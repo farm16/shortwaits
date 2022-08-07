@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'shared-types',
+  displayName: '@shortwaits/shared-types',
   preset: 'react-native',
   testRunner: 'jest-jasmine2',
   resolver: '@nrwl/jest/plugins/resolver',
