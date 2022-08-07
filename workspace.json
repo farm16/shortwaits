@@ -2,7 +2,12 @@
   "$schema": "./node_modules/nx/schemas/workspace-schema.json",
   "version": 2,
   "projects": {
+    "shared-types": "libs/shared-types",
+    "shared-ui-layout": "libs/shared-ui-layout",
     "shortwaits-admin": "apps/shortwaits-admin",
-    "shortwaits-admin-e2e": "apps/shortwaits-admin-e2e"
+    "shortwaits-admin-e2e": "apps/shortwaits-admin-e2e",
+    "shortwaits-backend": "apps/shortwaits-backend",
+    "shortwaits-client": "apps/shortwaits-client",
+    "shortwaits-client-e2e": "apps/shortwaits-client-e2e"
   }
 }
