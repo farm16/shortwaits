@@ -1,0 +1,8 @@
+{
+  "$schema": "./node_modules/nx/schemas/workspace-schema.json",
+  "version": 2,
+  "projects": {
+    "shortwaits-admin": "apps/shortwaits-admin",
+    "shortwaits-admin-e2e": "apps/shortwaits-admin-e2e"
+  }
+}
