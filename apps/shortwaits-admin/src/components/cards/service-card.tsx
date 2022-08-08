@@ -1,21 +1,21 @@
-import React, { FC } from "react"
-import { Alert, Image, ImageBackground, StyleSheet, View } from "react-native"
-import { ServicesType } from "shortwaits-shared"
+import React, { FC } from "react";
+import { Alert, Image, ImageBackground, StyleSheet, View } from "react-native";
+import { ServicesType } from "@shortwaits/shared-types";
 
-import { Button, ButtonProps, Space, Text } from "../common"
-import { getDimensions, useTheme } from "@/theme"
-import { getPrettyStringFromDurationInMin } from "@/utils/time"
-import { getPrettyStringFromPrice } from "@/utils/currency"
-import { ServiceAvatar } from "../service-avatar/service-avatar"
+import { Button, ButtonProps, Space, Text } from "../common";
+import { getDimensions, useTheme } from "@/theme";
+import { getPrettyStringFromDurationInMin } from "@/utils/time";
+import { getPrettyStringFromPrice } from "@/utils/currency";
+import { ServiceAvatar } from "../service-avatar/service-avatar";
 
-const CARD_HEIGH = 90
+const CARD_HEIGH = 90;
 
 interface ServiceCardProps extends ButtonProps {
-  service: Partial<ServicesType>
+  service: Partial<ServicesType>;
 }
 
-export const ServiceCard: FC<ServiceCardProps> = props => {
-  const { Colors } = useTheme()
+export const ServiceCard: FC<ServiceCardProps> = (props) => {
+  const { Colors } = useTheme();
   const {
     service: {
       imageUrl,
@@ -25,11 +25,11 @@ export const ServiceCard: FC<ServiceCardProps> = props => {
       price,
       currency,
       urls,
-      hours
+      hours,
     },
     ...rest
-  } = props
-  const { width } = getDimensions()
+  } = props;
+  const { width } = getDimensions();
 
   return (
     <Button
@@ -41,16 +41,16 @@ export const ServiceCard: FC<ServiceCardProps> = props => {
             {
               text: "Cancel",
               onPress: () => {},
-              style: "cancel"
+              style: "cancel",
             },
             {
               text: "Delete",
               onPress: () => {},
-              style: "destructive"
-            }
+              style: "destructive",
+            },
           ],
           {
-            cancelable: true
+            cancelable: true,
           }
         )
       }
@@ -61,8 +61,8 @@ export const ServiceCard: FC<ServiceCardProps> = props => {
           height: CARD_HEIGH,
           width: width * 0.9,
           borderLeftColor: serviceColor.hexCode || Colors.transparent,
-          backgroundColor: Colors.backgroundOverlay
-        }
+          backgroundColor: Colors.backgroundOverlay,
+        },
       ]}
       {...rest}
     >
@@ -79,7 +79,7 @@ export const ServiceCard: FC<ServiceCardProps> = props => {
           text={getPrettyStringFromPrice(currency, price)}
           style={[
             cardStyle.textItem3,
-            { color: serviceColor.hexCode || Colors.text }
+            { color: serviceColor.hexCode || Colors.text },
           ]}
         />
       </View>
@@ -90,31 +90,31 @@ export const ServiceCard: FC<ServiceCardProps> = props => {
       />
       <Space size="tiny" direction="vertical" />
     </Button>
-  )
-}
+  );
+};
 const cardStyle = StyleSheet.create({
   container: {
     flexDirection: "row",
     borderLeftWidth: 5,
     borderRadius: 5,
-    alignItems: "center"
+    alignItems: "center",
   },
   textItems: {
     flex: 1,
     alignItems: "flex-start",
     justifyContent: "space-between",
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
   },
   textItem1: {
     fontSize: 15,
-    fontWeight: "500"
+    fontWeight: "500",
   },
   textItem2: {
-    fontSize: 13
+    fontSize: 13,
   },
   textItem3: {
     fontSize: 15,
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   imageContainer: {
     opacity: 0.8,
@@ -122,7 +122,7 @@ const cardStyle = StyleSheet.create({
     width: CARD_HEIGH * 0.7,
     borderRadius: CARD_HEIGH * 0.4,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
-  image: {}
-})
+  image: {},
+});

@@ -1,9 +1,11 @@
-import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions"
-import { BusinessSuccessResponseType } from "shortwaits-shared"
-import configs from "@/config"
-import { ObjectId } from "shortwaits-shared/build/main/types/common"
+import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
+import configs from "@/config";
+import {
+  ObjectId,
+  BusinessSuccessResponseType,
+} from "@shortwaits/shared-types";
 
-const { getBusiness } = configs.api.endpoints.BUSINESS
+const { getBusiness } = configs.api.endpoints.BUSINESS;
 
 /**
  * @Note
@@ -24,5 +26,5 @@ const { getBusiness } = configs.api.endpoints.BUSINESS
  */
 export default (builder: EndpointBuilder<any, any, any>) =>
   builder.query<BusinessSuccessResponseType, ObjectId | string>({
-    query: businessId => getBusiness.getPath(businessId as string)
-  })
+    query: (businessId) => getBusiness.getPath(businessId as string),
+  });

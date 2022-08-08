@@ -3,10 +3,10 @@ import React, {
   useCallback,
   useLayoutEffect,
   useRef,
-  useState
-} from "react"
-import Icon from "react-native-vector-icons/MaterialCommunityIcons"
-import { BusinessWeekDaysType, WEEKDAYS } from "shortwaits-shared"
+  useState,
+} from "react";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { BusinessWeekDaysType, WEEKDAYS } from "@shortwaits/shared-types";
 
 import {
   BottomSheet,
@@ -16,32 +16,32 @@ import {
   LeftChevronButton,
   Screen,
   Space,
-  useBottomSheet
-} from "@/components"
-import { ModalsScreenProps } from "@/navigation/navigation-types"
-import { useBusiness } from "@/hooks/useBusiness"
-import { useTheme } from "@/theme"
+  useBottomSheet,
+} from "@/components";
+import { ModalsScreenProps } from "@/navigation/navigation-types";
+import { useBusiness } from "@/hooks/useBusiness";
+import { useTheme } from "@/theme";
 
-import { ScheduleCard } from "./schedule-card"
-import { SelectTimeRange } from "./select-time-range"
-import { scheduleConfigs } from "./schedule-config"
-import { useDispatch } from "react-redux"
-import { setBusinessEveryDayActivity } from "@/redux/business"
+import { ScheduleCard } from "./schedule-card";
+import { SelectTimeRange } from "./select-time-range";
+import { scheduleConfigs } from "./schedule-config";
+import { useDispatch } from "react-redux";
+import { setBusinessEveryDayActivity } from "@/redux/business";
 
 const getFullDayString = (day?: string): string => {
-  return day ? WEEKDAYS[day] : ""
-}
+  return day ? WEEKDAYS[day] : "";
+};
 
 export const ScheduleModal: FC<ModalsScreenProps<"schedule-modal-screen">> = ({
   navigation,
-  route
+  route,
 }) => {
-  const { type } = route.params
+  const { type } = route.params;
   const [selectedDay, setSelectedDay] = useState<BusinessWeekDaysType | null>(
     null
-  )
-  const dispatch = useDispatch()
-  const { Colors } = useTheme()
+  );
+  const dispatch = useDispatch();
+  const { Colors } = useTheme();
 
   // const {
   //   mode,
@@ -62,28 +62,28 @@ export const ScheduleModal: FC<ModalsScreenProps<"schedule-modal-screen">> = ({
         >
           <Icon name="lock-open" color={Colors.brandPrimary} size={22} />
         </Button>
-      )
-    })
-    return () => console.log(" bye bye schedule modal")
-  }, [Colors.brandPrimary, dispatch, navigation, type])
+      ),
+    });
+    return () => console.log(" bye bye schedule modal");
+  }, [Colors.brandPrimary, dispatch, navigation, type]);
 
-  const business = useBusiness()
-  const bottomSheetRef = useRef<BottomSheetType>(null)
-  const handleBottomSheet = useBottomSheet(bottomSheetRef)
+  const business = useBusiness();
+  const bottomSheetRef = useRef<BottomSheetType>(null);
+  const handleBottomSheet = useBottomSheet(bottomSheetRef);
 
   const showModal = useCallback(
     (day: BusinessWeekDaysType | null) => {
-      setSelectedDay(day)
-      handleBottomSheet.expand()
+      setSelectedDay(day);
+      handleBottomSheet.expand();
     },
     [handleBottomSheet]
-  )
+  );
 
   const handleSheetChanges = useCallback((index: number) => {
-    console.log("handleSheetChanges", index)
-  }, [])
+    console.log("handleSheetChanges", index);
+  }, []);
 
-  const days = Object.keys(WEEKDAYS)
+  const days = Object.keys(WEEKDAYS);
 
   return (
     <Screen
@@ -109,5 +109,5 @@ export const ScheduleModal: FC<ModalsScreenProps<"schedule-modal-screen">> = ({
         {/* <SelectTimeRange day={day} title={getFullDayString(day)} /> */}
       </BottomSheet>
     </Screen>
-  )
-}
+  );
+};

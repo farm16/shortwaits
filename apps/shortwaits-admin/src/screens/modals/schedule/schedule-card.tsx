@@ -1,41 +1,41 @@
-import React from "react"
-import Icon from "react-native-vector-icons/MaterialCommunityIcons"
-import { Switch, View, StyleSheet } from "react-native"
+import React from "react";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { Switch, View, StyleSheet } from "react-native";
 
-import { Button, Text } from "@/components"
-import { getDimensions, useTheme } from "@/theme"
-import { TimeRangeText } from "@/components"
-import { useDispatch } from "react-redux"
+import { Button, Text } from "@/components";
+import { getDimensions, useTheme } from "@/theme";
+import { TimeRangeText } from "@/components";
+import { useDispatch } from "react-redux";
 import {
   BusinessDayTimeRangeType,
-  BusinessWeekDaysType
-} from "shortwaits-shared"
-import { useBusiness } from "@/hooks/useBusiness"
-import { ScheduleModalType } from "@/navigation"
-import { scheduleConfigs } from "./schedule-config"
+  BusinessWeekDaysType,
+} from "@shortwaits/shared-types";
+import { useBusiness } from "@/hooks/useBusiness";
+import { ScheduleModalType } from "@/navigation";
+import { scheduleConfigs } from "./schedule-config";
 
 interface DayCardProps {
-  type: ScheduleModalType
-  day: BusinessDayTimeRangeType & { name: BusinessWeekDaysType }
-  handlePress?: any
+  type: ScheduleModalType;
+  day: BusinessDayTimeRangeType & { name: BusinessWeekDaysType };
+  handlePress?: any;
 }
 /**
  * @todo
  * We are only supporting 1 set of time range in a day ** **FOR NOW
  */
 export const ScheduleCard = ({ day, handlePress, type }: DayCardProps) => {
-  const { width } = getDimensions()
-  const { Colors } = useTheme()
-  const { setDayActivity } = scheduleConfigs[type]
-  const { startTime, endTime, isActive, name } = day
-  const dispatch = useDispatch()
+  const { width } = getDimensions();
+  const { Colors } = useTheme();
+  const { setDayActivity } = scheduleConfigs[type];
+  const { startTime, endTime, isActive, name } = day;
+  const dispatch = useDispatch();
 
   return (
     <View
       style={{
         ...styles.container,
         width: width * 0.87,
-        borderBottomColor: Colors.backgroundOverlay
+        borderBottomColor: Colors.backgroundOverlay,
       }}
     >
       <View style={styles.subContainer1}>
@@ -43,7 +43,7 @@ export const ScheduleCard = ({ day, handlePress, type }: DayCardProps) => {
           preset="none"
           style={{
             flexDirection: "row",
-            alignItems: "center"
+            alignItems: "center",
           }}
           disabled={!isActive}
           onPress={() => handlePress(day)}
@@ -52,7 +52,7 @@ export const ScheduleCard = ({ day, handlePress, type }: DayCardProps) => {
             preset="none"
             style={{
               ...styles.weekDay,
-              color: isActive ? Colors.gray : Colors.lightGray
+              color: isActive ? Colors.gray : Colors.lightGray,
             }}
             text={name}
           />
@@ -75,14 +75,14 @@ export const ScheduleCard = ({ day, handlePress, type }: DayCardProps) => {
           thumbColor={isActive ? Colors.brandPrimary2 : Colors.red2}
           ios_backgroundColor={Colors.backgroundOverlay}
           onChange={() => {
-            dispatch(setDayActivity(day.name))
+            dispatch(setDayActivity(day.name));
           }}
           value={isActive}
         />
       </View>
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -90,25 +90,25 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderBottomWidth: 1,
     justifyContent: "space-between",
-    flexDirection: "row"
+    flexDirection: "row",
   },
   subContainer1: {
     alignItems: "flex-start",
-    justifyContent: "flex-start"
+    justifyContent: "flex-start",
   },
   subContainer2: {
     flex: 1,
     alignItems: "flex-end",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   weekDay: {
     fontSize: 27,
     textTransform: "lowercase",
-    marginRight: 10
+    marginRight: 10,
   },
   time: {
     fontSize: 12,
     marginEnd: 10,
-    textTransform: "uppercase"
-  }
-})
+    textTransform: "uppercase",
+  },
+});

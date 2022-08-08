@@ -1,21 +1,21 @@
-import React from "react"
-import { View, StyleSheet } from "react-native"
-import { Text, MultiSlider, Space, TimeRangeText } from "@/components"
-import { getDimensions, useTheme } from "@/theme"
-import { BusinessWeekDaysType } from "shortwaits-shared"
+import React from "react";
+import { View, StyleSheet } from "react-native";
+import { Text, MultiSlider, Space, TimeRangeText } from "@/components";
+import { getDimensions, useTheme } from "@/theme";
+import { BusinessWeekDaysType } from "@shortwaits/shared-types";
 
 interface SelectTimeRangeProps {
-  title?: string
-  day?: BusinessWeekDaysType
+  title?: string;
+  day?: BusinessWeekDaysType;
 }
 export const SelectTimeRange = ({ title }: SelectTimeRangeProps) => {
-  const { Colors } = useTheme()
+  const { Colors } = useTheme();
 
   return (
     <View
       style={{
         ...styles.container,
-        width: getDimensions(90).width
+        width: getDimensions(90).width,
       }}
     >
       <Space />
@@ -29,13 +29,13 @@ export const SelectTimeRange = ({ title }: SelectTimeRangeProps) => {
         onValuesChange={(values: number[]) => {}}
       />
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     alignSelf: "center",
     alignItems: "center",
-    justifyContent: "center"
-  }
-})
+    justifyContent: "center",
+  },
+});

@@ -1,42 +1,42 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { setBusinessCategories } from "@/redux/business"
-import { SelectorConfigs } from "./selector-types"
+import { setBusinessCategories } from "@/redux/business";
+import { SelectorConfigs } from "./selector-types";
 import {
   BusinessPayloadType,
   BusinessType,
   CategoriesPayloadType,
-  UserPayloadType
-} from "shortwaits-shared"
-import { navigate } from "@/utils"
-import { noop } from "lodash"
+  UserPayloadType,
+} from "@shortwaits/shared-types";
+import { navigate } from "@/utils";
+import { noop } from "lodash";
 import {
   useGetUserQuery,
   useGetCategoriesQuery,
   useGetCategoryQuery,
-  useGetBusinessStaffQuery
-} from "@/services/api"
-import { useBusiness } from "@/hooks/useBusiness"
+  useGetBusinessStaffQuery,
+} from "@/services/api";
+import { useBusiness } from "@/hooks/useBusiness";
 
 export const selectorConfigs: SelectorConfigs = {
   "My-Business-Categories": {
     permissions: ["READ", "READ", "DELETE"],
     searchOptions: {
       searchPlaceholder: "Search",
-      isSearchable: true
+      isSearchable: true,
     },
     headerTitle: "Categories",
     keys: {
-      businessKey: "categories"
+      businessKey: "categories",
     },
     mode: "SELECT-MANY",
     action: (item: CategoriesPayloadType) => setBusinessCategories(item._id),
     onSelect: () => null,
-    filterId: item => item._id,
-    itemQueryHook: id => useGetCategoryQuery(id),
-    filterItemQuery: item => item?.data,
+    filterId: (item) => item._id,
+    itemQueryHook: (id) => useGetCategoryQuery(id),
+    filterItemQuery: (item) => item?.data,
     itemsQueryHook: (business: BusinessPayloadType, user: UserPayloadType) =>
       useGetCategoriesQuery(""),
-    filterItemsQuery: item => item?.data,
+    filterItemsQuery: (item) => item?.data,
     getIsSelected: (
       item: CategoriesPayloadType,
       current: BusinessType["categories"]
@@ -45,43 +45,43 @@ export const selectorConfigs: SelectorConfigs = {
     getTileSubTitle: (_item: CategoriesPayloadType) => "",
     icons: {
       default: "checkbox-blank-circle-outline",
-      selected: "checkbox-marked-circle-outline"
-    }
+      selected: "checkbox-marked-circle-outline",
+    },
   },
   "My-Business-Staff": {
     getIsSelected: () => false,
     permissions: ["READ", "WRITE", "DELETE"],
     searchOptions: {
       searchPlaceholder: "Search",
-      isSearchable: false
+      isSearchable: false,
     },
     headerTitle: "Personnel",
     keys: {
-      businessKey: "staff"
+      businessKey: "staff",
     },
     mode: "NONE",
     action: noop,
-    filterId: item => item,
-    itemQueryHook: id => useGetUserQuery(id),
-    filterItemQuery: item => item,
+    filterId: (item) => item,
+    itemQueryHook: (id) => useGetUserQuery(id),
+    filterItemQuery: (item) => item,
     itemsQueryHook: (business: BusinessPayloadType, user: UserPayloadType) =>
       business._id
         ? useGetBusinessStaffQuery(business._id)
         : { data: useBusiness().staff },
-    filterItemsQuery: item => item,
+    filterItemsQuery: (item) => item,
     getTileTitle: (item: UserPayloadType) => item.firstName || item.username,
     getTileSubTitle: (_item: UserPayloadType) => "",
-    onSelect: _item => {
+    onSelect: (_item) => {
       navigate("modals", {
         screen: "schedule-modal-screen",
         params: {
-          scheduleType: "My-Business-Hours"
-        }
-      })
+          scheduleType: "My-Business-Hours",
+        },
+      });
     },
     icons: {
       default: "dots-vertical",
-      selected: undefined
-    }
-  }
-}
+      selected: undefined,
+    },
+  },
+};

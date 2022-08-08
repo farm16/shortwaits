@@ -1,12 +1,12 @@
 import {
   ServicesType,
-  ShortwaitsAdminDefaultDataPayloadType
-} from "shortwaits-shared"
-import { api } from "../../services/api"
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+  ShortwaitsAdminDefaultDataPayloadType,
+} from "@shortwaits/shared-types";
+import { api } from "../../services/api";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import type { RootState } from "../types"
-import { cloneDeep } from "lodash"
+import type { RootState } from "../types";
+import { cloneDeep } from "lodash";
 
 const slice = createSlice({
   name: "defaultMobileData",
@@ -22,31 +22,31 @@ const slice = createSlice({
       action: PayloadAction<{ data: Partial<ServicesType>; index: number }>
     ) {
       const shortwaitsAdminDefaultData: ShortwaitsAdminDefaultDataPayloadType[] =
-        cloneDeep(state)
-      const swDefaultData = shortwaitsAdminDefaultData.map(defaultData => {
+        cloneDeep(state);
+      const swDefaultData = shortwaitsAdminDefaultData.map((defaultData) => {
         if (defaultData.short_id === "0000001") {
           defaultData.sampleBusinessData.services[action.payload.index] =
-            action.payload.data
-          return defaultData
+            action.payload.data;
+          return defaultData;
         }
-        return defaultData
-      })
-      return [...swDefaultData]
-    }
+        return defaultData;
+      });
+      return [...swDefaultData];
+    },
   },
-  extraReducers: builder => {
+  extraReducers: (builder) => {
     builder.addMatcher(
       api.endpoints.getAdminMobile.matchFulfilled,
       (_state, action) => {
-        return [...action.payload.data]
+        return [...action.payload.data];
       }
-    )
-  }
-})
+    );
+  },
+});
 
-export const { setSampleBusinessServicesByIndex } = slice.actions
+export const { setSampleBusinessServicesByIndex } = slice.actions;
 
-export default slice.reducer
+export default slice.reducer;
 
 export const selectCurrentMobileAdminState = (state: RootState) =>
-  state.defaultMobileData
+  state.defaultMobileData;

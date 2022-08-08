@@ -1,4 +1,5 @@
-import { AppRegistry } from 'react-native';
-import App from './app/App';
+import { AppRegistry } from "react-native";
+import "react-native-gesture-handler";
+import { App } from "@/App";
 
-AppRegistry.registerComponent('ShortwaitsAdmin', () => App);
+AppRegistry.registerComponent("ShortwaitsAdmin", () => App);

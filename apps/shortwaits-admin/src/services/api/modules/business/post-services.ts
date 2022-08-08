@@ -1,18 +1,18 @@
-import configs from "@/config"
+import configs from "@/config";
 import {
+  ObjectId,
   AuthPayloadType,
   ServicesDocType,
   ServicesType,
-  SuccessResponseType
-} from "shortwaits-shared"
-import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions"
-import { ObjectId } from "shortwaits-shared/build/main/types/common"
+  SuccessResponseType,
+} from "@shortwaits/shared-types";
+import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
 
-const { createBusiness } = configs.api.endpoints.BUSINESS
+const { createBusiness } = configs.api.endpoints.BUSINESS;
 
 interface BusinessServicePost {
-  businessId: ObjectId
-  formData: ServicesType
+  businessId: ObjectId;
+  formData: ServicesType;
 }
 
 export default (builder: EndpointBuilder<any, any, any>) =>
@@ -20,6 +20,6 @@ export default (builder: EndpointBuilder<any, any, any>) =>
     query: ({ businessId, formData }) => ({
       url: `${createBusiness.PATH}/${businessId} `,
       method: createBusiness.METHOD,
-      body: formData
-    })
-  })
+      body: formData,
+    }),
+  });

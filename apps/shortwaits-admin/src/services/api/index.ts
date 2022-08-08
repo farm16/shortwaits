@@ -1,18 +1,18 @@
-import configs from "@/config"
+import configs from "@/config";
 // import { persistor } from "../../redux"
-import { setCredentials } from "../../redux/auth"
-import { RootState } from "../../redux/types"
-import { QueryReturnValue } from "@reduxjs/toolkit/dist/query/baseQueryTypes"
+import { setCredentials } from "../../redux/auth";
+import { RootState } from "../../redux/types";
+import { QueryReturnValue } from "@reduxjs/toolkit/dist/query/baseQueryTypes";
 import {
   BaseQueryFn,
   FetchArgs,
   createApi,
   fetchBaseQuery,
   FetchBaseQueryError,
-  FetchBaseQueryMeta
-} from "@reduxjs/toolkit/query/react"
-import { Mutex } from "async-mutex"
-import { TokenPayloadType } from "shortwaits-shared"
+  FetchBaseQueryMeta,
+} from "@reduxjs/toolkit/query/react";
+import { Mutex } from "async-mutex";
+import { TokenPayloadType } from "@shortwaits/shared-types";
 
 //modules
 import {
@@ -30,13 +30,13 @@ import {
   GetCategories,
   GetService,
   GetServicesByBusiness,
-  GetUser
-} from "./modules"
+  GetUser,
+} from "./modules";
 
-const API_BASE_URL = configs.api.endpoints.API_BASE_URL
-const AUTH = configs.api.endpoints.AUTH
+const API_BASE_URL = configs.api.endpoints.API_BASE_URL;
+const AUTH = configs.api.endpoints.AUTH;
 
-const mutex = new Mutex()
+const mutex = new Mutex();
 
 /**
  * @tutorial
@@ -50,39 +50,39 @@ const baseQueryWithInterceptor: BaseQueryFn<
   FetchBaseQueryError
 > = async (args, api, extraOptions) => {
   // wait until the mutex is available without locking it
-  await mutex.waitForUnlock()
+  await mutex.waitForUnlock();
 
   const {
-    auth: { token, refreshToken }
-  } = api.getState() as RootState
+    auth: { token, refreshToken },
+  } = api.getState() as RootState;
 
   const baseQuery = fetchBaseQuery({
     baseUrl: API_BASE_URL,
-    prepareHeaders: headers => {
+    prepareHeaders: (headers) => {
       // If we have a token set in state, let's assume that we should be passing it.
       if (token && !headers.has("Authorization")) {
-        headers.set("Authorization", `Bearer ${token}`) // we stored the token as "Bearer + key"
+        headers.set("Authorization", `Bearer ${token}`); // we stored the token as "Bearer + key"
       }
 
-      return headers
-    }
-  })
+      return headers;
+    },
+  });
 
-  let result = await baseQuery(args, api, extraOptions)
+  let result = await baseQuery(args, api, extraOptions);
 
   if (result.error) {
     if (!mutex.isLocked()) {
-      const release = await mutex.acquire()
+      const release = await mutex.acquire();
       try {
         switch (result.error?.status) {
           case 400:
-            console.log("~~400 SERVER ERROR~~")
-            break
+            console.log("~~400 SERVER ERROR~~");
+            break;
           case 401: //Unauthorized
-            console.log("~~401 SERVER ERROR~~")
-            console.log("... acquiring refresh token")
+            console.log("~~401 SERVER ERROR~~");
+            console.log("... acquiring refresh token");
             if (refreshToken) {
-              console.log("...refresh token available")
+              console.log("...refresh token available");
               const refreshResult: QueryReturnValue<
                 { auth: TokenPayloadType } | unknown,
                 FetchBaseQueryError,
@@ -92,52 +92,52 @@ const baseQueryWithInterceptor: BaseQueryFn<
                   url: AUTH.refreshToken.PATH,
                   method: AUTH.refreshToken.METHOD,
                   headers: {
-                    authorization: `Bearer ${refreshToken}`
-                  }
+                    authorization: `Bearer ${refreshToken}`,
+                  },
                 },
                 api,
                 extraOptions
-              )
+              );
               if (
                 refreshResult.meta?.response?.status === 200 &&
                 refreshResult.data
               ) {
                 api.dispatch(
                   setCredentials(refreshResult.data.auth as TokenPayloadType)
-                )
-                result = await baseQuery(args, api, extraOptions)
+                );
+                result = await baseQuery(args, api, extraOptions);
               } else {
-                console.log("...unable to retrieve refresh token")
+                console.log("...unable to retrieve refresh token");
                 // await persistor.purge()
-                api.dispatch({ type: "USER_SIGN_OUT" })
+                api.dispatch({ type: "USER_SIGN_OUT" });
               }
             } else {
-              console.log("...refresh token NOT available")
+              console.log("...refresh token NOT available");
               // await persistor.purge()
-              api.dispatch({ type: "USER_SIGN_OUT" })
+              api.dispatch({ type: "USER_SIGN_OUT" });
             }
-            break
+            break;
           default: {
             // await persistor.purge()
-            api.dispatch({ type: "USER_SIGN_OUT" })
+            api.dispatch({ type: "USER_SIGN_OUT" });
           }
         }
       } finally {
-        release()
+        release();
       }
     } else {
       // wait until the mutex is available without locking it
-      await mutex.waitForUnlock()
-      result = await baseQuery(args, api, extraOptions)
+      await mutex.waitForUnlock();
+      result = await baseQuery(args, api, extraOptions);
     }
   }
-  return result
-}
+  return result;
+};
 
 export const api = createApi({
   reducerPath: "api_service",
   baseQuery: baseQueryWithInterceptor,
-  endpoints: builder => ({
+  endpoints: (builder) => ({
     //default data
     getAdminMobile: GetAdminMobile(builder),
     //auth
@@ -158,9 +158,9 @@ export const api = createApi({
     getService: GetService(builder),
     getServicesByBusiness: GetServicesByBusiness(builder),
     //user
-    getUser: GetUser(builder)
-  })
-})
+    getUser: GetUser(builder),
+  }),
+});
 
 export const {
   //Mutations hooks
@@ -191,5 +191,5 @@ export const {
   useLazyGetBusinessCategoryQuery,
   useLazyGetBusinessHoursQuery,
   useLazyGetBusinessServicesQuery,
-  useLazyGetBusinessStaffQuery
-} = api
+  useLazyGetBusinessStaffQuery,
+} = api;

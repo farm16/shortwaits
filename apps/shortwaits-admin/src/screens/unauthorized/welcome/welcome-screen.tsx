@@ -1,45 +1,45 @@
-import React, { FC, useEffect } from "react"
-import { View, StatusBar } from "react-native"
-import SafeAreaView from "react-native-safe-area-view"
-import SplashScreen from "react-native-splash-screen"
-import { CompositeNavigationProp } from "@react-navigation/native"
-import { StackNavigationProp } from "@react-navigation/stack"
+import React, { FC, useEffect } from "react";
+import { View, StatusBar } from "react-native";
+import SafeAreaView from "react-native-safe-area-view";
+import SplashScreen from "react-native-splash-screen";
+import { CompositeNavigationProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 
-import { Button, Space, Spinner, Text } from "@/components"
-import { useTheme } from "@/theme"
+import { Button, Space, Spinner, Text } from "@/components";
+import { useTheme } from "@/theme";
 import {
   RootStackParamList,
-  UnauthorizedStackParamList
-} from "@/navigation/navigation-types"
-import { useUser } from "@/hooks/useUser"
+  UnauthorizedStackParamList,
+} from "@/navigation/navigation-types";
+import { useUser } from "@/hooks/useUser";
 
 export interface WelcomeScreenProps {
   navigation: CompositeNavigationProp<
     StackNavigationProp<UnauthorizedStackParamList, "welcome-screen">,
     StackNavigationProp<RootStackParamList>
-  >
+  >;
 }
 
 export const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation }) => {
-  const { Colors } = useTheme()
-  const userState = useUser()
+  const { Colors } = useTheme();
+  const userState = useUser();
 
   useEffect(() => {
-    SplashScreen.hide()
-  }, [])
+    SplashScreen.hide();
+  }, []);
 
   useEffect(() => {
     if (userState) {
-      navigation.navigate("onboarding-1-screen")
+      navigation.navigate("onboarding-1-screen");
     }
-  }, [userState])
+  }, [userState]);
 
   return (
     <SafeAreaView
       style={{
         alignItems: "center",
         flex: 1,
-        backgroundColor: Colors.brandSecondary
+        backgroundColor: Colors.brandSecondary,
       }}
     >
       <StatusBar barStyle="light-content" />
@@ -50,7 +50,7 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation }) => {
             lineHeight: 37,
             fontStyle: "italic",
             fontWeight: "bold",
-            color: "white"
+            color: "white",
           }}
         >
           SHORT{"\n"}WAITS
@@ -60,14 +60,14 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation }) => {
       <View style={{ alignItems: "center", position: "absolute", bottom: 0 }}>
         <Button
           style={{
-            backgroundColor: Colors.white
+            backgroundColor: Colors.white,
           }}
           textStyle={{ color: Colors.brandSecondary6 }}
           preset="primary"
           text="Register"
           onPress={() =>
             navigation.navigate("unauthorized", {
-              screen: "sign-up-screen"
+              screen: "sign-up-screen",
             })
           }
         />
@@ -79,12 +79,12 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation }) => {
           text="Login"
           onPress={() =>
             navigation.navigate("unauthorized", {
-              screen: "sign-in-screen"
+              screen: "sign-in-screen",
             })
           }
         />
         <Space size="large" />
       </View>
     </SafeAreaView>
-  )
-}
+  );
+};

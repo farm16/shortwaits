@@ -1,25 +1,25 @@
-import React from "react"
-import { StyleSheet, View } from "react-native"
+import React from "react";
+import { StyleSheet, View } from "react-native";
 import CurrencyInput, {
-  CurrencyInputProps
+  CurrencyInputProps,
   //   FakeCurrencyInput
-} from "react-native-currency-input"
+} from "react-native-currency-input";
 
-import { useTheme } from "@/theme"
-import { TextFieldProps, Card, Text } from "../common"
-import { getCurrencySymbolFromCurrencyType } from "@/utils/currency"
-import { BusinessAvailableCurrenciesType } from "shortwaits-shared"
+import { useTheme } from "@/theme";
+import { TextFieldProps, Card, Text } from "../common";
+import { getCurrencySymbolFromCurrencyType } from "@/utils/currency";
+import { BusinessAvailableCurrenciesType } from "@shortwaits/shared-types";
 
 interface TextFieldCard
   extends CurrencyInputProps,
     Pick<TextFieldProps, "preset" | "errors"> {
-  title: string
-  isTouched?: boolean
-  currencyType: BusinessAvailableCurrenciesType
+  title: string;
+  isTouched?: boolean;
+  currencyType: BusinessAvailableCurrenciesType;
 }
 
-const VALID = /^[1-9]{1}[0-9]*$/
-const MAX = 10000
+const VALID = /^[1-9]{1}[0-9]*$/;
+const MAX = 10000;
 
 export function CurrencyFieldCard(props: TextFieldCard) {
   const {
@@ -30,12 +30,12 @@ export function CurrencyFieldCard(props: TextFieldCard) {
     value,
     onChangeValue,
     ...rest
-  } = props
+  } = props;
 
   const {
     Colors,
-    Common: { textFieldPresets }
-  } = useTheme()
+    Common: { textFieldPresets },
+  } = useTheme();
 
   return (
     <Card mode="text-field">
@@ -62,13 +62,13 @@ export function CurrencyFieldCard(props: TextFieldCard) {
         {...rest}
       />
     </Card>
-  )
+  );
 }
 
 const style = StyleSheet.create({
   rowContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    margin: 0
-  }
-})
+    margin: 0,
+  },
+});

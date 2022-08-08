@@ -1,25 +1,25 @@
-import configs from "@/config"
+import configs from "@/config";
 import {
   AuthPayloadType,
   BusinessType,
   ServicesDocType,
   ServicesType,
   SuccessResponseType,
-  UserType
-} from "shortwaits-shared"
-import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions"
-import { ObjectId } from "shortwaits-shared/build/main/types/common"
+  ObjectId,
+  UserType,
+} from "@shortwaits/shared-types";
+import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
 
-const { registerBusiness } = configs.api.endpoints.BUSINESS
+const { registerBusiness } = configs.api.endpoints.BUSINESS;
 
 interface BusinessServicePost {
-  userId: ObjectId | string
-  business: Partial<BusinessType>
-  services: Partial<ServicesType>[]
+  userId: ObjectId | string;
+  business: Partial<BusinessType>;
+  services: Partial<ServicesType>[];
 }
 interface BusinessServicePostResponse {
-  data: { user: UserType; business: BusinessType }
-  meta: unknown
+  data: { user: UserType; business: BusinessType };
+  meta: unknown;
 }
 
 export default (builder: EndpointBuilder<any, any, any>) =>
@@ -27,6 +27,6 @@ export default (builder: EndpointBuilder<any, any, any>) =>
     query: ({ userId, business, services }) => ({
       url: registerBusiness.PATH,
       method: registerBusiness.METHOD,
-      body: { userId, business, services }
-    })
-  })
+      body: { userId, business, services },
+    }),
+  });

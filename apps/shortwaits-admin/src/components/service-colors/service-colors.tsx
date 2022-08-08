@@ -1,22 +1,22 @@
-import React from "react"
-import { StyleSheet, View, ViewStyle } from "react-native"
-import Icon from "react-native-vector-icons/MaterialCommunityIcons"
-import { ServiceColorType } from "shortwaits-shared"
+import React from "react";
+import { StyleSheet, View, ViewStyle } from "react-native";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { ServiceColorType } from "@shortwaits/shared-types";
 
-import { getDimensions } from "@/theme"
-import { Button, ButtonProps } from "../common"
-import { useMobileAdmin } from "@/hooks/useMobileAdmin"
+import { getDimensions } from "@/theme";
+import { Button, ButtonProps } from "../common";
+import { useMobileAdmin } from "@/hooks/useMobileAdmin";
 
 interface ServiceColorsProps {
-  color?: ServiceColorType
-  onSelect(arg: ServiceColorType): void
+  color?: ServiceColorType;
+  onSelect(arg: ServiceColorType): void;
 }
 interface CircleProps extends ButtonProps {
-  width: number
-  color: string
-  isSelected: boolean | null
-  isDefault?: boolean
-  onSelect(): void
+  width: number;
+  color: string;
+  isSelected: boolean | null;
+  isDefault?: boolean;
+  onSelect(): void;
 }
 
 function Circle({
@@ -24,7 +24,7 @@ function Circle({
   color,
   isSelected,
   isDefault = false,
-  onSelect
+  onSelect,
 }: CircleProps) {
   const style: ViewStyle = {
     backgroundColor: color,
@@ -32,34 +32,34 @@ function Circle({
     height: circleDiameter,
     borderRadius: circleDiameter * 0.5,
     justifyContent: "center",
-    alignItems: "center"
-  }
+    alignItems: "center",
+  };
   return (
     <Button preset="none" style={style} onPress={onSelect}>
       {isSelected && (
         <Icon name="check-bold" size={circleDiameter - 5} color="white" />
       )}
     </Button>
-  )
+  );
 }
 
 export function ServiceColors({ color, onSelect }: ServiceColorsProps) {
-  const defaultData = useMobileAdmin()
+  const defaultData = useMobileAdmin();
 
-  const { width } = getDimensions(87)
+  const { width } = getDimensions(87);
 
   const colorsSize: number = defaultData
     ? Object.keys(defaultData.serviceColors).length
-    : 0
+    : 0;
 
-  const circleWidth = width / (colorsSize * 1.9)
+  const circleWidth = width / (colorsSize * 1.9);
 
-  if (!defaultData) return null
-  if (!color) return null
+  if (!defaultData) return null;
+  if (!color) return null;
 
   return (
     <View style={[styles.container, { width }]}>
-      {Object.keys(defaultData?.serviceColors ?? []).map(elem => (
+      {Object.keys(defaultData?.serviceColors ?? []).map((elem) => (
         <Circle
           key={defaultData?.serviceColors[elem].colorId}
           onSelect={() => onSelect(defaultData?.serviceColors[elem])}
@@ -72,12 +72,12 @@ export function ServiceColors({ color, onSelect }: ServiceColorsProps) {
         />
       ))}
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    justifyContent: "space-between"
-  }
-})
+    justifyContent: "space-between",
+  },
+});

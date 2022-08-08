@@ -1,24 +1,24 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import React, { useCallback, useEffect, useState } from "react"
-import { StyleSheet, View } from "react-native"
-import { Space, Text, Button, ScrollView } from "../common"
-import { ServiceColors } from "../service-colors/service-colors"
-import { ServicesType } from "shortwaits-shared"
-import { useMobileAdmin } from "@/hooks/useMobileAdmin"
-import { TextFieldCard, TimeDurationCard, CurrencyFieldCard } from "../cards"
+import React, { useCallback, useEffect, useState } from "react";
+import { StyleSheet, View } from "react-native";
+import { Space, Text, Button, ScrollView } from "../common";
+import { ServiceColors } from "../service-colors/service-colors";
+import { ServicesType } from "@shortwaits/shared-types";
+import { useMobileAdmin } from "@/hooks/useMobileAdmin";
+import { TextFieldCard, TimeDurationCard, CurrencyFieldCard } from "../cards";
 
 interface SimpleServiceFormProps {
-  mode: "update" | "create"
-  initialValues: Partial<ServicesType> | undefined
-  onSubmit: (serviceFormData: Partial<ServicesType>) => void
+  mode: "update" | "create";
+  initialValues: Partial<ServicesType> | undefined;
+  onSubmit: (serviceFormData: Partial<ServicesType>) => void;
 }
 
 export function SimpleServiceForm({
   mode,
   initialValues,
-  onSubmit
+  onSubmit,
 }: SimpleServiceFormProps) {
-  const defaultData = useMobileAdmin()
+  const defaultData = useMobileAdmin();
 
   const [form, setForm] = useState<Partial<ServicesType>>({
     name: "",
@@ -27,35 +27,35 @@ export function SimpleServiceForm({
     serviceColor: defaultData?.serviceColors.red,
     currency: "USD",
     description: "",
-    imageUrl: ""
-  })
+    imageUrl: "",
+  });
 
   useEffect(() => {
     if (mode === "update" && initialValues) {
-      setForm({ ...initialValues })
+      setForm({ ...initialValues });
     }
-  }, [mode, initialValues])
+  }, [mode, initialValues]);
 
-  const handlePriceChange = useCallback(price => {
-    setForm(formValues => ({ ...formValues, price: price * 100 }))
-  }, [])
-  const handleDurationTimeChange = useCallback(durationTime => {
-    setForm(formValues => ({
+  const handlePriceChange = useCallback((price) => {
+    setForm((formValues) => ({ ...formValues, price: price * 100 }));
+  }, []);
+  const handleDurationTimeChange = useCallback((durationTime) => {
+    setForm((formValues) => ({
       ...formValues,
-      durationInMin: durationTime ? durationTime[0] : 0
-    }))
-  }, [])
+      durationInMin: durationTime ? durationTime[0] : 0,
+    }));
+  }, []);
   const handleServiceColorChange = useCallback(
-    serviceColor => {
-      setForm(formValues => ({
+    (serviceColor) => {
+      setForm((formValues) => ({
         ...formValues,
         serviceColor: serviceColor
           ? serviceColor
-          : defaultData?.serviceColors.red
-      }))
+          : defaultData?.serviceColors.red,
+      }));
     },
     [defaultData?.serviceColors.red]
-  )
+  );
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.header}>
@@ -81,10 +81,10 @@ export function SimpleServiceForm({
         title="Name"
         placeholder="Yoga class"
         value={form.name}
-        onChangeText={text => {
-          setForm(formState => {
-            return { ...formState, name: text }
-          })
+        onChangeText={(text) => {
+          setForm((formState) => {
+            return { ...formState, name: text };
+          });
         }}
       />
       <CurrencyFieldCard
@@ -107,16 +107,16 @@ export function SimpleServiceForm({
         <Space size="large" />
       </View>
     </ScrollView>
-  )
+  );
 }
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   header: {
-    alignItems: "center"
+    alignItems: "center",
   },
   bottomContainer: {
-    marginTop: "auto"
-  }
-})
+    marginTop: "auto",
+  },
+});
