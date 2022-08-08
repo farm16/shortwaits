@@ -44,7 +44,6 @@
     "react-native-safe-area-view": "*",
     "react-native-screens": "*",
     "react-native-shadow-2": "*",
-    "react-native-slider": "*",
     "react-native-spinkit": "*",
     "react-native-splash-screen": "*",
     "react-native-vector-icons": "*",
@@ -55,6 +54,8 @@
     "redux-persist": "*",
     "redux-thunk": "*",
     "typesafe-actions": "*",
-    "yup": "*"
+    "yup": "*",
+    "mongoose": "*",
+    "mongoose-paginate-v2": "*"
   }
 }

@@ -1,4 +1,4 @@
-import { useTheme } from "@/theme";
+import { useTheme } from "@shortwaits/admin/theme";
 import React from "react";
 import { ImageBackground, StyleSheet, View, ViewStyle } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";

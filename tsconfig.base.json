@@ -16,7 +16,8 @@
     "baseUrl": ".",
     "paths": {
       "@shortwaits/shared-types": ["libs/shared-types/src/index.ts"],
-      "@shortwaits/shared-ui-layout": ["libs/shared-ui-layout/src/index.ts"]
+      "@shortwaits/shared-ui-layout": ["libs/shared-ui-layout/src/index.ts"],
+      "@shortwaits/admin/*": ["apps/shortwaits-admin/src/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]

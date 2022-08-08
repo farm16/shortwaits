@@ -1,5 +1,5 @@
-import { StyleSheet } from "react-native"
-import { ThemeVariables } from "@/theme/theme.type"
+import { StyleSheet } from "react-native";
+import { ThemeVariables } from "@shortwaits/admin/theme/theme.type";
 
 /**
  * Generate Styles depending on MetricsSizes vars availabled at ./Theme/Variables
@@ -26,44 +26,44 @@ export default function ({ MetricsSizes }: ThemeVariables) {
         ...acc,
         /* Margins */
         [`${key}BMargin`]: {
-          marginBottom: value
+          marginBottom: value,
         },
         [`${key}TMargin`]: {
-          marginTop: value
+          marginTop: value,
         },
         [`${key}RMargin`]: {
-          marginRight: value
+          marginRight: value,
         },
         [`${key}LMargin`]: {
-          marginLeft: value
+          marginLeft: value,
         },
         [`${key}VMargin`]: {
-          marginVertical: value
+          marginVertical: value,
         },
         [`${key}HMargin`]: {
-          marginHorizontal: value
+          marginHorizontal: value,
         },
         /* Paddings */
         [`${key}BPadding`]: {
-          paddingBottom: value
+          paddingBottom: value,
         },
         [`${key}TPadding`]: {
-          paddingTop: value
+          paddingTop: value,
         },
         [`${key}RPadding`]: {
-          paddingRight: value
+          paddingRight: value,
         },
         [`${key}LPadding`]: {
-          paddingLeft: value
+          paddingLeft: value,
         },
         [`${key}VPadding`]: {
-          paddingVertical: value
+          paddingVertical: value,
         },
         [`${key}HPadding`]: {
-          paddingHorizontal: value
-        }
+          paddingHorizontal: value,
+        },
       }),
       {}
-    )
-  })
+    ),
+  });
 }

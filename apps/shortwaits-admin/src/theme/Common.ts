@@ -3,9 +3,13 @@
  *
  * Use it to define generic component styles (e.g. the default text styles, default button styles...).
  */
-import { StyleSheet } from "react-native"
-import { buttonPresets, textFieldPresets, textPresets } from "@/theme/presets"
-import { ThemeCommonParams } from "@/theme/theme.type"
+import { StyleSheet } from "react-native";
+import {
+  buttonPresets,
+  textFieldPresets,
+  textPresets,
+} from "@shortwaits/admin/theme/presets";
+import { ThemeCommonParams } from "@shortwaits/admin/theme/theme.type";
 /**
  *
  * @param Theme can be spread like {Colors, NavigationColors, Gutters, Layout, Common, ...args}
@@ -19,10 +23,10 @@ export default function ({ Colors, ...args }: ThemeCommonParams) {
     textFieldPresets: textFieldPresets({ Colors, ...args }),
     ...StyleSheet.create({
       backgroundPrimary: {
-        backgroundColor: Colors.brandPrimary
+        backgroundColor: Colors.brandPrimary,
       },
       backgroundReset: {
-        backgroundColor: Colors.transparent
+        backgroundColor: Colors.transparent,
       },
       textInput: {
         borderWidth: 1,
@@ -30,10 +34,10 @@ export default function ({ Colors, ...args }: ThemeCommonParams) {
         backgroundColor: Colors.inputBackground,
         color: Colors.text,
         minHeight: 50,
-        textAlign: "center"
+        textAlign: "center",
         // marginTop: 10,
         // marginBottom: 10
-      }
-    })
-  }
+      },
+    }),
+  };
 }

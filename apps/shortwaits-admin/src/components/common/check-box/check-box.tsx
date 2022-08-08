@@ -1,10 +1,10 @@
-import { useTheme } from "@/theme"
-import React from "react"
+import { useTheme } from "@shortwaits/admin/theme";
+import React from "react";
 
-import CheckBox, { CheckBoxProps } from "@react-native-community/checkbox"
+import CheckBox, { CheckBoxProps } from "@react-native-community/checkbox";
 
 export const Checkbox = (props: CheckBoxProps) => {
-  const { Colors } = useTheme()
+  const { Colors } = useTheme();
 
   return (
     <CheckBox
@@ -13,5 +13,5 @@ export const Checkbox = (props: CheckBoxProps) => {
       onTintColor={Colors.brandSecondary6}
       boxType="square"
     />
-  )
-}
+  );
+};

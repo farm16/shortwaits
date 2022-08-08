@@ -10,45 +10,45 @@ import {
   SimpleServiceForm,
   Space,
   Text,
-  useBottomSheet
-} from "@/components"
-import { useBusiness } from "@/hooks/useBusiness"
-import { useGetServicesByBusinessQuery } from "@/services/api"
-import { useTheme } from "@/theme"
-import React, { useRef, useState } from "react"
-import { StatusBar, StyleSheet, Animated, View } from "react-native"
-import { FlatList } from "react-native-gesture-handler"
-import { Divider, Menu } from "react-native-paper"
-import Icon from "react-native-vector-icons/MaterialCommunityIcons"
-import { useDispatch } from "react-redux"
+  useBottomSheet,
+} from "@shortwaits/admin/components";
+import { useBusiness } from "@shortwaits/admin/hooks/useBusiness";
+import { useGetServicesByBusinessQuery } from "@shortwaits/admin/services/api";
+import { useTheme } from "@shortwaits/admin/theme";
+import React, { useRef, useState } from "react";
+import { StatusBar, StyleSheet, Animated, View } from "react-native";
+import { FlatList } from "react-native-gesture-handler";
+import { Divider, Menu } from "react-native-paper";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { useDispatch } from "react-redux";
 
 export const ServicesScreen = () => {
-  const { Colors } = useTheme()
-  const bottomSheetRef = useRef<BottomSheetType>(null)
-  const handleBottomSheet = useBottomSheet(bottomSheetRef)
+  const { Colors } = useTheme();
+  const bottomSheetRef = useRef<BottomSheetType>(null);
+  const handleBottomSheet = useBottomSheet(bottomSheetRef);
 
-  const business = useBusiness()
+  const business = useBusiness();
   const { isFetching, data: services } = useGetServicesByBusinessQuery(
     String(business?._id)
-  )
-  console.log("data payload >>>", services)
+  );
+  console.log("data payload >>>", services);
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const ItemSeparatorComponent = () => (
     <View
       style={[
         styles.listSeparator,
-        { borderTopColor: Colors.backgroundOverlay }
+        { borderTopColor: Colors.backgroundOverlay },
       ]}
     />
-  )
-  const [visible, setVisible] = React.useState(false)
-  const [isSearchBarVisible, setIsSearchBarVisible] = React.useState(false)
+  );
+  const [visible, setVisible] = React.useState(false);
+  const [isSearchBarVisible, setIsSearchBarVisible] = React.useState(false);
 
-  const openMenu = () => setVisible(true)
+  const openMenu = () => setVisible(true);
 
-  const closeMenu = () => setVisible(false)
+  const closeMenu = () => setVisible(false);
 
   return (
     <Screen
@@ -66,37 +66,37 @@ export const ServicesScreen = () => {
       <FlatList
         showsVerticalScrollIndicator={false}
         style={{
-          backgroundColor: Colors.white
+          backgroundColor: Colors.white,
         }}
         contentContainerStyle={{
           marginTop: 25,
-          alignItems: "center"
+          alignItems: "center",
         }}
         ItemSeparatorComponent={() => <Space size="tiny" />}
         data={services}
         renderItem={({ item }) => {
           //const {data} = use
-          return <ServiceCard service={item} onPress={() => null} />
+          return <ServiceCard service={item} onPress={() => null} />;
         }}
-        keyExtractor={item => item?._id}
+        keyExtractor={(item) => item?._id}
       />
       {/* <FloatingScreenButton iconName={"plus"} /> */}
     </Screen>
-  )
-}
+  );
+};
 const styles = StyleSheet.create({
   container: {
     // alignItems: "stretch"
   },
   bottomSheetHeader: {
-    alignItems: "center"
+    alignItems: "center",
   },
   contentContainer: {},
   listSeparator: {
     borderTopWidth: 1,
-    marginVertical: 5
-  }
-})
+    marginVertical: 5,
+  },
+});
 
 {
   /* <BottomSheet snapPoints={["77%"]} ref={bottomSheetRef}>

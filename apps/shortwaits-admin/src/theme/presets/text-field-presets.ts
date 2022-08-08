@@ -1,16 +1,16 @@
-import { ThemeCommonParams } from "@/theme/theme.type"
-import { StyleSheet } from "react-native"
-import { getDimensions } from "../utils"
+import { ThemeCommonParams } from "@shortwaits/admin/theme/theme.type";
+import { StyleSheet } from "react-native";
+import { getDimensions } from "../utils";
 
-export type TextFieldPresets = keyof ReturnType<typeof textFieldPresets>
+export type TextFieldPresets = keyof ReturnType<typeof textFieldPresets>;
 
 export const textFieldPresets = ({
   FontSize,
   Fonts,
   Gutters,
-  Colors
+  Colors,
 }: ThemeCommonParams) => {
-  const { width } = getDimensions()
+  const { width } = getDimensions();
 
   const BASE = StyleSheet.flatten([
     {
@@ -18,13 +18,13 @@ export const textFieldPresets = ({
       letterSpacing: 0.6,
       lineHeight: 27,
       textAlign: "center" as const,
-      color: Colors.text
-    }
-  ])
+      color: Colors.text,
+    },
+  ]);
 
   return StyleSheet.create({
     default: {
-      ...BASE
+      ...BASE,
     },
     cardSubtitle: {
       ...Fonts.textSmall,
@@ -32,8 +32,8 @@ export const textFieldPresets = ({
       paddingTop: 0,
       marginTop: 0,
       letterSpacing: 0.65,
-      color: Colors.text
+      color: Colors.text,
     },
-    none: {}
-  })
-}
+    none: {},
+  });
+};

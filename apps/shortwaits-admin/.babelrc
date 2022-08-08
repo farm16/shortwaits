@@ -7,7 +7,7 @@
         "root": [".", "./src"],
         "extensions": [".js", ".json"],
         "alias": {
-          "@": "./src"
+          "@shortwaits/admin": "./src"
         }
       }
     ],

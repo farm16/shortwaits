@@ -5,13 +5,13 @@ import SplashScreen from "react-native-splash-screen";
 import { CompositeNavigationProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { Button, Space, Spinner, Text } from "@/components";
-import { useTheme } from "@/theme";
+import { Button, Space, Spinner, Text } from "@shortwaits/admin/components";
+import { useTheme } from "@shortwaits/admin/theme";
 import {
   RootStackParamList,
   UnauthorizedStackParamList,
-} from "@/navigation/navigation-types";
-import { useUser } from "@/hooks/useUser";
+} from "@shortwaits/admin/navigation/navigation-types";
+import { useUser } from "@shortwaits/admin/hooks/useUser";
 
 export interface WelcomeScreenProps {
   navigation: CompositeNavigationProp<

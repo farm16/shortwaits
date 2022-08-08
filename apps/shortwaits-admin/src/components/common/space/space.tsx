@@ -1,29 +1,29 @@
-import React from "react"
-import { View } from "react-native"
+import React from "react";
+import { View } from "react-native";
 
-import { MetricsSizes } from "@/theme/Variables"
+import { MetricsSizes } from "@shortwaits/admin/theme/Variables";
 
 export const Space = ({
   direction = "horizontal",
   size = "regular",
-  extra = 0
+  extra = 0,
 }: {
-  direction?: "horizontal" | "vertical"
-  size?: keyof typeof MetricsSizes
-  extra?: number
+  direction?: "horizontal" | "vertical";
+  size?: keyof typeof MetricsSizes;
+  extra?: number;
 }) => {
-  const metricSize = MetricsSizes[size]
+  const metricSize = MetricsSizes[size];
   const horizontalStyle = {
     width: "100%",
-    height: metricSize + extra
-  }
+    height: metricSize + extra,
+  };
   const verticalStyle = {
     height: "100%",
-    width: metricSize
-  }
+    width: metricSize,
+  };
   return (
     <View
       style={direction === "horizontal" ? horizontalStyle : verticalStyle}
     />
-  )
-}
+  );
+};

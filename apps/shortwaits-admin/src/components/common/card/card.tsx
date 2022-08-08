@@ -1,37 +1,37 @@
-import React from "react"
-import Icon from "react-native-vector-icons/MaterialCommunityIcons"
-import { StyleSheet, View } from "react-native"
+import React from "react";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { StyleSheet, View } from "react-native";
 
-import { Button, ButtonProps } from "../button/button"
-import { useTheme } from "@/theme"
-import { IconSizes } from "@/theme/Variables"
+import { Button, ButtonProps } from "../button/button";
+import { useTheme } from "@shortwaits/admin/theme";
+import { IconSizes } from "@shortwaits/admin/theme/Variables";
 
 export interface CardIconsProps {
-  leftIconName?: string
-  rightIconOnPress?: () => void
-  rightIconName?: string
-  rightIconSize?: keyof typeof IconSizes
-  leftIconOnPress?: () => void
-  leftIconSize?: keyof typeof IconSizes
-  rightIconColor?: string
-  leftIconColor?: string
+  leftIconName?: string;
+  rightIconOnPress?: () => void;
+  rightIconName?: string;
+  rightIconSize?: keyof typeof IconSizes;
+  leftIconOnPress?: () => void;
+  leftIconSize?: keyof typeof IconSizes;
+  rightIconColor?: string;
+  leftIconColor?: string;
 }
 export interface CardProps extends ButtonProps, CardIconsProps {
-  mode: keyof typeof cardModes
+  mode: keyof typeof cardModes;
 }
-export const CARD_HEIGHT = 80
+export const CARD_HEIGHT = 80;
 
 const cardModes = {
   "text-field": {
-    disabled: true
+    disabled: true,
   },
   button: {},
   static: {
-    disabled: true
-  }
-}
+    disabled: true,
+  },
+};
 export const Card = (props: CardProps) => {
-  const { Colors } = useTheme()
+  const { Colors } = useTheme();
 
   const {
     mode,
@@ -45,7 +45,7 @@ export const Card = (props: CardProps) => {
     leftIconOnPress,
     rightIconOnPress,
     ...rest
-  } = props
+  } = props;
 
   return (
     <Button
@@ -86,23 +86,23 @@ export const Card = (props: CardProps) => {
         </Button>
       )}
     </Button>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     minHeight: CARD_HEIGHT,
-    maxHeight: CARD_HEIGHT
+    maxHeight: CARD_HEIGHT,
   },
   childrenContaiener: {
     flex: 1,
-    justifyContent: "center"
+    justifyContent: "center",
   },
   iconContainer: {
     width: 35,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   rightIcon: {},
-  leftIcon: {}
-})
+  leftIcon: {},
+});

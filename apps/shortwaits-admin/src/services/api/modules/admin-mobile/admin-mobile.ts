@@ -1,6 +1,6 @@
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
 import { ShortwaitsAdminDefaultDataSuccessResponseType } from "@shortwaits/shared-types";
-import configs from "@/config";
+import configs from "@shortwaits/admin/config";
 
 const { getAdminMobile } = configs.api.endpoints.SHORTWAITS;
 

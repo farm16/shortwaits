@@ -1,5 +1,5 @@
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
-import configs from "@/config";
+import configs from "@shortwaits/admin/config";
 import {
   ObjectId,
   BusinessSuccessResponseType,

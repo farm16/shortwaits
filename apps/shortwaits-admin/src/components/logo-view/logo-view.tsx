@@ -1,26 +1,26 @@
-import React from "react"
-import { View, Image as RNImage } from "react-native"
+import React from "react";
+import { View, Image as RNImage } from "react-native";
 
-import { AutoImage as Image } from "../common"
-import { getDimensions } from "@/theme"
-import logo from "@/assets/images/logo.png"
+import { AutoImage as Image } from "../common";
+import { getDimensions } from "@shortwaits/admin/theme";
+import logo from "@shortwaits/admin/assets/images/logo.png";
 
-const MAX_LOGO_HEIGHT = 100
+const MAX_LOGO_HEIGHT = 100;
 
 interface LogoProps {
-  withMargin?: boolean
-  center?: boolean
+  withMargin?: boolean;
+  center?: boolean;
 }
 export function Logo({ withMargin = true, center = true }: LogoProps) {
-  const [currentHeight, setCurrentHeight] = React.useState(MAX_LOGO_HEIGHT)
-  const { height: SCREEN_HEIGHT } = getDimensions()
+  const [currentHeight, setCurrentHeight] = React.useState(MAX_LOGO_HEIGHT);
+  const { height: SCREEN_HEIGHT } = getDimensions();
 
-  const minViewHeight = SCREEN_HEIGHT * 0.3
-  const maxViewHeight = SCREEN_HEIGHT * 0.5
+  const minViewHeight = SCREEN_HEIGHT * 0.3;
+  const maxViewHeight = SCREEN_HEIGHT * 0.5;
 
-  const fromCurrentViewHeight = currentHeight * 0.5
+  const fromCurrentViewHeight = currentHeight * 0.5;
 
-  const logoSide = Math.min(fromCurrentViewHeight, MAX_LOGO_HEIGHT)
+  const logoSide = Math.min(fromCurrentViewHeight, MAX_LOGO_HEIGHT);
   return withMargin ? (
     <View
       style={{
@@ -28,15 +28,15 @@ export function Logo({ withMargin = true, center = true }: LogoProps) {
         backgroundColor: undefined,
         minHeight: minViewHeight,
         maxHeight: maxViewHeight,
-        justifyContent: center ? "center" : "flex-start"
+        justifyContent: center ? "center" : "flex-start",
       }}
-      onLayout={e => setCurrentHeight(e.nativeEvent.layout.height)}
+      onLayout={(e) => setCurrentHeight(e.nativeEvent.layout.height)}
     >
       <Image
         source={logo}
         style={{
           width: logoSide,
-          height: logoSide
+          height: logoSide,
         }}
       />
     </View>
@@ -45,8 +45,8 @@ export function Logo({ withMargin = true, center = true }: LogoProps) {
       source={logo}
       style={{
         width: logoSide,
-        height: logoSide
+        height: logoSide,
       }}
     />
-  )
+  );
 }

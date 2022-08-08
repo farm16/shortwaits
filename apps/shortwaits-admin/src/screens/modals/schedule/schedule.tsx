@@ -17,16 +17,16 @@ import {
   Screen,
   Space,
   useBottomSheet,
-} from "@/components";
-import { ModalsScreenProps } from "@/navigation/navigation-types";
-import { useBusiness } from "@/hooks/useBusiness";
-import { useTheme } from "@/theme";
+} from "@shortwaits/admin/components";
+import { ModalsScreenProps } from "@shortwaits/admin/navigation/navigation-types";
+import { useBusiness } from "@shortwaits/admin/hooks/useBusiness";
+import { useTheme } from "@shortwaits/admin/theme";
 
 import { ScheduleCard } from "./schedule-card";
 import { SelectTimeRange } from "./select-time-range";
 import { scheduleConfigs } from "./schedule-config";
 import { useDispatch } from "react-redux";
-import { setBusinessEveryDayActivity } from "@/redux/business";
+import { setBusinessEveryDayActivity } from "@shortwaits/admin/redux/business";
 
 const getFullDayString = (day?: string): string => {
   return day ? WEEKDAYS[day] : "";

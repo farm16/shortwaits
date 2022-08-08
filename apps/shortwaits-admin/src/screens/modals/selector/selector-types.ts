@@ -2,7 +2,7 @@ import {
   SelectorMode,
   SelectorModalType,
   ModalPermissions,
-} from "@/navigation/navigation-types";
+} from "@shortwaits/admin/navigation/navigation-types";
 import { UseQuery } from "@reduxjs/toolkit/dist/query/react/buildHooks";
 import { BusinessPayloadType } from "@shortwaits/shared-types";
 

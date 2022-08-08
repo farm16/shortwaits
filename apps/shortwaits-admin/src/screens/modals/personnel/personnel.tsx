@@ -1,20 +1,25 @@
-import React, { useLayoutEffect } from "react"
-import { StatusBar, View } from "react-native"
-import { StackScreenProps } from "@react-navigation/stack"
+import React, { useLayoutEffect } from "react";
+import { StatusBar, View } from "react-native";
+import { StackScreenProps } from "@react-navigation/stack";
 
-import { RootStackParamList } from "@/navigation"
-import { Screen, Card, Text, FloatingScreenButton } from "@/components"
-import { useTheme } from "@/theme"
+import { RootStackParamList } from "@shortwaits/admin/navigation";
+import {
+  Screen,
+  Card,
+  Text,
+  FloatingScreenButton,
+} from "@shortwaits/admin/components";
+import { useTheme } from "@shortwaits/admin/theme";
 
 export const PersonnelModal = ({
-  navigation
+  navigation,
 }: StackScreenProps<RootStackParamList, "modals">) => {
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "personnel"
-    })
-  }, [navigation])
-  const { Colors } = useTheme()
+      headerTitle: "personnel",
+    });
+  }, [navigation]);
+  const { Colors } = useTheme();
   return (
     <Screen
       preset="scroll"
@@ -29,7 +34,7 @@ export const PersonnelModal = ({
         onPress={() =>
           navigation.navigate("modals", {
             screen: "add-personnel-modal-screen",
-            params: { mode: "add" }
+            params: { mode: "add" },
           })
         }
         iconName="account-plus-outline"
@@ -42,11 +47,11 @@ export const PersonnelModal = ({
               <Text preset="cardSubtitle" text={elem.email} />
             </View>
           </Card>
-        )
+        );
       })}
     </Screen>
-  )
-}
+  );
+};
 
 const employees = [
   {
@@ -54,13 +59,13 @@ const employees = [
     fullName: "Amaira Pelaez",
     firstName: "amaira",
     lastName: "Pelaez",
-    email: "amaira.fajardo@gmail.com"
+    email: "amaira.fajardo@gmail.com",
   },
   {
     id: "AQHJKjlkJUHasdasdassdas4358h763dfFQAQW",
     fullName: "Christopher Fajardo",
     firstName: "Christopher",
     lastName: "Fajardo",
-    email: "christopher.fajardo@gmail.com"
-  }
-]
+    email: "christopher.fajardo@gmail.com",
+  },
+];

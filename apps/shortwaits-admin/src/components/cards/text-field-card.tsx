@@ -1,19 +1,19 @@
-import React from "react"
-import { StyleSheet, View } from "react-native"
+import React from "react";
+import { StyleSheet, View } from "react-native";
 
-import { getDimensions, useTheme } from "@/theme"
+import { getDimensions, useTheme } from "@shortwaits/admin/theme";
 import {
   TextField,
   TextFieldProps,
   Card,
   Text,
-  CardIconsProps
-} from "../common"
+  CardIconsProps,
+} from "../common";
 
 interface TextFieldCard extends TextFieldProps, Partial<CardIconsProps> {
-  title: string
-  isTouched?: boolean
-  rightIconName?: string
+  title: string;
+  isTouched?: boolean;
+  rightIconName?: string;
 }
 
 export function TextFieldCard(props: TextFieldCard) {
@@ -33,10 +33,10 @@ export function TextFieldCard(props: TextFieldCard) {
     leftIconName,
     rightIconColor,
     ...rest
-  } = props
+  } = props;
 
-  const { Colors } = useTheme()
-  const { width } = getDimensions()
+  const { Colors } = useTheme();
+  const { width } = getDimensions();
 
   return (
     <>
@@ -63,23 +63,23 @@ export function TextFieldCard(props: TextFieldCard) {
           style={{
             ...styles.errorField,
             width: width * 0.87,
-            color: Colors.red3
+            color: Colors.red3,
           }}
           text={"* " + errors}
         />
       ) : null}
     </>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   errorField: {
     alignSelf: "center",
-    textAlign: "right"
+    textAlign: "right",
   },
   cardTitle: {
     flexDirection: "row",
     justifyContent: "space-between",
-    margin: 0
-  }
-})
+    margin: 0,
+  },
+});

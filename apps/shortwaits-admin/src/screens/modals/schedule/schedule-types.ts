@@ -3,7 +3,7 @@ import {
   ScheduleMode,
   ScheduleModalType,
   ModalPermissions,
-} from "@/navigation/navigation-types";
+} from "@shortwaits/admin/navigation/navigation-types";
 import { QueryDefinition } from "@reduxjs/toolkit/dist/query";
 import { UseQuery } from "@reduxjs/toolkit/dist/query/react/buildHooks";
 

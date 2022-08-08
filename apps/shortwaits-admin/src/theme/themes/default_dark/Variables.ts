@@ -1,16 +1,16 @@
-import { ThemeNavigationColors } from "@/theme/theme.type"
+import { ThemeNavigationColors } from "@shortwaits/admin/theme/theme.type";
 
 const Colors = {
   primary: "lightblue",
   text: "white",
-  inputBackground: "gray"
-}
+  inputBackground: "gray",
+};
 
 const NavigationColors: Partial<ThemeNavigationColors> = {
-  primary: Colors.primary
-}
+  primary: Colors.primary,
+};
 
 export default {
   Colors,
-  NavigationColors
-}
+  NavigationColors,
+};

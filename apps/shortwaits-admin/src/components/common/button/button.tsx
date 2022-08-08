@@ -1,13 +1,13 @@
-import React, { FC } from "react"
-import { StyleSheet, TouchableOpacity } from "react-native"
-import { Shadow } from "react-native-shadow-2"
-import Spinner from "react-native-spinkit"
+import React, { FC } from "react";
+import { StyleSheet, TouchableOpacity } from "react-native";
+import { Shadow } from "react-native-shadow-2";
+import Spinner from "react-native-spinkit";
 
-import { Text } from "../text/text"
-import { useTheme } from "@/theme"
-import { ButtonProps } from "./button-types"
+import { Text } from "../text/text";
+import { useTheme } from "@shortwaits/admin/theme";
+import { ButtonProps } from "./button-types";
 
-export const Button: FC<ButtonProps> = props => {
+export const Button: FC<ButtonProps> = (props) => {
   const {
     preset = "primary",
     withShadow = false,
@@ -21,12 +21,12 @@ export const Button: FC<ButtonProps> = props => {
     disabled = false,
     state = "enabled",
     ...rest
-  } = props
+  } = props;
 
   const {
     Colors,
-    Common: { buttonTextPresets, buttonViewPresets }
-  } = useTheme()
+    Common: { buttonTextPresets, buttonViewPresets },
+  } = useTheme();
 
   if (state === "loading")
     return (
@@ -36,15 +36,15 @@ export const Button: FC<ButtonProps> = props => {
         type={"ThreeBounce"}
         color={Colors.darkText}
       />
-    )
+    );
 
-  const defaultStyle = buttonViewPresets[preset] || buttonViewPresets.primary
-  const textStyle = buttonTextPresets[preset] || buttonTextPresets.primary
-  const textStyles = [textStyle, textStyleOverride]
-  const Icon = icon
+  const defaultStyle = buttonViewPresets[preset] || buttonViewPresets.primary;
+  const textStyle = buttonTextPresets[preset] || buttonTextPresets.primary;
+  const textStyles = [textStyle, textStyleOverride];
+  const Icon = icon;
   const content = children || (
     <Text iText={iText} text={text} style={textStyles} />
-  )
+  );
 
   const WithOutShadow = (
     <TouchableOpacity
@@ -62,17 +62,17 @@ export const Button: FC<ButtonProps> = props => {
 
       {content}
     </TouchableOpacity>
-  )
+  );
 
-  const WithShadow = <Shadow distance={4}>{WithOutShadow}</Shadow>
+  const WithShadow = <Shadow distance={4}>{WithOutShadow}</Shadow>;
 
-  return withShadow ? WithShadow : WithOutShadow
-}
+  return withShadow ? WithShadow : WithOutShadow;
+};
 
 const styles = StyleSheet.create({
   spinner: {
-    marginBottom: 5
-  }
-})
+    marginBottom: 5,
+  },
+});
 
-export * from "./button-types"
+export * from "./button-types";

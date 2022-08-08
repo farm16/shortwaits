@@ -1,4 +1,7 @@
-import { ThemeImages, ThemeVariables } from "@/theme/theme.type";
+import {
+  ThemeImages,
+  ThemeVariables,
+} from "@shortwaits/admin/theme/theme.type";
 
 /**
  *
@@ -6,8 +9,8 @@ import { ThemeImages, ThemeVariables } from "@/theme/theme.type";
  * @return {*}
  */
 export default function ({}: ThemeVariables): ThemeImages {
-    return {
-        logo: null
-        // logo: require("@/Assets/Images/TOM.png")
-    };
+  return {
+    logo: null,
+    // logo: require("@shortwaits/admin/Assets/Images/TOM.png")
+  };
 }

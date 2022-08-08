@@ -1,12 +1,12 @@
-import React from "react"
-import { StyleSheet, ViewStyle } from "react-native"
+import React from "react";
+import { StyleSheet, ViewStyle } from "react-native";
 import MultiSlider, {
-  MultiSliderProps
-} from "@ptomasroos/react-native-multi-slider"
-import { getDimensions, useTheme } from "@/theme"
+  MultiSliderProps,
+} from "@ptomasroos/react-native-multi-slider";
+import { getDimensions, useTheme } from "@shortwaits/admin/theme";
 
 interface MultiSliderComponentProps extends MultiSliderProps {
-  style?: ViewStyle
+  style?: ViewStyle;
 }
 
 export const MultiSliderComponent = (props: MultiSliderComponentProps) => {
@@ -19,19 +19,19 @@ export const MultiSliderComponent = (props: MultiSliderComponentProps) => {
     allowOverlap = false,
     values,
     ...rest
-  } = props
-  const { width } = getDimensions(80)
-  const { Colors } = useTheme()
+  } = props;
+  const { width } = getDimensions(80);
+  const { Colors } = useTheme();
 
   const containerStyle = StyleSheet.flatten([
     styles.container,
     { width: width },
-    styleOverride
-  ])
+    styleOverride,
+  ]);
   const markerStyle = StyleSheet.flatten([
     styles.marker,
-    { backgroundColor: Colors.brandPrimary }
-  ])
+    { backgroundColor: Colors.brandPrimary },
+  ]);
 
   return (
     <MultiSlider
@@ -49,8 +49,8 @@ export const MultiSliderComponent = (props: MultiSliderComponentProps) => {
       step={step}
       {...rest}
     />
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -58,24 +58,24 @@ const styles = StyleSheet.create({
     height: 30,
     marginHorizontal: 0,
     marginVertical: 5,
-    paddingHorizontal: 0
+    paddingHorizontal: 0,
   },
   track: {
     height: 3.5,
-    borderRadius: 3.5 / 2
+    borderRadius: 3.5 / 2,
   },
   selected: {},
   unselected: {},
   pressedMarker: {
     height: 25,
-    width: 25
+    width: 25,
   },
   marker: {
     height: 20,
     width: 20,
-    top: 1.5
-  }
-})
+    top: 1.5,
+  },
+});
 
 /**
  * PROPS !!!

@@ -1,6 +1,6 @@
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
 import { ObjectId, UserType } from "@shortwaits/shared-types";
-import configs from "@/config";
+import configs from "@shortwaits/admin/config";
 
 const { getCategory } = configs.api.endpoints.CATEGORIES;
 

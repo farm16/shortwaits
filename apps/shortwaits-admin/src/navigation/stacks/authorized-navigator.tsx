@@ -1,21 +1,21 @@
-import React from "react"
-import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs"
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
+import React from "react";
+import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 import {
   SettingsScreen,
   EventsScreen,
   ServicesScreen,
   ActivityScreen,
-  StaffScreen
-} from "@/screens"
-import { useTheme } from "@/theme"
-import { AUTHORIZED_SCREENS } from "../navigation-constants"
+  StaffScreen,
+} from "@shortwaits/admin/screens";
+import { useTheme } from "@shortwaits/admin/theme";
+import { AUTHORIZED_SCREENS } from "../navigation-constants";
 
-const Tab = createMaterialBottomTabNavigator()
+const Tab = createMaterialBottomTabNavigator();
 
 export const AuthorizedNavigator = () => {
-  const { Colors } = useTheme()
+  const { Colors } = useTheme();
   return (
     <Tab.Navigator
       initialRouteName={AUTHORIZED_SCREENS.EVENTS_SCREEN}
@@ -36,7 +36,7 @@ export const AuthorizedNavigator = () => {
               color={color}
               size={25}
             />
-          )
+          ),
         }}
       />
       <Tab.Screen
@@ -50,7 +50,7 @@ export const AuthorizedNavigator = () => {
               color={color}
               size={25}
             />
-          )
+          ),
         }}
       />
       <Tab.Screen
@@ -64,7 +64,7 @@ export const AuthorizedNavigator = () => {
               color={color}
               size={25}
             />
-          )
+          ),
         }}
       />
       <Tab.Screen
@@ -82,7 +82,7 @@ export const AuthorizedNavigator = () => {
               color={color}
               size={25}
             />
-          )
+          ),
         }}
       />
       <Tab.Screen
@@ -96,11 +96,11 @@ export const AuthorizedNavigator = () => {
               color={color}
               size={25}
             />
-          )
+          ),
         }}
       />
     </Tab.Navigator>
-  )
-}
+  );
+};
 // const exitRoutes = ['welcome'];
 //  const canExit = (routeName: string) => exitRoutes.includes(routeName);

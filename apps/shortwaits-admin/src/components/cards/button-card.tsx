@@ -1,21 +1,21 @@
-import React from "react"
+import React from "react";
 
-import { Card, CardProps, Text } from "../common"
-import { useTheme } from "@/theme"
+import { Card, CardProps, Text } from "../common";
+import { useTheme } from "@shortwaits/admin/theme";
 
 export interface ButtonCardProps extends Omit<CardProps, "mode"> {
-  title: string
-  subTitle?: string
+  title: string;
+  subTitle?: string;
 }
 export const ButtonCard = (props: ButtonCardProps) => {
-  const { Colors } = useTheme()
+  const { Colors } = useTheme();
   const {
     title,
     subTitle,
     rightIconName = "chevron-right",
     rightIconSize = "large",
     ...rest
-  } = props
+  } = props;
 
   return (
     <Card
@@ -33,5 +33,5 @@ export const ButtonCard = (props: ButtonCardProps) => {
         />
       )}
     </Card>
-  )
-}
+  );
+};

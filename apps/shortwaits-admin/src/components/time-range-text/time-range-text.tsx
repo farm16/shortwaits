@@ -1,35 +1,35 @@
-import React from "react"
-import Icon from "react-native-vector-icons/MaterialCommunityIcons"
-import { StyleProp, View, StyleSheet, ViewStyle } from "react-native"
+import React from "react";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { StyleProp, View, StyleSheet, ViewStyle } from "react-native";
 
-import { Text } from "../common"
-import { useTheme } from "@/theme"
-import { get12hrTimeFromDecimal } from "@/utils"
+import { Text } from "../common";
+import { useTheme } from "@shortwaits/admin/theme";
+import { get12hrTimeFromDecimal } from "@shortwaits/admin/utils";
 
 export const TimeRangeText = ({
   style,
   startTime,
   endTime,
   preset = "text",
-  disabled = false
+  disabled = false,
 }: {
-  style?: StyleProp<ViewStyle>
-  preset?: "text" | "title"
-  startTime?: number
-  endTime?: number
-  disabled?: boolean
+  style?: StyleProp<ViewStyle>;
+  preset?: "text" | "title";
+  startTime?: number;
+  endTime?: number;
+  disabled?: boolean;
 }) => {
-  const { Colors } = useTheme()
+  const { Colors } = useTheme();
   const textColors = {
     text: Colors.subText,
-    title: Colors.text
-  }
+    title: Colors.text,
+  };
   return (
     <View style={[styles.container, style]}>
       <Text
         style={{
           ...styles[preset],
-          color: disabled ? Colors.lightGray : textColors[preset]
+          color: disabled ? Colors.lightGray : textColors[preset],
         }}
         text={get12hrTimeFromDecimal(startTime)}
       />
@@ -48,27 +48,27 @@ export const TimeRangeText = ({
         style={{
           ...styles[preset],
           color: disabled ? Colors.lightGray : textColors[preset],
-          marginStart: styles[preset].marginEnd
+          marginStart: styles[preset].marginEnd,
         }}
         text={get12hrTimeFromDecimal(endTime)}
       />
     </View>
-  )
-}
+  );
+};
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "flex-start"
+    justifyContent: "flex-start",
   },
   text: {
     fontSize: 12,
     marginEnd: 10,
-    textTransform: "lowercase"
+    textTransform: "lowercase",
   },
   title: {
     fontSize: 23,
     marginEnd: 10,
-    textTransform: "lowercase"
-  }
-})
+    textTransform: "lowercase",
+  },
+});

@@ -6,7 +6,7 @@ import {
   SafeAreaProvider,
   initialWindowMetrics,
 } from "react-native-safe-area-context";
-import { AppNavigator } from "@/navigation";
+import { AppNavigator } from "@shortwaits/admin/navigation";
 import { persistor, store } from "./redux";
 import { PortalProvider, enableLogging } from "@gorhom/portal";
 

@@ -1,29 +1,29 @@
-import { StyleSheet } from "react-native"
-import { ThemeCommonParams } from "@/theme/theme.type"
-import { getDimensions } from "../utils"
+import { StyleSheet } from "react-native";
+import { ThemeCommonParams } from "@shortwaits/admin/theme/theme.type";
+import { getDimensions } from "../utils";
 
-type PresetType<TObj, TProp extends keyof TObj> = TObj[TProp]
+type PresetType<TObj, TProp extends keyof TObj> = TObj[TProp];
 
-export type ButtonPresets = ReturnType<typeof buttonPresets>
+export type ButtonPresets = ReturnType<typeof buttonPresets>;
 
-export type ButtonViewType = PresetType<ButtonPresets, "viewPresets">
+export type ButtonViewType = PresetType<ButtonPresets, "viewPresets">;
 
 export const buttonPresets = ({
   Colors,
   Fonts,
   Gutters, //Should not use margins
-  Layout
+  Layout,
 }: ThemeCommonParams) => {
-  const { width } = getDimensions()
+  const { width } = getDimensions();
 
   const VIEW_BASE = StyleSheet.flatten([
     {
       ...Layout.center,
       height: 55,
       width: width * 0.85,
-      backgroundColor: Colors.brandPrimary
-    }
-  ])
+      backgroundColor: Colors.brandPrimary,
+    },
+  ]);
 
   const viewPresets = StyleSheet.create({
     none: {},
@@ -31,7 +31,7 @@ export const buttonPresets = ({
       ...VIEW_BASE,
       backgroundColor: Colors.brandSecondary1,
       //backgroundColor: "#C4EDDE",
-      borderRadius: 25
+      borderRadius: 25,
     },
     headerLink: {
       backgroundColor: Colors.backgroundOverlay,
@@ -40,37 +40,37 @@ export const buttonPresets = ({
       height: 36,
       width: 36,
       borderRadius: 18,
-      marginHorizontal: "10%"
+      marginHorizontal: "10%",
     },
     icon: {
       height: 55,
       width: 52,
       justifyContent: "center",
-      alignItems: "center"
+      alignItems: "center",
     },
     outline: {
       ...VIEW_BASE,
       borderRadius: 25,
       backgroundColor: Colors.transparent,
       borderWidth: 2,
-      borderColor: Colors.brandPrimary
+      borderColor: Colors.brandPrimary,
     },
     flat: {
       ...VIEW_BASE,
       backgroundColor: Colors.backgroundOverlay,
-      borderRadius: 25
+      borderRadius: 25,
     },
     subLink: {
       ...VIEW_BASE,
       width: undefined,
       alignItems: "flex-end",
       height: undefined,
-      backgroundColor: Colors.transparent
+      backgroundColor: Colors.transparent,
     },
     link: {
       ...VIEW_BASE,
       width: undefined,
-      backgroundColor: Colors.transparent
+      backgroundColor: Colors.transparent,
     },
     social: {
       ...VIEW_BASE,
@@ -81,14 +81,14 @@ export const buttonPresets = ({
       // backgroundColor: Colors.brandAccent,
       flexDirection: "row",
       borderWidth: 2,
-      borderColor: "#AEB2C2"
+      borderColor: "#AEB2C2",
     },
     socialIcon: {
       position: "absolute",
       left: 0,
       marginLeft: width * 0.03,
       height: 27,
-      width: 27
+      width: 27,
     },
     card: {
       paddingLeft: 10,
@@ -97,7 +97,7 @@ export const buttonPresets = ({
       paddingVertical: 10,
       width: width * 0.87,
       borderBottomWidth: 1.5,
-      borderBottomColor: Colors.inputBackground
+      borderBottomColor: Colors.inputBackground,
     },
     listItem: {
       minHeight: 55,
@@ -105,20 +105,20 @@ export const buttonPresets = ({
       width,
       backgroundColor: Colors.white,
       alignItems: "flex-start",
-      justifyContent: "space-evenly"
-    }
-  })
+      justifyContent: "space-evenly",
+    },
+  });
   const TEXT_BASE = StyleSheet.flatten([
     {
-      ...Fonts.textRegular
-    }
-  ])
+      ...Fonts.textRegular,
+    },
+  ]);
   const textPresets = StyleSheet.create({
     none: {},
     primary: {
       ...TEXT_BASE,
       color: Colors.brandSecondary6,
-      fontWeight: "600"
+      fontWeight: "600",
     },
     headerLink: {
       // marginHorizontal: 5,
@@ -127,38 +127,38 @@ export const buttonPresets = ({
     },
     outline: {
       ...TEXT_BASE,
-      color: Colors.brandPrimary6
+      color: Colors.brandPrimary6,
     },
     flat: {
       ...TEXT_BASE,
       color: Colors.darkGray,
-      fontWeight: "600"
+      fontWeight: "600",
     },
     subLink: {
       ...TEXT_BASE,
       ...Fonts.textSmall,
       color: Colors.brandSecondary6,
-      fontWeight: "600"
+      fontWeight: "600",
     },
     link: {
       ...TEXT_BASE,
       ...Fonts.textRegular,
       color: Colors.brandPrimary5,
-      fontWeight: "400"
+      fontWeight: "400",
     },
     social: {
       ...TEXT_BASE,
       ...Fonts.textSmall,
       color: Colors.text,
-      fontWeight: "bold"
+      fontWeight: "bold",
     },
     icon: {},
     socialIcon: {},
     card: {},
-    listItem: {}
-  })
+    listItem: {},
+  });
   return {
     viewPresets,
-    textPresets
-  }
-}
+    textPresets,
+  };
+};

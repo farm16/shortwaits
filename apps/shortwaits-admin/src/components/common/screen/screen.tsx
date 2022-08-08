@@ -1,28 +1,28 @@
-import React from "react"
+import React from "react";
 import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
   StatusBar,
-  View
-} from "react-native"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
+  View,
+} from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { useTheme } from "@/theme"
-import { ScreenProps } from "./screen.props"
-import { isNonScrolling, offsets, presets } from "./screen.presets"
+import { useTheme } from "@shortwaits/admin/theme";
+import { ScreenProps } from "./screen.props";
+import { isNonScrolling, offsets, presets } from "./screen.presets";
 
-const isIos = Platform.OS === "ios"
+const isIos = Platform.OS === "ios";
 
 function ScreenWithoutScrolling(props: ScreenProps) {
-  const insets = useSafeAreaInsets()
-  const preset = presets.fixed
-  const style = props.style || {}
-  const { Colors } = useTheme()
+  const insets = useSafeAreaInsets();
+  const preset = presets.fixed;
+  const style = props.style || {};
+  const { Colors } = useTheme();
   const backgroundStyle = props.backgroundColor
     ? { backgroundColor: props.backgroundColor }
-    : { backgroundColor: Colors.background }
-  const insetStyle = { paddingTop: props.unsafe ? 0 : insets.top }
+    : { backgroundColor: Colors.background };
+  const insetStyle = { paddingTop: props.unsafe ? 0 : insets.top };
 
   return (
     <KeyboardAvoidingView
@@ -36,18 +36,18 @@ function ScreenWithoutScrolling(props: ScreenProps) {
       />
       <View style={[preset.inner, style, insetStyle]}>{props.children}</View>
     </KeyboardAvoidingView>
-  )
+  );
 }
 
 function ScreenWithScrolling(props: ScreenProps) {
-  const insets = useSafeAreaInsets()
-  const preset = presets.scroll
-  const style = props.style || {}
-  const { Colors } = useTheme()
+  const insets = useSafeAreaInsets();
+  const preset = presets.scroll;
+  const style = props.style || {};
+  const { Colors } = useTheme();
   const backgroundStyle = props.backgroundColor
     ? { backgroundColor: props.backgroundColor }
-    : { backgroundColor: Colors.background }
-  const insetStyle = { paddingTop: props.unsafe ? 0 : insets.top }
+    : { backgroundColor: Colors.background };
+  const insetStyle = { paddingTop: props.unsafe ? 0 : insets.top };
 
   return (
     <KeyboardAvoidingView
@@ -71,7 +71,7 @@ function ScreenWithScrolling(props: ScreenProps) {
         </ScrollView>
       </View>
     </KeyboardAvoidingView>
-  )
+  );
 }
 
 /**
@@ -81,8 +81,8 @@ function ScreenWithScrolling(props: ScreenProps) {
  */
 export function Screen(props: ScreenProps) {
   if (isNonScrolling(props.preset)) {
-    return <ScreenWithoutScrolling {...props} />
+    return <ScreenWithoutScrolling {...props} />;
   } else {
-    return <ScreenWithScrolling {...props} />
+    return <ScreenWithScrolling {...props} />;
   }
 }

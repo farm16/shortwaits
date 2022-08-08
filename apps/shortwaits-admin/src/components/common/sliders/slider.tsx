@@ -1,16 +1,7 @@
-import { useTheme } from "@/theme"
-import React from "react"
-import * as RNSlider from "react-native-slider"
-
-interface SliderProps {
-  onValueChange: void
-  value: number
-  disabled?: boolean
-  onSlidingComplete?: void
-  step?: number
-  maximumValue?: number
-  minimumValue?: number
-}
+import { useTheme } from "@shortwaits/admin/theme";
+import React from "react";
+import RNCSlider from "@react-native-community/slider";
+import { SliderProps } from "react-native";
 
 export const Slider = (props: SliderProps) => {
   const {
@@ -19,23 +10,23 @@ export const Slider = (props: SliderProps) => {
     onValueChange,
     step = 15,
     value,
-    disabled = false
-  } = props
-  const { Colors } = useTheme()
+    disabled = false,
+  } = props;
+  const { Colors } = useTheme();
 
   return (
-    <RNSlider
+    <RNCSlider
       minimumValue={minimumValue}
       maximumValue={maximumValue}
       minimumTrackTintColor={Colors.gray}
       maximumTrackTintColor={Colors.gray}
       thumbTintColor={Colors.gray}
-      animateTransitions={true}
-      thumbTouchSize={{ width: 40, height: 40 }}
+      // animateTransitions={true}
+      // thumbTouchSize={{ width: 40, height: 40 }}
       step={step}
       disabled={disabled}
       value={value}
       onValueChange={onValueChange}
     />
-  )
-}
+  );
+};

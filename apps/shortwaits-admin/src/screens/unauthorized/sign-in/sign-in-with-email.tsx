@@ -1,14 +1,23 @@
-import React, { FC, useCallback, useState } from "react"
-import { StyleSheet, View } from "react-native"
-import { StackNavigationProp } from "@react-navigation/stack"
-import { ScrollView } from "react-native-gesture-handler"
+import React, { FC, useCallback, useState } from "react";
+import { StyleSheet, View } from "react-native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { ScrollView } from "react-native-gesture-handler";
 
-import { Button, Text, Checkbox, Space, TextFieldCard } from "@/components"
-import { useTheme } from "@/theme"
-import { RootStackParamList, UnauthorizedStackParamList } from "@/navigation"
-import { useForm } from "@/hooks/useForm"
-import { CompositeNavigationProp } from "@react-navigation/native"
-import { useLocalSignInMutation } from "@/services/api"
+import {
+  Button,
+  Text,
+  Checkbox,
+  Space,
+  TextFieldCard,
+} from "@shortwaits/admin/components";
+import { useTheme } from "@shortwaits/admin/theme";
+import {
+  RootStackParamList,
+  UnauthorizedStackParamList,
+} from "@shortwaits/admin/navigation";
+import { useForm } from "@shortwaits/admin/hooks/useForm";
+import { CompositeNavigationProp } from "@react-navigation/native";
+import { useLocalSignInMutation } from "@shortwaits/admin/services/api";
 
 interface SignInWithEmailScreenProps {
   navigation: CompositeNavigationProp<
@@ -17,44 +26,44 @@ interface SignInWithEmailScreenProps {
       "sign-in-with-email-screen"
     >,
     StackNavigationProp<RootStackParamList>
-  >
+  >;
 }
 
 export const SignInWithEmail: FC<SignInWithEmailScreenProps> = ({
-  navigation
+  navigation,
 }) => {
-  const { Colors } = useTheme()
-  const [isVisible, setIsVisible] = useState(false)
+  const { Colors } = useTheme();
+  const [isVisible, setIsVisible] = useState(false);
 
-  const [localSignIn, { isLoading }] = useLocalSignInMutation()
+  const [localSignIn, { isLoading }] = useLocalSignInMutation();
 
   const initialValues = {
     email: "",
-    password: ""
-  }
+    password: "",
+  };
   const { touched, errors, values, handleChange, handleSubmit, dirty } =
     useForm(
       {
         initialValues,
-        onSubmit: formData => {
+        onSubmit: (formData) => {
           localSignIn({
             email: formData.email,
-            password: formData.password
-          })
-        }
+            password: formData.password,
+          });
+        },
       },
       "signInSchema"
-    )
+    );
   const handlePasswordVisibility = useCallback(() => {
-    setIsVisible(visibility => !visibility)
-  }, [])
+    setIsVisible((visibility) => !visibility);
+  }, []);
   return (
     <View
       style={[
         styles.container,
         {
-          backgroundColor: Colors.background
-        }
+          backgroundColor: Colors.background,
+        },
       ]}
     >
       <Space />
@@ -90,7 +99,7 @@ export const SignInWithEmail: FC<SignInWithEmailScreenProps> = ({
           style={{
             flexDirection: "row",
             alignItems: "center",
-            paddingBottom: 20
+            paddingBottom: 20,
           }}
         >
           <Checkbox />
@@ -119,23 +128,23 @@ export const SignInWithEmail: FC<SignInWithEmailScreenProps> = ({
           preset="subLink"
           text="Sign Up"
           onPress={() => {
-            navigation.navigate("unauthorized", { screen: "sign-up-screen" })
+            navigation.navigate("unauthorized", { screen: "sign-up-screen" });
           }}
         />
       </View>
       <Space size="xLarge" />
     </View>
-  )
-}
+  );
+};
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center"
+    alignItems: "center",
   },
   signInRow: {
-    flexDirection: "row"
+    flexDirection: "row",
   },
   subLink: {
-    fontWeight: "bold"
-  }
-})
+    fontWeight: "bold",
+  },
+});

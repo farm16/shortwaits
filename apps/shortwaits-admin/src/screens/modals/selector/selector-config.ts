@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { setBusinessCategories } from "@/redux/business";
+import { setBusinessCategories } from "@shortwaits/admin/redux/business";
 import { SelectorConfigs } from "./selector-types";
 import {
   BusinessPayloadType,
@@ -7,15 +7,15 @@ import {
   CategoriesPayloadType,
   UserPayloadType,
 } from "@shortwaits/shared-types";
-import { navigate } from "@/utils";
+import { navigate } from "@shortwaits/admin/utils";
 import { noop } from "lodash";
 import {
   useGetUserQuery,
   useGetCategoriesQuery,
   useGetCategoryQuery,
   useGetBusinessStaffQuery,
-} from "@/services/api";
-import { useBusiness } from "@/hooks/useBusiness";
+} from "@shortwaits/admin/services/api";
+import { useBusiness } from "@shortwaits/admin/hooks/useBusiness";
 
 export const selectorConfigs: SelectorConfigs = {
   "My-Business-Categories": {

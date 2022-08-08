@@ -1,26 +1,30 @@
-import React from "react"
-import { StyleSheet } from "react-native"
-import { useDispatch } from "react-redux"
-import { AuthorizedScreenHeader, Button, Screen } from "@/components"
-import { useTheme } from "@/theme"
-import { Divider, List, Switch } from "react-native-paper"
-import { useUser } from "@/hooks/useUser"
-import { useBusiness } from "@/hooks/useBusiness"
-import { UserAccountSettings } from "./options/user-account"
-import { SupportSettings } from "./options/support"
-import { BusinessInfoSettings } from "./options/business-info"
-import { IntegrationsSettings } from "./options/integrations"
-import { ContactsSettings } from "./options/contacts"
-import { persistor } from "@/redux"
+import React from "react";
+import { StyleSheet } from "react-native";
+import { useDispatch } from "react-redux";
+import {
+  AuthorizedScreenHeader,
+  Button,
+  Screen,
+} from "@shortwaits/admin/components";
+import { useTheme } from "@shortwaits/admin/theme";
+import { Divider, List, Switch } from "react-native-paper";
+import { useUser } from "@shortwaits/admin/hooks/useUser";
+import { useBusiness } from "@shortwaits/admin/hooks/useBusiness";
+import { UserAccountSettings } from "./options/user-account";
+import { SupportSettings } from "./options/support";
+import { BusinessInfoSettings } from "./options/business-info";
+import { IntegrationsSettings } from "./options/integrations";
+import { ContactsSettings } from "./options/contacts";
+import { persistor } from "@shortwaits/admin/redux";
 
 export const SettingsScreen = ({ navigation }) => {
-  const { Colors } = useTheme()
-  const dispatch = useDispatch()
-  const user = useUser()
-  const business = useBusiness()
-  const [expanded, setExpanded] = React.useState(true)
+  const { Colors } = useTheme();
+  const dispatch = useDispatch();
+  const user = useUser();
+  const business = useBusiness();
+  const [expanded, setExpanded] = React.useState(true);
 
-  const handlePress = () => setExpanded(!expanded)
+  const handlePress = () => setExpanded(!expanded);
   return (
     <Screen
       preset="scroll"
@@ -52,24 +56,24 @@ export const SettingsScreen = ({ navigation }) => {
           preset="link"
           text="Sign Out"
           onPress={async function () {
-            await persistor.purge()
-            dispatch({ type: "USER_SIGN_OUT" })
+            await persistor.purge();
+            dispatch({ type: "USER_SIGN_OUT" });
           }}
         />
       </List.Section>
     </Screen>
-  )
-}
+  );
+};
 const styles = StyleSheet.create({
   container: {
     // alignItems: "stretch"
   },
   bottomSheetHeader: {
-    alignItems: "center"
+    alignItems: "center",
   },
   contentContainer: {},
   listSeparator: {
     borderTopWidth: 1,
-    marginVertical: 5
-  }
-})
+    marginVertical: 5,
+  },
+});

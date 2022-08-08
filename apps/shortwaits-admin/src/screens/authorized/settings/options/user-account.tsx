@@ -1,11 +1,11 @@
-import { useTheme } from "@/theme"
-import React, { useState } from "react"
-import { Divider, List } from "react-native-paper"
+import { useTheme } from "@shortwaits/admin/theme";
+import React, { useState } from "react";
+import { Divider, List } from "react-native-paper";
 
 export const UserAccountSettings = ({ user }) => {
-  const [expanded, setExpanded] = useState(false)
-  const handlePress = () => setExpanded(state => !state)
-  const { Colors } = useTheme()
+  const [expanded, setExpanded] = useState(false);
+  const handlePress = () => setExpanded((state) => !state);
+  const { Colors } = useTheme();
 
   return (
     <List.Accordion
@@ -18,13 +18,13 @@ export const UserAccountSettings = ({ user }) => {
       <List.Item
         title="Username"
         description={user.username}
-        right={props => <List.Icon {...props} icon="account" />}
+        right={(props) => <List.Icon {...props} icon="account" />}
       />
       <Divider />
       <List.Item
         title="Email"
         description={user.email}
-        right={props => <List.Icon {...props} icon="email" />}
+        right={(props) => <List.Icon {...props} icon="email" />}
       />
       {/* <List.Item
         title="Password"
@@ -32,5 +32,5 @@ export const UserAccountSettings = ({ user }) => {
         right={props => <List.Icon {...props} icon="folder" />}
       /> */}
     </List.Accordion>
-  )
-}
+  );
+};

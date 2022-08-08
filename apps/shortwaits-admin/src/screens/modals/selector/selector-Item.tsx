@@ -1,9 +1,9 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 
-import { ButtonCard, Spinner } from "@/components";
+import { ButtonCard, Spinner } from "@shortwaits/admin/components";
 import { selectorConfigs } from "./selector-config";
-import { SelectorModalType } from "@/navigation";
+import { SelectorModalType } from "@shortwaits/admin/navigation";
 import { View } from "react-native";
 import { ObjectId } from "@shortwaits/shared-types";
 

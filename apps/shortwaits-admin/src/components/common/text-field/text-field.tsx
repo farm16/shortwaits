@@ -1,9 +1,9 @@
-import React, { ForwardedRef, forwardRef } from "react"
-import { TextInput } from "react-native"
-import { TextFieldProps } from "./text-field-types"
-import { useTheme } from "@/theme"
+import React, { ForwardedRef, forwardRef } from "react";
+import { TextInput } from "react-native";
+import { TextFieldProps } from "./text-field-types";
+import { useTheme } from "@shortwaits/admin/theme";
 
-export * from "./text-field-types"
+export * from "./text-field-types";
 
 export const TextField = forwardRef(
   (props: TextFieldProps, ref: ForwardedRef<null>) => {
@@ -13,15 +13,15 @@ export const TextField = forwardRef(
       style: styleOverride,
       errors,
       ...rest
-    } = props
+    } = props;
 
     const {
       Colors,
-      Common: { textFieldPresets }
-    } = useTheme()
+      Common: { textFieldPresets },
+    } = useTheme();
 
-    const style = textFieldPresets[preset] || textFieldPresets.default
-    const textInputStyle = [style, styleOverride]
+    const style = textFieldPresets[preset] || textFieldPresets.default;
+    const textInputStyle = [style, styleOverride];
 
     return (
       <TextInput
@@ -31,6 +31,6 @@ export const TextField = forwardRef(
         placeholder={placeholder}
         {...rest}
       />
-    )
+    );
   }
-)
+);

@@ -1,8 +1,8 @@
-import React, { useLayoutEffect } from "react"
-import { View } from "react-native"
-import { StackScreenProps } from "@react-navigation/stack"
+import React, { useLayoutEffect } from "react";
+import { View } from "react-native";
+import { StackScreenProps } from "@react-navigation/stack";
 
-import { useTheme } from "@/theme"
+import { useTheme } from "@shortwaits/admin/theme";
 import {
   Button,
   Screen,
@@ -10,29 +10,29 @@ import {
   TextField,
   Text,
   Space,
-  TextHeaderButton
-} from "@/components"
-import { CloseButton, UploadProfileImage } from "@/components"
-import { RootStackParamList } from "@/navigation/app-navigator"
-import { ScrollView } from "react-native-gesture-handler"
+  TextHeaderButton,
+} from "@shortwaits/admin/components";
+import { CloseButton, UploadProfileImage } from "@shortwaits/admin/components";
+import { RootStackParamList } from "@shortwaits/admin/navigation/app-navigator";
+import { ScrollView } from "react-native-gesture-handler";
 
 export const AddPersonnelModal = ({
   route: { params },
-  navigation
+  navigation,
 }: StackScreenProps<RootStackParamList, "modals">) => {
-  const { Gutters } = useTheme()
-  const { mode = "add", headerTitle, data } = params
+  const { Gutters } = useTheme();
+  const { mode = "add", headerTitle, data } = params;
 
   const personnelModalselectMode: any = {
     add: {
       headerTitle: "add personnel",
-      action: "add"
+      action: "add",
     },
     update: {
       headerTitle: headerTitle,
-      action: "update"
-    }
-  }
+      action: "update",
+    },
+  };
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -41,13 +41,13 @@ export const AddPersonnelModal = ({
         <TextHeaderButton
           onPress={() => {
             // onChange({ businessIndustryTypes: data })
-            navigation.goBack()
+            navigation.goBack();
           }}
           text={personnelModalModes[mode].action}
         />
-      )
-    })
-  }, [navigation])
+      ),
+    });
+  }, [navigation]);
 
   return (
     <Screen preset="fixed" style={{ alignItems: "center" }} unsafe>
@@ -80,8 +80,8 @@ export const AddPersonnelModal = ({
               screen: "schedule-modal-screen",
               params: {
                 headerTitle: "personnel schedule",
-                data: sampleScheduleData
-              }
+                data: sampleScheduleData,
+              },
             })
           }
         >
@@ -103,8 +103,8 @@ export const AddPersonnelModal = ({
               screen: "schedule-modal-screen",
               params: {
                 headerTitle: "break schedule",
-                data: sampleScheduleData
-              }
+                data: sampleScheduleData,
+              },
             })
           }
         >
@@ -125,8 +125,8 @@ export const AddPersonnelModal = ({
         />
       </ScrollView>
     </Screen>
-  )
-}
+  );
+};
 const sampleScheduleData = [
   {
     dayId: 1,
@@ -134,7 +134,7 @@ const sampleScheduleData = [
     startTime: 540,
     endTime: 1020,
     isDayActive: null,
-    isDayActiveDefault: false
+    isDayActiveDefault: false,
   },
   {
     dayId: 2,
@@ -142,7 +142,7 @@ const sampleScheduleData = [
     startTime: 540,
     endTime: 1020,
     isDayActive: null,
-    isDayActiveDefault: true
+    isDayActiveDefault: true,
   },
   {
     dayId: 3,
@@ -150,7 +150,7 @@ const sampleScheduleData = [
     startTime: 540,
     endTime: 1020,
     isDayActive: null,
-    isDayActiveDefault: true
+    isDayActiveDefault: true,
   },
   {
     dayId: 4,
@@ -158,7 +158,7 @@ const sampleScheduleData = [
     startTime: 540,
     endTime: 1020,
     isDayActive: null,
-    isDayActiveDefault: true
+    isDayActiveDefault: true,
   },
   {
     dayId: 5,
@@ -166,7 +166,7 @@ const sampleScheduleData = [
     startTime: 540,
     endTime: 1020,
     isDayActive: null,
-    isDayActiveDefault: true
+    isDayActiveDefault: true,
   },
   {
     dayId: 6,
@@ -174,7 +174,7 @@ const sampleScheduleData = [
     startTime: 540,
     endTime: 1020,
     isDayActive: null,
-    isDayActiveDefault: true
+    isDayActiveDefault: true,
   },
   {
     dayId: 7,
@@ -182,6 +182,6 @@ const sampleScheduleData = [
     startTime: 540,
     endTime: 1020,
     isDayActive: null,
-    isDayActiveDefault: false
-  }
-]
+    isDayActiveDefault: false,
+  },
+];

@@ -1,22 +1,28 @@
-import React, { FC } from "react"
-import { View, StyleSheet } from "react-native"
-import { StackNavigationProp } from "@react-navigation/stack"
+import React, { FC } from "react";
+import { View, StyleSheet } from "react-native";
+import { StackNavigationProp } from "@react-navigation/stack";
 
-import { Screen, Button, Text, Space, Logo } from "@/components"
-import Facebook from "@/assets/icons/facebook.svg"
-import Google from "@/assets/icons/google.svg"
-import EMail from "@/assets/icons/email.svg"
-import { CompositeNavigationProp } from "@react-navigation/native"
+import {
+  Screen,
+  Button,
+  Text,
+  Space,
+  Logo,
+} from "@shortwaits/admin/components";
+import Facebook from "@shortwaits/admin/assets/icons/facebook.svg";
+import Google from "@shortwaits/admin/assets/icons/google.svg";
+import EMail from "@shortwaits/admin/assets/icons/email.svg";
+import { CompositeNavigationProp } from "@react-navigation/native";
 import {
   RootStackParamList,
-  UnauthorizedStackParamList
-} from "@/navigation/navigation-types"
+  UnauthorizedStackParamList,
+} from "@shortwaits/admin/navigation/navigation-types";
 
 export interface SignUpScreenProps {
   navigation: CompositeNavigationProp<
     StackNavigationProp<UnauthorizedStackParamList, "sign-up-screen">,
     StackNavigationProp<RootStackParamList>
-  >
+  >;
 }
 
 export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
@@ -36,7 +42,7 @@ export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
           text="with your email"
           onPress={() =>
             navigation.navigate("unauthorized", {
-              screen: "sign-up-with-email-screen"
+              screen: "sign-up-with-email-screen",
             })
           }
         />
@@ -49,23 +55,23 @@ export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
         <Space size="xLarge" />
       </View>
     </Screen>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: "flex-start"
+    justifyContent: "flex-start",
   },
   footerContainer: {
     flexDirection: "row",
     alignSelf: "stretch",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   formContainer: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "flex-end"
+    justifyContent: "flex-end",
   },
-  subLink: { fontWeight: "bold" }
-})
+  subLink: { fontWeight: "bold" },
+});

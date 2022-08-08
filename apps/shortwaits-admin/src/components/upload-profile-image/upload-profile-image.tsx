@@ -1,46 +1,46 @@
-import React from "react"
-import { ImageBackground, View, StyleSheet, ViewStyle } from "react-native"
-import { launchCamera, launchImageLibrary } from "react-native-image-picker"
-import Icon from "react-native-vector-icons/MaterialCommunityIcons"
+import React from "react";
+import { ImageBackground, View, StyleSheet, ViewStyle } from "react-native";
+import { launchCamera, launchImageLibrary } from "react-native-image-picker";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
-import { Button } from "../common"
-import { getDimensions, useTheme } from "@/theme"
+import { Button } from "../common";
+import { getDimensions, useTheme } from "@shortwaits/admin/theme";
 
 interface UploadProfileImageProps {
-  preset?: keyof typeof SIZES | "field"
-  style?: ViewStyle
+  preset?: keyof typeof SIZES | "field";
+  style?: ViewStyle;
 }
 const SIZES = {
   small: 10,
   medium: 15,
-  large: 20
-} as const
+  large: 20,
+} as const;
 
 export function UploadProfileImage({
   style: styleOverride,
-  preset = "medium"
+  preset = "medium",
 }: UploadProfileImageProps) {
-  const [image, setImage] = React.useState<any>(null)
-  const { height: percentangeHeight } = getDimensions(SIZES[preset])
-  const height = preset === "field" ? 65 : percentangeHeight
-  const { Colors } = useTheme()
+  const [image, setImage] = React.useState<any>(null);
+  const { height: percentangeHeight } = getDimensions(SIZES[preset]);
+  const height = preset === "field" ? 65 : percentangeHeight;
+  const { Colors } = useTheme();
   const imageDimensions = {
     width: height,
     height: height,
-    borderRadius: height / 2
-  }
+    borderRadius: height / 2,
+  };
   const style = [
     styleOverride,
-    { backgroundColor: Colors.background, width: height }
-  ]
+    { backgroundColor: Colors.background, width: height },
+  ];
 
   const onButtonPress = React.useCallback((type, options) => {
     if (type === "capture") {
-      launchCamera(options, setImage)
+      launchCamera(options, setImage);
     } else {
-      launchImageLibrary(options, setImage)
+      launchImageLibrary(options, setImage);
     }
-  }, [])
+  }, []);
 
   return (
     <View style={style}>
@@ -63,7 +63,7 @@ export function UploadProfileImage({
             maxWidth: 200,
             saveToPhotos: false,
             mediaType: "photo",
-            includeBase64: false
+            includeBase64: false,
           })
         }
         style={{
@@ -73,16 +73,16 @@ export function UploadProfileImage({
           borderRadius: height / 4,
           right: -5,
           bottom: 5,
-          backgroundColor: Colors.brandSecondary
+          backgroundColor: Colors.brandSecondary,
         }}
       >
         <Icon name="plus" color="white" size={20} />
       </Button>
     </View>
-  )
+  );
 }
 const styles = StyleSheet.create({
   button: {
-    position: "absolute"
-  }
-})
+    position: "absolute",
+  },
+});

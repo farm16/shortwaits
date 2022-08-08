@@ -1,4 +1,4 @@
-import configs from "@/config";
+import configs from "@shortwaits/admin/config";
 import {
   AuthPayloadType,
   BusinessType,

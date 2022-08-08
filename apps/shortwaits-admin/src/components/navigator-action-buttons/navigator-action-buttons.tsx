@@ -1,13 +1,13 @@
-import React, { FC } from "react"
-import { View } from "react-native"
-import Icon from "react-native-vector-icons/MaterialCommunityIcons"
+import React, { FC } from "react";
+import { View } from "react-native";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
-import { Button, ButtonProps, Spinner } from "../common"
-import { useTheme } from "@/theme"
+import { Button, ButtonProps, Spinner } from "../common";
+import { useTheme } from "@shortwaits/admin/theme";
 
-const disabledStates = ["loading", "disabled", "enable"]
+const disabledStates = ["loading", "disabled", "enable"];
 
-export const BackButton: FC<ButtonProps> = props => (
+export const BackButton: FC<ButtonProps> = (props) => (
   <Button {...props} preset="icon">
     <Icon
       name="chevron-left"
@@ -15,44 +15,44 @@ export const BackButton: FC<ButtonProps> = props => (
       size={30}
     />
   </Button>
-)
+);
 
-export const ForwardButton: FC<ButtonProps> = props => (
+export const ForwardButton: FC<ButtonProps> = (props) => (
   <Button {...props} preset="icon">
     <Icon name="chevron-right" color={useTheme().Colors.text} size={30} />
   </Button>
-)
+);
 
-export const CloseButton: FC<ButtonProps> = props => (
+export const CloseButton: FC<ButtonProps> = (props) => (
   <Button {...props} preset="headerLink">
     <Icon name="close" color={useTheme().Colors.brandSecondary6} size={22} />
   </Button>
-)
+);
 
-export const TextHeaderButton: FC<ButtonProps> = props => {
-  const { disabled, text, textStyle, ...rest } = props
+export const TextHeaderButton: FC<ButtonProps> = (props) => {
+  const { disabled, text, textStyle, ...rest } = props;
   const {
-    Colors: { brandPrimary6 }
-  } = useTheme()
+    Colors: { brandPrimary6 },
+  } = useTheme();
 
   const textStyleOverride = [
     {
       marginRight: 15,
       fontWeight: "600" as const,
-      color: brandPrimary6
+      color: brandPrimary6,
     },
-    textStyle
-  ]
+    textStyle,
+  ];
   return (
     <Button {...rest} text={text} textStyle={textStyleOverride} preset="link" />
-  )
-}
+  );
+};
 
-export const RightArrowButton: FC<ButtonProps> = props => {
+export const RightArrowButton: FC<ButtonProps> = (props) => {
   const {
-    Colors: { brandSecondary6, inputBackground }
-  } = useTheme()
-  const { state = "enable", ...rest } = props
+    Colors: { brandSecondary6, inputBackground },
+  } = useTheme();
+  const { state = "enable", ...rest } = props;
   return (
     <Button {...rest} preset="headerLink">
       <Icon
@@ -63,18 +63,18 @@ export const RightArrowButton: FC<ButtonProps> = props => {
         size={22}
       />
     </Button>
-  )
-}
+  );
+};
 
-export const LeftArrowButton: FC<ButtonProps> = props => {
-  const { Colors } = useTheme()
-  const { state = "enable", ...rest } = props
+export const LeftArrowButton: FC<ButtonProps> = (props) => {
+  const { Colors } = useTheme();
+  const { state = "enable", ...rest } = props;
 
   const stateIcons = {
     disabled: { name: "exclamation-thick", color: "darkGray" },
-    enable: { name: "chevron-right", color: "brandSecondary6" }
-  }
-  if (state === "loading") return <Spinner />
+    enable: { name: "chevron-right", color: "brandSecondary6" },
+  };
+  if (state === "loading") return <Spinner />;
   return (
     <Button {...rest} preset="headerLink">
       <Icon
@@ -83,17 +83,17 @@ export const LeftArrowButton: FC<ButtonProps> = props => {
         size={22}
       />
     </Button>
-  )
-}
+  );
+};
 
-export const RightChevronButton: FC<ButtonProps> = props => {
-  const { Colors } = useTheme()
-  const { state = "enabled", ...rest } = props
+export const RightChevronButton: FC<ButtonProps> = (props) => {
+  const { Colors } = useTheme();
+  const { state = "enabled", ...rest } = props;
   const stateIcons = {
     disabled: { name: "chevron-right", color: "lightGray", size: 35 },
-    enabled: { name: "chevron-right", color: "brandSecondary6", size: 35 }
-  }
-  if (state === "loading") return <Spinner />
+    enabled: { name: "chevron-right", color: "brandSecondary6", size: 35 },
+  };
+  if (state === "loading") return <Spinner />;
   return (
     <Button {...rest} state={state} preset="icon">
       <Icon
@@ -102,13 +102,13 @@ export const RightChevronButton: FC<ButtonProps> = props => {
         size={stateIcons[state].size}
       />
     </Button>
-  )
-}
-export const LeftChevronButton: FC<ButtonProps> = props => {
+  );
+};
+export const LeftChevronButton: FC<ButtonProps> = (props) => {
   const {
-    Colors: { brandSecondary6, backgroundOverlay }
-  } = useTheme()
-  const { state = "enabled", ...rest } = props
+    Colors: { brandSecondary6, backgroundOverlay },
+  } = useTheme();
+  const { state = "enabled", ...rest } = props;
   return (
     <Button {...rest} state={state} preset="icon">
       <Icon
@@ -119,50 +119,50 @@ export const LeftChevronButton: FC<ButtonProps> = props => {
         size={35}
       />
     </Button>
-  )
-}
+  );
+};
 
 const addIcons = {
   "add-categories": {
     name: "plus",
-    size: 24
+    size: 24,
   },
   "add-currency": {
     name: "plus",
-    size: 24
+    size: 24,
   },
   "add-staff": {
     name: "account-plus",
-    size: 24
+    size: 24,
   },
   "add-services": {
     name: "text-box-plus",
-    size: 26
+    size: 26,
   },
   "add-image": {
     name: "camera-plus",
-    size: 24
+    size: 24,
   },
   more: {
     name: "camera-plus",
-    size: 24
+    size: 24,
   },
   default: {
     name: "plus",
-    size: 24
-  }
-} as const
+    size: 24,
+  },
+} as const;
 
 export const CircleIconButton: FC<
   ButtonProps & {
-    noMargin?: boolean
-    iconType?: keyof typeof addIcons
-    iconSize?: number
+    noMargin?: boolean;
+    iconType?: keyof typeof addIcons;
+    iconSize?: number;
   }
-> = props => {
+> = (props) => {
   const {
-    Colors: { brandSecondary6, backgroundOverlay }
-  } = useTheme()
+    Colors: { brandSecondary6, backgroundOverlay },
+  } = useTheme();
 
   const {
     noMargin = false,
@@ -171,7 +171,7 @@ export const CircleIconButton: FC<
     iconType = "default",
     style: styleOverride,
     ...rest
-  } = props
+  } = props;
 
   return (
     <Button
@@ -190,12 +190,12 @@ export const CircleIconButton: FC<
         size={addIcons[iconType].size}
       />
     </Button>
-  )
-}
-export const SubmitHeaderIconButton: FC<ButtonProps> = props => {
+  );
+};
+export const SubmitHeaderIconButton: FC<ButtonProps> = (props) => {
   const {
-    Colors: { brandSecondary6, gray }
-  } = useTheme()
+    Colors: { brandSecondary6, gray },
+  } = useTheme();
   return (
     <Button preset="headerLink" {...props}>
       <Icon
@@ -204,12 +204,12 @@ export const SubmitHeaderIconButton: FC<ButtonProps> = props => {
         size={20}
       />
     </Button>
-  )
-}
-export const CancelAndLogOutHeaderButton: FC<ButtonProps> = props => {
+  );
+};
+export const CancelAndLogOutHeaderButton: FC<ButtonProps> = (props) => {
   const {
-    Colors: { brandSecondary6, gray }
-  } = useTheme()
+    Colors: { brandSecondary6, gray },
+  } = useTheme();
   return (
     <Button {...props} preset="headerLink">
       <Icon
@@ -218,9 +218,9 @@ export const CancelAndLogOutHeaderButton: FC<ButtonProps> = props => {
         size={22}
       />
     </Button>
-  )
-}
+  );
+};
 
 export const MultipleHeaderButtons: FC = ({ children }) => {
-  return <View style={{ flexDirection: "row" }}>{children}</View>
-}
+  return <View style={{ flexDirection: "row" }}>{children}</View>;
+};

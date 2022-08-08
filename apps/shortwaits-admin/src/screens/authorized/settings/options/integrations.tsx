@@ -1,11 +1,11 @@
-import { useTheme } from "@/theme"
-import React, { useState } from "react"
-import { Divider, List } from "react-native-paper"
+import { useTheme } from "@shortwaits/admin/theme";
+import React, { useState } from "react";
+import { Divider, List } from "react-native-paper";
 
 export const IntegrationsSettings = ({ business }) => {
-  const [expanded, setExpanded] = useState(false)
-  const handlePress = () => setExpanded(state => !state)
-  const { Colors } = useTheme()
+  const [expanded, setExpanded] = useState(false);
+  const handlePress = () => setExpanded((state) => !state);
+  const { Colors } = useTheme();
 
   return (
     <List.Accordion
@@ -17,17 +17,17 @@ export const IntegrationsSettings = ({ business }) => {
       <Divider />
       <List.Item
         title="Zoom"
-        right={props => <List.Icon {...props} icon="video" />}
+        right={(props) => <List.Icon {...props} icon="video" />}
       />
       <Divider />
       <List.Item
         title="Google"
-        right={props => <List.Icon {...props} icon="google" />}
+        right={(props) => <List.Icon {...props} icon="google" />}
       />
       <List.Item
         title="Add URL link"
-        right={props => <List.Icon {...props} icon="link-plus" />}
+        right={(props) => <List.Icon {...props} icon="link-plus" />}
       />
     </List.Accordion>
-  )
-}
+  );
+};

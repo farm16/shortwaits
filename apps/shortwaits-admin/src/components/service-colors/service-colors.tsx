@@ -3,9 +3,9 @@ import { StyleSheet, View, ViewStyle } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { ServiceColorType } from "@shortwaits/shared-types";
 
-import { getDimensions } from "@/theme";
+import { getDimensions } from "@shortwaits/admin/theme";
 import { Button, ButtonProps } from "../common";
-import { useMobileAdmin } from "@/hooks/useMobileAdmin";
+import { useMobileAdmin } from "@shortwaits/admin/hooks/useMobileAdmin";
 
 interface ServiceColorsProps {
   color?: ServiceColorType;

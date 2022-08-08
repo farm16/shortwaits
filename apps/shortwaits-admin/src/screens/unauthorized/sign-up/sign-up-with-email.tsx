@@ -1,16 +1,22 @@
-import React, { FC, useCallback, useLayoutEffect, useState } from "react"
-import { StyleSheet, View } from "react-native"
-import { StackNavigationProp } from "@react-navigation/stack"
-import { CompositeNavigationProp } from "@react-navigation/native"
+import React, { FC, useCallback, useLayoutEffect, useState } from "react";
+import { StyleSheet, View } from "react-native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { CompositeNavigationProp } from "@react-navigation/native";
 
-import { Button, Space, Text, TextFieldCard, ScrollView } from "@/components"
-import { useForm } from "@/hooks/useForm"
-import { useTheme } from "@/theme"
+import {
+  Button,
+  Space,
+  Text,
+  TextFieldCard,
+  ScrollView,
+} from "@shortwaits/admin/components";
+import { useForm } from "@shortwaits/admin/hooks/useForm";
+import { useTheme } from "@shortwaits/admin/theme";
 import {
   RootStackParamList,
-  UnauthorizedStackParamList
-} from "@/navigation/navigation-types"
-import { useLocalSignUpMutation } from "@/services/api"
+  UnauthorizedStackParamList,
+} from "@shortwaits/admin/navigation/navigation-types";
+import { useLocalSignUpMutation } from "@shortwaits/admin/services/api";
 
 interface SignUpWithEmailScreenProps {
   navigation: CompositeNavigationProp<
@@ -19,52 +25,52 @@ interface SignUpWithEmailScreenProps {
       "sign-up-with-email-screen"
     >,
     StackNavigationProp<RootStackParamList>
-  >
+  >;
 }
 
 export const SignUpWithEmail: FC<SignUpWithEmailScreenProps> = ({
-  navigation
+  navigation,
 }) => {
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "Create new account"
-    })
-  }, [navigation])
+      headerTitle: "Create new account",
+    });
+  }, [navigation]);
 
-  const { Colors } = useTheme()
-  const [isVisible, setIsVisible] = useState(false)
-  const [localSignUp, { isLoading }] = useLocalSignUpMutation()
+  const { Colors } = useTheme();
+  const [isVisible, setIsVisible] = useState(false);
+  const [localSignUp, { isLoading }] = useLocalSignUpMutation();
   const initialValues = {
     email: "",
     password: "",
-    passwordConfirmation: ""
-  }
+    passwordConfirmation: "",
+  };
   const { touched, errors, values, handleChange, handleSubmit, dirty } =
     useForm(
       {
         initialValues,
-        onSubmit: formData => {
+        onSubmit: (formData) => {
           localSignUp({
             username: formData.email,
             email: formData.email,
-            password: formData.passwordConfirmation
-          })
-        }
+            password: formData.passwordConfirmation,
+          });
+        },
       },
       "signUpSchema"
-    )
+    );
 
   const handlePasswordVisibility = useCallback(() => {
-    setIsVisible(visibility => !visibility)
-  }, [])
+    setIsVisible((visibility) => !visibility);
+  }, []);
 
   return (
     <View
       style={[
         styles.container,
         {
-          backgroundColor: Colors.background
-        }
+          backgroundColor: Colors.background,
+        },
       ]}
     >
       <Space />
@@ -125,24 +131,24 @@ export const SignUpWithEmail: FC<SignUpWithEmailScreenProps> = ({
           preset="subLink"
           text="Sign in"
           onPress={() => {
-            navigation.navigate("unauthorized", { screen: "sign-in-screen" })
+            navigation.navigate("unauthorized", { screen: "sign-in-screen" });
           }}
         />
       </View>
       <Space size="xLarge" />
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center"
+    alignItems: "center",
   },
   signInRow: {
-    flexDirection: "row"
+    flexDirection: "row",
   },
   subLink: {
-    fontWeight: "bold"
-  }
-})
+    fontWeight: "bold",
+  },
+});

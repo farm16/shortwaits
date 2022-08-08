@@ -1,29 +1,29 @@
-import React, { FC, useLayoutEffect } from "react"
-import { FlatList, View, StyleSheet } from "react-native"
+import React, { FC, useLayoutEffect } from "react";
+import { FlatList, View, StyleSheet } from "react-native";
 
-import { useMobileAdmin } from "@/hooks/useMobileAdmin"
+import { useMobileAdmin } from "@shortwaits/admin/hooks/useMobileAdmin";
 import {
   SearchBar,
   Space,
   CircleIconButton,
-  LeftChevronButton
-} from "@/components"
-import { ModalsScreenProps } from "@/navigation/navigation-types"
-import { useBusiness } from "@/hooks/useBusiness"
-import { selectorConfigs } from "./selector-config"
-import { SelectorItem } from "./selector-Item"
-import { useTheme } from "@/theme"
-import Spinner from "react-native-spinkit"
-import { useUser } from "@/hooks/useUser"
+  LeftChevronButton,
+} from "@shortwaits/admin/components";
+import { ModalsScreenProps } from "@shortwaits/admin/navigation/navigation-types";
+import { useBusiness } from "@shortwaits/admin/hooks/useBusiness";
+import { selectorConfigs } from "./selector-config";
+import { SelectorItem } from "./selector-Item";
+import { useTheme } from "@shortwaits/admin/theme";
+import Spinner from "react-native-spinkit";
+import { useUser } from "@shortwaits/admin/hooks/useUser";
 
 export const SelectorScreenModal: FC<
   ModalsScreenProps<"selector-modal-screen">
 > = ({ navigation, route }) => {
-  const { type } = route.params
+  const { type } = route.params;
 
-  const { Colors } = useTheme()
-  const businessState = useBusiness()
-  const userState = useUser()
+  const { Colors } = useTheme();
+  const businessState = useBusiness();
+  const userState = useUser();
 
   const {
     mode,
@@ -32,11 +32,11 @@ export const SelectorScreenModal: FC<
     getIsSelected,
     filterId,
     filterItemsQuery,
-    keys: { businessKey }
-  } = selectorConfigs[type]
+    keys: { businessKey },
+  } = selectorConfigs[type];
 
-  const isSelectionDisabled = mode === "NONE"
-  const { isSearchable, searchPlaceholder } = searchOptions
+  const isSelectionDisabled = mode === "NONE";
+  const { isSearchable, searchPlaceholder } = searchOptions;
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -45,17 +45,17 @@ export const SelectorScreenModal: FC<
         <LeftChevronButton onPress={() => navigation.goBack()} />
       ),
       headerRight: () =>
-        isSelectionDisabled && <CircleIconButton iconType="default" />
-    })
-  }, [navigation, isSelectionDisabled, type])
+        isSelectionDisabled && <CircleIconButton iconType="default" />,
+    });
+  }, [navigation, isSelectionDisabled, type]);
 
   const {
     data: queryData,
     isLoading,
-    isSuccess
-  } = itemsQueryHook(businessState, userState)
+    isSuccess,
+  } = itemsQueryHook(businessState, userState);
 
-  console.log("queryData>>>", queryData)
+  console.log("queryData>>>", queryData);
 
   return (
     <View style={[styles.container, { backgroundColor: Colors.background }]}>
@@ -77,7 +77,7 @@ export const SelectorScreenModal: FC<
           showsVerticalScrollIndicator={false}
           contentContainerStyle={[
             styles.listContainer,
-            { backgroundColor: Colors.background }
+            { backgroundColor: Colors.background },
           ]}
           data={filterItemsQuery(queryData)}
           ItemSeparatorComponent={() => <Space size="small" />}
@@ -94,19 +94,19 @@ export const SelectorScreenModal: FC<
         />
       )}
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingVertical: 15,
-    alignItems: "center"
+    alignItems: "center",
   },
   searchBar: {
-    marginTop: 15
+    marginTop: 15,
   },
   listContainer: {
-    alignItems: "center"
-  }
-})
+    alignItems: "center",
+  },
+});

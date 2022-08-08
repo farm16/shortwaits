@@ -5,7 +5,7 @@ import {
   ObjectId,
 } from "@shortwaits/shared-types";
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
-import configs from "@/config";
+import configs from "@shortwaits/admin/config";
 
 const { getBusinessServices } = configs.api.endpoints.BUSINESS;
 

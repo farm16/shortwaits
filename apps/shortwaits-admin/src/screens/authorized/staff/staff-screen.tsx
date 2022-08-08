@@ -1,50 +1,50 @@
-import React from "react"
-import { useDispatch } from "react-redux"
+import React from "react";
+import { useDispatch } from "react-redux";
 import {
   AuthorizedScreenHeader,
   Button,
   ButtonCard,
   Screen,
-  Text
-} from "@/components"
-import { useTheme } from "@/theme"
-import { DataTable } from "react-native-paper"
-import { useBusiness } from "@/hooks/useBusiness"
-import { useGetBusinessStaffQuery } from "@/services/api"
-import Icon from "react-native-vector-icons/MaterialCommunityIcons"
-import { StyleSheet } from "react-native"
+  Text,
+} from "@shortwaits/admin/components";
+import { useTheme } from "@shortwaits/admin/theme";
+import { DataTable } from "react-native-paper";
+import { useBusiness } from "@shortwaits/admin/hooks/useBusiness";
+import { useGetBusinessStaffQuery } from "@shortwaits/admin/services/api";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { StyleSheet } from "react-native";
 
-const optionsPerPage = [2, 3, 4]
+const optionsPerPage = [2, 3, 4];
 
 export const StaffScreen = ({ navigation }) => {
-  const dispatch = useDispatch()
-  const business = useBusiness()
-  const { data: staff } = useGetBusinessStaffQuery(business._id)
+  const dispatch = useDispatch();
+  const business = useBusiness();
+  const { data: staff } = useGetBusinessStaffQuery(business._id);
 
-  console.log("useGetBusinessStaffQuery >>>", staff)
+  console.log("useGetBusinessStaffQuery >>>", staff);
 
-  const { Colors } = useTheme()
-  const [page, setPage] = React.useState<number>(0)
-  const [itemsPerPage, setItemsPerPage] = React.useState(optionsPerPage[0])
+  const { Colors } = useTheme();
+  const [page, setPage] = React.useState<number>(0);
+  const [itemsPerPage, setItemsPerPage] = React.useState(optionsPerPage[0]);
 
   React.useEffect(() => {
-    setPage(0)
-  }, [itemsPerPage])
+    setPage(0);
+  }, [itemsPerPage]);
 
   const roles = {
     staff: {
       text: "staff",
-      icon: ""
+      icon: "",
     },
     admin: {
       text: "admin",
-      icon: ""
+      icon: "",
     },
     superAdmin: {
       text: "admin",
-      icon: ""
-    }
-  }
+      icon: "",
+    },
+  };
 
   return (
     <Screen
@@ -65,7 +65,7 @@ export const StaffScreen = ({ navigation }) => {
           <DataTable.Title>Role</DataTable.Title>
         </DataTable.Header>
         {staff ? (
-          staff.data.map(elem => (
+          staff.data.map((elem) => (
             <Button preset="none" key={elem._id}>
               <DataTable.Row>
                 <DataTable.Cell>{elem.lastName ?? "-"}</DataTable.Cell>
@@ -99,8 +99,8 @@ export const StaffScreen = ({ navigation }) => {
         /> */}
       </DataTable>
     </Screen>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   dataTableCellRightButton: {
@@ -110,6 +110,6 @@ const styles = StyleSheet.create({
     height: 35,
     alignSelf: "center",
     position: "absolute",
-    right: 0
-  }
-})
+    right: 0,
+  },
+});

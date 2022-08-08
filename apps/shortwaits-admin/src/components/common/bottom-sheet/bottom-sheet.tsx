@@ -3,16 +3,16 @@ import React, {
   forwardRef,
   useCallback,
   useMemo,
-  useState
-} from "react"
-import { KeyboardAvoidingView, StyleSheet, View } from "react-native"
-import G_BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet"
-import { Portal } from "@gorhom/portal"
+  useState,
+} from "react";
+import { KeyboardAvoidingView, StyleSheet, View } from "react-native";
+import G_BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
+import { Portal } from "@gorhom/portal";
 
-import { useTheme } from "@/theme"
-import { BottomSheetProps } from "./bottom-sheet-types"
+import { useTheme } from "@shortwaits/admin/theme";
+import { BottomSheetProps } from "./bottom-sheet-types";
 
-const defaultSnapPoints = ["35%", "60%", "85%"]
+const defaultSnapPoints = ["35%", "60%", "85%"];
 
 export const BottomSheet = forwardRef(
   (props: BottomSheetProps, ref: ForwardedRef<G_BottomSheet | null>) => {
@@ -21,54 +21,54 @@ export const BottomSheet = forwardRef(
       snapPoints: snapPointsOverride,
       children,
       ...rest
-    } = props
+    } = props;
     const [keyboardBehavior, setKeyboardBehavior] = useState<
       "extend" | "fillParent" | "interactive"
-    >("interactive")
+    >("interactive");
     const [keyboardBlurBehavior, setKeyboardBlurBehavior] = useState<
       "none" | "restore"
-    >("none")
+    >("none");
 
     const snapPoints = useMemo(
       () => snapPointsOverride ?? defaultSnapPoints,
       [snapPointsOverride]
-    )
+    );
 
-    const { Colors } = useTheme()
+    const { Colors } = useTheme();
     const sheetStyle = useMemo(
       () => ({
         ...styles.sheetContainer,
-        shadowColor: Colors.text
+        shadowColor: Colors.text,
       }),
       [Colors.text]
-    )
+    );
 
     const handleToggleKeyboardBehavior = useCallback(() => {
-      setKeyboardBehavior(state => {
+      setKeyboardBehavior((state) => {
         switch (state) {
           case "interactive":
-            return "extend"
+            return "extend";
           case "extend":
-            return "fillParent"
+            return "fillParent";
           case "fillParent":
-            return "interactive"
+            return "interactive";
         }
-      })
-    }, [])
+      });
+    }, []);
 
     const handleToggleKeyboardBlurBehavior = useCallback(() => {
-      setKeyboardBlurBehavior(state => {
+      setKeyboardBlurBehavior((state) => {
         switch (state) {
           case "none":
-            return "restore"
+            return "restore";
           case "restore":
-            return "none"
+            return "none";
         }
-      })
-    }, [])
+      });
+    }, []);
 
     const renderBackdrop = useCallback(
-      bottomSheetBackdropProps => (
+      (bottomSheetBackdropProps) => (
         <BottomSheetBackdrop
           {...bottomSheetBackdropProps}
           opacity={0.5}
@@ -77,7 +77,7 @@ export const BottomSheet = forwardRef(
         />
       ),
       []
-    )
+    );
     return (
       <Portal>
         <G_BottomSheet
@@ -100,9 +100,9 @@ export const BottomSheet = forwardRef(
           </KeyboardAvoidingView>
         </G_BottomSheet>
       </Portal>
-    )
+    );
   }
-)
+);
 
 const styles = StyleSheet.create({
   sheetContainer: {
@@ -111,14 +111,14 @@ const styles = StyleSheet.create({
     borderTopEndRadius: 24,
     shadowOffset: {
       width: 0,
-      height: 12
+      height: 12,
     },
     shadowOpacity: 0.75,
     shadowRadius: 16.0,
-    elevation: 24
+    elevation: 24,
   },
   contentContainer: {
     flex: 1,
-    alignItems: "center"
-  }
-})
+    alignItems: "center",
+  },
+});

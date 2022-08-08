@@ -1,55 +1,58 @@
-import React, { useEffect, useState } from "react"
-import { useColorScheme } from "react-native"
+import React, { useEffect, useState } from "react";
+import { useColorScheme } from "react-native";
 import {
   NavigationContainer,
   DefaultTheme,
-  DarkTheme
-} from "@react-navigation/native"
-import { createStackNavigator } from "@react-navigation/stack"
-import { useFlipper } from "@react-navigation/devtools"
+  DarkTheme,
+} from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { useFlipper } from "@react-navigation/devtools";
 
-import { RootStackParamList } from "./navigation-types"
-import { NAVIGATION_STACKS } from "./navigation-constants"
-import { navigationRef, useBackButtonHandler } from "./navigation-utils"
+import { RootStackParamList } from "./navigation-types";
+import { NAVIGATION_STACKS } from "./navigation-constants";
+import { navigationRef, useBackButtonHandler } from "./navigation-utils";
 import {
   ModalsNavigator,
   UnauthorizedNavigator,
-  AuthorizedNavigator
-} from "./stacks"
-import { useUser } from "@/hooks/useUser"
-import { useAuth } from "@/hooks/useAuth"
-import { skipToken } from "@reduxjs/toolkit/dist/query"
-import { useGetBusinessQuery, useGetAdminMobileQuery } from "@/services/api"
+  AuthorizedNavigator,
+} from "./stacks";
+import { useUser } from "@shortwaits/admin/hooks/useUser";
+import { useAuth } from "@shortwaits/admin/hooks/useAuth";
+import { skipToken } from "@reduxjs/toolkit/dist/query";
+import {
+  useGetBusinessQuery,
+  useGetAdminMobileQuery,
+} from "@shortwaits/admin/services/api";
 
-const RootStack = createStackNavigator<RootStackParamList>()
+const RootStack = createStackNavigator<RootStackParamList>();
 
 const AppStack = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const auth = useAuth()
-  const user = useUser()
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const auth = useAuth();
+  const user = useUser();
 
   const { data, isSuccess } = useGetBusinessQuery(
     user?.businesses.length > 0 ? user.businesses[0] : skipToken
-  )
+  );
 
-  useGetAdminMobileQuery({ skipToken: isSuccess })
+  useGetAdminMobileQuery({ skipToken: isSuccess });
 
   useEffect(() => {
     if (auth.token && user?.registrationState?.isCompleted) {
-      setIsAuthenticated(true)
+      setIsAuthenticated(true);
     }
-  }, [isAuthenticated, auth.token, user])
+  }, [isAuthenticated, auth.token, user]);
 
   useEffect(() => {
     if (!auth.token) {
-      setIsAuthenticated(false)
+      setIsAuthenticated(false);
     }
-  }, [isAuthenticated, auth.token])
+  }, [isAuthenticated, auth.token]);
 
   return (
     <RootStack.Navigator
       screenOptions={{
-        headerShown: false
+        headerShown: false,
       }}
     >
       {isAuthenticated ? (
@@ -58,7 +61,7 @@ const AppStack = () => {
           component={AuthorizedNavigator}
           options={{
             headerShown: false,
-            animationEnabled: false
+            animationEnabled: false,
           }}
         />
       ) : (
@@ -72,15 +75,17 @@ const AppStack = () => {
         component={ModalsNavigator}
       />
     </RootStack.Navigator>
-  )
-}
+  );
+};
 
-type NavigationProps = Partial<React.ComponentProps<typeof NavigationContainer>>
+type NavigationProps = Partial<
+  React.ComponentProps<typeof NavigationContainer>
+>;
 
 export const AppNavigator = (props: NavigationProps): React.ReactElement => {
-  useFlipper(navigationRef)
-  const colorScheme = useColorScheme()
-  useBackButtonHandler(canExit)
+  useFlipper(navigationRef);
+  const colorScheme = useColorScheme();
+  useBackButtonHandler(canExit);
 
   return (
     <NavigationContainer
@@ -90,10 +95,10 @@ export const AppNavigator = (props: NavigationProps): React.ReactElement => {
     >
       <AppStack />
     </NavigationContainer>
-  )
-}
+  );
+};
 
-AppNavigator.displayName = "AppNavigator"
+AppNavigator.displayName = "AppNavigator";
 
 /**
  * A list of routes from which we're allowed to leave the app when
@@ -104,6 +109,6 @@ AppNavigator.displayName = "AppNavigator"
  *
  * `canExit` is used in ./app/app.tsx in the `useBackButtonHandler` hook.
  */
-const exitRoutes = ["welcome"]
+const exitRoutes = ["welcome"];
 export const canExit = (routeName: string): boolean =>
-  exitRoutes.includes(routeName)
+  exitRoutes.includes(routeName);

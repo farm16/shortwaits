@@ -1,4 +1,4 @@
-import configs from "@/config";
+import configs from "@shortwaits/admin/config";
 // import { persistor } from "../../redux"
 import { setCredentials } from "../../redux/auth";
 import { RootState } from "../../redux/types";

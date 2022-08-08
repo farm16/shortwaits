@@ -1,30 +1,34 @@
-import React from "react"
-import { StyleSheet } from "react-native"
+import React from "react";
+import { StyleSheet } from "react-native";
 import {
   CardStyleInterpolators,
   createStackNavigator,
-  StackNavigationOptions
-} from "@react-navigation/stack"
+  StackNavigationOptions,
+} from "@react-navigation/stack";
 
-import { SelectorScreenModal, ScheduleModal, ServicesModal } from "@/screens"
-import { MODAL_SCREENS } from "../navigation-constants"
-import { useTheme } from "@/theme"
-import { ModalStackParamList } from "../navigation-types"
+import {
+  SelectorScreenModal,
+  ScheduleModal,
+  ServicesModal,
+} from "@shortwaits/admin/screens";
+import { MODAL_SCREENS } from "../navigation-constants";
+import { useTheme } from "@shortwaits/admin/theme";
+import { ModalStackParamList } from "../navigation-types";
 
 const { SELECTOR_MODAL_SCREEN, SCHEDULE_MODAL_SCREEN, SERVICE_MODAL_SCREEN } =
-  MODAL_SCREENS
+  MODAL_SCREENS;
 
-const Stack = createStackNavigator<ModalStackParamList>()
+const Stack = createStackNavigator<ModalStackParamList>();
 
 export const ModalsNavigator = (): React.ReactElement => {
   const {
     Colors,
-    Common: { textPresets }
-  } = useTheme()
+    Common: { textPresets },
+  } = useTheme();
 
   const headerStyles = StyleSheet.create({
     withBorder: {
-      backgroundColor: Colors.background
+      backgroundColor: Colors.background,
     },
     withOutBorder: {
       backgroundColor: Colors.background,
@@ -33,10 +37,10 @@ export const ModalsNavigator = (): React.ReactElement => {
       elevation: 0, // for Android
       shadowOffset: {
         width: 0,
-        height: 0 // for iOS
-      }
-    }
-  })
+        height: 0, // for iOS
+      },
+    },
+  });
   const modalScreensOptions: StackNavigationOptions = {
     presentation: "modal",
     headerShown: true,
@@ -47,9 +51,9 @@ export const ModalsNavigator = (): React.ReactElement => {
       ...textPresets.headerTitle,
       color: Colors.text,
       position: "absolute",
-      alignSelf: "center"
-    }
-  }
+      alignSelf: "center",
+    },
+  };
 
   return (
     <Stack.Navigator>
@@ -62,5 +66,5 @@ export const ModalsNavigator = (): React.ReactElement => {
         <Stack.Screen name={SERVICE_MODAL_SCREEN} component={ServicesModal} />
       </Stack.Group>
     </Stack.Navigator>
-  )
-}
+  );
+};

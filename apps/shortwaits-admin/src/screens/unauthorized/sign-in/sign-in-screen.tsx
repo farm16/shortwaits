@@ -1,29 +1,35 @@
-import React, { FC } from "react"
-import { StyleSheet, View } from "react-native"
-import { StackNavigationProp } from "@react-navigation/stack"
+import React, { FC } from "react";
+import { StyleSheet, View } from "react-native";
+import { StackNavigationProp } from "@react-navigation/stack";
 
-import { Screen, Logo, Button, Text, Space } from "@/components"
-import Facebook from "@/assets/icons/facebook.svg"
-import Google from "@/assets/icons/google.svg"
-import EMail from "@/assets/icons/email.svg"
-import { useTheme } from "@/theme"
+import {
+  Screen,
+  Logo,
+  Button,
+  Text,
+  Space,
+} from "@shortwaits/admin/components";
+import Facebook from "@shortwaits/admin/assets/icons/facebook.svg";
+import Google from "@shortwaits/admin/assets/icons/google.svg";
+import EMail from "@shortwaits/admin/assets/icons/email.svg";
+import { useTheme } from "@shortwaits/admin/theme";
 import {
   RootStackParamList,
-  UnauthorizedStackParamList
-} from "@/navigation/navigation-types"
-import { CompositeNavigationProp } from "@react-navigation/native"
+  UnauthorizedStackParamList,
+} from "@shortwaits/admin/navigation/navigation-types";
+import { CompositeNavigationProp } from "@react-navigation/native";
 
 export interface RegisterWithEmailScreenProps {
   navigation: CompositeNavigationProp<
     StackNavigationProp<UnauthorizedStackParamList, "sign-in-screen">,
     StackNavigationProp<RootStackParamList>
-  >
+  >;
 }
 
 export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({
-  navigation
+  navigation,
 }) => {
-  const { Colors } = useTheme()
+  const { Colors } = useTheme();
 
   return (
     <Screen preset="fixed">
@@ -41,8 +47,8 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({
           text="with your email"
           onPress={() => {
             navigation.navigate("unauthorized", {
-              screen: "sign-in-with-email-screen"
-            })
+              screen: "sign-in-with-email-screen",
+            });
           }}
         />
         <Space size="large" />
@@ -56,24 +62,24 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({
             preset="subLink"
             text="Sign up"
             onPress={() => {
-              navigation.navigate("unauthorized", { screen: "sign-up-screen" })
+              navigation.navigate("unauthorized", { screen: "sign-up-screen" });
             }}
           />
         </View>
         <Space size="xLarge" />
       </View>
     </Screen>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "flex-end"
+    justifyContent: "flex-end",
   },
   footer: {
     flexDirection: "row",
-    alignSelf: "center"
-  }
-})
+    alignSelf: "center",
+  },
+});

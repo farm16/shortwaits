@@ -4,7 +4,7 @@ import { StyleSheet, View } from "react-native";
 import { Space, Text, Button, ScrollView } from "../common";
 import { ServiceColors } from "../service-colors/service-colors";
 import { ServicesType } from "@shortwaits/shared-types";
-import { useMobileAdmin } from "@/hooks/useMobileAdmin";
+import { useMobileAdmin } from "@shortwaits/admin/hooks/useMobileAdmin";
 import { TextFieldCard, TimeDurationCard, CurrencyFieldCard } from "../cards";
 
 interface SimpleServiceFormProps {

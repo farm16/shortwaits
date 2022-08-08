@@ -1,5 +1,5 @@
-import { useDispatch } from "react-redux"
-import React, { FC, useLayoutEffect } from "react"
+import { useDispatch } from "react-redux";
+import React, { FC, useLayoutEffect } from "react";
 
 import {
   CancelAndLogOutHeaderButton,
@@ -7,47 +7,50 @@ import {
   TextFieldCard,
   ButtonCard,
   Space,
-  RightChevronButton
-} from "@/components"
-import { UnauthorizedScreenProps } from "@/navigation/navigation-types"
-import { useUser } from "@/hooks/useUser"
-import { getPrettyStringFromHours } from "@/utils/time"
-import { getStaffCount } from "@/utils/staff"
-import { useBusiness } from "@/hooks/useBusiness"
-import { persistor } from "@/redux"
-import { setBusinessDescription, setBusinessShortName } from "@/redux/business"
-import { isEmpty } from "lodash"
-import { useForm } from "@/hooks/useForm"
+  RightChevronButton,
+} from "@shortwaits/admin/components";
+import { UnauthorizedScreenProps } from "@shortwaits/admin/navigation/navigation-types";
+import { useUser } from "@shortwaits/admin/hooks/useUser";
+import { getPrettyStringFromHours } from "@shortwaits/admin/utils/time";
+import { getStaffCount } from "@shortwaits/admin/utils/staff";
+import { useBusiness } from "@shortwaits/admin/hooks/useBusiness";
+import { persistor } from "@shortwaits/admin/redux";
+import {
+  setBusinessDescription,
+  setBusinessShortName,
+} from "@shortwaits/admin/redux/business";
+import { isEmpty } from "lodash";
+import { useForm } from "@shortwaits/admin/hooks/useForm";
 
 export const Onboarding1Screen: FC<
   UnauthorizedScreenProps<"onboarding-1-screen">
 > = ({ navigation }) => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  const businessState = useBusiness()
-  const userState = useUser()
+  const businessState = useBusiness();
+  const userState = useUser();
 
   const initialValues = {
     businessShortName: "",
-    businessDescription: ""
-  }
+    businessDescription: "",
+  };
   const { touched, errors, values, handleChange, handleSubmit } = useForm(
     {
       initialValues,
-      onSubmit: formData => {
+      onSubmit: (formData) => {
         dispatch(
           setBusinessDescription({ description: formData.businessDescription })
-        )
+        );
         dispatch(
           setBusinessShortName({ shortName: formData.businessShortName })
-        )
+        );
         navigation.navigate("unauthorized", {
-          screen: "onboarding-2-screen"
-        })
-      }
+          screen: "onboarding-2-screen",
+        });
+      },
     },
     "onBoarding1"
-  )
+  );
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -55,9 +58,9 @@ export const Onboarding1Screen: FC<
       headerLeft: () => (
         <CancelAndLogOutHeaderButton
           onPress={async () => {
-            await persistor.purge()
-            dispatch({ type: "USER_SIGN_OUT" })
-            navigation.navigate("welcome-screen")
+            await persistor.purge();
+            dispatch({ type: "USER_SIGN_OUT" });
+            navigation.navigate("welcome-screen");
           }}
         />
       ),
@@ -66,9 +69,9 @@ export const Onboarding1Screen: FC<
           state={isEmpty(errors) ? "enabled" : "disabled"}
           onPress={handleSubmit}
         />
-      )
-    })
-  }, [navigation, userState?.firstName, dispatch, handleSubmit, errors])
+      ),
+    });
+  }, [navigation, userState?.firstName, dispatch, handleSubmit, errors]);
 
   return (
     <Screen preset="scroll" style={{ alignItems: "center" }}>
@@ -106,8 +109,8 @@ export const Onboarding1Screen: FC<
           navigation.navigate("modals", {
             screen: "selector-modal-screen",
             params: {
-              type: "My-Business-Categories"
-            }
+              type: "My-Business-Categories",
+            },
           })
         }
       />
@@ -123,8 +126,8 @@ export const Onboarding1Screen: FC<
           navigation.navigate("modals", {
             screen: "schedule-modal-screen",
             params: {
-              type: "My-Business-Hours"
-            }
+              type: "My-Business-Hours",
+            },
           })
         }
       />
@@ -136,8 +139,8 @@ export const Onboarding1Screen: FC<
           navigation.navigate("modals", {
             screen: "selector-modal-screen",
             params: {
-              type: "My-Business-Staff"
-            }
+              type: "My-Business-Staff",
+            },
           })
         }
       />
@@ -159,5 +162,5 @@ export const Onboarding1Screen: FC<
         }
       /> */}
     </Screen>
-  )
-}
+  );
+};

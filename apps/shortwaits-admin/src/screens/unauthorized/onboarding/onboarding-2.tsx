@@ -16,18 +16,18 @@ import {
   useBottomSheet,
   MultipleHeaderButtons,
   SimpleServiceForm,
-} from "@/components";
-import { useTheme } from "@/theme";
+} from "@shortwaits/admin/components";
+import { useTheme } from "@shortwaits/admin/theme";
 import {
   RootStackParamList,
   UnauthorizedStackParamList,
-} from "@/navigation/navigation-types";
-import { useMobileAdmin } from "@/hooks/useMobileAdmin";
+} from "@shortwaits/admin/navigation/navigation-types";
+import { useMobileAdmin } from "@shortwaits/admin/hooks/useMobileAdmin";
 import { ServicesType } from "@shortwaits/shared-types";
-import { useBusiness } from "@/hooks/useBusiness";
-import { setSampleBusinessServicesByIndex } from "@/redux/mobile-admin";
-import { useUser } from "@/hooks/useUser";
-import { usePostBusinessRegistrationMutation } from "@/services/api";
+import { useBusiness } from "@shortwaits/admin/hooks/useBusiness";
+import { setSampleBusinessServicesByIndex } from "@shortwaits/admin/redux/mobile-admin";
+import { useUser } from "@shortwaits/admin/hooks/useUser";
+import { usePostBusinessRegistrationMutation } from "@shortwaits/admin/services/api";
 
 export interface Onboarding2ScreenProps {
   navigation: CompositeNavigationProp<
