@@ -1,17 +1,17 @@
-import { Model } from 'mongoose';
-import { InjectModel } from '@nestjs/mongoose';
-import { ConfigService } from '@nestjs/config';
+import { Model } from "mongoose";
+import { InjectModel } from "@nestjs/mongoose";
+import { ConfigService } from "@nestjs/config";
 import {
   ForbiddenException,
   Injectable,
   NotFoundException,
-} from '@nestjs/common';
-import { BusinessType, ServicesType, ObjectId } from '@shortwaits/shared-types';
-import { Business } from './entities/business.entity';
-import { CreateBusinessDto } from './dto/createBusinessDto';
-import { UpdateBusinessDto } from './dto/updateBusinessDto';
-import { Service } from '../services/entities/service.entity';
-import { User } from '../users/entities/user.entity';
+} from "@nestjs/common";
+import { BusinessType, ServicesType, ObjectId } from "@shortwaits/shared-types";
+import { Business } from "./entities/business.entity";
+import { CreateBusinessDto } from "./dto/createBusinessDto";
+import { UpdateBusinessDto } from "./dto/updateBusinessDto";
+import { Service } from "../services/entities/service.entity";
+import { User } from "../users/entities/user.entity";
 
 @Injectable()
 export class BusinessService {
@@ -40,7 +40,7 @@ export class BusinessService {
     if (businessData) {
       return businessData;
     } else {
-      throw new NotFoundException('Business not available');
+      throw new NotFoundException("Business not available");
     }
   }
   /**
@@ -84,7 +84,7 @@ export class BusinessService {
     const data = await this.businessModel
       .findById(businessId, String(key))
       .exec();
-    console.log('findByKey>>>', businessId, key, data);
+    console.log("findByKey>>>", businessId, key, data);
     return data;
   }
 
@@ -121,7 +121,7 @@ export class BusinessService {
           businesses: business._id,
         },
         registrationState: {
-          screenName: '',
+          screenName: "",
           state: 1,
           isCompleted: true,
         },
@@ -129,7 +129,7 @@ export class BusinessService {
       { new: true }
     );
 
-    console.log('registration: new user >>> ', user);
+    console.log("registration: new user >>> ", user);
 
     return { business, user };
   }
@@ -142,14 +142,14 @@ export class BusinessService {
       userId
     );
     if (isAdmin || isSuperAdmin) {
-      console.log('finding staff');
+      console.log("finding staff");
       const staff = this.userModel
         .find({
           _id: {
             $in: businessData.staff,
           },
         })
-        .select('-__v -hashedRt');
+        .select("-__v -hashedRt");
       return staff;
     }
   }

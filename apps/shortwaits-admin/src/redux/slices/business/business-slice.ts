@@ -5,11 +5,11 @@ import { shortwaitsApi } from "../../../services/shortwaits-api";
 import { businessReducers } from "./business-reducers";
 import { isEmpty } from "lodash";
 
-const initialState = null;
+const initialState: BusinessPayloadType = null;
 
 export const BusinessSlice = createSlice({
   name: "business",
-  initialState: initialState as BusinessPayloadType,
+  initialState: initialState,
   reducers: {
     setBusiness: (state, action: PayloadAction<BusinessPayloadType>) => ({
       ...state,

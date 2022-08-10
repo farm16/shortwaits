@@ -1,14 +1,14 @@
-import { Schema, Prop, SchemaFactory, raw } from '@nestjs/mongoose';
-import { ApiProperty } from '@nestjs/swagger';
-import { Document, Types } from 'mongoose';
+import { Schema, Prop, SchemaFactory, raw } from "@nestjs/mongoose";
+import { ApiProperty } from "@nestjs/swagger";
+import { Document, Types } from "mongoose";
 import {
   BusinessHoursType,
   BusinessLocationType,
   BusinessType,
   CurrencyType,
   ObjectId,
-} from '@shortwaits/shared-types';
-import { User } from '../../users/entities/user.entity';
+} from "@shortwaits/shared-types";
+import { User } from "../../users/entities/user.entity";
 
 @Schema()
 export class Business extends Document implements BusinessType {
@@ -89,11 +89,11 @@ export class Business extends Document implements BusinessType {
   @Prop()
   deleted: boolean;
   @ApiProperty()
-  @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }] })
-  createdBy: User['_id'];
+  @Prop({ type: [{ type: Types.ObjectId, ref: "User" }] })
+  createdBy: User["_id"];
   @ApiProperty()
-  @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }] })
-  updatedBy: User['_id'];
+  @Prop({ type: [{ type: Types.ObjectId, ref: "User" }] })
+  updatedBy: User["_id"];
   /**
    * @todo !!!
    * */

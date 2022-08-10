@@ -4,11 +4,11 @@ import { UserPayloadType } from "@shortwaits/shared-types";
 
 import type { RootState } from "../../types";
 
-const initialState = null;
+const initialState: UserPayloadType = null;
 
 const slice = createSlice({
   name: "user",
-  initialState: initialState as UserPayloadType,
+  initialState: initialState,
   reducers: {
     setUser(state, action: PayloadAction<UserPayloadType>) {
       return { ...state, ...action.payload };

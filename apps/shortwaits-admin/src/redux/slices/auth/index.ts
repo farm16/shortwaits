@@ -4,13 +4,13 @@ import { TokenPayloadType } from "@shortwaits/shared-types";
 import { shortwaitsApi } from "../../../services/shortwaits-api";
 import type { RootState } from "../../types";
 
-const initialState = {
+const initialState: TokenPayloadType = {
   token: null,
   refreshToken: null,
 };
 const slice = createSlice({
   name: "auth",
-  initialState: initialState as TokenPayloadType,
+  initialState: initialState,
   reducers: {
     setCredentials(state, action: PayloadAction<TokenPayloadType>) {
       return {

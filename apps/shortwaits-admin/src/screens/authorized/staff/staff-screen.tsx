@@ -20,9 +20,11 @@ const optionsPerPage = [2, 3, 4];
 export const StaffScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const business = useBusiness();
-  const { data: staff, isLoading: isStaffLoading } = useGetBusinessStaffQuery(
-    business._id
-  );
+  const {
+    data: staff,
+    isLoading: isStaffLoading,
+    isSuccess: isStaffSuccess,
+  } = useGetBusinessStaffQuery(business._id);
 
   console.log("useGetBusinessStaffQuery >>>", staff);
 
@@ -67,10 +69,8 @@ export const StaffScreen = ({ navigation }) => {
           <DataTable.Title>Username</DataTable.Title>
           <DataTable.Title>Role</DataTable.Title>
         </DataTable.Header>
-        {isStaffLoading ? (
-          <Text text="loading ..." />
-        ) : (
-          staff.data.map((elem) => (
+        {isStaffSuccess ? (
+          staff?.data.map((elem) => (
             <Button preset="none" key={String(elem._id)}>
               <DataTable.Row>
                 <DataTable.Cell>{elem.lastName ?? "-"}</DataTable.Cell>
@@ -87,6 +87,8 @@ export const StaffScreen = ({ navigation }) => {
               </DataTable.Row>
             </Button>
           ))
+        ) : (
+          <Text text="loading ..." />
         )}
 
         {/* <DataTable.Pagination
