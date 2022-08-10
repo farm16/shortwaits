@@ -9,14 +9,14 @@ import {
   Text,
   TextFieldCard,
   ScrollView,
-} from "@shortwaits/admin/components";
-import { useForm } from "@shortwaits/admin/hooks/useForm";
-import { useTheme } from "@shortwaits/admin/theme";
+} from "../../../components";
+import { useForm } from "../../../hooks";
+import { useTheme } from "../../../theme";
 import {
   RootStackParamList,
   UnauthorizedStackParamList,
-} from "@shortwaits/admin/navigation/navigation-types";
-import { useLocalSignUpMutation } from "@shortwaits/admin/services/api";
+} from "../../../navigation";
+import { useLocalSignUpMutation } from "../../../services/shortwaits-api";
 
 interface SignUpWithEmailScreenProps {
   navigation: CompositeNavigationProp<

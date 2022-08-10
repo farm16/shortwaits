@@ -1,22 +1,16 @@
 import React, { FC } from "react";
 import { View, StyleSheet } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
-
-import {
-  Screen,
-  Button,
-  Text,
-  Space,
-  Logo,
-} from "@shortwaits/admin/components";
-import Facebook from "@shortwaits/admin/assets/icons/facebook.svg";
-import Google from "@shortwaits/admin/assets/icons/google.svg";
-import EMail from "@shortwaits/admin/assets/icons/email.svg";
 import { CompositeNavigationProp } from "@react-navigation/native";
+
+import { Screen, Button, Text, Space, Logo } from "../../../components";
+import Facebook from "../../../assets/icons/facebook.svg";
+import Google from "../../../assets/icons/google.svg";
+import EMail from "../../../assets/icons/email.svg";
 import {
   RootStackParamList,
   UnauthorizedStackParamList,
-} from "@shortwaits/admin/navigation/navigation-types";
+} from "../../../navigation";
 
 export interface SignUpScreenProps {
   navigation: CompositeNavigationProp<

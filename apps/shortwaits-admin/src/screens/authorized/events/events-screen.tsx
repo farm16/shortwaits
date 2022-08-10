@@ -1,11 +1,3 @@
-/* eslint-disable react-native/no-inline-styles */
-import {
-  AuthorizedScreenHeader,
-  FloatingScreenButton,
-  Screen,
-  SearchBar,
-  Space,
-} from "@shortwaits/admin/components";
 import React, { FC, useCallback, useState } from "react";
 import {
   Alert,
@@ -26,18 +18,26 @@ import {
   WeekCalendar,
   AgendaList,
 } from "react-native-calendars";
-import { isEmpty } from "lodash";
-import { Colors } from "@shortwaits/admin/theme/Variables";
-import { Theme } from "react-native-calendars/src/types";
-import { useGetBusinessQuery } from "@shortwaits/admin/services/api";
-import { useUser } from "@shortwaits/admin/hooks/useUser";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { Theme } from "react-native-calendars/src/types";
+import { isEmpty } from "lodash";
 import { date } from "yup";
+
+import {
+  AuthorizedScreenHeader,
+  FloatingScreenButton,
+  Screen,
+  SearchBar,
+  Space,
+} from "../../../components";
+import { Colors } from "../../../theme/Variables";
+import { useGetBusinessQuery } from "../../../services/shortwaits-api";
+import { useUser } from "../../../hooks/useUser";
 import {
   AuthorizedScreenProps,
   AUTHORIZED_SCREENS,
   UnauthorizedScreenProps,
-} from "@shortwaits/admin/navigation";
+} from "../../../navigation";
 
 function getFutureDates(numberOfDays: number) {
   const array: string[] = [];

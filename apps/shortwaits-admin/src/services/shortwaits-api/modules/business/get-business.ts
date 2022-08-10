@@ -1,11 +1,11 @@
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
-import configs from "@shortwaits/admin/config";
+import { shortwaitsApiEndpoints } from "../../../../configs";
 import {
   ObjectId,
   BusinessSuccessResponseType,
 } from "@shortwaits/shared-types";
 
-const { getBusiness } = configs.api.endpoints.BUSINESS;
+const { getBusiness } = shortwaitsApiEndpoints.BUSINESS;
 
 /**
  * @Note

@@ -1,7 +1,8 @@
 import React, { ForwardedRef, forwardRef } from "react";
 import { TextInput } from "react-native";
+
 import { TextFieldProps } from "./text-field-types";
-import { useTheme } from "@shortwaits/admin/theme";
+import { useTheme } from "../../../theme";
 
 export * from "./text-field-types";
 

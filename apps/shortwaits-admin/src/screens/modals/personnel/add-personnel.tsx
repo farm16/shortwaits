@@ -1,8 +1,9 @@
 import React, { useLayoutEffect } from "react";
 import { View } from "react-native";
 import { StackScreenProps } from "@react-navigation/stack";
+import { ScrollView } from "react-native-gesture-handler";
 
-import { useTheme } from "@shortwaits/admin/theme";
+import { useTheme } from "../../../theme";
 import {
   Button,
   Screen,
@@ -11,10 +12,9 @@ import {
   Text,
   Space,
   TextHeaderButton,
-} from "@shortwaits/admin/components";
-import { CloseButton, UploadProfileImage } from "@shortwaits/admin/components";
-import { RootStackParamList } from "@shortwaits/admin/navigation/app-navigator";
-import { ScrollView } from "react-native-gesture-handler";
+} from "../../../components";
+import { CloseButton, UploadProfileImage } from "../../../components";
+import { RootStackParamList } from "../../../navigation";
 
 export const AddPersonnelModal = ({
   route: { params },

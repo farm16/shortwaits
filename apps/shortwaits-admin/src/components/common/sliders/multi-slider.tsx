@@ -3,7 +3,8 @@ import { StyleSheet, ViewStyle } from "react-native";
 import MultiSlider, {
   MultiSliderProps,
 } from "@ptomasroos/react-native-multi-slider";
-import { getDimensions, useTheme } from "@shortwaits/admin/theme";
+
+import { getDimensions, useTheme } from "../../../theme";
 
 interface MultiSliderComponentProps extends MultiSliderProps {
   style?: ViewStyle;

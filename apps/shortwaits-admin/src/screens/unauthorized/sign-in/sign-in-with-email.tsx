@@ -1,6 +1,7 @@
 import React, { FC, useCallback, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { CompositeNavigationProp } from "@react-navigation/native";
 import { ScrollView } from "react-native-gesture-handler";
 
 import {
@@ -9,15 +10,14 @@ import {
   Checkbox,
   Space,
   TextFieldCard,
-} from "@shortwaits/admin/components";
-import { useTheme } from "@shortwaits/admin/theme";
+} from "../../../components";
+import { useTheme } from "../../../theme";
 import {
   RootStackParamList,
   UnauthorizedStackParamList,
-} from "@shortwaits/admin/navigation";
-import { useForm } from "@shortwaits/admin/hooks/useForm";
-import { CompositeNavigationProp } from "@react-navigation/native";
-import { useLocalSignInMutation } from "@shortwaits/admin/services/api";
+} from "../../../navigation";
+import { useForm } from "../../../hooks";
+import { useLocalSignInMutation } from "../../../services/shortwaits-api";
 
 interface SignInWithEmailScreenProps {
   navigation: CompositeNavigationProp<

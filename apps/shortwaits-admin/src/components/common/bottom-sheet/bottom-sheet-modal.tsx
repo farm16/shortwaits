@@ -11,7 +11,7 @@ import {
   BottomSheetBackdrop,
 } from "@gorhom/bottom-sheet";
 
-import { useTheme } from "@shortwaits/admin/theme";
+import { useTheme } from "../../../theme";
 import { BottomSheetProps } from "./bottom-sheet-types";
 
 const defaultSnapPoints = ["35%", "60%", "90%"];

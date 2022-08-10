@@ -4,12 +4,13 @@ import {
   NavigatorScreenParams,
   RouteProp,
 } from "@react-navigation/native";
+
 import {
   NAVIGATION_STACKS,
   UNAUTHORIZED_SCREENS,
   AUTHORIZED_SCREENS,
   MODAL_SCREENS,
-} from "@shortwaits/admin/navigation/navigation-constants";
+} from "./navigation-constants";
 
 /**
  * - WRITE: Enable add/update capability.
@@ -48,7 +49,11 @@ export type ModalStackParamList = {
 };
 
 export type AuthorizedStackParamList = {
-  [AUTHORIZED_SCREENS.DASHBOARD_SCREEN]: undefined;
+  [AUTHORIZED_SCREENS.ACTIVITY_SCREEN]: undefined;
+  [AUTHORIZED_SCREENS.EVENTS_SCREEN]: undefined;
+  [AUTHORIZED_SCREENS.SERVICES_SCREEN]: undefined;
+  [AUTHORIZED_SCREENS.SETTINGS_SCREEN]: undefined;
+  [AUTHORIZED_SCREENS.STAFF_SCREEN]: undefined;
 };
 
 export type UnauthorizedStackParamList = {

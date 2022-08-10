@@ -1,21 +1,18 @@
 import React from "react";
 import { StyleSheet } from "react-native";
 import { useDispatch } from "react-redux";
-import {
-  AuthorizedScreenHeader,
-  Button,
-  Screen,
-} from "@shortwaits/admin/components";
-import { useTheme } from "@shortwaits/admin/theme";
+
+import { AuthorizedScreenHeader, Button, Screen } from "../../../components";
+import { persistor } from "../../../redux";
+import { useTheme } from "../../../theme";
 import { Divider, List, Switch } from "react-native-paper";
-import { useUser } from "@shortwaits/admin/hooks/useUser";
-import { useBusiness } from "@shortwaits/admin/hooks/useBusiness";
+import { useUser } from "../../../hooks/useUser";
+import { useBusiness } from "../../../hooks/useBusiness";
 import { UserAccountSettings } from "./options/user-account";
 import { SupportSettings } from "./options/support";
 import { BusinessInfoSettings } from "./options/business-info";
 import { IntegrationsSettings } from "./options/integrations";
 import { ContactsSettings } from "./options/contacts";
-import { persistor } from "@shortwaits/admin/redux";
 
 export const SettingsScreen = ({ navigation }) => {
   const { Colors } = useTheme();

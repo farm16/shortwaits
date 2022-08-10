@@ -2,14 +2,9 @@ import React, { useLayoutEffect } from "react";
 import { StatusBar, View } from "react-native";
 import { StackScreenProps } from "@react-navigation/stack";
 
-import { RootStackParamList } from "@shortwaits/admin/navigation";
-import {
-  Screen,
-  Card,
-  Text,
-  FloatingScreenButton,
-} from "@shortwaits/admin/components";
-import { useTheme } from "@shortwaits/admin/theme";
+import { RootStackParamList } from "../../../navigation";
+import { Screen, Card, Text, FloatingScreenButton } from "../../../components";
+import { useTheme } from "../../../theme";
 
 export const PersonnelModal = ({
   navigation,

@@ -1,10 +1,10 @@
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
 import { ObjectId, UserType } from "@shortwaits/shared-types";
-import configs from "@shortwaits/admin/config";
+import { shortwaitsApiEndpoints } from "../../../../configs";
 
-const { getCategory } = configs.api.endpoints.CATEGORIES;
+const { getUser } = shortwaitsApiEndpoints.USERS;
 
 export default (build: EndpointBuilder<any, any, any>) =>
   build.query<UserType, ObjectId>({
-    query: (id) => `${getCategory.PATH}/${id}`,
+    query: (id) => `${getUser.PATH}/${id}`,
   });

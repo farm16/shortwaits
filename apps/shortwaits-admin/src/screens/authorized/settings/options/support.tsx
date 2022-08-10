@@ -1,7 +1,8 @@
-import { useTheme } from "@shortwaits/admin/theme";
 import React, { useState } from "react";
 import { Divider, List } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+
+import { useTheme } from "../../../../theme";
 
 export const SupportSettings = () => {
   const [expanded, setExpanded] = useState(false);

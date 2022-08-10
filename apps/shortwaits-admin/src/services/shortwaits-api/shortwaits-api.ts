@@ -1,5 +1,4 @@
-import configs from "@shortwaits/admin/config";
-// import { persistor } from "../../redux"
+import { shortwaitsApiEndpoints } from "../../configs";
 import { setCredentials } from "../../redux/auth";
 import { RootState } from "../../redux/types";
 import { QueryReturnValue } from "@reduxjs/toolkit/dist/query/baseQueryTypes";
@@ -33,8 +32,8 @@ import {
   GetUser,
 } from "./modules";
 
-const API_BASE_URL = configs.api.endpoints.API_BASE_URL;
-const AUTH = configs.api.endpoints.AUTH;
+const API_BASE_URL = shortwaitsApiEndpoints.API_BASE_URL;
+const AUTH = shortwaitsApiEndpoints.AUTH;
 
 const mutex = new Mutex();
 
@@ -134,8 +133,8 @@ const baseQueryWithInterceptor: BaseQueryFn<
   return result;
 };
 
-export const api = createApi({
-  reducerPath: "api_service",
+export const shortwaitsApi = createApi({
+  reducerPath: "shortwaitsApi",
   baseQuery: baseQueryWithInterceptor,
   endpoints: (builder) => ({
     //default data
@@ -192,4 +191,4 @@ export const {
   useLazyGetBusinessHoursQuery,
   useLazyGetBusinessServicesQuery,
   useLazyGetBusinessStaffQuery,
-} = api;
+} = shortwaitsApi;

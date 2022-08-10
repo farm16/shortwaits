@@ -1,8 +1,8 @@
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
 import { UserType } from "@shortwaits/shared-types";
-import configs from "@shortwaits/admin/config";
+import { shortwaitsApiEndpoints } from "../../../../configs";
 
-const { getAllCategories } = configs.api.endpoints.CATEGORIES;
+const { getAllCategories } = shortwaitsApiEndpoints.CATEGORIES;
 
 export default (build: EndpointBuilder<any, any, any>) =>
   build.query<UserType, unknown>({

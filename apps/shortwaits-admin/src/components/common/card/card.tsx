@@ -3,8 +3,8 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { StyleSheet, View } from "react-native";
 
 import { Button, ButtonProps } from "../button/button";
-import { useTheme } from "@shortwaits/admin/theme";
-import { IconSizes } from "@shortwaits/admin/theme/Variables";
+import { useTheme } from "../../../theme";
+import { IconSizes } from "../../../theme/Variables";
 
 export interface CardIconsProps {
   leftIconName?: string;

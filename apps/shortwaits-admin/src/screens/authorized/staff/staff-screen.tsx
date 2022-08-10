@@ -1,18 +1,19 @@
 import React from "react";
+import { StyleSheet } from "react-native";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useDispatch } from "react-redux";
+
 import {
   AuthorizedScreenHeader,
   Button,
   ButtonCard,
   Screen,
   Text,
-} from "@shortwaits/admin/components";
-import { useTheme } from "@shortwaits/admin/theme";
+} from "../../../components";
+import { useTheme } from "../../../theme";
 import { DataTable } from "react-native-paper";
-import { useBusiness } from "@shortwaits/admin/hooks/useBusiness";
-import { useGetBusinessStaffQuery } from "@shortwaits/admin/services/api";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { StyleSheet } from "react-native";
+import { useBusiness } from "../../../hooks/useBusiness";
+import { useGetBusinessStaffQuery } from "../../../services/shortwaits-api";
 
 const optionsPerPage = [2, 3, 4];
 

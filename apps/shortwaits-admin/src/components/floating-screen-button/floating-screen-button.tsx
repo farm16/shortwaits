@@ -3,9 +3,9 @@ import { View, ViewStyle } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 import { Button, ButtonProps } from "../common";
-import { getDimensions, useTheme } from "@shortwaits/admin/theme";
-import { ThemeColorName } from "@shortwaits/admin/theme/Colors";
-import { IconSizes } from "@shortwaits/admin/theme/Variables";
+import { getDimensions, useTheme } from "../../theme";
+import { ThemeColorName } from "../../theme/Colors";
+import { IconSizes } from "../../theme/Variables";
 
 interface FloatingScreenButtonProps extends Omit<ButtonProps, "iconSize"> {
   iconName: string;

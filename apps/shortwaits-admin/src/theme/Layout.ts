@@ -1,8 +1,6 @@
 import { StyleSheet } from "react-native";
-import {
-  ThemeLayout,
-  ThemeVariables,
-} from "@shortwaits/admin/theme/theme.type";
+
+import { ThemeLayout, ThemeVariables } from "./theme.type";
 
 /**
  *

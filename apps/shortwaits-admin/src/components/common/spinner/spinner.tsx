@@ -1,6 +1,7 @@
 import React from "react";
 import LoaderSpinner from "react-native-spinkit";
-import { useTheme } from "@shortwaits/admin/theme";
+
+import { useTheme } from "../../../theme";
 
 export const Spinner = ({ color }: { color?: string }) => {
   const { Colors } = useTheme();

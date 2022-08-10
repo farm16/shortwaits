@@ -1,7 +1,8 @@
-import { useTheme } from "@shortwaits/admin/theme";
 import * as React from "react";
 import { Text as ReactNativeText } from "react-native";
+
 import { TextProps } from "./text-types";
+import { useTheme } from "../../../theme";
 // ctv5y
 /**
  * For your text displaying needs.

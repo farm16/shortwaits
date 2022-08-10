@@ -6,6 +6,7 @@ import React, {
   useState,
 } from "react";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { useDispatch } from "react-redux";
 import { BusinessWeekDaysType, WEEKDAYS } from "@shortwaits/shared-types";
 
 import {
@@ -17,16 +18,14 @@ import {
   Screen,
   Space,
   useBottomSheet,
-} from "@shortwaits/admin/components";
-import { ModalsScreenProps } from "@shortwaits/admin/navigation/navigation-types";
-import { useBusiness } from "@shortwaits/admin/hooks/useBusiness";
-import { useTheme } from "@shortwaits/admin/theme";
-
+} from "../../../components";
+import { ModalsScreenProps } from "../../../navigation/navigation-types";
+import { useBusiness } from "../../../hooks/useBusiness";
+import { useTheme } from "../../../theme";
 import { ScheduleCard } from "./schedule-card";
 import { SelectTimeRange } from "./select-time-range";
 import { scheduleConfigs } from "./schedule-config";
-import { useDispatch } from "react-redux";
-import { setBusinessEveryDayActivity } from "@shortwaits/admin/redux/business";
+import { setBusinessEveryDayActivity } from "../../../redux/business";
 
 const getFullDayString = (day?: string): string => {
   return day ? WEEKDAYS[day] : "";

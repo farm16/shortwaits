@@ -16,13 +16,12 @@ import {
   UnauthorizedNavigator,
   AuthorizedNavigator,
 } from "./stacks";
-import { useUser } from "@shortwaits/admin/hooks/useUser";
-import { useAuth } from "@shortwaits/admin/hooks/useAuth";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 import {
   useGetBusinessQuery,
   useGetAdminMobileQuery,
-} from "@shortwaits/admin/services/api";
+} from "../services/shortwaits-api";
+import { useAuth, useUser } from "../hooks";
 
 const RootStack = createStackNavigator<RootStackParamList>();
 

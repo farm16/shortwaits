@@ -1,13 +1,9 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
-import {
-  Text,
-  MultiSlider,
-  Space,
-  TimeRangeText,
-} from "@shortwaits/admin/components";
-import { getDimensions, useTheme } from "@shortwaits/admin/theme";
 import { BusinessWeekDaysType } from "@shortwaits/shared-types";
+
+import { Text, MultiSlider, Space, TimeRangeText } from "../../../components";
+import { getDimensions, useTheme } from "../../../theme";
 
 interface SelectTimeRangeProps {
   title?: string;

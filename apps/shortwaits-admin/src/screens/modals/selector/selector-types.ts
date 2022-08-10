@@ -1,10 +1,11 @@
+import { UseQuery } from "@reduxjs/toolkit/dist/query/react/buildHooks";
+import { BusinessPayloadType } from "@shortwaits/shared-types";
+
 import {
   SelectorMode,
   SelectorModalType,
   ModalPermissions,
-} from "@shortwaits/admin/navigation/navigation-types";
-import { UseQuery } from "@reduxjs/toolkit/dist/query/react/buildHooks";
-import { BusinessPayloadType } from "@shortwaits/shared-types";
+} from "../../../navigation";
 
 export interface SelectorConfig {
   searchOptions: {

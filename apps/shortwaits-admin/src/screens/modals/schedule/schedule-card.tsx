@@ -1,17 +1,16 @@
 import React from "react";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { Switch, View, StyleSheet } from "react-native";
-
-import { Button, Text } from "@shortwaits/admin/components";
-import { getDimensions, useTheme } from "@shortwaits/admin/theme";
-import { TimeRangeText } from "@shortwaits/admin/components";
 import { useDispatch } from "react-redux";
 import {
   BusinessDayTimeRangeType,
   BusinessWeekDaysType,
 } from "@shortwaits/shared-types";
-import { useBusiness } from "@shortwaits/admin/hooks/useBusiness";
-import { ScheduleModalType } from "@shortwaits/admin/navigation";
+
+import { getDimensions, useTheme } from "../../../theme";
+import { Button, Text, TimeRangeText } from "../../../components";
+import { useBusiness } from "../../../hooks";
+import { ScheduleModalType } from "../../../navigation";
 import { scheduleConfigs } from "./schedule-config";
 
 interface DayCardProps {

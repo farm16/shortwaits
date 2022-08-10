@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { TokenPayloadType } from "@shortwaits/shared-types";
 
-import { api } from "@shortwaits/admin/services/api";
+import { shortwaitsApi } from "../../services/shortwaits-api";
 import type { RootState } from "../types";
 
 const initialState = {
@@ -22,14 +22,14 @@ const slice = createSlice({
   extraReducers: (builder) => {
     builder
       .addMatcher(
-        api.endpoints.localSignUp.matchFulfilled,
+        shortwaitsApi.endpoints.localSignUp.matchFulfilled,
         (state, action) => ({
           ...state,
           ...action.payload.auth,
         })
       )
       .addMatcher(
-        api.endpoints.localSignIn.matchFulfilled,
+        shortwaitsApi.endpoints.localSignIn.matchFulfilled,
         (state, action) => ({
           ...state,
           ...action.payload.auth,

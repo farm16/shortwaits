@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Card, CardProps, Text } from "../common";
-import { useTheme } from "@shortwaits/admin/theme";
+import { useTheme } from "../../theme";
 
 export interface ButtonCardProps extends Omit<CardProps, "mode"> {
   title: string;

@@ -1,11 +1,11 @@
 import React from "react";
-import { useDispatch } from "react-redux";
-
-import { ButtonCard, Spinner } from "@shortwaits/admin/components";
-import { selectorConfigs } from "./selector-config";
-import { SelectorModalType } from "@shortwaits/admin/navigation";
 import { View } from "react-native";
+import { useDispatch } from "react-redux";
 import { ObjectId } from "@shortwaits/shared-types";
+
+import { ButtonCard, Spinner } from "../../../components";
+import { SelectorModalType } from "../../../navigation";
+import { selectorConfigs } from "./selector-config";
 
 interface SelectorItemProps {
   type: SelectorModalType;

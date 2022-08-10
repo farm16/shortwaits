@@ -1,8 +1,8 @@
 import * as default_dark from "./default_dark";
-import { Theme } from "@shortwaits/admin/theme/theme.type";
+import { Theme } from "../theme.type";
 
 type Themes = { [key: string]: Partial<Theme> };
 
 export default {
   default_dark,
-} as Themes;
+} as unknown as Themes;

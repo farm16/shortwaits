@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { BusinessPayloadType } from "@shortwaits/shared-types";
-import { api } from "@shortwaits/admin/services/api";
+import { shortwaitsApi } from "../../services/shortwaits-api";
 import { businessReducers } from "./business-reducers";
 import { isEmpty } from "lodash";
 
@@ -20,23 +20,26 @@ export const BusinessSlice = createSlice({
       /**
        * this happens when user signs up
        */
-      .addMatcher(api.endpoints.localSignUp.matchFulfilled, (state, action) => {
-        if (isEmpty(state.staff) && !state.isRegistrationCompleted) {
-          const staff = [action.payload.data._id];
-          return { ...state, staff };
-        } else {
-          return state;
-        }
-      })
       .addMatcher(
-        api.endpoints.postBusinessRegistration.matchFulfilled,
+        shortwaitsApi.endpoints.localSignUp.matchFulfilled,
+        (state, action) => {
+          if (isEmpty(state.staff) && !state.isRegistrationCompleted) {
+            const staff = [action.payload.data._id];
+            return { ...state, staff };
+          } else {
+            return state;
+          }
+        }
+      )
+      .addMatcher(
+        shortwaitsApi.endpoints.postBusinessRegistration.matchFulfilled,
         (state, action) => ({
           ...state,
           ...action.payload.data.business,
         })
       )
       .addMatcher(
-        api.endpoints.getAdminMobile.matchFulfilled,
+        shortwaitsApi.endpoints.getAdminMobile.matchFulfilled,
         (state, action) => {
           const { sampleBusinessData } = action.payload.data[0];
           if (state && state.isRegistrationCompleted) {
@@ -67,7 +70,7 @@ export const BusinessSlice = createSlice({
         }
       )
       .addMatcher(
-        api.endpoints.getBusiness.matchFulfilled,
+        shortwaitsApi.endpoints.getBusiness.matchFulfilled,
         (state, action) => ({
           ...state,
           ...action.payload.data,

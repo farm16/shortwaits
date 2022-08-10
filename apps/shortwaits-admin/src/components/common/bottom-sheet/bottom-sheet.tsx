@@ -9,7 +9,7 @@ import { KeyboardAvoidingView, StyleSheet, View } from "react-native";
 import G_BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { Portal } from "@gorhom/portal";
 
-import { useTheme } from "@shortwaits/admin/theme";
+import { useTheme } from "../../../theme";
 import { BottomSheetProps } from "./bottom-sheet-types";
 
 const defaultSnapPoints = ["35%", "60%", "85%"];

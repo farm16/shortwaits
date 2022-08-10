@@ -1,8 +1,8 @@
-import configs from "@shortwaits/admin/config";
+import { shortwaitsApiEndpoints } from "../../../../configs";
 import { AuthPayloadType, SuccessResponseType } from "@shortwaits/shared-types";
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
 
-const { adminLocalSignUp } = configs.api.endpoints.AUTH;
+const { adminLocalSignUp } = shortwaitsApiEndpoints.AUTH;
 
 interface DtoType {
   username: string;

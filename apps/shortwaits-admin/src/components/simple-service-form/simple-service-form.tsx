@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React, { useCallback, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
+import { ServicesType } from "@shortwaits/shared-types";
+
 import { Space, Text, Button, ScrollView } from "../common";
 import { ServiceColors } from "../service-colors/service-colors";
-import { ServicesType } from "@shortwaits/shared-types";
-import { useMobileAdmin } from "@shortwaits/admin/hooks/useMobileAdmin";
+import { useMobileAdmin } from "../../hooks/useMobileAdmin";
 import { TextFieldCard, TimeDurationCard, CurrencyFieldCard } from "../cards";
 
 interface SimpleServiceFormProps {

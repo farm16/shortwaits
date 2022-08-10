@@ -1,6 +1,6 @@
-import Welcome1 from "@shortwaits/admin/assets/images/welcome1.svg";
-import Welcome2 from "@shortwaits/admin/assets/images/welcome2.svg";
-import Welcome3 from "@shortwaits/admin/assets/images/welcome3.svg";
+import Welcome1 from "../../assets/images/welcome1.svg";
+import Welcome2 from "../../assets/images/welcome2.svg";
+import Welcome3 from "../../assets/images/welcome3.svg";
 import { Slides } from "./welcome";
 
 export const slidesData: Slides = [

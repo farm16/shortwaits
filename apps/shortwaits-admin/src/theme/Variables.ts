@@ -9,7 +9,7 @@ import {
   ThemeFontSize,
   ThemeMetricsSizes,
   ThemeNavigationColors,
-} from "@shortwaits/admin/theme/theme.type";
+} from "./theme.type";
 import { getColors } from "./Colors";
 
 export const Colors = {

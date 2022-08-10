@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
+import { useDispatch } from "react-redux";
 import { FlatList, StyleSheet, View } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { CompositeNavigationProp } from "@react-navigation/native";
-import { useDispatch } from "react-redux";
+import { ServicesType } from "@shortwaits/shared-types";
 
 import {
   ServiceCard,
@@ -16,18 +17,15 @@ import {
   useBottomSheet,
   MultipleHeaderButtons,
   SimpleServiceForm,
-} from "@shortwaits/admin/components";
-import { useTheme } from "@shortwaits/admin/theme";
+} from "../../../components";
+import { useTheme } from "../../../theme";
 import {
   RootStackParamList,
   UnauthorizedStackParamList,
-} from "@shortwaits/admin/navigation/navigation-types";
-import { useMobileAdmin } from "@shortwaits/admin/hooks/useMobileAdmin";
-import { ServicesType } from "@shortwaits/shared-types";
-import { useBusiness } from "@shortwaits/admin/hooks/useBusiness";
-import { setSampleBusinessServicesByIndex } from "@shortwaits/admin/redux/mobile-admin";
-import { useUser } from "@shortwaits/admin/hooks/useUser";
-import { usePostBusinessRegistrationMutation } from "@shortwaits/admin/services/api";
+} from "../../../navigation/navigation-types";
+import { useMobileAdmin, useUser, useBusiness } from "../../../hooks";
+import { setSampleBusinessServicesByIndex } from "../../../redux/mobile-admin";
+import { usePostBusinessRegistrationMutation } from "../../../services/shortwaits-api";
 
 export interface Onboarding2ScreenProps {
   navigation: CompositeNavigationProp<

@@ -1,4 +1,4 @@
-import { ThemeNavigationColors } from "@shortwaits/admin/theme/theme.type";
+import { ThemeNavigationColors } from "../../theme.type";
 
 const Colors = {
   primary: "lightblue",

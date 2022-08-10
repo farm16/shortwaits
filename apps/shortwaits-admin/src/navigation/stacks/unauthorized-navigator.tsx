@@ -13,10 +13,10 @@ import {
   SignUpWithEmail,
   Onboarding1Screen,
   Onboarding2Screen,
-} from "@shortwaits/admin/screens";
-import { BackButton } from "@shortwaits/admin/components";
+} from "../../screens";
+import { BackButton } from "../../components";
 import { UNAUTHORIZED_SCREENS } from "../navigation-constants";
-import { useTheme } from "@shortwaits/admin/theme";
+import { useTheme } from "../../theme";
 
 const {
   WELCOME_SCREEN,

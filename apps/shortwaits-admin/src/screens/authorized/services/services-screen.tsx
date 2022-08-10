@@ -1,3 +1,10 @@
+import React, { useRef, useState } from "react";
+import { StatusBar, StyleSheet, Animated, View } from "react-native";
+import { FlatList } from "react-native-gesture-handler";
+import { Divider, Menu } from "react-native-paper";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { useDispatch } from "react-redux";
+
 import {
   AuthorizedScreenHeader,
   BottomSheet,
@@ -11,16 +18,10 @@ import {
   Space,
   Text,
   useBottomSheet,
-} from "@shortwaits/admin/components";
-import { useBusiness } from "@shortwaits/admin/hooks/useBusiness";
-import { useGetServicesByBusinessQuery } from "@shortwaits/admin/services/api";
-import { useTheme } from "@shortwaits/admin/theme";
-import React, { useRef, useState } from "react";
-import { StatusBar, StyleSheet, Animated, View } from "react-native";
-import { FlatList } from "react-native-gesture-handler";
-import { Divider, Menu } from "react-native-paper";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { useDispatch } from "react-redux";
+} from "../../../components";
+import { useBusiness } from "../../../hooks/useBusiness";
+import { useGetServicesByBusinessQuery } from "../../../services/shortwaits-api";
+import { useTheme } from "../../../theme";
 
 export const ServicesScreen = () => {
   const { Colors } = useTheme();

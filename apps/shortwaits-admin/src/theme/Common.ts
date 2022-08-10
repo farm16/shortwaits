@@ -1,15 +1,11 @@
+import { StyleSheet } from "react-native";
 /**
  * This file defines the base application styles.
  *
  * Use it to define generic component styles (e.g. the default text styles, default button styles...).
  */
-import { StyleSheet } from "react-native";
-import {
-  buttonPresets,
-  textFieldPresets,
-  textPresets,
-} from "@shortwaits/admin/theme/presets";
-import { ThemeCommonParams } from "@shortwaits/admin/theme/theme.type";
+import { buttonPresets, textFieldPresets, textPresets } from "./presets";
+import { ThemeCommonParams } from "./theme.type";
 /**
  *
  * @param Theme can be spread like {Colors, NavigationColors, Gutters, Layout, Common, ...args}

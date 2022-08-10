@@ -3,9 +3,9 @@ import { Alert, Image, ImageBackground, StyleSheet, View } from "react-native";
 import { ServicesType } from "@shortwaits/shared-types";
 
 import { Button, ButtonProps, Space, Text } from "../common";
-import { getDimensions, useTheme } from "@shortwaits/admin/theme";
-import { getPrettyStringFromDurationInMin } from "@shortwaits/admin/utils/time";
-import { getPrettyStringFromPrice } from "@shortwaits/admin/utils/currency";
+import { getDimensions, useTheme } from "../../theme";
+import { getPrettyStringFromDurationInMin } from "../../utils/time";
+import { getPrettyStringFromPrice } from "../../utils/currency";
 import { ServiceAvatar } from "../service-avatar/service-avatar";
 
 const CARD_HEIGH = 90;

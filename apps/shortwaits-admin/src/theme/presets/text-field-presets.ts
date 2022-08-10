@@ -1,5 +1,6 @@
-import { ThemeCommonParams } from "@shortwaits/admin/theme/theme.type";
 import { StyleSheet } from "react-native";
+
+import { ThemeCommonParams } from "../theme.type";
 import { getDimensions } from "../utils";
 
 export type TextFieldPresets = keyof ReturnType<typeof textFieldPresets>;

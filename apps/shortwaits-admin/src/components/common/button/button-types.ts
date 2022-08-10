@@ -1,4 +1,3 @@
-import { ButtonViewType } from "@shortwaits/admin/theme/presets";
 import {
   StyleProp,
   TextStyle,
@@ -6,6 +5,8 @@ import {
   ViewStyle,
 } from "react-native";
 import { SvgProps } from "react-native-svg";
+
+import { ButtonViewType } from "../../../theme/presets";
 // import { TxKeyPath } from "../../i18n";
 
 export interface ButtonProps extends TouchableOpacityProps {

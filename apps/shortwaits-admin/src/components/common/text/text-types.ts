@@ -4,7 +4,7 @@ import {
   TextStyle,
 } from "react-native";
 // import i18n from "i18n-js"
-import { TextPresets } from "@shortwaits/admin/theme/presets";
+import { TextPresets } from "../../../theme/presets";
 // import { TxKeyPath } from "../../i18n"
 
 export interface TextProps extends TextProperties {

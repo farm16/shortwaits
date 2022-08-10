@@ -1,23 +1,17 @@
 import React, { FC } from "react";
 import { StyleSheet, View } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { CompositeNavigationProp } from "@react-navigation/native";
 
-import {
-  Screen,
-  Logo,
-  Button,
-  Text,
-  Space,
-} from "@shortwaits/admin/components";
-import Facebook from "@shortwaits/admin/assets/icons/facebook.svg";
-import Google from "@shortwaits/admin/assets/icons/google.svg";
-import EMail from "@shortwaits/admin/assets/icons/email.svg";
-import { useTheme } from "@shortwaits/admin/theme";
+import { Screen, Logo, Button, Text, Space } from "../../../components";
+import Facebook from "../../../assets/icons/facebook.svg";
+import Google from "../../../assets/icons/google.svg";
+import EMail from "../../../assets/icons/email.svg";
+import { useTheme } from "../../../theme";
 import {
   RootStackParamList,
   UnauthorizedStackParamList,
-} from "@shortwaits/admin/navigation/navigation-types";
-import { CompositeNavigationProp } from "@react-navigation/native";
+} from "../../../navigation/navigation-types";
 
 export interface RegisterWithEmailScreenProps {
   navigation: CompositeNavigationProp<

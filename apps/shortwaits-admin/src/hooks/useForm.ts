@@ -1,5 +1,5 @@
 import { FormikConfig, FormikProps, useFormik } from "formik";
-import { formSchemas } from "@shortwaits/admin/utils";
+import { formSchemas } from "../utils";
 
 export const useForm = <T = never>(
   config: FormikConfig<T>,

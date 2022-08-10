@@ -4,11 +4,11 @@ import CurrencyInput, {
   CurrencyInputProps,
   //   FakeCurrencyInput
 } from "react-native-currency-input";
-
-import { useTheme } from "@shortwaits/admin/theme";
-import { TextFieldProps, Card, Text } from "../common";
-import { getCurrencySymbolFromCurrencyType } from "@shortwaits/admin/utils/currency";
 import { BusinessAvailableCurrenciesType } from "@shortwaits/shared-types";
+
+import { useTheme } from "../../theme";
+import { TextFieldProps, Card, Text } from "../common";
+import { getCurrencySymbolFromCurrencyType } from "../../utils/currency";
 
 interface TextFieldCard
   extends CurrencyInputProps,

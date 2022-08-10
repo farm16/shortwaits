@@ -1,8 +1,8 @@
 import React, { ComponentProps } from "react";
 import { Searchbar as SearchBarPaper } from "react-native-paper";
 
-import { getDimensions, useTheme } from "@shortwaits/admin/theme";
-import { DeepPartial } from "@shortwaits/admin/index.d";
+import { getDimensions, useTheme } from "../../../theme";
+import { DeepPartial } from "../../../index.d";
 
 type SearchBarProps =
   | ComponentProps<typeof SearchBarPaper>

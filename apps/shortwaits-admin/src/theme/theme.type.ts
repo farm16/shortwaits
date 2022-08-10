@@ -1,5 +1,5 @@
 import { ImageStyle, TextStyle, ViewStyle } from "react-native";
-import Common from "@shortwaits/admin/theme/Common";
+import Common from "./Common";
 import { ThemeColors } from "./Colors";
 import { MetricsSizes } from "./Variables";
 

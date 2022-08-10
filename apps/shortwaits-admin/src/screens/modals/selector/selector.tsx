@@ -1,20 +1,20 @@
 import React, { FC, useLayoutEffect } from "react";
 import { FlatList, View, StyleSheet } from "react-native";
+import Spinner from "react-native-spinkit";
 
-import { useMobileAdmin } from "@shortwaits/admin/hooks/useMobileAdmin";
+import { useMobileAdmin } from "../../../hooks/useMobileAdmin";
 import {
   SearchBar,
   Space,
   CircleIconButton,
   LeftChevronButton,
-} from "@shortwaits/admin/components";
-import { ModalsScreenProps } from "@shortwaits/admin/navigation/navigation-types";
-import { useBusiness } from "@shortwaits/admin/hooks/useBusiness";
+} from "../../../components";
+import { ModalsScreenProps } from "../../../navigation/navigation-types";
+import { useBusiness } from "../../../hooks/useBusiness";
 import { selectorConfigs } from "./selector-config";
 import { SelectorItem } from "./selector-Item";
-import { useTheme } from "@shortwaits/admin/theme";
-import Spinner from "react-native-spinkit";
-import { useUser } from "@shortwaits/admin/hooks/useUser";
+import { useTheme } from "../../../theme";
+import { useUser } from "../../../hooks/useUser";
 
 export const SelectorScreenModal: FC<
   ModalsScreenProps<"selector-modal-screen">

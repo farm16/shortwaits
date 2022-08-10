@@ -4,7 +4,7 @@ import { Shadow } from "react-native-shadow-2";
 import Spinner from "react-native-spinkit";
 
 import { Text } from "../text/text";
-import { useTheme } from "@shortwaits/admin/theme";
+import { useTheme } from "../../../theme";
 import { ButtonProps } from "./button-types";
 
 export const Button: FC<ButtonProps> = (props) => {

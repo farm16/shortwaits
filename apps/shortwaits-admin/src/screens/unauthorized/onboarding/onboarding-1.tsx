@@ -1,5 +1,6 @@
 import { useDispatch } from "react-redux";
 import React, { FC, useLayoutEffect } from "react";
+import { isEmpty } from "lodash";
 
 import {
   CancelAndLogOutHeaderButton,
@@ -8,19 +9,16 @@ import {
   ButtonCard,
   Space,
   RightChevronButton,
-} from "@shortwaits/admin/components";
-import { UnauthorizedScreenProps } from "@shortwaits/admin/navigation/navigation-types";
-import { useUser } from "@shortwaits/admin/hooks/useUser";
-import { getPrettyStringFromHours } from "@shortwaits/admin/utils/time";
-import { getStaffCount } from "@shortwaits/admin/utils/staff";
-import { useBusiness } from "@shortwaits/admin/hooks/useBusiness";
-import { persistor } from "@shortwaits/admin/redux";
+} from "../../../components";
+import { UnauthorizedScreenProps } from "../../../navigation/navigation-types";
+import { getPrettyStringFromHours } from "../../../utils/time";
+import { getStaffCount } from "../../../utils/staff";
+import { useBusiness, useUser, useForm } from "../../../hooks";
+import { persistor } from "../../../redux";
 import {
   setBusinessDescription,
   setBusinessShortName,
-} from "@shortwaits/admin/redux/business";
-import { isEmpty } from "lodash";
-import { useForm } from "@shortwaits/admin/hooks/useForm";
+} from "../../../redux/business";
 
 export const Onboarding1Screen: FC<
   UnauthorizedScreenProps<"onboarding-1-screen">

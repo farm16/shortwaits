@@ -1,11 +1,11 @@
 import {
   setBusinessDayActivity,
   setBusinessDaySchedule,
-} from "@shortwaits/admin/redux/business";
+} from "../../../redux/business";
 import {
   useGetBusinessCategoryQuery,
   useGetBusinessStaffQuery,
-} from "@shortwaits/admin/services/api";
+} from "../../../services/shortwaits-api";
 import { ScheduleConfigs } from "./schedule-types";
 
 export const scheduleConfigs: ScheduleConfigs = {

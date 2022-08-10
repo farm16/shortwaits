@@ -1,11 +1,12 @@
+import { QueryDefinition } from "@reduxjs/toolkit/dist/query";
+import { UseQuery } from "@reduxjs/toolkit/dist/query/react/buildHooks";
 import { SuccessResponseType } from "@shortwaits/shared-types";
+
 import {
   ScheduleMode,
   ScheduleModalType,
   ModalPermissions,
-} from "@shortwaits/admin/navigation/navigation-types";
-import { QueryDefinition } from "@reduxjs/toolkit/dist/query";
-import { UseQuery } from "@reduxjs/toolkit/dist/query/react/buildHooks";
+} from "../../../navigation/navigation-types";
 
 export interface ScheduleConfig {
   headerTitle: string;

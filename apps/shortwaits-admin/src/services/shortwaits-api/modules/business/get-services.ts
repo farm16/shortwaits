@@ -5,9 +5,9 @@ import {
   ObjectId,
 } from "@shortwaits/shared-types";
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
-import configs from "@shortwaits/admin/config";
+import { shortwaitsApiEndpoints } from "../../../../configs";
 
-const { getBusinessServices } = configs.api.endpoints.BUSINESS;
+const { getBusinessServices } = shortwaitsApiEndpoints.BUSINESS;
 
 export default (builder: EndpointBuilder<any, any, any>) =>
   builder.query<

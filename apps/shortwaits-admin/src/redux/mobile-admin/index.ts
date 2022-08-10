@@ -2,7 +2,7 @@ import {
   ServicesType,
   ShortwaitsAdminDefaultDataPayloadType,
 } from "@shortwaits/shared-types";
-import { api } from "../../services/api";
+import { shortwaitsApi } from "../../services/shortwaits-api";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import type { RootState } from "../types";
@@ -36,7 +36,7 @@ const slice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addMatcher(
-      api.endpoints.getAdminMobile.matchFulfilled,
+      shortwaitsApi.endpoints.getAdminMobile.matchFulfilled,
       (_state, action) => {
         return [...action.payload.data];
       }

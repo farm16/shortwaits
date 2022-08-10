@@ -1,6 +1,7 @@
-import { useTheme } from "@shortwaits/admin/theme";
 import React, { useState } from "react";
 import { Divider, List } from "react-native-paper";
+
+import { useTheme } from "../../../../theme";
 
 export const ContactsSettings = ({ business }) => {
   const [expanded, setExpanded] = useState(false);

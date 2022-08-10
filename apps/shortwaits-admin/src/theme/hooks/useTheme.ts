@@ -1,22 +1,23 @@
 import { useColorScheme } from "react-native";
 import { useSelector } from "react-redux";
 import { DarkTheme, DefaultTheme } from "@react-navigation/native";
-import Fonts from "@shortwaits/admin/theme/Fonts";
-import Gutters from "@shortwaits/admin/theme/Gutters";
-import Images from "@shortwaits/admin/theme/Images";
-import Layout from "@shortwaits/admin/theme/Layout";
-import Common from "@shortwaits/admin/theme/Common";
-import * as DefaultVariables from "@shortwaits/admin/theme/Variables";
-import themes from "@shortwaits/admin/theme/themes";
+
+import Fonts from "../Fonts";
+import Gutters from "../Gutters";
+import Images from "../Images";
+import Layout from "../Layout";
+import Common from "../Common";
+import * as DefaultVariables from "../Variables";
+import themes from "../themes";
 import {
   Theme,
   ThemeCommon,
   ThemeNavigationColors,
   ThemeNavigationTheme,
   ThemeVariables,
-} from "@shortwaits/admin/theme/theme.type";
+} from "../theme.type";
 
-export default function () {
+export const useTheme = () => {
   // Get the scheme device
   const colorScheme = useColorScheme();
 
@@ -71,7 +72,7 @@ export default function () {
     formatTheme(themeVariables, themeConfig || {}),
     formatTheme(themeVariables, darkThemeConfig || {})
   );
-}
+};
 
 /**
  * Generate Theme with theme variables

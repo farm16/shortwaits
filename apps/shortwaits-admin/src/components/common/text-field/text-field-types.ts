@@ -1,5 +1,6 @@
-import { TextFieldPresets } from "@shortwaits/admin/theme/presets";
 import { StyleProp, TextInputProps, TextStyle, ViewStyle } from "react-native";
+
+import { TextFieldPresets } from "../../../theme/presets";
 
 export interface TextFieldProps extends Partial<TextInputProps> {
   /**

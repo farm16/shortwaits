@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { useTheme } from "@shortwaits/admin/theme";
+import { useTheme } from "../../../theme";
 import { ScreenProps } from "./screen.props";
 import { isNonScrolling, offsets, presets } from "./screen.presets";
 

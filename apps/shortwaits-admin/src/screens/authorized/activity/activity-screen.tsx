@@ -1,13 +1,10 @@
 import React from "react";
 import { Text, View } from "react-native";
 import { useDispatch } from "react-redux";
-import {
-  AuthorizedScreenHeader,
-  Button,
-  Screen,
-} from "@shortwaits/admin/components";
-import { persistor } from "@shortwaits/admin/redux";
-import { useTheme } from "@shortwaits/admin/theme";
+
+import { AuthorizedScreenHeader, Button, Screen } from "../../../components";
+import { persistor } from "../../../redux";
+import { useTheme } from "../../../theme";
 
 export const ActivityScreen = ({ navigation }) => {
   const dispatch = useDispatch();

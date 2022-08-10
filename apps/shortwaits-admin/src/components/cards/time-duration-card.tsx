@@ -1,10 +1,10 @@
 import React, { useState } from "react";
+import { StyleSheet } from "react-native";
+import { noop } from "lodash";
 
 import { Card, MultiSlider, Text } from "../common";
-import { useTheme } from "@shortwaits/admin/theme";
-import { getPrettyStringFromDurationInMin } from "@shortwaits/admin/utils/time";
-import { noop } from "lodash";
-import { StyleSheet } from "react-native";
+import { useTheme } from "../../theme";
+import { getPrettyStringFromDurationInMin } from "../../utils/time";
 
 export interface TimeDurationCardProps {
   title: string;

@@ -3,7 +3,7 @@ import { View } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 import { Button, ButtonProps, Spinner } from "../common";
-import { useTheme } from "@shortwaits/admin/theme";
+import { useTheme } from "../../theme";
 
 const disabledStates = ["loading", "disabled", "enable"];
 

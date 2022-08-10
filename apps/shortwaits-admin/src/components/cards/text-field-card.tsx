@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 
-import { getDimensions, useTheme } from "@shortwaits/admin/theme";
+import { getDimensions, useTheme } from "../../theme";
 import {
   TextField,
   TextFieldProps,

@@ -2,8 +2,8 @@ import React from "react";
 import { View, Image as RNImage } from "react-native";
 
 import { AutoImage as Image } from "../common";
-import { getDimensions } from "@shortwaits/admin/theme";
-import logo from "@shortwaits/admin/assets/images/logo.png";
+import { getDimensions } from "../../theme";
+import logo from "../../assets/images/logo.png";
 
 const MAX_LOGO_HEIGHT = 100;
 

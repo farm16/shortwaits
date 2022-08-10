@@ -1,7 +1,8 @@
-import { useTheme } from "@shortwaits/admin/theme";
 import React from "react";
 import RNCSlider from "@react-native-community/slider";
 import { SliderProps } from "react-native";
+
+import { useTheme } from "../../../theme";
 
 export const Slider = (props: SliderProps) => {
   const {

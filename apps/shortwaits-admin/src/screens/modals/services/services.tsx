@@ -10,9 +10,9 @@ import {
   ButtonCard,
   ServiceColors,
   UploadProfileImage,
-} from "@shortwaits/admin/components";
-import { useTheme } from "@shortwaits/admin/theme";
-import { ModalsScreenProps } from "@shortwaits/admin/navigation";
+} from "../../../components";
+import { useTheme } from "../../../theme";
+import { ModalsScreenProps } from "../../../navigation";
 
 export const ServicesModal: FC<ModalsScreenProps<"schedule-modal-screen">> = ({
   navigation,

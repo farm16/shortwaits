@@ -10,9 +10,9 @@ import {
   SelectorScreenModal,
   ScheduleModal,
   ServicesModal,
-} from "@shortwaits/admin/screens";
+} from "../../screens";
 import { MODAL_SCREENS } from "../navigation-constants";
-import { useTheme } from "@shortwaits/admin/theme";
+import { useTheme } from "../../theme";
 import { ModalStackParamList } from "../navigation-types";
 
 const { SELECTOR_MODAL_SCREEN, SCHEDULE_MODAL_SCREEN, SERVICE_MODAL_SCREEN } =

@@ -1,7 +1,7 @@
 import React from "react";
 import { View } from "react-native";
 
-import { MetricsSizes } from "@shortwaits/admin/theme/Variables";
+import { MetricsSizes } from "../../../theme/Variables";
 
 export const Space = ({
   direction = "horizontal",

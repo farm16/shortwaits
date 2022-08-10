@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native";
-import { ThemeCommonParams } from "@shortwaits/admin/theme/theme.type";
+
+import { ThemeCommonParams } from "../theme.type";
 
 export type TextPresets = keyof ReturnType<typeof textPresets>;
 

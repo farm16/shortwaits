@@ -3,8 +3,8 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { StyleProp, View, StyleSheet, ViewStyle } from "react-native";
 
 import { Text } from "../common";
-import { useTheme } from "@shortwaits/admin/theme";
-import { get12hrTimeFromDecimal } from "@shortwaits/admin/utils";
+import { useTheme } from "../../theme";
+import { get12hrTimeFromDecimal } from "../../utils";
 
 export const TimeRangeText = ({
   style,

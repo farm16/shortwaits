@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { ThemeVariables } from "@shortwaits/admin/theme/theme.type";
+import { ThemeVariables } from "./theme.type";
 
 /**
  * Generate Styles depending on MetricsSizes vars availabled at ./Theme/Variables

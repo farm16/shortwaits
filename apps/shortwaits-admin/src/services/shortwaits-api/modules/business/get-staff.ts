@@ -4,9 +4,9 @@ import {
   UserType,
 } from "@shortwaits/shared-types";
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
-import configs from "@shortwaits/admin/config";
+import { shortwaitsApiEndpoints } from "../../../../configs";
 
-const { getBusinessStaff } = configs.api.endpoints.BUSINESS;
+const { getBusinessStaff } = shortwaitsApiEndpoints.BUSINESS;
 
 export default (builder: EndpointBuilder<any, any, any>) =>
   builder.query<SuccessResponseType<UserType[]>, ObjectId | string>({

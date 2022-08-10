@@ -4,13 +4,11 @@ import {
   SuccessResponseType,
 } from "@shortwaits/shared-types";
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
-import configs from "@shortwaits/admin/config";
+import { shortwaitsApiEndpoints } from "../../../../configs";
 
-const { getBusinessServices } = configs.api.endpoints.SERVICES;
+const { getService } = shortwaitsApiEndpoints.SERVICES;
 
 export default (builder: EndpointBuilder<any, any, any>) =>
   builder.query<SuccessResponseType<DocType<ServicesType[]>>, string>({
-    query: (businessId) => getBusinessServices.getPath(businessId),
-    // Pick out data and prevent nested properties in a hook or selector
-    transformResponse: (response) => response.data,
+    query: (serviceId) => getService.getPath(serviceId),
   });

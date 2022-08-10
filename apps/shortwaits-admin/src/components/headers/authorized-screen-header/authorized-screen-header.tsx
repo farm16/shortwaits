@@ -1,8 +1,9 @@
-import { Button, ButtonProps, Text } from "@shortwaits/admin/components";
-import { useTheme } from "@shortwaits/admin/theme";
 import React, { FC } from "react";
 import { StyleSheet, View } from "react-native";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
+
+import { useTheme } from "../../../theme";
+import { Button, ButtonProps, Text } from "../../common";
 
 interface AuthorizedScreenHeaderProps {
   title: string;

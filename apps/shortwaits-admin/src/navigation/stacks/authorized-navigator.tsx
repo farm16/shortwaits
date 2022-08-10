@@ -8,8 +8,8 @@ import {
   ServicesScreen,
   ActivityScreen,
   StaffScreen,
-} from "@shortwaits/admin/screens";
-import { useTheme } from "@shortwaits/admin/theme";
+} from "../../screens";
+import { useTheme } from "../../theme";
 import { AUTHORIZED_SCREENS } from "../navigation-constants";
 
 const Tab = createMaterialBottomTabNavigator();

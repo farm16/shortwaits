@@ -4,7 +4,7 @@ import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 import { Button } from "../common";
-import { getDimensions, useTheme } from "@shortwaits/admin/theme";
+import { getDimensions, useTheme } from "../../theme";
 
 interface UploadProfileImageProps {
   preset?: keyof typeof SIZES | "field";

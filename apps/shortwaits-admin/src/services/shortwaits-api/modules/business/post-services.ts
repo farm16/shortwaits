@@ -1,4 +1,4 @@
-import configs from "@shortwaits/admin/config";
+import { shortwaitsApiEndpoints } from "../../../../configs";
 import {
   ObjectId,
   AuthPayloadType,
@@ -8,7 +8,7 @@ import {
 } from "@shortwaits/shared-types";
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
 
-const { createBusiness } = configs.api.endpoints.BUSINESS;
+const { createBusiness } = shortwaitsApiEndpoints.BUSINESS;
 
 interface BusinessServicePost {
   businessId: ObjectId;
