@@ -22,9 +22,13 @@ import { useTheme } from "../../../theme";
 import {
   RootStackParamList,
   UnauthorizedStackParamList,
-} from "../../../navigation/navigation-types";
-import { useMobileAdmin, useUser, useBusiness } from "../../../hooks";
-import { setSampleBusinessServicesByIndex } from "../../../redux/mobile-admin";
+} from "../../../navigation";
+import {
+  useMobileAdmin,
+  useUser,
+  useBusiness,
+  setSampleBusinessServicesByIndex,
+} from "../../../redux";
 import { usePostBusinessRegistrationMutation } from "../../../services/shortwaits-api";
 
 export interface Onboarding2ScreenProps {
@@ -60,7 +64,7 @@ export const Onboarding2Screen = ({ navigation }: Onboarding2ScreenProps) => {
     registerBusiness({
       userId: user._id,
       business,
-      services: mobileAdmin?.sampleBusinessData.services!,
+      services: mobileAdmin?.sampleBusinessData.services,
     });
   }, [
     business,

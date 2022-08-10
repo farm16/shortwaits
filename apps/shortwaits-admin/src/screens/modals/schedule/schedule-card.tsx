@@ -9,7 +9,7 @@ import {
 
 import { getDimensions, useTheme } from "../../../theme";
 import { Button, Text, TimeRangeText } from "../../../components";
-import { useBusiness } from "../../../hooks";
+import { useBusiness } from "../../../redux";
 import { ScheduleModalType } from "../../../navigation";
 import { scheduleConfigs } from "./schedule-config";
 

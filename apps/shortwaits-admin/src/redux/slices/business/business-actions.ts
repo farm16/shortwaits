@@ -1,4 +1,4 @@
-import { BusinessSlice } from "./business-slice"
+import { BusinessSlice } from "./business-slice";
 
 export const {
   setBusiness,
@@ -19,5 +19,6 @@ export const {
   setBusinessService,
   setBusinessServices,
   setBusinessIsRegistrationCompleted,
-  setBusinessDeleted
-} = BusinessSlice.actions
+  setBusinessDeleted,
+  resetBusiness,
+} = BusinessSlice.actions;

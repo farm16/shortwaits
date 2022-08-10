@@ -19,13 +19,12 @@ import {
   Space,
   useBottomSheet,
 } from "../../../components";
-import { ModalsScreenProps } from "../../../navigation/navigation-types";
-import { useBusiness } from "../../../hooks/useBusiness";
+import { ModalsScreenProps } from "../../../navigation";
 import { useTheme } from "../../../theme";
 import { ScheduleCard } from "./schedule-card";
 import { SelectTimeRange } from "./select-time-range";
 import { scheduleConfigs } from "./schedule-config";
-import { setBusinessEveryDayActivity } from "../../../redux/business";
+import { setBusinessEveryDayActivity, useBusiness } from "../../../redux";
 
 const getFullDayString = (day?: string): string => {
   return day ? WEEKDAYS[day] : "";

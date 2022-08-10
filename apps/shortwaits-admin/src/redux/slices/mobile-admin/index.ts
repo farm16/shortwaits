@@ -1,12 +1,12 @@
+import { cloneDeep } from "lodash";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   ServicesType,
   ShortwaitsAdminDefaultDataPayloadType,
 } from "@shortwaits/shared-types";
-import { shortwaitsApi } from "../../services/shortwaits-api";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import type { RootState } from "../types";
-import { cloneDeep } from "lodash";
+import { shortwaitsApi } from "../../../services/shortwaits-api";
+import type { RootState } from "../../../redux";
 
 const slice = createSlice({
   name: "defaultMobileData",
@@ -46,7 +46,7 @@ const slice = createSlice({
 
 export const { setSampleBusinessServicesByIndex } = slice.actions;
 
-export default slice.reducer;
+export const mobileAdminReducer = slice.reducer;
 
 export const selectCurrentMobileAdminState = (state: RootState) =>
-  state.defaultMobileData;
+  state.mobileAdmin;

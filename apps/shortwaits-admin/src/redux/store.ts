@@ -41,13 +41,10 @@ const store = configureStore({
   },
 });
 
-export type AppDispatch = typeof store.dispatch;
-const useAppDispatch: () => AppDispatch = useDispatch; // Export a hook that can be reused to resolve types
-
 // optional, but required for refetchOnFocus/refetchOnReconnect behaviors
 // see `setupListeners` docs - takes an optional callback as the 2nd arg for customization
 setupListeners(store.dispatch);
 
 const persistor = persistStore(store);
 
-export { store, persistor, useAppDispatch };
+export { store, persistor };

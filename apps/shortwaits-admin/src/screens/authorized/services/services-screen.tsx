@@ -19,7 +19,7 @@ import {
   Text,
   useBottomSheet,
 } from "../../../components";
-import { useBusiness } from "../../../hooks/useBusiness";
+import { useBusiness } from "../../../redux";
 import { useGetServicesByBusinessQuery } from "../../../services/shortwaits-api";
 import { useTheme } from "../../../theme";
 

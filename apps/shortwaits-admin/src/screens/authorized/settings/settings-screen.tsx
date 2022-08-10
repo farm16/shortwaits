@@ -1,18 +1,16 @@
 import React from "react";
 import { StyleSheet } from "react-native";
-import { useDispatch } from "react-redux";
 
 import { AuthorizedScreenHeader, Button, Screen } from "../../../components";
-import { persistor } from "../../../redux";
 import { useTheme } from "../../../theme";
 import { Divider, List, Switch } from "react-native-paper";
-import { useUser } from "../../../hooks/useUser";
-import { useBusiness } from "../../../hooks/useBusiness";
+import { useUser, useBusiness, persistor } from "../../../redux";
 import { UserAccountSettings } from "./options/user-account";
 import { SupportSettings } from "./options/support";
 import { BusinessInfoSettings } from "./options/business-info";
 import { IntegrationsSettings } from "./options/integrations";
 import { ContactsSettings } from "./options/contacts";
+import { useDispatch } from "react-redux";
 
 export const SettingsScreen = ({ navigation }) => {
   const { Colors } = useTheme();
@@ -54,7 +52,7 @@ export const SettingsScreen = ({ navigation }) => {
           text="Sign Out"
           onPress={async function () {
             await persistor.purge();
-            dispatch({ type: "USER_SIGN_OUT" });
+            dispatch(reset);
           }}
         />
       </List.Section>

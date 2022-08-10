@@ -1,15 +1,20 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { shortwaitsApi } from "../../services/shortwaits-api";
+import { shortwaitsApi } from "../../../services/shortwaits-api";
 import { UserPayloadType } from "@shortwaits/shared-types";
 
-import type { RootState } from "../types";
+import type { RootState } from "../../types";
+
+const initialState = null;
 
 const slice = createSlice({
   name: "user",
-  initialState: null as unknown as UserPayloadType,
+  initialState: initialState as UserPayloadType,
   reducers: {
     setUser(state, action: PayloadAction<UserPayloadType>) {
       return { ...state, ...action.payload };
+    },
+    resetUser() {
+      return initialState;
     },
   },
   extraReducers: (builder) => {
@@ -38,8 +43,8 @@ const slice = createSlice({
   },
 });
 
-export const { setUser } = slice.actions;
+export const { setUser, resetUser } = slice.actions;
 
-export default slice.reducer;
+export const userReducer = slice.reducer;
 
 export const selectCurrentUserState = (state: RootState) => state.user;

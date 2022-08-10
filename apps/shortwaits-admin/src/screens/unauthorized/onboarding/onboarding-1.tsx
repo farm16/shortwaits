@@ -10,15 +10,17 @@ import {
   Space,
   RightChevronButton,
 } from "../../../components";
-import { UnauthorizedScreenProps } from "../../../navigation/navigation-types";
+import { UnauthorizedScreenProps } from "../../../navigation";
 import { getPrettyStringFromHours } from "../../../utils/time";
 import { getStaffCount } from "../../../utils/staff";
-import { useBusiness, useUser, useForm } from "../../../hooks";
-import { persistor } from "../../../redux";
+import { useForm } from "../../../hooks";
 import {
+  persistor,
+  useBusiness,
+  useUser,
   setBusinessDescription,
   setBusinessShortName,
-} from "../../../redux/business";
+} from "../../../redux";
 
 export const Onboarding1Screen: FC<
   UnauthorizedScreenProps<"onboarding-1-screen">

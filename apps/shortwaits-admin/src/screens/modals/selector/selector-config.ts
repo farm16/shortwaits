@@ -7,7 +7,7 @@ import {
 } from "@shortwaits/shared-types";
 
 import { SelectorConfigs } from "./selector-types";
-import { setBusinessCategories } from "../../../redux/business";
+import { useBusiness, setBusinessCategories } from "../../../redux";
 import { navigate } from "../../../utils";
 import {
   useGetUserQuery,
@@ -15,7 +15,6 @@ import {
   useGetCategoryQuery,
   useGetBusinessStaffQuery,
 } from "../../../services/shortwaits-api";
-import { useBusiness } from "../../../hooks";
 
 export const selectorConfigs: SelectorConfigs = {
   "My-Business-Categories": {

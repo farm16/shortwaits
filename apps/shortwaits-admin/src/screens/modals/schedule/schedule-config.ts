@@ -1,7 +1,4 @@
-import {
-  setBusinessDayActivity,
-  setBusinessDaySchedule,
-} from "../../../redux/business";
+import { setBusinessDayActivity, setBusinessDaySchedule } from "../../../redux";
 import {
   useGetBusinessCategoryQuery,
   useGetBusinessStaffQuery,

@@ -12,7 +12,7 @@ import {
 } from "../../../components";
 import { useTheme } from "../../../theme";
 import { DataTable } from "react-native-paper";
-import { useBusiness } from "../../../hooks/useBusiness";
+import { useBusiness } from "../../../redux";
 import { useGetBusinessStaffQuery } from "../../../services/shortwaits-api";
 
 const optionsPerPage = [2, 3, 4];
@@ -20,7 +20,9 @@ const optionsPerPage = [2, 3, 4];
 export const StaffScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const business = useBusiness();
-  const { data: staff } = useGetBusinessStaffQuery(business._id);
+  const { data: staff, isLoading: isStaffLoading } = useGetBusinessStaffQuery(
+    business._id
+  );
 
   console.log("useGetBusinessStaffQuery >>>", staff);
 
@@ -65,9 +67,11 @@ export const StaffScreen = ({ navigation }) => {
           <DataTable.Title>Username</DataTable.Title>
           <DataTable.Title>Role</DataTable.Title>
         </DataTable.Header>
-        {staff ? (
+        {isStaffLoading ? (
+          <Text text="loading ..." />
+        ) : (
           staff.data.map((elem) => (
-            <Button preset="none" key={elem._id}>
+            <Button preset="none" key={String(elem._id)}>
               <DataTable.Row>
                 <DataTable.Cell>{elem.lastName ?? "-"}</DataTable.Cell>
                 <DataTable.Cell>{elem.firstName ?? "-"}</DataTable.Cell>
@@ -83,8 +87,6 @@ export const StaffScreen = ({ navigation }) => {
               </DataTable.Row>
             </Button>
           ))
-        ) : (
-          <Text text="loading ..." />
         )}
 
         {/* <DataTable.Pagination

@@ -5,7 +5,7 @@ import { ServicesType } from "@shortwaits/shared-types";
 
 import { Space, Text, Button, ScrollView } from "../common";
 import { ServiceColors } from "../service-colors/service-colors";
-import { useMobileAdmin } from "../../hooks/useMobileAdmin";
+import { useMobileAdmin } from "../../redux";
 import { TextFieldCard, TimeDurationCard, CurrencyFieldCard } from "../cards";
 
 interface SimpleServiceFormProps {

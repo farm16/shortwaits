@@ -1,6 +1,5 @@
 import { shortwaitsApiEndpoints } from "../../configs";
-import { setCredentials } from "../../redux/auth";
-import { RootState } from "../../redux/types";
+import { setCredentials, RootState } from "../../redux";
 import { QueryReturnValue } from "@reduxjs/toolkit/dist/query/baseQueryTypes";
 import {
   BaseQueryFn,

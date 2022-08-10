@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { TokenPayloadType } from "@shortwaits/shared-types";
 
-import { shortwaitsApi } from "../../services/shortwaits-api";
-import type { RootState } from "../types";
+import { shortwaitsApi } from "../../../services/shortwaits-api";
+import type { RootState } from "../../types";
 
 const initialState = {
   token: null,
@@ -17,6 +17,9 @@ const slice = createSlice({
         ...state,
         ...action.payload,
       };
+    },
+    resetAuth() {
+      return initialState;
     },
   },
   extraReducers: (builder) => {
@@ -38,8 +41,8 @@ const slice = createSlice({
   },
 });
 
-export const { setCredentials } = slice.actions;
+export const { setCredentials, resetAuth } = slice.actions;
 
-export default slice.reducer;
+export const authReducer = slice.reducer;
 
 export const selectCurrentAuthState = (state: RootState) => state.auth;

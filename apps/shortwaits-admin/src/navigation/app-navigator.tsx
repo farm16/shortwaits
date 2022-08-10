@@ -21,7 +21,7 @@ import {
   useGetBusinessQuery,
   useGetAdminMobileQuery,
 } from "../services/shortwaits-api";
-import { useAuth, useUser } from "../hooks";
+import { useAuth, useUser } from "../redux";
 
 const RootStack = createStackNavigator<RootStackParamList>();
 

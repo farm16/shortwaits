@@ -32,7 +32,7 @@ import {
 } from "../../../components";
 import { Colors } from "../../../theme/Variables";
 import { useGetBusinessQuery } from "../../../services/shortwaits-api";
-import { useUser } from "../../../hooks/useUser";
+import { useUser } from "../../../redux/hooks/useUser";
 import {
   AuthorizedScreenProps,
   AUTHORIZED_SCREENS,

@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
-import { selectCurrentMobileAdminState } from "../redux/mobile-admin";
+import { selectCurrentMobileAdminState } from "../../redux";
 /**
  *
  * @returns returns element 0 which is `short_id: 0001`

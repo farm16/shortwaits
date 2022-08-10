@@ -5,7 +5,7 @@ import { ServiceColorType } from "@shortwaits/shared-types";
 
 import { getDimensions } from "../../theme";
 import { Button, ButtonProps } from "../common";
-import { useMobileAdmin } from "../../hooks/useMobileAdmin";
+import { useMobileAdmin } from "../../redux";
 
 interface ServiceColorsProps {
   color?: ServiceColorType;

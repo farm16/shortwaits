@@ -11,7 +11,7 @@ import {
   RootStackParamList,
   UnauthorizedStackParamList,
 } from "../../../navigation";
-import { useUser } from "../../../hooks";
+import { useUser } from "../../../redux";
 
 export interface WelcomeScreenProps {
   navigation: CompositeNavigationProp<

@@ -1,14 +1,17 @@
 import { persistReducer } from "redux-persist";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { combineReducers } from "@reduxjs/toolkit";
+
 import { shortwaitsApi } from "../services/shortwaits-api";
 
 //reducers
-import theme from "./theme";
-import auth from "./auth";
-import user from "./user";
-import business from "./business";
-import defaultMobileData from "./mobile-admin";
+import {
+  authReducer,
+  businessReducer,
+  themeReducer,
+  userReducer,
+  mobileAdminReducer,
+} from "./slices";
 
 const persistRootConfig = {
   key: "root",
@@ -16,11 +19,11 @@ const persistRootConfig = {
 };
 
 const reducers = combineReducers({
-  user,
-  auth,
-  theme,
-  business,
-  defaultMobileData,
+  user: userReducer,
+  auth: authReducer,
+  theme: themeReducer,
+  business: businessReducer,
+  mobileAdmin: mobileAdminReducer,
   [shortwaitsApi.reducerPath]: shortwaitsApi.reducer,
 });
 

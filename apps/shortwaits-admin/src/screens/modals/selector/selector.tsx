@@ -2,19 +2,17 @@ import React, { FC, useLayoutEffect } from "react";
 import { FlatList, View, StyleSheet } from "react-native";
 import Spinner from "react-native-spinkit";
 
-import { useMobileAdmin } from "../../../hooks/useMobileAdmin";
+import { useMobileAdmin, useBusiness, useUser } from "../../../redux";
 import {
   SearchBar,
   Space,
   CircleIconButton,
   LeftChevronButton,
 } from "../../../components";
-import { ModalsScreenProps } from "../../../navigation/navigation-types";
-import { useBusiness } from "../../../hooks/useBusiness";
+import { ModalsScreenProps } from "../../../navigation";
 import { selectorConfigs } from "./selector-config";
 import { SelectorItem } from "./selector-Item";
 import { useTheme } from "../../../theme";
-import { useUser } from "../../../hooks/useUser";
 
 export const SelectorScreenModal: FC<
   ModalsScreenProps<"selector-modal-screen">

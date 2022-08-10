@@ -1,19 +1,24 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { BusinessPayloadType } from "@shortwaits/shared-types";
-import { shortwaitsApi } from "../../services/shortwaits-api";
+import { shortwaitsApi } from "../../../services/shortwaits-api";
 import { businessReducers } from "./business-reducers";
 import { isEmpty } from "lodash";
 
+const initialState = null;
+
 export const BusinessSlice = createSlice({
   name: "business",
-  initialState: null as unknown as BusinessPayloadType,
+  initialState: initialState as BusinessPayloadType,
   reducers: {
     setBusiness: (state, action: PayloadAction<BusinessPayloadType>) => ({
       ...state,
       ...action.payload,
     }),
     ...businessReducers,
+    resetBusiness() {
+      return initialState;
+    },
   },
   extraReducers: (builder) => {
     builder

@@ -4,6 +4,7 @@ import {
   SuccessResponseType,
 } from "@shortwaits/shared-types";
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
+
 import { shortwaitsApiEndpoints } from "../../../../configs";
 
 const { getServices } = shortwaitsApiEndpoints.SERVICES;

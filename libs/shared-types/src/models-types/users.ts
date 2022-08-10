@@ -1,8 +1,8 @@
-import { Document, PaginateModel } from 'mongoose';
+import { Document, PaginateModel } from "mongoose";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import * as paginate from 'mongoose-paginate-v2';
+import * as paginate from "mongoose-paginate-v2";
 
-import { ObjectId } from '../common';
+import { ObjectId } from "../common";
 
 /**
  *
