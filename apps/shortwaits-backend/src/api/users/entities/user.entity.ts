@@ -1,7 +1,7 @@
-import { Schema, Prop, SchemaFactory, raw } from '@nestjs/mongoose';
-import { ApiProperty } from '@nestjs/swagger';
-import { Document, Types } from 'mongoose';
-import { UserType, ObjectId } from '@shortwaits/shared-types';
+import { Schema, Prop, SchemaFactory, raw } from "@nestjs/mongoose";
+import { ApiProperty } from "@nestjs/swagger";
+import { Document, Types } from "mongoose";
+import { UserType, ObjectId } from "@shortwaits/shared-types";
 
 @Schema()
 export class User extends Document implements UserType {
@@ -53,7 +53,7 @@ export class User extends Document implements UserType {
 
   @ApiProperty()
   @Prop()
-  lastSignInAt: string;
+  lastSignInAt: Date;
 
   @ApiProperty()
   @Prop()
@@ -66,12 +66,12 @@ export class User extends Document implements UserType {
   @ApiProperty()
   @Prop(
     raw({
-      screenName: { type: String, default: '' },
+      screenName: { type: String, default: "" },
       state: { type: Number, trim: true, default: 0 },
       isCompleted: { type: Boolean, default: false },
     })
   )
-  registrationState: UserType['registrationState'];
+  registrationState: UserType["registrationState"];
 
   @ApiProperty()
   @Prop({ required: true })

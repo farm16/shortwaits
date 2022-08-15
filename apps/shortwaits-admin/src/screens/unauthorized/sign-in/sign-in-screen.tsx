@@ -1,8 +1,8 @@
 import React, { FC } from "react";
 import { StyleSheet, View } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { CompositeNavigationProp } from "@react-navigation/native";
 
+import { CompositeNavigationProp } from "@react-navigation/native";
 import { Screen, Logo, Button, Text, Space } from "../../../components";
 import Facebook from "../../../assets/icons/facebook.svg";
 import Google from "../../../assets/icons/google.svg";

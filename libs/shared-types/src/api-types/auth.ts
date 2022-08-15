@@ -1,6 +1,6 @@
-import { SuccessResponseType } from './helpers';
+import { SuccessResponseType } from "./helpers";
 
-import { UserPayloadType } from '.';
+import { BusinessPayloadType, UserPayloadType } from ".";
 
 export type TokenPayloadType = {
   readonly token: string | null;
@@ -8,7 +8,10 @@ export type TokenPayloadType = {
 };
 export type AuthPayloadType = {
   readonly auth: TokenPayloadType;
-  readonly data: UserPayloadType;
+  readonly attributes: {
+    readonly currentBusinessAccounts: BusinessPayloadType[];
+    readonly currentUser: UserPayloadType;
+  };
 };
 
 export type AuthSuccessResponseType = SuccessResponseType<AuthPayloadType>;

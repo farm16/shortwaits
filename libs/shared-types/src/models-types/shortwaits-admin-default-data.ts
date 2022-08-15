@@ -1,10 +1,8 @@
-/* eslint-disable functional/prefer-readonly-type */
-import { Document } from 'mongoose';
+import { Document } from "mongoose";
 
-import { ObjectId } from '../common';
-
-import { BusinessHoursType, CurrencyType, ServiceColorsType } from './helpers';
-import { ServicesType } from './services';
+import { ObjectId } from "../common";
+import { BusinessHoursType, CurrencyType, ServiceColorsType } from "./helpers";
+import { ServicesType } from "./services";
 
 export type ShortwaitsAdminDefaultDataDocType = ShortwaitsAdminDefaultDataType &
   Document;
@@ -18,10 +16,10 @@ export type ShortwaitsAdminDefaultDataType = {
   blackList: string[];
   timeZones: string[];
   serviceColors: ServiceColorsType;
+  categories: ObjectId[];
   sampleBusinessData: {
     services: Partial<ServicesType>[];
     currencies: CurrencyType[];
     hours: BusinessHoursType;
-    categories: ObjectId[];
   };
 };

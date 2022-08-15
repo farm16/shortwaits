@@ -1,39 +1,42 @@
-import { Document } from 'mongoose';
+import { Document } from "mongoose";
 
-import { ObjectId } from '../common';
+import { ObjectId } from "../common";
 
 import {
   BusinessHoursType,
   BusinessLocationType,
   CurrencyType,
   PaginatedModel,
-} from './helpers';
+} from "./helpers";
 
 export type BusinessType = {
-  readonly admins: readonly ObjectId[] /** @todo this might not always be received via the API why should it ? */;
-  readonly superAdmins: readonly ObjectId[] /** @todo this might not always be received via the API why should it ? */;
-  readonly backgroundAdmins: readonly ObjectId[] /** @todo this might not always be received via the API why should it ? */;
-  readonly staff: readonly ObjectId[] /** @todo every UserType in the Shortwaits admin app is a staff */;
-  readonly categories: readonly ObjectId[];
-  readonly services: readonly ObjectId[];
-  readonly description: string;
-  readonly currency: CurrencyType;
-  readonly country: string;
-  readonly phone1: string;
-  readonly shortName: string;
-  readonly longName: string;
-  readonly hours: BusinessHoursType;
-  readonly location: BusinessLocationType;
-  readonly isRegistrationCompleted: boolean;
-  readonly deleted: boolean;
-  readonly createdBy: ObjectId;
-  readonly updatedBy: ObjectId;
+  admins: ObjectId[] /** @todo this might not always be received via the API why should it ? */;
+  superAdmins: ObjectId[] /** @todo this might not always be received via the API why should it ? */;
+  backgroundAdmins: ObjectId[] /** @todo this might not always be received via the API why should it ? */;
+  staff: ObjectId[] /** @todo every UserType in the Shortwaits admin app is a staff */;
+  categories: ObjectId[];
+  services: ObjectId[];
+  description: string;
+  currency: CurrencyType;
+  country: string;
+  phone1: string;
+  shortName: string;
+  longName: string;
+  hours: BusinessHoursType;
+  location: BusinessLocationType;
+  isRegistrationCompleted: boolean;
+  deleted: boolean;
+  createdBy: ObjectId;
+  updatedBy: ObjectId;
   /**
    * @todo !!!
    * */
-  readonly deliveryInfo?: Record<string, string>;
-  readonly reservations?: readonly ObjectId[];
-  readonly paymentMethods?: Record<string, string>;
+  deliveryInfo?: Record<string, string>;
+  reservations?: ObjectId[];
+  paymentMethods?: Record<string, string>;
+  web?: {
+    isActive: boolean;
+  };
 };
 
 export type BusinessDocType = BusinessType & Document;

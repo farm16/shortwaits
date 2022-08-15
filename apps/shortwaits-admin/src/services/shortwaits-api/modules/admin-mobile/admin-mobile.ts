@@ -5,6 +5,11 @@ import { shortwaitsApiEndpoints } from "../../../../configs";
 const { getAdminMobile } = shortwaitsApiEndpoints.SHORTWAITS;
 
 export default (builder: EndpointBuilder<any, any, any>) =>
-  builder.query<ShortwaitsAdminDefaultDataSuccessResponseType, unknown>({
+  builder.query<ShortwaitsAdminDefaultDataSuccessResponseType, never>({
     query: () => getAdminMobile.PATH,
+    transformResponse: (
+      response: ShortwaitsAdminDefaultDataSuccessResponseType,
+      meta,
+      arg
+    ) => response,
   });

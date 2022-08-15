@@ -8,7 +8,7 @@ const initialState: TokenPayloadType = {
   token: null,
   refreshToken: null,
 };
-const slice = createSlice({
+export const authSlice = createSlice({
   name: "auth",
   initialState: initialState,
   reducers: {
@@ -25,24 +25,31 @@ const slice = createSlice({
   extraReducers: (builder) => {
     builder
       .addMatcher(
-        shortwaitsApi.endpoints.localSignUp.matchFulfilled,
-        (state, action) => ({
-          ...state,
-          ...action.payload.auth,
-        })
+        shortwaitsApi.endpoints.localSignIn.matchFulfilled,
+        function (state, action) {
+          console.log(">>> localSignIn - AUTH ");
+          return {
+            ...state,
+            ...action.payload.auth,
+          };
+        }
       )
       .addMatcher(
-        shortwaitsApi.endpoints.localSignIn.matchFulfilled,
-        (state, action) => ({
-          ...state,
-          ...action.payload.auth,
-        })
+        shortwaitsApi.endpoints.localSignUp.matchFulfilled,
+        function (state, action) {
+          console.log(">>> localSignUp - AUTH ", {
+            ...state,
+            ...action.payload.auth,
+          });
+          return {
+            ...state,
+            ...action.payload.auth,
+          };
+        }
       );
   },
 });
 
-export const { setCredentials, resetAuth } = slice.actions;
-
-export const authReducer = slice.reducer;
+export const { setCredentials, resetAuth } = authSlice.actions;
 
 export const selectCurrentAuthState = (state: RootState) => state.auth;

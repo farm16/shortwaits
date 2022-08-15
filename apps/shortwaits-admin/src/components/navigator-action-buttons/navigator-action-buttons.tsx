@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { View } from "react-native";
+import { StyleProp, View, ViewStyle } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 import { Button, ButtonProps, Spinner } from "../common";
@@ -133,7 +133,7 @@ const addIcons = {
   },
   "add-staff": {
     name: "account-plus",
-    size: 24,
+    size: 21,
   },
   "add-services": {
     name: "text-box-plus",
@@ -161,23 +161,26 @@ export const CircleIconButton: FC<
   }
 > = (props) => {
   const {
-    Colors: { brandSecondary6, backgroundOverlay },
+    Colors: { brandSecondary6, backgroundOverlay, lightGray },
   } = useTheme();
 
   const {
-    noMargin = false,
     state = "enabled",
-    iconSize = 24,
+    iconSize = 22,
     iconType = "default",
     style: styleOverride,
     ...rest
   } = props;
 
+  const style: StyleProp<ViewStyle> = {
+    backgroundColor: lightGray,
+  };
+
   return (
     <Button
       {...rest}
       preset="headerLink"
-      style={[{ marginHorizontal: noMargin ? 0 : undefined }, styleOverride]}
+      style={[style, styleOverride]}
       state={state}
     >
       <Icon
@@ -187,7 +190,7 @@ export const CircleIconButton: FC<
         color={
           disabledStates.includes(state) ? backgroundOverlay : brandSecondary6
         }
-        size={addIcons[iconType].size}
+        size={addIcons[iconType].size || iconSize}
       />
     </Button>
   );

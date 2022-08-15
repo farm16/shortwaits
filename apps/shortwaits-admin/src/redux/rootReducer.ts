@@ -1,30 +1,39 @@
 import { persistReducer } from "redux-persist";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { combineReducers } from "@reduxjs/toolkit";
-
+import { combineReducers } from "redux";
 import { shortwaitsApi } from "../services/shortwaits-api";
 
 //reducers
 import {
-  authReducer,
-  businessReducer,
-  themeReducer,
-  userReducer,
-  mobileAdminReducer,
+  authSlice,
+  themeSlice,
+  businessSlice,
+  userSlice,
+  mobileAdminSlice,
 } from "./slices";
 
 const persistRootConfig = {
   key: "root",
   storage: AsyncStorage,
+  whitelist: ["auth", "theme", "mobileAdmin"],
 };
 
-const reducers = combineReducers({
-  user: userReducer,
-  auth: authReducer,
-  theme: themeReducer,
-  business: businessReducer,
-  mobileAdmin: mobileAdminReducer,
+export const reducers = {
   [shortwaitsApi.reducerPath]: shortwaitsApi.reducer,
+  [userSlice.name]: userSlice.reducer,
+  [authSlice.name]: authSlice.reducer,
+  [businessSlice.name]: businessSlice.reducer,
+  [themeSlice.name]: themeSlice.reducer,
+  [mobileAdminSlice.name]: mobileAdminSlice.reducer,
+};
+
+const _combineReducers = combineReducers({
+  [shortwaitsApi.reducerPath]: shortwaitsApi.reducer,
+  [userSlice.name]: userSlice.reducer,
+  [authSlice.name]: authSlice.reducer,
+  [businessSlice.name]: businessSlice.reducer,
+  [themeSlice.name]: themeSlice.reducer,
+  [mobileAdminSlice.name]: mobileAdminSlice.reducer,
 });
 
 // const combinedRootReducer = (state, action) => {
@@ -34,4 +43,7 @@ const reducers = combineReducers({
 //   return reducers(state, action);
 // };
 
-export const persistedReducer = persistReducer(persistRootConfig, reducers);
+export const persistedReducer = persistReducer(
+  persistRootConfig,
+  _combineReducers
+);

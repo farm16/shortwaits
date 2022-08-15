@@ -1,5 +1,5 @@
 import {
-  CategoriesType,
+  BusinessCategoryType,
   DocType,
   SuccessResponseType,
 } from "@shortwaits/shared-types";
@@ -9,6 +9,6 @@ import { shortwaitsApiEndpoints } from "../../../../configs";
 const { getBusinessCategories } = shortwaitsApiEndpoints.BUSINESS;
 
 export default (builder: EndpointBuilder<any, any, any>) =>
-  builder.query<SuccessResponseType<CategoriesType>, string>({
+  builder.query<SuccessResponseType<BusinessCategoryType>, string>({
     query: (businessId) => `${getBusinessCategories.PATH}/${businessId}`,
   });

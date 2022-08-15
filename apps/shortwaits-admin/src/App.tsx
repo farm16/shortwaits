@@ -1,6 +1,9 @@
 import React from "react";
 import { Provider } from "react-redux";
-import { Provider as PaperProvider } from "react-native-paper";
+import {
+  ActivityIndicator,
+  Provider as PaperProvider,
+} from "react-native-paper";
 import { PersistGate } from "redux-persist/lib/integration/react";
 import {
   SafeAreaProvider,
@@ -16,11 +19,11 @@ enableLogging();
 export const App = () => {
   return (
     <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <WithProviders>
-          <AppNavigator />
-        </WithProviders>
-      </PersistGate>
+      {/* <PersistGate loading={<ActivityIndicator />} persistor={persistor}> */}
+      <WithProviders>
+        <AppNavigator />
+      </WithProviders>
+      {/* </PersistGate> */}
     </Provider>
   );
 };

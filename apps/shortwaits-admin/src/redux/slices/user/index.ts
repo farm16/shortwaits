@@ -6,7 +6,7 @@ import type { RootState } from "../../types";
 
 const initialState: UserPayloadType = null;
 
-const slice = createSlice({
+export const userSlice = createSlice({
   name: "user",
   initialState: initialState,
   reducers: {
@@ -20,31 +20,43 @@ const slice = createSlice({
   extraReducers: (builder) => {
     builder
       .addMatcher(
-        shortwaitsApi.endpoints.localSignIn.matchFulfilled,
-        (state, action) => ({
-          ...state,
-          ...action.payload.data,
-        })
+        shortwaitsApi.endpoints.localSignUp.matchFulfilled,
+        function (state, action) {
+          console.log(">>> localSignUp - USER ", {
+            ...state,
+            ...action.payload.attributes.currentUser,
+          });
+          return {
+            ...state,
+            ...action.payload.attributes.currentUser,
+          };
+        }
       )
       .addMatcher(
-        shortwaitsApi.endpoints.localSignUp.matchFulfilled,
-        (state, action) => ({
-          ...state,
-          ...action.payload.data,
-        })
+        shortwaitsApi.endpoints.localSignIn.matchFulfilled,
+        function (state, action) {
+          console.log(">>> localSignIn - USER ", {
+            ...state,
+            ...action.payload.attributes.currentUser,
+          });
+          return {
+            ...state,
+            ...action.payload.attributes.currentUser,
+          };
+        }
       )
       .addMatcher(
         shortwaitsApi.endpoints.postBusinessRegistration.matchFulfilled,
-        (state, action) => ({
-          ...state,
-          ...action.payload.data.user,
-        })
+        function (state, action) {
+          return {
+            ...state,
+            ...action.payload.data,
+          };
+        }
       );
   },
 });
 
-export const { setUser, resetUser } = slice.actions;
-
-export const userReducer = slice.reducer;
+export const { setUser, resetUser } = userSlice.actions;
 
 export const selectCurrentUserState = (state: RootState) => state.user;

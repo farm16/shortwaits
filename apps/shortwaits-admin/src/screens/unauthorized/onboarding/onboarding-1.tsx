@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import React, { FC, useLayoutEffect } from "react";
+import React, { FC, useEffect, useLayoutEffect } from "react";
 import { isEmpty } from "lodash";
 
 import {
@@ -15,20 +15,30 @@ import { getPrettyStringFromHours } from "../../../utils/time";
 import { getStaffCount } from "../../../utils/staff";
 import { useForm } from "../../../hooks";
 import {
-  persistor,
   useBusiness,
   useUser,
   setBusinessDescription,
   setBusinessShortName,
+  useSignOut,
+  useAuth,
 } from "../../../redux";
+import { StackActions } from "@react-navigation/native";
 
 export const Onboarding1Screen: FC<
   UnauthorizedScreenProps<"onboarding-1-screen">
 > = ({ navigation }) => {
   const dispatch = useDispatch();
 
+  const signOut = useSignOut();
   const businessState = useBusiness();
-  const userState = useUser();
+  const user = useUser();
+  const auth = useAuth();
+
+  useEffect(() => {
+    if (auth.token === null) {
+      navigation.dispatch(StackActions.popToTop());
+    }
+  }, [auth, navigation]);
 
   const initialValues = {
     businessShortName: "",
@@ -54,24 +64,22 @@ export const Onboarding1Screen: FC<
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: `Welcome ${userState?.firstName || ""}`,
+      headerTitle: `Welcome ${user?.firstName || ""}`,
       headerLeft: () => (
         <CancelAndLogOutHeaderButton
-          onPress={async () => {
-            await persistor.purge();
-            dispatch({ type: "USER_SIGN_OUT" });
-            navigation.navigate("welcome-screen");
+          onPress={() => {
+            signOut();
           }}
         />
       ),
       headerRight: () => (
         <RightChevronButton
           state={isEmpty(errors) ? "enabled" : "disabled"}
-          onPress={handleSubmit}
+          onPress={(e) => handleSubmit()}
         />
       ),
     });
-  }, [navigation, userState?.firstName, dispatch, handleSubmit, errors]);
+  }, [navigation, user?.firstName, dispatch, handleSubmit, errors, signOut]);
 
   return (
     <Screen preset="scroll" style={{ alignItems: "center" }}>
@@ -109,7 +117,7 @@ export const Onboarding1Screen: FC<
           navigation.navigate("modals", {
             screen: "selector-modal-screen",
             params: {
-              type: "My-Business-Categories",
+              type: "categories",
             },
           })
         }
@@ -139,7 +147,7 @@ export const Onboarding1Screen: FC<
           navigation.navigate("modals", {
             screen: "selector-modal-screen",
             params: {
-              type: "My-Business-Staff",
+              type: "onboarding-staff",
             },
           })
         }

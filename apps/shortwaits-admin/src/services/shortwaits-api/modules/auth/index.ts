@@ -1,4 +1,4 @@
-import LocalSignIn from "./local-sign-in"
-import LocalSignUp from "./local-sign-up"
+import GetLocalSignIn from "./local-sign-in";
+import GetLocalSignUp from "./local-sign-up";
 
-export { LocalSignIn, LocalSignUp }
+export { GetLocalSignIn, GetLocalSignUp };

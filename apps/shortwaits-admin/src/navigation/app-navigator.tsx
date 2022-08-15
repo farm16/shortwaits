@@ -16,38 +16,28 @@ import {
   UnauthorizedNavigator,
   AuthorizedNavigator,
 } from "./stacks";
-import { skipToken } from "@reduxjs/toolkit/dist/query";
-import {
-  useGetBusinessQuery,
-  useGetAdminMobileQuery,
-} from "../services/shortwaits-api";
-import { useAuth, useUser } from "../redux";
+import { useAuth, useBusiness, useUser } from "../redux";
 
 const RootStack = createStackNavigator<RootStackParamList>();
 
 const AppStack = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const auth = useAuth();
-  const user = useUser();
-
-  const { data, isSuccess } = useGetBusinessQuery(
-    user?.businesses.length > 0 ? user.businesses[0] : skipToken
-  );
-
-  useGetAdminMobileQuery({ skipToken: isSuccess });
+  const business = useBusiness();
 
   useEffect(() => {
-    if (auth.token && user?.registrationState?.isCompleted) {
+    if (auth.token && business?.isRegistrationCompleted) {
       setIsAuthenticated(true);
     }
-  }, [isAuthenticated, auth.token, user]);
+  }, [isAuthenticated, auth.token, business?.isRegistrationCompleted]);
 
   useEffect(() => {
-    if (!auth.token) {
+    if (auth.token === null) {
       setIsAuthenticated(false);
     }
-  }, [isAuthenticated, auth.token]);
+  }, [isAuthenticated, auth]);
 
+  console.log("isAuthenticated>>>", isAuthenticated);
   return (
     <RootStack.Navigator
       screenOptions={{

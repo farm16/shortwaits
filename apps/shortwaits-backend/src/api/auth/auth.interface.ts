@@ -1,6 +1,9 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { AuthPayloadType } from '@shortwaits/shared-types';
-import { User } from '../users/entities/user.entity';
+import { ApiProperty } from "@nestjs/swagger";
+import {
+  AuthPayloadType,
+  BusinessPayloadType,
+  UserPayloadType,
+} from "@shortwaits/shared-types";
 
 export class AuthSuccessResponse implements AuthPayloadType {
   @ApiProperty()
@@ -9,7 +12,8 @@ export class AuthSuccessResponse implements AuthPayloadType {
     readonly refreshToken: string;
   };
   @ApiProperty()
-  data: User & {
-    readonly _id: any;
+  readonly attributes: {
+    readonly currentBusinessAccounts: BusinessPayloadType[];
+    readonly currentUser: UserPayloadType;
   };
 }

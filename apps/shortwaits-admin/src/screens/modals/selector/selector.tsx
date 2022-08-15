@@ -1,96 +1,34 @@
-import React, { FC, useLayoutEffect } from "react";
-import { FlatList, View, StyleSheet } from "react-native";
-import Spinner from "react-native-spinkit";
+import React, { FC } from "react";
+import { View, StyleSheet } from "react-native";
 
-import { useMobileAdmin, useBusiness, useUser } from "../../../redux";
-import {
-  SearchBar,
-  Space,
-  CircleIconButton,
-  LeftChevronButton,
-} from "../../../components";
-import { ModalsScreenProps } from "../../../navigation";
-import { selectorConfigs } from "./selector-config";
-import { SelectorItem } from "./selector-Item";
+import { ModalsScreenProps, SelectorModalType } from "../../../navigation";
+import { SelectorConfigsKeys } from "./selector-config";
 import { useTheme } from "../../../theme";
+import { OnboardingCategoriesSelector } from "./selectors/categories/categories-selector";
 
+export type SelectorComponentType = FC<
+  ModalsScreenProps<"selector-modal-screen"> & { type: SelectorConfigsKeys }
+>;
 export const SelectorScreenModal: FC<
   ModalsScreenProps<"selector-modal-screen">
-> = ({ navigation, route }) => {
+> = (props) => {
+  const { route } = props;
   const { type } = route.params;
 
   const { Colors } = useTheme();
-  const businessState = useBusiness();
-  const userState = useUser();
 
-  const {
-    mode,
-    itemsQueryHook,
-    searchOptions,
-    getIsSelected,
-    filterId,
-    filterItemsQuery,
-    keys: { businessKey },
-  } = selectorConfigs[type];
-
-  const isSelectionDisabled = mode === "NONE";
-  const { isSearchable, searchPlaceholder } = searchOptions;
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerTitle: selectorConfigs[type].headerTitle,
-      headerLeft: () => (
-        <LeftChevronButton onPress={() => navigation.goBack()} />
-      ),
-      headerRight: () =>
-        isSelectionDisabled && <CircleIconButton iconType="default" />,
-    });
-  }, [navigation, isSelectionDisabled, type]);
-
-  const {
-    data: queryData,
-    isLoading,
-    isSuccess,
-  } = itemsQueryHook(businessState, userState);
-
-  console.log("queryData>>>", queryData);
+  const selectorsComponents: Record<SelectorModalType, SelectorComponentType> =
+    {
+      "onboarding-categories": OnboardingCategoriesSelector,
+      staff: OnboardingCategoriesSelector,
+      categories: OnboardingCategoriesSelector,
+      "onboarding-staff": OnboardingCategoriesSelector,
+    };
+  const SelectorComponent = selectorsComponents[type];
 
   return (
     <View style={[styles.container, { backgroundColor: Colors.background }]}>
-      {isSearchable && (
-        <SearchBar
-          value={""}
-          style={styles.searchBar}
-          autoCapitalize="none"
-          placeholder={searchPlaceholder}
-          autoComplete={"off"}
-          autoCorrect={false}
-        />
-      )}
-      <Space size="small" />
-      {isLoading ? (
-        <Spinner />
-      ) : (
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={[
-            styles.listContainer,
-            { backgroundColor: Colors.background },
-          ]}
-          data={filterItemsQuery(queryData)}
-          ItemSeparatorComponent={() => <Space size="small" />}
-          renderItem={({ item, index }) => (
-            <SelectorItem
-              type={type}
-              itemId={filterId(item)}
-              index={index}
-              disabled={isSelectionDisabled}
-              isSelected={getIsSelected(item, businessState[businessKey])}
-            />
-          )}
-          // keyExtractor={(item, index) => `${item.name || ""}${index}`}
-        />
-      )}
+      <SelectorComponent {...props} type={type} />
     </View>
   );
 };
@@ -99,12 +37,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingVertical: 15,
-    alignItems: "center",
-  },
-  searchBar: {
-    marginTop: 15,
-  },
-  listContainer: {
     alignItems: "center",
   },
 });

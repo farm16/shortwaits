@@ -57,6 +57,7 @@ export const SignInWithEmail: FC<SignInWithEmailScreenProps> = ({
   const handlePasswordVisibility = useCallback(() => {
     setIsVisible((visibility) => !visibility);
   }, []);
+
   return (
     <View
       style={[
@@ -71,7 +72,6 @@ export const SignInWithEmail: FC<SignInWithEmailScreenProps> = ({
         <TextFieldCard
           autoCapitalize="none"
           keyboardType="email-address"
-          autoCompleteType="email"
           title="Email"
           placeholder="bod_ross@shortwaits.com"
           value={values.email}
@@ -82,7 +82,6 @@ export const SignInWithEmail: FC<SignInWithEmailScreenProps> = ({
         <Space />
         <TextFieldCard
           secureTextEntry={!isVisible}
-          autoCompleteType="password"
           title="Password"
           placeholder=""
           value={values.password}

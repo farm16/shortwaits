@@ -68,8 +68,14 @@ export const shortwaitsApiEndpoints = {
     },
   },
   CATEGORIES: {
-    getAllCategories: { PATH: "/categories", METHOD: "GET" },
-    getCategory: { PATH: "/categories", METHOD: "GET" },
+    getCategories: {
+      getPath: () => `/categories`,
+      METHOD: "GET",
+    },
+    getCategory: {
+      getPath: (categoryId: string) => `/category?category_id=${categoryId}`,
+      METHOD: "GET",
+    },
   },
   SERVICES: {
     postServices: {

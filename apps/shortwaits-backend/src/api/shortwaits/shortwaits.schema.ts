@@ -1,15 +1,14 @@
-import { Schema, Prop, SchemaFactory, raw } from '@nestjs/mongoose';
-import { ApiProperty } from '@nestjs/swagger';
-import { Document } from 'mongoose';
+import { Schema, Prop, SchemaFactory, raw } from "@nestjs/mongoose";
+import { ApiProperty } from "@nestjs/swagger";
+import { Document } from "mongoose";
 import {
   BusinessHoursType,
-  CategoriesPayloadType,
   CurrencyType,
   ServiceColorsType,
   ServicesType,
   ShortwaitsAdminDefaultDataType,
   ObjectId,
-} from '@shortwaits/shared-types';
+} from "@shortwaits/shared-types";
 
 @Schema()
 export class Shortwaits
@@ -38,16 +37,17 @@ export class Shortwaits
   @Prop()
   readonly timeZones: [];
   @ApiProperty()
+  @Prop()
+  readonly categories: ObjectId[];
+  @ApiProperty()
   @Prop(
     raw({
-      categories: { type: Array },
       services: { type: Array },
       currencies: { type: Array },
       hours: { type: Object },
     })
   )
   sampleBusinessData: {
-    categories: ObjectId[];
     services: ServicesType[];
     currencies: CurrencyType[];
     hours: BusinessHoursType;

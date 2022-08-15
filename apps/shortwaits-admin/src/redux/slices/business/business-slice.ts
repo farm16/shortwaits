@@ -7,7 +7,7 @@ import { isEmpty } from "lodash";
 
 const initialState: BusinessPayloadType = null;
 
-export const BusinessSlice = createSlice({
+export const businessSlice = createSlice({
   name: "business",
   initialState: initialState,
   reducers: {
@@ -25,61 +25,45 @@ export const BusinessSlice = createSlice({
       /**
        * this happens when user signs up
        */
-      .addMatcher(
-        shortwaitsApi.endpoints.localSignUp.matchFulfilled,
-        (state, action) => {
-          if (isEmpty(state.staff) && !state.isRegistrationCompleted) {
-            const staff = [action.payload.data._id];
-            return { ...state, staff };
-          } else {
-            return state;
-          }
-        }
-      )
-      .addMatcher(
-        shortwaitsApi.endpoints.postBusinessRegistration.matchFulfilled,
-        (state, action) => ({
-          ...state,
-          ...action.payload.data.business,
-        })
-      )
-      .addMatcher(
-        shortwaitsApi.endpoints.getAdminMobile.matchFulfilled,
-        (state, action) => {
-          const { sampleBusinessData } = action.payload.data[0];
-          if (state && state.isRegistrationCompleted) {
-            return state;
-          } else {
-            const payload: Pick<
-              BusinessPayloadType,
-              "currency" | "isRegistrationCompleted" | "hours" | "categories"
-            > = {
-              currency: sampleBusinessData.currencies.find(
-                (category) => category.code === "USD"
-              ) ?? {
-                name: "",
-                code: "",
-                symbol: "",
-                codeNumber: 0,
-                decimalSeparator: 0,
-              },
-              isRegistrationCompleted: false,
-              hours: sampleBusinessData.hours,
-              categories: sampleBusinessData.categories,
-            };
-            return {
-              ...state,
-              ...payload,
-            };
-          }
-        }
-      )
+      // .addMatcher(
+      //   shortwaitsApi.endpoints.postBusinessRegistration.matchFulfilled,
+      //   (state, action) => ({
+      //     ...state,
+      //     ...action.payload.data.business,
+      //   })
+      // )
       .addMatcher(
         shortwaitsApi.endpoints.getBusiness.matchFulfilled,
         (state, action) => ({
           ...state,
           ...action.payload.data,
         })
+      )
+      .addMatcher(
+        shortwaitsApi.endpoints.localSignUp.matchFulfilled,
+        function (state, action) {
+          console.log(">>> localSignUp - BUSINESS ", {
+            ...state,
+            ...action.payload.attributes.currentBusinessAccounts,
+          });
+          return {
+            ...state,
+            ...action.payload.attributes.currentBusinessAccounts[0],
+          };
+        }
+      )
+      .addMatcher(
+        shortwaitsApi.endpoints.localSignIn.matchFulfilled,
+        function (state, action) {
+          console.log(">>> localSignIn - BUSINESS ", {
+            ...state,
+            ...action.payload.attributes.currentBusinessAccounts,
+          });
+          return {
+            ...state,
+            ...action.payload.attributes.currentBusinessAccounts[0],
+          };
+        }
       );
   },
 });

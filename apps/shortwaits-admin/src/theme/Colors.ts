@@ -1,4 +1,4 @@
-import { getPaletteWithContrast, getReversePalette } from "./utils"
+import { getPaletteWithContrast, getReversePalette } from "./utils";
 
 /**
  * Brand's Colors
@@ -13,8 +13,8 @@ import { getPaletteWithContrast, getReversePalette } from "./utils"
 const brandColors = {
   primary: getPaletteWithContrast("brandPrimary", "#F73859"),
   secondary: getPaletteWithContrast("brandSecondary", "#7AC7C4"),
-  accent: getPaletteWithContrast("brandAccent", "#384259")
-}
+  accent: getPaletteWithContrast("brandAccent", "#384259"),
+};
 
 // console.log(getPaletteWithContrast("brandAccent", "#E24939"))
 // console.log(getPaletteWithContrast("brandAccent", "#EB7084"))
@@ -25,8 +25,8 @@ const basicColors = {
   blue: getPaletteWithContrast("blue", "#0000ff"),
   violet: getPaletteWithContrast("violet", "#7f00ff"),
   yellow: getPaletteWithContrast("yellow", "#ffff00"),
-  orange: getPaletteWithContrast("orange", "#ffa500")
-}
+  orange: getPaletteWithContrast("orange", "#ffa500"),
+};
 
 // dark #26242b
 
@@ -36,9 +36,9 @@ export const staticCustomColors = {
   backgroundOverlay: "#FBFBFB",
   white: "#ffffff",
   //grays
-  lightGray: "hsl(300,1%, 70%)",
-  gray: "hsl(300,1%, 50%)",
-  darkGray: "hsl(300,1%, 17%)",
+  lightGray: "hsl(300,1%, 95%)",
+  gray: "hsl(300,1%, 60%)",
+  darkGray: "hsl(300,1%, 20%)",
 
   text: "#6E7480",
   lightText: "#c1c4ca",
@@ -48,8 +48,8 @@ export const staticCustomColors = {
   error: "#dc3545",
   inputBackground: "rgb(218,226,226)",
   inputBackground2: "#FFFFFF",
-  darkBackground: "#356E6E"
-}
+  darkBackground: "#356E6E",
+};
 
 export const palettes = {
   ...brandColors.primary,
@@ -60,8 +60,8 @@ export const palettes = {
   ...basicColors.blue,
   ...basicColors.violet,
   ...basicColors.yellow,
-  ...basicColors.orange
-}
+  ...basicColors.orange,
+};
 
 export const reversedPalettes = {
   ...getReversePalette(brandColors.primary),
@@ -72,20 +72,20 @@ export const reversedPalettes = {
   ...getReversePalette(basicColors.blue),
   ...getReversePalette(basicColors.violet),
   ...getReversePalette(basicColors.yellow),
-  ...getReversePalette(basicColors.orange)
-}
+  ...getReversePalette(basicColors.orange),
+};
 
 export const getColors = () => ({
   ...staticCustomColors,
-  ...palettes
-})
+  ...palettes,
+});
 
-export type PaletteKey = keyof typeof palettes
-export type ThemeColors = ReturnType<typeof getColors>
-export type ThemeColorName = keyof ThemeColors
-export type PaletteColorNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+export type PaletteKey = keyof typeof palettes;
+export type ThemeColors = ReturnType<typeof getColors>;
+export type ThemeColorName = keyof ThemeColors;
+export type PaletteColorNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 export type Palette<T extends string> = {
-  [K in T as `${K}${PaletteColorNumber}`]: string
+  [K in T as `${K}${PaletteColorNumber}`]: string;
 } & {
-  [BaseKey in T]: string
-}
+  [BaseKey in T]: string;
+};

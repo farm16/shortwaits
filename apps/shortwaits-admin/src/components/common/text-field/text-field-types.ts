@@ -2,7 +2,7 @@ import { StyleProp, TextInputProps, TextStyle, ViewStyle } from "react-native";
 
 import { TextFieldPresets } from "../../../theme/presets";
 
-export interface TextFieldProps extends Partial<TextInputProps> {
+export interface TextFieldProps extends TextInputProps {
   /**
    * The placeholder i18n key.
    */

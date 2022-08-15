@@ -38,6 +38,8 @@ import {
   AUTHORIZED_SCREENS,
   UnauthorizedScreenProps,
 } from "../../../navigation";
+import { skipToken } from "@reduxjs/toolkit/dist/query/react";
+import { useBusiness } from "apps/shortwaits-admin/src/redux";
 
 function getFutureDates(numberOfDays: number) {
   const array: string[] = [];
@@ -132,11 +134,12 @@ function getTheme(): Theme {
 }
 export const EventsScreen: FC<AuthorizedScreenProps<"events-screen">> = () => {
   const user = useUser();
+  const business = useBusiness();
   const threeDotsIcon: ImageSourcePropType =
     Icon.getImageSourceSync("dots-vertical");
 
   const { isFetching, data: businessPayload } = useGetBusinessQuery(
-    user?.businesses[0]
+    business ? business._id : skipToken
   );
   console.log("data payload >>>", businessPayload?.data.services);
 

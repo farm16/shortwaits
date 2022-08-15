@@ -15,8 +15,8 @@ import { TokenPayloadType } from "@shortwaits/shared-types";
 //modules
 import {
   GetAdminMobile,
-  LocalSignIn,
-  LocalSignUp,
+  GetLocalSignIn,
+  GetLocalSignUp,
   GetBusiness,
   GetBusinessCategory,
   GetBusinessHours,
@@ -30,6 +30,7 @@ import {
   GetServicesByBusiness,
   GetUser,
 } from "./modules";
+import { Alert } from "react-native";
 
 const API_BASE_URL = shortwaitsApiEndpoints.API_BASE_URL;
 const AUTH = shortwaitsApiEndpoints.AUTH;
@@ -48,7 +49,6 @@ const baseQueryWithInterceptor: BaseQueryFn<
   FetchBaseQueryError
 > = async (args, api, extraOptions) => {
   // wait until the mutex is available without locking it
-  await mutex.waitForUnlock();
 
   const {
     auth: { token, refreshToken },
@@ -66,59 +66,51 @@ const baseQueryWithInterceptor: BaseQueryFn<
     },
   });
 
+  await mutex.waitForUnlock();
   let result = await baseQuery(args, api, extraOptions);
 
   if (result.error) {
+    console.log("...cannot handle 400 error ");
+    Alert.alert(
+      `Oops 😮\n${result.error?.data["message"] ?? ""}`,
+      `error: ${result.error.status}`
+    );
+    console.log(JSON.stringify(result, null, 2));
+  }
+  // await persistor.purge()
+  // api.dispatch({ type: "USER_SIGN_OUT" });
+
+  if (result.error && result.error.status === 401 && refreshToken) {
+    //Unauthorized
+    console.log("401 SERVER ERROR~~", result.error.status);
     if (!mutex.isLocked()) {
       const release = await mutex.acquire();
       try {
-        switch (result.error?.status) {
-          case 400:
-            console.log("~~400 SERVER ERROR~~");
-            break;
-          case 401: //Unauthorized
-            console.log("~~401 SERVER ERROR~~");
-            console.log("... acquiring refresh token");
-            if (refreshToken) {
-              console.log("...refresh token available");
-              const refreshResult: QueryReturnValue<
-                { auth: TokenPayloadType } | unknown,
-                FetchBaseQueryError,
-                FetchBaseQueryMeta
-              > = await baseQuery(
-                {
-                  url: AUTH.refreshToken.PATH,
-                  method: AUTH.refreshToken.METHOD,
-                  headers: {
-                    authorization: `Bearer ${refreshToken}`,
-                  },
-                },
-                api,
-                extraOptions
-              );
-              if (
-                refreshResult.meta?.response?.status === 200 &&
-                refreshResult.data
-              ) {
-                api.dispatch(
-                  setCredentials(refreshResult.data.auth as TokenPayloadType)
-                );
-                result = await baseQuery(args, api, extraOptions);
-              } else {
-                console.log("...unable to retrieve refresh token");
-                // await persistor.purge()
-                api.dispatch({ type: "USER_SIGN_OUT" });
-              }
-            } else {
-              console.log("...refresh token NOT available");
-              // await persistor.purge()
-              api.dispatch({ type: "USER_SIGN_OUT" });
-            }
-            break;
-          default: {
-            // await persistor.purge()
-            api.dispatch({ type: "USER_SIGN_OUT" });
-          }
+        console.log("~~401 SERVER ERROR~~");
+        console.log("... acquiring refresh token");
+        const refreshResult = await baseQuery(
+          {
+            url: AUTH.refreshToken.PATH,
+            method: AUTH.refreshToken.METHOD,
+            headers: {
+              authorization: `Bearer ${refreshToken}`,
+            },
+          },
+          api,
+          extraOptions
+        );
+        if (
+          refreshResult.meta?.response?.status === 200 &&
+          refreshResult.data
+        ) {
+          api.dispatch(
+            setCredentials(refreshResult.data["auth"] as TokenPayloadType)
+          );
+          result = await baseQuery(args, api, extraOptions);
+        } else {
+          console.log("...unable to retrieve refresh token");
+          // await persistor.purge()
+          // api.dispatch({ type: "USER_SIGN_OUT" });
         }
       } finally {
         release();
@@ -136,11 +128,11 @@ export const shortwaitsApi = createApi({
   reducerPath: "shortwaitsApi",
   baseQuery: baseQueryWithInterceptor,
   endpoints: (builder) => ({
-    //default data
+    //default mobile data
     getAdminMobile: GetAdminMobile(builder),
     //auth
-    localSignUp: LocalSignUp(builder),
-    localSignIn: LocalSignIn(builder),
+    localSignUp: GetLocalSignUp(builder),
+    localSignIn: GetLocalSignIn(builder),
     //business
     getBusiness: GetBusiness(builder),
     getBusinessCategory: GetBusinessCategory(builder),

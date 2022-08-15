@@ -64,3 +64,16 @@ export const ERROR_CODES = {
   27: { code: 27, description: "authorization error sign out" },
   28: { code: 28, description: "authorization error signup" },
 } as const;
+
+export interface CommonResponseType<T = any> {
+  statusCode: number;
+  data: T;
+  message?: string;
+  meta: any;
+}
+// } "meta": {
+//   "page": 1,
+//   "per_page": 2,
+//   "total_pages": 7,
+//   "total_count": 14
+// }

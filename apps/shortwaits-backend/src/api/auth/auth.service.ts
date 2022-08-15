@@ -1,23 +1,26 @@
-import * as bcrypt from 'bcryptjs';
-import { Model } from 'mongoose';
-import { InjectModel } from '@nestjs/mongoose';
+import * as bcrypt from "bcryptjs";
+import { Model } from "mongoose";
+import { InjectModel } from "@nestjs/mongoose";
 import {
   ForbiddenException,
   NotFoundException,
   Injectable,
-} from '@nestjs/common';
-import { AuthPayloadType, TokenPayloadType } from '@shortwaits/shared-types';
+  UnprocessableEntityException,
+} from "@nestjs/common";
+import { AuthPayloadType, TokenPayloadType } from "@shortwaits/shared-types";
 
-import { User } from '../users/entities/user.entity';
-import { SignUpWithEmailDto } from './dto/sign-up-with-email.dto';
-import { SignInWithEmailDto } from './dto/sign-in-with-email.dto';
-import { JwtService } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
+import { User } from "../users/entities/user.entity";
+import { SignUpWithEmailDto } from "./dto/sign-up-with-email.dto";
+import { SignInWithEmailDto } from "./dto/sign-in-with-email.dto";
+import { JwtService } from "@nestjs/jwt";
+import { ConfigService } from "@nestjs/config";
+import { Business } from "../business/entities/business.entity";
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectModel(User.name) private userModel: Model<User>,
+    @InjectModel(Business.name) private businessModel: Model<Business>,
     private jwtService: JwtService,
     private config: ConfigService
   ) {}
@@ -29,59 +32,105 @@ export class AuthService {
       });
 
       if (user) {
-        throw new ForbiddenException('Incorrect credentials');
+        throw new UnprocessableEntityException("Invalid email or username");
       }
 
       const salt: string = bcrypt.genSaltSync(
-        Number(this.config.get('SALT_ROUNDS'))
+        Number(this.config.get("SALT_ROUNDS"))
       );
       const encodedPassword = bcrypt.hashSync(dto.password, salt);
-      const newUser = await this.userModel.create({
+
+      const currentUser = new this.userModel({
         ...dto,
         password: encodedPassword,
       });
 
-      const signedTokens = await this.signTokens(newUser);
-      await this.updateRtHash(newUser, signedTokens.refreshToken);
+      const newBusinessAccount = new this.businessModel({
+        isRegistrationCompleted: false,
+        admins: [currentUser._id],
+        superAdmins: [currentUser._id],
+        createdBy: [currentUser._id],
+        updatedBy: [currentUser._id],
+        staff: [currentUser._id],
+      });
 
-      delete newUser.password;
-      return { auth: signedTokens, data: newUser };
+      const tokens = await this.signTokens(currentUser);
+      const hashedRefreshToken = bcrypt.hashSync(tokens.refreshToken, salt);
+
+      currentUser.businesses = [newBusinessAccount._id];
+      currentUser.hashedRt = hashedRefreshToken;
+      currentUser.lastSignInAt = new Date();
+
+      const [newUserDoc, newBusinessAccDoc] = await Promise.all([
+        currentUser.save(),
+        newBusinessAccount.save(),
+      ]);
+
+      newUserDoc.password = null;
+
+      return {
+        auth: tokens,
+        attributes: {
+          currentBusinessAccounts: [newBusinessAccDoc],
+          currentUser: newUserDoc,
+        },
+      };
     } catch (error) {
       console.log(error);
-      throw new ForbiddenException('Auth error');
+      throw error;
     }
   }
 
   async signInLocal(dto: SignInWithEmailDto): Promise<AuthPayloadType> {
-    const user = await this.userModel.findOne({
+    const currentUser = await this.userModel.findOne({
       email: dto.email,
     });
 
-    if (!user) {
-      throw new NotFoundException('User not registered');
+    if (!currentUser) {
+      throw new NotFoundException("User not registered");
     }
 
     const isPasswordValid: boolean = bcrypt.compareSync(
       dto.password,
-      user.password
+      currentUser.password
     );
 
     if (!isPasswordValid) {
-      throw new ForbiddenException('Access Denied');
+      throw new ForbiddenException("Access Denied");
     }
 
-    const signedTokens = await this.signTokens(user);
-    await this.updateRtHash(user, signedTokens.refreshToken);
+    const signedTokens = await this.signTokens(currentUser);
+    await this.updateRtHash(currentUser, signedTokens.refreshToken);
 
-    delete user.password;
-    return { auth: signedTokens, data: user };
+    delete currentUser.password;
+
+    const currentBusinessAccounts = await this.businessModel
+      .find({
+        _id: {
+          $in: currentUser.businesses,
+        },
+      })
+      .select("-__v -hashedRt");
+    return {
+      auth: signedTokens,
+      attributes: {
+        currentBusinessAccounts,
+        currentUser,
+      },
+    };
   }
 
   async logout(userId: number): Promise<AuthPayloadType> {
     await this.userModel.findByIdAndUpdate(userId, {
       hashedRt: null,
     });
-    return { auth: null, data: null };
+    return {
+      auth: null,
+      attributes: {
+        currentBusinessAccounts: null,
+        currentUser: null,
+      },
+    };
   }
 
   async refreshTokens(
@@ -93,15 +142,15 @@ export class AuthService {
 
     const user = await this.userModel.findById(userId).exec();
 
-    if (!user) throw new ForbiddenException('Unable to reauthenticate user');
+    if (!user) throw new ForbiddenException("Unable to reauthenticate user");
 
     const rtMatches = bcrypt.compareSync(rt, user.hashedRt);
 
-    if (!rtMatches) throw new ForbiddenException('Unable to reauthenticate');
+    if (!rtMatches) throw new ForbiddenException("Unable to reauthenticate");
 
     const signedTokens = await this.signTokens(user);
 
-    console.log('signedTokens>>>', signedTokens);
+    console.log("signedTokens>>>", signedTokens);
 
     await this.updateRtHash(user, signedTokens.refreshToken);
 
@@ -110,7 +159,7 @@ export class AuthService {
 
   async updateRtHash(user: User, rt: string): Promise<void> {
     const salt: string = bcrypt.genSaltSync(
-      Number(this.config.get('SALT_ROUNDS'))
+      Number(this.config.get("SALT_ROUNDS"))
     );
     const hash = bcrypt.hashSync(rt, salt);
 
@@ -128,12 +177,12 @@ export class AuthService {
 
     const [at, rt] = await Promise.all([
       this.jwtService.signAsync(payload, {
-        secret: this.config.get<string>('AT_SECRET'),
-        expiresIn: this.config.get<string>('AT_EXPIRES_IN'),
+        secret: this.config.get<string>("AT_SECRET"),
+        expiresIn: this.config.get<string>("AT_EXPIRES_IN"),
       }),
       this.jwtService.signAsync(payload, {
-        secret: this.config.get<string>('RT_SECRET'),
-        expiresIn: this.config.get<string>('RT_EXPIRES_IN'),
+        secret: this.config.get<string>("RT_SECRET"),
+        expiresIn: this.config.get<string>("RT_EXPIRES_IN"),
       }),
     ]);
 

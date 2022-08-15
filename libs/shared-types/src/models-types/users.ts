@@ -60,6 +60,6 @@ export type UserType = {
   readonly deleted: boolean;
   readonly createdAt: string;
   readonly updatedAt: string;
-  readonly lastSignInAt: string;
+  readonly lastSignInAt: Date;
   readonly rolId: ObjectId;
 };

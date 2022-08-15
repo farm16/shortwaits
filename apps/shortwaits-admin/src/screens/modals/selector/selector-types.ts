@@ -1,40 +1,31 @@
-import { UseQuery } from "@reduxjs/toolkit/dist/query/react/buildHooks";
-import { BusinessPayloadType } from "@shortwaits/shared-types";
-
+import { QueryDefinition } from "@reduxjs/toolkit/dist/query";
 import {
-  SelectorMode,
-  SelectorModalType,
-  ModalPermissions,
-} from "../../../navigation";
+  TypedUseQueryHookResult,
+  TypedUseQueryStateResult,
+  UseQuery,
+} from "@reduxjs/toolkit/dist/query/react/buildHooks";
+import { ShortwaitsAdminDefaultDataSuccessResponseType } from "@shortwaits/shared-types";
+import { FC } from "react";
+import { ListRenderItem } from "react-native";
+import { Button, ButtonProps, Spinner } from "../../../components";
 
+/**
+ * - WRITE: Enable add/update capability.
+ * - READ: Enable visibility capability.
+ * - DELETE: Enable delete capability.
+ */
+export type ModalPermissions = "WRITE" | "READ" | "DELETE";
 export interface SelectorConfig {
-  searchOptions: {
-    isSearchable: boolean;
-    searchPlaceholder: string;
-  };
   headerTitle: string;
-  keys: {
-    businessKey: keyof Pick<
-      BusinessPayloadType,
-      "services" | "categories" | "staff"
-    >;
-  };
-  mode: SelectorMode;
-  getIsSelected: (item, current) => boolean;
-  action(arg: any): void;
-  onSelect(item: any): void;
-  getTileTitle: (item: any) => string;
-  getTileSubTitle: (item: any) => string;
-  itemQueryHook: (id: any) => any;
-  filterId: (id: any) => any;
-  filterItemQuery(item: any): any;
-  itemsQueryHook: (business, user) => any;
-  filterItemsQuery(item: any): any;
-  permissions: ModalPermissions[];
-  icons: {
-    default?: string;
-    selected?: string;
-  };
+  /**
+   * should be selectMax > 0,
+   * else disable select action
+   *  */
+  selectMax?: number;
+  searchPlaceholder: string;
+  /**
+   * func to initialize data
+   */
+  isReadOnly: boolean;
+  testId?: string;
 }
-
-export type SelectorConfigs = Record<SelectorModalType, SelectorConfig>;

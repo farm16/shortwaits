@@ -8,8 +8,8 @@ import {
 import { shortwaitsApi } from "../../../services/shortwaits-api";
 import type { RootState } from "../../../redux";
 
-const slice = createSlice({
-  name: "defaultMobileData",
+export const mobileAdminSlice = createSlice({
+  name: "mobileAdmin",
   initialState: null as unknown as ShortwaitsAdminDefaultDataPayloadType[],
   reducers: {
     /**
@@ -44,9 +44,7 @@ const slice = createSlice({
   },
 });
 
-export const { setSampleBusinessServicesByIndex } = slice.actions;
-
-export const mobileAdminReducer = slice.reducer;
+export const { setSampleBusinessServicesByIndex } = mobileAdminSlice.actions;
 
 export const selectCurrentMobileAdminState = (state: RootState) =>
   state.mobileAdmin;

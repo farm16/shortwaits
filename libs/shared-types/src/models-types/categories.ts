@@ -1,8 +1,8 @@
-import { Document } from 'mongoose';
+import { Document } from "mongoose";
 
-import { PaginatedModel } from './helpers';
+import { PaginatedModel } from "./helpers";
 
-export type CategoriesType = {
+export type BusinessCategoryType = {
   readonly short_id: string;
   readonly name: string;
   readonly keys: readonly string[];
@@ -17,6 +17,6 @@ export type CategoriesType = {
   readonly deleted?: boolean;
 };
 
-export type CategoriesDocType = CategoriesType & Document;
+export type CategoriesDocType = BusinessCategoryType & Document;
 
 export type CategoriesModelType = PaginatedModel<CategoriesDocType>;

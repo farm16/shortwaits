@@ -78,7 +78,6 @@ export const SignUpWithEmail: FC<SignUpWithEmailScreenProps> = ({
         <TextFieldCard
           keyboardType="email-address"
           autoCapitalize="none"
-          autoCompleteType="email"
           title="Email"
           placeholder="bod_ross@shortwaits.com"
           value={values.email}
@@ -89,7 +88,6 @@ export const SignUpWithEmail: FC<SignUpWithEmailScreenProps> = ({
         <Space />
         <TextFieldCard
           secureTextEntry={!isVisible}
-          autoCompleteType="password"
           title="Password"
           placeholder=""
           value={values.password}
@@ -104,7 +102,6 @@ export const SignUpWithEmail: FC<SignUpWithEmailScreenProps> = ({
         <Space />
         <TextFieldCard
           secureTextEntry={!isVisible}
-          autoCompleteType="password"
           title="Confirm password"
           placeholder=""
           value={values.passwordConfirmation}
@@ -115,7 +112,7 @@ export const SignUpWithEmail: FC<SignUpWithEmailScreenProps> = ({
       </ScrollView>
       <Space />
       <Button
-        onPress={handleSubmit}
+        onPress={() => handleSubmit()}
         preset="primary"
         text="Submit"
         state={!dirty ? "disabled" : isLoading ? "loading" : "enabled"}

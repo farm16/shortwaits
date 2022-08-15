@@ -11,40 +11,29 @@ import {
   AUTHORIZED_SCREENS,
   MODAL_SCREENS,
 } from "./navigation-constants";
-
-/**
- * - WRITE: Enable add/update capability.
- * - READ: Enable visibility capability.
- * - DELETE: Enable delete capability.
- */
-export type ModalPermissions = "WRITE" | "READ" | "DELETE";
+import {
+  SelectorConfigs,
+  SelectorModes,
+} from "../screens/modals/selector/selector-types";
+import { selectorConfigs } from "../screens/modals/selector/selector-config";
 
 export type ScheduleModalType = "My-Business-Hours" | "User-Hours";
-export type SelectorModalType = "My-Business-Categories" | "My-Business-Staff";
+export type SelectorModalType = keyof typeof selectorConfigs;
 // | "My-Business-Currency"
 export type serviceModalType = "My-Business-Services";
 
-export type SelectorMode = "NONE" | "SELECT-ONE" | "SELECT-MANY";
 export type ScheduleMode = "";
 export type ServicesMode = "";
-
-export type ModalParamsKeys = "mode" | "type" | "permissions";
 
 export type ModalStackParamList = {
   [MODAL_SCREENS.SELECTOR_MODAL_SCREEN]: {
     type: SelectorModalType;
-    mode?: SelectorMode;
-    permissions?: ModalPermissions[];
   };
   [MODAL_SCREENS.SCHEDULE_MODAL_SCREEN]: {
     type: ScheduleModalType;
-    mode?: ScheduleMode;
-    permissions?: ModalPermissions[];
   };
   [MODAL_SCREENS.SERVICE_MODAL_SCREEN]: {
     type: serviceModalType;
-    mode?: ServicesMode;
-    permissions?: ModalPermissions[];
   };
 };
 

@@ -8,6 +8,8 @@ export const UserAccountSettings = ({ user }) => {
   const handlePress = () => setExpanded((state) => !state);
   const { Colors } = useTheme();
 
+  if (!user) return null;
+
   return (
     <List.Accordion
       title="Account"

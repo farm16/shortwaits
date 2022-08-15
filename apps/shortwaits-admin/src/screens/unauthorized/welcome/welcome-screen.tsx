@@ -11,7 +11,9 @@ import {
   RootStackParamList,
   UnauthorizedStackParamList,
 } from "../../../navigation";
-import { useUser } from "../../../redux";
+import { useBusiness, useMobileAdmin, useUser } from "../../../redux";
+import { useGetAdminMobileQuery } from "../../../services/shortwaits-api";
+import { skipToken } from "@reduxjs/toolkit/dist/query/react";
 
 export interface WelcomeScreenProps {
   navigation: CompositeNavigationProp<
@@ -22,17 +24,24 @@ export interface WelcomeScreenProps {
 
 export const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation }) => {
   const { Colors } = useTheme();
-  const userState = useUser();
+  const business = useBusiness();
+  const mobileAdminData = useMobileAdmin();
+
+  const { isLoading: isAdminMobileLoading } = useGetAdminMobileQuery(
+    mobileAdminData && skipToken
+  );
 
   useEffect(() => {
     SplashScreen.hide();
   }, []);
 
   useEffect(() => {
-    if (userState) {
+    if (business?.isRegistrationCompleted === false) {
       navigation.navigate("onboarding-1-screen");
     }
-  }, [userState]);
+  }, [navigation, business?.isRegistrationCompleted]);
+
+  if (isAdminMobileLoading) return <Text>Loading ...</Text>;
 
   return (
     <SafeAreaView

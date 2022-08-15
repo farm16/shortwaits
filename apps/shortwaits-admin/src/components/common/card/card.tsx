@@ -21,10 +21,11 @@ export interface CardProps extends ButtonProps, CardIconsProps {
 }
 export const CARD_HEIGHT = 80;
 
-const cardModes = {
+const cardModes: Record<string, ButtonProps> = {
   "text-field": {
     disabled: true,
   },
+  listItem: {},
   button: {},
   static: {
     disabled: true,

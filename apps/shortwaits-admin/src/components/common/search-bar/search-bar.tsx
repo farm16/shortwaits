@@ -3,12 +3,11 @@ import { Searchbar as SearchBarPaper } from "react-native-paper";
 
 import { getDimensions, useTheme } from "../../../theme";
 import { DeepPartial } from "../../../index.d";
+import { StyleProp, TextStyle, ViewStyle } from "react-native";
 
-type SearchBarProps =
-  | ComponentProps<typeof SearchBarPaper>
-  | {
-      iPlaceholder?: string;
-    };
+type SearchBarProps = ComponentProps<typeof SearchBarPaper> & {
+  iPlaceholder?: string;
+};
 
 export const SearchBar = (props: SearchBarProps) => {
   const {
@@ -22,21 +21,18 @@ export const SearchBar = (props: SearchBarProps) => {
   } = props;
   const { Colors } = useTheme();
   const { width } = getDimensions();
-  const style = [
-    {
-      width: width * 0.9,
-      elevation: 0,
-      backgroundColor: Colors.lightGray,
-    },
-  ];
+  const style: StyleProp<TextStyle> & StyleProp<ViewStyle> = {
+    width: width * 0.9,
+    elevation: 0,
+    backgroundColor: Colors.lightGray,
+  };
+
   const searchBarStyle = [style, styleOverride];
   const SearchBarTheme: DeepPartial<ReactNativePaper.Theme> = {
     colors: {
-      primary: Colors.darkGray,
-      accent: Colors.darkGray,
-      text: Colors.gray,
-      placeholder: Colors.gray,
-      background: Colors.darkGray,
+      primary: Colors.brandPrimary,
+      accent: Colors.brandAccent,
+      text: Colors.text,
     },
     roundness: 5,
   };

@@ -1,12 +1,12 @@
-import { CategoriesType } from '..';
+import { BusinessCategoryType } from "..";
 
-import { DocType, SuccessResponseType } from '.';
+import { DocType, SuccessResponseType } from ".";
 
 export type CategoriesSuccessResponseType = SuccessResponseType<
   readonly CategoriesPayloadType[]
 >;
 
-export type CategoriesPayloadType = DocType<CategoriesType>;
+export type CategoriesPayloadType = DocType<BusinessCategoryType>;
 
 export type CategoriesSuccessFnType = (
   payload: readonly CategoriesPayloadType[],

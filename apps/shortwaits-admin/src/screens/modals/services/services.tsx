@@ -44,7 +44,7 @@ export const ServicesModal: FC<ModalsScreenProps<"schedule-modal-screen">> = ({
           navigation.navigate("modals", {
             screen: "selector-modal-screen",
             params: {
-              type: "My-Business-Categories",
+              type: "onboarding-categories",
             },
           })
         }

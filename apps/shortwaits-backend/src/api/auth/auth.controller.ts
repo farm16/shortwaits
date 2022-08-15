@@ -6,31 +6,31 @@ import {
   Post,
   UseGuards,
   ValidationPipe,
-} from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { SignUpWithEmailDto } from './dto/sign-up-with-email.dto';
-import { SignInWithEmailDto } from './dto/sign-in-with-email.dto';
-import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
-import { AuthPayloadType, TokenPayloadType } from '@shortwaits/shared-types';
-import { AuthSuccessResponse } from './auth.interface';
+} from "@nestjs/common";
+import { AuthService } from "./auth.service";
+import { SignUpWithEmailDto } from "./dto/sign-up-with-email.dto";
+import { SignInWithEmailDto } from "./dto/sign-in-with-email.dto";
+import { ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
+import { AuthPayloadType, TokenPayloadType } from "@shortwaits/shared-types";
 import {
   GetCurrentUser,
   GetCurrentUserId,
   Public,
-} from '../../common/decorators/auth.decorator';
-import { RtGuard } from '../../common/guards';
+} from "../../common/decorators/auth.decorator";
+import { RtGuard } from "../../common/guards";
+import { AuthSuccessResponse } from "./auth.interface";
 
-@ApiTags('auth')
-@Controller('auth')
+@ApiTags("auth")
+@Controller("auth")
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Public()
-  @Post('admin/local/sign-up')
+  @Post("admin/local/sign-up")
   @HttpCode(HttpStatus.CREATED)
   @ApiCreatedResponse({
     status: HttpStatus.CREATED,
-    description: 'Returns new user record',
+    description: "Returns new user & business record",
     type: AuthSuccessResponse,
   })
   signUpLocal(
@@ -40,11 +40,11 @@ export class AuthController {
   }
 
   @Public()
-  @Post('admin/local/sign-in')
+  @Post("admin/local/sign-in")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
-    description: 'Returns existing user record',
+    description: "Returns existing user record",
     type: AuthSuccessResponse,
   })
   signInLocal(
@@ -53,11 +53,11 @@ export class AuthController {
     return this.authService.signInLocal(body);
   }
 
-  @Post('sign-out')
+  @Post("sign-out")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
-    description: 'Revokes tokens',
+    description: "Revokes tokens",
   })
   logout(@GetCurrentUserId() userId: number): Promise<AuthPayloadType> {
     return this.authService.logout(userId);
@@ -65,17 +65,17 @@ export class AuthController {
 
   @Public()
   @UseGuards(RtGuard)
-  @Post('refresh')
+  @Post("refresh")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
-    description: 'Returns refreshed token',
+    description: "Returns refreshed token",
   })
   refreshTokens(
     @GetCurrentUserId() userId: string,
-    @GetCurrentUser('refreshToken') refreshToken: string
+    @GetCurrentUser("refreshToken") refreshToken: string
   ): Promise<{ auth: TokenPayloadType }> {
-    console.log('refreshTokens controller');
+    console.log("refreshTokens controller");
     return this.authService.refreshTokens(userId, refreshToken);
   }
 }
