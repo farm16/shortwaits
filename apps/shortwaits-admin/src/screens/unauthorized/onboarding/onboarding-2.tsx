@@ -17,6 +17,7 @@ import {
   useBottomSheet,
   MultipleHeaderButtons,
   SimpleServiceForm,
+  Container,
 } from "../../../components";
 import { useTheme } from "../../../theme";
 import {
@@ -29,7 +30,11 @@ import {
   useBusiness,
   setSampleBusinessServicesByIndex,
 } from "../../../redux";
-import { usePostBusinessRegistrationMutation } from "../../../services/shortwaits-api";
+import {
+  usePostBusinessRegistrationMutation,
+  useGetServicesByBusinessQuery,
+} from "../../../services/shortwaits-api";
+import { skipToken } from "@reduxjs/toolkit/dist/query";
 
 export interface Onboarding2ScreenProps {
   navigation: CompositeNavigationProp<
@@ -43,35 +48,23 @@ export type SampleBusinessServices = number;
 export const Onboarding2Screen = ({ navigation }: Onboarding2ScreenProps) => {
   const { Colors } = useTheme();
   const [sampleServicesIndex, setSampleServicesIndex] = useState<number>(0);
-  const user = useUser();
-  const mobileAdmin = useMobileAdmin();
+
   const business = useBusiness();
   const bottomSheetRef = useRef<BottomSheetType>(null);
   const handleBottomSheet = useBottomSheet(bottomSheetRef);
   const dispatch = useDispatch();
 
-  const [registerBusiness, { isSuccess, isError, isLoading }] =
+  const [registerBusiness, postBusinessRegistrationMutationStatus] =
     usePostBusinessRegistrationMutation();
 
   //  TODO: user will not be able create new service during sign-up on update data
   const handleBusinessRegistration = useCallback(() => {
-    console.log("\nUserId", user._id);
-    console.log("\nBusiness", JSON.stringify(business));
-    console.log(
-      "\nServices",
-      JSON.stringify(mobileAdmin?.sampleBusinessData.services)
-    );
-    registerBusiness({
-      userId: user._id,
-      business,
-      services: mobileAdmin?.sampleBusinessData.services,
-    });
-  }, [
-    business,
-    mobileAdmin?.sampleBusinessData.services,
-    registerBusiness,
-    user._id,
-  ]);
+    return registerBusiness(business);
+  }, [business, registerBusiness]);
+
+  const servicesByBusinessQuery = useGetServicesByBusinessQuery(
+    business ? String(business?._id) : skipToken
+  );
 
   const handleCardOnPress = useCallback(
     (index: number, _data: Partial<ServicesType>) => {
@@ -88,14 +81,14 @@ export const Onboarding2Screen = ({ navigation }: Onboarding2ScreenProps) => {
         <LeftChevronButton onPress={() => navigation.goBack()} />
       ),
       headerRight: () => (
-        <MultipleHeaderButtons>
+        <Container>
           {/* <CircleIconButton
             noMargin
             iconType="add-services"
           
           /> */}
           <SubmitHeaderIconButton onPress={handleBusinessRegistration} />
-        </MultipleHeaderButtons>
+        </Container>
       ),
     });
   }, [handleBusinessRegistration, navigation]);
@@ -114,7 +107,7 @@ export const Onboarding2Screen = ({ navigation }: Onboarding2ScreenProps) => {
       <FlatList
         ItemSeparatorComponent={ItemSeparatorComponent}
         contentContainerStyle={styles.contentContainer}
-        data={mobileAdmin?.sampleBusinessData.services}
+        data={servicesByBusinessQuery.data.data}
         renderItem={({ index, item }) => {
           return (
             <ServiceCard
@@ -126,20 +119,18 @@ export const Onboarding2Screen = ({ navigation }: Onboarding2ScreenProps) => {
         keyExtractor={(item, index) => item.name! + index}
       />
       <BottomSheet snapPoints={["77%"]} ref={bottomSheetRef}>
-        <SimpleServiceForm
+        {/* <SimpleServiceForm
           mode="update"
-          initialValues={
-            mobileAdmin?.sampleBusinessData.services[sampleServicesIndex]
-          }
+          initialValues={servicesByBusinessQuery.data.data[sampleServicesIndex]}
           onSubmit={(formData) => {
-            dispatch(
-              setSampleBusinessServicesByIndex({
-                data: formData,
-                index: sampleServicesIndex,
-              })
-            );
+            // dispatch(
+            //   setSampleBusinessServicesByIndex({
+            //     data: formData,
+            //     index: sampleServicesIndex,
+            //   })
+            // );
             handleBottomSheet.close();
-          }}
+          }} */}
         />
       </BottomSheet>
     </Screen>

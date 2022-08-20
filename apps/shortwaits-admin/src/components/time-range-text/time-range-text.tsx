@@ -1,10 +1,16 @@
-import React from "react";
+import React, { useMemo } from "react";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { StyleProp, View, StyleSheet, ViewStyle } from "react-native";
 
 import { Text } from "../common";
 import { useTheme } from "../../theme";
 import { get12hrTimeFromDecimal } from "../../utils";
+import { ThemeColorName } from "../../theme/Colors";
+
+const textColors: Record<string, ThemeColorName> = {
+  text: "subText",
+  title: "text",
+};
 
 export const TimeRangeText = ({
   style,
@@ -20,34 +26,28 @@ export const TimeRangeText = ({
   disabled?: boolean;
 }) => {
   const { Colors } = useTheme();
-  const textColors = {
-    text: Colors.subText,
-    title: Colors.text,
-  };
+  const textColor = useMemo(() => {
+    return disabled ? Colors.lightGray : Colors[textColors[preset]];
+  }, [Colors, disabled, preset]);
+
   return (
     <View style={[styles.container, style]}>
       <Text
         style={{
           ...styles[preset],
-          color: disabled ? Colors.lightGray : textColors[preset],
+          color: textColor,
         }}
         text={get12hrTimeFromDecimal(startTime)}
       />
       <Icon
-        color={
-          disabled
-            ? Colors.lightGray
-            : preset === "title"
-            ? Colors.darkGray
-            : textColors[preset]
-        }
+        color={Colors.brandAccent}
         name="arrow-right"
         size={preset === "title" ? 20 : 15}
       />
       <Text
         style={{
           ...styles[preset],
-          color: disabled ? Colors.lightGray : textColors[preset],
+          color: textColor,
           marginStart: styles[preset].marginEnd,
         }}
         text={get12hrTimeFromDecimal(endTime)}
@@ -55,6 +55,7 @@ export const TimeRangeText = ({
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",

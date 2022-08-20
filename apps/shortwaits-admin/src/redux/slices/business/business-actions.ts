@@ -3,7 +3,7 @@ import { businessSlice } from "./business-slice";
 export const {
   setBusiness,
   setBusinessServicesFromDefault,
-  setBusinessEveryDayActivity,
+  setBusinessAllHours,
   setBusinessShortName,
   setBusinessDescription,
   setBusinessCurrency,
@@ -21,4 +21,5 @@ export const {
   setBusinessIsRegistrationCompleted,
   setBusinessDeleted,
   resetBusiness,
+  setBusinessDayHours,
 } = businessSlice.actions;

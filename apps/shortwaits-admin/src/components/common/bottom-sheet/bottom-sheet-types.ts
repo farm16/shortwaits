@@ -1,10 +1,12 @@
-import { RefObject } from "react"
+import { RefObject } from "react";
 import BottomSheet, {
-  BottomSheetProps as BottomSheetComponentProps
-} from "@gorhom/bottom-sheet"
+  BottomSheetProps as BottomSheetComponentProps,
+} from "@gorhom/bottom-sheet";
 
-export type snapLevelsType = 0 | 1 | 2 | 3
-export type BottomSheetRefType = RefObject<BottomSheet>
-export { BottomSheet as BottomSheetType }
+export type snapLevelsType = 0 | 1 | 2 | 3;
+export type BottomSheetRefType = RefObject<BottomSheet>;
+export { BottomSheet as BottomSheetType };
 
-export type BottomSheetProps = Partial<BottomSheetComponentProps>
+export type BottomSheetProps = Partial<BottomSheetComponentProps> & {
+  snapPointsLevel?: 1 | 2 | 3;
+};

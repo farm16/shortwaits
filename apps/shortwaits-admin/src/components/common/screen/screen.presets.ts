@@ -1,16 +1,16 @@
-import { ViewStyle } from "react-native"
+import { ViewStyle } from "react-native";
 
 /**
  * All screen keyboard offsets.
  */
 export const offsets = {
-  none: 0
-}
+  none: 0,
+};
 
 /**
  * The variations of keyboard offsets.
  */
-export type KeyboardOffsets = keyof typeof offsets
+export type KeyboardOffsets = keyof typeof offsets;
 
 /**
  * All the variations of screens.
@@ -24,14 +24,14 @@ export const presets = {
     outer: {
       //backgroundColor: "red",
       flex: 1,
-      height: "100%"
+      height: "100%",
     } as ViewStyle,
     inner: {
       justifyContent: "flex-start",
       alignItems: "stretch",
       height: "100%",
-      width: "100%"
-    } as ViewStyle
+      width: "100%",
+    } as ViewStyle,
   },
 
   /**
@@ -41,21 +41,20 @@ export const presets = {
    */
   scroll: {
     outer: {
-      //backgroundColor: "red",
       flex: 1,
-      height: "100%"
+      height: "100%",
     } as ViewStyle,
     inner: {
       justifyContent: "flex-start",
-      alignItems: "stretch"
-    } as ViewStyle
-  }
-}
+      alignItems: "stretch",
+    } as ViewStyle,
+  },
+};
 
 /**
  * The variations of screens.
  */
-export type ScreenPresets = keyof typeof presets
+export type ScreenPresets = keyof typeof presets;
 
 /**
  * Is this preset a non-scrolling one?
@@ -64,5 +63,5 @@ export type ScreenPresets = keyof typeof presets
  */
 export function isNonScrolling(preset?: ScreenPresets) {
   // any of these things will make you scroll
-  return !preset || !presets[preset] || preset === "fixed"
+  return !preset || !presets[preset] || preset === "fixed";
 }

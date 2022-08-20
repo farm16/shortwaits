@@ -40,12 +40,16 @@ export const businessReducers = {
   setBusinessPhone1(state, action: PayloadAction<{ phone1: string }>) {
     return { ...state, ...action.payload };
   },
-  setBusinessCategory(state, action: PayloadAction<CategoriesPayloadType>) {
-    if (
-      state.categories.some((category) => category._id === action.payload._id)
-    ) {
-      const categories = state.categories.filter((category) => {
-        return category._id !== action.payload._id;
+  setBusinessCategory(state, action: PayloadAction<ObjectId | string>) {
+    const _categories = state.categories as BusinessPayloadType["categories"];
+
+    const isCategoryPresent = _categories.some(
+      (categoryId) => categoryId === action.payload
+    );
+
+    if (isCategoryPresent) {
+      const categories = _categories.filter((categoriesId) => {
+        return categoriesId !== action.payload;
       });
       return { ...state, categories };
     } else {
@@ -89,13 +93,12 @@ export const businessReducers = {
   setBusinessDaySchedule(
     state,
     action: PayloadAction<{
-      data: BusinessDayTimeRangeType[];
+      data: BusinessDayTimeRangeType;
       day: BusinessWeekDaysType;
     }>
   ) {
-    if (!state) return state;
     const days = state.hours;
-    days[action.payload.day] = action.payload.data;
+    days[action.payload.day][0] = action.payload.data;
     return { ...state, ...days };
   },
   /**
@@ -103,22 +106,44 @@ export const businessReducers = {
    * We are only supporting 1 set of time range in a day ** **FOR NOW
    */
   setBusinessDayActivity(state, action: PayloadAction<BusinessWeekDaysType>) {
-    if (!state) return state;
     const day = action.payload;
     const hours = cloneDeep(state.hours);
     hours[day][0].isActive = !state.hours[day][0].isActive;
 
     return { ...state, hours };
   },
-  setBusinessEveryDayActivity(state, action: PayloadAction<boolean>) {
-    if (!state) return state;
-    const hours = cloneDeep(state.hours);
-    const days = Object.keys(hours);
+  /**
+   * return hours with active/inactive hours
+   */
+  setBusinessAllHours(state, action: PayloadAction<boolean>) {
+    const clonedHours = cloneDeep(state.hours);
+    const days = Object.keys(clonedHours);
+
     days.forEach((day) => {
-      hours[day][0].isActive = action.payload;
+      clonedHours[day][0].isActive = action.payload;
     });
 
-    return { ...state, hours };
+    return { ...state, hours: clonedHours };
+  },
+  /**
+   * sets hours in a day
+   */
+  setBusinessDayHours(
+    state,
+    action: PayloadAction<{
+      values: [number, number];
+      name: BusinessWeekDaysType;
+    }>
+  ) {
+    const newHours = {
+      ...state.hours[action.payload.name][0],
+      startTime: action.payload.values[0],
+      endTime: action.payload.values[1],
+    };
+    return {
+      ...state,
+      hours: { ...state.hours, [action.payload.name]: [newHours] },
+    };
   },
   setBusinessLocation(
     state,

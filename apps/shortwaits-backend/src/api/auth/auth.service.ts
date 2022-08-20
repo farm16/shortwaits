@@ -8,19 +8,22 @@ import {
   UnprocessableEntityException,
 } from "@nestjs/common";
 import { AuthPayloadType, TokenPayloadType } from "@shortwaits/shared-types";
+import { JwtService } from "@nestjs/jwt";
+import { ConfigService } from "@nestjs/config";
 
 import { User } from "../users/entities/user.entity";
 import { SignUpWithEmailDto } from "./dto/sign-up-with-email.dto";
 import { SignInWithEmailDto } from "./dto/sign-in-with-email.dto";
-import { JwtService } from "@nestjs/jwt";
-import { ConfigService } from "@nestjs/config";
 import { Business } from "../business/entities/business.entity";
+import shortwaitsAdminDefaultData = require("../../assets/default-data/2-shortwaits/shortwaits");
+import { Service } from "../services/entities/service.entity";
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectModel(User.name) private userModel: Model<User>,
     @InjectModel(Business.name) private businessModel: Model<Business>,
+    @InjectModel(Service.name) private serviceModel: Model<Service>,
     private jwtService: JwtService,
     private config: ConfigService
   ) {}
@@ -52,11 +55,21 @@ export class AuthService {
         createdBy: [currentUser._id],
         updatedBy: [currentUser._id],
         staff: [currentUser._id],
+        hours: shortwaitsAdminDefaultData[0].sampleBusinessData.hours,
       });
+      const services =
+        shortwaitsAdminDefaultData[0].sampleBusinessData.services.map(
+          (service) => {
+            return { ...service, businessId: newBusinessAccount._id };
+          }
+        );
+      const insertedServices = await this.serviceModel.insertMany(services);
+      const servicesIds = insertedServices.map((service) => service._id);
 
       const tokens = await this.signTokens(currentUser);
       const hashedRefreshToken = bcrypt.hashSync(tokens.refreshToken, salt);
 
+      newBusinessAccount.services = servicesIds as [];
       currentUser.businesses = [newBusinessAccount._id];
       currentUser.hashedRt = hashedRefreshToken;
       currentUser.lastSignInAt = new Date();

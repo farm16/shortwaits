@@ -1,16 +1,30 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { StyleSheet, ViewStyle } from "react-native";
-import MultiSlider, {
-  MultiSliderProps,
+import PMultiSlider, {
+  MultiSliderProps as PMultiSliderProps,
 } from "@ptomasroos/react-native-multi-slider";
 
 import { getDimensions, useTheme } from "../../../theme";
 
-interface MultiSliderComponentProps extends MultiSliderProps {
+interface MultiSliderProps extends PMultiSliderProps {
   style?: ViewStyle;
+  type?: keyof typeof multiSliderTypes;
 }
 
-export const MultiSliderComponent = (props: MultiSliderComponentProps) => {
+const multiSliderTypes = {
+  day: {
+    min: 0,
+    max: 1440,
+    step: 15,
+  },
+  hour: {
+    min: 0,
+    max: 60,
+    step: 1,
+  },
+} as const;
+
+export const MultiSlider = (props: MultiSliderProps) => {
   const {
     onValuesChange,
     style: styleOverride,
@@ -19,6 +33,7 @@ export const MultiSliderComponent = (props: MultiSliderComponentProps) => {
     max,
     allowOverlap = false,
     values,
+    type = "day",
     ...rest
   } = props;
   const { width } = getDimensions(80);
@@ -31,23 +46,23 @@ export const MultiSliderComponent = (props: MultiSliderComponentProps) => {
   ]);
   const markerStyle = StyleSheet.flatten([
     styles.marker,
-    { backgroundColor: Colors.brandPrimary },
+    { backgroundColor: Colors.brandSecondary },
   ]);
 
   return (
-    <MultiSlider
+    <PMultiSlider
       containerStyle={containerStyle}
       markerStyle={markerStyle}
       trackStyle={styles.track}
       pressedMarkerStyle={styles.pressedMarker}
-      selectedStyle={{ backgroundColor: Colors.brandPrimary3 }}
+      selectedStyle={{ backgroundColor: Colors.brandSecondary3 }}
       unselectedStyle={{ backgroundColor: Colors.lightGray }}
       onValuesChange={onValuesChange}
       allowOverlap={allowOverlap}
       values={values}
-      min={min}
-      max={max}
-      step={step}
+      min={multiSliderTypes[type]["min"]}
+      max={multiSliderTypes[type]["max"]}
+      step={multiSliderTypes[type]["step"]}
       {...rest}
     />
   );
@@ -94,10 +109,10 @@ const styles = StyleSheet.create({
  *     slipDisplacement: number;
  * };
  *
- * customMarker?: React.ComponentType<MarkerProps>;
- * customMarkerLeft?: React.ComponentType<MarkerProps>;
- * customMarkerRight?: React.ComponentType<MarkerProps>;
- * customLabel?: React.ComponentType<LabelProps>;
+ * customMarker?: React.Type<MarkerProps>;
+ * customMarkerLeft?: React.Type<MarkerProps>;
+ * customMarkerRight?: React.Type<MarkerProps>;
+ * customLabel?: React.Type<LabelProps>;
  *
  * isMarkersSeparated?: boolean;
  *

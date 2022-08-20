@@ -63,8 +63,11 @@ export const shortwaitsApiEndpoints = {
     },
     getBusinessHours: {
       getPath: (_id: string) => `/business/${_id}/hours`,
-      PATH: "/business/hours",
       METHOD: "GET",
+    },
+    putBusinessHours: {
+      getPath: (_id: string) => `/business/${_id}/hours`,
+      METHOD: "PUT",
     },
   },
   CATEGORIES: {

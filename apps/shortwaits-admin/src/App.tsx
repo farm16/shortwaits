@@ -1,7 +1,7 @@
 import React from "react";
 import { Provider } from "react-redux";
 import {
-  ActivityIndicator,
+  Portal as PaperPortalProvider,
   Provider as PaperProvider,
 } from "react-native-paper";
 import { PersistGate } from "redux-persist/lib/integration/react";
@@ -9,10 +9,16 @@ import {
   SafeAreaProvider,
   initialWindowMetrics,
 } from "react-native-safe-area-context";
-import { PortalProvider, enableLogging } from "@gorhom/portal";
+import {
+  PortalProvider as GPortalProvider,
+  enableLogging,
+} from "@gorhom/portal";
 
 import { AppNavigator } from "./navigation";
-import { persistor, store } from "./redux";
+import {
+  //persistor,
+  store,
+} from "./redux";
 
 enableLogging();
 
@@ -39,9 +45,9 @@ export const App = () => {
 function WithProviders({ children }) {
   return (
     <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-      <PortalProvider>
-        <PaperProvider>{children}</PaperProvider>
-      </PortalProvider>
+      <PaperProvider>
+        <GPortalProvider>{children}</GPortalProvider>
+      </PaperProvider>
     </SafeAreaProvider>
   );
 }

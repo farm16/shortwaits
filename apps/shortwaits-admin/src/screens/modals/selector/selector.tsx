@@ -4,7 +4,8 @@ import { View, StyleSheet } from "react-native";
 import { ModalsScreenProps, SelectorModalType } from "../../../navigation";
 import { SelectorConfigsKeys } from "./selector-config";
 import { useTheme } from "../../../theme";
-import { OnboardingCategoriesSelector } from "./selectors/categories/categories-selector";
+import { CategoriesSelector } from "./selectors/categories/categories-selector";
+import { StaffSelector } from "./selectors/staff/staff-selector";
 
 export type SelectorComponentType = FC<
   ModalsScreenProps<"selector-modal-screen"> & { type: SelectorConfigsKeys }
@@ -19,10 +20,8 @@ export const SelectorScreenModal: FC<
 
   const selectorsComponents: Record<SelectorModalType, SelectorComponentType> =
     {
-      "onboarding-categories": OnboardingCategoriesSelector,
-      staff: OnboardingCategoriesSelector,
-      categories: OnboardingCategoriesSelector,
-      "onboarding-staff": OnboardingCategoriesSelector,
+      staff: StaffSelector,
+      categories: CategoriesSelector,
     };
   const SelectorComponent = selectorsComponents[type];
 

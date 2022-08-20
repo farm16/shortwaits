@@ -2,21 +2,17 @@ import React from "react";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { Switch, View, StyleSheet } from "react-native";
 import { useDispatch } from "react-redux";
-import {
-  BusinessDayTimeRangeType,
-  BusinessWeekDaysType,
-} from "@shortwaits/shared-types";
 
 import { getDimensions, useTheme } from "../../../theme";
-import { Button, Text, TimeRangeText } from "../../../components";
-import { useBusiness } from "../../../redux";
+import { Button, Container, Text, TimeRangeText } from "../../../components";
+import { setBusinessDayActivity } from "../../../redux";
 import { ScheduleModalType } from "../../../navigation";
-import { scheduleConfigs } from "./schedule-config";
+import { DayType } from "./schedule";
 
 interface DayCardProps {
   type: ScheduleModalType;
-  day: BusinessDayTimeRangeType & { name: BusinessWeekDaysType };
-  handlePress?: any;
+  day: DayType;
+  handlePress: (day: DayType["name"]) => void;
 }
 /**
  * @todo
@@ -25,7 +21,7 @@ interface DayCardProps {
 export const ScheduleCard = ({ day, handlePress, type }: DayCardProps) => {
   const { width } = getDimensions();
   const { Colors } = useTheme();
-  const { setDayActivity } = scheduleConfigs[type];
+
   const { startTime, endTime, isActive, name } = day;
   const dispatch = useDispatch();
 
@@ -41,40 +37,41 @@ export const ScheduleCard = ({ day, handlePress, type }: DayCardProps) => {
         <Button
           preset="none"
           style={{
-            flexDirection: "row",
-            alignItems: "center",
+            alignItems: "flex-start",
           }}
           disabled={!isActive}
-          onPress={() => handlePress(day)}
+          onPress={() => handlePress(name)}
         >
-          <Text
-            preset="none"
-            style={{
-              ...styles.weekDay,
-              color: isActive ? Colors.gray : Colors.lightGray,
-            }}
-            text={name}
-          />
-          <Icon
-            name="pencil"
-            color={isActive ? Colors.brandPrimary : Colors.lightGray}
-            size={20}
+          <Container direction="row">
+            <Text
+              preset="none"
+              style={{
+                ...styles.weekDay,
+                color: isActive ? Colors.brandSecondary7 : Colors.gray,
+              }}
+              text={name}
+            />
+            <Icon
+              name="pencil"
+              color={isActive ? Colors.brandSecondary : Colors.gray}
+              size={20}
+            />
+          </Container>
+          <TimeRangeText
+            disabled={!isActive}
+            startTime={startTime}
+            endTime={endTime}
           />
         </Button>
-        <TimeRangeText
-          disabled={!isActive}
-          startTime={startTime}
-          endTime={endTime}
-        />
       </View>
       <View style={styles.subContainer2}>
         <Switch
           style={{ marginLeft: "auto" }}
-          trackColor={{ false: Colors.red1, true: Colors.brandPrimary1 }}
-          thumbColor={isActive ? Colors.brandPrimary2 : Colors.red2}
+          trackColor={{ false: Colors.red1, true: Colors.brandSecondary1 }}
+          thumbColor={isActive ? Colors.brandSecondary2 : Colors.gray}
           ios_backgroundColor={Colors.backgroundOverlay}
           onChange={() => {
-            dispatch(setDayActivity(day.name));
+            dispatch(setBusinessDayActivity(day.name));
           }}
           value={isActive}
         />

@@ -6,7 +6,13 @@ import {
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
-import { BusinessType, ServicesType, ObjectId } from "@shortwaits/shared-types";
+import {
+  BusinessType,
+  ServicesType,
+  ObjectId,
+  BusinessHoursType,
+  BusinessPayloadType,
+} from "@shortwaits/shared-types";
 import { Business } from "./entities/business.entity";
 import { CreateBusinessDto } from "./dto/createBusinessDto";
 import { UpdateBusinessDto } from "./dto/updateBusinessDto";
@@ -34,7 +40,7 @@ export class BusinessService {
     }
   }
 
-  async findBusinessById(businessId: string) {
+  async findBusinessById(businessId: string | ObjectId) {
     const businessData = await this.businessModel.findById(businessId).exec();
 
     if (businessData) {
@@ -60,16 +66,42 @@ export class BusinessService {
       return businessData;
     }
   }
-
   async updateBusiness(
-    businessId: string,
-    dto: UpdateBusinessDto
+    userId: string,
+    business: Partial<BusinessPayloadType>
   ): Promise<Business> {
-    const newBusiness = await this.businessModel.findByIdAndUpdate(
-      businessId,
-      dto
+    const businessData = await this.findBusinessById(business._id);
+
+    const { isAdmin, isSuperAdmin } = this.isUserAdminType(
+      businessData,
+      userId
     );
-    return newBusiness;
+
+    if (isAdmin || isSuperAdmin) {
+      return businessData;
+    }
+  }
+
+  async updateBusinessHours(
+    businessId: string,
+    userId: string,
+    dto: { hours: BusinessHoursType }
+  ): Promise<Business> {
+    const businessData = await this.businessModel.findOne(
+      { _id: businessId },
+      null,
+      { new: true }
+    );
+
+    const { isAdmin, isSuperAdmin } = this.isUserAdminType(
+      businessData,
+      userId
+    );
+    if (isAdmin || isSuperAdmin) {
+      businessData.hours = dto.hours;
+      console.log({ ...dto });
+      return await businessData.save();
+    }
   }
 
   async createBusiness(dto: CreateBusinessDto): Promise<Business> {

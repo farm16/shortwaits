@@ -51,6 +51,16 @@
         "jestConfig": "apps/shortwaits-backend/jest.config.ts",
         "passWithNoTests": true
       }
+    },
+    "seed": {
+      "executor": "@nrwl/workspace:run-commands",
+      "configurations": {
+        "default-data": {
+          "commands": [
+            "DEBUG=mongo-seeding ts-node apps/shortwaits-backend/src/scripts/seed-default-data.mjs --project"
+          ]
+        }
+      }
     }
   },
   "tags": []

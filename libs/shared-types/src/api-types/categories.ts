@@ -2,13 +2,13 @@ import { BusinessCategoryType } from "..";
 
 import { DocType, SuccessResponseType } from ".";
 
-export type CategoriesSuccessResponseType = SuccessResponseType<
-  readonly CategoriesPayloadType[]
->;
-
 export type CategoriesPayloadType = DocType<BusinessCategoryType>;
 
+export type CategoriesSuccessResponseType = SuccessResponseType<
+  CategoriesPayloadType[]
+>;
+
 export type CategoriesSuccessFnType = (
-  payload: readonly CategoriesPayloadType[],
+  payload: CategoriesPayloadType[],
   message: string
 ) => CategoriesSuccessResponseType;

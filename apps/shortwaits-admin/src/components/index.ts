@@ -10,3 +10,4 @@ export * from "./logo-view/logo-view";
 export * from "./headers";
 export * from "./common";
 export * from "./cards";
+export * from "./modals";

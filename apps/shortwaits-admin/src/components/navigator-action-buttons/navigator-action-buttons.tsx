@@ -2,8 +2,9 @@ import React, { FC } from "react";
 import { StyleProp, View, ViewStyle } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
-import { Button, ButtonProps, Spinner } from "../common";
+import { Button, ButtonProps, Spinner, Text } from "../common";
 import { useTheme } from "../../theme";
+import { ThemeColorName, ThemeColors } from "../../theme/Colors";
 
 const disabledStates = ["loading", "disabled", "enable"];
 
@@ -122,76 +123,141 @@ export const LeftChevronButton: FC<ButtonProps> = (props) => {
   );
 };
 
-const addIcons = {
+const _circleIcons = {
+  save: {
+    name: "content-save-outline",
+    color: "brandSecondary6",
+    backgroundColor: "lightGray",
+    size: 26,
+  },
+  "open-business": {
+    name: "door-open",
+    color: "brandSecondary6",
+    backgroundColor: "lightGray",
+    size: 22,
+  },
+  "closed-business": {
+    name: "door-closed-lock",
+    backgroundColor: "red1",
+    color: "brandPrimary",
+    size: 20,
+  },
+  "account-cancel": {
+    name: "account-cancel",
+    color: "brandSecondary6",
+    backgroundColor: "lightGray",
+    size: 24,
+  },
   "add-categories": {
     name: "plus",
+    backgroundColor: "lightGray",
+    color: "brandSecondary6",
     size: 24,
   },
   "add-currency": {
     name: "plus",
+    backgroundColor: "lightGray",
+    color: "brandSecondary6",
     size: 24,
   },
   "add-staff": {
     name: "account-plus",
+    backgroundColor: "lightGray",
+    color: "brandSecondary6",
     size: 21,
   },
   "add-services": {
     name: "text-box-plus",
+    backgroundColor: "lightGray",
+    color: "brandSecondary6",
     size: 26,
   },
   "add-image": {
     name: "camera-plus",
+    backgroundColor: "lightGray",
+    color: "brandSecondary6",
     size: 24,
   },
   more: {
     name: "camera-plus",
+    backgroundColor: "lightGray",
+    color: "brandSecondary6",
     size: 24,
   },
   default: {
     name: "plus",
+    backgroundColor: "lightGray",
+    color: "brandSecondary6",
     size: 24,
   },
 } as const;
+type CircleIconsKeys = keyof typeof _circleIcons;
+type CircleIconsValues = {
+  name: string;
+  color: ThemeColorName;
+  backgroundColor: ThemeColorName;
+  size: number;
+};
+const circleIcons = _circleIcons as Record<CircleIconsKeys, CircleIconsValues>;
 
 export const CircleIconButton: FC<
   ButtonProps & {
     noMargin?: boolean;
-    iconType?: keyof typeof addIcons;
+    iconType: CircleIconsKeys;
     iconSize?: number;
+    isHeaderLeft?: boolean;
   }
 > = (props) => {
-  const {
-    Colors: { brandSecondary6, backgroundOverlay, lightGray },
-  } = useTheme();
+  const { Colors } = useTheme();
 
   const {
     state = "enabled",
     iconSize = 22,
     iconType = "default",
     style: styleOverride,
+    text,
+    //isHeaderRight = true,
+    isHeaderLeft,
     ...rest
   } = props;
 
   const style: StyleProp<ViewStyle> = {
-    backgroundColor: lightGray,
+    backgroundColor: Colors[circleIcons[iconType].backgroundColor],
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 36 / 2,
+    marginEnd: isHeaderLeft ? undefined : "10%",
+    marginStart: isHeaderLeft ? "10%" : undefined,
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
   };
 
   return (
     <Button
+      preset="none"
       {...rest}
-      preset="headerLink"
       style={[style, styleOverride]}
       state={state}
     >
-      <Icon
-        name={
-          addIcons[iconType] ? addIcons[iconType].name : addIcons.default.name
-        }
-        color={
-          disabledStates.includes(state) ? backgroundOverlay : brandSecondary6
-        }
-        size={addIcons[iconType].size || iconSize}
-      />
+      {text ? null : (
+        <Icon
+          name={
+            circleIcons[iconType]
+              ? circleIcons[iconType].name
+              : circleIcons.default.name
+          }
+          color={
+            disabledStates.includes(state)
+              ? Colors.gray
+              : Colors[circleIcons[iconType]["color"]]
+          }
+          size={circleIcons[iconType].size || iconSize}
+        />
+      )}
+      {text ? (
+        <Text style={{ color: Colors.brandSecondary7 }} text={text} />
+      ) : null}
     </Button>
   );
 };

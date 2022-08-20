@@ -1,4 +1,4 @@
-import { ErrorsWithCodeType } from '../';
+import { ErrorsWithCodeType } from "../";
 
 export type ServiceDocResponseType<T = never> = {
   readonly success: boolean;

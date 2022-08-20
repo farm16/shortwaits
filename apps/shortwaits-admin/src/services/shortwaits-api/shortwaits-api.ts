@@ -29,6 +29,7 @@ import {
   GetService,
   GetServicesByBusiness,
   GetUser,
+  PostBusinessHours,
 } from "./modules";
 import { Alert } from "react-native";
 
@@ -140,6 +141,7 @@ export const shortwaitsApi = createApi({
     getBusinessServices: GetBusinessServices(builder),
     getBusinessStaff: GetBusinessStaff(builder),
     postBusinessServices: PostBusinessServices(builder),
+    postBusinessHours: PostBusinessHours(builder),
     postBusinessRegistration: PostBusinessRegistration(builder),
     //categories (business)
     getCategory: GetCategory(builder),
@@ -158,6 +160,7 @@ export const {
   useLocalSignInMutation,
   usePostBusinessServicesMutation,
   usePostBusinessRegistrationMutation,
+  usePostBusinessHoursMutation,
   //Query hooks
   useGetAdminMobileQuery,
   useGetBusinessQuery,

@@ -1,9 +1,7 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { BusinessPayloadType } from "@shortwaits/shared-types";
 import { shortwaitsApi } from "../../../services/shortwaits-api";
 import { businessReducers } from "./business-reducers";
-import { isEmpty } from "lodash";
 
 const initialState: BusinessPayloadType = null;
 

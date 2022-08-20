@@ -11,10 +11,6 @@ import {
   AUTHORIZED_SCREENS,
   MODAL_SCREENS,
 } from "./navigation-constants";
-import {
-  SelectorConfigs,
-  SelectorModes,
-} from "../screens/modals/selector/selector-types";
 import { selectorConfigs } from "../screens/modals/selector/selector-config";
 
 export type ScheduleModalType = "My-Business-Hours" | "User-Hours";

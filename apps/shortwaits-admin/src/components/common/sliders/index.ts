@@ -1,2 +1,2 @@
-export { MultiSliderComponent as MultiSlider } from "./multi-slider"
-export * from "./slider"
+export * from "./multi-slider";
+export * from "./slider";

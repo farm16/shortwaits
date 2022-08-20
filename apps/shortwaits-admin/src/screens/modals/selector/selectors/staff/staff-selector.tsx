@@ -1,34 +1,35 @@
-import React, { FC, useLayoutEffect, useMemo } from "react";
+import React, { useCallback, useLayoutEffect, useMemo, useRef } from "react";
 import { FlatList, View, StyleSheet } from "react-native";
-import Spinner from "react-native-spinkit";
+import { skipToken } from "@reduxjs/toolkit/dist/query";
 
-import { useMobileAdmin, useBusiness, useUser } from "../../../../../redux";
+import { hidePremiumMembershipModal, useUser } from "../../../../../redux";
 import {
   SearchBar,
   Space,
   CircleIconButton,
   LeftChevronButton,
   Text,
+  BottomSheet,
+  BottomSheetType,
+  useBottomSheet,
 } from "../../../../../components";
-import { ModalsScreenProps } from "../../../../../navigation";
 import { selectorConfigs } from "../../selector-config";
-import {
-  OnboardingCategoriesSelectorItem,
-  SelectorItem,
-} from "./staff-selector-item";
-import { useTheme } from "../../../../../theme";
+import { StaffSelectorItem } from "./staff-selector-item";
 import { SelectorComponentType } from "../../selector";
-import { useGetBusinessStaffQuery } from "apps/shortwaits-admin/src/services/shortwaits-api";
-import { skipToken } from "@reduxjs/toolkit/dist/query";
+import { useGetBusinessStaffQuery } from "../../../../../services/shortwaits-api";
+import { useDispatch } from "react-redux";
 
-export const OnboardingCategoriesSelector: SelectorComponentType = ({
-  navigation,
-  type,
-}) => {
+export const StaffSelector: SelectorComponentType = ({ navigation, type }) => {
   const { headerTitle, searchPlaceholder, isReadOnly } = useMemo(
     () => selectorConfigs[type],
     [type]
   );
+  const bottomSheetRef = useRef<BottomSheetType>(null);
+  // const handleBottomSheet = useBottomSheet(bottomSheetRef);
+  const dispatch = useDispatch();
+  const handleCardOnPress = useCallback(() => {
+    dispatch(hidePremiumMembershipModal());
+  }, [dispatch]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -37,9 +38,14 @@ export const OnboardingCategoriesSelector: SelectorComponentType = ({
         <LeftChevronButton onPress={() => navigation.goBack()} />
       ),
       headerRight: () =>
-        !isReadOnly && <CircleIconButton iconType="add-staff" />,
+        !isReadOnly && (
+          <CircleIconButton
+            onPress={() => handleCardOnPress()}
+            iconType="add-staff"
+          />
+        ),
     });
-  }, [navigation, headerTitle, isReadOnly]);
+  }, [navigation, headerTitle, isReadOnly, handleCardOnPress]);
 
   const user = useUser();
 
@@ -58,34 +64,43 @@ export const OnboardingCategoriesSelector: SelectorComponentType = ({
   }
   if (isSuccess) {
     return (
-      <FlatList
-        ListHeaderComponent={
-          <SearchBar
-            value={""}
-            style={styles.searchBar}
-            autoCapitalize="none"
-            placeholder={searchPlaceholder}
-            autoComplete={"off"}
-            autoCorrect={false}
-          />
-        }
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={[styles.listContainer]}
-        data={businessStaff.data}
-        ItemSeparatorComponent={() => <Space size="small" />}
-        renderItem={({ item }) => {
-          return (
-            <OnboardingCategoriesSelectorItem
-              type={"staff"}
-              index={0}
-              isSelected={false}
-              disabled={false}
-              item={item}
+      <>
+        <FlatList
+          ListHeaderComponent={
+            <SearchBar
+              value={""}
+              style={styles.searchBar}
+              autoCapitalize="none"
+              placeholder={searchPlaceholder}
+              autoComplete={"off"}
+              autoCorrect={false}
             />
-          );
-        }}
-        // keyExtractor={(item, index) => `${item.name || ""}${index}`}
-      />
+          }
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={[styles.listContainer]}
+          data={businessStaff.data}
+          ItemSeparatorComponent={() => <Space size="small" />}
+          renderItem={({ item }) => {
+            return (
+              <StaffSelectorItem
+                type={"staff"}
+                index={0}
+                isSelected={false}
+                disabled={false}
+                item={item}
+              />
+            );
+          }}
+          // keyExtractor={(item, index) => `${item.name || ""}${index}`}
+        />
+        <BottomSheet snapPoints={["77%"]} ref={bottomSheetRef}>
+          {/* <SimpleServiceForm
+            mode="update"
+            initialValues={}
+            onSubmit={(formData) => {}}
+          /> */}
+        </BottomSheet>
+      </>
     );
   }
 };

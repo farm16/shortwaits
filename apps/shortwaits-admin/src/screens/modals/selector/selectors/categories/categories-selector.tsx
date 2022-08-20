@@ -1,33 +1,19 @@
-import React, {
-  FC,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useState,
-} from "react";
-import { FlatList, View, StyleSheet } from "react-native";
-import Spinner from "react-native-spinkit";
+import React, { useLayoutEffect, useMemo } from "react";
+import { FlatList, StyleSheet } from "react-native";
 
-import { useMobileAdmin, useBusiness, useUser } from "../../../../../redux";
+import { useBusiness } from "../../../../../redux";
 import {
   SearchBar,
   Space,
-  CircleIconButton,
   LeftChevronButton,
   Text,
 } from "../../../../../components";
-import { ModalsScreenProps } from "../../../../../navigation";
 import { selectorConfigs } from "../../selector-config";
-import { OnboardingCategoriesSelectorItem } from "./categories-selector-item";
-import { useTheme } from "../../../../../theme";
+import { CategoriesSelectorItem } from "./categories-selector-item";
 import { SelectorComponentType } from "../../selector";
-import {
-  useGetAdminMobileQuery,
-  useGetCategoriesQuery,
-} from "apps/shortwaits-admin/src/services/shortwaits-api";
-import { skipToken } from "@reduxjs/toolkit/dist/query";
+import { useGetCategoriesQuery } from "../../../../../services/shortwaits-api";
 
-export const OnboardingCategoriesSelector: SelectorComponentType = ({
+export const CategoriesSelector: SelectorComponentType = ({
   navigation,
   type,
 }) => {
@@ -36,14 +22,15 @@ export const OnboardingCategoriesSelector: SelectorComponentType = ({
     [type]
   );
 
+  const business = useBusiness();
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: headerTitle,
       headerLeft: () => (
         <LeftChevronButton onPress={() => navigation.goBack()} />
       ),
-      headerRight: () =>
-        !isReadOnly && <CircleIconButton iconType="add-categories" />,
+      headerRight: undefined,
     });
   }, [navigation, headerTitle, isReadOnly]);
 
@@ -56,6 +43,9 @@ export const OnboardingCategoriesSelector: SelectorComponentType = ({
 
   console.log(categories);
 
+  // const insertIsSelected = (arr: CategoriesPayloadType[]) => {
+  //   return arr.map((elem) => ({ ...elem, isSelected: false }));
+  // };
   // if (isError) {
   //   return <Text>Error</Text>;
   // }
@@ -67,25 +57,29 @@ export const OnboardingCategoriesSelector: SelectorComponentType = ({
     return (
       <FlatList
         ListHeaderComponent={
-          <SearchBar
-            value={""}
-            style={styles.searchBar}
-            autoCapitalize="none"
-            placeholder={searchPlaceholder}
-            autoComplete={"off"}
-            autoCorrect={false}
-          />
+          <>
+            <SearchBar
+              value={""}
+              style={styles.searchBar}
+              autoCapitalize="none"
+              placeholder={searchPlaceholder}
+              autoComplete={"off"}
+              autoCorrect={false}
+            />
+            <Space size="small" />
+          </>
         }
         showsVerticalScrollIndicator={false}
         contentContainerStyle={[styles.listContainer]}
+        //data={insertIsSelected(categories.data)}
         data={categories.data}
         ItemSeparatorComponent={() => <Space size="small" />}
         renderItem={({ item }) => {
           return (
-            <OnboardingCategoriesSelectorItem
+            <CategoriesSelectorItem
+              business={business}
               type={"categories"}
               index={0}
-              isSelected={false}
               disabled={false}
               item={item}
             />

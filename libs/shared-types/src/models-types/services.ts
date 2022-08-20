@@ -1,35 +1,35 @@
-import { Document } from 'mongoose';
+import { Document } from "mongoose";
 
-import { ObjectId } from '../common';
+import { ObjectId } from "../common";
 
 import {
   BusinessAvailableCurrenciesType,
   BusinessHoursType,
   PaginatedModel,
   ServiceColorType,
-} from './helpers';
+} from "./helpers";
 
 export type ServicesType = {
-  readonly businessId: ObjectId;
-  readonly name: string;
-  readonly description: string;
-  readonly hours: BusinessHoursType;
-  readonly applicableCategories: readonly ObjectId[];
-  readonly durationInMin: number;
-  readonly price: number;
-  readonly currency: BusinessAvailableCurrenciesType;
-  readonly isPrivate: boolean;
-  readonly urls?: {
-    readonly zoom?: string;
-    readonly other1?: string;
-    readonly other2?: string;
+  businessId: ObjectId;
+  name: string;
+  description: string;
+  hours: BusinessHoursType;
+  applicableCategories: ObjectId[];
+  durationInMin: number;
+  price: number;
+  currency: BusinessAvailableCurrenciesType;
+  isPrivate: boolean;
+  urls?: {
+    zoom?: string;
+    other1?: string;
+    other2?: string;
   };
-  readonly isVideoConference: boolean;
-  readonly deleted: boolean;
-  readonly serviceColor: ServiceColorType;
-  readonly imageUrl: string;
-  readonly createdBy: ObjectId;
-  readonly updatedBy: ObjectId;
+  isVideoConference: boolean;
+  deleted: boolean;
+  serviceColor: ServiceColorType;
+  imageUrl: string;
+  createdBy: ObjectId;
+  updatedBy: ObjectId;
 };
 
 export type ServicesDocType = ServicesType & Document;

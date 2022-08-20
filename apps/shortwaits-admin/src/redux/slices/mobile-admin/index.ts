@@ -8,9 +8,25 @@ import {
 import { shortwaitsApi } from "../../../services/shortwaits-api";
 import type { RootState } from "../../../redux";
 
+export interface MobileAdminStateType {
+  defaultData: ShortwaitsAdminDefaultDataPayloadType;
+  modals: {
+    premiumMembership: {
+      isModalOpen: boolean;
+    };
+  };
+}
+export const mobileAdminInitialState: MobileAdminStateType = {
+  defaultData: null,
+  modals: {
+    premiumMembership: {
+      isModalOpen: false,
+    },
+  },
+};
 export const mobileAdminSlice = createSlice({
   name: "mobileAdmin",
-  initialState: null as unknown as ShortwaitsAdminDefaultDataPayloadType[],
+  initialState: mobileAdminInitialState,
   reducers: {
     /**
      * @param action.payload: ServicesType and
@@ -21,30 +37,35 @@ export const mobileAdminSlice = createSlice({
       state,
       action: PayloadAction<{ data: Partial<ServicesType>; index: number }>
     ) {
-      const shortwaitsAdminDefaultData: ShortwaitsAdminDefaultDataPayloadType[] =
-        cloneDeep(state);
-      const swDefaultData = shortwaitsAdminDefaultData.map((defaultData) => {
-        if (defaultData.short_id === "0000001") {
-          defaultData.sampleBusinessData.services[action.payload.index] =
-            action.payload.data;
-          return defaultData;
-        }
-        return defaultData;
-      });
-      return [...swDefaultData];
+      const shortwaitsAdminDefaultData = cloneDeep(state);
+      shortwaitsAdminDefaultData.defaultData.sampleBusinessData.services[
+        action.payload.index
+      ] = action.payload.data;
+      return { ...state, defaultData: shortwaitsAdminDefaultData.defaultData };
+    },
+    hidePremiumMembershipModal(state) {
+      return {
+        ...state,
+        modals: {
+          premiumMembership: {
+            isModalOpen: !state.modals.premiumMembership.isModalOpen,
+          },
+        },
+      };
     },
   },
   extraReducers: (builder) => {
     builder.addMatcher(
       shortwaitsApi.endpoints.getAdminMobile.matchFulfilled,
-      (_state, action) => {
-        return [...action.payload.data];
+      (state, action) => {
+        return { ...state, defaultData: action.payload.data };
       }
     );
   },
 });
 
-export const { setSampleBusinessServicesByIndex } = mobileAdminSlice.actions;
+export const { setSampleBusinessServicesByIndex, hidePremiumMembershipModal } =
+  mobileAdminSlice.actions;
 
 export const selectCurrentMobileAdminState = (state: RootState) =>
   state.mobileAdmin;

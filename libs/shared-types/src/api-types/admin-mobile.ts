@@ -1,15 +1,14 @@
-import { ShortwaitsAdminDefaultDataType } from '..';
+import { ShortwaitsAdminDefaultDataType } from "..";
 
-import { DocType, SuccessResponseType } from '.';
+import { DocType, SuccessResponseType } from ".";
 
-export type ShortwaitsAdminDefaultDataSuccessResponseType = SuccessResponseType<
-  readonly ShortwaitsAdminDefaultDataPayloadType[]
->;
+export type ShortwaitsAdminDefaultDataSuccessResponseType =
+  SuccessResponseType<ShortwaitsAdminDefaultDataPayloadType>;
 
 export type ShortwaitsAdminDefaultDataPayloadType =
   DocType<ShortwaitsAdminDefaultDataType>;
 
 export type ShortwaitsAdminDefaultDataSuccessFnType = (
-  payload: readonly ShortwaitsAdminDefaultDataPayloadType[],
+  payload: ShortwaitsAdminDefaultDataPayloadType,
   message: string
 ) => ShortwaitsAdminDefaultDataSuccessResponseType;

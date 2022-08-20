@@ -7,26 +7,17 @@ import {
   SuccessResponseType,
   ObjectId,
   UserType,
+  BusinessPayloadType,
 } from "@shortwaits/shared-types";
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
 
 const { registerBusiness } = shortwaitsApiEndpoints.BUSINESS;
 
-interface BusinessServicePost {
-  userId: ObjectId | string;
-  business: Partial<BusinessType>;
-  services: Partial<ServicesType>[];
-}
-interface BusinessServicePostResponse {
-  data: { user: UserType; business: BusinessType };
-  meta: unknown;
-}
-
 export default (builder: EndpointBuilder<any, any, any>) =>
-  builder.mutation<BusinessServicePostResponse, BusinessServicePost>({
-    query: ({ userId, business, services }) => ({
+  builder.mutation<BusinessPayloadType, Partial<BusinessType>>({
+    query: (business) => ({
       url: registerBusiness.PATH,
       method: registerBusiness.METHOD,
-      body: { userId, business, services },
+      body: { business },
     }),
   });

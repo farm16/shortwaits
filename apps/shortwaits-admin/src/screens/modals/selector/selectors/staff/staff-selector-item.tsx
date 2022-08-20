@@ -1,13 +1,9 @@
 import React from "react";
-import { View } from "react-native";
-import { useDispatch } from "react-redux";
-import { ObjectId, UserType } from "@shortwaits/shared-types";
+import { UserType } from "@shortwaits/shared-types";
 
-import { ButtonCard, Card, Spinner, Text } from "../../../../../components";
+import { Card, Text } from "../../../../../components";
 import { useTheme } from "../../../../../theme";
-
 import { SelectorModalType } from "../../../../../navigation";
-import { selectorConfigs } from "../../selector-config";
 
 interface SelectorItemProps {
   type: SelectorModalType;
@@ -17,7 +13,7 @@ interface SelectorItemProps {
   item: UserType;
 }
 
-export function OnboardingCategoriesSelectorItem(props: SelectorItemProps) {
+export function StaffSelectorItem(props: SelectorItemProps) {
   const { disabled, item } = props;
   const { Colors } = useTheme();
   return (

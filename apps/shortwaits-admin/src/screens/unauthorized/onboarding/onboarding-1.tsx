@@ -1,14 +1,15 @@
 import { useDispatch } from "react-redux";
 import React, { FC, useEffect, useLayoutEffect } from "react";
 import { isEmpty } from "lodash";
+import { StackActions } from "@react-navigation/native";
 
 import {
-  CancelAndLogOutHeaderButton,
   Screen,
   TextFieldCard,
   ButtonCard,
   Space,
   RightChevronButton,
+  CircleIconButton,
 } from "../../../components";
 import { UnauthorizedScreenProps } from "../../../navigation";
 import { getPrettyStringFromHours } from "../../../utils/time";
@@ -22,7 +23,6 @@ import {
   useSignOut,
   useAuth,
 } from "../../../redux";
-import { StackActions } from "@react-navigation/native";
 
 export const Onboarding1Screen: FC<
   UnauthorizedScreenProps<"onboarding-1-screen">
@@ -66,7 +66,9 @@ export const Onboarding1Screen: FC<
     navigation.setOptions({
       headerTitle: `Welcome ${user?.firstName || ""}`,
       headerLeft: () => (
-        <CancelAndLogOutHeaderButton
+        <CircleIconButton
+          isHeaderLeft
+          iconType="account-cancel"
           onPress={() => {
             signOut();
           }}
@@ -147,7 +149,7 @@ export const Onboarding1Screen: FC<
           navigation.navigate("modals", {
             screen: "selector-modal-screen",
             params: {
-              type: "onboarding-staff",
+              type: "staff",
             },
           })
         }

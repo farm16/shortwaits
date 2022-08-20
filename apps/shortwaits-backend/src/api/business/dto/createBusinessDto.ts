@@ -5,11 +5,13 @@ import {
   IsPhoneNumber,
   IsString,
   MaxLength,
-} from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
-import { Trim } from 'class-sanitizer';
+} from "class-validator";
+import { ApiProperty } from "@nestjs/swagger";
+import { Trim } from "class-sanitizer";
+import { BusinessEndpointsTypes } from "@shortwaits/shared-types";
 
-export class CreateBusinessDto {
+type DTO = BusinessEndpointsTypes["business/"]["methods"]["POST"]["body"];
+export class CreateBusinessDto implements DTO {
   @Trim()
   @IsString()
   @IsNotEmpty()

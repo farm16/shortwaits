@@ -40,7 +40,7 @@ export const staticCustomColors = {
   gray: "hsl(300,1%, 60%)",
   darkGray: "hsl(300,1%, 20%)",
 
-  text: "#6E7480",
+  text: "hsl(300,1%, 10%)",
   lightText: "#c1c4ca",
   darkText: "#2e3234",
   subText: "hsl(215,23%,40%)",

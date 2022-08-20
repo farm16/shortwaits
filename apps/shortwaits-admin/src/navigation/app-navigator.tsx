@@ -16,7 +16,8 @@ import {
   UnauthorizedNavigator,
   AuthorizedNavigator,
 } from "./stacks";
-import { useAuth, useBusiness, useUser } from "../redux";
+import { useAuth, useBusiness, useMobileAdminModal, useUser } from "../redux";
+import { PremiumMembershipModal } from "../components";
 
 const RootStack = createStackNavigator<RootStackParamList>();
 
@@ -75,7 +76,8 @@ export const AppNavigator = (props: NavigationProps): React.ReactElement => {
   useFlipper(navigationRef);
   const colorScheme = useColorScheme();
   useBackButtonHandler(canExit);
-
+  const { isModalOpen } = useMobileAdminModal("premiumMembership");
+  console.log("isModalOpen >>>", isModalOpen);
   return (
     <NavigationContainer
       ref={navigationRef}
@@ -83,6 +85,7 @@ export const AppNavigator = (props: NavigationProps): React.ReactElement => {
       {...props}
     >
       <AppStack />
+      <PremiumMembershipModal visible={isModalOpen} onDismiss={() => null} />
     </NavigationContainer>
   );
 };
