@@ -27,7 +27,7 @@
       "rules": {}
     },
     {
-      "files": ["*.js", "*.jsx"],
+      "files": ["*.js", "*.jsx", "*.mjs"],
       "extends": ["plugin:@nrwl/nx/javascript"],
       "rules": {}
     }

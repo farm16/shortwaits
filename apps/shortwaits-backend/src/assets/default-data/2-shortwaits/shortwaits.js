@@ -1,12 +1,11 @@
-import { ShortwaitsAdminDefaultDataPayloadType } from "@shortwaits/shared-types";
-import { getObjectId } from "mongo-seeding";
-import * as defaultCategories from "../1-categories/categories";
+const { getObjectId } = require("mongo-seeding");
+const categories = require("../1-categories/categories");
 
-const defaultCategory = defaultCategories.find(
+const defaultCategory = categories.find(
   (category) => category.short_id === "1020"
 );
 
-const shortwaitsAdminDefaultData: ShortwaitsAdminDefaultDataPayloadType[] = [
+const shortwaitsAdminDefaultData = [
   {
     _id: getObjectId("0000001"),
     short_id: "0000001",
@@ -66,9 +65,9 @@ const shortwaitsAdminDefaultData: ShortwaitsAdminDefaultDataPayloadType[] = [
         {
           name: "Service I - 15 mins",
           applicableCategories: [
-            defaultCategories[0]._id,
-            defaultCategories[1]._id,
-            defaultCategories[2]._id,
+            categories[0]._id,
+            categories[1]._id,
+            categories[2]._id,
           ],
           hours: {
             mon: [
@@ -144,9 +143,9 @@ const shortwaitsAdminDefaultData: ShortwaitsAdminDefaultDataPayloadType[] = [
         {
           name: "Service II - 1 hr",
           applicableCategories: [
-            defaultCategories[0]._id,
-            defaultCategories[1]._id,
-            defaultCategories[2]._id,
+            categories[0]._id,
+            categories[1]._id,
+            categories[2]._id,
           ],
           hours: {
             mon: [
@@ -273,9 +272,9 @@ const shortwaitsAdminDefaultData: ShortwaitsAdminDefaultDataPayloadType[] = [
             ],
           },
           applicableCategories: [
-            defaultCategories[0]._id,
-            defaultCategories[1]._id,
-            defaultCategories[2]._id,
+            categories[0]._id,
+            categories[1]._id,
+            categories[2]._id,
           ],
           description: "Describe your service here =)",
           durationInMin: 180,
@@ -368,4 +367,4 @@ const shortwaitsAdminDefaultData: ShortwaitsAdminDefaultDataPayloadType[] = [
     },
   },
 ];
-export = shortwaitsAdminDefaultData;
+module.exports = shortwaitsAdminDefaultData;

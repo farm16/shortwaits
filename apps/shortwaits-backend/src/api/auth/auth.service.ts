@@ -15,8 +15,9 @@ import { User } from "../users/entities/user.entity";
 import { SignUpWithEmailDto } from "./dto/sign-up-with-email.dto";
 import { SignInWithEmailDto } from "./dto/sign-in-with-email.dto";
 import { Business } from "../business/entities/business.entity";
-import shortwaitsAdminDefaultData = require("../../assets/default-data/2-shortwaits/shortwaits");
 import { Service } from "../services/entities/service.entity";
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const shortwaitsAdmin = require("../../assets/default-data/2-shortwaits/shortwaits.js");
 
 @Injectable()
 export class AuthService {
@@ -55,14 +56,13 @@ export class AuthService {
         createdBy: [currentUser._id],
         updatedBy: [currentUser._id],
         staff: [currentUser._id],
-        hours: shortwaitsAdminDefaultData[0].sampleBusinessData.hours,
+        hours: shortwaitsAdmin[0].sampleBusinessData.hours,
       });
-      const services =
-        shortwaitsAdminDefaultData[0].sampleBusinessData.services.map(
-          (service) => {
-            return { ...service, businessId: newBusinessAccount._id };
-          }
-        );
+      const services = shortwaitsAdmin[0].sampleBusinessData.services.map(
+        (service) => {
+          return { ...service, businessId: newBusinessAccount._id };
+        }
+      );
       const insertedServices = await this.serviceModel.insertMany(services);
       const servicesIds = insertedServices.map((service) => service._id);
 

@@ -8,9 +8,5 @@
     "target": "es2015"
   },
   "exclude": ["jest.config.ts", "**/*.spec.ts", "**/*.test.ts"],
-  "include": [
-    "**/*.ts",
-    "scripts/seeds/default-data.mjs",
-    "scripts/create-key-pair.mjs"
-  ]
+  "include": ["**/*.ts", "**/*.js"]
 }

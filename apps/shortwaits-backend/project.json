@@ -57,7 +57,7 @@
       "configurations": {
         "default-data": {
           "commands": [
-            "DEBUG=mongo-seeding ts-node apps/shortwaits-backend/src/scripts/seed-default-data.mjs --project"
+            "DEBUG=mongo-seeding node apps/shortwaits-backend/scripts/seeds/default-data.js"
           ]
         }
       }

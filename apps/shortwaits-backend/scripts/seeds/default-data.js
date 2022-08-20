@@ -1,9 +1,10 @@
-import * as path from "path";
-import * as dotenv from "dotenv";
-import { Seeder } from "mongo-seeding";
+const path = require("path");
+const dotenv = require("dotenv");
+const { Seeder } = require("mongo-seeding");
 
-dotenv.config({ path: "./src/assets/development.env" });
+dotenv.config({ path: "apps/shortwaits-backend/src/assets/development.env" });
 
+console.log("TARGETING => " + process.env.MONGO_DB_URL);
 const config = {
   database: process.env.MONGO_DB_URL,
   dropDatabase: true,
@@ -12,7 +13,7 @@ const config = {
 const seeder = new Seeder(config);
 
 const collections = seeder.readCollectionsFromPath(
-  path.resolve("./src/scripts/default-data"),
+  path.resolve("./apps/shortwaits-backend/src/assets/default-data"),
   {
     extensions: ["js", "json", "ts"],
     transformers: [Seeder.Transformers.replaceDocumentIdWithUnderscoreId],
