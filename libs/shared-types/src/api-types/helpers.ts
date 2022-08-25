@@ -1,28 +1,28 @@
 import { ObjectId } from "../common";
 
 export type ApiResponseWithPayload<Payload> = {
-  readonly status: "success" | "error" | "pending";
-  readonly success: boolean;
-  readonly data: Payload;
-  readonly messages?: readonly string[];
+  status: "success" | "error" | "pending";
+  success: boolean;
+  data: Payload;
+  messages?: string[];
 };
 
 export type RegisterWithEmailRequest = {
-  readonly firstName?: string;
-  readonly lastName?: string;
-  readonly email?: string;
-  readonly password?: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  password?: string;
 };
 
 export type DocType<T = never> = T & {
-  readonly _id: ObjectId;
+  _id: ObjectId;
 };
 
 export type SuccessResponseType<Payload = never> = {
-  readonly status: "success" | "pending";
-  readonly success: boolean;
-  readonly message: string;
-  readonly data: Payload;
+  status: "success" | "pending";
+  success: boolean;
+  message: string;
+  data: Payload;
 };
 export type SuccessResponseFnType<Payload = never> = (
   payload: Payload,
@@ -33,18 +33,18 @@ export type SuccessResponseFnType<Payload = never> = (
 export type ErrorResponseFnType = (
   code: ErrorCodeType,
   message: string,
-  errors: readonly ErrorsWithCodeType[]
+  errors: ErrorsWithCodeType[]
 ) => ErrorResponseType;
 
 export type ErrorResponseType = ErrorsWithCodeType & {
-  readonly status: "error";
-  readonly success: false;
-  readonly errors: readonly ErrorsWithCodeType[];
+  status: "error";
+  success: false;
+  errors: ErrorsWithCodeType[];
 };
 
 export type ErrorsWithCodeType = {
-  readonly code: ErrorCodeType;
-  readonly message?: string;
+  code: ErrorCodeType;
+  message?: string;
 };
 export type ErrorCodeType = keyof typeof ERROR_CODES;
 

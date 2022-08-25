@@ -7,6 +7,7 @@ export * from "./service-colors/service-colors";
 export * from "./service-avatar/service-avatar";
 export * from "./time-picker/time-picker";
 export * from "./logo-view/logo-view";
+export * from "./calendar/calendar";
 export * from "./headers";
 export * from "./common";
 export * from "./cards";

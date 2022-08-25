@@ -1,38 +1,35 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React, { useCallback, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { ServicesType } from "@shortwaits/shared-types";
+import { DocType, ServicesType } from "@shortwaits/shared-types";
 
 import { Space, Text, Button, ScrollView } from "../common";
 import { ServiceColors } from "../service-colors/service-colors";
 import { useMobileAdmin } from "../../redux";
 import { TextFieldCard, TimeDurationCard, CurrencyFieldCard } from "../cards";
 
-interface SimpleServiceFormProps {
+export interface ServiceForm {
+  data: DocType<ServicesType>;
   mode: "update" | "create";
-  initialValues: Partial<ServicesType> | undefined;
-  onSubmit: (serviceFormData: Partial<ServicesType>) => void;
+}
+interface SimpleServiceFormProps {
+  mode: ServiceForm["mode"];
+  initialValues: ServiceForm["data"];
 }
 
 export function SimpleServiceForm({
   mode,
   initialValues,
-  onSubmit,
 }: SimpleServiceFormProps) {
-  const defaultData = useMobileAdmin();
+  const mobileAdminData = useMobileAdmin();
 
-  const [form, setForm] = useState<Partial<ServicesType>>({
-    name: "",
-    durationInMin: 15,
-    price: 150,
-    serviceColor: defaultData?.serviceColors.red,
-    currency: "USD",
-    description: "",
-    imageUrl: "",
-  });
+  const [form, setForm] = useState<ServiceForm["data"]>(null);
 
   useEffect(() => {
-    if (mode === "update" && initialValues) {
+    if (mode === "update") {
+      setForm({ ...initialValues });
+    }
+    if (mode === "create") {
       setForm({ ...initialValues });
     }
   }, [mode, initialValues]);
@@ -46,17 +43,17 @@ export function SimpleServiceForm({
       durationInMin: durationTime ? durationTime[0] : 0,
     }));
   }, []);
-  const handleServiceColorChange = useCallback(
-    (serviceColor) => {
-      setForm((formValues) => ({
-        ...formValues,
-        serviceColor: serviceColor
-          ? serviceColor
-          : defaultData?.serviceColors.red,
-      }));
-    },
-    [defaultData?.serviceColors.red]
-  );
+  const handleServiceColorChange = useCallback((serviceColor) => {
+    setForm((formValues) => ({
+      ...formValues,
+      serviceColor: serviceColor,
+    }));
+  }, []);
+
+  if (!form) {
+    return null;
+  }
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.header}>
@@ -104,7 +101,7 @@ export function SimpleServiceForm({
         <Space />
         <Button text="Advance Options" preset="outline" />
         <Space size="small" />
-        <Button text="Save" onPress={() => onSubmit(form)} />
+        <Button text="Save" onPress={() => null} />
         <Space size="large" />
       </View>
     </ScrollView>

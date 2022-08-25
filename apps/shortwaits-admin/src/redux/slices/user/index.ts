@@ -44,15 +44,6 @@ export const userSlice = createSlice({
             ...action.payload.attributes.currentUser,
           };
         }
-      )
-      .addMatcher(
-        shortwaitsApi.endpoints.postBusinessRegistration.matchFulfilled,
-        function (state, action) {
-          return {
-            ...state,
-            ...action.payload.data,
-          };
-        }
       );
   },
 });

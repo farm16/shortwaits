@@ -61,7 +61,7 @@
     "react": "18.2.0",
     "react-native": "0.69.3",
     "react-native-app-intro-slider": "^4.0.4",
-    "react-native-calendars": "^1.1284.0",
+    "react-native-calendars": "^1.1288.2",
     "react-native-currency-input": "^1.0.1",
     "react-native-datepicker": "^1.7.2",
     "react-native-flipper": "^0.157.0",

@@ -6,10 +6,13 @@ import { Portal } from "@gorhom/portal";
 import { useTheme } from "../../../theme";
 import { BottomSheetProps } from "./bottom-sheet-types";
 
-const defaultSnapPointsLevels = {
+export const defaultSnapPointsLevels = {
   1: ["35%"],
   2: ["35%", "60%"],
   3: ["35%", "60%", "85%"],
+  4: ["85%", "60%", "35%"],
+  5: ["85%", "60%"],
+  6: ["85%"],
 };
 
 export const BottomSheet = forwardRef(

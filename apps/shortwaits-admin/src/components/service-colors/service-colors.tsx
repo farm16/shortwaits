@@ -44,29 +44,35 @@ function Circle({
 }
 
 export function ServiceColors({ color, onSelect }: ServiceColorsProps) {
-  const defaultData = useMobileAdmin();
+  const mobileAdminData = useMobileAdmin();
 
   const { width } = getDimensions(87);
 
-  const colorsSize: number = defaultData
-    ? Object.keys(defaultData.serviceColors).length
+  const colorsNumber: number = mobileAdminData
+    ? Object.keys(mobileAdminData?.defaultData?.serviceColors).length
     : 0;
 
-  const circleWidth = width / (colorsSize * 1.9);
+  const circleWidth = width / (colorsNumber * 1.9);
 
-  if (!defaultData) return null;
+  if (!mobileAdminData) return null;
   if (!color) return null;
 
   return (
     <View style={[styles.container, { width }]}>
-      {Object.keys(defaultData?.serviceColors ?? []).map((elem) => (
+      {Object.keys(mobileAdminData.defaultData?.serviceColors).map((elem) => (
         <Circle
-          key={defaultData?.serviceColors[elem].colorId}
-          onSelect={() => onSelect(defaultData?.serviceColors[elem])}
+          key={mobileAdminData.defaultData?.serviceColors[elem].colorId}
+          onSelect={() =>
+            onSelect(mobileAdminData.defaultData?.serviceColors[elem])
+          }
           width={circleWidth}
-          color={defaultData?.serviceColors[elem].hexCode ?? "#ffffff"}
+          color={
+            mobileAdminData.defaultData?.serviceColors[elem].hexCode ??
+            "#ffffff"
+          }
           isSelected={
-            defaultData?.serviceColors[elem].colorId === color?.colorId
+            mobileAdminData.defaultData?.serviceColors[elem].colorId ===
+            color?.colorId
           }
           isDefault={false}
         />

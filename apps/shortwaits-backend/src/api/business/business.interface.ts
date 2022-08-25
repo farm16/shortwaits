@@ -1,5 +1,5 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { Business } from './entities/business.entity';
+import { ApiProperty } from "@nestjs/swagger";
+import { Business } from "./entities/business.entity";
 
 export class BusinessSuccessResponse {
   @ApiProperty()

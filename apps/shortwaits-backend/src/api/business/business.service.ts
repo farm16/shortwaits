@@ -5,17 +5,15 @@ import {
   ForbiddenException,
   Injectable,
   NotFoundException,
+  PreconditionFailedException,
 } from "@nestjs/common";
 import {
   BusinessType,
-  ServicesType,
   ObjectId,
   BusinessHoursType,
   BusinessPayloadType,
 } from "@shortwaits/shared-types";
 import { Business } from "./entities/business.entity";
-import { CreateBusinessDto } from "./dto/createBusinessDto";
-import { UpdateBusinessDto } from "./dto/updateBusinessDto";
 import { Service } from "../services/entities/service.entity";
 import { User } from "../users/entities/user.entity";
 
@@ -38,6 +36,16 @@ export class BusinessService {
     } else {
       throw new ForbiddenException("Can't access business record");
     }
+  }
+
+  filterBusiness(business: BusinessPayloadType) {
+    delete business.admins;
+    delete business.backgroundAdmins;
+    delete business.superAdmins;
+    delete business.deleted;
+    delete business.isRegistrationCompleted;
+    delete business.createdBy;
+    return business;
   }
 
   async findBusinessById(businessId: string | ObjectId) {
@@ -66,20 +74,49 @@ export class BusinessService {
       return businessData;
     }
   }
+
   async updateBusiness(
     userId: string,
-    business: Partial<BusinessPayloadType>
+    business: BusinessPayloadType,
+    isRegistration?: boolean
   ): Promise<Business> {
-    const businessData = await this.findBusinessById(business._id);
+    const filteredBusiness = this.filterBusiness(business);
+    if (isRegistration) filteredBusiness.isRegistrationCompleted = true;
+    const updatedBusiness = await this.businessModel.findByIdAndUpdate(
+      filteredBusiness._id,
+      filteredBusiness,
+      { new: true }
+    );
 
     const { isAdmin, isSuperAdmin } = this.isUserAdminType(
-      businessData,
+      updatedBusiness,
       userId
     );
 
     if (isAdmin || isSuperAdmin) {
-      return businessData;
+      return await updatedBusiness.save();
     }
+  }
+
+  async registerBusiness(
+    userId: string,
+    business: BusinessPayloadType
+  ): Promise<Business> {
+    if (business.services.length === 0) {
+      throw new PreconditionFailedException({
+        error: "Precondition Failed",
+        message: "Unable to register business\n missing: services.",
+        statusCode: 412,
+      });
+    }
+    if (business.categories.length === 0) {
+      throw new PreconditionFailedException({
+        error: "Precondition Failed",
+        message: "Unable to register business\n missing: categories.",
+        statusCode: 412,
+      });
+    }
+    return this.updateBusiness(userId, business, true);
   }
 
   async updateBusinessHours(
@@ -104,11 +141,6 @@ export class BusinessService {
     }
   }
 
-  async createBusiness(dto: CreateBusinessDto): Promise<Business> {
-    const newBusiness = await (await this.businessModel.create(dto)).save();
-    return newBusiness;
-  }
-
   async findByKey(
     businessId: string,
     key: keyof BusinessType
@@ -118,52 +150,6 @@ export class BusinessService {
       .exec();
     console.log("findByKey>>>", businessId, key, data);
     return data;
-  }
-
-  async registerBusiness(dto: {
-    userId: string;
-    services: Partial<ServicesType>[];
-    business: Partial<BusinessType>;
-  }): Promise<{ business: Business; user: User }> {
-    // console.log('userId >>>', dto.userId);
-    // console.log('newServices >>>', dto.services);
-    // console.log('business >>>', dto.business);
-
-    const services = dto.services.map((service) => {
-      return { ...service, businessId: dto.userId };
-    });
-    const insertedServices = await this.serviceModel.insertMany(services);
-
-    const servicesIds = insertedServices.map((service) => service._id);
-
-    const business = await this.businessModel.create({
-      ...dto.business,
-      services: servicesIds,
-      isRegistrationCompleted: true,
-      admins: [dto.userId],
-      superAdmin: [dto.userId],
-      createdBy: [dto.userId],
-      updatedBy: [dto.userId],
-    });
-
-    const user = await this.userModel.findByIdAndUpdate(
-      dto.userId,
-      {
-        $push: {
-          businesses: business._id,
-        },
-        registrationState: {
-          screenName: "",
-          state: 1,
-          isCompleted: true,
-        },
-      },
-      { new: true }
-    );
-
-    console.log("registration: new user >>> ", user);
-
-    return { business, user };
   }
 
   async getStaff(businessId: string, userId: string) {

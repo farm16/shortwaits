@@ -1,6 +1,11 @@
 import { BusinessHoursType, BusinessType } from "..";
 
-import { DocType, SuccessResponseType } from ".";
+import {
+  CommonResponseType,
+  DocType,
+  ServicesPayloadType,
+  SuccessResponseType,
+} from ".";
 
 export type BusinessSuccessResponseType =
   SuccessResponseType<BusinessPayloadType>;
@@ -12,91 +17,121 @@ export type BusinessSuccessFnType = (
   message: string
 ) => BusinessSuccessResponseType;
 
+export type BusinessEndpoints = keyof BusinessEndpointsTypes;
+
+export type BusinessEndpointsPaths =
+  | BusinessEndpointsTypes["/business"]["path"]
+  | BusinessEndpointsTypes["/business/:business_id"]["path"]
+  | BusinessEndpointsTypes["/business/:business_id/admins"]["path"]
+  | BusinessEndpointsTypes["/business/:business_id/services"]["path"]
+  | BusinessEndpointsTypes["/business/:business_id/categories"]["path"]
+  | BusinessEndpointsTypes["/business/:business_id/staff"]["path"]
+  | BusinessEndpointsTypes["/business/:business_id/hours"]["path"]
+  | BusinessEndpointsTypes["/business"]["path"];
+
+export type BusinessEndpointsMethods =
+  | keyof BusinessEndpointsTypes["/business"]["methods"]
+  | keyof BusinessEndpointsTypes["/business/:business_id"]["methods"]
+  | keyof BusinessEndpointsTypes["/business/:business_id/admins"]["methods"]
+  | keyof BusinessEndpointsTypes["/business/:business_id/services"]["methods"]
+  | keyof BusinessEndpointsTypes["/business/:business_id/categories"]["methods"]
+  | keyof BusinessEndpointsTypes["/business/:business_id/staff"]["methods"]
+  | keyof BusinessEndpointsTypes["/business/:business_id/hours"]["methods"]
+  | keyof BusinessEndpointsTypes["/business"]["methods"];
 export interface BusinessEndpointsTypes {
-  "business/": {
+  "/business": {
+    path: `/business`;
     methods: {
-      POST: {
-        params: undefined;
-        body: {
-          country: string;
-          phone1: string;
-          shortName: string;
-          longName: string;
-          description: string;
-          isRegistrationCompleted: boolean;
-          staff: [];
-          categories: [];
-          services: [];
-        };
-        return: BusinessType;
+      PUT: {
+        query: [];
+        body: BusinessPayloadType;
+        response: CommonResponseType<BusinessPayloadType>;
       };
     };
   };
-  "business/:business_id": {
+  "/business/register": {
+    path: `/business/register`;
     methods: {
-      GET: {
-        params: ["business_id"];
-        body: undefined;
-        return: BusinessType;
+      PUT: {
+        query: [];
+        body: BusinessPayloadType;
+        response: CommonResponseType<BusinessPayloadType>;
       };
     };
   };
-  "business/:business_id/admins": {
+  "/business/:business_id": {
+    path: `/business/${string}`;
     methods: {
       GET: {
-        params: ["business_id"];
+        query: [];
         body: undefined;
-        return: BusinessType;
+        response: CommonResponseType<BusinessType>;
       };
     };
   };
-  "business/:business_id/services": {
+  "/business/:business_id/admins": {
+    path: `/business/${string}/admin`;
     methods: {
       GET: {
-        params: ["business_id"];
+        query: [];
         body: undefined;
-        return: BusinessType;
+        response: CommonResponseType<BusinessType>;
       };
     };
   };
-  "business/:business_id/categories": {
+  "/business/:business_id/services": {
+    path: `/business/${string}/services`;
     methods: {
       GET: {
-        params: ["business_id"];
+        query: [];
         body: undefined;
-        return: BusinessType;
-      };
-    };
-  };
-  "business/:business_id/staff": {
-    methods: {
-      GET: {
-        params: ["business_id"];
-        body: undefined;
-        return: BusinessType;
-      };
-    };
-  };
-  "business/:business_id/hours": {
-    methods: {
-      GET: {
-        params: ["business_id"];
-        body: undefined;
-        return: BusinessType;
+        response: CommonResponseType<ServicesPayloadType>;
       };
       PUT: {
-        params: ["business_id"];
-        body: { hours: BusinessHoursType };
-        return: BusinessType;
+        query: [];
+        body: ServicesPayloadType;
+        response: CommonResponseType<ServicesPayloadType>;
+      };
+      POST: {
+        query: [];
+        body: ServicesPayloadType;
+        response: CommonResponseType<ServicesPayloadType>;
       };
     };
   };
-  "business/registration": {
+
+  "/business/:business_id/categories": {
+    path: `/business/${string}/categories`;
     methods: {
       GET: {
-        params: ["business_id"];
+        query: [];
         body: undefined;
-        return: BusinessType;
+        response: CommonResponseType<BusinessType>;
+      };
+    };
+  };
+  "/business/:business_id/staff": {
+    path: `/business/${string}/staff`;
+    methods: {
+      GET: {
+        query: [];
+        body: undefined;
+        response: CommonResponseType<BusinessType>;
+      };
+    };
+  };
+  "/business/:business_id/hours": {
+    path: `/business/${string}/hours`;
+    methods: {
+      GET: {
+        query: [];
+        body: undefined;
+        response: CommonResponseType<BusinessType>;
+      };
+      PUT: {
+        query: [];
+        body: { hours: BusinessHoursType };
+        response: CommonResponseType<BusinessType>;
       };
     };
   };

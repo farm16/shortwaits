@@ -216,6 +216,7 @@ export const CircleIconButton: FC<
     iconType = "default",
     style: styleOverride,
     text,
+    textStyle,
     //isHeaderRight = true,
     isHeaderLeft,
     ...rest
@@ -256,7 +257,10 @@ export const CircleIconButton: FC<
         />
       )}
       {text ? (
-        <Text style={{ color: Colors.brandSecondary7 }} text={text} />
+        <Text
+          style={[{ color: Colors.brandSecondary7 }, textStyle]}
+          text={text}
+        />
       ) : null}
     </Button>
   );

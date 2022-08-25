@@ -3,20 +3,20 @@ import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions
 
 import { shortwaitsApiEndpoints } from "../../../../configs";
 
-const { putBusinessHours } = shortwaitsApiEndpoints.BUSINESS;
+const { updateBusinessHours } = shortwaitsApiEndpoints.BUSINESS;
 
 type RequestType = {
   businessId: string;
-  payload: BusinessEndpointsTypes["business/:business_id/hours"]["methods"]["PUT"]["body"];
+  payload: BusinessEndpointsTypes["/business/:business_id/hours"]["methods"]["PUT"]["body"];
 };
 type ResponseType =
-  BusinessEndpointsTypes["business/:business_id/hours"]["methods"]["PUT"]["return"];
+  BusinessEndpointsTypes["/business/:business_id/hours"]["methods"]["PUT"]["response"];
 
 export default (builder: EndpointBuilder<any, any, any>) =>
   builder.mutation<ResponseType, RequestType>({
     query: ({ businessId, payload }) => ({
-      url: putBusinessHours.getPath(businessId),
-      method: putBusinessHours.METHOD,
+      url: updateBusinessHours.getPath(businessId),
+      method: updateBusinessHours.METHOD,
       body: payload,
     }),
   });

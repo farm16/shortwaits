@@ -8,8 +8,6 @@ export default (builder: EndpointBuilder<any, any, any>) =>
   builder.query<ShortwaitsAdminDefaultDataSuccessResponseType, never>({
     query: () => getAdminMobile.PATH,
     transformResponse: (
-      response: ShortwaitsAdminDefaultDataSuccessResponseType,
-      meta,
-      arg
+      response: ShortwaitsAdminDefaultDataSuccessResponseType
     ) => response,
   });

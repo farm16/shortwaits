@@ -3,17 +3,18 @@ import GetBusinessCategory from "./get-categories";
 import GetBusinessServices from "./get-services";
 import GetBusinessHours from "./get-hours";
 import GetBusinessStaff from "./get-staff";
-import PostBusinessServices from "./post-services";
-import PostBusinessRegistration from "./post-registration-business";
-import PostBusinessHours from "./post-business-hours";
-
+import UpdateBusinessServices from "./update-services";
+import UpdateBusinessHours from "./update-hours";
+import UpdateBusiness from "./update-business";
+import RegisterBusiness from "./register-business";
 export {
   GetBusiness,
   GetBusinessCategory,
   GetBusinessServices,
   GetBusinessHours,
   GetBusinessStaff,
-  PostBusinessServices,
-  PostBusinessRegistration,
-  PostBusinessHours,
+  UpdateBusiness,
+  UpdateBusinessServices,
+  UpdateBusinessHours,
+  RegisterBusiness,
 };

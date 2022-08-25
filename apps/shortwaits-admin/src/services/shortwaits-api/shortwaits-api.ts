@@ -11,7 +11,7 @@ import {
 } from "@reduxjs/toolkit/query/react";
 import { Mutex } from "async-mutex";
 import { TokenPayloadType } from "@shortwaits/shared-types";
-
+import { Alert } from "react-native";
 //modules
 import {
   GetAdminMobile,
@@ -22,16 +22,16 @@ import {
   GetBusinessHours,
   GetBusinessServices,
   GetBusinessStaff,
-  PostBusinessServices,
-  PostBusinessRegistration,
   GetCategory,
   GetCategories,
   GetService,
   GetServicesByBusiness,
   GetUser,
-  PostBusinessHours,
+  UpdateBusinessServices,
+  UpdateBusinessHours,
+  RegisterBusiness,
+  UpdateBusiness,
 } from "./modules";
-import { Alert } from "react-native";
 
 const API_BASE_URL = shortwaitsApiEndpoints.API_BASE_URL;
 const AUTH = shortwaitsApiEndpoints.AUTH;
@@ -140,9 +140,10 @@ export const shortwaitsApi = createApi({
     getBusinessHours: GetBusinessHours(builder),
     getBusinessServices: GetBusinessServices(builder),
     getBusinessStaff: GetBusinessStaff(builder),
-    postBusinessServices: PostBusinessServices(builder),
-    postBusinessHours: PostBusinessHours(builder),
-    postBusinessRegistration: PostBusinessRegistration(builder),
+    updateBusinessServices: UpdateBusinessServices(builder),
+    updateBusiness: UpdateBusiness(builder),
+    updateBusinessHours: UpdateBusinessHours(builder),
+    registerBusiness: RegisterBusiness(builder),
     //categories (business)
     getCategory: GetCategory(builder),
     getCategories: GetCategories(builder),
@@ -156,11 +157,12 @@ export const shortwaitsApi = createApi({
 
 export const {
   //Mutations hooks
+  useRegisterBusinessMutation,
   useLocalSignUpMutation,
   useLocalSignInMutation,
-  usePostBusinessServicesMutation,
-  usePostBusinessRegistrationMutation,
-  usePostBusinessHoursMutation,
+  useUpdateBusinessMutation,
+  useUpdateBusinessServicesMutation,
+  useUpdateBusinessHoursMutation,
   //Query hooks
   useGetAdminMobileQuery,
   useGetBusinessQuery,

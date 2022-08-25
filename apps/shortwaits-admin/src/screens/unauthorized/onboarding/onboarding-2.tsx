@@ -1,42 +1,42 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { useDispatch } from "react-redux";
-import { FlatList, StyleSheet, View } from "react-native";
+import { FlatList, StyleSheet } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { CompositeNavigationProp } from "@react-navigation/native";
-import { ServicesType } from "@shortwaits/shared-types";
+import { DocType, ServicesType } from "@shortwaits/shared-types";
+import { skipToken } from "@reduxjs/toolkit/dist/query";
+import { ActivityIndicator, AnimatedFAB } from "react-native-paper";
 
 import {
   ServiceCard,
   Screen,
-  SubmitHeaderIconButton,
   LeftChevronButton,
   Space,
   BottomSheet,
   BottomSheetType,
   useBottomSheet,
-  MultipleHeaderButtons,
+  Button,
   SimpleServiceForm,
-  Container,
+  ServiceForm,
 } from "../../../components";
 import { useTheme } from "../../../theme";
 import {
   RootStackParamList,
   UnauthorizedStackParamList,
 } from "../../../navigation";
+import { useBusiness } from "../../../redux";
 import {
-  useMobileAdmin,
-  useUser,
-  useBusiness,
-  setSampleBusinessServicesByIndex,
-} from "../../../redux";
-import {
-  usePostBusinessRegistrationMutation,
   useGetServicesByBusinessQuery,
+  useRegisterBusinessMutation,
 } from "../../../services/shortwaits-api";
-import { skipToken } from "@reduxjs/toolkit/dist/query";
 
-export interface Onboarding2ScreenProps {
+export interface OnboardingScreenProps {
   navigation: CompositeNavigationProp<
     StackNavigationProp<UnauthorizedStackParamList, "onboarding-2-screen">,
     StackNavigationProp<RootStackParamList>
@@ -45,34 +45,57 @@ export interface Onboarding2ScreenProps {
 
 export type SampleBusinessServices = number;
 
-export const Onboarding2Screen = ({ navigation }: Onboarding2ScreenProps) => {
+export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
   const { Colors } = useTheme();
-  const [sampleServicesIndex, setSampleServicesIndex] = useState<number>(0);
-
+  const [form, setForm] = useState<ServiceForm>({
+    data: null,
+    mode: null,
+  });
   const business = useBusiness();
   const bottomSheetRef = useRef<BottomSheetType>(null);
   const handleBottomSheet = useBottomSheet(bottomSheetRef);
   const dispatch = useDispatch();
+  const [isExtended, setIsExtended] = useState(true);
 
-  const [registerBusiness, postBusinessRegistrationMutationStatus] =
-    usePostBusinessRegistrationMutation();
+  // const [registerBusiness, postBusinessRegistrationMutationStatus] =
+  //   usePostBusinessRegistrationMutation();
 
+  const onScroll = ({ nativeEvent }) => {
+    const currentScrollPosition =
+      Math.floor(nativeEvent?.contentOffset?.y) ?? 0;
+
+    setIsExtended(currentScrollPosition <= 0);
+  };
   //  TODO: user will not be able create new service during sign-up on update data
   const handleBusinessRegistration = useCallback(() => {
-    return registerBusiness(business);
-  }, [business, registerBusiness]);
+    return null;
+    // return registerBusiness(business);
+  }, []);
 
-  const servicesByBusinessQuery = useGetServicesByBusinessQuery(
+  const {
+    data: services,
+    // isError,
+    // isFetching,
+    isLoading,
+    isSuccess,
+  } = useGetServicesByBusinessQuery(
     business ? String(business?._id) : skipToken
   );
+  // console.log("services >>>", services);
+
+  useEffect(() => {
+    console.log("form >>>", form);
+  }, [form]);
 
   const handleCardOnPress = useCallback(
-    (index: number, _data: Partial<ServicesType>) => {
-      setSampleServicesIndex(index);
+    (item: DocType<ServicesType>) => {
+      setForm({ ...{ data: item, mode: "update" } });
       handleBottomSheet.expand();
     },
     [handleBottomSheet]
   );
+  const [registerBusiness, registerBusinessStatus] =
+    useRegisterBusinessMutation();
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -81,60 +104,85 @@ export const Onboarding2Screen = ({ navigation }: Onboarding2ScreenProps) => {
         <LeftChevronButton onPress={() => navigation.goBack()} />
       ),
       headerRight: () => (
-        <Container>
-          {/* <CircleIconButton
-            noMargin
-            iconType="add-services"
-          
-          /> */}
-          <SubmitHeaderIconButton onPress={handleBusinessRegistration} />
-        </Container>
+        <Button
+          preset="none"
+          text="Register"
+          onPress={() => registerBusiness(business)}
+          style={[
+            {
+              backgroundColor: Colors.white,
+              borderColor: Colors.brandPrimary,
+            },
+            styles.registerButton,
+          ]}
+          textStyle={[
+            {
+              color: Colors.brandPrimary,
+            },
+            styles.registerButtonText,
+          ]}
+        />
       ),
     });
-  }, [handleBusinessRegistration, navigation]);
+  }, [
+    Colors.brandPrimary,
+    Colors.white,
+    business,
+    handleBusinessRegistration,
+    navigation,
+    registerBusiness,
+  ]);
 
-  const ItemSeparatorComponent = () => (
-    <View
-      style={[
-        styles.listSeparator,
-        { borderTopColor: Colors.backgroundOverlay },
-      ]}
-    />
-  );
-  return (
-    <Screen preset="fixed" style={styles.container}>
-      <Space />
-      <FlatList
-        ItemSeparatorComponent={ItemSeparatorComponent}
-        contentContainerStyle={styles.contentContainer}
-        data={servicesByBusinessQuery.data.data}
-        renderItem={({ index, item }) => {
-          return (
-            <ServiceCard
-              service={item}
-              onPress={() => handleCardOnPress(index, item)}
-            />
-          );
-        }}
-        keyExtractor={(item, index) => item.name! + index}
-      />
-      <BottomSheet snapPoints={["77%"]} ref={bottomSheetRef}>
-        {/* <SimpleServiceForm
-          mode="update"
-          initialValues={servicesByBusinessQuery.data.data[sampleServicesIndex]}
-          onSubmit={(formData) => {
-            // dispatch(
-            //   setSampleBusinessServicesByIndex({
-            //     data: formData,
-            //     index: sampleServicesIndex,
-            //   })
-            // );
-            handleBottomSheet.close();
-          }} */}
+  if (isLoading || registerBusinessStatus.isLoading) {
+    return <ActivityIndicator />;
+  }
+  if (isSuccess) {
+    return (
+      <Screen unsafe preset="fixed" style={styles.container}>
+        <Space />
+        <FlatList
+          onScroll={onScroll}
+          ItemSeparatorComponent={() => <Space size="tiny" />}
+          contentContainerStyle={styles.contentContainer}
+          data={services.data}
+          renderItem={({ item }) => {
+            return (
+              <ServiceCard
+                service={item}
+                onPress={() => handleCardOnPress(item)}
+              />
+            );
+          }}
+          keyExtractor={(item) => String(item._id)}
         />
-      </BottomSheet>
-    </Screen>
-  );
+        <AnimatedFAB
+          icon={"text-box-plus"}
+          color={Colors.white}
+          label={"Add Service"}
+          extended={isExtended}
+          onPress={() => console.log("Pressed")}
+          visible={true}
+          animateFrom={"right"}
+          iconMode={"static"}
+          theme={{
+            colors: {
+              accent: Colors.brandSecondary6,
+            },
+          }}
+          style={styles.fab}
+        />
+        <BottomSheet
+          snapPointsLevel={6}
+          ref={bottomSheetRef}
+          onClose={() => setForm({ ...{ data: null, mode: null } })}
+        >
+          {form.data ? (
+            <SimpleServiceForm mode={form.mode} initialValues={form.data} />
+          ) : null}
+        </BottomSheet>
+      </Screen>
+    );
+  }
 };
 const styles = StyleSheet.create({
   container: {
@@ -149,5 +197,26 @@ const styles = StyleSheet.create({
   listSeparator: {
     borderTopWidth: 1,
     marginVertical: 5,
+  },
+  registerButton: {
+    borderWidth: 2,
+    paddingVertical: 1.75,
+    paddingHorizontal: 10,
+    marginHorizontal: 15,
+    borderRadius: 35,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  registerButtonText: {
+    fontSize: 14,
+    fontWeight: "600",
+    textTransform: "uppercase",
+  },
+  fab: {
+    position: "absolute",
+    marginRight: 25,
+    marginBottom: 40,
+    right: 0,
+    bottom: 0,
   },
 });

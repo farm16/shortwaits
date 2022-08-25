@@ -1,22 +1,26 @@
 import { Document } from "mongoose";
+import { ObjectId } from "..";
 
 import { PaginatedModel } from "./helpers";
 
-export type BusinessCategoryType = {
-  short_id: string;
+export type EventType = {
   name: string;
   keys: string[];
   description: string;
-  translations: {
-    languageCode: string;
-    languageName: string;
-    translation: string;
-  }[];
-  isDefault: boolean;
+  staffIds: ObjectId[];
+  clientIds: ObjectId[];
+  features: string[];
   state: number;
-  deleted?: boolean;
+  startTime: Date;
+  endTime: Date;
+  endTimeExpected: Date;
+  priceExpected: number;
+  priceFinal: number;
+  canceled: boolean;
+  cancellationsReason: string;
+  deleted: boolean;
 };
 
-export type CategoriesDocType = BusinessCategoryType & Document;
+export type EventDocType = EventType & Document;
 
-export type CategoriesModelType = PaginatedModel<CategoriesDocType>;
+export type EventModelType = PaginatedModel<EventDocType>;

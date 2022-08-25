@@ -1,6 +1,10 @@
 import React, { FC } from "react";
-import { Alert, Image, ImageBackground, StyleSheet, View } from "react-native";
-import { ServicesType } from "@shortwaits/shared-types";
+import { Alert, StyleSheet, View } from "react-native";
+import {
+  DocType,
+  ServicesPayloadType,
+  ServicesType,
+} from "@shortwaits/shared-types";
 
 import { Button, ButtonProps, Space, Text } from "../common";
 import { getDimensions, useTheme } from "../../theme";
@@ -11,7 +15,7 @@ import { ServiceAvatar } from "../service-avatar/service-avatar";
 const CARD_HEIGH = 90;
 
 interface ServiceCardProps extends ButtonProps {
-  service: Partial<ServicesType>;
+  service: DocType<ServicesType>;
 }
 
 export const ServiceCard: FC<ServiceCardProps> = (props) => {

@@ -115,7 +115,7 @@ export const SignInWithEmail: FC<SignInWithEmailScreenProps> = ({
         </View>
       </ScrollView>
       <Space />
-      <Button onPress={handleSubmit} preset="primary" text="Sign In" />
+      <Button onPress={() => handleSubmit()} preset="primary" text="Sign In" />
       <Space />
       <View style={{ flexDirection: "row", alignSelf: "center" }}>
         <Text

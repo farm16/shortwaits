@@ -11,7 +11,8 @@ export const Checkbox = (props: CheckBoxProps) => {
       {...props}
       onCheckColor={Colors.brandSecondary6}
       onTintColor={Colors.brandSecondary6}
-      boxType="square"
+      boxType="circle"
+      style={{ marginHorizontal: 5 }}
     />
   );
 };

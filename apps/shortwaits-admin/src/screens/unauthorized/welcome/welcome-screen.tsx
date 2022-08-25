@@ -5,13 +5,13 @@ import SplashScreen from "react-native-splash-screen";
 import { CompositeNavigationProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { Button, Space, Spinner, Text } from "../../../components";
+import { Button, Space, Text } from "../../../components";
 import { useTheme } from "../../../theme";
 import {
   RootStackParamList,
   UnauthorizedStackParamList,
 } from "../../../navigation";
-import { useBusiness, useMobileAdmin, useUser } from "../../../redux";
+import { useBusiness, useMobileAdmin } from "../../../redux";
 import { useGetAdminMobileQuery } from "../../../services/shortwaits-api";
 import { skipToken } from "@reduxjs/toolkit/dist/query/react";
 
@@ -28,7 +28,7 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation }) => {
   const mobileAdminData = useMobileAdmin();
 
   const { isLoading: isAdminMobileLoading } = useGetAdminMobileQuery(
-    mobileAdminData && skipToken
+    mobileAdminData.defaultData && skipToken
   );
 
   useEffect(() => {

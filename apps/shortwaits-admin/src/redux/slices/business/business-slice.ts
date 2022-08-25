@@ -20,16 +20,13 @@ export const businessSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      /**
-       * this happens when user signs up
-       */
-      // .addMatcher(
-      //   shortwaitsApi.endpoints.postBusinessRegistration.matchFulfilled,
-      //   (state, action) => ({
-      //     ...state,
-      //     ...action.payload.data.business,
-      //   })
-      // )
+      .addMatcher(
+        shortwaitsApi.endpoints.registerBusiness.matchFulfilled,
+        (state, action) => ({
+          ...state,
+          ...action.payload.data,
+        })
+      )
       .addMatcher(
         shortwaitsApi.endpoints.getBusiness.matchFulfilled,
         (state, action) => ({

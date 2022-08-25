@@ -1,14 +1,10 @@
 import {
   Body,
   Controller,
-  Delete,
-  ForbiddenException,
   Get,
   HttpCode,
   HttpStatus,
   Param,
-  Patch,
-  Post,
   Put,
   Req,
   UseGuards,
@@ -19,17 +15,8 @@ import { BusinessService } from "./business.service";
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
 import { BusinessSuccessResponse } from "./business.interface";
 import { AtGuard } from "../../common/guards";
-import { CreateBusinessDto } from "./dto/createBusinessDto";
 import { TransformInterceptor } from "../../common/interceptors/transform.interceptor";
-import { UpdateBusinessDto } from "./dto/updateBusinessDto";
-import {
-  BusinessEndpointsTypes,
-  BusinessHoursType,
-  BusinessPayloadType,
-  BusinessType,
-  ServicesType,
-} from "@shortwaits/shared-types";
-import { Business } from "./entities/business.entity";
+import { BusinessEndpointsTypes } from "@shortwaits/shared-types";
 
 /**
  *
@@ -46,16 +33,6 @@ import { Business } from "./entities/business.entity";
 export class BusinessController {
   constructor(private readonly businessService: BusinessService) {}
 
-  @Post() // virtually any registered user with valid token can create business
-  @HttpCode(HttpStatus.OK)
-  @ApiCreatedResponse({
-    status: HttpStatus.OK,
-    description: "Create business record",
-    type: BusinessSuccessResponse,
-  })
-  postBusiness(@Body(new ValidationPipe()) dto: CreateBusinessDto) {
-    return this.businessService.createBusiness(dto);
-  }
   @Put()
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
@@ -66,11 +43,9 @@ export class BusinessController {
   patchBusiness(
     @Req() request,
     @Body(new ValidationPipe())
-    dto: {
-      business: Partial<BusinessPayloadType>;
-    }
+    dto: BusinessEndpointsTypes["/business"]["methods"]["PUT"]["body"]
   ) {
-    return this.businessService.updateBusiness(request.user.sub, dto.business);
+    return this.businessService.updateBusiness(request.user.sub, dto);
   }
   /**
    * only admins of the business can retrieve full information
@@ -155,7 +130,7 @@ export class BusinessController {
     @Req() request,
     @Param("business_id") businessId: string,
     @Body()
-    dto: BusinessEndpointsTypes["business/:business_id/hours"]["methods"]["PUT"]["body"]
+    dto: BusinessEndpointsTypes["/business/:business_id/hours"]["methods"]["PUT"]["body"]
   ) {
     return this.businessService.updateBusinessHours(
       businessId,
@@ -163,22 +138,21 @@ export class BusinessController {
       dto
     );
   }
-
-  @Post("registration")
+  /**
+   * only admins of the business can retrieve full information
+   */
+  @Put("register")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
-    description: "Business registration",
+    description: "Register Business",
     type: BusinessSuccessResponse,
   })
-  postBusinessRegistration(
+  async registerBusiness(
+    @Req() request,
     @Body(new ValidationPipe())
-    dto: {
-      userId: string;
-      services: Partial<ServicesType>[];
-      business: Partial<BusinessType>;
-    }
+    dto: BusinessEndpointsTypes["/business"]["methods"]["PUT"]["body"]
   ) {
-    return this.businessService.registerBusiness(dto);
+    return this.businessService.registerBusiness(request.user.sub, dto);
   }
 }
