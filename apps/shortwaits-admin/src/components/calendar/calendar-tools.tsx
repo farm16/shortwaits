@@ -1,4 +1,5 @@
 import { isEmpty } from "lodash";
+import { intervalToDuration, formatDuration } from "date-fns";
 
 export function getFutureDates(numberOfDays: number) {
   const array: string[] = [];
@@ -53,6 +54,34 @@ export const today = new Date().toISOString().split("T")[0];
 export const fastDate = getPastDate(3);
 export const futureDates = getFutureDates(9);
 export const dates = [fastDate, today].concat(futureDates);
+
+export function milliSecondsToDuration(milliSeconds: number): Duration {
+  const epoch = new Date(0);
+  const secondsAfterEpoch = new Date(milliSeconds);
+  return intervalToDuration({
+    start: epoch,
+    end: secondsAfterEpoch,
+  });
+}
+
+export const getEventTime = (milliSeconds: number) => {
+  const formatDistanceLocale = {
+    xMinutes: "{{count}} min{{plural}}",
+    xHours: "{{count}} hr{{plural}}",
+  };
+
+  const shortEnLocale = {
+    formatDistance: (token, count) =>
+      formatDistanceLocale[token]
+        .replace("{{count}}", count)
+        .replace("{{plural}}", count > 1 ? "s" : ""),
+  };
+
+  return formatDuration(milliSecondsToDuration(milliSeconds), {
+    format: ["hours", "minutes"],
+    locale: shortEnLocale,
+  });
+};
 
 type MarkedDates = {
   [key: string]: object;

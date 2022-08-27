@@ -93,8 +93,8 @@ export const Onboarding1Screen: FC<
        * <Space />
        **/}
       <TextFieldCard
-        title="Business name"
-        placeholder="Shortwaits LLC"
+        title="Business Name"
+        placeholder={`The name of your business`}
         value={values.businessShortName}
         onChangeText={handleChange("businessShortName")}
         isTouched={touched.businessShortName}
@@ -102,7 +102,7 @@ export const Onboarding1Screen: FC<
       />
       <Space size="small" />
       <TextFieldCard
-        title="Business description"
+        title="Business Description"
         placeholder="A short description about your business"
         multiline
         maxLength={150} // get reduced to 140 by the form's validation
@@ -113,7 +113,7 @@ export const Onboarding1Screen: FC<
       />
       <Space size="small" />
       <ButtonCard
-        title="Business categories"
+        title="Business Categories"
         subTitle="Select any applicable category"
         onPress={() =>
           navigation.navigate("modals", {
@@ -130,7 +130,7 @@ export const Onboarding1Screen: FC<
        * schedule should default should be 5 days per week
        */}
       <ButtonCard
-        title="Business hours"
+        title="Business Hours"
         subTitle={getPrettyStringFromHours(businessState?.hours)}
         onPress={() =>
           navigation.navigate("modals", {

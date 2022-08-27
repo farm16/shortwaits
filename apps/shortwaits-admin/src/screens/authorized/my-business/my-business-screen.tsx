@@ -17,7 +17,7 @@ import { useGetBusinessStaffQuery } from "../../../services/shortwaits-api";
 
 const optionsPerPage = [2, 3, 4];
 
-export const StaffScreen = ({ navigation }) => {
+export const MyBusinessScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const business = useBusiness();
   const {

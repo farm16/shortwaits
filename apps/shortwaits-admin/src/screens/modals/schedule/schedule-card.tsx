@@ -42,18 +42,18 @@ export const ScheduleCard = ({ day, handlePress, type }: DayCardProps) => {
           disabled={!isActive}
           onPress={() => handlePress(name)}
         >
-          <Container direction="row">
+          <Container direction="row" style={{ alignItems: "center" }}>
             <Text
               preset="none"
               style={{
                 ...styles.weekDay,
-                color: isActive ? Colors.brandSecondary7 : Colors.gray,
+                color: isActive ? Colors.text : Colors.disabledText,
               }}
               text={name}
             />
             <Icon
               name="pencil"
-              color={isActive ? Colors.brandSecondary : Colors.gray}
+              color={isActive ? Colors.brandSecondary : Colors.disabledText}
               size={20}
             />
           </Container>

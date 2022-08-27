@@ -8,7 +8,6 @@ export interface ButtonCardProps extends Omit<CardProps, "mode"> {
   subTitle?: string;
 }
 export const ButtonCard = (props: ButtonCardProps) => {
-  const { Colors } = useTheme();
   const {
     title,
     subTitle,
@@ -25,13 +24,7 @@ export const ButtonCard = (props: ButtonCardProps) => {
       rightIconName={rightIconName}
     >
       <Text preset="cardTitle" text={title} />
-      {subTitle && (
-        <Text
-          preset="cardSubtitle"
-          style={{ color: Colors.text }}
-          text={subTitle}
-        />
-      )}
+      {subTitle && <Text preset="cardSubtitle" text={subTitle} />}
     </Card>
   );
 };

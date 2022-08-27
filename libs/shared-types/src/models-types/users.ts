@@ -15,8 +15,8 @@ import { ObjectId } from "../common";
  */
 
 export type UserMethodsType = {
-  readonly encryptPassword: (param1: string) => Promise<string>;
-  readonly matchPassword: (param1: string) => Promise<boolean>;
+  encryptPassword: (param1: string) => Promise<string>;
+  matchPassword: (param1: string) => Promise<boolean>;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -25,41 +25,45 @@ export type UserModelType = PaginateModel<UserType, any, UserMethodsType>;
 export type UserDocType = UserType & Document;
 
 export type UserType = {
-  readonly businesses: readonly ObjectId[];
-  readonly username: string;
-  readonly firstName: string;
-  readonly lastName: string;
-  readonly address: {
-    readonly address1: string;
-    readonly address2: string;
-    readonly city: string;
-    readonly state: string;
-    readonly zip: number;
-    readonly countryCode: string;
+  businesses: ObjectId[];
+  alias: "username" | "firstName" | "lastName" | "customAlias";
+  customAlias: string;
+  username: string;
+  firstName: string;
+  lastName: string;
+  accountImageUrl: string;
+  address: {
+    address1: string;
+    address2: string;
+    city: string;
+    state: string;
+    zip: number;
+    countryCode: string;
   };
-  readonly accounts: readonly {
-    readonly kind: string;
-    readonly uid?: string;
-    readonly username?: string;
-    readonly password?: string;
+  socialAccounts: {
+    kind: string;
+    uid?: string;
+    username?: string;
+    password?: string;
   }[];
-  readonly registrationState: {
-    readonly screenName: string;
-    readonly state: number;
-    readonly isCompleted: boolean;
+  registrationState: {
+    screenName: string;
+    state: number;
+    isCompleted: boolean;
   };
-  readonly email: string;
-  readonly password?: string;
-  readonly desiredCurrencies: readonly string[];
-  readonly locale: {
-    readonly countryCode: string;
-    readonly isRTL: boolean;
-    readonly languageCode: string;
-    readonly languageTag: string;
+  email: string;
+  password?: string;
+  desiredCurrencies: string[];
+  locale: {
+    countryCode: string;
+    isRTL: boolean;
+    languageCode: string;
+    languageTag: string;
   };
-  readonly deleted: boolean;
-  readonly createdAt: string;
-  readonly updatedAt: string;
-  readonly lastSignInAt: Date;
-  readonly rolId: ObjectId;
+  deleted: boolean;
+  createdAt: string;
+  updatedAt: string;
+  lastSignInAt: Date;
+  rolId: ObjectId;
+  hashedRt: string;
 };

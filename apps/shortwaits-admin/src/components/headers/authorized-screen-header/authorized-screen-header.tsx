@@ -13,6 +13,7 @@ interface AuthorizedScreenHeaderProps {
   props2?: ButtonProps;
   iconName3?: string;
   props3?: ButtonProps;
+  children?: ReactNode;
 }
 export const AuthorizedScreenHeader: FC<AuthorizedScreenHeaderProps> = (
   props
@@ -25,6 +26,7 @@ export const AuthorizedScreenHeader: FC<AuthorizedScreenHeaderProps> = (
     props1,
     props2,
     props3,
+    children = null,
   } = props;
   const { Colors } = useTheme();
 
@@ -38,7 +40,15 @@ export const AuthorizedScreenHeader: FC<AuthorizedScreenHeaderProps> = (
       />
     </Button>
   );
-
+  const renderIcons = () => {
+    return (
+      <>
+        {iconName3 ? <Icon name={iconName3} {...props3} /> : null}
+        {iconName2 ? <Icon name={iconName2} {...props2} /> : null}
+        {iconName1 ? <Icon name={iconName1} {...props1} /> : null}
+      </>
+    );
+  };
   return (
     <View
       style={[
@@ -57,9 +67,7 @@ export const AuthorizedScreenHeader: FC<AuthorizedScreenHeaderProps> = (
           },
         ]}
       />
-      {iconName3 ? <Icon name={iconName3} {...props3} /> : null}
-      {iconName2 ? <Icon name={iconName2} {...props2} /> : null}
-      {iconName1 ? <Icon name={iconName1} {...props1} /> : null}
+      {children ?? renderIcons()}
     </View>
   );
 };
@@ -67,7 +75,7 @@ const styles = StyleSheet.create({
   container: {
     paddingRight: 12,
     paddingLeft: 25,
-    height: 60,
+    paddingVertical: 10,
     flexDirection: "row",
     justifyContent: "flex-end",
     alignItems: "center",

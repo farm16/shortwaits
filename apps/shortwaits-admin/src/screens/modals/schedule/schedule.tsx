@@ -30,7 +30,7 @@ import { ScheduleCard } from "./schedule-card";
 import { SelectTimeRange } from "./select-time-range";
 import { scheduleConfigs } from "./schedule-config";
 import { setBusinessAllHours, useBusiness } from "../../../redux";
-import { usePostBusinessHoursMutation } from "../../../services/shortwaits-api";
+import { useUpdateBusinessHoursMutation } from "../../../services/shortwaits-api";
 
 export type DayType = BusinessDayTimeRangeType & {
   name: BusinessWeekDaysType;
@@ -49,7 +49,7 @@ export const ScheduleModal: FC<ModalsScreenProps<"schedule-modal-screen">> = ({
   const bottomSheetRef = useRef<BottomSheetType>(null);
   const handleBottomSheet = useBottomSheet(bottomSheetRef);
   const [postBusinessHours, postBusinessHoursStatus] =
-    usePostBusinessHoursMutation();
+    useUpdateBusinessHoursMutation();
   useEffect(() => {
     if (postBusinessHoursStatus.isSuccess) {
       Alert.alert("Business hours updated");

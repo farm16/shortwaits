@@ -28,6 +28,16 @@ export type BusinessType = {
   deleted: boolean;
   createdBy: ObjectId;
   updatedBy: ObjectId;
+  clients: ObjectId[];
+  taggedClients: [
+    {
+      clientId: ObjectId;
+      isByService: boolean;
+      services: ObjectId[];
+      clientsTags: string[];
+    }
+  ];
+  clientsTags: string[];
   /**
    * @todo !!!
    * */

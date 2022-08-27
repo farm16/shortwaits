@@ -29,6 +29,24 @@ export const textPresets = ({
       ...BASE,
       fontWeight: "bold",
     },
+    pending: {
+      ...Fonts.textTiny,
+      fontWeight: "400",
+      // textTransform: "uppercase",
+      color: Colors.pending,
+    },
+    success: {
+      ...Fonts.textTiny,
+      fontWeight: "400",
+      // textTransform: "uppercase",
+      color: Colors.success,
+    },
+    failed: {
+      ...Fonts.textTiny,
+      fontWeight: "400",
+      // textTransform: "uppercase",
+      color: Colors.failed,
+    },
     link: {
       ...BASE,
       ...Fonts.textSmall,
@@ -61,21 +79,25 @@ export const textPresets = ({
       ...Fonts.titleSmall,
       // ...Gutters.largeVPadding
     },
-    text1: {
+    textTiny: {
       ...BASE,
-      ...Fonts.textLarge,
+      ...Fonts.textTiny,
     },
-    text2: {
-      ...BASE,
-      ...Fonts.textRegular,
-    },
-    text3: {
+    textSmall: {
       ...BASE,
       ...Fonts.textSmall,
     },
+    text: {
+      ...BASE,
+      ...Fonts.textRegular,
+    },
+    textLarge: {
+      ...BASE,
+      ...Fonts.textLarge,
+    },
     errorMessage: {
       ...Fonts.textTiny,
-      color: Colors.red3,
+      color: Colors.failed,
     },
     fieldLabel: {
       ...BASE,
@@ -84,7 +106,7 @@ export const textPresets = ({
     },
     cardTitle: {
       ...Fonts.textSmall,
-      color: Colors.darkText,
+      color: Colors.text,
       fontWeight: "500" as const,
       marginBottom: 10,
       letterSpacing: 0.65,
@@ -95,7 +117,7 @@ export const textPresets = ({
       paddingTop: 0,
       marginTop: 0,
       letterSpacing: 0.65,
-      color: Colors.lightGray,
+      color: Colors.subText,
     },
     headerTitle: {
       fontSize: 18,

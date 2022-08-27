@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, ViewStyle } from "react-native";
 
 import { ThemeCommonParams } from "../theme.type";
 import { getDimensions } from "../utils";
@@ -23,8 +23,9 @@ export const buttonPresets = ({
       height: 55,
       width: width * 0.85,
       backgroundColor: Colors.brandPrimary,
+      flexDirection: "row",
     },
-  ]);
+  ]) as ViewStyle;
 
   const viewPresets = StyleSheet.create({
     none: {},

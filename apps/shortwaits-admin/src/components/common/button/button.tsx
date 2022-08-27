@@ -34,7 +34,7 @@ export const Button: FC<ButtonProps> = (props) => {
         style={styles.spinner}
         size={40}
         type={"ThreeBounce"}
-        color={Colors.darkText}
+        color={Colors.text}
       />
     );
 
@@ -64,7 +64,7 @@ export const Button: FC<ButtonProps> = (props) => {
     </TouchableOpacity>
   );
 
-  const WithShadow = <Shadow distance={4}>{WithOutShadow}</Shadow>;
+  const WithShadow = <Shadow distance={6} children={WithOutShadow} />;
 
   return withShadow ? WithShadow : WithOutShadow;
 };

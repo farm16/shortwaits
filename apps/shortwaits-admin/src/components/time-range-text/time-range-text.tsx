@@ -27,7 +27,7 @@ export const TimeRangeText = ({
 }) => {
   const { Colors } = useTheme();
   const textColor = useMemo(() => {
-    return disabled ? Colors.lightGray : Colors[textColors[preset]];
+    return disabled ? Colors.disabledText : Colors[textColors[preset]];
   }, [Colors, disabled, preset]);
 
   return (
@@ -40,7 +40,7 @@ export const TimeRangeText = ({
         text={get12hrTimeFromDecimal(startTime)}
       />
       <Icon
-        color={Colors.brandAccent}
+        color={textColor}
         name="arrow-right"
         size={preset === "title" ? 20 : 15}
       />

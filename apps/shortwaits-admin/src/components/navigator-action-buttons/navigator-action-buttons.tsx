@@ -258,7 +258,11 @@ export const CircleIconButton: FC<
       )}
       {text ? (
         <Text
-          style={[{ color: Colors.brandSecondary7 }, textStyle]}
+          preset="none"
+          style={[
+            { color: Colors.brandSecondary7, fontWeight: "600" },
+            textStyle,
+          ]}
           text={text}
         />
       ) : null}

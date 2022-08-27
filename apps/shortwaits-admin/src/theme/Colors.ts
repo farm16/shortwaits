@@ -35,20 +35,25 @@ export const staticCustomColors = {
   background: "#ffffff",
   backgroundOverlay: "#FBFBFB",
   white: "#ffffff",
-  //grays
-  lightGray: "hsl(300,1%, 95%)",
-  gray: "hsl(300,1%, 60%)",
-  darkGray: "hsl(300,1%, 20%)",
+  black: "#000000",
 
-  text: "hsl(300,1%, 10%)",
-  lightText: "#c1c4ca",
-  darkText: "#2e3234",
-  subText: "hsl(215,23%,40%)",
+  //grays
+  lightGray: "hsl(300,1%, 90%)",
+  gray: "hsl(300,1%, 50%)",
+  darkGray: "hsl(300,1%, 10%)",
+
+  text: "rgba(0,0,0,0.87)",
+  subText: "rgba(0,0,0,0.60)",
+  disabledText: "rgba(0,0,0,0.38)",
+
   success: "#28a745",
-  error: "#dc3545",
+  pending: "#e0c01f",
+  failed: "#dc3545",
+
   inputBackground: "rgb(218,226,226)",
-  inputBackground2: "#FFFFFF",
-  darkBackground: "#356E6E",
+
+  staticLightBackground: "#f0f9f8",
+  staticDarkBackground: "#356E6E",
 };
 
 export const palettes = {

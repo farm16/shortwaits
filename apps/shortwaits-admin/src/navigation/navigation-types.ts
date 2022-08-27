@@ -36,9 +36,9 @@ export type ModalStackParamList = {
 export type AuthorizedStackParamList = {
   [AUTHORIZED_SCREENS.ACTIVITY_SCREEN]: undefined;
   [AUTHORIZED_SCREENS.EVENTS_SCREEN]: undefined;
-  [AUTHORIZED_SCREENS.SERVICES_SCREEN]: undefined;
+  [AUTHORIZED_SCREENS.MY_BUSINESS_SCREEN]: undefined;
   [AUTHORIZED_SCREENS.SETTINGS_SCREEN]: undefined;
-  [AUTHORIZED_SCREENS.STAFF_SCREEN]: undefined;
+  [AUTHORIZED_SCREENS.CLIENTS_SCREEN]: undefined;
 };
 
 export type UnauthorizedStackParamList = {

@@ -23,7 +23,7 @@ import { useBusiness } from "../../../redux";
 import { useGetServicesByBusinessQuery } from "../../../services/shortwaits-api";
 import { useTheme } from "../../../theme";
 
-export const ServicesScreen = () => {
+export const ClientsScreen = () => {
   const { Colors } = useTheme();
   const bottomSheetRef = useRef<BottomSheetType>(null);
   const handleBottomSheet = useBottomSheet(bottomSheetRef);

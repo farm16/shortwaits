@@ -43,7 +43,7 @@ export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
         <Space size="large" />
         <View style={styles.footerContainer}>
           <Button text="T" preset="subLink" onPress={() => null} />
-          <Text text={"& "} preset="text3" />
+          <Text text={"& "} preset="textSmall" />
           <Button text="C" preset="subLink" onPress={() => null} />
         </View>
         <Space size="xLarge" />

@@ -1,23 +1,31 @@
+import { EventType } from "@shortwaits/shared-types";
 import React from "react";
-import { DefaultSectionT, SectionListData, StyleSheet } from "react-native";
+import {
+  DefaultSectionT,
+  SectionListData,
+  StyleSheet,
+  TextStyle,
+} from "react-native";
 import {
   CalendarProvider,
   WeekCalendar,
   ExpandableCalendar,
   AgendaList,
 } from "react-native-calendars";
+
 import { Colors } from "../../theme";
 import { useCalendarTheme } from "./calendar-hooks";
 import { AgendaItem } from "./calendar-item";
 import { getMarkedDates } from "./calendar-tools";
+import { Text } from "../common";
 
+type CalendarSectionData = EventType;
+type Sections = {
+  title: string;
+};
 export type CalendarEventsType = SectionListData<
-  {
-    hour: string;
-    duration: string;
-    title: string;
-  },
-  DefaultSectionT
+  CalendarSectionData,
+  Sections
 >[];
 
 export const Calendar = (props) => {
@@ -46,13 +54,16 @@ export const Calendar = (props) => {
       onDateChanged={onDateChanged}
       onMonthChange={onMonthChange}
       showTodayButton={true}
+      todayButtonStyle={{
+        backgroundColor: Colors.brandSecondary6,
+      }}
+      theme={{
+        todayButtonTextColor: "white",
+      }}
       //   disabledOpacity={0.5}
       //   todayBottomMargin={30}
       //   todayButtonStyle
-      theme={{
-        todayBackgroundColor: Colors.brandSecondary,
-        todayButtonFontSize: 15,
-      }}
+      // theme={theme}
       //   style={{ flex: 1 }}
       //todayBottomMargin={16}
     >
@@ -64,12 +75,24 @@ export const Calendar = (props) => {
         />
       ) : (
         <ExpandableCalendar
-          //   theme={theme}
-          markedDates={marked}
+          // @to-do !!!!
+          // markedDates={marked}
+          // markingType={"multi-dot"}
           firstDay={1}
-          markingType={"multi-dot"}
+          theme={{
+            arrowColor: Colors.brandSecondary6,
+            selectedDayBackgroundColor: Colors.brandSecondary3,
+            todayBackgroundColor: Colors.brandSecondary6,
+            todayButtonTextColor: Colors.white,
+            todayTextColor: Colors.white,
+            dayTextColor: Colors.subText,
+
+            textDayStyle: {
+              color: Colors.text,
+            },
+            selectedDayTextColor: Colors.white,
+          }}
           style={{
-            backgroundColor: Colors.brandAccent,
             shadowColor: "#858F96",
             shadowOpacity: 0.1,
             shadowRadius: 5,
@@ -96,58 +119,26 @@ export const Calendar = (props) => {
       <AgendaList
         sections={events}
         renderItem={renderItem}
+        style={{
+          backgroundColor: Colors.staticLightBackground,
+        }}
+        sectionStyle={
+          {
+            backgroundColor: Colors.staticLightBackground,
+            color: Colors.gray,
+            fontWeight: "400",
+            fontSize: 13,
+            lineHeight: undefined,
+            // textAlign: "right",
+            paddingTop: 20,
+            paddingBottom: 20,
+            paddingLeft: 20,
+            paddingRight: 20,
+          } as TextStyle
+        }
         // scrollToNextEvent
         // dayFormat={'YYYY-MM-d'}
       />
     </CalendarProvider>
   );
 };
-
-const styles = StyleSheet.create({
-  calendar: {
-    paddingLeft: 20,
-    paddingRight: 20,
-  },
-  section: {
-    backgroundColor: "white",
-    color: "grey",
-    textTransform: "capitalize",
-  },
-  item: {
-    padding: 20,
-    backgroundColor: "white",
-    borderBottomWidth: 1,
-    borderBottomColor: "lightgrey",
-    flexDirection: "row",
-  },
-  itemHourText: {
-    color: "black",
-  },
-  itemDurationText: {
-    color: "grey",
-    fontSize: 12,
-    marginTop: 4,
-    marginLeft: 4,
-  },
-  itemTitleText: {
-    color: "black",
-    marginLeft: 16,
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-  itemButtonContainer: {
-    flex: 1,
-    alignItems: "flex-end",
-  },
-  emptyItem: {
-    paddingLeft: 20,
-    height: 52,
-    justifyContent: "center",
-    borderBottomWidth: 1,
-    borderBottomColor: "lightgrey",
-  },
-  emptyItemText: {
-    color: "lightgrey",
-    fontSize: 14,
-  },
-});

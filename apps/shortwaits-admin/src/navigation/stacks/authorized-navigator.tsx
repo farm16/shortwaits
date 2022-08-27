@@ -5,9 +5,9 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import {
   SettingsScreen,
   EventsScreen,
-  ServicesScreen,
+  MyBusinessScreen,
   ActivityScreen,
-  StaffScreen,
+  ClientsScreen,
 } from "../../screens";
 import { useTheme } from "../../theme";
 import { AUTHORIZED_SCREENS } from "../navigation-constants";
@@ -40,13 +40,13 @@ export const AuthorizedNavigator = () => {
         }}
       />
       <Tab.Screen
-        name={AUTHORIZED_SCREENS.STAFF_SCREEN}
-        component={StaffScreen}
+        name={AUTHORIZED_SCREENS.CLIENTS_SCREEN}
+        component={ClientsScreen}
         options={{
-          tabBarLabel: "Staff",
+          tabBarLabel: "Clients",
           tabBarIcon: ({ focused, color }) => (
             <MaterialCommunityIcons
-              name={focused ? "clipboard-account" : "clipboard-account-outline"}
+              name={focused ? "account-group" : "account-group-outline"}
               color={color}
               size={25}
             />
@@ -54,13 +54,13 @@ export const AuthorizedNavigator = () => {
         }}
       />
       <Tab.Screen
-        name={AUTHORIZED_SCREENS.SERVICES_SCREEN}
-        component={ServicesScreen}
+        name={AUTHORIZED_SCREENS.MY_BUSINESS_SCREEN}
+        component={MyBusinessScreen}
         options={{
-          tabBarLabel: "Services",
+          tabBarLabel: "My Business",
           tabBarIcon: ({ color, focused }) => (
             <MaterialCommunityIcons
-              name={focused ? "briefcase-variant" : "briefcase-variant-outline"}
+              name={focused ? "store" : "store-outline"}
               color={color}
               size={25}
             />

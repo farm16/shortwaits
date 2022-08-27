@@ -27,7 +27,7 @@ export const TextField = forwardRef(
     return (
       <TextInput
         ref={ref}
-        placeholderTextColor={Colors.lightText}
+        placeholderTextColor={Colors.subText}
         style={textInputStyle}
         placeholder={placeholder}
         {...rest}
