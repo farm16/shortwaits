@@ -30,7 +30,7 @@ export class Categories extends Document implements BusinessCategoryType {
   }[];
 
   @ApiProperty()
-  @Prop()
+  @Prop({ default: false })
   isDefault: boolean;
 
   @ApiProperty()
@@ -38,7 +38,7 @@ export class Categories extends Document implements BusinessCategoryType {
   state: number;
 
   @ApiProperty()
-  @Prop()
+  @Prop({ default: false })
   deleted?: boolean;
 }
 

@@ -1,4 +1,4 @@
-import { Model } from "mongoose";
+import { Model, Types } from "mongoose";
 import { InjectModel } from "@nestjs/mongoose";
 import { ConfigService } from "@nestjs/config";
 import {
@@ -9,7 +9,6 @@ import {
 } from "@nestjs/common";
 import {
   BusinessType,
-  ObjectId,
   BusinessHoursType,
   BusinessPayloadType,
 } from "@shortwaits/shared-types";
@@ -26,11 +25,9 @@ export class BusinessService {
     private config: ConfigService
   ) {}
 
-  isUserAdminType(business: Business, userId: string) {
-    const isAdmin = business.admins.includes(userId as unknown as ObjectId);
-    const isSuperAdmin = business.superAdmins.includes(
-      userId as unknown as ObjectId
-    );
+  isUserAdminType(business: Business, userId: Types.ObjectId) {
+    const isAdmin = business.admins.includes(userId);
+    const isSuperAdmin = business.superAdmins.includes(userId);
     if (isAdmin || isSuperAdmin) {
       return { isAdmin, isSuperAdmin };
     } else {
@@ -48,7 +45,7 @@ export class BusinessService {
     return business;
   }
 
-  async findBusinessById(businessId: string | ObjectId) {
+  async findBusinessById(businessId: Types.ObjectId) {
     const businessData = await this.businessModel.findById(businessId).exec();
 
     if (businessData) {
@@ -62,7 +59,10 @@ export class BusinessService {
    * we need to verify that user is an admin for the requested business
    *
    */
-  async getBusiness(businessId: string, userId: string): Promise<Business> {
+  async getBusiness(
+    businessId: Types.ObjectId,
+    userId: Types.ObjectId
+  ): Promise<Business> {
     const businessData = await this.findBusinessById(businessId);
 
     const { isAdmin, isSuperAdmin } = this.isUserAdminType(
@@ -76,7 +76,7 @@ export class BusinessService {
   }
 
   async updateBusiness(
-    userId: string,
+    userId: Types.ObjectId,
     business: BusinessPayloadType,
     isRegistration?: boolean
   ): Promise<Business> {
@@ -99,7 +99,7 @@ export class BusinessService {
   }
 
   async registerBusiness(
-    userId: string,
+    userId: Types.ObjectId,
     business: BusinessPayloadType
   ): Promise<Business> {
     if (business.services.length === 0) {
@@ -120,8 +120,8 @@ export class BusinessService {
   }
 
   async updateBusinessHours(
-    businessId: string,
-    userId: string,
+    businessId: Types.ObjectId,
+    userId: Types.ObjectId,
     dto: { hours: BusinessHoursType }
   ): Promise<Business> {
     const businessData = await this.businessModel.findOne(
@@ -142,7 +142,7 @@ export class BusinessService {
   }
 
   async findByKey(
-    businessId: string,
+    businessId: Types.ObjectId,
     key: keyof BusinessType
   ): Promise<Business> {
     const data = await this.businessModel
@@ -152,7 +152,7 @@ export class BusinessService {
     return data;
   }
 
-  async getStaff(businessId: string, userId: string) {
+  async getStaff(businessId: Types.ObjectId, userId: Types.ObjectId) {
     const businessData = await this.findBusinessById(businessId);
 
     const { isAdmin, isSuperAdmin } = this.isUserAdminType(

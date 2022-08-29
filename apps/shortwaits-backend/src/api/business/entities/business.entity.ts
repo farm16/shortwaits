@@ -1,12 +1,11 @@
 import { Schema, Prop, SchemaFactory, raw } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
-import { Document, Types } from "mongoose";
+import { Document, Types, Schema as MongooseSchema } from "mongoose";
 import {
   BusinessHoursType,
   BusinessLocationType,
   BusinessType,
   CurrencyType,
-  ObjectId,
 } from "@shortwaits/shared-types";
 import { User } from "../../users/entities/user.entity";
 
@@ -14,24 +13,24 @@ import { User } from "../../users/entities/user.entity";
 export class Business extends Document implements BusinessType {
   @ApiProperty()
   @Prop()
-  admins: ObjectId[] /** @todo this might not always be received via the API why should it ? */;
+  admins: Types.ObjectId[];
   @ApiProperty()
   @Prop()
-  superAdmins: ObjectId[] /** @todo this might not always be received via the API why should it ? */;
+  superAdmins: Types.ObjectId[];
   @ApiProperty()
   @Prop()
-  backgroundAdmins: ObjectId[] /** @todo this might not always be received via the API why should it ? */;
+  backgroundAdmins: Types.ObjectId[];
   @ApiProperty()
   @Prop()
-  staff: ObjectId[] /** @todo every UsersType in the Shortwaits admin app is a staff */;
+  staff: Types.ObjectId[];
   @ApiProperty()
   @Prop()
-  categories: [];
+  categories: Types.ObjectId[];
   @ApiProperty()
   @Prop()
-  services: [];
+  services: Types.ObjectId[];
   @ApiProperty()
-  @Prop({ trim: true })
+  @Prop()
   description: string;
   @ApiProperty()
   @Prop(
@@ -45,67 +44,83 @@ export class Business extends Document implements BusinessType {
   )
   currency: CurrencyType;
   @ApiProperty()
-  @Prop({ trim: true })
+  @Prop()
   country: string;
   @ApiProperty()
-  @Prop({ trim: true })
+  @Prop()
   phone1: string;
   @ApiProperty()
-  @Prop({ trim: true })
+  @Prop()
   shortName: string;
   @ApiProperty()
-  @Prop({ trim: true })
+  @Prop()
   longName: string;
   @ApiProperty()
   @Prop(
     raw({
-      mon: { type: Array },
-      tue: { type: Array },
-      wed: { type: Array },
-      thu: { type: Array },
-      fri: { type: Array },
-      sat: { type: Array },
-      sun: { type: Array },
+      mon: [],
+      tue: [],
+      wed: [],
+      thu: [],
+      fri: [],
+      sat: [],
+      sun: [],
     })
   )
   hours: BusinessHoursType;
   @ApiProperty()
   @Prop(
     raw({
-      formattedAddress: { type: String },
-      streetAddress: { type: String },
-      city: { type: String },
-      state: { type: String },
-      postalCode: { type: String },
-      country: { type: String },
-      coordinates: { type: [Number, Number] },
+      formattedAddress: String,
+      streetAddress: String,
+      city: String,
+      state: String,
+      postalCode: String,
+      country: String,
+      coordinates: [Number, Number],
     })
   )
   location: BusinessLocationType;
   @ApiProperty()
-  @Prop()
+  @Prop({ default: false })
   isRegistrationCompleted: boolean;
   @ApiProperty()
-  @Prop()
+  @Prop({ default: false })
   deleted: boolean;
   @ApiProperty()
-  @Prop({ type: [{ type: Types.ObjectId, ref: "User" }] })
-  createdBy: User["_id"];
-  @ApiProperty()
-  @Prop({ type: [{ type: Types.ObjectId, ref: "User" }] })
-  updatedBy: User["_id"];
-  /**
-   * @todo !!!
-   * */
-  @ApiProperty()
-  @Prop({ type: Object })
-  deliveryInfo: Record<string, string>;
+  @Prop()
+  createdBy: Types.ObjectId;
   @ApiProperty()
   @Prop()
-  events: [];
+  updatedBy: Types.ObjectId;
   @ApiProperty()
-  @Prop({ type: Object })
-  paymentMethods: Record<string, string>;
+  @Prop()
+  clients: Types.ObjectId[];
+  @ApiProperty()
+  @Prop()
+  deliveryInfo: MongooseSchema.Types.Mixed;
+  @ApiProperty()
+  @Prop()
+  reservations: Types.ObjectId[];
+  @ApiProperty()
+  @Prop()
+  paymentMethods: MongooseSchema.Types.Mixed;
+  @ApiProperty()
+  @Prop(
+    raw({
+      isActive: { type: Boolean, default: false },
+    })
+  )
+  web: { isActive: boolean };
+  @ApiProperty()
+  @Prop()
+  taggedClients: [
+    {
+      clientId: Types.ObjectId;
+      services: Types.ObjectId[];
+      tags: string[];
+    }
+  ];
 }
 
 export const BusinessSchema = SchemaFactory.createForClass(Business);

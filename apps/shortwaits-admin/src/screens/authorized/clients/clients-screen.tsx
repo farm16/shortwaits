@@ -1,55 +1,55 @@
-import React, { useRef, useState } from "react";
-import { StatusBar, StyleSheet, Animated, View } from "react-native";
-import { FlatList } from "react-native-gesture-handler";
-import { Divider, Menu } from "react-native-paper";
+import React from "react";
+import { StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useDispatch } from "react-redux";
 
 import {
   AuthorizedScreenHeader,
-  BottomSheet,
-  BottomSheetType,
   Button,
-  FloatingScreenButton,
+  ButtonCard,
   Screen,
-  SearchBar,
-  ServiceCard,
-  SimpleServiceForm,
-  Space,
   Text,
-  useBottomSheet,
 } from "../../../components";
-import { useBusiness } from "../../../redux";
-import { useGetServicesByBusinessQuery } from "../../../services/shortwaits-api";
 import { useTheme } from "../../../theme";
+import { DataTable } from "react-native-paper";
+import { useBusiness } from "../../../redux";
+import { useGetBusinessStaffQuery } from "../../../services/shortwaits-api";
 
-export const ClientsScreen = () => {
-  const { Colors } = useTheme();
-  const bottomSheetRef = useRef<BottomSheetType>(null);
-  const handleBottomSheet = useBottomSheet(bottomSheetRef);
+const optionsPerPage = [2, 3, 4];
 
-  const business = useBusiness();
-  const { isFetching, data: services } = useGetServicesByBusinessQuery(
-    String(business?._id)
-  );
-  console.log("data payload >>>", services);
-
+export const ClientsScreen = ({ navigation }) => {
   const dispatch = useDispatch();
+  const business = useBusiness();
+  const {
+    data: staff,
+    isLoading: isStaffLoading,
+    isSuccess: isStaffSuccess,
+  } = useGetBusinessStaffQuery(business._id);
 
-  const ItemSeparatorComponent = () => (
-    <View
-      style={[
-        styles.listSeparator,
-        { borderTopColor: Colors.backgroundOverlay },
-      ]}
-    />
-  );
-  const [visible, setVisible] = React.useState(false);
-  const [isSearchBarVisible, setIsSearchBarVisible] = React.useState(false);
+  console.log("useGetBusinessStaffQuery >>>", staff);
 
-  const openMenu = () => setVisible(true);
+  const { Colors } = useTheme();
+  const [page, setPage] = React.useState<number>(0);
+  const [itemsPerPage, setItemsPerPage] = React.useState(optionsPerPage[0]);
 
-  const closeMenu = () => setVisible(false);
+  React.useEffect(() => {
+    setPage(0);
+  }, [itemsPerPage]);
+
+  const roles = {
+    staff: {
+      text: "staff",
+      icon: "",
+    },
+    admin: {
+      text: "admin",
+      icon: "",
+    },
+    superAdmin: {
+      text: "admin",
+      icon: "",
+    },
+  };
 
   return (
     <Screen
@@ -57,64 +57,60 @@ export const ClientsScreen = () => {
       backgroundColor={Colors.white}
       statusBar="dark-content"
     >
-      <AuthorizedScreenHeader
-        title={"Services"}
-        iconName2="magnify"
-        iconName1="plus-thick"
-      />
+      {/* <AuthorizedScreenHeader title={"Clients"} iconName2="magnify" /> */}
+      <DataTable>
+        <DataTable.Header>
+          <DataTable.Title>Last Name</DataTable.Title>
+          <DataTable.Title>First Name</DataTable.Title>
+          <DataTable.Title>Username</DataTable.Title>
+          <DataTable.Title>Role</DataTable.Title>
+        </DataTable.Header>
+        {isStaffSuccess ? (
+          staff?.data.map((elem) => (
+            <Button preset="none" key={String(elem._id)}>
+              <DataTable.Row>
+                <DataTable.Cell>{elem.lastName ?? "-"}</DataTable.Cell>
+                <DataTable.Cell>{elem.firstName ?? "-"}</DataTable.Cell>
+                <DataTable.Cell>{elem.username ?? elem.email}</DataTable.Cell>
+                <DataTable.Cell>
+                  {business.admins.includes(elem._id)
+                    ? roles.admin.text
+                    : roles.staff.text}
+                </DataTable.Cell>
+                <Button preset="none" style={styles.dataTableCellRightButton}>
+                  <Icon name="dots-vertical" size={25} />
+                </Button>
+              </DataTable.Row>
+            </Button>
+          ))
+        ) : (
+          <Text text="loading ..." />
+        )}
 
-      {isSearchBarVisible && <SearchBar />}
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        style={{
-          backgroundColor: Colors.white,
-        }}
-        contentContainerStyle={{
-          marginTop: 25,
-          alignItems: "center",
-        }}
-        ItemSeparatorComponent={() => <Space size="tiny" />}
-        data={services}
-        renderItem={({ item }) => {
-          //const {data} = use
-          return <ServiceCard service={item} onPress={() => null} />;
-        }}
-        keyExtractor={(item) => item?._id}
-      />
-      {/* <FloatingScreenButton iconName={"plus"} /> */}
+        {/* <DataTable.Pagination
+          page={page}
+          numberOfPages={3}
+          onPageChange={() => null}
+          label="1-2 of 6"
+          optionsPerPage={optionsPerPage}
+          itemsPerPage={itemsPerPage}
+          setItemsPerPage={setItemsPerPage}
+          showFastPagination
+          optionsLabel={"Rows per page"}
+        /> */}
+      </DataTable>
     </Screen>
   );
 };
+
 const styles = StyleSheet.create({
-  container: {
-    // alignItems: "stretch"
-  },
-  bottomSheetHeader: {
-    alignItems: "center",
-  },
-  contentContainer: {},
-  listSeparator: {
-    borderTopWidth: 1,
-    marginVertical: 5,
+  dataTableCellRightButton: {
+    justifyContent: "center",
+    alignItems: "flex-end",
+    width: 35,
+    height: 35,
+    alignSelf: "center",
+    position: "absolute",
+    right: 0,
   },
 });
-
-{
-  /* <BottomSheet snapPoints={["77%"]} ref={bottomSheetRef}>
-        <SimpleServiceForm
-          mode="update"
-          initialValues={
-            mobileAdmin?.sampleBusinessData.services[sampleServicesIndex]
-          }
-          onSubmit={formData => {
-            dispatch(
-              setSampleBusinessServicesByIndex({
-                data: formData,
-                index: sampleServicesIndex
-              })
-            )
-            handleBottomSheet.close()
-          }}
-        />
-      </BottomSheet> */
-}

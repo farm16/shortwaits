@@ -17,6 +17,7 @@ import { BusinessSuccessResponse } from "./business.interface";
 import { AtGuard } from "../../common/guards";
 import { TransformInterceptor } from "../../common/interceptors/transform.interceptor";
 import { BusinessEndpointsTypes } from "@shortwaits/shared-types";
+import { Types } from "mongoose";
 
 /**
  *
@@ -57,7 +58,10 @@ export class BusinessController {
     description: "Returns business record",
     type: BusinessSuccessResponse,
   })
-  async getBusiness(@Req() request, @Param("business_id") businessId: string) {
+  async getBusiness(
+    @Req() request,
+    @Param("business_id") businessId: Types.ObjectId
+  ) {
     return this.businessService.getBusiness(businessId, request.user.sub);
   }
 
@@ -68,7 +72,7 @@ export class BusinessController {
     description: "Returns business services",
     type: BusinessSuccessResponse,
   })
-  getBusinessAdmins(@Param("business_id") businessId: string) {
+  getBusinessAdmins(@Param("business_id") businessId: Types.ObjectId) {
     return this.businessService.findByKey(businessId, "services");
   }
 
@@ -79,7 +83,7 @@ export class BusinessController {
     description: "Returns business services",
     type: BusinessSuccessResponse,
   })
-  getBusinessServices(@Param("business_id") businessId: string) {
+  getBusinessServices(@Param("business_id") businessId: Types.ObjectId) {
     return this.businessService.findByKey(businessId, "services");
   }
 
@@ -90,7 +94,7 @@ export class BusinessController {
     description: "Returns business categories",
     type: BusinessSuccessResponse,
   })
-  getBusinessCategories(@Param("business_id") businessId: string) {
+  getBusinessCategories(@Param("business_id") businessId: Types.ObjectId) {
     return this.businessService.findByKey(businessId, "categories");
   }
 
@@ -103,7 +107,7 @@ export class BusinessController {
   })
   getBusinessStaffByIds(
     @Req() request,
-    @Param("business_id") businessId: string
+    @Param("business_id") businessId: Types.ObjectId
   ) {
     return this.businessService.getStaff(businessId, request.user.sub);
   }
@@ -115,7 +119,7 @@ export class BusinessController {
     description: "Returns business hours",
     type: BusinessSuccessResponse,
   })
-  getBusinessHours(@Param("business_id") businessId: string) {
+  getBusinessHours(@Param("business_id") businessId: Types.ObjectId) {
     return this.businessService.findByKey(businessId, "hours");
   }
 
@@ -128,7 +132,7 @@ export class BusinessController {
   })
   putBusiness(
     @Req() request,
-    @Param("business_id") businessId: string,
+    @Param("business_id") businessId: Types.ObjectId,
     @Body()
     dto: BusinessEndpointsTypes["/business/:business_id/hours"]["methods"]["PUT"]["body"]
   ) {

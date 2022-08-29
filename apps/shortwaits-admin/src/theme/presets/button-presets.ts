@@ -83,7 +83,7 @@ export const buttonPresets = ({
       // backgroundColor: Colors.brandAccent,
       flexDirection: "row",
       borderWidth: 2,
-      borderColor: "#AEB2C2",
+      borderColor: Colors.lightGray,
     },
     socialIcon: {
       position: "absolute",

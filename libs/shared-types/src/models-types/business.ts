@@ -32,18 +32,16 @@ export type BusinessType = {
   taggedClients: [
     {
       clientId: ObjectId;
-      isByService: boolean;
       services: ObjectId[];
-      clientsTags: string[];
+      tags: string[];
     }
   ];
-  clientsTags: string[];
   /**
    * @todo !!!
    * */
-  deliveryInfo?: Record<string, string>;
+  deliveryInfo?: any;
   reservations?: ObjectId[];
-  paymentMethods?: Record<string, string>;
+  paymentMethods?: any;
   web?: {
     isActive: boolean;
   };

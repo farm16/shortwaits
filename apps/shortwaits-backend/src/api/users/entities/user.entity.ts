@@ -6,63 +6,48 @@ import { UserType, ObjectId } from "@shortwaits/shared-types";
 @Schema()
 export class User extends Document implements UserType {
   @ApiProperty()
-  @Prop({ default: [] })
-  businesses: readonly ObjectId[];
-
+  @Prop()
+  businesses: Types.ObjectId[];
   @ApiProperty()
-  address: {
-    readonly address1: string;
-    readonly address2: string;
-    readonly city: string;
-    readonly state: string;
-    readonly zip: number;
-    readonly countryCode: string;
-  };
-
+  @Prop()
+  alias: "username" | "firstName" | "lastName" | "customAlias";
   @ApiProperty()
-  accounts: readonly {
-    readonly kind: string;
-    readonly uid?: string;
-    readonly username?: string;
-    readonly password?: string;
-  }[];
-
-  @ApiProperty()
-  locale: {
-    readonly countryCode: string;
-    readonly isRTL: boolean;
-    readonly languageCode: string;
-    readonly languageTag: string;
-  };
-
-  @ApiProperty()
-  @Prop({ trim: true })
-  username: string;
-
-  @ApiProperty()
-  @Prop({ trim: true })
-  firstName: string;
-
-  @ApiProperty()
-  @Prop({ trim: true })
-  lastName: string;
-
+  @Prop()
+  customAlias: string;
   @ApiProperty()
   @Prop({ unique: true, trim: true, required: true })
-  email: string;
-
+  username: string;
   @ApiProperty()
   @Prop()
-  lastSignInAt: Date;
-
+  firstName: string;
   @ApiProperty()
   @Prop()
-  createdAt: string;
-
+  lastName: string;
   @ApiProperty()
   @Prop()
-  updatedAt: string;
-
+  accountImageUrl: string;
+  @ApiProperty()
+  @Prop(
+    raw({
+      address1: { type: String, default: "" },
+      address2: { type: String, default: "" },
+      city: { type: String, default: "" },
+      state: { type: String, default: "" },
+      zip: { type: Number, default: 0 },
+      countryCode: { type: String, default: "" },
+    })
+  )
+  address: {
+    address1: string;
+    address2: string;
+    city: string;
+    state: string;
+    zip: number;
+    countryCode: string;
+  };
+  @ApiProperty()
+  @Prop()
+  socialAccounts: [];
   @ApiProperty()
   @Prop(
     raw({
@@ -71,35 +56,51 @@ export class User extends Document implements UserType {
       isCompleted: { type: Boolean, default: false },
     })
   )
-  registrationState: UserType["registrationState"];
-
+  registrationState: {
+    screenName: string;
+    state: number;
+    isCompleted: boolean;
+  };
   @ApiProperty()
-  @Prop({ required: true })
-  password: string;
-
-  @ApiProperty()
-  @Prop()
-  desiredCurrencies: [string];
-
-  @ApiProperty()
-  @Prop()
-  locales: [
-    {
-      countryCode: string;
-      isRTL: boolean;
-      languageCode: string;
-      languageTag: string;
-    }
-  ];
+  @Prop({ unique: true, trim: true, required: true })
+  email: string;
 
   @ApiProperty()
   @Prop()
-  rolId: Types.ObjectId;
-
+  password?: string;
+  @ApiProperty()
+  @Prop()
+  desiredCurrencies: string[];
+  @ApiProperty()
+  @Prop(
+    raw({
+      countryCode: { type: String, default: "" },
+      isRTL: { type: Boolean, default: true },
+      languageCode: { type: String, default: "" },
+      languageTag: { type: String, default: "" },
+    })
+  )
+  locale: {
+    countryCode: string;
+    isRTL: boolean;
+    languageCode: string;
+    languageTag: string;
+  };
   @ApiProperty()
   @Prop({ default: false })
   deleted: boolean;
-
+  @ApiProperty()
+  @Prop()
+  createdAt: string;
+  @ApiProperty()
+  @Prop()
+  updatedAt: string;
+  @ApiProperty()
+  @Prop()
+  lastSignInAt: Date;
+  @ApiProperty()
+  @Prop()
+  rolId: Types.ObjectId;
   @ApiProperty()
   @Prop({ default: null })
   hashedRt: string;

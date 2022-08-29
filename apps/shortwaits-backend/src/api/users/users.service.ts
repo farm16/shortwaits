@@ -1,11 +1,11 @@
-import { Model } from 'mongoose';
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { UserDocType } from '@shortwaits/shared-types';
+import { Model } from "mongoose";
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectModel } from "@nestjs/mongoose";
+import { UserPayloadType } from "@shortwaits/shared-types";
 
-import { User } from './entities/user.entity';
-import { PaginationQueryDto } from '../../common/dto/pagination-query.dto';
-import { CreateUserDto, UpdateUserDto } from './dto';
+import { User } from "./entities/user.entity";
+import { PaginationQueryDto } from "../../common/dto/pagination-query.dto";
+import { CreateUserDto, UpdateUserDto } from "./dto";
 
 @Injectable()
 export class UsersService {
@@ -32,7 +32,9 @@ export class UsersService {
     return user;
   }
 
-  public async create(createCustomerDto: CreateUserDto): Promise<UserDocType> {
+  public async create(
+    createCustomerDto: CreateUserDto
+  ): Promise<UserPayloadType> {
     const newCustomer = await this.userModel.create(createCustomerDto);
     return newCustomer;
   }
@@ -40,7 +42,7 @@ export class UsersService {
   public async update(
     userId: string,
     updateUserDto: Partial<UpdateUserDto>
-  ): Promise<UserDocType> {
+  ): Promise<UserPayloadType> {
     const existingUser = await this.userModel.findByIdAndUpdate(
       { _id: userId },
       updateUserDto

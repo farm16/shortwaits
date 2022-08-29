@@ -8,6 +8,7 @@ export * from "./service-avatar/service-avatar";
 export * from "./time-picker/time-picker";
 export * from "./logo-view/logo-view";
 export * from "./calendar/calendar";
+export * from "./emoji/emoji";
 export * from "./headers";
 export * from "./common";
 export * from "./cards";
