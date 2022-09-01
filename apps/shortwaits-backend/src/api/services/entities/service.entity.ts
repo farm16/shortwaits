@@ -3,12 +3,16 @@ import { Document, Types } from "mongoose";
 import {
   BusinessAvailableCurrenciesType,
   BusinessHoursType,
+  ObjectId,
   ServiceColorType,
   ServicesType,
 } from "@shortwaits/shared-types";
 
 @Schema()
 export class Service extends Document implements ServicesType {
+  @Prop()
+  staff: Types.ObjectId[];
+
   @Prop({ required: true })
   businessId: Types.ObjectId;
 

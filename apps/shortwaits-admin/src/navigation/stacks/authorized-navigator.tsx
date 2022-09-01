@@ -1,5 +1,6 @@
 import React from "react";
-import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
+// import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 import {
@@ -11,19 +12,43 @@ import {
 } from "../../screens";
 import { useTheme } from "../../theme";
 import { AUTHORIZED_SCREENS } from "../navigation-constants";
+import { Platform } from "react-native";
 
-const Tab = createMaterialBottomTabNavigator();
+const Tab = createBottomTabNavigator();
 
 export const AuthorizedNavigator = () => {
   const { Colors } = useTheme();
   return (
     <Tab.Navigator
       initialRouteName={AUTHORIZED_SCREENS.EVENTS_SCREEN}
-      activeColor={Colors.brandAccent}
-      inactiveColor={Colors.brandAccent2}
-      labeled={true}
-      shifting={true}
-      barStyle={{ backgroundColor: Colors.white }}
+      // activeColor={Colors.brandAccent}
+
+      // inactiveColor={Colors.brandAccent2}
+      // labeled={true}
+      // shifting={true}
+      // barStyle={{ backgroundColor: Colors.white }}
+      screenOptions={{
+        unmountOnBlur: true,
+        tabBarStyle: {
+          borderTopWidth: 0,
+          backgroundColor: Colors.white,
+          ...Platform.select({
+            ios: {
+              shadowColor: "#858F96",
+              shadowOpacity: 0.25,
+              shadowRadius: 5,
+              shadowOffset: { height: -2, width: 0 },
+              zIndex: 99,
+            },
+            android: {
+              elevation: 3,
+            },
+          }),
+        },
+        // tabBarIconStyle: { color: Colors.brandSecondary6 },
+        tabBarActiveTintColor: Colors.brandAccent,
+        tabBarInactiveTintColor: Colors.brandAccent2,
+      }}
     >
       <Tab.Screen
         name={AUTHORIZED_SCREENS.EVENTS_SCREEN}

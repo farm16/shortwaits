@@ -55,17 +55,10 @@ export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
   const bottomSheetRef = useRef<BottomSheetType>(null);
   const handleBottomSheet = useBottomSheet(bottomSheetRef);
   const dispatch = useDispatch();
-  const [isExtended, setIsExtended] = useState(true);
 
   // const [registerBusiness, postBusinessRegistrationMutationStatus] =
   //   usePostBusinessRegistrationMutation();
 
-  const onScroll = ({ nativeEvent }) => {
-    const currentScrollPosition =
-      Math.floor(nativeEvent?.contentOffset?.y) ?? 0;
-
-    setIsExtended(currentScrollPosition <= 0);
-  };
   //  TODO: user will not be able create new service during sign-up on update data
   const handleBusinessRegistration = useCallback(() => {
     return null;
@@ -141,7 +134,6 @@ export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
       <Screen unsafe preset="fixed" style={styles.container}>
         <Space />
         <FlatList
-          onScroll={onScroll}
           ItemSeparatorComponent={() => <Space size="tiny" />}
           contentContainerStyle={styles.contentContainer}
           data={services.data}
@@ -154,22 +146,6 @@ export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
             );
           }}
           keyExtractor={(item) => String(item._id)}
-        />
-        <AnimatedFAB
-          icon={"text-box-plus"}
-          color={Colors.white}
-          label={"Add Service"}
-          extended={isExtended}
-          onPress={() => console.log("Pressed")}
-          visible={true}
-          animateFrom={"right"}
-          iconMode={"static"}
-          theme={{
-            colors: {
-              accent: Colors.brandSecondary6,
-            },
-          }}
-          style={styles.fab}
         />
         <BottomSheet
           snapPointsLevel={6}

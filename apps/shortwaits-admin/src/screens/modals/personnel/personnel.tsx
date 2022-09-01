@@ -3,7 +3,7 @@ import { StatusBar, View } from "react-native";
 import { StackScreenProps } from "@react-navigation/stack";
 
 import { RootStackParamList } from "../../../navigation";
-import { Screen, Card, Text, FloatingScreenButton } from "../../../components";
+import { Screen, Card, Text, FloatingActionButton } from "../../../components";
 import { useTheme } from "../../../theme";
 
 export const PersonnelModal = ({
@@ -24,7 +24,7 @@ export const PersonnelModal = ({
         barStyle="light-content"
         backgroundColor={Colors.darkBackground}
       />
-      <FloatingScreenButton
+      <FloatingActionButton
         iconSize="regular"
         onPress={() =>
           navigation.navigate("modals", {
@@ -36,7 +36,7 @@ export const PersonnelModal = ({
       />
       {employees.map((elem, index) => {
         return (
-          <Card key={index} disabled>
+          <Card key={index} disabled mode={""}>
             <View>
               <Text preset="cardTitle" text={elem.fullName} />
               <Text preset="cardSubtitle" text={elem.email} />

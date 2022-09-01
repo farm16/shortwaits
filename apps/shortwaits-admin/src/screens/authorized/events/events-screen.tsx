@@ -2,7 +2,12 @@ import React, { FC } from "react";
 import { skipToken } from "@reduxjs/toolkit/dist/query/react";
 import { ObjectId } from "@shortwaits/shared-types";
 
-import { Calendar, CalendarEventsType, Screen } from "../../../components";
+import {
+  Calendar,
+  CalendarEventsType,
+  FloatingActionButton,
+  Screen,
+} from "../../../components";
 import { Colors } from "../../../theme";
 import { useGetBusinessQuery } from "../../../services/shortwaits-api";
 import { AuthorizedScreenProps } from "../../../navigation";
@@ -21,11 +26,13 @@ export const EventsScreen: FC<AuthorizedScreenProps<"events-screen">> = () => {
   return (
     <Screen
       preset="fixed"
+      unsafe
       backgroundColor={Colors.white}
       statusBar="dark-content"
     >
-      <EventsScreenHeader user={user} business={business} />
+      {/* <EventsScreenHeader user={user} business={business} /> */}
       <Calendar events={SAMPLE_EVENTS} />
+      <FloatingActionButton />
     </Screen>
   );
 };

@@ -1,16 +1,16 @@
 import { Document } from "mongoose";
-import { DocType, ObjectId, ServicesType, UserPayloadType } from "..";
+import { ObjectId, UserPayloadType } from "..";
 
 import { PaginatedModel } from "./helpers";
 
 export type EventType = {
   name: string;
   description: string;
-  service: DocType<ServicesType>;
+  service: ObjectId;
   createdBy: ObjectId;
   updatedBy: ObjectId;
-  staff: UserPayloadType[];
-  clients: UserPayloadType[];
+  staff: ObjectId[];
+  clients: ObjectId[];
   features: string[];
   status: {
     statusCode: number;

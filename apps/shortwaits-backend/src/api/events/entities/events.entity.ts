@@ -20,7 +20,7 @@ export class Events extends Document implements EventType {
   @Prop({
     type: MongooseSchema.Types.Mixed,
   })
-  service: DocType<ServicesType>;
+  service: mongoose.Types.ObjectId;
   @ApiProperty()
   @Prop()
   createdBy: mongoose.Types.ObjectId;
@@ -29,10 +29,10 @@ export class Events extends Document implements EventType {
   updatedBy: mongoose.Types.ObjectId;
   @ApiProperty()
   @Prop()
-  staff: UserPayloadType[];
+  staff: mongoose.Types.ObjectId[];
   @ApiProperty()
   @Prop()
-  clients: UserPayloadType[];
+  clients: mongoose.Types.ObjectId[];
   @ApiProperty()
   @Prop()
   features: string[];

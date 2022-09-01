@@ -57,6 +57,8 @@
     "typesafe-actions": "*",
     "yup": "*",
     "mongoose": "*",
-    "mongoose-paginate-v2": "*"
+    "mongoose-paginate-v2": "*",
+    "date-fns": "*",
+    "emoji-datasource": "*"
   }
 }

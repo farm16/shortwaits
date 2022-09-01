@@ -1,5 +1,5 @@
 export * from "./navigator-action-buttons/navigator-action-buttons";
-export * from "./floating-screen-button/floating-screen-button";
+export * from "./floating-action-button/floating-action-button";
 export * from "./upload-profile-image/upload-profile-image";
 export * from "./simple-service-form/simple-service-form";
 export * from "./time-range-text/time-range-text";

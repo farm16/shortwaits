@@ -6,11 +6,13 @@ import {
   BusinessLocationType,
   BusinessType,
   CurrencyType,
+  ObjectId,
 } from "@shortwaits/shared-types";
 import { User } from "../../users/entities/user.entity";
 
 @Schema()
 export class Business extends Document implements BusinessType {
+  events: ObjectId[];
   @ApiProperty()
   @Prop()
   admins: Types.ObjectId[];

@@ -1,6 +1,6 @@
 import { EventType } from "@shortwaits/shared-types";
 import React from "react";
-import { SectionListData, TextStyle } from "react-native";
+import { Platform, SectionListData, TextStyle } from "react-native";
 import {
   CalendarProvider,
   WeekCalendar,
@@ -66,11 +66,18 @@ export const Calendar = (props) => {
           firstDay={1}
           theme={theme}
           style={{
-            shadowColor: "#858F96",
-            shadowOpacity: 0.1,
-            shadowRadius: 5,
-            shadowOffset: { height: 10, width: 0 },
-            zIndex: 99,
+            ...Platform.select({
+              ios: {
+                shadowColor: "#858F96",
+                shadowOpacity: 0.25,
+                shadowRadius: 10,
+                shadowOffset: { height: 2, width: 0 },
+                zIndex: 99,
+              },
+              android: {
+                elevation: 3,
+              },
+            }),
           }}
           allowShadow={false}
         />

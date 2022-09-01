@@ -15,6 +15,7 @@ export type ServicesType = {
   description: string;
   hours: BusinessHoursType;
   applicableCategories: ObjectId[];
+  staff: ObjectId[];
   durationInMin: number;
   price: number;
   currency: BusinessAvailableCurrenciesType;

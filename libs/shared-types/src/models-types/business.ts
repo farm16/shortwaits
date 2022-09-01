@@ -16,6 +16,7 @@ export type BusinessType = {
   staff: ObjectId[] /** @todo every UserType in the Shortwaits admin app is a staff */;
   categories: ObjectId[];
   services: ObjectId[];
+  events: ObjectId[];
   description: string;
   currency: CurrencyType;
   country: string;

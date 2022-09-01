@@ -12,7 +12,10 @@ import { Business, BusinessSchema } from "../business/entities/business.entity";
         name: Service.name,
         schema: ServiceSchema,
       },
-      { name: Business.name, schema: BusinessSchema },
+      {
+        name: Business.name,
+        schema: BusinessSchema,
+      },
     ]),
   ],
   controllers: [ServicesController],
