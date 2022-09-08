@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { TokenPayloadType } from "@shortwaits/shared-types";
 
-import { shortwaitsApi } from "../../../services/shortwaits-api";
+import { shortwaitsApi } from "../../../services";
 import type { RootState } from "../../types";
 
 const initialState: TokenPayloadType = {

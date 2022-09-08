@@ -1,16 +1,16 @@
-import { Document } from "mongoose";
-import { ObjectId, UserPayloadType } from "..";
-
+import { Document, Types } from "mongoose";
 import { PaginatedModel } from "./helpers";
 
 export type EventType = {
   name: string;
   description: string;
-  service: ObjectId;
-  createdBy: ObjectId;
-  updatedBy: ObjectId;
-  staff: ObjectId[];
-  clients: ObjectId[];
+  eventImage: string;
+  businessId: Types.ObjectId;
+  service: Types.ObjectId;
+  createdBy: Types.ObjectId;
+  updatedBy: Types.ObjectId;
+  staff: Types.ObjectId[];
+  clients: Types.ObjectId[];
   features: string[];
   status: {
     statusCode: number;

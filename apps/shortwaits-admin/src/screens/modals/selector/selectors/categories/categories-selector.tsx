@@ -11,7 +11,7 @@ import {
 import { selectorConfigs } from "../../selector-config";
 import { CategoriesSelectorItem } from "./categories-selector-item";
 import { SelectorComponentType } from "../../selector";
-import { useGetCategoriesQuery } from "../../../../../services/shortwaits-api";
+import { useGetCategoriesQuery } from "../../../../../services";
 
 export const CategoriesSelector: SelectorComponentType = ({
   navigation,

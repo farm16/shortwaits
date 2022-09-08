@@ -12,8 +12,8 @@ type BusinessEndpoint = Record<
   }
 >;
 
+export const API_BASE_URL = ENV.API_BASE_URL;
 export const shortwaitsApiEndpoints = {
-  API_BASE_URL: ENV.API_BASE_URL,
   AUTH: {
     adminLocalSignUp: {
       PATH: "/auth/admin/local/sign-up",
@@ -115,20 +115,31 @@ export const shortwaitsApiEndpoints = {
       getPath: (businessId: string) => `/services?businessId=${businessId}`,
       METHOD: "GET",
     },
-    updateService: {
-      getPath: (_id: string) => `/business/${_id}/hours`,
-      METHOD: "PUT",
+    // updateService: {
+    //   getPath: (businessId: string) => `/business/${businessId}/hours`,
+    //   METHOD: "PUT",
+    // },
+    // patchService: {
+    //   getPath: (businessId: string) => `/business/${businessId}/hours`,
+    //   METHOD: "PATCH",
+    // },
+    // deleteService: {
+    //   getPath: (businessId: string) => `/business/${businessId}/hours`,
+    //   METHOD: "DELETE",
+    // },
+  },
+  EVENTS: {
+    postEvent: {
+      METHOD: "POST",
+      getPath: (businessId: string) => `/events/admin/${businessId}`,
     },
-    patchService: {
-      getPath: (_id: string) => `/business/${_id}/hours`,
-      METHOD: "PATCH",
-    },
-    deleteService: {
-      getPath: (_id: string) => `/business/${_id}/hours`,
-      METHOD: "DELETE",
+    getAllAdminEvents: {
+      METHOD: "GET",
+      getPath: (businessId: string) => `/events/admin/${businessId}`,
     },
   },
+
   SHORTWAITS: {
     getAdminMobile: { PATH: "/shortwaits/admin/mobile", METHOD: "GET" },
   },
-};
+} as const;

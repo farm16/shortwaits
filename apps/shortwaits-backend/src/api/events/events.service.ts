@@ -1,6 +1,11 @@
 import { Injectable, PreconditionFailedException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { EventType } from "@shortwaits/shared-types";
+import {
+  EventsPayloadType,
+  EventType,
+  NewlyCreatedEvent,
+  UserPayloadType,
+} from "@shortwaits/shared-types";
 import { Model, Types } from "mongoose";
 
 import { Business } from "../business/entities/business.entity";
@@ -17,28 +22,32 @@ export class EventsService {
     @InjectModel(User.name) private userModel: Model<User>
   ) {}
 
-  private async createEventPayload(event, creatorId) {
-    const service = await this.servicesModel.findById(event.service);
-
-    event.staff = service.staff;
-    event.status.statusCode = 0;
-    event.status.statusName = "pending";
-    event.createdBy = creatorId;
-    event.updatedBy = creatorId;
+  private createEventPayload(
+    event: Events & {
+      _id: Types.ObjectId;
+    },
+    user: UserPayloadType
+  ): Events & {
+    _id: Types.ObjectId;
+  } {
+    event.status = { statusCode: 0, statusName: "pending" };
+    event.createdBy = user._id;
+    event.updatedBy = user._id;
     event.isGroupEvent = event.clients.length > 1;
     event.deleted = false;
     event.canceled = false;
+
     return event;
   }
 
   async createEventByClient(eventDto: EventType, clientId: Types.ObjectId) {
-    const user = await this.userModel.findById(clientId);
-    // we are using user.businesses[0]
-    const userBusiness = await this.businessModel.findById(user.businesses[0]);
-
-    if (userBusiness.services.some((service) => service === eventDto.service)) {
-      return await this.createEventPayload(eventDto, clientId);
-    }
+    // const user = await this.userModel.findById(clientId);
+    // // we are using user.businesses[0]
+    // const userBusiness = await this.businessModel.findById(user.businesses[0]);
+    // if (userBusiness.services.some((service) => service === eventDto.service)) {
+    //   const event = await (await this.eventsModel.create(eventDto)).toObject();
+    //   return await this.createEventPayload(event, user);
+    // }
   }
 
   async createEventByAdmin(
@@ -56,7 +65,7 @@ export class EventsService {
       });
     }
 
-    const userBusiness = await this.businessModel.findById(businessId);
+    const userBusiness = await this.businessModel.findOne({ _id: businessId });
     if (!userBusiness) {
       console.log("userBusiness", userBusiness);
       throw new PreconditionFailedException({
@@ -67,11 +76,60 @@ export class EventsService {
     }
 
     if (userBusiness.services.some((service) => service === eventDto.service)) {
-      return await this.createEventPayload(eventDto, adminUserId);
+      let event = new this.eventsModel(eventDto);
+      userBusiness.events.push(event._id);
+      const updatedBusiness = await userBusiness.save();
+      event = this.createEventPayload(event, user);
+      const newEvent = await event.save();
+      const events = await this.eventsModel.find({
+        _id: { $in: updatedBusiness.events },
+      });
+
+      return {
+        business: updatedBusiness,
+        event: newEvent,
+        events: events,
+      };
     } else {
       throw new PreconditionFailedException({
         error: "Precondition Failed",
         message: "Unable to create event.",
+        statusCode: 412,
+      });
+    }
+  }
+
+  async getAllAdminEvents(
+    adminUserId: Types.ObjectId,
+    businessId: Types.ObjectId,
+    limit = 10,
+    page = 1
+  ) {
+    try {
+      const { events: eventIds } = await this.businessModel.findById(
+        businessId
+      );
+
+      const events = await this.eventsModel
+        .find({
+          _id: { $in: eventIds },
+        })
+        .limit(limit * 1)
+        .skip((page - 1) * limit)
+        .exec();
+
+      const count = await this.eventsModel
+        .find({
+          _id: { $in: eventIds },
+        })
+        .count();
+
+      return { meta: { count }, events };
+    } catch (error) {
+      console.log(error);
+      throw new PreconditionFailedException({
+        error: "Precondition Failed",
+        message: "Unable to get event.",
         statusCode: 412,
       });
     }

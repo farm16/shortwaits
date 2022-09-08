@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { ObjectId } from "../common";
 
 export type ApiResponseWithPayload<Payload> = {
@@ -15,7 +16,7 @@ export type RegisterWithEmailRequest = {
 };
 
 export type DocType<T = never> = T & {
-  _id: ObjectId;
+  _id: Types.ObjectId;
 };
 
 export type SuccessResponseType<Payload = never> = {
@@ -65,11 +66,11 @@ export const ERROR_CODES = {
   28: { code: 28, description: "authorization error signup" },
 } as const;
 
-export interface CommonResponseType<T = any> {
+export interface CommonResponseType<DataPayload = any, MetaPayload = any> {
   statusCode: number;
-  data: T;
+  data: DataPayload;
   message?: string;
-  meta: any;
+  meta?: MetaPayload;
 }
 // } "meta": {
 //   "page": 1,
@@ -77,3 +78,38 @@ export interface CommonResponseType<T = any> {
 //   "total_pages": 7,
 //   "total_count": 14
 // }
+
+export type HttpMethod = "GET" | "DELETE" | "PUT" | "POST" | "PATCH";
+
+export type ApiMetaType = {
+  count?: number;
+  page?: number;
+};
+
+type BusinessQuery = {
+  limit?: number;
+  page?: number;
+};
+export type GeneralSpecShape = {
+  [x in EndPoints]: {
+    path: string;
+    methods: {
+      [M in HttpMethod]?: {
+        query?: BusinessQuery;
+        body?: unknown;
+        response: any;
+        paginatedResponse?: any;
+      };
+    };
+  };
+};
+
+export type EndPoints =
+  | "/business"
+  | "/business/register"
+  | "/business/:business_id"
+  | "/business/:business_id/admins"
+  | "/business/:business_id/services"
+  | "/business/:business_id/categories"
+  | "/business/:business_id/staff"
+  | "/business/:business_id/hours";

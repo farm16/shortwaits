@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { BusinessPayloadType } from "@shortwaits/shared-types";
-import { shortwaitsApi } from "../../../services/shortwaits-api";
+import { shortwaitsApi } from "../../../services";
 import { businessReducers } from "./business-reducers";
 
 const initialState: BusinessPayloadType = null;

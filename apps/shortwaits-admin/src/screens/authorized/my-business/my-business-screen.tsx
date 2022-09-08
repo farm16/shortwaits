@@ -13,7 +13,7 @@ import {
 import { useTheme } from "../../../theme";
 import { DataTable } from "react-native-paper";
 import { useBusiness } from "../../../redux";
-import { useGetBusinessStaffQuery } from "../../../services/shortwaits-api";
+import { useGetBusinessStaffQuery } from "../../../services";
 
 const optionsPerPage = [2, 3, 4];
 

@@ -123,6 +123,17 @@ export class BusinessController {
     return this.businessService.findByKey(businessId, "hours");
   }
 
+  @Get(":business_id/events")
+  @HttpCode(HttpStatus.OK)
+  @ApiCreatedResponse({
+    status: HttpStatus.OK,
+    description: "Returns business hours",
+    type: BusinessSuccessResponse,
+  })
+  getBusinessEvents(@Param("business_id") businessId: Types.ObjectId) {
+    return this.businessService.findByKey(businessId, "events");
+  }
+
   @Put(":business_id/hours")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({

@@ -5,7 +5,7 @@ import {
   ShortwaitsAdminDefaultDataPayloadType,
 } from "@shortwaits/shared-types";
 
-import { shortwaitsApi } from "../../../services/shortwaits-api";
+import { shortwaitsApi } from "../../../services";
 import type { RootState } from "../../../redux";
 
 export interface MobileAdminStateType {

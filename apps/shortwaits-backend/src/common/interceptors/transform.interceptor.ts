@@ -17,14 +17,24 @@ export class TransformInterceptor<T>
     next: CallHandler
   ): Observable<CommonResponseType<T>> {
     return next.handle().pipe(
-      map((data) => ({
-        statusCode: context.switchToHttp().getResponse().statusCode,
-        message: data ? data.message : "",
-        data,
-        meta: {
-          size: data ? data.length : null,
-        }, // if this is supposed to be the actual return then replace {} with data.result
-      }))
+      map((payload) => {
+        let meta = null;
+        let message = null;
+        if (typeof payload === "object" && payload?.meta) {
+          meta = payload.meta;
+          delete payload.meta;
+        }
+        if (typeof payload === "object" && payload?.message) {
+          message = payload.message;
+          delete payload.message;
+        }
+        return {
+          data: payload,
+          statusCode: context.switchToHttp().getResponse().statusCode,
+          message,
+          meta, // if this is supposed to be the actual return then replace {} with data.result
+        };
+      })
     );
   }
 }

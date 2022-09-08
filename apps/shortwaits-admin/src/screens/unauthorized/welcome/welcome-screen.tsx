@@ -12,7 +12,7 @@ import {
   UnauthorizedStackParamList,
 } from "../../../navigation";
 import { useBusiness, useMobileAdmin } from "../../../redux";
-import { useGetAdminMobileQuery } from "../../../services/shortwaits-api";
+import { useGetAdminMobileQuery } from "../../../services";
 import { skipToken } from "@reduxjs/toolkit/dist/query/react";
 
 export interface WelcomeScreenProps {

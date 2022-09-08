@@ -21,12 +21,6 @@ export const AuthorizedNavigator = () => {
   return (
     <Tab.Navigator
       initialRouteName={AUTHORIZED_SCREENS.EVENTS_SCREEN}
-      // activeColor={Colors.brandAccent}
-
-      // inactiveColor={Colors.brandAccent2}
-      // labeled={true}
-      // shifting={true}
-      // barStyle={{ backgroundColor: Colors.white }}
       screenOptions={{
         unmountOnBlur: true,
         tabBarStyle: {

@@ -4,6 +4,12 @@ import { Types } from "mongoose";
 
 export class CreateEventsDto implements EventType {
   @ApiProperty()
+  eventImage: string;
+
+  @ApiProperty()
+  businessId: Types.ObjectId;
+
+  @ApiProperty()
   service: Types.ObjectId;
 
   @ApiProperty()

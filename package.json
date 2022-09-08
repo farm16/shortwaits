@@ -12,6 +12,7 @@
     "client": "nx serve shortwaits-client",
     "client:ios": "nx run-ios shortwaits-client",
     "backend": "nx serve shortwaits-backend",
+    "backend:seed": "yarn nx run shortwaits-backend:seed --configuration=default-data",
     "generate-keypair": "ts-node ./src/scripts/create-key-pair",
     "many": "nx run-many --target=serve --projects=shortwaits-admin,shortwaits-backend --parallel=2",
     "build": "nx build",

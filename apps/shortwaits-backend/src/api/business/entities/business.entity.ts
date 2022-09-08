@@ -12,6 +12,8 @@ import { User } from "../../users/entities/user.entity";
 
 @Schema()
 export class Business extends Document implements BusinessType {
+  @ApiProperty()
+  @Prop()
   events: ObjectId[];
   @ApiProperty()
   @Prop()

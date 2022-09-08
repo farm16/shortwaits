@@ -1,2 +1,2 @@
-export * from "./shortwaits-api";
+export * from "./hooks";
 export * from "./shortwaits-api";

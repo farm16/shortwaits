@@ -16,7 +16,7 @@ import {
   RootStackParamList,
   UnauthorizedStackParamList,
 } from "../../../navigation";
-import { useLocalSignUpMutation } from "../../../services/shortwaits-api";
+import { useLocalSignUpMutation } from "../../../services";
 
 interface SignUpWithEmailScreenProps {
   navigation: CompositeNavigationProp<

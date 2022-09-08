@@ -23,7 +23,7 @@ import { BusinessInfoSettings } from "./options/business-info";
 import { IntegrationsSettings } from "./options/integrations";
 import { ContactsSettings } from "./options/contacts";
 import { useDispatch } from "react-redux";
-import { useGetBusinessQuery } from "../../../services/shortwaits-api";
+import { useGetBusinessQuery } from "../../../services";
 import { skipToken } from "@reduxjs/toolkit/dist/query/react";
 
 export const SettingsScreen = ({ navigation }) => {

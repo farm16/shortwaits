@@ -17,7 +17,7 @@ import {
   UnauthorizedStackParamList,
 } from "../../../navigation";
 import { useForm } from "../../../hooks";
-import { useLocalSignInMutation } from "../../../services/shortwaits-api";
+import { useLocalSignInMutation } from "../../../services";
 
 interface SignInWithEmailScreenProps {
   navigation: CompositeNavigationProp<

@@ -16,7 +16,7 @@ import {
 import { selectorConfigs } from "../../selector-config";
 import { StaffSelectorItem } from "./staff-selector-item";
 import { SelectorComponentType } from "../../selector";
-import { useGetBusinessStaffQuery } from "../../../../../services/shortwaits-api";
+import { useGetBusinessStaffQuery } from "../../../../../services";
 import { useDispatch } from "react-redux";
 
 export const StaffSelector: SelectorComponentType = ({ navigation, type }) => {

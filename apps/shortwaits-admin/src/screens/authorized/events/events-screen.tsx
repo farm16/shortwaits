@@ -9,19 +9,33 @@ import {
   Screen,
 } from "../../../components";
 import { Colors } from "../../../theme";
-import { useGetBusinessQuery } from "../../../services/shortwaits-api";
+import {
+  useGetAllBusinessEventsQuery,
+  useGetBusinessQuery,
+  useGetServiceQuery,
+  useGetServicesByBusinessQuery,
+} from "../../../services";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useBusiness, useUser } from "../../../redux";
 import { EventsScreenHeader } from "./events-screen-header";
+import { AgendaItem } from "../../../components/calendar/calendar-item";
 
 export const EventsScreen: FC<AuthorizedScreenProps<"events-screen">> = () => {
   const user = useUser();
   const business = useBusiness();
 
-  const { isFetching, data: businessPayload } = useGetBusinessQuery(
+  const { data: servicesData } = useGetServicesByBusinessQuery(
     business ? business._id : skipToken
   );
-  console.log("data payload >>>", businessPayload?.data.services);
+  // console.log(
+  //   "servicesData payload >>>",
+  //   JSON.stringify(servicesData, null, 2)
+  // );
+  const { data: eventsData } = useGetAllBusinessEventsQuery(
+    business ? business._id : skipToken,
+    { refetchOnMountOrArgChange: true }
+  );
+  console.log("eventsData payload >>>", eventsData?.meta);
 
   return (
     <Screen
@@ -30,7 +44,7 @@ export const EventsScreen: FC<AuthorizedScreenProps<"events-screen">> = () => {
       backgroundColor={Colors.white}
       statusBar="dark-content"
     >
-      {/* <EventsScreenHeader user={user} business={business} /> */}
+      <AgendaItem item={SAMPLE_EVENTS[0].data[0]} />
       <Calendar events={SAMPLE_EVENTS} />
       <FloatingActionButton />
     </Screen>

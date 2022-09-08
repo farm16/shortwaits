@@ -11,7 +11,7 @@ import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
 
 // services
-import { shortwaitsApi } from "../services/shortwaits-api";
+import { shortwaitsApi } from "../services";
 import { reducers } from "./rootReducer";
 
 /**

@@ -1,7 +1,7 @@
 import { persistReducer } from "redux-persist";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { combineReducers } from "redux";
-import { shortwaitsApi } from "../services/shortwaits-api";
+import { shortwaitsApi } from "../services";
 
 //reducers
 import {
@@ -10,6 +10,8 @@ import {
   businessSlice,
   userSlice,
   mobileAdminSlice,
+  servicesSlice,
+  eventsSlice,
 } from "./slices";
 
 const persistRootConfig = {
@@ -23,6 +25,8 @@ export const reducers = {
   [userSlice.name]: userSlice.reducer,
   [authSlice.name]: authSlice.reducer,
   [businessSlice.name]: businessSlice.reducer,
+  [servicesSlice.name]: servicesSlice.reducer,
+  [eventsSlice.name]: eventsSlice.reducer,
   [themeSlice.name]: themeSlice.reducer,
   [mobileAdminSlice.name]: mobileAdminSlice.reducer,
 };
@@ -32,6 +36,7 @@ const _combineReducers = combineReducers({
   [userSlice.name]: userSlice.reducer,
   [authSlice.name]: authSlice.reducer,
   [businessSlice.name]: businessSlice.reducer,
+  [servicesSlice.name]: servicesSlice.reducer,
   [themeSlice.name]: themeSlice.reducer,
   [mobileAdminSlice.name]: mobileAdminSlice.reducer,
 });

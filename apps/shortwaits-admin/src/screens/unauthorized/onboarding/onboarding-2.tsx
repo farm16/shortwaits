@@ -34,7 +34,7 @@ import { useBusiness } from "../../../redux";
 import {
   useGetServicesByBusinessQuery,
   useRegisterBusinessMutation,
-} from "../../../services/shortwaits-api";
+} from "../../../services";
 
 export interface OnboardingScreenProps {
   navigation: CompositeNavigationProp<

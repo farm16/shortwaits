@@ -30,7 +30,7 @@ import { ScheduleCard } from "./schedule-card";
 import { SelectTimeRange } from "./select-time-range";
 import { scheduleConfigs } from "./schedule-config";
 import { setBusinessAllHours, useBusiness } from "../../../redux";
-import { useUpdateBusinessHoursMutation } from "../../../services/shortwaits-api";
+import { useUpdateBusinessHoursMutation } from "../../../services";
 
 export type DayType = BusinessDayTimeRangeType & {
   name: BusinessWeekDaysType;

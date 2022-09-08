@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { shortwaitsApi } from "../../../services/shortwaits-api";
+import { shortwaitsApi } from "../../../services";
 import { UserPayloadType } from "@shortwaits/shared-types";
 
 import type { RootState } from "../../types";

@@ -3,6 +3,7 @@ import { BusinessHoursType, BusinessType } from "..";
 import {
   CommonResponseType,
   DocType,
+  GeneralSpecShape,
   ServicesPayloadType,
   SuccessResponseType,
 } from ".";
@@ -38,14 +39,15 @@ export type BusinessEndpointsMethods =
   | keyof BusinessEndpointsTypes["/business/:business_id/staff"]["methods"]
   | keyof BusinessEndpointsTypes["/business/:business_id/hours"]["methods"]
   | keyof BusinessEndpointsTypes["/business"]["methods"];
-export interface BusinessEndpointsTypes {
+
+export interface BusinessEndpointsTypes extends GeneralSpecShape {
   "/business": {
     path: `/business`;
     methods: {
       PUT: {
-        query: [];
+        query: undefined;
         body: BusinessPayloadType;
-        response: CommonResponseType<BusinessPayloadType>;
+        response: BusinessPayloadType;
       };
     };
   };
@@ -53,9 +55,9 @@ export interface BusinessEndpointsTypes {
     path: `/business/register`;
     methods: {
       PUT: {
-        query: [];
+        query: undefined;
         body: BusinessPayloadType;
-        response: CommonResponseType<BusinessPayloadType>;
+        response: BusinessPayloadType;
       };
     };
   };
@@ -63,9 +65,9 @@ export interface BusinessEndpointsTypes {
     path: `/business/${string}`;
     methods: {
       GET: {
-        query: [];
+        query: undefined;
         body: undefined;
-        response: CommonResponseType<BusinessType>;
+        response: BusinessType;
       };
     };
   };
@@ -73,9 +75,9 @@ export interface BusinessEndpointsTypes {
     path: `/business/${string}/admin`;
     methods: {
       GET: {
-        query: [];
+        query: undefined;
         body: undefined;
-        response: CommonResponseType<BusinessType>;
+        response: BusinessType;
       };
     };
   };
@@ -83,30 +85,29 @@ export interface BusinessEndpointsTypes {
     path: `/business/${string}/services`;
     methods: {
       GET: {
-        query: [];
+        query: undefined;
         body: undefined;
-        response: CommonResponseType<ServicesPayloadType>;
+        response: ServicesPayloadType;
       };
       PUT: {
-        query: [];
+        query: undefined;
         body: ServicesPayloadType;
-        response: CommonResponseType<ServicesPayloadType>;
+        response: ServicesPayloadType;
       };
       POST: {
-        query: [];
+        query: undefined;
         body: ServicesPayloadType;
-        response: CommonResponseType<ServicesPayloadType>;
+        response: ServicesPayloadType;
       };
     };
   };
-
   "/business/:business_id/categories": {
     path: `/business/${string}/categories`;
     methods: {
       GET: {
-        query: [];
+        query: undefined;
         body: undefined;
-        response: CommonResponseType<BusinessType>;
+        response: BusinessType;
       };
     };
   };
@@ -114,9 +115,9 @@ export interface BusinessEndpointsTypes {
     path: `/business/${string}/staff`;
     methods: {
       GET: {
-        query: [];
+        query: undefined;
         body: undefined;
-        response: CommonResponseType<BusinessType>;
+        response: BusinessType;
       };
     };
   };
@@ -124,14 +125,14 @@ export interface BusinessEndpointsTypes {
     path: `/business/${string}/hours`;
     methods: {
       GET: {
-        query: [];
+        query: undefined;
         body: undefined;
-        response: CommonResponseType<BusinessType>;
+        response: BusinessType;
       };
       PUT: {
-        query: [];
+        query: undefined;
         body: { hours: BusinessHoursType };
-        response: CommonResponseType<BusinessType>;
+        response: BusinessType;
       };
     };
   };

@@ -1,15 +1,16 @@
 import { Schema, Prop, SchemaFactory, raw } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
-import {
-  DocType,
-  EventType,
-  ServicesType,
-  UserPayloadType,
-} from "@shortwaits/shared-types";
+import { EventType } from "@shortwaits/shared-types";
 import mongoose, { Document, Schema as MongooseSchema } from "mongoose";
 
 @Schema()
 export class Events extends Document implements EventType {
+  @ApiProperty()
+  @Prop()
+  eventImage: string;
+  @ApiProperty()
+  @Prop()
+  businessId: mongoose.Types.ObjectId;
   @ApiProperty()
   @Prop()
   name: string;

@@ -11,6 +11,7 @@ import {
   HttpCode,
   HttpStatus,
   Req,
+  Query,
 } from "@nestjs/common";
 import { Types } from "mongoose";
 import { ApiTags, ApiBearerAuth, ApiCreatedResponse } from "@nestjs/swagger";
@@ -19,8 +20,15 @@ import { EventsService } from "./events.service";
 import { CreateEventsDto } from "./dto/create-events.dto";
 import { AtGuard } from "../../common/guards";
 import { TransformInterceptor } from "../../common/interceptors/transform.interceptor";
-import { EventType } from "@shortwaits/shared-types";
+import {
+  BusinessEndpointsTypes,
+  EventsEndpointsTypes,
+  EventType,
+} from "@shortwaits/shared-types";
+import { PaginationParams } from "../../shared/paginationParams";
 
+type ResponseController =
+  EventsEndpointsTypes["/events/admin/:business_id"]["methods"];
 @UseGuards(AtGuard)
 @ApiTags("events")
 @ApiBearerAuth("bearer")
@@ -29,6 +37,25 @@ import { EventType } from "@shortwaits/shared-types";
 export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
 
+  @Get("admin/:id")
+  @HttpCode(HttpStatus.OK)
+  @ApiCreatedResponse({
+    status: HttpStatus.OK,
+    description: "Create new event record",
+    type: CreateEventsDto,
+  })
+  getAllAdminEvent(
+    @Req() request,
+    @Param("id") businessId,
+    @Query() { limit, page }: PaginationParams
+  ): Promise<ResponseController["GET"]["paginatedResponse"]> {
+    return this.eventsService.getAllAdminEvents(
+      request.user.sub,
+      businessId,
+      limit,
+      page
+    );
+  }
   /**
    * @id  refer to a Business Id.
    * A business can only post events linked to it \
@@ -70,7 +97,7 @@ export class EventsController {
   createEventByClient(
     @Req() request,
     @Param("id") clientId: Types.ObjectId,
-    @Body() createEventsDto: CreateEventsDto
+    @Body() createEventsDto: EventType
   ) {
     return this.eventsService.createEventByClient(
       createEventsDto,
