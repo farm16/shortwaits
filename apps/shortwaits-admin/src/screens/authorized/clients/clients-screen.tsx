@@ -1,23 +1,20 @@
-import React from "react";
+import React, { FC, useLayoutEffect } from "react";
 import { StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useDispatch } from "react-redux";
 
-import {
-  AuthorizedScreenHeader,
-  Button,
-  ButtonCard,
-  Screen,
-  Text,
-} from "../../../components";
+import { Button, CircleIconButton, Screen, Text } from "../../../components";
 import { useTheme } from "../../../theme";
 import { DataTable } from "react-native-paper";
 import { useBusiness } from "../../../redux";
 import { useGetBusinessStaffQuery } from "../../../services";
+import { AuthorizedScreenProps } from "../../../navigation";
 
 const optionsPerPage = [2, 3, 4];
 
-export const ClientsScreen = ({ navigation }) => {
+export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
+  navigation,
+}) => {
   const dispatch = useDispatch();
   const business = useBusiness();
   const {
@@ -29,12 +26,6 @@ export const ClientsScreen = ({ navigation }) => {
   console.log("useGetBusinessStaffQuery >>>", staff);
 
   const { Colors } = useTheme();
-  const [page, setPage] = React.useState<number>(0);
-  const [itemsPerPage, setItemsPerPage] = React.useState(optionsPerPage[0]);
-
-  React.useEffect(() => {
-    setPage(0);
-  }, [itemsPerPage]);
 
   const roles = {
     staff: {
@@ -51,55 +42,20 @@ export const ClientsScreen = ({ navigation }) => {
     },
   };
 
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: "Staff",
+      headerRight: () => {
+        return <CircleIconButton iconType="add" marginRight />;
+      },
+    });
+  }, [navigation]);
   return (
     <Screen
       preset="fixed"
       backgroundColor={Colors.white}
       statusBar="dark-content"
-    >
-      {/* <AuthorizedScreenHeader title={"Clients"} iconName2="magnify" /> */}
-      <DataTable>
-        <DataTable.Header>
-          <DataTable.Title>Last Name</DataTable.Title>
-          <DataTable.Title>First Name</DataTable.Title>
-          <DataTable.Title>Username</DataTable.Title>
-          <DataTable.Title>Role</DataTable.Title>
-        </DataTable.Header>
-        {isStaffSuccess ? (
-          staff?.data.map((elem) => (
-            <Button preset="none" key={String(elem._id)}>
-              <DataTable.Row>
-                <DataTable.Cell>{elem.lastName ?? "-"}</DataTable.Cell>
-                <DataTable.Cell>{elem.firstName ?? "-"}</DataTable.Cell>
-                <DataTable.Cell>{elem.username ?? elem.email}</DataTable.Cell>
-                <DataTable.Cell>
-                  {business.admins.includes(elem._id)
-                    ? roles.admin.text
-                    : roles.staff.text}
-                </DataTable.Cell>
-                <Button preset="none" style={styles.dataTableCellRightButton}>
-                  <Icon name="dots-vertical" size={25} />
-                </Button>
-              </DataTable.Row>
-            </Button>
-          ))
-        ) : (
-          <Text text="loading ..." />
-        )}
-
-        {/* <DataTable.Pagination
-          page={page}
-          numberOfPages={3}
-          onPageChange={() => null}
-          label="1-2 of 6"
-          optionsPerPage={optionsPerPage}
-          itemsPerPage={itemsPerPage}
-          setItemsPerPage={setItemsPerPage}
-          showFastPagination
-          optionsLabel={"Rows per page"}
-        /> */}
-      </DataTable>
-    </Screen>
+    ></Screen>
   );
 };
 

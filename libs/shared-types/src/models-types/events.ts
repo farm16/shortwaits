@@ -2,6 +2,7 @@ import { Document, Types } from "mongoose";
 import { PaginatedModel } from "./helpers";
 
 export type EventType = {
+  leadClientName: string;
   name: string;
   description: string;
   eventImage: string;

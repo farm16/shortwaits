@@ -12,7 +12,7 @@ import { getPaletteWithContrast, getReversePalette } from "./utils";
 
 const brandColors = {
   primary: getPaletteWithContrast("brandPrimary", "#F73859"),
-  secondary: getPaletteWithContrast("brandSecondary", "#7AC7C4"),
+  secondary: getPaletteWithContrast("brandSecondary", "#63AE9D"),
   accent: getPaletteWithContrast("brandAccent", "#384259"),
 };
 

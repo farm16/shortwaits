@@ -1,13 +1,31 @@
 import { Portal } from "@gorhom/portal";
 import React, { useState } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, TextStyle, ViewStyle } from "react-native";
 import { FAB } from "react-native-paper";
 import { useTheme } from "../../theme";
 
-type FloatingActionButtonProps = any;
+type FloatingActionButtonProps = {
+  actions: FloatingActions;
+  /**
+   *
+   */
+  onPress?(): null;
+  icon: string;
+  pressedIcon: string;
+};
+
+export type FloatingActions = {
+  icon: string;
+  onPress(): void;
+  label: string;
+  color?: string;
+  labelTextColor?: string;
+  labelStyle: ViewStyle;
+  style: ViewStyle;
+}[];
 
 export const FloatingActionButton = (props: FloatingActionButtonProps) => {
-  const { ...rest } = props;
+  const { actions = [], icon = "plus", pressedIcon = "plus" } = props;
 
   const { Colors } = useTheme();
 
@@ -16,6 +34,7 @@ export const FloatingActionButton = (props: FloatingActionButtonProps) => {
   const onStateChange = ({ open }) => setState({ open });
 
   const { open } = state;
+
   return (
     <Portal>
       <FAB.Group
@@ -25,27 +44,12 @@ export const FloatingActionButton = (props: FloatingActionButtonProps) => {
           paddingBottom: 100,
         }}
         fabStyle={{
-          backgroundColor: Colors.brandSecondary6,
+          backgroundColor: Colors.brandSecondary,
         }}
-        icon={open ? "calendar-today" : "plus"}
-        actions={[
-          { icon: "plus", onPress: () => console.log("Pressed add") },
-          {
-            icon: "star",
-            label: "Star",
-            onPress: () => console.log("Pressed star"),
-          },
-          {
-            icon: "email",
-            label: "Email",
-            onPress: () => console.log("Pressed email"),
-          },
-          {
-            icon: "bell",
-            label: "Remind",
-            onPress: () => console.log("Pressed notifications"),
-          },
-        ]}
+        backdropColor={"rgba(0, 0, 0, 0.32)"}
+        icon={open ? pressedIcon : icon}
+        color={Colors.white}
+        actions={actions}
         onStateChange={onStateChange}
         onPress={() => {
           if (open) {

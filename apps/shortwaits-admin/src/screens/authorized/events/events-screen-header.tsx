@@ -23,7 +23,7 @@ export const EventsScreenHeader = ({ user, business }) => {
         <MaterialCommunityIcon
           name={"account-box"}
           size={21}
-          color={Colors.brandSecondary6}
+          color={Colors.brandSecondary}
           style={{ marginRight: 5 }}
         />
         <Text
@@ -51,7 +51,7 @@ export const EventsScreenHeader = ({ user, business }) => {
         <MaterialCommunityIcon
           name={"account-box-multiple"}
           size={21}
-          color={Colors.brandSecondary6}
+          color={Colors.brandSecondary}
           style={{ marginRight: 5 }}
         />
         <Text

@@ -9,8 +9,8 @@ export const Checkbox = (props: CheckBoxProps) => {
   return (
     <CheckBox
       {...props}
-      onCheckColor={Colors.brandSecondary6}
-      onTintColor={Colors.brandSecondary6}
+      onCheckColor={Colors.brandSecondary}
+      onTintColor={Colors.brandSecondary}
       boxType="circle"
       style={{ marginHorizontal: 5 }}
     />

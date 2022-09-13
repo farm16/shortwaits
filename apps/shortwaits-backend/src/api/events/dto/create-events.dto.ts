@@ -4,6 +4,9 @@ import { Types } from "mongoose";
 
 export class CreateEventsDto implements EventType {
   @ApiProperty()
+  leadClientName: string;
+
+  @ApiProperty()
   eventImage: string;
 
   @ApiProperty()

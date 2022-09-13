@@ -28,23 +28,14 @@ export const Calendar = (props) => {
   const marked = getMarkedDates(events);
   const theme = useCalendarTheme();
 
-  const onDateChanged = (/* date, updateSource */) => {
-    // console.warn('ExpandableCalendarScreen onDateChanged: ', date, updateSource);
-    // fetch and set data for date + week ahead
-  };
-
-  const onMonthChange = (/* month, updateSource */) => {
-    // console.warn('ExpandableCalendarScreen onMonthChange: ', month, updateSource);
-  };
-
   return (
     <CalendarProvider
       date={new Date(Date.now()).toISOString()}
-      onDateChanged={onDateChanged}
-      onMonthChange={onMonthChange}
+      // onDateChanged={onDateChanged}
+      // onMonthChange={onMonthChange}
       showTodayButton={true}
       todayButtonStyle={{
-        backgroundColor: Colors.brandSecondary6,
+        backgroundColor: Colors.brandSecondary,
       }}
       theme={{
         todayButtonTextColor: Colors.white,

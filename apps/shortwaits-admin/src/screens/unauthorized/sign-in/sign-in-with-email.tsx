@@ -89,7 +89,7 @@ export const SignInWithEmail: FC<SignInWithEmailScreenProps> = ({
           rightIconOnPress={handlePasswordVisibility}
           rightIconName={isVisible ? "eye-off" : "eye"}
           rightIconColor={
-            isVisible ? Colors.disabledText : Colors.brandSecondary6
+            isVisible ? Colors.disabledText : Colors.brandSecondary
           }
           onChangeText={handleChange("password")}
           isTouched={touched.password}

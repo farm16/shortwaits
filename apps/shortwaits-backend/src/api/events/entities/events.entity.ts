@@ -7,6 +7,9 @@ import mongoose, { Document, Schema as MongooseSchema } from "mongoose";
 export class Events extends Document implements EventType {
   @ApiProperty()
   @Prop()
+  leadClientName: string;
+  @ApiProperty()
+  @Prop()
   eventImage: string;
   @ApiProperty()
   @Prop()

@@ -7,9 +7,9 @@ export function useCalendarTheme() {
   const { Colors } = useTheme();
   return useMemo<Theme>(() => {
     return {
-      arrowColor: Colors.brandSecondary6,
+      arrowColor: Colors.brandSecondary,
       selectedDayBackgroundColor: Colors.brandSecondary3,
-      todayBackgroundColor: Colors.brandSecondary6,
+      todayBackgroundColor: Colors.brandSecondary,
       todayButtonTextColor: Colors.white,
       todayTextColor: Colors.white,
       dayTextColor: Colors.subText,
@@ -20,7 +20,7 @@ export function useCalendarTheme() {
     };
   }, [
     Colors.brandSecondary3,
-    Colors.brandSecondary6,
+    Colors.brandSecondary,
     Colors.subText,
     Colors.text,
     Colors.white,

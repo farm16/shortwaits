@@ -48,7 +48,7 @@ export class EventsController {
     @Req() request,
     @Param("id") businessId,
     @Query() { limit, page }: PaginationParams
-  ): Promise<ResponseController["GET"]["paginatedResponse"]> {
+  ): Promise<ResponseController["GET"]["response"]["data"]> {
     return this.eventsService.getAllAdminEvents(
       request.user.sub,
       businessId,

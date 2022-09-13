@@ -46,9 +46,11 @@ export interface EventsEndpointsTypes extends GeneralSpecShape {
       GET: {
         query: EventQuery;
         body: undefined;
-        paginatedResponse: {
-          events: EventsPayloadType[];
+        response: {
           meta: { count: number };
+          data: {
+            events: EventsPayloadType[];
+          };
         };
       };
     };

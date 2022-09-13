@@ -12,7 +12,7 @@ export const BackButton: FC<ButtonProps> = (props) => (
   <Button {...props} preset="icon">
     <Icon
       name="chevron-left"
-      color={useTheme().Colors.brandSecondary6}
+      color={useTheme().Colors.brandSecondary}
       size={30}
     />
   </Button>
@@ -26,7 +26,7 @@ export const ForwardButton: FC<ButtonProps> = (props) => (
 
 export const CloseButton: FC<ButtonProps> = (props) => (
   <Button {...props} preset="headerLink">
-    <Icon name="close" color={useTheme().Colors.brandSecondary6} size={22} />
+    <Icon name="close" color={useTheme().Colors.brandSecondary} size={22} />
   </Button>
 );
 
@@ -51,7 +51,7 @@ export const TextHeaderButton: FC<ButtonProps> = (props) => {
 
 export const RightArrowButton: FC<ButtonProps> = (props) => {
   const {
-    Colors: { brandSecondary6, inputBackground },
+    Colors: { brandSecondary, inputBackground },
   } = useTheme();
   const { state = "enable", ...rest } = props;
   return (
@@ -59,7 +59,7 @@ export const RightArrowButton: FC<ButtonProps> = (props) => {
       <Icon
         name="arrow-right-bold"
         color={
-          disabledStates.includes(state) ? inputBackground : brandSecondary6
+          disabledStates.includes(state) ? inputBackground : brandSecondary
         }
         size={22}
       />
@@ -73,7 +73,7 @@ export const LeftArrowButton: FC<ButtonProps> = (props) => {
 
   const stateIcons = {
     disabled: { name: "exclamation-thick", color: "darkGray" },
-    enable: { name: "chevron-right", color: "brandSecondary6" },
+    enable: { name: "chevron-right", color: "brandSecondary" },
   };
   if (state === "loading") return <Spinner />;
   return (
@@ -92,7 +92,7 @@ export const RightChevronButton: FC<ButtonProps> = (props) => {
   const { state = "enabled", ...rest } = props;
   const stateIcons = {
     disabled: { name: "chevron-right", color: "lightGray", size: 35 },
-    enabled: { name: "chevron-right", color: "brandSecondary6", size: 35 },
+    enabled: { name: "chevron-right", color: "brandSecondary", size: 35 },
   };
   if (state === "loading") return <Spinner />;
   return (
@@ -107,7 +107,7 @@ export const RightChevronButton: FC<ButtonProps> = (props) => {
 };
 export const LeftChevronButton: FC<ButtonProps> = (props) => {
   const {
-    Colors: { brandSecondary6, backgroundOverlay },
+    Colors: { brandSecondary, backgroundOverlay },
   } = useTheme();
   const { state = "enabled", ...rest } = props;
   return (
@@ -115,7 +115,7 @@ export const LeftChevronButton: FC<ButtonProps> = (props) => {
       <Icon
         name="chevron-left"
         color={
-          disabledStates.includes(state) ? backgroundOverlay : brandSecondary6
+          disabledStates.includes(state) ? backgroundOverlay : brandSecondary
         }
         size={35}
       />
@@ -124,15 +124,27 @@ export const LeftChevronButton: FC<ButtonProps> = (props) => {
 };
 
 const _circleIcons = {
+  business: {
+    name: "store",
+    color: "brandSecondary",
+    backgroundColor: "lightGray",
+    size: 20,
+  },
+  "business-settings": {
+    name: "store-cog",
+    color: "brandSecondary",
+    backgroundColor: "lightGray",
+    size: 20,
+  },
   save: {
     name: "content-save-outline",
-    color: "brandSecondary6",
+    color: "brandSecondary",
     backgroundColor: "lightGray",
     size: 26,
   },
   "open-business": {
     name: "door-open",
-    color: "brandSecondary6",
+    color: "brandSecondary",
     backgroundColor: "lightGray",
     size: 22,
   },
@@ -144,50 +156,56 @@ const _circleIcons = {
   },
   "account-cancel": {
     name: "account-cancel",
-    color: "brandSecondary6",
+    color: "brandSecondary",
     backgroundColor: "lightGray",
     size: 24,
   },
   "add-categories": {
     name: "plus",
     backgroundColor: "lightGray",
-    color: "brandSecondary6",
+    color: "brandSecondary",
     size: 24,
   },
   "add-currency": {
     name: "plus",
     backgroundColor: "lightGray",
-    color: "brandSecondary6",
+    color: "brandSecondary",
     size: 24,
   },
   "add-staff": {
-    name: "account-plus",
+    name: "account-tie",
     backgroundColor: "lightGray",
-    color: "brandSecondary6",
+    color: "brandSecondary",
     size: 21,
   },
   "add-services": {
     name: "text-box-plus",
     backgroundColor: "lightGray",
-    color: "brandSecondary6",
+    color: "brandSecondary",
     size: 26,
   },
   "add-image": {
     name: "camera-plus",
     backgroundColor: "lightGray",
-    color: "brandSecondary6",
+    color: "brandSecondary",
     size: 24,
   },
   more: {
     name: "camera-plus",
     backgroundColor: "lightGray",
-    color: "brandSecondary6",
+    color: "brandSecondary",
+    size: 24,
+  },
+  add: {
+    name: "plus",
+    backgroundColor: "lightGray",
+    color: "brandSecondary",
     size: 24,
   },
   default: {
     name: "plus",
     backgroundColor: "lightGray",
-    color: "brandSecondary6",
+    color: "brandSecondary",
     size: 24,
   },
 } as const;
@@ -205,7 +223,8 @@ export const CircleIconButton: FC<
     noMargin?: boolean;
     iconType: CircleIconsKeys;
     iconSize?: number;
-    isHeaderLeft?: boolean;
+    marginLeft?: boolean;
+    marginRight?: boolean;
   }
 > = (props) => {
   const { Colors } = useTheme();
@@ -217,21 +236,20 @@ export const CircleIconButton: FC<
     style: styleOverride,
     text,
     textStyle,
-    //isHeaderRight = true,
-    isHeaderLeft,
+    marginRight,
+    marginLeft,
     ...rest
   } = props;
 
   const style: StyleProp<ViewStyle> = {
-    backgroundColor: Colors[circleIcons[iconType].backgroundColor],
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 36 / 2,
-    marginEnd: isHeaderLeft ? undefined : "10%",
-    marginStart: isHeaderLeft ? "10%" : undefined,
+    backgroundColor: Colors[circleIcons[iconType].backgroundColor ?? "text"],
+    width: circleIcons[iconType].size + 10,
+    height: circleIcons[iconType].size + 10,
+    borderRadius: (circleIcons[iconType].size + 10) / 2,
     justifyContent: "center",
     alignItems: "center",
-    flexDirection: "row",
+    marginLeft: marginLeft ? 15 : undefined,
+    marginRight: marginRight ? 15 : undefined,
   };
 
   return (
@@ -241,7 +259,16 @@ export const CircleIconButton: FC<
       style={[style, styleOverride]}
       state={state}
     >
-      {text ? null : (
+      {text ? (
+        <Text
+          preset="none"
+          style={[
+            { color: Colors.brandSecondary7, fontWeight: "600" },
+            textStyle,
+          ]}
+          text={text}
+        />
+      ) : (
         <Icon
           name={
             circleIcons[iconType]
@@ -256,28 +283,18 @@ export const CircleIconButton: FC<
           size={circleIcons[iconType].size || iconSize}
         />
       )}
-      {text ? (
-        <Text
-          preset="none"
-          style={[
-            { color: Colors.brandSecondary7, fontWeight: "600" },
-            textStyle,
-          ]}
-          text={text}
-        />
-      ) : null}
     </Button>
   );
 };
 export const SubmitHeaderIconButton: FC<ButtonProps> = (props) => {
   const {
-    Colors: { brandSecondary6, gray },
+    Colors: { brandSecondary, gray },
   } = useTheme();
   return (
     <Button preset="headerLink" {...props}>
       <Icon
         name="send"
-        color={props.disabled ? gray : brandSecondary6}
+        color={props.disabled ? gray : brandSecondary}
         size={20}
       />
     </Button>
@@ -285,13 +302,13 @@ export const SubmitHeaderIconButton: FC<ButtonProps> = (props) => {
 };
 export const CancelAndLogOutHeaderButton: FC<ButtonProps> = (props) => {
   const {
-    Colors: { brandSecondary6, gray },
+    Colors: { brandSecondary, gray },
   } = useTheme();
   return (
     <Button {...props} preset="headerLink">
       <Icon
         name="account-cancel"
-        color={props.disabled ? gray : brandSecondary6}
+        color={props.disabled ? gray : brandSecondary}
         size={22}
       />
     </Button>

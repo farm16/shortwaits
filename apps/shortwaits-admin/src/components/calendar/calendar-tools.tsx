@@ -1,5 +1,6 @@
 import { isEmpty } from "lodash";
-import { intervalToDuration, formatDuration } from "date-fns";
+import { intervalToDuration, formatDuration, format } from "date-fns";
+import { EventsPayloadType } from "@shortwaits/shared-types";
 
 export function getFutureDates(numberOfDays: number) {
   const array: string[] = [];
@@ -80,6 +81,25 @@ export const getEventTime = (milliSeconds: number) => {
   return formatDuration(milliSecondsToDuration(milliSeconds), {
     format: ["hours", "minutes"],
     locale: shortEnLocale,
+    zero: true,
+  });
+};
+
+export const formatDateToCalendarDate = (date: string | Date) =>
+  format(new Date(date), "MM/dd/yyyy");
+
+export const getCalendarData = (events: EventsPayloadType[]) => {
+  if (!events) return [];
+  const allDates = events.map((event) =>
+    formatDateToCalendarDate(event.startTime)
+  );
+  return [...new Set(allDates)].map((date) => {
+    return {
+      title: formatDateToCalendarDate(date),
+      data: events.filter(
+        (event) => formatDateToCalendarDate(event.startTime) === date
+      ),
+    };
   });
 };
 

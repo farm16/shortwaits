@@ -1,15 +1,15 @@
 import React, { FC, useCallback } from "react";
 import { Alert, TouchableOpacity, View, Image, StyleSheet } from "react-native";
-import { EventType } from "@shortwaits/shared-types";
+import { EventsPayloadType } from "@shortwaits/shared-types";
 import { isEmpty, truncate } from "lodash";
 
 import { Emoji, Text } from "../";
 import { useTheme } from "../../theme";
 import { getEventTime } from "./calendar-tools";
-import { truncated } from "../../utils";
 import defaultUserImage from "../../assets/images/user.png";
+import { useService } from "../../redux";
 
-type AgendaItemProps = { item: EventType };
+type AgendaItemProps = { item: EventsPayloadType };
 const BORDER_RADIUS = 6;
 const statusDisplayMessages = {
   success: "Request accepted",
@@ -20,6 +20,7 @@ const statusDisplayMessages = {
 export const AgendaItem: FC<AgendaItemProps> = (props) => {
   const { item } = props;
   const { Colors } = useTheme();
+  const service = useService(item.service);
 
   const itemPressed = useCallback(() => {
     Alert.alert(item.name);
@@ -42,7 +43,7 @@ export const AgendaItem: FC<AgendaItemProps> = (props) => {
       width: 10,
       borderTopStartRadius: BORDER_RADIUS,
       borderBottomStartRadius: BORDER_RADIUS,
-      backgroundColor: item.service.serviceColor.hexCode,
+      backgroundColor: service?.serviceColor.hexCode ?? "",
     },
     eventTime: {
       paddingHorizontal: 5,
@@ -63,32 +64,31 @@ export const AgendaItem: FC<AgendaItemProps> = (props) => {
       textAlign: "center",
       width: "100%",
     },
+    eventNameFloatingLabels: {
+      right: 5,
+      top: 0,
+      position: "absolute",
+      flexDirection: "row",
+    },
     eventName: {
-      height: "100%",
-      justifyContent: "space-between",
+      justifyContent: "space-evenly",
       flexGrow: 1,
-      paddingHorizontal: 0,
-      paddingRight: 5,
-      paddingVertical: 6,
+      marginVertical: 6,
+      alignSelf: "stretch",
     },
     eventNameRow1: {
-      flexDirection: "row",
-      width: "100%",
-      alignItems: "flex-end",
-    },
-    eventNameRow1Column1: {
       color: Colors.text,
       fontSize: 16,
       fontWeight: "500",
       textTransform: "capitalize",
     },
-    eventNameRow1Column2: {
-      right: 0,
-      position: "absolute",
-      flexDirection: "row",
-    },
     eventNameRow2: {
-      color: item.service.serviceColor.hexCode ?? Colors.subText,
+      color: service?.serviceColor.hexCode ?? Colors.subText,
+      fontSize: 14.5,
+      fontWeight: "500",
+    },
+    eventNameRow3: {
+      color: Colors[item.status?.statusName ?? "text"],
       fontSize: 14.5,
       fontWeight: "500",
     },
@@ -130,7 +130,9 @@ export const AgendaItem: FC<AgendaItemProps> = (props) => {
       <Text
         preset="none"
         style={styles.eventTimeRow1}
-        text={item.startTime.toLocaleTimeString([], { timeStyle: "short" })}
+        text={new Date(item.startTime).toLocaleTimeString([], {
+          timeStyle: "short",
+        })}
       />
       <Text
         preset="none"
@@ -141,25 +143,30 @@ export const AgendaItem: FC<AgendaItemProps> = (props) => {
   );
   const EventName = () => (
     <View style={styles.eventName}>
-      <View style={styles.eventNameRow1}>
+      <View style={styles.eventNameFloatingLabels}>
+        <Emoji name="wheelchair" />
+        <Emoji name="star2" />
+      </View>
+      {item.leadClientName ? (
         <Text
           preset="none"
-          style={styles.eventNameRow1Column1}
-          text={truncated(item.clients[0][item.clients[0].alias], 10) ?? ""}
+          style={styles.eventNameRow1}
+          text={truncate(item.leadClientName, { length: 10, separator: "." })}
         />
-        <View style={styles.eventNameRow1Column2}>
-          <Emoji name="wheelchair" />
-          <Emoji name="star2" />
-        </View>
-      </View>
+      ) : null}
       <Text
         preset="none"
         style={styles.eventNameRow2}
-        text={truncate(item.service.name, { length: 21, separator: "." })}
+        text={truncate(service.name, { length: 21, separator: "." })}
       />
       <Text
-        preset={item.status.statusName}
-        text={statusDisplayMessages[item.status.statusName]}
+        style={styles.eventNameRow3}
+        preset={item.status?.statusName}
+        text={
+          item.status?.statusName
+            ? statusDisplayMessages[item.status.statusName]
+            : ""
+        }
       />
     </View>
   );
@@ -167,7 +174,7 @@ export const AgendaItem: FC<AgendaItemProps> = (props) => {
     <View style={styles.eventClientImage}>
       <Image
         source={{
-          uri: item.clients[0].accountImageUrl,
+          uri: item.eventImage,
         }}
         defaultSource={defaultUserImage}
         style={styles.eventClientImageColumn}

@@ -119,7 +119,7 @@ export const buttonPresets = ({
     none: {},
     primary: {
       ...TEXT_BASE,
-      color: Colors.brandSecondary6,
+      color: Colors.brandSecondary,
       fontWeight: "600",
     },
     headerLink: {
@@ -139,7 +139,7 @@ export const buttonPresets = ({
     subLink: {
       ...TEXT_BASE,
       ...Fonts.textSmall,
-      color: Colors.brandSecondary6,
+      color: Colors.brandSecondary,
       fontWeight: "600",
     },
     link: {

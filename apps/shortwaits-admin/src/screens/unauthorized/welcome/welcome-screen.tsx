@@ -71,7 +71,7 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation }) => {
           style={{
             backgroundColor: Colors.white,
           }}
-          textStyle={{ color: Colors.brandSecondary6 }}
+          textStyle={{ color: Colors.brandSecondary }}
           preset="primary"
           text="Register"
           onPress={() =>
