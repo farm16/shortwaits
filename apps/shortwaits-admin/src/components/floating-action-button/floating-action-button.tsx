@@ -6,9 +6,7 @@ import { useTheme } from "../../theme";
 
 type FloatingActionButtonProps = {
   actions: FloatingActions;
-  /**
-   *
-   */
+  isBottomTab?: boolean;
   onPress?(): null;
   icon: string;
   pressedIcon: string;
@@ -25,7 +23,12 @@ export type FloatingActions = {
 }[];
 
 export const FloatingActionButton = (props: FloatingActionButtonProps) => {
-  const { actions = [], icon = "plus", pressedIcon = "plus" } = props;
+  const {
+    actions = [],
+    icon = "plus",
+    pressedIcon = "plus",
+    isBottomTab = true,
+  } = props;
 
   const { Colors } = useTheme();
 
@@ -41,7 +44,7 @@ export const FloatingActionButton = (props: FloatingActionButtonProps) => {
         visible={true}
         open={open}
         style={{
-          paddingBottom: 100,
+          paddingBottom: isBottomTab ? 100 : 0,
         }}
         fabStyle={{
           backgroundColor: Colors.brandSecondary,

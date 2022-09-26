@@ -57,10 +57,10 @@ export const EventsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
     isLoading: isEventsLoading,
     isSuccess: isEventSuccess,
   } = useGetAllBusinessEventsQuery(
-    business && isBusinessServicesSuccess ? business._id : skipToken,
-    {
-      refetchOnMountOrArgChange: true,
-    }
+    business && isBusinessServicesSuccess ? business._id : skipToken
+    // {
+    //   refetchOnMountOrArgChange: true, // remember we remount on every bottom tab screen
+    // }
   );
   const events = useMemo(
     () => getCalendarData(eventsData?.data.events),
@@ -68,7 +68,7 @@ export const EventsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
   );
   const actions: FloatingActions = [
     {
-      label: "EVENTS",
+      label: "EVENT",
       onPress: () => null,
       icon: "calendar-clock",
       color: Colors.white,
@@ -82,7 +82,7 @@ export const EventsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
       },
     },
     {
-      label: "CLIENTS",
+      label: "CLIENT",
       onPress: () => null,
       icon: "account-group",
       color: Colors.white,

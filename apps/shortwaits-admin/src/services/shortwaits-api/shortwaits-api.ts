@@ -5,6 +5,7 @@ import {
   GetAdminMobile,
   GetLocalSignIn,
   GetLocalSignUp,
+  GetBusinessClients,
   GetBusiness,
   GetBusinessCategory,
   GetBusinessHours,
@@ -33,6 +34,7 @@ export const shortwaitsApi = createApi({
     localSignIn: GetLocalSignIn(builder),
     //business
     getBusiness: GetBusiness(builder),
+    getBusinessClients: GetBusinessClients(builder),
     getBusinessCategory: GetBusinessCategory(builder),
     getBusinessHours: GetBusinessHours(builder),
     getBusinessServices: GetBusinessServices(builder),

@@ -59,6 +59,7 @@
     "mongoose": "*",
     "mongoose-paginate-v2": "*",
     "date-fns": "*",
-    "emoji-datasource": "*"
+    "emoji-datasource": "*",
+    "react-native-contacts": "*"
   }
 }

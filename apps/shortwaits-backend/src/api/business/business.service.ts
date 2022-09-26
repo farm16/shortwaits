@@ -11,6 +11,7 @@ import {
   BusinessType,
   BusinessHoursType,
   BusinessPayloadType,
+  UserType,
 } from "@shortwaits/shared-types";
 import { Business } from "./entities/business.entity";
 import { Service } from "../services/entities/service.entity";
@@ -144,12 +145,12 @@ export class BusinessService {
   async findByKey(
     businessId: Types.ObjectId,
     key: keyof BusinessType
-  ): Promise<Business> {
+  ): Promise<Business[keyof BusinessType]> {
     const data = await this.businessModel
       .findById(businessId, String(key))
       .exec();
-    console.log("findByKey>>>", businessId, key, data);
-    return data;
+    // console.log("findByKey>>>", businessId, key, data);
+    return data[key];
   }
 
   async getStaff(businessId: Types.ObjectId, userId: Types.ObjectId) {
@@ -170,5 +171,15 @@ export class BusinessService {
         .select("-__v -hashedRt");
       return staff;
     }
+  }
+
+  async createBusinessClients(businessId: Types.ObjectId, clients: UserType[]) {
+    const insertedClients = await this.userModel.insertMany(clients);
+    const clientsIds = insertedClients.map((client) => {
+      return client._id;
+    });
+    await this.businessModel.findOneAndUpdate(businessId, {
+      $push: { clients: clientsIds },
+    });
   }
 }

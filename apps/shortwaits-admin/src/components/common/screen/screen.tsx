@@ -11,7 +11,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTheme } from "../../../theme";
 import { ScreenProps } from "./screen.props";
 import { isNonScrolling, offsets, presets } from "./screen.presets";
-
+import { Text } from "../text/text";
 const isIos = Platform.OS === "ios";
 
 function ScreenWithoutScrolling(props: ScreenProps) {
@@ -49,6 +49,7 @@ function ScreenWithScrolling(props: ScreenProps) {
     : { backgroundColor: Colors.background };
   const insetStyle = { paddingTop: props.unsafe ? 0 : insets.top };
 
+  const Header = props?.header ? props?.header : null;
   return (
     <KeyboardAvoidingView
       style={[preset.outer, backgroundStyle]}

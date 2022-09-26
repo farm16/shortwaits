@@ -5,6 +5,7 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  Post,
   Put,
   Req,
   UseGuards,
@@ -123,6 +124,11 @@ export class BusinessController {
     return this.businessService.findByKey(businessId, "hours");
   }
 
+  /**
+   *
+   * @todo
+   * we need to paginate
+   */
   @Get(":business_id/events")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
@@ -133,7 +139,33 @@ export class BusinessController {
   getBusinessEvents(@Param("business_id") businessId: Types.ObjectId) {
     return this.businessService.findByKey(businessId, "events");
   }
+  //========== Clients
+  /**
+   * @todo
+   * we need to paginate
+   */
+  @Get(":business_id/clients")
+  @HttpCode(HttpStatus.OK)
+  @ApiCreatedResponse({
+    status: HttpStatus.OK,
+    description: "Returns business hours",
+    type: BusinessSuccessResponse,
+  })
+  getBusinessClients(@Param("business_id") businessId: Types.ObjectId) {
+    return this.businessService.findByKey(businessId, "clients");
+  }
 
+  @Post(":business_id/clients")
+  @HttpCode(HttpStatus.OK)
+  @ApiCreatedResponse({
+    status: HttpStatus.OK,
+    description: "Returns business hours",
+    type: BusinessSuccessResponse,
+  })
+  createBusinessClients(@Param("business_id") businessId: Types.ObjectId) {
+    return this.businessService.findByKey(businessId, "clients");
+  }
+  //==========
   @Put(":business_id/hours")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({

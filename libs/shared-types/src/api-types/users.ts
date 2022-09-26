@@ -1,6 +1,6 @@
-import { UserType } from '../models-types';
+import { UserType } from "../models-types";
 
-import { DocType, SuccessResponseType } from '.';
+import { DocType, SuccessResponseType } from ".";
 
 export type UserSuccessResponseType = SuccessResponseType<UserPayloadType>;
 

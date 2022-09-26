@@ -59,15 +59,15 @@ export const Onboarding1Screen: FC<
         });
       },
     },
-    "onBoarding1"
+    "onboarding1"
   );
-
+  const isCategorySelected = businessState.categories.length > 0;
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: `Welcome ${user?.firstName || ""}`,
+      headerTitle: `Welcome ${user?.familyName || ""}`,
       headerLeft: () => (
         <CircleIconButton
-          marginRight
+          marginLeft
           iconType="account-cancel"
           onPress={() => {
             signOut();
@@ -76,12 +76,20 @@ export const Onboarding1Screen: FC<
       ),
       headerRight: () => (
         <RightChevronButton
-          state={isEmpty(errors) ? "enabled" : "disabled"}
+          state={isEmpty(errors) && isCategorySelected ? "enabled" : "disabled"}
           onPress={(e) => handleSubmit()}
         />
       ),
     });
-  }, [navigation, user?.firstName, dispatch, handleSubmit, errors, signOut]);
+  }, [
+    navigation,
+    dispatch,
+    handleSubmit,
+    errors,
+    signOut,
+    user?.familyName,
+    isCategorySelected,
+  ]);
 
   return (
     <Screen preset="scroll" style={{ alignItems: "center" }}>
@@ -102,7 +110,7 @@ export const Onboarding1Screen: FC<
       />
       <Space size="small" />
       <TextFieldCard
-        title="Business Description"
+        title="Description"
         placeholder="A short description about your business"
         multiline
         maxLength={150} // get reduced to 140 by the form's validation
@@ -130,7 +138,7 @@ export const Onboarding1Screen: FC<
        * schedule should default should be 5 days per week
        */}
       <ButtonCard
-        title="Business Hours"
+        title="Hours"
         subTitle={getPrettyStringFromHours(businessState?.hours)}
         onPress={() =>
           navigation.navigate("modals", {
@@ -143,7 +151,7 @@ export const Onboarding1Screen: FC<
       />
       <Space size="small" />
       <ButtonCard
-        title="Personnel"
+        title="Staff"
         subTitle={getStaffCount(businessState?.staff)}
         onPress={() =>
           navigation.navigate("modals", {

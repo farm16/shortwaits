@@ -6,11 +6,13 @@ import {
   Delete,
   Param,
   Controller,
+  Req,
   Res,
   NotFoundException,
   HttpStatus,
   UseGuards,
   UseInterceptors,
+  HttpCode,
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 
@@ -28,32 +30,30 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get(":id")
-  async get(@Res() res, @Param("id") userId: string) {
+  @HttpCode(HttpStatus.OK)
+  get(@Res() res, @Param("id") userId: string) {
     if (!userId) {
       throw new NotFoundException("User ID does not exist");
     }
-    const user = await this.usersService.findById(userId);
+    const user = this.usersService.findById(userId);
     return res.status(HttpStatus.OK).json(user);
   }
 
-  @Put(":id")
-  async update(
-    @Res() res,
-    @Body("id") userId: string,
-    @Body("user") userData: UpdateUserDto
-  ) {
-    const updatedUser = await this.usersService.update(userId, userData);
-    return res.status(HttpStatus.OK).json(updatedUser);
+  @Put()
+  @HttpCode(HttpStatus.ACCEPTED)
+  update(@Req() request, @Body("user") userData: UpdateUserDto) {
+    return this.usersService.update(request.user.sub, userData);
   }
 
   @Post()
-  async create(@Body("user") userData: CreateUserDto) {
+  @HttpCode(HttpStatus.CREATED)
+  create(@Body("user") userData: CreateUserDto) {
     return this.usersService.create(userData);
   }
 
   @Delete(":id")
-  async delete(@Res() res, @Param() params) {
-    await this.usersService.remove(params.slug);
+  delete(@Res() res, @Param() params) {
+    this.usersService.remove(params.slug);
     return res.status(HttpStatus.OK);
   }
 }

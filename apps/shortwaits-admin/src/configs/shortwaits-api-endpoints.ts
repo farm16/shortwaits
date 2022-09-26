@@ -87,6 +87,10 @@ export const shortwaitsApiEndpoints = {
       getPath: (_id: string) => `/business/register`,
       METHOD: "PUT",
     },
+    getBusinessClients: {
+      getPath: (_id: string) => `/business/${_id}/clients`,
+      METHOD: "GET",
+    },
   } as BusinessEndpoint,
   CATEGORIES: {
     getCategories: {

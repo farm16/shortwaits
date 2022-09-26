@@ -94,7 +94,7 @@ export const StaffSelector: SelectorComponentType = ({ navigation, type }) => {
           // keyExtractor={(item, index) => `${item.name || ""}${index}`}
         />
         <BottomSheet snapPoints={["77%"]} ref={bottomSheetRef}>
-          {/* <SimpleServiceForm
+          {/* <AddServiceForm
             mode="update"
             initialValues={}
             onSubmit={(formData) => {}}

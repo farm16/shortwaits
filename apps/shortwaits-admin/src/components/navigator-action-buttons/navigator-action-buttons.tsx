@@ -124,6 +124,18 @@ export const LeftChevronButton: FC<ButtonProps> = (props) => {
 };
 
 const _circleIcons = {
+  check: {
+    name: "check",
+    color: "brandSecondary",
+    backgroundColor: "lightGray",
+    size: 26,
+  },
+  cancel: {
+    name: "close",
+    color: "red3",
+    backgroundColor: "lightGray",
+    size: 26,
+  },
   business: {
     name: "store",
     color: "brandSecondary",
@@ -216,7 +228,10 @@ type CircleIconsValues = {
   backgroundColor: ThemeColorName;
   size: number;
 };
-const circleIcons = _circleIcons as Record<CircleIconsKeys, CircleIconsValues>;
+const circleIcons = _circleIcons as unknown as Record<
+  CircleIconsKeys,
+  CircleIconsValues
+>;
 
 export const CircleIconButton: FC<
   ButtonProps & {

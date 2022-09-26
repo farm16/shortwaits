@@ -1,14 +1,19 @@
-import React from "react";
+import React, { useLayoutEffect, useRef } from "react";
 import { StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useDispatch } from "react-redux";
 
 import {
+  AddServiceForm,
   AuthorizedScreenHeader,
+  BottomSheet,
+  BottomSheetType,
   Button,
   ButtonCard,
+  CircleIconButton,
   Screen,
   Text,
+  useBottomSheet,
 } from "../../../components";
 import { useTheme } from "../../../theme";
 import { DataTable } from "react-native-paper";
@@ -20,36 +25,27 @@ const optionsPerPage = [2, 3, 4];
 export const MyBusinessScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const business = useBusiness();
-  const {
-    data: staff,
-    isLoading: isStaffLoading,
-    isSuccess: isStaffSuccess,
-  } = useGetBusinessStaffQuery(business._id);
-
-  console.log("useGetBusinessStaffQuery >>>", staff);
 
   const { Colors } = useTheme();
-  const [page, setPage] = React.useState<number>(0);
-  const [itemsPerPage, setItemsPerPage] = React.useState(optionsPerPage[0]);
+  const bottomSheetRef = useRef<BottomSheetType>(null);
+  const handleBottomSheet = useBottomSheet(bottomSheetRef);
 
-  React.useEffect(() => {
-    setPage(0);
-  }, [itemsPerPage]);
-
-  const roles = {
-    staff: {
-      text: "staff",
-      icon: "",
-    },
-    admin: {
-      text: "admin",
-      icon: "",
-    },
-    superAdmin: {
-      text: "admin",
-      icon: "",
-    },
-  };
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: business.shortName,
+      headerRight: () => {
+        return (
+          <CircleIconButton
+            iconType="add"
+            marginRight
+            onPress={() => {
+              handleBottomSheet.expand();
+            }}
+          />
+        );
+      },
+    });
+  }, [business.shortName, handleBottomSheet, navigation]);
 
   return (
     <Screen
@@ -57,52 +53,13 @@ export const MyBusinessScreen = ({ navigation }) => {
       backgroundColor={Colors.white}
       statusBar="dark-content"
     >
-      <AuthorizedScreenHeader
-        title={"Staff"}
-        iconName2="magnify"
-        iconName1="plus-thick"
-      />
-      <DataTable>
-        <DataTable.Header>
-          <DataTable.Title>Last Name</DataTable.Title>
-          <DataTable.Title>First Name</DataTable.Title>
-          <DataTable.Title>Username</DataTable.Title>
-          <DataTable.Title>Role</DataTable.Title>
-        </DataTable.Header>
-        {isStaffSuccess ? (
-          staff?.data.map((elem) => (
-            <Button preset="none" key={String(elem._id)}>
-              <DataTable.Row>
-                <DataTable.Cell>{elem.lastName ?? "-"}</DataTable.Cell>
-                <DataTable.Cell>{elem.firstName ?? "-"}</DataTable.Cell>
-                <DataTable.Cell>{elem.username ?? elem.email}</DataTable.Cell>
-                <DataTable.Cell>
-                  {business.admins.includes(elem._id)
-                    ? roles.admin.text
-                    : roles.staff.text}
-                </DataTable.Cell>
-                <Button preset="none" style={styles.dataTableCellRightButton}>
-                  <Icon name="dots-vertical" size={25} />
-                </Button>
-              </DataTable.Row>
-            </Button>
-          ))
-        ) : (
-          <Text text="loading ..." />
-        )}
-
-        {/* <DataTable.Pagination
-          page={page}
-          numberOfPages={3}
-          onPageChange={() => null}
-          label="1-2 of 6"
-          optionsPerPage={optionsPerPage}
-          itemsPerPage={itemsPerPage}
-          setItemsPerPage={setItemsPerPage}
-          showFastPagination
-          optionsLabel={"Rows per page"}
-        /> */}
-      </DataTable>
+      <BottomSheet
+        snapPointsLevel={6}
+        ref={bottomSheetRef}
+        // onClose={() => setForm({ ...{ data: null, mode: null } })}
+      >
+        <AddServiceForm mode={"update"} initialValues={undefined} />
+      </BottomSheet>
     </Screen>
   );
 };

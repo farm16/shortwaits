@@ -6,6 +6,7 @@ import {
   GeneralSpecShape,
   ServicesPayloadType,
   SuccessResponseType,
+  UserPayloadType,
 } from ".";
 
 export type BusinessSuccessResponseType =
@@ -27,6 +28,7 @@ export type BusinessEndpointsPaths =
   | BusinessEndpointsTypes["/business/:business_id/services"]["path"]
   | BusinessEndpointsTypes["/business/:business_id/categories"]["path"]
   | BusinessEndpointsTypes["/business/:business_id/staff"]["path"]
+  | BusinessEndpointsTypes["/business/:business_id/clients"]["path"]
   | BusinessEndpointsTypes["/business/:business_id/hours"]["path"]
   | BusinessEndpointsTypes["/business"]["path"];
 
@@ -118,6 +120,16 @@ export interface BusinessEndpointsTypes extends GeneralSpecShape {
         query: undefined;
         body: undefined;
         response: BusinessType;
+      };
+    };
+  };
+  "/business/:business_id/clients": {
+    path: `/business/${string}/clients`;
+    methods: {
+      GET: {
+        query: undefined;
+        body: undefined;
+        response: UserPayloadType[];
       };
     };
   };

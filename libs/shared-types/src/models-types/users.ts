@@ -26,26 +26,42 @@ export type UserDocType = UserType & Document;
 
 export type UserType = {
   businesses: ObjectId[];
-  alias: "username" | "firstName" | "lastName" | "customAlias";
-  customAlias: string;
-  username: string;
-  firstName: string;
-  lastName: string;
+  alias: "familyName" | "givenName" | "middleName" | "displayName";
+  displayName: string;
+  //
+  familyName: string;
+  givenName: string;
+  middleName: string;
   accountImageUrl: string;
-  address: {
+  phoneNumbers: {
+    label: string;
+    number: string;
+  }[];
+  imAddresses: {
+    username: string;
+    service: string;
+  }[];
+  addresses: {
+    label: string;
     address1: string;
     address2: string;
     city: string;
+    region: string;
     state: string;
-    zip: number;
-    countryCode: string;
-  };
+    postCode: number;
+    country: string;
+  }[];
   socialAccounts: {
     kind: string;
     uid?: string;
     username?: string;
     password?: string;
   }[];
+  birthday: {
+    year: number;
+    month: number;
+    day: number;
+  };
   registrationState: {
     screenName: string;
     state: number;

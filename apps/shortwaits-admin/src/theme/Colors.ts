@@ -4,7 +4,7 @@ import { getPaletteWithContrast, getReversePalette } from "./utils";
  * Brand's Colors
  *
  * #F73859 primary
- * #7AC7C4 secondary
+ * #63AE9D secondary
  * #C4EDDE secondary 2
  * #384259 accent
  *

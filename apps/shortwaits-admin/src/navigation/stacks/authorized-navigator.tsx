@@ -22,7 +22,7 @@ export const AuthorizedNavigator = () => {
     <Tab.Navigator
       initialRouteName={AUTHORIZED_SCREENS.EVENTS_SCREEN}
       screenOptions={{
-        // unmountOnBlur: true,
+        unmountOnBlur: true,
         tabBarStyle: {
           borderTopWidth: 0,
           backgroundColor: Colors.white,

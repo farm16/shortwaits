@@ -11,7 +11,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { CompositeNavigationProp } from "@react-navigation/native";
 import { DocType, ServicesType } from "@shortwaits/shared-types";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
-import { ActivityIndicator, AnimatedFAB } from "react-native-paper";
+import { ActivityIndicator } from "react-native-paper";
 
 import {
   ServiceCard,
@@ -22,8 +22,9 @@ import {
   BottomSheetType,
   useBottomSheet,
   Button,
-  SimpleServiceForm,
-  ServiceForm,
+  AddServiceForm,
+  AddServiceFormValues,
+  FloatingActionButton,
 } from "../../../components";
 import { useTheme } from "../../../theme";
 import {
@@ -47,14 +48,14 @@ export type SampleBusinessServices = number;
 
 export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
   const { Colors } = useTheme();
-  const [form, setForm] = useState<ServiceForm>({
+  const [form, setForm] = useState<AddServiceFormValues>({
     data: null,
     mode: null,
   });
   const business = useBusiness();
   const bottomSheetRef = useRef<BottomSheetType>(null);
   const handleBottomSheet = useBottomSheet(bottomSheetRef);
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   // const [registerBusiness, postBusinessRegistrationMutationStatus] =
   //   usePostBusinessRegistrationMutation();
@@ -71,10 +72,7 @@ export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
     // isFetching,
     isLoading,
     isSuccess,
-  } = useGetServicesByBusinessQuery(
-    business ? String(business?._id) : skipToken
-  );
-  // console.log("services >>>", services);
+  } = useGetServicesByBusinessQuery(business ? business?._id : skipToken);
 
   useEffect(() => {
     console.log("form >>>", form);
@@ -103,14 +101,14 @@ export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
           onPress={() => registerBusiness(business)}
           style={[
             {
-              backgroundColor: Colors.white,
-              borderColor: Colors.brandPrimary,
+              backgroundColor: Colors.orange1,
+              borderColor: Colors.orange,
             },
             styles.registerButton,
           ]}
           textStyle={[
             {
-              color: Colors.brandPrimary,
+              color: Colors.orange,
             },
             styles.registerButtonText,
           ]}
@@ -118,8 +116,7 @@ export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
       ),
     });
   }, [
-    Colors.brandPrimary,
-    Colors.white,
+    Colors,
     business,
     handleBusinessRegistration,
     navigation,
@@ -147,13 +144,17 @@ export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
           }}
           keyExtractor={(item) => String(item._id)}
         />
+        <FloatingActionButton
+          actions={[{ icon: "plus" }]}
+          isBottomTab={false}
+        />
         <BottomSheet
           snapPointsLevel={6}
           ref={bottomSheetRef}
           onClose={() => setForm({ ...{ data: null, mode: null } })}
         >
           {form.data ? (
-            <SimpleServiceForm mode={form.mode} initialValues={form.data} />
+            <AddServiceForm mode={form.mode} initialValues={form.data} />
           ) : null}
         </BottomSheet>
       </Screen>
@@ -184,7 +185,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   registerButtonText: {
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: "600",
     textTransform: "uppercase",
   },

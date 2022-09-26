@@ -1,16 +1,65 @@
 import { Schema, Prop, SchemaFactory, raw } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
 import { Document, Types } from "mongoose";
-import { UserType, ObjectId } from "@shortwaits/shared-types";
+import { UserType } from "@shortwaits/shared-types";
 
 @Schema()
 export class User extends Document implements UserType {
   @ApiProperty()
   @Prop()
+  displayName: string;
+  @ApiProperty()
+  @Prop()
+  familyName: string;
+  @ApiProperty()
+  @Prop()
+  givenName: string;
+  @ApiProperty()
+  @Prop()
+  middleName: string;
+  @ApiProperty()
+  @Prop()
+  phoneNumbers: {
+    label: string;
+    number: string;
+  }[];
+  @ApiProperty()
+  @Prop()
+  imAddresses: {
+    username: string;
+    service: string;
+  }[];
+  @ApiProperty()
+  @Prop()
+  addresses: {
+    label: string;
+    address1: string;
+    address2: string;
+    city: string;
+    region: string;
+    state: string;
+    postCode: number;
+    country: string;
+  }[];
+  @ApiProperty()
+  @Prop(
+    raw({
+      year: { type: Number },
+      month: { type: Number },
+      day: { type: Number },
+    })
+  )
+  birthday: {
+    year: number;
+    month: number;
+    day: number;
+  };
+  @ApiProperty()
+  @Prop()
   businesses: Types.ObjectId[];
   @ApiProperty()
   @Prop()
-  alias: "username" | "firstName" | "lastName" | "customAlias";
+  alias: "familyName" | "givenName" | "middleName" | "displayName";
   @ApiProperty()
   @Prop()
   customAlias: string;

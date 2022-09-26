@@ -7,6 +7,8 @@ import UpdateBusinessServices from "./update-services";
 import UpdateBusinessHours from "./update-hours";
 import UpdateBusiness from "./update-business";
 import RegisterBusiness from "./register-business";
+import GetBusinessClients from "./get-clients";
+
 export {
   GetBusiness,
   GetBusinessCategory,
@@ -17,4 +19,5 @@ export {
   UpdateBusinessServices,
   UpdateBusinessHours,
   RegisterBusiness,
+  GetBusinessClients,
 };

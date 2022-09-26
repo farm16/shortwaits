@@ -10,6 +10,7 @@ export * from "./screen/screen";
 export * from "./bottom-sheet";
 export * from "./button/button";
 export * from "./space/space";
+export * from "./list/list";
 export * from "./card/card";
 export * from "./text/text";
 export * from "./sliders";
