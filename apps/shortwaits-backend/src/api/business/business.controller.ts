@@ -148,7 +148,7 @@ export class BusinessController {
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
-    description: "Returns business hours",
+    description: "Returns business clients",
     type: BusinessSuccessResponse,
   })
   getBusinessClients(@Param("business_id") businessId: Types.ObjectId) {
@@ -158,8 +158,8 @@ export class BusinessController {
   @Post(":business_id/clients")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
-    status: HttpStatus.OK,
-    description: "Returns business hours",
+    status: HttpStatus.CREATED,
+    description: "Returns created",
     type: BusinessSuccessResponse,
   })
   createBusinessClients(@Param("business_id") businessId: Types.ObjectId) {

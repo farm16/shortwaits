@@ -11,18 +11,19 @@ import {
   BusinessType,
   BusinessHoursType,
   BusinessPayloadType,
-  UserType,
+  BusinessUserType,
 } from "@shortwaits/shared-types";
 import { Business } from "./entities/business.entity";
 import { Service } from "../services/entities/service.entity";
-import { User } from "../users/entities/user.entity";
+import { BusinessUser } from "../business-user/entities/business-user.entity";
 
 @Injectable()
 export class BusinessService {
   constructor(
     @InjectModel(Business.name) private businessModel: Model<Business>,
     @InjectModel(Service.name) private serviceModel: Model<Service>,
-    @InjectModel(User.name) private userModel: Model<User>,
+    @InjectModel(BusinessUser.name)
+    private businessUserModel: Model<BusinessUser>,
     private config: ConfigService
   ) {}
 
@@ -162,7 +163,7 @@ export class BusinessService {
     );
     if (isAdmin || isSuperAdmin) {
       console.log("finding staff");
-      const staff = this.userModel
+      const staff = this.businessUserModel
         .find({
           _id: {
             $in: businessData.staff,
@@ -173,8 +174,11 @@ export class BusinessService {
     }
   }
 
-  async createBusinessClients(businessId: Types.ObjectId, clients: UserType[]) {
-    const insertedClients = await this.userModel.insertMany(clients);
+  async createBusinessClients(
+    businessId: Types.ObjectId,
+    clients: BusinessUserType[]
+  ) {
+    const insertedClients = await this.businessUserModel.insertMany(clients);
     const clientsIds = insertedClients.map((client) => {
       return client._id;
     });

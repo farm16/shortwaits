@@ -8,7 +8,6 @@ import {
   CurrencyType,
   ObjectId,
 } from "@shortwaits/shared-types";
-import { User } from "../../users/entities/user.entity";
 
 @Schema()
 export class Business extends Document implements BusinessType {

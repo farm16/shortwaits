@@ -1,10 +1,10 @@
 import { Schema, Prop, SchemaFactory, raw } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
 import { Document, Types } from "mongoose";
-import { UserType } from "@shortwaits/shared-types";
+import { ClientUserType } from "@shortwaits/shared-types";
 
-@Schema()
-export class User extends Document implements UserType {
+@Schema({ collection: "client-users" })
+export class ClientUser extends Document implements ClientUserType {
   @ApiProperty()
   @Prop()
   displayName: string;
@@ -155,4 +155,4 @@ export class User extends Document implements UserType {
   hashedRt: string;
 }
 
-export const UserSchema = SchemaFactory.createForClass(User);
+export const ClientUserSchema = SchemaFactory.createForClass(ClientUser);

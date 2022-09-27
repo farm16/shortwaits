@@ -2,7 +2,10 @@ import { Module } from "@nestjs/common";
 import { JwtModule } from "@nestjs/jwt";
 import { MongooseModule } from "@nestjs/mongoose";
 
-import { User, UserSchema } from "../../api/users/entities/user.entity";
+import {
+  BusinessUser,
+  BusinessUserSchema,
+} from "../business-user/entities/business-user.entity";
 import { Business, BusinessSchema } from "../business/entities/business.entity";
 import { Service, ServiceSchema } from "../services/entities/service.entity";
 import { AuthController } from "./auth.controller";
@@ -14,7 +17,7 @@ import { RtStrategy } from "./strategies/rt.strategy";
   imports: [
     JwtModule.register({}),
     MongooseModule.forFeature([
-      { name: User.name, schema: UserSchema },
+      { name: BusinessUser.name, schema: BusinessUserSchema },
       { name: Service.name, schema: ServiceSchema },
       { name: Business.name, schema: BusinessSchema },
     ]),

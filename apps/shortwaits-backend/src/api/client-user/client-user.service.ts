@@ -3,39 +3,42 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { UserPayloadType } from "@shortwaits/shared-types";
 
-import { User } from "./entities/user.entity";
+import { ClientUser } from "./entities/client-user.entity";
 import { PaginationQueryDto } from "../../common/dto/pagination-query.dto";
 import { CreateUserDto, UpdateUserDto } from "./dto";
 
 @Injectable()
-export class UsersService {
+export class ClientUserService {
   constructor(
-    @InjectModel(User.name) private readonly userModel: Model<User>
+    @InjectModel(ClientUser.name)
+    private readonly clientUserModel: Model<ClientUser>
   ) {}
 
-  public async findAll(query: PaginationQueryDto): Promise<User[]> {
+  public async findAll(query: PaginationQueryDto): Promise<ClientUser[]> {
     const { limit, offset } = query;
-    return await this.userModel.find().skip(offset).limit(limit).exec();
+    return await this.clientUserModel.find().skip(offset).limit(limit).exec();
   }
 
-  public async findByUserName(username: string): Promise<User | undefined> {
-    return await this.userModel.findOne({ username: username }).exec();
+  public async findByUserName(
+    username: string
+  ): Promise<ClientUser | undefined> {
+    return await this.clientUserModel.findOne({ username: username }).exec();
   }
 
-  public async findById(userId: string): Promise<User> {
-    const user = await this.userModel
+  public async findById(userId: string): Promise<ClientUser> {
+    const businessUser = await this.clientUserModel
       .findById({ _id: userId, deleted: false })
       .exec();
-    if (!user) {
-      throw new NotFoundException(`User #${userId} not found`);
+    if (!businessUser) {
+      throw new NotFoundException(`ClientUser #${userId} not found`);
     }
-    return user;
+    return businessUser;
   }
 
   public async create(
     createCustomerDto: CreateUserDto
   ): Promise<UserPayloadType> {
-    const newCustomer = await this.userModel.create(createCustomerDto);
+    const newCustomer = await this.clientUserModel.create(createCustomerDto);
     return newCustomer;
   }
 
@@ -43,7 +46,7 @@ export class UsersService {
     userId: string,
     updateUserDto: Partial<UpdateUserDto>
   ): Promise<UserPayloadType> {
-    const existingUser = await this.userModel.findByIdAndUpdate(
+    const existingUser = await this.clientUserModel.findByIdAndUpdate(
       { _id: userId },
       updateUserDto
     );
@@ -54,7 +57,7 @@ export class UsersService {
   }
 
   public async remove(userId: string): Promise<any> {
-    const deletedUser = await this.userModel.findByIdAndRemove(userId);
+    const deletedUser = await this.clientUserModel.findByIdAndRemove(userId);
     return deletedUser;
   }
 }

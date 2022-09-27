@@ -11,7 +11,7 @@ import { AuthPayloadType, TokenPayloadType } from "@shortwaits/shared-types";
 import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
 
-import { User } from "../users/entities/user.entity";
+import { BusinessUser } from "../business-user/entities/business-user.entity";
 import { SignUpWithEmailDto } from "./dto/sign-up-with-email.dto";
 import { SignInWithEmailDto } from "./dto/sign-in-with-email.dto";
 import { Business } from "../business/entities/business.entity";
@@ -22,7 +22,8 @@ const shortwaitsAdmin = require("../../assets/default-data/2-shortwaits/shortwai
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectModel(User.name) private userModel: Model<User>,
+    @InjectModel(BusinessUser.name)
+    private businessUserModel: Model<BusinessUser>,
     @InjectModel(Business.name) private businessModel: Model<Business>,
     @InjectModel(Service.name) private serviceModel: Model<Service>,
     private jwtService: JwtService,
@@ -31,7 +32,7 @@ export class AuthService {
 
   async signUpLocal(dto: SignUpWithEmailDto): Promise<AuthPayloadType> {
     try {
-      const user = await this.userModel.findOne({
+      const user = await this.businessUserModel.findOne({
         email: dto.email,
       });
 
@@ -44,7 +45,7 @@ export class AuthService {
       );
       const encodedPassword = bcrypt.hashSync(dto.password, salt);
 
-      const currentUser = new this.userModel({
+      const currentUser = new this.businessUserModel({
         ...dto,
         password: encodedPassword,
       });
@@ -95,12 +96,12 @@ export class AuthService {
   }
 
   async signInLocal(dto: SignInWithEmailDto): Promise<AuthPayloadType> {
-    const currentUser = await this.userModel.findOne({
+    const currentUser = await this.businessUserModel.findOne({
       email: dto.email,
     });
 
     if (!currentUser) {
-      throw new NotFoundException("User not registered");
+      throw new NotFoundException("BusinessUser not registered");
     }
 
     const isPasswordValid: boolean = bcrypt.compareSync(
@@ -134,7 +135,7 @@ export class AuthService {
   }
 
   async logout(userId: number): Promise<AuthPayloadType> {
-    await this.userModel.findByIdAndUpdate(userId, {
+    await this.businessUserModel.findByIdAndUpdate(userId, {
       hashedRt: null,
     });
     return {
@@ -153,7 +154,7 @@ export class AuthService {
     // console.log('userId>>>', userId);
     // console.log('rt>>>', rt);
 
-    const user = await this.userModel.findById(userId).exec();
+    const user = await this.businessUserModel.findById(userId).exec();
 
     if (!user) throw new ForbiddenException("Unable to reauthenticate user");
 
@@ -170,13 +171,13 @@ export class AuthService {
     return { auth: signedTokens };
   }
 
-  async updateRtHash(user: User, rt: string): Promise<void> {
+  async updateRtHash(user: BusinessUser, rt: string): Promise<void> {
     const salt: string = bcrypt.genSaltSync(
       Number(this.config.get("SALT_ROUNDS"))
     );
     const hash = bcrypt.hashSync(rt, salt);
 
-    await this.userModel.findByIdAndUpdate(
+    await this.businessUserModel.findByIdAndUpdate(
       { _id: user._id },
       {
         hashedRt: hash,
@@ -185,7 +186,7 @@ export class AuthService {
     );
   }
 
-  async signTokens(user: User): Promise<TokenPayloadType> {
+  async signTokens(user: BusinessUser): Promise<TokenPayloadType> {
     const payload = { sub: user._id, email: user.email };
 
     const [at, rt] = await Promise.all([

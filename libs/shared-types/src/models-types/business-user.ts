@@ -20,11 +20,15 @@ export type UserMethodsType = {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type UserModelType = PaginateModel<UserType, any, UserMethodsType>;
+export type UserModelType = PaginateModel<
+  BusinessUserType,
+  any,
+  UserMethodsType
+>;
 
-export type UserDocType = UserType & Document;
+export type UserDocType = BusinessUserType & Document;
 
-export type UserType = {
+export type BusinessUserType = {
   businesses: ObjectId[];
   alias: "familyName" | "givenName" | "middleName" | "displayName";
   displayName: string;

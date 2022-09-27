@@ -5,7 +5,10 @@ import { MongooseModule } from "@nestjs/mongoose";
 import { Events, EventsSchema } from "./entities/events.entity";
 import { Service, ServiceSchema } from "../services/entities/service.entity";
 import { Business, BusinessSchema } from "../business/entities/business.entity";
-import { User, UserSchema } from "../users/entities/user.entity";
+import {
+  BusinessUser,
+  BusinessUserSchema,
+} from "../business-user/entities/business-user.entity";
 
 @Module({
   imports: [
@@ -23,8 +26,8 @@ import { User, UserSchema } from "../users/entities/user.entity";
         schema: BusinessSchema,
       },
       {
-        name: User.name,
-        schema: UserSchema,
+        name: BusinessUser.name,
+        schema: BusinessUserSchema,
       },
     ]),
   ],

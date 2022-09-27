@@ -1,5 +1,5 @@
 import React from "react";
-import { UserType } from "@shortwaits/shared-types";
+import { BusinessUserType } from "@shortwaits/shared-types";
 
 import { Card, Text } from "../../../../../components";
 import { useTheme } from "../../../../../theme";
@@ -10,7 +10,7 @@ interface SelectorItemProps {
   index: number;
   isSelected: boolean;
   disabled: boolean;
-  item: UserType;
+  item: BusinessUserType;
 }
 
 export function StaffSelectorItem(props: SelectorItemProps) {

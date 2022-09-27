@@ -13,7 +13,7 @@ export type BusinessType = {
   admins: ObjectId[] /** @todo this might not always be received via the API why should it ? */;
   superAdmins: ObjectId[] /** @todo this might not always be received via the API why should it ? */;
   backgroundAdmins: ObjectId[] /** @todo this might not always be received via the API why should it ? */;
-  staff: ObjectId[] /** @todo every UserType in the Shortwaits admin app is a staff */;
+  staff: ObjectId[] /** @todo every BusinessUserType in the Shortwaits admin app is a staff */;
   categories: ObjectId[];
   services: ObjectId[];
   events: ObjectId[];

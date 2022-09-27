@@ -81,7 +81,7 @@ export class EventsController {
   }
 
   /**
-   * @id  refer to a User Id
+   * @id  refer to a BusinessUser Id
    * all user are technically clients,
    * remember business user are also users and
    * the therefore they can be treated as a clients

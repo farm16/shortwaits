@@ -17,23 +17,23 @@ import {
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 
 import { TransformInterceptor } from "../../common/interceptors/transform.interceptor";
-import { UsersService } from "./users.service";
+import { BusinessUsersService } from "./business-users.service";
 import { CreateUserDto, UpdateUserDto } from "./dto";
 import { AtGuard } from "../../common/guards";
 
-@ApiTags("users")
-@Controller("users")
+@ApiTags("business-user")
+@Controller("business-user")
 @ApiBearerAuth("bearer")
 @UseGuards(AtGuard)
 @UseInterceptors(TransformInterceptor)
-export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+export class BusinessUsersController {
+  constructor(private readonly usersService: BusinessUsersService) {}
 
   @Get(":id")
   @HttpCode(HttpStatus.OK)
   get(@Res() res, @Param("id") userId: string) {
     if (!userId) {
-      throw new NotFoundException("User ID does not exist");
+      throw new NotFoundException("Business User ID does not exist");
     }
     const user = this.usersService.findById(userId);
     return res.status(HttpStatus.OK).json(user);

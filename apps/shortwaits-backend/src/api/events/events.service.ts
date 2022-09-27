@@ -10,7 +10,7 @@ import { Model, Types } from "mongoose";
 
 import { Business } from "../business/entities/business.entity";
 import { Service } from "../services/entities/service.entity";
-import { User } from "../users/entities/user.entity";
+import { BusinessUser } from "../business-user/entities/business-user.entity";
 import { Events } from "./entities/events.entity";
 
 @Injectable()
@@ -19,7 +19,8 @@ export class EventsService {
     @InjectModel(Events.name) private eventsModel: Model<Events>,
     @InjectModel(Service.name) private servicesModel: Model<Service>,
     @InjectModel(Business.name) private businessModel: Model<Business>,
-    @InjectModel(User.name) private userModel: Model<User>
+    @InjectModel(BusinessUser.name)
+    private businessUserModel: Model<BusinessUser>
   ) {}
 
   private createEventPayload(
@@ -41,7 +42,7 @@ export class EventsService {
   }
 
   async createEventByClient(eventDto: EventType, clientId: Types.ObjectId) {
-    // const user = await this.userModel.findById(clientId);
+    // const user = await this.businessUserModel.findById(clientId);
     // // we are using user.businesses[0]
     // const userBusiness = await this.businessModel.findById(user.businesses[0]);
     // if (userBusiness.services.some((service) => service === eventDto.service)) {
@@ -55,7 +56,7 @@ export class EventsService {
     businessId: Types.ObjectId,
     adminUserId: Types.ObjectId
   ) {
-    const user = await this.userModel.findById(adminUserId);
+    const user = await this.businessUserModel.findById(adminUserId);
     if (!user) {
       console.log("user", user);
       throw new PreconditionFailedException({

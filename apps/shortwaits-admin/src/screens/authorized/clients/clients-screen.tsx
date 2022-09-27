@@ -19,7 +19,7 @@ import { useGetBusinessClientsQuery } from "../../../services";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { ActivityIndicator } from "react-native-paper";
 import Contacts from "react-native-contacts";
-import { UserType } from "@shortwaits/shared-types";
+import { BusinessUserType } from "@shortwaits/shared-types";
 
 export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
   navigation,
@@ -139,7 +139,7 @@ const getUserFromContact = ({
   phoneNumbers,
   postalAddresses,
   imAddresses,
-}: Contacts.Contact): Partial<UserType> => {
+}: Contacts.Contact): Partial<BusinessUserType> => {
   return {
     givenName,
     familyName,
