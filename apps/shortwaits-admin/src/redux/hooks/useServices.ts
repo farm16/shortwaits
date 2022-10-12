@@ -1,9 +1,9 @@
-import { Types } from "mongoose";
+import { ObjectId } from "@shortwaits/shared-types";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { selectCurrentServicesState } from "../../redux";
 
-export const useService = (serviceId?: Types.ObjectId) => {
+export const useService = (serviceId?: ObjectId) => {
   const services = useSelector(selectCurrentServicesState);
   console.log("useService", serviceId);
   const service = services

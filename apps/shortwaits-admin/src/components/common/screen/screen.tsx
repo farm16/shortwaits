@@ -3,6 +3,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  ScrollViewProps,
   StatusBar,
   View,
 } from "react-native";
@@ -40,35 +41,49 @@ function ScreenWithoutScrolling(props: ScreenProps) {
 }
 
 function ScreenWithScrolling(props: ScreenProps) {
+  const {
+    backgroundColor,
+    keyboardOffset,
+    keyboardShouldPersistTaps,
+    statusBar,
+    children,
+    style: styleOverride,
+    unsafe,
+    unsafeBottom,
+    stickyHeaderIndices,
+    showsVerticalScrollIndicator = false,
+  } = props;
   const insets = useSafeAreaInsets();
   const preset = presets.scroll;
-  const style = props.style || {};
+  const style = styleOverride || {};
   const { Colors } = useTheme();
-  const backgroundStyle = props.backgroundColor
-    ? { backgroundColor: props.backgroundColor }
+  const backgroundStyle = backgroundColor
+    ? { backgroundColor: backgroundColor }
     : { backgroundColor: Colors.background };
-  const insetStyle = { paddingTop: props.unsafe ? 0 : insets.top };
+  const insetStyle = {
+    paddingTop: unsafe ? 0 : insets.top,
+    paddingBottom: unsafeBottom ? 0 : insets.bottom,
+  };
 
-  const Header = props?.header ? props?.header : null;
   return (
     <KeyboardAvoidingView
       style={[preset.outer, backgroundStyle]}
       behavior={isIos ? "padding" : undefined}
-      keyboardVerticalOffset={offsets[props.keyboardOffset || "none"]}
+      keyboardVerticalOffset={offsets[keyboardOffset || "none"]}
     >
       <StatusBar
-        barStyle={props.statusBar || "dark-content"}
+        barStyle={statusBar || "dark-content"}
         backgroundColor={Colors.background}
       />
       <View style={[preset.outer, backgroundStyle, insetStyle]}>
         <ScrollView
+          stickyHeaderIndices={stickyHeaderIndices}
           style={[preset.outer, backgroundStyle]}
+          showsVerticalScrollIndicator={showsVerticalScrollIndicator}
           contentContainerStyle={[preset.inner, style]}
-          keyboardShouldPersistTaps={
-            props.keyboardShouldPersistTaps || "handled"
-          }
+          keyboardShouldPersistTaps={keyboardShouldPersistTaps || "handled"}
         >
-          {props.children}
+          {children}
         </ScrollView>
       </View>
     </KeyboardAvoidingView>

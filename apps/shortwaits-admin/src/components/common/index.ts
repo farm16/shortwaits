@@ -2,7 +2,6 @@ export * from "./time-picker/time-picker";
 export * from "./scroll-view/scroll-view";
 export * from "./auto-image/auto-image";
 export * from "./text-field/text-field";
-export * from "./search-bar/search-bar";
 export * from "./container/container";
 export * from "./check-box/check-box";
 export * from "./spinner/spinner";

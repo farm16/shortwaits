@@ -16,7 +16,7 @@ export type RegisterWithEmailRequest = {
 };
 
 export type DocType<T = never> = T & {
-  _id: Types.ObjectId;
+  _id: ObjectId;
 };
 
 export type SuccessResponseType<Payload = never> = {

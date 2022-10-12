@@ -19,7 +19,7 @@ export interface CardIconsProps {
 export interface CardProps extends ButtonProps, CardIconsProps {
   mode: keyof typeof cardModes;
 }
-export const CARD_HEIGHT = 80;
+export const CARD_HEIGHT = 70;
 
 const cardModes: Record<string, ButtonProps> = {
   "text-field": {
@@ -51,7 +51,7 @@ export const Card = (props: CardProps) => {
   return (
     <Button
       preset="card"
-      style={styles.container}
+      style={styles.cardHeight}
       {...cardModes[mode]}
       {...rest}
     >
@@ -70,7 +70,7 @@ export const Card = (props: CardProps) => {
           />
         </Button>
       )}
-      <View style={styles.childrenContaiener}>{children}</View>
+      <View style={styles.childrenContainer}>{children}</View>
       {rightIconName && (
         <Button
           disabled={rightIconOnPress ? false : true}
@@ -91,11 +91,11 @@ export const Card = (props: CardProps) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
+  cardHeight: {
     minHeight: CARD_HEIGHT,
     maxHeight: CARD_HEIGHT,
   },
-  childrenContaiener: {
+  childrenContainer: {
     flex: 1,
     justifyContent: "center",
   },

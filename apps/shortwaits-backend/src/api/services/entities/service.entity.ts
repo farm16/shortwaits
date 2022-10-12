@@ -1,5 +1,5 @@
 import { Schema, Prop, SchemaFactory, raw } from "@nestjs/mongoose";
-import { Document, Types } from "mongoose";
+import Mongoose, { Document } from "mongoose";
 import {
   BusinessAvailableCurrenciesType,
   BusinessHoursType,
@@ -10,11 +10,22 @@ import {
 
 @Schema()
 export class Service extends Document implements ServicesType {
-  @Prop()
-  staff: Types.ObjectId[];
+  @Prop(
+    raw({
+      staff: Array,
+    })
+  )
+  staff: ObjectId[];
 
-  @Prop({ required: true })
-  businessId: Types.ObjectId;
+  @Prop(
+    raw({
+      businessId: {
+        type: Mongoose.Schema.Types.ObjectId,
+        require: true,
+      },
+    })
+  )
+  businessId: ObjectId;
 
   @Prop()
   name: string;
@@ -79,11 +90,23 @@ export class Service extends Document implements ServicesType {
   @Prop()
   imageUrl: string;
 
-  @Prop()
-  createdBy: Types.ObjectId;
+  @Prop(
+    raw({
+      businessId: {
+        type: Mongoose.Schema.Types.ObjectId,
+      },
+    })
+  )
+  createdBy: ObjectId;
 
-  @Prop()
-  updatedBy: Types.ObjectId;
+  @Prop(
+    raw({
+      businessId: {
+        type: Mongoose.Schema.Types.ObjectId,
+      },
+    })
+  )
+  updatedBy: ObjectId;
 }
 
 export const ServiceSchema = SchemaFactory.createForClass(Service);

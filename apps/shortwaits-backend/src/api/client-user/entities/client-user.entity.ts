@@ -1,10 +1,24 @@
 import { Schema, Prop, SchemaFactory, raw } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
-import { Document, Types } from "mongoose";
-import { ClientUserType } from "@shortwaits/shared-types";
+import { Document, Schema as MongooseSchema } from "mongoose";
+import { ClientUserType, ObjectId } from "@shortwaits/shared-types";
 
 @Schema({ collection: "client-users" })
 export class ClientUser extends Document implements ClientUserType {
+  @ApiProperty()
+  @Prop()
+  businesses: ObjectId[];
+  @ApiProperty()
+  @Prop()
+  doe: Date;
+  @ApiProperty()
+  @Prop()
+  username: string;
+  @ApiProperty()
+  @Prop({
+    default: "displayName",
+  })
+  alias: "displayName" | "familyName" | "givenName" | "middleName" | "username";
   @ApiProperty()
   @Prop()
   displayName: string;
@@ -19,6 +33,9 @@ export class ClientUser extends Document implements ClientUserType {
   middleName: string;
   @ApiProperty()
   @Prop()
+  accountImageUrl: string;
+  @ApiProperty()
+  @Prop()
   phoneNumbers: {
     label: string;
     number: string;
@@ -30,7 +47,16 @@ export class ClientUser extends Document implements ClientUserType {
     service: string;
   }[];
   @ApiProperty()
-  @Prop()
+  @Prop(
+    raw({
+      address1: { type: String, default: "" },
+      address2: { type: String, default: "" },
+      city: { type: String, default: "" },
+      state: { type: String, default: "" },
+      zip: { type: Number, default: 0 },
+      countryCode: { type: String, default: "" },
+    })
+  )
   addresses: {
     label: string;
     address1: string;
@@ -44,59 +70,18 @@ export class ClientUser extends Document implements ClientUserType {
   @ApiProperty()
   @Prop(
     raw({
-      year: { type: Number },
-      month: { type: Number },
-      day: { type: Number },
+      kind: String,
+      uid: String,
+      username: String,
+      password: String,
     })
   )
-  birthday: {
-    year: number;
-    month: number;
-    day: number;
-  };
-  @ApiProperty()
-  @Prop()
-  businesses: Types.ObjectId[];
-  @ApiProperty()
-  @Prop()
-  alias: "familyName" | "givenName" | "middleName" | "displayName";
-  @ApiProperty()
-  @Prop()
-  customAlias: string;
-  @ApiProperty()
-  @Prop({ unique: true, trim: true, required: true })
-  username: string;
-  @ApiProperty()
-  @Prop()
-  firstName: string;
-  @ApiProperty()
-  @Prop()
-  lastName: string;
-  @ApiProperty()
-  @Prop()
-  accountImageUrl: string;
-  @ApiProperty()
-  @Prop(
-    raw({
-      address1: { type: String, default: "" },
-      address2: { type: String, default: "" },
-      city: { type: String, default: "" },
-      state: { type: String, default: "" },
-      zip: { type: Number, default: 0 },
-      countryCode: { type: String, default: "" },
-    })
-  )
-  address: {
-    address1: string;
-    address2: string;
-    city: string;
-    state: string;
-    zip: number;
-    countryCode: string;
-  };
-  @ApiProperty()
-  @Prop()
-  socialAccounts: [];
+  socialAccounts: {
+    kind: string;
+    uid?: string;
+    username?: string;
+    password?: string;
+  }[];
   @ApiProperty()
   @Prop(
     raw({
@@ -111,9 +96,8 @@ export class ClientUser extends Document implements ClientUserType {
     isCompleted: boolean;
   };
   @ApiProperty()
-  @Prop({ unique: true, trim: true, required: true })
+  @Prop()
   email: string;
-
   @ApiProperty()
   @Prop()
   password?: string;
@@ -136,7 +120,7 @@ export class ClientUser extends Document implements ClientUserType {
     languageTag: string;
   };
   @ApiProperty()
-  @Prop({ default: false })
+  @Prop()
   deleted: boolean;
   @ApiProperty()
   @Prop()
@@ -149,10 +133,60 @@ export class ClientUser extends Document implements ClientUserType {
   lastSignInAt: Date;
   @ApiProperty()
   @Prop()
-  rolId: Types.ObjectId;
+  rolId: MongooseSchema.Types.ObjectId;
   @ApiProperty()
-  @Prop({ default: null })
+  @Prop()
   hashedRt: string;
+  @ApiProperty()
+  @Prop()
+  clientType: "partial" | "full";
+  @ApiProperty()
+  @Prop(
+    raw({
+      state: String,
+      stateDescriptions: Array,
+      isRegistered: Boolean,
+    })
+  )
+  registration: {
+    state: string;
+    stateDescriptions: string[];
+    isRegistered: boolean;
+  };
+  @ApiProperty()
+  @Prop(
+    raw({
+      membershipTypeId: MongooseSchema.Types.ObjectId,
+      invoiceId: MongooseSchema.Types.ObjectId,
+      type: String,
+      price: Number,
+      code: String,
+      status: String,
+      description: String,
+      isFaulty: Boolean,
+      faultyReason: Array,
+    })
+  )
+  currentMembership: {
+    membershipTypeId: MongooseSchema.Types.ObjectId;
+    invoiceId: MongooseSchema.Types.ObjectId;
+    type: string;
+    price: number;
+    code: string;
+    status: string;
+    description: string;
+    isFaulty: boolean;
+    faultyReason: string[];
+  };
+  @ApiProperty()
+  @Prop(
+    raw({
+      invoiceId: MongooseSchema.Types.ObjectId,
+    })
+  )
+  billing: {
+    invoiceId: MongooseSchema.Types.ObjectId;
+  };
 }
 
 export const ClientUserSchema = SchemaFactory.createForClass(ClientUser);

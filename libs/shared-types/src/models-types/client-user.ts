@@ -29,10 +29,35 @@ export type ClientUserModelType = PaginateModel<
 export type ClientUserDocType = ClientUserType & Document;
 
 export type ClientUserType = {
+  // "partial" comes from imported contacts
+  // or added manually added from admin app,
+  // "full" clients registered from client app
+  clientType: "partial" | "full";
+  registration: {
+    state: string;
+    stateDescriptions: string[];
+    isRegistered: boolean;
+  };
+  currentMembership: {
+    membershipTypeId: ObjectId;
+    invoiceId: ObjectId;
+    type: string;
+    price: number;
+    code: string;
+    status: string;
+    description: string;
+    isFaulty: boolean;
+    faultyReason: string[];
+  };
+  billing: {
+    // billing info cc stripe etc
+    invoiceId: ObjectId;
+  };
   businesses: ObjectId[];
-  alias: "familyName" | "givenName" | "middleName" | "displayName";
+  doe: Date;
+  username: string;
+  alias: "username" | "familyName" | "givenName" | "middleName" | "displayName";
   displayName: string;
-  //
   familyName: string;
   givenName: string;
   middleName: string;
@@ -61,11 +86,6 @@ export type ClientUserType = {
     username?: string;
     password?: string;
   }[];
-  birthday: {
-    year: number;
-    month: number;
-    day: number;
-  };
   registrationState: {
     screenName: string;
     state: number;

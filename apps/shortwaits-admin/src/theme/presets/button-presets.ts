@@ -96,7 +96,7 @@ export const buttonPresets = ({
       paddingLeft: 10,
       flexDirection: "row",
       justifyContent: "center",
-      paddingVertical: 10,
+      alignItems: "center",
       width: width * 0.87,
       borderBottomWidth: 1.5,
       borderBottomColor: Colors.inputBackground,
@@ -119,7 +119,7 @@ export const buttonPresets = ({
     none: {},
     primary: {
       ...TEXT_BASE,
-      color: Colors.brandSecondary,
+      color: Colors.brandSecondary7,
       fontWeight: "600",
     },
     headerLink: {

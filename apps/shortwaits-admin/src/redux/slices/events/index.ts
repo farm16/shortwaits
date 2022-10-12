@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { EventsPayloadType } from "@shortwaits/shared-types";
+import { EventPayloadType } from "@shortwaits/shared-types";
 
 import { shortwaitsApi } from "../../../services";
 import type { RootState } from "../../../redux";
 
-export const eventsInitialState: EventsPayloadType[] = null;
+export const eventsInitialState: EventPayloadType[] = null;
 export const eventsSlice = createSlice({
   name: "events",
   initialState: eventsInitialState,

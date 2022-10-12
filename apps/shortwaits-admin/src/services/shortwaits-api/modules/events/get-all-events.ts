@@ -3,8 +3,8 @@ import { shortwaitsApiEndpoints } from "../../../../configs";
 import {
   EventsEndpointsTypes,
   CommonResponseType,
+  ObjectId,
 } from "@shortwaits/shared-types";
-import { Types } from "mongoose";
 
 const { getAllAdminEvents } = shortwaitsApiEndpoints.EVENTS;
 type Response =
@@ -13,7 +13,7 @@ type Response =
 export default (builder: EndpointBuilder<any, any, any>) =>
   builder.query<
     CommonResponseType<Response["data"], Response["meta"]>,
-    Types.ObjectId
+    ObjectId
   >({
     query: (businessId) =>
       getAllAdminEvents.getPath(businessId as unknown as string),

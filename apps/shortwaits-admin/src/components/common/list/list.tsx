@@ -1,9 +1,15 @@
 import React from "react";
-import { FlatList, StyleSheet } from "react-native";
+import { FlatList, StyleSheet, FlatListProps } from "react-native";
 
-export const List = (props) => {
-  const { ...rest } = props;
-  return <FlatList style={styles.root} {...rest} />;
+export const List = (props: FlatListProps<any>) => {
+  const { showsVerticalScrollIndicator = false, ...rest } = props;
+  return (
+    <FlatList
+      showsVerticalScrollIndicator={showsVerticalScrollIndicator}
+      style={styles.root}
+      {...rest}
+    />
+  );
 };
 
 const styles = StyleSheet.create({

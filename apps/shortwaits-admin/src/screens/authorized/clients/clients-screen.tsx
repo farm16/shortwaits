@@ -1,77 +1,109 @@
 import React, { FC, useLayoutEffect, useRef } from "react";
-import { PermissionsAndroid, Platform, StyleSheet } from "react-native";
-import { useDispatch } from "react-redux";
-
+import {
+  ListRenderItem,
+  PermissionsAndroid,
+  Platform,
+  RefreshControl,
+  StyleSheet,
+  View,
+} from "react-native";
 import {
   AddClientsForm,
   BottomSheet,
   BottomSheetType,
   Button,
+  ButtonCard,
   CircleIconButton,
+  Container,
   List,
   NonIdealState,
   Screen,
+  Text,
+  SearchBar,
   useBottomSheet,
 } from "../../../components";
 import { useTheme } from "../../../theme";
 import { useBusiness } from "../../../redux";
-import { useGetBusinessClientsQuery } from "../../../services";
+import {
+  useCreateBusinessClientsMutation,
+  useGetBusinessClientsQuery,
+} from "../../../services";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { ActivityIndicator } from "react-native-paper";
 import Contacts from "react-native-contacts";
-import { BusinessUserType } from "@shortwaits/shared-types";
+import { ClientUserType, UserPayloadType } from "@shortwaits/shared-types";
 
 export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
   navigation,
 }) => {
-  // const dispatch = useDispatch();
   const business = useBusiness();
   const {
     data: clientsData,
-    isLoading: isClientsLoading,
-    isSuccess: isClientsSuccess,
-  } = useGetBusinessClientsQuery(business._id);
-
+    isLoading: isBusinessClientsQueryLoading,
+    isSuccess: isBusinessClientsQuerySuccess,
+    refetch: refetchBusinessClientsQuery,
+  } = useGetBusinessClientsQuery(business._id, {});
+  const [createClients, createClientsResult] =
+    useCreateBusinessClientsMutation();
   const bottomSheetRef = useRef<BottomSheetType>(null);
   const handleBottomSheet = useBottomSheet(bottomSheetRef);
-  console.log("useGetBusinessClientsQuery >>>", clientsData);
 
   const { Colors } = useTheme();
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: "Clients",
+      headerTitle: () => {
+        return (
+          <Container>
+            <Text text={"Clients"} />
+          </Container>
+        );
+      },
       headerRight: () => {
         return (
-          <CircleIconButton
-            iconType="add"
-            marginRight
-            onPress={() => {
-              handleBottomSheet.expand();
-            }}
-          />
+          <Container direction="row">
+            <CircleIconButton
+              iconType="add"
+              marginRight
+              onPress={() => {
+                handleBottomSheet.expand();
+              }}
+            />
+            <CircleIconButton
+              iconType="contactSync"
+              marginRight
+              onPress={() => {
+                handleBottomSheet.expand();
+              }}
+            />
+          </Container>
         );
       },
     });
   }, [handleBottomSheet, navigation]);
 
-  const loadContacts = () => {
-    Contacts.getAll()
-      .then((contacts) => {
-        const userPayload = contacts.map((contact) => {
-          return getUserFromContact(contact);
-        });
-        console.log(JSON.stringify(userPayload, null, 2));
-      })
-      .catch((e) => {
-        console.log(e);
+  const loadContacts = async () => {
+    try {
+      const contacts = await Contacts.getAll();
+      const userPayload = contacts.map((contact) => {
+        return getUserFromContact(contact);
       });
-
-    Contacts.getCount().then((count) => {
-      console.log(count);
-    });
-
-    Contacts.checkPermission();
+      const clientsResults = await createClients({
+        businessId: business._id,
+        businessClients: userPayload,
+      }).unwrap();
+      if (clientsResults) {
+        refetchBusinessClientsQuery();
+      }
+      // console.log(JSON.stringify(userPayload[0], null, 2));
+      // this is because the server at one point might need to know how many we will
+      // be uploading
+      const contactsCount = await Contacts.getCount();
+      const permission = await Contacts.checkPermission();
+      console.log(contactsCount, permission);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const handleSyncContacts = () => {
@@ -88,47 +120,73 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
     }
   };
 
+  const _renderItem: ListRenderItem<UserPayloadType> = ({ item }) => (
+    <ButtonCard
+      title={item[item.alias ?? "displayName"]}
+      subTitle={item.email}
+    />
+  );
+
+  const isClientsDataLoading =
+    isBusinessClientsQueryLoading && !isBusinessClientsQuerySuccess;
+  const isCreateClientsLoading =
+    createClientsResult.isLoading && !createClientsResult.isSuccess;
+
+  const isLoading = isClientsDataLoading || isCreateClientsLoading;
+
   return (
     <Screen
       preset="fixed"
       backgroundColor={Colors.white}
       statusBar="dark-content"
+      style={styles.root}
+      unsafe
     >
-      {isClientsLoading && !isClientsSuccess ? (
+      {isLoading ? (
         <ActivityIndicator />
-      ) : clientsData.data.length === 0 ? (
-        <NonIdealState
-          image={"noClients"}
-          buttons={[
-            <Button
-              text="Sync contacts"
-              onPress={() => handleSyncContacts()}
-            />,
-          ]}
-        />
       ) : (
-        <List />
+        <>
+          <SearchBar value={""} style={{ marginTop: 15 }} />
+          <List
+            refreshControl={
+              <RefreshControl
+                refreshing={isBusinessClientsQueryLoading}
+                onRefresh={refetchBusinessClientsQuery}
+              />
+            }
+            ListEmptyComponent={
+              <View>
+                <NonIdealState
+                  image={"noClients"}
+                  buttons={[
+                    <Button
+                      text="Sync contacts"
+                      onPress={() => handleSyncContacts()}
+                    />,
+                  ]}
+                />
+              </View>
+            }
+            // style={{ backgroundColor: "red" }}
+            renderItem={_renderItem}
+            data={clientsData?.data}
+          />
+        </>
       )}
-      <BottomSheet
-        snapPointsLevel={6}
-        ref={bottomSheetRef}
-        // onClose={() => setForm({ ...{ data: null, mode: null } })}
-      >
-        <AddClientsForm />
+      <BottomSheet snapPointsLevel={6} ref={bottomSheetRef}>
+        <AddClientsForm
+          handleBottomSheet={handleBottomSheet}
+          onSaved={() => refetchBusinessClientsQuery()}
+        />
       </BottomSheet>
     </Screen>
   );
 };
 
 const styles = StyleSheet.create({
-  dataTableCellRightButton: {
-    justifyContent: "center",
-    alignItems: "flex-end",
-    width: 35,
-    height: 35,
-    alignSelf: "center",
-    position: "absolute",
-    right: 0,
+  root: {
+    alignItems: "center",
+    alignSelf: "stretch",
   },
 });
 const getUserFromContact = ({
@@ -139,7 +197,7 @@ const getUserFromContact = ({
   phoneNumbers,
   postalAddresses,
   imAddresses,
-}: Contacts.Contact): Partial<BusinessUserType> => {
+}: Contacts.Contact): Partial<ClientUserType> => {
   return {
     givenName,
     familyName,
@@ -147,6 +205,9 @@ const getUserFromContact = ({
     displayName,
     phoneNumbers,
     imAddresses,
+    email: phoneNumbers[0].number,
+    username: phoneNumbers[0].number,
+    alias: "givenName",
     addresses: postalAddresses.map((postalAddress) => {
       return {
         label: postalAddress.label,

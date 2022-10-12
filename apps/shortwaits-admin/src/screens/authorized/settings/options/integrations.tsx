@@ -1,9 +1,14 @@
+import { BusinessPayloadType } from "@shortwaits/shared-types";
 import React, { useState } from "react";
 import { Divider, List } from "react-native-paper";
 
 import { useTheme } from "../../../../theme";
 
-export const IntegrationsSettings = ({ business }) => {
+export const IntegrationsSettings = ({
+  business,
+}: {
+  business: BusinessPayloadType;
+}) => {
   const [expanded, setExpanded] = useState(false);
   const handlePress = () => setExpanded((state) => !state);
   const { Colors } = useTheme();

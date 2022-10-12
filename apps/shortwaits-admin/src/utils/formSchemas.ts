@@ -33,8 +33,9 @@ export const formSchemas = {
     month: Yup.number(),
     day: Yup.number(),
     email: Yup.string()
-      .email("Please enter a vaild email")
-      .min(2, "Must be more than 10 characters"),
+      .email("Please enter a valid email")
+      .min(2, "Must be more than 10 characters")
+      .required("this field is required"),
   }),
   onboarding1: Yup.object().shape({
     businessShortName: Yup.string()

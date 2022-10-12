@@ -35,26 +35,26 @@ export class ClientUserService {
     return businessUser;
   }
 
-  public async create(
-    createCustomerDto: CreateUserDto
-  ): Promise<UserPayloadType> {
-    const newCustomer = await this.clientUserModel.create(createCustomerDto);
-    return newCustomer;
-  }
+  // public async create(
+  //   createCustomerDto: CreateUserDto
+  // ): Promise<UserPayloadType> {
+  //   const newCustomer = await this.clientUserModel.create(createCustomerDto);
+  //   return newCustomer;
+  // }
 
-  public async update(
-    userId: string,
-    updateUserDto: Partial<UpdateUserDto>
-  ): Promise<UserPayloadType> {
-    const existingUser = await this.clientUserModel.findByIdAndUpdate(
-      { _id: userId },
-      updateUserDto
-    );
-    if (!existingUser) {
-      throw new NotFoundException(`Customer #${userId} not found`);
-    }
-    return existingUser;
-  }
+  // public async update(
+  //   userId: string,
+  //   updateUserDto: Partial<UpdateUserDto>
+  // ): Promise<UserPayloadType> {
+  //   const existingUser = await this.clientUserModel.findByIdAndUpdate(
+  //     { _id: userId },
+  //     updateUserDto
+  //   );
+  //   if (!existingUser) {
+  //     throw new NotFoundException(`Customer #${userId} not found`);
+  //   }
+  //   return existingUser;
+  // }
 
   public async remove(userId: string): Promise<any> {
     const deletedUser = await this.clientUserModel.findByIdAndRemove(userId);

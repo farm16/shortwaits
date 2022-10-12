@@ -124,6 +124,12 @@ export const LeftChevronButton: FC<ButtonProps> = (props) => {
 };
 
 const _circleIcons = {
+  edit: {
+    name: "pencil",
+    color: "brandSecondary",
+    backgroundColor: "lightGray",
+    size: 21,
+  },
   check: {
     name: "check",
     color: "brandSecondary",
@@ -135,6 +141,12 @@ const _circleIcons = {
     color: "red3",
     backgroundColor: "lightGray",
     size: 26,
+  },
+  "business-header": {
+    name: "store",
+    color: "brandAccent",
+    backgroundColor: "white",
+    size: 30,
   },
   business: {
     name: "store",
@@ -213,6 +225,18 @@ const _circleIcons = {
     backgroundColor: "lightGray",
     color: "brandSecondary",
     size: 24,
+  },
+  contactSync: {
+    name: "phone-sync",
+    backgroundColor: "lightGray",
+    color: "brandSecondary",
+    size: 24,
+  },
+  share: {
+    name: "share-variant",
+    backgroundColor: "lightGray",
+    color: "brandSecondary",
+    size: 21,
   },
   default: {
     name: "plus",

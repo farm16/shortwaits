@@ -2,12 +2,15 @@ import { shortwaitsApi } from "../shortwaits-api";
 
 export const {
   //Mutations hooks
+
   useRegisterBusinessMutation,
   useLocalSignUpMutation,
   useLocalSignInMutation,
   useUpdateBusinessMutation,
   useUpdateBusinessServicesMutation,
   useUpdateBusinessHoursMutation,
+  useCreateBusinessClientsMutation,
+  useCreateBusinessStaffMutation,
   //Query hooks
   useGetBusinessClientsQuery,
   useGetAllBusinessEventsQuery,

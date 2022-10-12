@@ -1,77 +1,161 @@
-import React, { useLayoutEffect, useRef } from "react";
-import { StyleSheet } from "react-native";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { useDispatch } from "react-redux";
+import React, { FC, useLayoutEffect, useMemo, useState } from "react";
+import { StyleSheet, View } from "react-native";
+import { truncate } from "lodash";
 
 import {
-  AddServiceForm,
-  AuthorizedScreenHeader,
-  BottomSheet,
-  BottomSheetType,
-  Button,
   ButtonCard,
   CircleIconButton,
+  Container,
+  Graph,
+  MembershipCard,
   Screen,
+  Space,
   Text,
-  useBottomSheet,
 } from "../../../components";
 import { useTheme } from "../../../theme";
-import { DataTable } from "react-native-paper";
+import { IconButton, Menu } from "react-native-paper";
 import { useBusiness } from "../../../redux";
-import { useGetBusinessStaffQuery } from "../../../services";
+import { AuthorizedScreenProps } from "../../../navigation";
+import { getSampleGraphData } from "./utils";
 
-const optionsPerPage = [2, 3, 4];
-
-export const MyBusinessScreen = ({ navigation }) => {
-  const dispatch = useDispatch();
+export const MyBusinessScreen: FC<
+  AuthorizedScreenProps<"my-business-screen">
+> = ({ navigation }) => {
   const business = useBusiness();
-
   const { Colors } = useTheme();
-  const bottomSheetRef = useRef<BottomSheetType>(null);
-  const handleBottomSheet = useBottomSheet(bottomSheetRef);
+  const graphData = useMemo(() => getSampleGraphData(), []);
+  const [graphDataType, setGraphDataType] =
+    useState<keyof typeof graphData>("week");
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: business.shortName,
+      headerTitle: () => {
+        return (
+          <Container direction="row" alignItems="center">
+            <CircleIconButton iconType="business-header" disabled />
+            <Text
+              preset="headerTitle"
+              text={truncate(business.shortName, { length: 16 })}
+            />
+          </Container>
+        );
+      },
       headerRight: () => {
         return (
-          <CircleIconButton
-            iconType="add"
-            marginRight
-            onPress={() => {
-              handleBottomSheet.expand();
-            }}
-          />
+          <Container direction="row" alignItems="center">
+            <CircleIconButton marginRight iconType="edit" />
+            <CircleIconButton marginRight iconType="share" />
+          </Container>
         );
       },
     });
-  }, [business.shortName, handleBottomSheet, navigation]);
+  }, [business.shortName, navigation]);
+
+  const [visible, setVisible] = useState<boolean>(false);
+
+  const graphTopBar = (
+    <View
+      style={[
+        styles.graphBar,
+        { backgroundColor: Colors.staticLightBackground },
+      ]}
+    >
+      <Text
+        preset="textSmall"
+        style={{ fontWeight: "500" }}
+        text={`Total ${graphDataType}'s income: ${graphData[graphDataType].data
+          .reduce((pre, cur) => pre + cur.y, 0)
+          .toLocaleString("en-US", {
+            maximumFractionDigits: 2,
+            minimumFractionDigits: 2,
+          })}`}
+      />
+      <Menu
+        visible={visible}
+        onDismiss={() => setVisible(false)}
+        anchor={
+          <IconButton onPress={() => setVisible(true)} icon={"dots-vertical"} />
+        }
+      >
+        {Object.keys(graphData).map((name) => {
+          return (
+            <Menu.Item
+              titleStyle={{
+                fontWeight: graphDataType === name ? "bold" : "normal",
+                color:
+                  graphDataType === name ? Colors.brandSecondary : Colors.text,
+              }}
+              onPress={() => {
+                setGraphDataType(name as keyof typeof graphData);
+                setVisible(false);
+              }}
+              title={name}
+            />
+          );
+        })}
+      </Menu>
+    </View>
+  );
 
   return (
-    <Screen
-      preset="fixed"
-      backgroundColor={Colors.white}
-      statusBar="dark-content"
-    >
-      <BottomSheet
-        snapPointsLevel={6}
-        ref={bottomSheetRef}
-        // onClose={() => setForm({ ...{ data: null, mode: null } })}
+    <>
+      {graphTopBar}
+      <Screen
+        preset="scroll"
+        style={{ alignItems: "center", paddingTop: 10 }}
+        unsafe
+        // stickyHeaderIndices={[0]}
       >
-        <AddServiceForm mode={"update"} initialValues={undefined} />
-      </BottomSheet>
-    </Screen>
+        <Graph
+          displayOptions={graphData[graphDataType].displayOptions}
+          data={graphData[graphDataType].data}
+        />
+        <Space size="small" />
+        <MembershipCard business={business} />
+        <Space size="tiny" />
+        <ButtonCard
+          leftIconName="account-tie"
+          leftIconColor={Colors.brandSecondary6}
+          title={"Staff"}
+        />
+        <ButtonCard
+          leftIconName="layers-triple"
+          leftIconColor={Colors.brandSecondary6}
+          title={"Services"}
+        />
+        <ButtonCard
+          leftIconName="cash-fast"
+          leftIconColor={Colors.brandSecondary6}
+          title={"Payments"}
+        />
+        <ButtonCard
+          leftIconName="puzzle"
+          leftIconColor={Colors.brandSecondary6}
+          title={"Integrations"}
+        />
+        <ButtonCard
+          leftIconName="message-star"
+          leftIconColor={Colors.brandSecondary6}
+          title={"Reviews"}
+        />
+      </Screen>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
-  dataTableCellRightButton: {
-    justifyContent: "center",
-    alignItems: "flex-end",
-    width: 35,
-    height: 35,
-    alignSelf: "center",
-    position: "absolute",
-    right: 0,
+  graphBar: {
+    alignSelf: "stretch",
+    flexDirection: "row",
+    alignItems: "center",
+    paddingLeft: 20,
+    justifyContent: "space-between",
+  },
+  graphBarButtons: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 15,
+    justifyContent: "flex-end",
   },
 });

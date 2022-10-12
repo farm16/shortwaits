@@ -10,6 +10,7 @@ import {
   Text,
   CircleIconButton,
   FloatingActions,
+  Container,
 } from "../../../components";
 import { Colors } from "../../../theme";
 import {
@@ -29,21 +30,10 @@ export const EventsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
     navigation.setOptions({
       headerTitle: () => {
         return (
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
+          <Container direction="row" alignItems="center">
+            <CircleIconButton marginRight iconType="business" />
             <Text text={truncate(business.shortName, { length: 16 })} />
-            <CircleIconButton
-              style={{
-                marginLeft: 15,
-              }}
-              iconType="business"
-            />
-          </View>
+          </Container>
         );
       },
       headerShadowVisible: false,

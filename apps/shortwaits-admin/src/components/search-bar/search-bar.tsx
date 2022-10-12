@@ -1,9 +1,9 @@
 import React, { ComponentProps } from "react";
 import { Searchbar as SearchBarPaper } from "react-native-paper";
-
-import { getDimensions, useTheme } from "../../../theme";
-import { DeepPartial } from "../../../index.d";
 import { StyleProp, TextStyle, ViewStyle } from "react-native";
+
+import { getDimensions, useTheme } from "../../theme";
+import { DeepPartial } from "../../";
 
 type SearchBarProps = ComponentProps<typeof SearchBarPaper> & {
   iPlaceholder?: string;

@@ -14,8 +14,8 @@ export const textPresets = ({
     {
       ...Fonts.textRegular,
       letterSpacing: 0.6,
-      lineHeight: 27,
-      textAlign: "center" as const,
+      // lineHeight: 27,
+      textAlign: "left" as const,
       color: Colors.text,
     },
   ]);
@@ -76,8 +76,11 @@ export const textPresets = ({
     },
     title3: {
       ...BASE,
+      textAlign: "left",
       ...Fonts.titleSmall,
-      // ...Gutters.largeVPadding
+      color: Colors.text,
+      fontWeight: "500" as const,
+      letterSpacing: 0.65,
     },
     textTiny: {
       ...BASE,
@@ -108,22 +111,21 @@ export const textPresets = ({
       ...Fonts.textSmall,
       color: Colors.text,
       fontWeight: "500" as const,
-      marginBottom: 10,
       letterSpacing: 0.65,
     },
     cardSubtitle: {
       ...Fonts.textSmall,
       fontWeight: "400" as const,
-      paddingTop: 0,
-      marginTop: 0,
+      // paddingTop: 0,
+      // marginTop: 0,
       letterSpacing: 0.65,
       color: Colors.subText,
     },
     headerTitle: {
-      fontSize: 18,
-      color: Colors.white,
+      fontSize: 16,
+      color: Colors.text,
       letterSpacing: 0.65,
-      fontWeight: "bold",
+      fontWeight: "500" as const,
     },
   });
 };

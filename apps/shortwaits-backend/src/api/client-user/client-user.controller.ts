@@ -39,21 +39,21 @@ export class ClientUserController {
     return res.status(HttpStatus.OK).json(user);
   }
 
-  @Put()
-  @HttpCode(HttpStatus.ACCEPTED)
-  update(@Req() request, @Body("user") userData: UpdateUserDto) {
-    return this.clientUsersService.update(request.user.sub, userData);
-  }
+  // @Post()
+  // @HttpCode(HttpStatus.CREATED)
+  // create(@Body("user") userData: CreateUserDto) {
+  //   return this.clientUsersService.create(userData);
+  // }
 
-  @Post()
-  @HttpCode(HttpStatus.CREATED)
-  create(@Body("user") userData: CreateUserDto) {
-    return this.clientUsersService.create(userData);
-  }
+  // @Put()
+  // @HttpCode(HttpStatus.ACCEPTED)
+  // update(@Req() request, @Body("user") userData: UpdateUserDto) {
+  //   return this.clientUsersService.update(request.user.sub, userData);
+  // }
 
-  @Delete(":id")
-  delete(@Res() res, @Param() params) {
-    this.clientUsersService.remove(params.slug);
-    return res.status(HttpStatus.OK);
-  }
+  // @Delete(":id")
+  // delete(@Res() res, @Param() params) {
+  //   this.clientUsersService.remove(params.slug);
+  //   return res.status(HttpStatus.OK);
+  // }
 }

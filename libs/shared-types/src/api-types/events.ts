@@ -8,12 +8,12 @@ import {
 } from ".";
 import { EventType, ServicesType } from "..";
 
-export type EventsSuccessResponseType = SuccessResponseType<EventsPayloadType>;
+export type EventsSuccessResponseType = SuccessResponseType<EventPayloadType>;
 
-export type EventsPayloadType = DocType<EventType>;
+export type EventPayloadType = DocType<EventType>;
 
 export type EventsSuccessFnType = (
-  payload: EventsPayloadType,
+  payload: EventPayloadType,
   message: string
 ) => EventsSuccessResponseType;
 
@@ -39,8 +39,8 @@ export interface EventsEndpointsTypes extends GeneralSpecShape {
         body: EventType;
         response: {
           business: BusinessPayloadType;
-          event: EventsPayloadType;
-          events: EventsPayloadType[];
+          event: EventPayloadType;
+          events: EventPayloadType[];
         };
       };
       GET: {
@@ -49,7 +49,7 @@ export interface EventsEndpointsTypes extends GeneralSpecShape {
         response: {
           meta: { count: number };
           data: {
-            events: EventsPayloadType[];
+            events: EventPayloadType[];
           };
         };
       };

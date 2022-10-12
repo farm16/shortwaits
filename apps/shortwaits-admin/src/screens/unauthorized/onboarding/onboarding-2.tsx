@@ -101,14 +101,14 @@ export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
           onPress={() => registerBusiness(business)}
           style={[
             {
-              backgroundColor: Colors.orange1,
-              borderColor: Colors.orange,
+              backgroundColor: Colors.brandPrimary1,
+              borderColor: Colors.brandPrimary2,
             },
             styles.registerButton,
           ]}
           textStyle={[
             {
-              color: Colors.orange,
+              color: Colors.brandPrimary,
             },
             styles.registerButtonText,
           ]}
@@ -185,7 +185,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   registerButtonText: {
-    fontSize: 15,
+    fontSize: 16,
+    paddingTop: 5,
+    paddingBottom: 5,
     fontWeight: "600",
     textTransform: "uppercase",
   },

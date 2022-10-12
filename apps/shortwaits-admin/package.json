@@ -30,7 +30,7 @@
     "husky": "*",
     "lodash.filter": "*",
     "prettier": "*",
-    "react-native-app-intro-slider": "*",
+    "react-native-svg-transformer": "*",
     "react-native-calendars": "*",
     "react-native-currency-input": "*",
     "react-native-datepicker": "*",
@@ -60,6 +60,8 @@
     "mongoose-paginate-v2": "*",
     "date-fns": "*",
     "emoji-datasource": "*",
-    "react-native-contacts": "*"
+    "react-native-contacts": "*",
+    "react-native-paper-dates": "*",
+    "victory-native": "*"
   }
 }

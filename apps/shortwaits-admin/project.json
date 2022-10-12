@@ -15,6 +15,12 @@
         "command": "nx start shortwaits-admin"
       }
     },
+    "run-pods": {
+      "executor": "@nrwl/react-native:run-ios",
+      "options": {
+        "install": true
+      }
+    },
     "run-ios": {
       "executor": "@nrwl/react-native:run-ios",
       "options": {}

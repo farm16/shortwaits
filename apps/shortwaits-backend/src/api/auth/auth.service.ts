@@ -52,6 +52,8 @@ export class AuthService {
 
       const newBusinessAccount = new this.businessModel({
         isRegistrationCompleted: false,
+        clients: [],
+        taggedClients: [],
         admins: [currentUser._id],
         superAdmins: [currentUser._id],
         createdBy: [currentUser._id],

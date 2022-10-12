@@ -1,9 +1,11 @@
 import { Injectable, PreconditionFailedException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import {
-  EventsPayloadType,
+  EventDocType,
+  EventPayloadType,
   EventType,
   NewlyCreatedEvent,
+  ObjectId,
   UserPayloadType,
 } from "@shortwaits/shared-types";
 import { Model, Types } from "mongoose";
@@ -24,13 +26,9 @@ export class EventsService {
   ) {}
 
   private createEventPayload(
-    event: Events & {
-      _id: Types.ObjectId;
-    },
+    event: Events & { _id: ObjectId },
     user: UserPayloadType
-  ): Events & {
-    _id: Types.ObjectId;
-  } {
+  ): Events & { _id: ObjectId } {
     event.status = { statusCode: 0, statusName: "pending" };
     event.createdBy = user._id;
     event.updatedBy = user._id;

@@ -8,6 +8,7 @@ import {
   Card,
   Text,
   CardIconsProps,
+  Space,
 } from "../common";
 
 interface TextFieldCard extends TextFieldProps, Partial<CardIconsProps> {
@@ -41,7 +42,6 @@ export function TextFieldCard(props: TextFieldCard) {
   return (
     <>
       <Card
-        style={style}
         mode="text-field"
         leftIconOnPress={leftIconOnPress}
         rightIconOnPress={rightIconOnPress}
@@ -52,9 +52,8 @@ export function TextFieldCard(props: TextFieldCard) {
         leftIconName={leftIconName}
         rightIconColor={rightIconColor}
       >
-        <View style={styles.cardTitle}>
-          <Text preset="cardTitle" text={title} />
-        </View>
+        <Text preset="cardTitle" text={title} />
+        <Space size="tiny" />
         <TextField preset="cardSubtitle" placeholder={placeholder} {...rest} />
       </Card>
       {errors && isTouched ? (

@@ -1,25 +1,197 @@
-import React from "react";
-import { Text, View } from "react-native";
+import React, { FC, useLayoutEffect, useState } from "react";
+import {
+  View,
+  StyleSheet,
+  StyleProp,
+  ViewStyle,
+  FlatListProps,
+} from "react-native";
 import { useDispatch } from "react-redux";
+import Timeline from "react-native-timeline-flatlist";
 
-import { AuthorizedScreenHeader, Button, Screen } from "../../../components";
-import { persistor } from "../../../redux";
+import { AuthorizedScreenProps } from "../../../navigation";
+import {
+  AuthorizedScreenHeader,
+  Button,
+  CircleIconButton,
+  Container,
+  Screen,
+  Space,
+  Text,
+} from "../../../components";
 import { useTheme } from "../../../theme";
 
-export const ActivityScreen = ({ navigation }) => {
+export const ActivityScreen: FC<AuthorizedScreenProps<"activity-screen">> = ({
+  navigation,
+}) => {
   const dispatch = useDispatch();
   const { Colors } = useTheme();
+  const [activityType, setActivityType] = useState<"business" | "staff">(
+    "business"
+  );
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: () => {
+        return (
+          <Text
+            preset="headerTitle"
+            style={{ textTransform: "capitalize" }}
+            text={`${activityType} Activity`}
+          />
+        );
+      },
+      headerRight: () => {
+        return (
+          <Container direction="row" alignItems="center">
+            <CircleIconButton
+              onPress={() => setActivityType("business")}
+              marginRight
+              iconType="business"
+            />
+            <CircleIconButton
+              onPress={() => setActivityType("staff")}
+              marginRight
+              iconType="add-staff"
+            />
+          </Container>
+        );
+      },
+    });
+  }, [activityType, navigation]);
+
+  // data is render in array order - it does not get filtered
+  type Data = {
+    time?: string;
+    title?: string;
+    description?: any;
+    lineWidth?: number;
+    lineColor?: string;
+    eventContainerStyle?: StyleProp<ViewStyle>;
+    circleSize?: number;
+    circleColor?: string;
+    dotColor?: string;
+    icon?: string | React.ReactNode;
+    position?: "left" | "right";
+  };
+  const data: Data[] = [
+    {
+      time: "09:00",
+      title: "Event name",
+      // dotColor: "red",
+      description: "Event Description",
+    },
+    { time: "10:45", title: "Event name", description: "Event Description" },
+    { time: "12:00", title: "Event name", description: "Event Description" },
+    { time: "14:00", title: "Event name", description: "Event Description" },
+    { time: "16:30", title: "Event name", description: "Event Description" },
+    { time: "09:00", title: "Event name", description: "Event Description" },
+    { time: "10:45", title: "Event name", description: "Event Description" },
+    { time: "12:00", title: "Event name", description: "Event Description" },
+    { time: "14:00", title: "Event name", description: "Event Description" },
+  ];
+
+  const timeComponent = (rowData: any, sectionID: number, rowID: number) => {
+    return (
+      <View
+        style={{
+          width: 60,
+          paddingVertical: 5,
+          paddingHorizontal: 5,
+          height: 40,
+          borderRadius: 13,
+
+          backgroundColor: Colors.brandSecondary1,
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Text preset="textTiny">{rowData.time}</Text>
+        <Text preset="textTiny">{"Oct, 14"}</Text>
+      </View>
+    );
+  };
+  const renderDetail = (rowData, sectionID, rowID) => {
+    return (
+      <View style={{ flex: 1, paddingHorizontal: 15 }}>
+        <Text preset="cardTitle">{rowData.title}</Text>
+        <Space size="tiny" />
+        <Text preset="cardSubtitle">{rowData.description}</Text>
+      </View>
+    );
+  };
+
   return (
-    <Screen
-      preset="fixed"
-      backgroundColor={Colors.white}
-      statusBar="dark-content"
-    >
-      <AuthorizedScreenHeader
-        title={"Activity"}
-        // iconName2="magnify"
-        // iconName1="plus-thick"
+    <Screen preset="fixed" unsafe>
+      <Timeline
+        options={
+          {
+            style: { paddingTop: 3 },
+            showsVerticalScrollIndicator: false,
+          } as FlatListProps<Data>
+        }
+        renderTime={timeComponent}
+        renderDetail={renderDetail}
+        style={styles.timeline}
+        data={data}
+        circleColor={Colors.brandSecondary}
+        lineColor={Colors.brandSecondary3}
+        descriptionStyle={{ color: "gray" }}
+        innerCircle={"dot"}
+        onEventPress={() => null}
+        separator={false}
+        circleStyle={
+          {
+            // marginTop: -10,
+          }
+        }
+        rowContainerStyle={{
+          // backgroundColor: "red",
+          justifyContent: "center",
+        }}
+        // timeContainerStyle={{ marginTop: -15 }}
+        // timeStyle={{
+        //   padding: 5,
+        // }}
+        detailContainerStyle={{
+          marginBottom: 15,
+          backgroundColor: Colors.lightGray,
+          borderRadius: 10,
+        }}
+        columnFormat="single-column-right"
       />
     </Screen>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    paddingTop: 65,
+    backgroundColor: "white",
+  },
+  timeline: {
+    flex: 1,
+    width: "92%",
+    alignSelf: "center",
+    marginTop: 20,
+    // paddingTop: 20,
+  },
+  title: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  descriptionContainer: {
+    flexDirection: "row",
+    paddingRight: 50,
+  },
+  image: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+  },
+  textDescription: {
+    marginLeft: 10,
+    color: "gray",
+  },
+});

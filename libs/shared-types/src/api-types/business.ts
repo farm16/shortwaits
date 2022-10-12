@@ -1,4 +1,4 @@
-import { BusinessHoursType, BusinessType } from "..";
+import { BusinessHoursType, BusinessType, ClientUserType } from "..";
 
 import {
   CommonResponseType,
@@ -119,7 +119,12 @@ export interface BusinessEndpointsTypes extends GeneralSpecShape {
       GET: {
         query: undefined;
         body: undefined;
-        response: BusinessType;
+        response: UserPayloadType[];
+      };
+      POST: {
+        query: undefined;
+        body: UserPayloadType[];
+        response: UserPayloadType[];
       };
     };
   };
@@ -130,6 +135,11 @@ export interface BusinessEndpointsTypes extends GeneralSpecShape {
         query: undefined;
         body: undefined;
         response: UserPayloadType[];
+      };
+      POST: {
+        query: undefined;
+        body: Partial<ClientUserType>[];
+        response: Partial<ClientUserType>[];
       };
     };
   };

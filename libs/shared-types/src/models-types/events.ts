@@ -1,4 +1,5 @@
 import { Document, Types } from "mongoose";
+import { ObjectId } from "../common";
 import { PaginatedModel } from "./helpers";
 
 export type EventType = {
@@ -6,12 +7,12 @@ export type EventType = {
   name: string;
   description: string;
   eventImage: string;
-  businessId: Types.ObjectId;
-  service: Types.ObjectId;
-  createdBy: Types.ObjectId;
-  updatedBy: Types.ObjectId;
-  staff: Types.ObjectId[];
-  clients: Types.ObjectId[];
+  businessId: ObjectId;
+  service: ObjectId;
+  createdBy: ObjectId;
+  updatedBy: ObjectId;
+  staff: ObjectId[];
+  clients: ObjectId[];
   features: string[];
   status: {
     statusCode: number;

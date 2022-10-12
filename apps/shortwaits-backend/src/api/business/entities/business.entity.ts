@@ -16,22 +16,22 @@ export class Business extends Document implements BusinessType {
   events: ObjectId[];
   @ApiProperty()
   @Prop()
-  admins: Types.ObjectId[];
+  admins: ObjectId[];
   @ApiProperty()
   @Prop()
-  superAdmins: Types.ObjectId[];
+  superAdmins: ObjectId[];
   @ApiProperty()
   @Prop()
-  backgroundAdmins: Types.ObjectId[];
+  backgroundAdmins: ObjectId[];
   @ApiProperty()
   @Prop()
-  staff: Types.ObjectId[];
+  staff: ObjectId[];
   @ApiProperty()
   @Prop()
-  categories: Types.ObjectId[];
+  categories: ObjectId[];
   @ApiProperty()
   @Prop()
-  services: Types.ObjectId[];
+  services: ObjectId[];
   @ApiProperty()
   @Prop()
   description: string;
@@ -92,19 +92,19 @@ export class Business extends Document implements BusinessType {
   deleted: boolean;
   @ApiProperty()
   @Prop()
-  createdBy: Types.ObjectId;
+  createdBy: MongooseSchema.Types.ObjectId;
   @ApiProperty()
   @Prop()
-  updatedBy: Types.ObjectId;
+  updatedBy: MongooseSchema.Types.ObjectId;
   @ApiProperty()
   @Prop()
-  clients: Types.ObjectId[];
+  clients: ObjectId[];
   @ApiProperty()
   @Prop()
   deliveryInfo: MongooseSchema.Types.Mixed;
   @ApiProperty()
   @Prop()
-  reservations: Types.ObjectId[];
+  reservations: ObjectId[];
   @ApiProperty()
   @Prop()
   paymentMethods: MongooseSchema.Types.Mixed;
@@ -119,8 +119,8 @@ export class Business extends Document implements BusinessType {
   @Prop()
   taggedClients: [
     {
-      clientId: Types.ObjectId;
-      services: Types.ObjectId[];
+      clientId: ObjectId;
+      services: ObjectId[];
       tags: string[];
     }
   ];

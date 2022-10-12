@@ -1,6 +1,6 @@
 import { Schema, Prop, SchemaFactory, raw } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
-import { EventType } from "@shortwaits/shared-types";
+import { EventType, ObjectId } from "@shortwaits/shared-types";
 import mongoose, { Document, Schema as MongooseSchema } from "mongoose";
 
 @Schema()
@@ -12,8 +12,15 @@ export class Events extends Document implements EventType {
   @Prop()
   eventImage: string;
   @ApiProperty()
-  @Prop()
-  businessId: mongoose.Types.ObjectId;
+  @Prop(
+    raw({
+      businessId: {
+        type: mongoose.Schema.Types.ObjectId,
+        require: true,
+      },
+    })
+  )
+  businessId: ObjectId;
   @ApiProperty()
   @Prop()
   name: string;
@@ -21,28 +28,52 @@ export class Events extends Document implements EventType {
   @Prop()
   description: string;
   @ApiProperty()
-  @Prop({
-    type: MongooseSchema.Types.Mixed,
-  })
-  service: mongoose.Types.ObjectId;
+  @Prop(
+    raw({
+      businessId: {
+        type: mongoose.Schema.Types.ObjectId,
+      },
+    })
+  )
+  service: ObjectId;
+  @ApiProperty()
+  @Prop(
+    raw({
+      businessId: {
+        type: mongoose.Schema.Types.ObjectId,
+      },
+    })
+  )
+  createdBy: ObjectId;
+  @ApiProperty()
+  @Prop(
+    raw({
+      businessId: {
+        type: mongoose.Schema.Types.ObjectId,
+      },
+    })
+  )
+  updatedBy: ObjectId;
   @ApiProperty()
   @Prop()
-  createdBy: mongoose.Types.ObjectId;
+  staff: ObjectId[];
   @ApiProperty()
   @Prop()
-  updatedBy: mongoose.Types.ObjectId;
-  @ApiProperty()
-  @Prop()
-  staff: mongoose.Types.ObjectId[];
-  @ApiProperty()
-  @Prop()
-  clients: mongoose.Types.ObjectId[];
+  clients: ObjectId[];
   @ApiProperty()
   @Prop()
   features: string[];
   @ApiProperty()
-  @Prop(raw({ statusCode: Number, statusName: String }))
-  status: { statusCode: number; statusName: "pending" | "success" | "failed" };
+  @Prop(
+    raw({
+      statusCode: Number,
+      statusName: String,
+    })
+  )
+  status: {
+    statusCode: number;
+    statusName: "pending" | "success" | "failed";
+  };
   @ApiProperty()
   @Prop()
   durationInMin: number;

@@ -17,8 +17,12 @@ import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
 import { BusinessSuccessResponse } from "./business.interface";
 import { AtGuard } from "../../common/guards";
 import { TransformInterceptor } from "../../common/interceptors/transform.interceptor";
-import { BusinessEndpointsTypes } from "@shortwaits/shared-types";
-import { Types } from "mongoose";
+import {
+  BusinessEndpointsTypes,
+  BusinessUserType,
+  ClientUserType,
+  ObjectId,
+} from "@shortwaits/shared-types";
 
 /**
  *
@@ -61,7 +65,7 @@ export class BusinessController {
   })
   async getBusiness(
     @Req() request,
-    @Param("business_id") businessId: Types.ObjectId
+    @Param("business_id") businessId: ObjectId
   ) {
     return this.businessService.getBusiness(businessId, request.user.sub);
   }
@@ -73,7 +77,7 @@ export class BusinessController {
     description: "Returns business services",
     type: BusinessSuccessResponse,
   })
-  getBusinessAdmins(@Param("business_id") businessId: Types.ObjectId) {
+  getBusinessAdmins(@Param("business_id") businessId: ObjectId) {
     return this.businessService.findByKey(businessId, "services");
   }
 
@@ -84,7 +88,7 @@ export class BusinessController {
     description: "Returns business services",
     type: BusinessSuccessResponse,
   })
-  getBusinessServices(@Param("business_id") businessId: Types.ObjectId) {
+  getBusinessServices(@Param("business_id") businessId: ObjectId) {
     return this.businessService.findByKey(businessId, "services");
   }
 
@@ -95,22 +99,8 @@ export class BusinessController {
     description: "Returns business categories",
     type: BusinessSuccessResponse,
   })
-  getBusinessCategories(@Param("business_id") businessId: Types.ObjectId) {
+  getBusinessCategories(@Param("business_id") businessId: ObjectId) {
     return this.businessService.findByKey(businessId, "categories");
-  }
-
-  @Get(":business_id/staff")
-  @HttpCode(HttpStatus.OK)
-  @ApiCreatedResponse({
-    status: HttpStatus.OK,
-    description: "Returns business staff",
-    type: BusinessSuccessResponse,
-  })
-  getBusinessStaffByIds(
-    @Req() request,
-    @Param("business_id") businessId: Types.ObjectId
-  ) {
-    return this.businessService.getStaff(businessId, request.user.sub);
   }
 
   @Get(":business_id/hours")
@@ -120,7 +110,7 @@ export class BusinessController {
     description: "Returns business hours",
     type: BusinessSuccessResponse,
   })
-  getBusinessHours(@Param("business_id") businessId: Types.ObjectId) {
+  getBusinessHours(@Param("business_id") businessId: ObjectId) {
     return this.businessService.findByKey(businessId, "hours");
   }
 
@@ -136,7 +126,7 @@ export class BusinessController {
     description: "Returns business hours",
     type: BusinessSuccessResponse,
   })
-  getBusinessEvents(@Param("business_id") businessId: Types.ObjectId) {
+  getBusinessEvents(@Param("business_id") businessId: ObjectId) {
     return this.businessService.findByKey(businessId, "events");
   }
   //========== Clients
@@ -151,8 +141,15 @@ export class BusinessController {
     description: "Returns business clients",
     type: BusinessSuccessResponse,
   })
-  getBusinessClients(@Param("business_id") businessId: Types.ObjectId) {
-    return this.businessService.findByKey(businessId, "clients");
+  getBusinessClients(
+    @Req() request,
+    @Param("business_id") businessId: ObjectId
+  ) {
+    return this.businessService.getUsers(
+      "client",
+      businessId,
+      request.user.sub
+    );
   }
 
   @Post(":business_id/clients")
@@ -162,8 +159,55 @@ export class BusinessController {
     description: "Returns created",
     type: BusinessSuccessResponse,
   })
-  createBusinessClients(@Param("business_id") businessId: Types.ObjectId) {
-    return this.businessService.findByKey(businessId, "clients");
+  createBusinessClients(
+    @Req() request,
+    @Param("business_id") businessId: ObjectId,
+    @Body() dto: ClientUserType[]
+  ) {
+    return this.businessService.createBusinessClients(
+      request.user.sub,
+      businessId,
+      dto
+    );
+  }
+
+  //========== Staff
+  /**
+   * @todo
+   * we need to paginate
+   */
+  @Get(":business_id/staff")
+  @HttpCode(HttpStatus.OK)
+  @ApiCreatedResponse({
+    status: HttpStatus.OK,
+    description: "Returns business staff",
+    type: BusinessSuccessResponse,
+  })
+  getBusinessStaffByIds(
+    @Req() request,
+    @Param("business_id") businessId: ObjectId
+  ) {
+    return this.businessService.getUsers("staff", businessId, request.user.sub);
+  }
+
+  @Post(":business_id/staff")
+  @HttpCode(HttpStatus.OK)
+  @ApiCreatedResponse({
+    status: HttpStatus.OK,
+    description: "Returns business staff",
+    type: BusinessSuccessResponse,
+  })
+  createBusinessStaff(
+    @Req() request,
+    @Body() dto: BusinessUserType[],
+    @Param("business_id")
+    businessId: ObjectId
+  ) {
+    return this.businessService.createBusinessStaff(
+      request.user.sub,
+      businessId,
+      dto
+    );
   }
   //==========
   @Put(":business_id/hours")
@@ -175,15 +219,10 @@ export class BusinessController {
   })
   putBusiness(
     @Req() request,
-    @Param("business_id") businessId: Types.ObjectId,
-    @Body()
-    dto: BusinessEndpointsTypes["/business/:business_id/hours"]["methods"]["PUT"]["body"]
+    @Param("business_id") businessId: ObjectId,
+    @Body() dto: ClientUserType[]
   ) {
-    return this.businessService.updateBusinessHours(
-      businessId,
-      request.user.sub,
-      dto
-    );
+    return null;
   }
   /**
    * only admins of the business can retrieve full information

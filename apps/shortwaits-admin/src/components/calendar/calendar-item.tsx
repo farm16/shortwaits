@@ -1,6 +1,6 @@
 import React, { FC, useCallback } from "react";
 import { Alert, TouchableOpacity, View, Image, StyleSheet } from "react-native";
-import { EventsPayloadType } from "@shortwaits/shared-types";
+import { EventPayloadType } from "@shortwaits/shared-types";
 import { isEmpty, truncate } from "lodash";
 
 import { Emoji, Text } from "../";
@@ -9,7 +9,7 @@ import { getEventTime } from "./calendar-tools";
 import defaultUserImage from "../../assets/images/user.png";
 import { useService } from "../../redux";
 
-type AgendaItemProps = { item: EventsPayloadType };
+type AgendaItemProps = { item: EventPayloadType };
 const BORDER_RADIUS = 6;
 const statusDisplayMessages = {
   success: "Request accepted",

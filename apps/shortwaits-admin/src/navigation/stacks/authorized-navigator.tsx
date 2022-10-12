@@ -93,11 +93,7 @@ export const AuthorizedNavigator = () => {
           tabBarLabel: "Activity",
           tabBarIcon: ({ color, focused }) => (
             <MaterialCommunityIcons
-              name={
-                focused
-                  ? "chart-timeline-variant-shimmer"
-                  : "chart-timeline-variant"
-              }
+              name={focused ? "timeline-text" : "timeline-text-outline"}
               color={color}
               size={25}
             />

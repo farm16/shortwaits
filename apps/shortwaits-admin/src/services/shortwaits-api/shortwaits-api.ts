@@ -20,6 +20,8 @@ import {
   UpdateBusinessHours,
   RegisterBusiness,
   UpdateBusiness,
+  CreateBusinessStaff,
+  CreateBusinessClients,
 } from "./modules";
 import { baseQueryWithInterceptor } from "./interceptor";
 
@@ -32,21 +34,24 @@ export const shortwaitsApi = createApi({
     //auth
     localSignUp: GetLocalSignUp(builder),
     localSignIn: GetLocalSignIn(builder),
-    //business
+    //business (queries)
     getBusiness: GetBusiness(builder),
     getBusinessClients: GetBusinessClients(builder),
     getBusinessCategory: GetBusinessCategory(builder),
     getBusinessHours: GetBusinessHours(builder),
     getBusinessServices: GetBusinessServices(builder),
     getBusinessStaff: GetBusinessStaff(builder),
+    //business (mutation)
     updateBusinessServices: UpdateBusinessServices(builder),
     updateBusiness: UpdateBusiness(builder),
     updateBusinessHours: UpdateBusinessHours(builder),
     registerBusiness: RegisterBusiness(builder),
-    //categories (business)
+    createBusinessStaff: CreateBusinessStaff(builder),
+    createBusinessClients: CreateBusinessClients(builder),
+    //categories
     getCategory: GetCategory(builder),
     getCategories: GetCategories(builder),
-    //services (business)
+    //services
     getService: GetService(builder),
     getServicesByBusiness: GetServicesByBusiness(builder),
     //user

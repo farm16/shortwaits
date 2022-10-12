@@ -1,4 +1,4 @@
-import { Model, Types } from "mongoose";
+import mongoose, { Model, Types } from "mongoose";
 import { InjectModel } from "@nestjs/mongoose";
 import { ConfigService } from "@nestjs/config";
 import {
@@ -11,29 +11,37 @@ import {
   BusinessType,
   BusinessHoursType,
   BusinessPayloadType,
+  ClientUserType,
   BusinessUserType,
+  ObjectId,
 } from "@shortwaits/shared-types";
 import { Business } from "./entities/business.entity";
 import { Service } from "../services/entities/service.entity";
 import { BusinessUser } from "../business-user/entities/business-user.entity";
+import { ClientUser } from "../client-user/entities/client-user.entity";
 
 @Injectable()
 export class BusinessService {
   constructor(
-    @InjectModel(Business.name) private businessModel: Model<Business>,
-    @InjectModel(Service.name) private serviceModel: Model<Service>,
+    @InjectModel(Business.name)
+    private businessModel: Model<Business>,
     @InjectModel(BusinessUser.name)
     private businessUserModel: Model<BusinessUser>,
-    private config: ConfigService
+    @InjectModel(ClientUser.name)
+    private clientUserModel: Model<ClientUser> // @InjectModel(Service.name) // private serviceModel: Model<Service>, // private config: ConfigService
   ) {}
 
-  isUserAdminType(business: Business, userId: Types.ObjectId) {
-    const isAdmin = business.admins.includes(userId);
-    const isSuperAdmin = business.superAdmins.includes(userId);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  isUserAdminType(business: Business, userId: any) {
+    const id = new mongoose.mongo.ObjectId(userId);
+    // console.log(id, userId);
+    const isAdmin = business.admins.includes(id as ObjectId);
+    const isSuperAdmin = business.superAdmins.includes(id as ObjectId);
+
     if (isAdmin || isSuperAdmin) {
       return { isAdmin, isSuperAdmin };
     } else {
-      throw new ForbiddenException("Can't access business record");
+      throw new ForbiddenException("Not enough permissions");
     }
   }
 
@@ -47,7 +55,7 @@ export class BusinessService {
     return business;
   }
 
-  async findBusinessById(businessId: Types.ObjectId) {
+  async findBusinessById(businessId: ObjectId) {
     const businessData = await this.businessModel.findById(businessId).exec();
 
     if (businessData) {
@@ -61,10 +69,7 @@ export class BusinessService {
    * we need to verify that user is an admin for the requested business
    *
    */
-  async getBusiness(
-    businessId: Types.ObjectId,
-    userId: Types.ObjectId
-  ): Promise<Business> {
+  async getBusiness(businessId: ObjectId, userId: ObjectId): Promise<Business> {
     const businessData = await this.findBusinessById(businessId);
 
     const { isAdmin, isSuperAdmin } = this.isUserAdminType(
@@ -78,7 +83,7 @@ export class BusinessService {
   }
 
   async updateBusiness(
-    userId: Types.ObjectId,
+    userId: ObjectId,
     business: BusinessPayloadType,
     isRegistration?: boolean
   ): Promise<Business> {
@@ -101,7 +106,7 @@ export class BusinessService {
   }
 
   async registerBusiness(
-    userId: Types.ObjectId,
+    userId: ObjectId,
     business: BusinessPayloadType
   ): Promise<Business> {
     if (business.services.length === 0) {
@@ -122,8 +127,8 @@ export class BusinessService {
   }
 
   async updateBusinessHours(
-    businessId: Types.ObjectId,
-    userId: Types.ObjectId,
+    businessId: ObjectId,
+    userId: ObjectId,
     dto: { hours: BusinessHoursType }
   ): Promise<Business> {
     const businessData = await this.businessModel.findOne(
@@ -144,17 +149,25 @@ export class BusinessService {
   }
 
   async findByKey(
-    businessId: Types.ObjectId,
+    businessId: ObjectId,
     key: keyof BusinessType
   ): Promise<Business[keyof BusinessType]> {
     const data = await this.businessModel
       .findById(businessId, String(key))
       .exec();
-    // console.log("findByKey>>>", businessId, key, data);
-    return data[key];
+    data;
+    if (data) {
+      return data[key];
+    } else {
+      throw new ForbiddenException("No data available");
+    }
   }
 
-  async getStaff(businessId: Types.ObjectId, userId: Types.ObjectId) {
+  async getUsers(
+    userType: "staff" | "client",
+    businessId: ObjectId,
+    userId: ObjectId
+  ) {
     const businessData = await this.findBusinessById(businessId);
 
     const { isAdmin, isSuperAdmin } = this.isUserAdminType(
@@ -162,28 +175,74 @@ export class BusinessService {
       userId
     );
     if (isAdmin || isSuperAdmin) {
-      console.log("finding staff");
-      const staff = this.businessUserModel
-        .find({
-          _id: {
-            $in: businessData.staff,
-          },
-        })
-        .select("-__v -hashedRt");
-      return staff;
+      if (userType === "staff") {
+        const staff = this.businessUserModel
+          .find({
+            _id: {
+              $in: businessData.staff,
+            },
+          })
+          .select("-__v -hashedRt");
+        return staff;
+      } else if (userType === "client") {
+        const clients = this.clientUserModel
+          .find({
+            _id: {
+              $in: businessData.clients,
+            },
+          })
+          .select("-__v -hashedRt");
+        return clients;
+      }
+    }
+  }
+
+  async createBusinessStaff(
+    businessUserId: ObjectId,
+    businessId: ObjectId,
+    staff: BusinessUserType[]
+  ) {
+    const businessData = await this.findBusinessById(businessId);
+
+    const { isAdmin, isSuperAdmin } = this.isUserAdminType(
+      businessData,
+      businessUserId
+    );
+
+    if (isAdmin || isSuperAdmin) {
+      const insertedStaff = await this.businessUserModel.insertMany(staff);
+      const staffIds = insertedStaff.map((client) => {
+        return client._id;
+      });
+      await this.businessModel.findOneAndUpdate(businessId, {
+        $push: { staff: staffIds },
+      });
+      return insertedStaff;
     }
   }
 
   async createBusinessClients(
-    businessId: Types.ObjectId,
-    clients: BusinessUserType[]
+    businessUserId: ObjectId,
+    businessId: ObjectId,
+    clients: ClientUserType[]
   ) {
-    const insertedClients = await this.businessUserModel.insertMany(clients);
-    const clientsIds = insertedClients.map((client) => {
-      return client._id;
-    });
-    await this.businessModel.findOneAndUpdate(businessId, {
-      $push: { clients: clientsIds },
-    });
+    const businessData = await this.findBusinessById(businessId);
+
+    const { isAdmin, isSuperAdmin } = this.isUserAdminType(
+      businessData,
+      businessUserId
+    );
+
+    if (isAdmin || isSuperAdmin) {
+      const insertedClients = await this.clientUserModel.insertMany(clients);
+      const clientsIds = insertedClients.map((client) => {
+        return client._id;
+      });
+      const businessClients = businessData.clients.concat(clientsIds);
+      await this.businessModel.findOneAndUpdate(businessId, {
+        clients: businessClients,
+      });
+      return insertedClients;
+    }
   }
 }

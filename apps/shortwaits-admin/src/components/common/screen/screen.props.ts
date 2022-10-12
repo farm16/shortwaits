@@ -1,9 +1,15 @@
 import React from "react";
-import { ColorValue, StyleProp, ViewStyle } from "react-native";
+import {
+  ColorValue,
+  StyleProp,
+  ScrollViewProps,
+  ViewStyle,
+} from "react-native";
 import { KeyboardOffsets, ScreenPresets } from "./screen.presets";
 
-export interface ScreenProps {
+export interface ScreenProps extends ScrollViewProps {
   header?: JSX.Element;
+
   /**
    * Apply inset (padding) to the screen
    */
@@ -37,7 +43,7 @@ export interface ScreenProps {
    * Should we not wrap in SafeAreaView? Defaults to false.
    */
   unsafe?: boolean;
-
+  unsafeBottom?: boolean;
   /**
    * By how much should we offset the keyboard? Defaults to none.
    */
@@ -48,4 +54,6 @@ export interface ScreenProps {
    * Only applies to scroll preset.
    */
   keyboardShouldPersistTaps?: "handled" | "always" | "never";
+
+  showsVerticalScrollIndicator?: boolean;
 }

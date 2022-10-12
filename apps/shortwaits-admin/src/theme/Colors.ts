@@ -35,12 +35,12 @@ export const staticCustomColors = {
   background: "#ffffff",
   backgroundOverlay: "#FBFBFB",
   white: "#ffffff",
-  black: "#000000",
+  black: "#26242b",
 
   //grays
-  lightGray: "hsl(300,1%, 90%)",
-  gray: "hsl(300,1%, 50%)",
-  darkGray: "hsl(300,1%, 10%)",
+  lightGray: "rgb(239,239,239)",
+  gray: "rgb(200,200,200)",
+  darkGray: "rgb(50,50,50)",
 
   text: "rgba(0,0,0,0.87)",
   subText: "rgba(0,0,0,0.60)",

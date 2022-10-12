@@ -1,7 +1,6 @@
 import React from "react";
 
-import { Card, CardProps, Text } from "../common";
-import { useTheme } from "../../theme";
+import { Card, CardProps, Space, Text } from "../common";
 
 export interface ButtonCardProps extends Omit<CardProps, "mode"> {
   title: string;
@@ -13,6 +12,7 @@ export const ButtonCard = (props: ButtonCardProps) => {
     subTitle,
     rightIconName = "chevron-right",
     rightIconSize = "large",
+    textStyle,
     ...rest
   } = props;
 
@@ -23,8 +23,13 @@ export const ButtonCard = (props: ButtonCardProps) => {
       rightIconSize={rightIconSize}
       rightIconName={rightIconName}
     >
-      <Text preset="cardTitle" text={title} />
-      {subTitle && <Text preset="cardSubtitle" text={subTitle} />}
+      <Text preset="cardTitle" style={textStyle} text={title} />
+      {subTitle && (
+        <>
+          <Space size="tiny" />
+          <Text preset="cardSubtitle" text={subTitle} />
+        </>
+      )}
     </Card>
   );
 };
