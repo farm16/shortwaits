@@ -4,7 +4,7 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 import { Button, ButtonProps, Spinner, Text } from "../common";
 import { useTheme } from "../../theme";
-import { ThemeColorName, ThemeColors } from "../../theme/Colors";
+import { ThemeColorName } from "../../theme/Colors";
 
 const disabledStates = ["loading", "disabled", "enable"];
 
@@ -127,19 +127,19 @@ const _circleIcons = {
   edit: {
     name: "pencil",
     color: "brandSecondary",
-    backgroundColor: "lightGray",
+    backgroundColor: undefined,
     size: 21,
   },
   check: {
     name: "check",
     color: "brandSecondary",
-    backgroundColor: "lightGray",
+    backgroundColor: undefined,
     size: 26,
   },
   cancel: {
     name: "close",
     color: "red3",
-    backgroundColor: "lightGray",
+    backgroundColor: undefined,
     size: 26,
   },
   "business-header": {
@@ -151,25 +151,25 @@ const _circleIcons = {
   business: {
     name: "store",
     color: "brandSecondary",
-    backgroundColor: "lightGray",
+    backgroundColor: undefined,
     size: 20,
   },
   "business-settings": {
     name: "store-cog",
     color: "brandSecondary",
-    backgroundColor: "lightGray",
+    backgroundColor: undefined,
     size: 20,
   },
   save: {
     name: "content-save-outline",
     color: "brandSecondary",
-    backgroundColor: "lightGray",
+    backgroundColor: undefined,
     size: 26,
   },
   "open-business": {
     name: "door-open",
     color: "brandSecondary",
-    backgroundColor: "lightGray",
+    backgroundColor: undefined,
     size: 22,
   },
   "closed-business": {
@@ -181,66 +181,66 @@ const _circleIcons = {
   "account-cancel": {
     name: "account-cancel",
     color: "brandSecondary",
-    backgroundColor: "lightGray",
+    backgroundColor: undefined,
     size: 24,
   },
   "add-categories": {
     name: "plus",
-    backgroundColor: "lightGray",
+    backgroundColor: undefined,
     color: "brandSecondary",
     size: 24,
   },
   "add-currency": {
     name: "plus",
-    backgroundColor: "lightGray",
+    backgroundColor: undefined,
     color: "brandSecondary",
     size: 24,
   },
   "add-staff": {
     name: "account-tie",
-    backgroundColor: "lightGray",
+    backgroundColor: undefined,
     color: "brandSecondary",
     size: 21,
   },
   "add-services": {
     name: "text-box-plus",
-    backgroundColor: "lightGray",
+    backgroundColor: undefined,
     color: "brandSecondary",
     size: 26,
   },
   "add-image": {
     name: "camera-plus",
-    backgroundColor: "lightGray",
+    backgroundColor: undefined,
     color: "brandSecondary",
     size: 24,
   },
   more: {
     name: "camera-plus",
-    backgroundColor: "lightGray",
+    backgroundColor: undefined,
     color: "brandSecondary",
     size: 24,
   },
   add: {
     name: "plus",
-    backgroundColor: "lightGray",
+    backgroundColor: undefined,
     color: "brandSecondary",
     size: 24,
   },
   contactSync: {
     name: "phone-sync",
-    backgroundColor: "lightGray",
+    backgroundColor: undefined,
     color: "brandSecondary",
     size: 24,
   },
   share: {
     name: "share-variant",
-    backgroundColor: "lightGray",
+    backgroundColor: undefined,
     color: "brandSecondary",
     size: 21,
   },
   default: {
     name: "plus",
-    backgroundColor: "lightGray",
+    backgroundColor: undefined,
     color: "brandSecondary",
     size: 24,
   },
@@ -281,7 +281,7 @@ export const CircleIconButton: FC<
   } = props;
 
   const style: StyleProp<ViewStyle> = {
-    backgroundColor: Colors[circleIcons[iconType].backgroundColor ?? "text"],
+    backgroundColor: Colors[circleIcons[iconType].backgroundColor ?? undefined],
     width: circleIcons[iconType].size + 10,
     height: circleIcons[iconType].size + 10,
     borderRadius: (circleIcons[iconType].size + 10) / 2,

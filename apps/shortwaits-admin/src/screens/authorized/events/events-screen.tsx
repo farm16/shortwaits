@@ -1,6 +1,7 @@
-import React, { FC, useEffect, useMemo } from "react";
+import React, { FC, useEffect, useLayoutEffect, useMemo } from "react";
 import { skipToken } from "@reduxjs/toolkit/dist/query/react";
 import { ActivityIndicator } from "react-native-paper";
+import { truncate } from "lodash";
 
 import {
   Calendar,
@@ -19,19 +20,22 @@ import {
 } from "../../../services";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useBusiness } from "../../../redux";
-import { View, ViewStyle } from "react-native";
-import { truncate } from "lodash";
+import { actions } from "./fab-actions";
 
 export const EventsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
   navigation,
 }) => {
   const business = useBusiness();
-  useEffect(() => {
+  useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: () => {
         return (
           <Container direction="row" alignItems="center">
-            <CircleIconButton marginRight iconType="business" />
+            <CircleIconButton
+              marginRight
+              iconType="business"
+              onPress={() => navigation.navigate("my-business-screen")}
+            />
             <Text text={truncate(business.shortName, { length: 16 })} />
           </Container>
         );
@@ -56,64 +60,10 @@ export const EventsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
     () => getCalendarData(eventsData?.data.events),
     [eventsData]
   );
-  const actions: FloatingActions = [
-    {
-      label: "EVENT",
-      onPress: () => null,
-      icon: "calendar-clock",
-      color: Colors.white,
-      labelTextColor: Colors.white,
-      style: {
-        backgroundColor: Colors.brandSecondary,
-      },
-      labelStyle: {
-        backgroundColor: Colors.brandSecondary,
-        borderRadius: 20,
-      },
-    },
-    {
-      label: "CLIENT",
-      onPress: () => null,
-      icon: "account-group",
-      color: Colors.white,
-      labelTextColor: Colors.white,
-      style: {
-        backgroundColor: Colors.brandSecondary,
-      },
-      labelStyle: {
-        backgroundColor: Colors.brandSecondary,
-        borderRadius: 20,
-      },
-    },
-    {
-      label: "STAFF",
-      color: Colors.white,
-      labelTextColor: Colors.white,
-      onPress: () => null,
-      icon: "account-tie",
-      style: {
-        backgroundColor: Colors.brandSecondary,
-      },
-      labelStyle: {
-        backgroundColor: Colors.brandSecondary,
-        borderRadius: 20,
-      },
-    },
-    {
-      label: "MORE",
-      onPress: () => null,
-      icon: "dots-horizontal",
-      color: Colors.white,
-      labelTextColor: Colors.white,
-      style: {
-        backgroundColor: Colors.brandSecondary,
-      },
-      labelStyle: {
-        backgroundColor: Colors.brandSecondary,
-        borderRadius: 20,
-      },
-    },
-  ];
+
+  console.log(events);
+  const isLoading = isEventsLoading && !isEventSuccess;
+
   return (
     <Screen
       preset="fixed"
@@ -121,11 +71,7 @@ export const EventsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
       backgroundColor={Colors.white}
       statusBar="dark-content"
     >
-      {isEventsLoading && !isEventSuccess ? (
-        <ActivityIndicator />
-      ) : (
-        <Calendar events={events} />
-      )}
+      {isLoading ? <ActivityIndicator /> : <Calendar events={events} />}
       <FloatingActionButton
         actions={actions}
         icon={"plus"}

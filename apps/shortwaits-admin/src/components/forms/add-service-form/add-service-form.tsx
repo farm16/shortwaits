@@ -8,7 +8,7 @@ import { ServiceColors } from "../../service-colors/service-colors";
 import { useMobileAdmin } from "../../../redux";
 import {
   TextFieldCard,
-  TimeDurationCard,
+  DurationFieldCard,
   CurrencyFieldCard,
 } from "../../cards";
 import { useForm } from "../../../hooks";
@@ -116,7 +116,7 @@ export function AddServiceForm({ mode, initialValues }: AddServiceFormProps) {
           value={form.price! / 100}
           currencyType={form.currency!}
         />
-        <TimeDurationCard
+        <DurationFieldCard
           title="Duration"
           values={[form.durationInMin!]}
           onValuesChange={handleDurationTimeChange}

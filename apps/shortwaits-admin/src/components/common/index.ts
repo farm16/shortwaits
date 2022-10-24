@@ -1,4 +1,3 @@
-export * from "./time-picker/time-picker";
 export * from "./scroll-view/scroll-view";
 export * from "./auto-image/auto-image";
 export * from "./text-field/text-field";

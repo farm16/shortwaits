@@ -62,6 +62,8 @@
     "emoji-datasource": "*",
     "react-native-contacts": "*",
     "react-native-paper-dates": "*",
-    "victory-native": "*"
+    "victory-native": "*",
+    "react-native-timeline-flatlist": "*",
+    "react-native-picker-select": "*"
   }
 }

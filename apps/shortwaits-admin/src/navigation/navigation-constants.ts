@@ -20,6 +20,7 @@ export const MODAL_SCREENS = {
   SCHEDULE_MODAL_SCREEN: "schedule-modal-screen",
   SERVICE_MODAL_SCREEN: "service-modal-screen",
   SELECTOR_MODAL_SCREEN: "selector-modal-screen",
+  FORM_MODAL_SCREEN: "form-modal-screen",
 } as const;
 
 export const NAVIGATION_STACKS = {

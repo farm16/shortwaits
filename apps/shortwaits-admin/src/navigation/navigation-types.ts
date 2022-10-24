@@ -21,6 +21,7 @@ export type serviceModalType = "My-Business-Services";
 export type ScheduleMode = "";
 export type ServicesMode = "";
 
+export type FormModalTypes = "addClient" | "addEvent" | "addStaff";
 export type ModalStackParamList = {
   [MODAL_SCREENS.SELECTOR_MODAL_SCREEN]: {
     type: SelectorModalType;
@@ -30,6 +31,10 @@ export type ModalStackParamList = {
   };
   [MODAL_SCREENS.SERVICE_MODAL_SCREEN]: {
     type: serviceModalType;
+  };
+  [MODAL_SCREENS.FORM_MODAL_SCREEN]: {
+    formType: FormModalTypes;
+    onSaved?(): void;
   };
 };
 
@@ -68,13 +73,19 @@ export interface ModalsScreenProps<T extends keyof ModalStackParamList> {
   route: RouteProp<ModalStackParamList, T>;
 }
 
+type MODAL_SCREENS_KEYS = keyof typeof MODAL_SCREENS;
+type MODAL_SCREENS_TYPES = typeof MODAL_SCREENS[MODAL_SCREENS_KEYS];
+
 type UNAUTHORIZED_SCREENS_KEYS = keyof typeof UNAUTHORIZED_SCREENS;
 type UNAUTHORIZED_SCREENS_TYPES =
-  typeof UNAUTHORIZED_SCREENS[UNAUTHORIZED_SCREENS_KEYS];
+  | typeof UNAUTHORIZED_SCREENS[UNAUTHORIZED_SCREENS_KEYS]
+  | MODAL_SCREENS_TYPES;
 
 type AUTHORIZED_SCREENS_KEYS = keyof typeof AUTHORIZED_SCREENS;
 type AUTHORIZED_SCREENS_TYPES =
-  typeof AUTHORIZED_SCREENS[AUTHORIZED_SCREENS_KEYS];
+  | typeof AUTHORIZED_SCREENS[AUTHORIZED_SCREENS_KEYS]
+  | MODAL_SCREENS_TYPES;
+
 /**
  * @UnauthorizedScreenProps
  * this combines UnauthorizedStackParamList & ModalStackParamList
@@ -95,3 +106,9 @@ export interface AuthorizedScreenProps<T extends AUTHORIZED_SCREENS_TYPES> {
   >;
   route: RouteProp<AuthorizedStackParamList & ModalStackParamList, T>;
 }
+
+export type STACKS_TYPES =
+  typeof NAVIGATION_STACKS[keyof typeof NAVIGATION_STACKS];
+export type ALL_SCREENS_TYPE =
+  | AUTHORIZED_SCREENS_TYPES
+  | UNAUTHORIZED_SCREENS_TYPES;

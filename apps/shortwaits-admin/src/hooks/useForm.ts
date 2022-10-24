@@ -1,10 +1,10 @@
 import { FormikConfig, FormikProps, useFormik } from "formik";
 import { formSchemas } from "../utils";
 
-export const useForm = <T = never>(
+export const useForm = <T>(
   config: FormikConfig<T>,
   schema: keyof typeof formSchemas
-): FormikProps<T> => {
+) => {
   const { initialValues, validationSchema, onSubmit, ...rest } = config;
 
   return useFormik({

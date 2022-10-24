@@ -11,7 +11,7 @@ import { useBusiness } from "../../../redux";
 import { formatAddClientsValues } from "./utils";
 import { FormHeader } from "../form-commons/form-header";
 import { FormBody } from "../form-commons/form-body";
-import { TimePickerCardInput } from "../../time-picker";
+import { TimePickerFieldCard } from "../../cards";
 
 type AddClientsFormProps = {
   handleBottomSheet: UseBottomSheetType;
@@ -186,7 +186,7 @@ export const AddClientsForm = ({
             isTouched={touched.postCode}
             errors={errors.postCode}
           />
-          <TimePickerCardInput
+          <TimePickerFieldCard
             title={"DOE (date of birth)"}
             date={new Date(values.doe)}
             onChange={handleChange("doe")}

@@ -7,7 +7,7 @@ import { useTheme } from "../../../theme";
 export const Slider = (props: SliderProps) => {
   const {
     minimumValue = 0,
-    maximumValue = 1,
+    maximumValue = 100,
     onValueChange,
     step = 15,
     value,
@@ -20,14 +20,17 @@ export const Slider = (props: SliderProps) => {
       minimumValue={minimumValue}
       maximumValue={maximumValue}
       minimumTrackTintColor={Colors.gray}
-      maximumTrackTintColor={Colors.gray}
-      thumbTintColor={Colors.gray}
+      maximumTrackTintColor={Colors.brandSecondary}
+      thumbTintColor={Colors.brandSecondary}
       // animateTransitions={true}
       // thumbTouchSize={{ width: 40, height: 40 }}
       step={step}
       disabled={disabled}
       value={value}
       onValueChange={onValueChange}
+      style={{
+        alignSelf: "stretch",
+      }}
     />
   );
 };

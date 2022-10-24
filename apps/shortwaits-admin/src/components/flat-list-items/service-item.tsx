@@ -18,7 +18,7 @@ interface ServiceCardProps extends ButtonProps {
   service: DocType<ServicesType>;
 }
 
-export const ServiceCard: FC<ServiceCardProps> = (props) => {
+export const ServiceItem: FC<ServiceCardProps> = (props) => {
   const { Colors } = useTheme();
   const {
     service: {

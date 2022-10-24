@@ -8,16 +8,17 @@ export type EventType = {
   description: string;
   eventImage: string;
   businessId: ObjectId;
-  service: ObjectId;
+  serviceId: ObjectId;
   createdBy: ObjectId;
   updatedBy: ObjectId;
-  staff: ObjectId[];
-  clients: ObjectId[];
+  staffIds: ObjectId[];
+  clientsIds: ObjectId[];
   features: string[];
   status: {
     statusCode: number;
     statusName: "pending" | "success" | "failed";
   };
+  hasNoDuration: boolean;
   durationInMin: number;
   startTime: Date;
   endTime: Date;

@@ -5,7 +5,10 @@ import {
   DefaultTheme,
   DarkTheme,
 } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import {
+  createStackNavigator,
+  TransitionPresets,
+} from "@react-navigation/stack";
 import { useFlipper } from "@react-navigation/devtools";
 
 import { RootStackParamList } from "./navigation-types";
@@ -61,6 +64,11 @@ const AppStack = () => {
         />
       )}
       <RootStack.Screen
+        options={{
+          gestureEnabled: true,
+          cardOverlayEnabled: true,
+          ...TransitionPresets.ModalPresentationIOS,
+        }}
         name={NAVIGATION_STACKS.MODALS}
         component={ModalsNavigator}
       />

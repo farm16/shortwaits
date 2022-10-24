@@ -100,7 +100,10 @@ export const ActivityScreen: FC<AuthorizedScreenProps<"activity-screen">> = ({
           height: 40,
           borderRadius: 13,
 
-          backgroundColor: Colors.brandSecondary1,
+          backgroundColor:
+            sectionID % 2 === 0
+              ? Colors.staticLightBackground
+              : Colors.brandSecondary1,
           alignItems: "center",
           justifyContent: "center",
         }}
@@ -111,8 +114,21 @@ export const ActivityScreen: FC<AuthorizedScreenProps<"activity-screen">> = ({
     );
   };
   const renderDetail = (rowData, sectionID, rowID) => {
+    console.log(sectionID, rowID);
     return (
-      <View style={{ flex: 1, paddingHorizontal: 15 }}>
+      <View
+        style={{
+          flex: 1,
+          paddingHorizontal: 15,
+          paddingVertical: 10,
+          marginBottom: 15,
+          borderRadius: 10,
+          backgroundColor:
+            sectionID % 2 === 0
+              ? Colors.staticLightBackground
+              : Colors.brandSecondary1,
+        }}
+      >
         <Text preset="cardTitle">{rowData.title}</Text>
         <Space size="tiny" />
         <Text preset="cardSubtitle">{rowData.description}</Text>
@@ -133,31 +149,16 @@ export const ActivityScreen: FC<AuthorizedScreenProps<"activity-screen">> = ({
         renderDetail={renderDetail}
         style={styles.timeline}
         data={data}
-        circleColor={Colors.brandSecondary}
-        lineColor={Colors.brandSecondary3}
+        circleColor={Colors.brandAccent}
+        lineColor={Colors.brandAccent4}
         descriptionStyle={{ color: "gray" }}
         innerCircle={"dot"}
         onEventPress={() => null}
         separator={false}
-        circleStyle={
-          {
-            // marginTop: -10,
-          }
-        }
         rowContainerStyle={{
-          // backgroundColor: "red",
           justifyContent: "center",
         }}
-        // timeContainerStyle={{ marginTop: -15 }}
-        // timeStyle={{
-        //   padding: 5,
-        // }}
-        detailContainerStyle={{
-          marginBottom: 15,
-          backgroundColor: Colors.lightGray,
-          borderRadius: 10,
-        }}
-        columnFormat="single-column-right"
+        columnFormat="single-column-left"
       />
     </Screen>
   );

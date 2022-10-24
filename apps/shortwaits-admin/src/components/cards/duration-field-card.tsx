@@ -11,7 +11,7 @@ export interface TimeDurationCardProps {
   values?: number[];
   onValuesChange(values?: number[]): void;
 }
-export const TimeDurationCard = (props: TimeDurationCardProps) => {
+export const DurationFieldCard = (props: TimeDurationCardProps) => {
   const { title, values, onValuesChange = noop } = props;
   const {
     Colors,

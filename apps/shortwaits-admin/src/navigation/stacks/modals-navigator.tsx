@@ -4,6 +4,7 @@ import {
   CardStyleInterpolators,
   createStackNavigator,
   StackNavigationOptions,
+  TransitionPresets,
 } from "@react-navigation/stack";
 
 import {
@@ -14,9 +15,14 @@ import {
 import { MODAL_SCREENS } from "../navigation-constants";
 import { useTheme } from "../../theme";
 import { ModalStackParamList } from "../navigation-types";
+import { FormModalScreen } from "../../screens/modals/forms";
 
-const { SELECTOR_MODAL_SCREEN, SCHEDULE_MODAL_SCREEN, SERVICE_MODAL_SCREEN } =
-  MODAL_SCREENS;
+const {
+  SELECTOR_MODAL_SCREEN,
+  SCHEDULE_MODAL_SCREEN,
+  FORM_MODAL_SCREEN,
+  SERVICE_MODAL_SCREEN,
+} = MODAL_SCREENS;
 
 const Stack = createStackNavigator<ModalStackParamList>();
 
@@ -41,10 +47,18 @@ export const ModalsNavigator = (): React.ReactElement => {
       },
     },
   });
+  const forFade = ({ current }) => ({
+    cardStyle: {
+      opacity: current.progress,
+    },
+  });
   const modalScreensOptions: StackNavigationOptions = {
-    presentation: "modal",
+    // presentation: "modal",
     headerShown: true,
-    cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+    gestureDirection: "vertical",
+    // cardStyleInterpolator: forFade,
+    //cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+    cardStyleInterpolator: CardStyleInterpolators.forBottomSheetAndroid,
     headerStyle: headerStyles.withOutBorder,
     headerTitleAlign: "center",
     headerTitleStyle: {
@@ -57,14 +71,13 @@ export const ModalsNavigator = (): React.ReactElement => {
 
   return (
     <Stack.Navigator>
-      <Stack.Group screenOptions={modalScreensOptions}>
-        <Stack.Screen
-          name={SELECTOR_MODAL_SCREEN}
-          component={SelectorScreenModal}
-        />
-        <Stack.Screen name={SCHEDULE_MODAL_SCREEN} component={ScheduleModal} />
-        <Stack.Screen name={SERVICE_MODAL_SCREEN} component={ServicesModal} />
-      </Stack.Group>
+      <Stack.Screen
+        name={SELECTOR_MODAL_SCREEN}
+        component={SelectorScreenModal}
+      />
+      <Stack.Screen name={SCHEDULE_MODAL_SCREEN} component={ScheduleModal} />
+      <Stack.Screen name={SERVICE_MODAL_SCREEN} component={ServicesModal} />
+      <Stack.Screen name={FORM_MODAL_SCREEN} component={FormModalScreen} />
     </Stack.Navigator>
   );
 };

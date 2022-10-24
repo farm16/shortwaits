@@ -68,7 +68,7 @@ export const UnauthorizedNavigator = () => {
           headerTitleAlign: "center",
           headerTitleStyle: {
             ...textPresets.headerTitle,
-            color: Colors.darkText,
+            color: Colors.text,
             position: "absolute",
             alignSelf: "center",
           },

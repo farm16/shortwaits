@@ -65,9 +65,15 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
             <CircleIconButton
               iconType="add"
               marginRight
-              onPress={() => {
-                handleBottomSheet.expand();
-              }}
+              onPress={() =>
+                navigation.navigate("modals", {
+                  screen: "form-modal-screen",
+                  params: {
+                    formType: "addClient",
+                    onSaved: () => refetchBusinessClientsQuery(),
+                  },
+                })
+              }
             />
             <CircleIconButton
               iconType="contactSync"
@@ -80,7 +86,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
         );
       },
     });
-  }, [handleBottomSheet, navigation]);
+  }, [handleBottomSheet, navigation, refetchBusinessClientsQuery]);
 
   const loadContacts = async () => {
     try {

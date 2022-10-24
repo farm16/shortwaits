@@ -7,6 +7,8 @@ import {
   ExpandableCalendar,
   AgendaList,
 } from "react-native-calendars";
+import { Button, NonIdealState } from "..";
+import { navigate } from "../../navigation";
 
 import { Colors } from "../../theme";
 import { useCalendarTheme } from "./calendar-hooks";
@@ -73,26 +75,46 @@ export const Calendar = (props) => {
           allowShadow={false}
         />
       )}
-      <AgendaList
-        sections={events}
-        renderItem={AgendaItem}
-        style={{
-          backgroundColor: Colors.staticLightBackground,
-        }}
-        sectionStyle={
-          {
+      {events.length === 0 ? (
+        <NonIdealState
+          image={"noEvents"}
+          buttons={[
+            <Button
+              text="Add Event"
+              onPress={() =>
+                navigate("modals", {
+                  screen: "form-modal-screen",
+                  params: {
+                    formType: "addEvent",
+                    onSaved: () => null,
+                  },
+                })
+              }
+            />,
+          ]}
+        />
+      ) : (
+        <AgendaList
+          sections={events}
+          renderItem={AgendaItem}
+          style={{
             backgroundColor: Colors.staticLightBackground,
-            color: Colors.gray,
-            fontWeight: "400",
-            fontSize: 13,
-            lineHeight: undefined,
-            paddingTop: 20,
-            paddingBottom: 20,
-            paddingLeft: 20,
-            paddingRight: 20,
-          } as TextStyle
-        }
-      />
+          }}
+          sectionStyle={
+            {
+              backgroundColor: Colors.staticLightBackground,
+              color: Colors.gray,
+              fontWeight: "400",
+              fontSize: 13,
+              lineHeight: undefined,
+              paddingTop: 20,
+              paddingBottom: 20,
+              paddingLeft: 20,
+              paddingRight: 20,
+            } as TextStyle
+          }
+        />
+      )}
     </CalendarProvider>
   );
 };

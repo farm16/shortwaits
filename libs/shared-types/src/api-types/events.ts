@@ -1,6 +1,5 @@
 import {
   BusinessPayloadType,
-  CommonResponseType,
   DocType,
   GeneralSpecShape,
   SuccessResponseType,

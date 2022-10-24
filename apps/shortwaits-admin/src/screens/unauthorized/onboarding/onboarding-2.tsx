@@ -14,7 +14,7 @@ import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { ActivityIndicator } from "react-native-paper";
 
 import {
-  ServiceCard,
+  ServiceItem,
   Screen,
   LeftChevronButton,
   Space,
@@ -136,7 +136,7 @@ export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
           data={services.data}
           renderItem={({ item }) => {
             return (
-              <ServiceCard
+              <ServiceItem
                 service={item}
                 onPress={() => handleCardOnPress(item)}
               />

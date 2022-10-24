@@ -15,7 +15,13 @@ const images = {
     message: "No registered clients",
     messageColor: "brandAccent" as ThemeColorName,
   },
+  noEvents: {
+    source: require("./assets/no-events.png"),
+    message: "No events",
+    messageColor: "brandAccent" as ThemeColorName,
+  },
 };
+
 export const NonIdealState = (props: NonIdealStateProps) => {
   const { image = "noClients", buttons, ...rest } = props;
 
@@ -42,7 +48,7 @@ export const NonIdealState = (props: NonIdealStateProps) => {
       />
       <Text
         text={images[image].message}
-        preset="title3"
+        preset="text"
         style={[
           {
             color: Colors[images[image].messageColor],
