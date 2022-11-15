@@ -130,8 +130,9 @@ export const AgendaItem: FC<AgendaItemProps> = (props) => {
       <Text
         preset="none"
         style={styles.eventTimeRow1}
-        text={new Date(item.startTime).toLocaleTimeString([], {
-          timeStyle: "short",
+        text={new Date(item.startTime).toLocaleTimeString("en-US", {
+          hour: "2-digit",
+          minute: "2-digit",
         })}
       />
       <Text
@@ -157,7 +158,7 @@ export const AgendaItem: FC<AgendaItemProps> = (props) => {
       <Text
         preset="none"
         style={styles.eventNameRow2}
-        text={truncate(service.name, { length: 21, separator: "." })}
+        text={truncate(service?.name ?? "", { length: 21, separator: "." })}
       />
       <Text
         style={styles.eventNameRow3}

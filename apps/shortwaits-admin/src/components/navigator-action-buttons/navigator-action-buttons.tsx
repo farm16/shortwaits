@@ -132,14 +132,14 @@ const _circleIcons = {
   },
   check: {
     name: "check",
-    color: "brandSecondary",
-    backgroundColor: undefined,
+    color: "white",
+    backgroundColor: "brandSecondary",
     size: 26,
   },
   cancel: {
     name: "close",
-    color: "red3",
-    backgroundColor: undefined,
+    color: "white",
+    backgroundColor: "red3",
     size: 26,
   },
   "business-header": {

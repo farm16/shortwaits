@@ -19,8 +19,14 @@ import {
   UnauthorizedNavigator,
   AuthorizedNavigator,
 } from "./stacks";
-import { useAuth, useBusiness, useMobileAdminModal, useUser } from "../redux";
+import {
+  useAuth,
+  useBusiness,
+  useComponentVisibility,
+  useUser,
+} from "../redux";
 import { PremiumMembershipModal } from "../components";
+import { Portal } from "@gorhom/portal";
 
 const RootStack = createStackNavigator<RootStackParamList>();
 
@@ -63,6 +69,7 @@ const AppStack = () => {
           component={UnauthorizedNavigator}
         />
       )}
+
       <RootStack.Screen
         options={{
           gestureEnabled: true,
@@ -84,8 +91,8 @@ export const AppNavigator = (props: NavigationProps): React.ReactElement => {
   useFlipper(navigationRef);
   const colorScheme = useColorScheme();
   useBackButtonHandler(canExit);
-  const { isModalOpen } = useMobileAdminModal("premiumMembership");
-  console.log("isModalOpen >>>", isModalOpen);
+  const { isVisible } = useComponentVisibility("premiumMembership");
+  console.log("isVisible >>>", isVisible);
   return (
     <NavigationContainer
       ref={navigationRef}
@@ -93,7 +100,7 @@ export const AppNavigator = (props: NavigationProps): React.ReactElement => {
       {...props}
     >
       <AppStack />
-      <PremiumMembershipModal visible={isModalOpen} onDismiss={() => null} />
+      <PremiumMembershipModal visible={isVisible} onDismiss={() => null} />
     </NavigationContainer>
   );
 };

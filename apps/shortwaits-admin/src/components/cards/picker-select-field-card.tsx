@@ -5,7 +5,16 @@ import RNPickerSelect from "react-native-picker-select";
 import { getDimensions, useTheme } from "../../theme";
 import { Card, Space, Text } from "../common";
 
-export const PickerSelectFieldCard = (props) => {
+type PickerSelectFieldCardProps = {
+  onChange: (value: string, index: number) => void;
+  errors?: any[];
+  isTouched?: boolean;
+  data: any[];
+  title: string;
+  placeholder?: string;
+  disabled?: boolean;
+};
+export const PickerSelectFieldCard = (props: PickerSelectFieldCardProps) => {
   const {
     onChange = noop,
     errors,
@@ -13,6 +22,7 @@ export const PickerSelectFieldCard = (props) => {
     data,
     title,
     placeholder,
+    disabled = false,
   } = props;
   const {
     Colors,
@@ -26,6 +36,7 @@ export const PickerSelectFieldCard = (props) => {
         <Text preset="cardTitle" text={title ?? ""} />
         <Space size="tiny" />
         <RNPickerSelect
+          disabled={disabled}
           placeholder={{ inputLabel: placeholder }}
           style={{
             placeholder: { ...textPresets["cardSubtitle"] },

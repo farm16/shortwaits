@@ -1,20 +1,23 @@
 import React, { FC, useLayoutEffect, useMemo } from "react";
-import { ActivityIndicator } from "react-native-paper";
+import { ActivityIndicator, Portal } from "react-native-paper";
 import { FormikHelpers } from "formik";
 import { noop } from "lodash";
 
 import { useCreateBusinessClientsMutation } from "../../../services";
 import { useForm } from "../../../hooks";
-import { useBusiness } from "../../../redux";
+import { formSchemas } from "../../../utils/formSchemas";
+import { useBusiness, useServices } from "../../../redux";
 import {
   Text,
   TextFieldCard,
   TimePickerFieldCard,
   CircleIconButton,
   PickerSelectFieldCard,
+  Button,
 } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { FormBody } from "./commons/form-body";
+import { ServicePayloadType } from "@shortwaits/shared-types";
 
 export const AddEventModal: FC<AuthorizedScreenProps<"form-modal-screen">> = ({
   navigation,
@@ -23,13 +26,15 @@ export const AddEventModal: FC<AuthorizedScreenProps<"form-modal-screen">> = ({
   const { onSaved = noop } = route.params;
 
   const business = useBusiness();
+  const services = useServices();
+
   const [createBusinessClient, createBusinessClientResult] =
     useCreateBusinessClientsMutation();
   const initialValues = useMemo(
     () => ({
-      leadClientName: "",
       name: "",
       description: "",
+      leadClientName: "",
       eventImage: "",
       businessId: "",
       serviceId: "",
@@ -44,7 +49,6 @@ export const AddEventModal: FC<AuthorizedScreenProps<"form-modal-screen">> = ({
       // payment: object;
       notes: "",
       labels: [],
-
       //duration
       durationInMin: 0,
       startTime: new Date().toISOString(),
@@ -55,20 +59,16 @@ export const AddEventModal: FC<AuthorizedScreenProps<"form-modal-screen">> = ({
     []
   );
 
-  const { touched, errors, values, handleChange, handleSubmit } = useForm<
-    typeof initialValues
-  >(
+  const { touched, errors, values, handleChange, handleSubmit } = useForm(
     {
       initialValues,
-      onSubmit: function (
-        values: typeof initialValues,
-        formikHelpers: FormikHelpers<typeof initialValues>
-      ): void | Promise<any> {
-        throw new Error("Function not implemented.");
+      onSubmit: (formData) => {
+        console.log("dd>>>", formData);
       },
     },
-    "addClient"
+    "addEvent"
   );
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => (
@@ -81,9 +81,7 @@ export const AddEventModal: FC<AuthorizedScreenProps<"form-modal-screen">> = ({
       headerRight: () => (
         <CircleIconButton
           marginRight
-          onPress={() => {
-            handleSubmit();
-          }}
+          onPress={(e) => handleSubmit()}
           iconType="check"
         />
       ),
@@ -94,6 +92,8 @@ export const AddEventModal: FC<AuthorizedScreenProps<"form-modal-screen">> = ({
   const isLoading =
     createBusinessClientResult.isLoading &&
     !createBusinessClientResult.isSuccess;
+
+  const getClientsData: GetSelectorData<ServicePayloadType> = getServiceData;
 
   return isLoading ? (
     <ActivityIndicator />
@@ -109,14 +109,21 @@ export const AddEventModal: FC<AuthorizedScreenProps<"form-modal-screen">> = ({
       />
       <TextFieldCard
         title="Description"
-        placeholder="jhon_smith@shortwaits.com"
+        placeholder="Yoga class description"
         value={values.description}
         onChangeText={handleChange("description")}
         isTouched={touched.description}
         errors={errors.description}
       />
-      <PickerSelectFieldCard
+      {/* <PickerSelectFieldCard
         title={"Service"}
+        placeholder="Select a service"
+        onChange={(value) => handleChange("serviceId")}
+        data={getClientsData(services, "name", "_id")}
+      />
+      <PickerSelectFieldCard
+        title={"Client"}
+        disabled
         placeholder="Select a service"
         onChange={() => null}
         data={[
@@ -124,15 +131,6 @@ export const AddEventModal: FC<AuthorizedScreenProps<"form-modal-screen">> = ({
           { label: "Baseball", value: "baseball" },
           { label: "Hockey", value: "hockey" },
         ]}
-      />
-      <TextFieldCard
-        title="Client"
-        placeholder="John Doe"
-        keyboardType="number-pad"
-        value={values.leadClientName}
-        onChangeText={handleChange("leadClientName")}
-        isTouched={touched.leadClientName}
-        errors={errors.leadClientName}
       />
       <TimePickerFieldCard
         title={"Starts"}
@@ -147,7 +145,21 @@ export const AddEventModal: FC<AuthorizedScreenProps<"form-modal-screen">> = ({
         onChange={handleChange("endTimeExpected")}
         isTouched={touched.endTimeExpected}
         errors={errors.endTimeExpected}
-      />
+      /> */}
     </FormBody>
   );
 };
+
+type GetSelectorData<T> = (
+  data: T[],
+  label: keyof T,
+  value: keyof T
+) => { label: string; value: string }[];
+
+const getServiceData = (data, _label, _value) =>
+  data.map((elem) => {
+    const label = elem[_label];
+    const value = elem[_value];
+
+    return { label, value };
+  });

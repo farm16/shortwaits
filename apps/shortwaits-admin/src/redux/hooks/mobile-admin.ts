@@ -1,6 +1,10 @@
-import { useMemo } from "react";
-import { useSelector } from "react-redux";
-import { mobileAdminInitialState, selectCurrentMobileAdminState } from "..";
+import { useEffect, useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  changeFloatingActionButtonVisibility,
+  mobileAdminInitialState,
+  selectCurrentMobileAdminState,
+} from "..";
 /**
  *
  * @returns returns element 0 which is `short_id: 0001`
@@ -19,11 +23,21 @@ export const useMobileDefaultData = () => {
   }, [mobileAdmin]);
 };
 
-export const useMobileAdminModal = (
-  modal: keyof typeof mobileAdminInitialState["modals"]
+export const useComponentVisibility = (
+  modal: keyof typeof mobileAdminInitialState["components"],
+  initialVisibleState?: boolean
 ) => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (initialVisibleState) {
+      dispatch(changeFloatingActionButtonVisibility(initialVisibleState));
+    }
+  }, []);
+
   const mobileAdmin = useSelector(selectCurrentMobileAdminState);
+
   return useMemo(() => {
-    return mobileAdmin ? mobileAdmin.modals[modal] : null;
+    return mobileAdmin ? mobileAdmin.components[modal] : null;
   }, [mobileAdmin, modal]);
 };

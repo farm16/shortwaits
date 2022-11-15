@@ -19,7 +19,7 @@ import {
   useGetServicesByBusinessQuery,
 } from "../../../services";
 import { AuthorizedScreenProps } from "../../../navigation";
-import { useBusiness } from "../../../redux";
+import { useBusiness, useComponentVisibility } from "../../../redux";
 import { actions } from "./fab-actions";
 
 export const EventsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
@@ -44,6 +44,8 @@ export const EventsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
     });
   }, [business.shortName, navigation]);
 
+  const { isVisible } = useComponentVisibility("floatingActionButton", true);
+
   const { isSuccess: isBusinessServicesSuccess } =
     useGetServicesByBusinessQuery(business ? business._id : skipToken);
   const {
@@ -52,16 +54,13 @@ export const EventsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
     isSuccess: isEventSuccess,
   } = useGetAllBusinessEventsQuery(
     business && isBusinessServicesSuccess ? business._id : skipToken
-    // {
-    //   refetchOnMountOrArgChange: true, // remember we remount on every bottom tab screen
-    // }
   );
   const events = useMemo(
     () => getCalendarData(eventsData?.data.events),
     [eventsData]
   );
-
   console.log(events);
+
   const isLoading = isEventsLoading && !isEventSuccess;
 
   return (
@@ -73,6 +72,7 @@ export const EventsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
     >
       {isLoading ? <ActivityIndicator /> : <Calendar events={events} />}
       <FloatingActionButton
+        isVisible={isVisible}
         actions={actions}
         icon={"plus"}
         pressedIcon={"close"}

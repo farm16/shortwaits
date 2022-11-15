@@ -2,7 +2,10 @@ import React, { useCallback, useLayoutEffect, useMemo, useRef } from "react";
 import { FlatList, View, StyleSheet } from "react-native";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 
-import { hidePremiumMembershipModal, useUser } from "../../../../../redux";
+import {
+  changePremiumMembershipModalVisibility,
+  useUser,
+} from "../../../../../redux";
 import {
   SearchBar,
   Space,
@@ -28,7 +31,7 @@ export const StaffSelector: SelectorComponentType = ({ navigation, type }) => {
   // const handleBottomSheet = useBottomSheet(bottomSheetRef);
   const dispatch = useDispatch();
   const handleCardOnPress = useCallback(() => {
-    dispatch(hidePremiumMembershipModal());
+    dispatch(changePremiumMembershipModalVisibility());
   }, [dispatch]);
 
   useLayoutEffect(() => {

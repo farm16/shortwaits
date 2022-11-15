@@ -2,14 +2,16 @@ import { Portal } from "@gorhom/portal";
 import React, { useState } from "react";
 import { StyleSheet, TextStyle, ViewStyle } from "react-native";
 import { FAB } from "react-native-paper";
+import { useComponentVisibility } from "../../redux";
 import { useTheme } from "../../theme";
 
 type FloatingActionButtonProps = {
   actions: FloatingActions;
-  isBottomTab?: boolean;
+  hasPaddingBottom?: boolean;
   onPress?(): null;
   icon: string;
   pressedIcon: string;
+  isVisible: boolean;
 };
 
 export type FloatingActions = {
@@ -27,7 +29,9 @@ export const FloatingActionButton = (props: FloatingActionButtonProps) => {
     actions = [],
     icon = "plus",
     pressedIcon = "plus",
-    isBottomTab = true,
+    hasPaddingBottom = true,
+    isVisible = true,
+    ...rest
   } = props;
 
   const { Colors } = useTheme();
@@ -41,10 +45,10 @@ export const FloatingActionButton = (props: FloatingActionButtonProps) => {
   return (
     <Portal>
       <FAB.Group
-        visible={true}
+        visible={isVisible}
         open={open}
         style={{
-          paddingBottom: isBottomTab ? 100 : 0,
+          paddingBottom: hasPaddingBottom ? 100 : 0,
         }}
         fabStyle={{
           backgroundColor: Colors.brandSecondary,
@@ -59,6 +63,7 @@ export const FloatingActionButton = (props: FloatingActionButtonProps) => {
             // do something if the speed dial is open
           }
         }}
+        {...rest}
       />
     </Portal>
   );

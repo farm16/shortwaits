@@ -1,3 +1,3 @@
 import GetAllBusinessEvents from "./get-all-events";
-
-export { GetAllBusinessEvents };
+import CreateBusinessEvent from "./create-event";
+export { GetAllBusinessEvents, CreateBusinessEvent };

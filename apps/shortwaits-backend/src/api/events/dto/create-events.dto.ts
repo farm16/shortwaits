@@ -1,8 +1,12 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { EventType } from "@shortwaits/shared-types";
+import { EventType, ObjectId } from "@shortwaits/shared-types";
 import { Types } from "mongoose";
 
 export class CreateEventsDto implements EventType {
+  serviceId: ObjectId;
+  staffIds: ObjectId[];
+  clientsIds: ObjectId[];
+  hasNoDuration: boolean;
   @ApiProperty()
   leadClientName: string;
 

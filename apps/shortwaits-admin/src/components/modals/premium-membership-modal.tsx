@@ -4,7 +4,7 @@ import { View } from "react-native";
 import { Divider, Modal } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useDispatch } from "react-redux";
-import { hidePremiumMembershipModal } from "../../redux";
+import { changePremiumMembershipModalVisibility } from "../../redux";
 import { useTheme } from "../../theme";
 import { Button, Container, Space, Text } from "../common";
 
@@ -84,7 +84,7 @@ export const PremiumMembershipModal: FC<PremiumMembershipModalPropTypes> = (
           <Space />
           <Button
             onPress={() => {
-              dispatch(hidePremiumMembershipModal());
+              dispatch(changePremiumMembershipModalVisibility());
             }}
             textStyle={{ color: Colors.brandSecondary7 }}
             preset="subLink"

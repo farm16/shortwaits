@@ -6,6 +6,7 @@ export type ServicesSuccessResponseType =
   SuccessResponseType<ServicesPayloadType>;
 
 export type ServicesPayloadType = DocType<ServicesType>[];
+export type ServicePayloadType = DocType<ServicesType>;
 
 export type ServicesSuccessFnType = (
   payload: ServicesPayloadType,

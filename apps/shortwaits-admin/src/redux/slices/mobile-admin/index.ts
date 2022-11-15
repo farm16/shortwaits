@@ -10,17 +10,23 @@ import type { RootState } from "../../../redux";
 
 export interface MobileAdminStateType {
   defaultData: ShortwaitsAdminDefaultDataPayloadType;
-  modals: {
+  components: {
     premiumMembership: {
-      isModalOpen: boolean;
+      isVisible: boolean;
+    };
+    floatingActionButton: {
+      isVisible: boolean;
     };
   };
 }
 export const mobileAdminInitialState: MobileAdminStateType = {
   defaultData: null,
-  modals: {
+  components: {
+    floatingActionButton: {
+      isVisible: false,
+    },
     premiumMembership: {
-      isModalOpen: false,
+      isVisible: false,
     },
   },
 };
@@ -33,22 +39,38 @@ export const mobileAdminSlice = createSlice({
      * updates by index since_id is not defined
      * on sample services.
      */
-    setSampleBusinessServicesByIndex(
+    changeFloatingActionButtonVisibility(
       state,
-      action: PayloadAction<{ data: Partial<ServicesType>; index: number }>
+      action: PayloadAction<boolean>
     ) {
-      const shortwaitsAdminDefaultData = cloneDeep(state);
-      shortwaitsAdminDefaultData.defaultData.sampleBusinessData.services[
-        action.payload.index
-      ] = action.payload.data;
-      return { ...state, defaultData: shortwaitsAdminDefaultData.defaultData };
+      const { payload } = action;
+      const currentState = cloneDeep(state);
+      return {
+        ...currentState,
+        components: {
+          ...currentState.components,
+          floatingActionButton: {
+            isVisible: payload
+              ? payload
+              : !currentState.components.floatingActionButton.isVisible,
+          },
+        },
+      };
     },
-    hidePremiumMembershipModal(state) {
+    changePremiumMembershipModalVisibility(
+      state,
+      action: PayloadAction<boolean>
+    ) {
+      const { payload } = action;
+
       return {
         ...state,
-        modals: {
+        components: {
+          ...state.components,
           premiumMembership: {
-            isModalOpen: !state.modals.premiumMembership.isModalOpen,
+            isVisible: payload
+              ? payload
+              : !state.components.premiumMembership.isVisible,
           },
         },
       };
@@ -64,8 +86,10 @@ export const mobileAdminSlice = createSlice({
   },
 });
 
-export const { setSampleBusinessServicesByIndex, hidePremiumMembershipModal } =
-  mobileAdminSlice.actions;
+export const {
+  changePremiumMembershipModalVisibility,
+  changeFloatingActionButtonVisibility,
+} = mobileAdminSlice.actions;
 
 export const selectCurrentMobileAdminState = (state: RootState) =>
   state.mobileAdmin;

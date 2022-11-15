@@ -5,6 +5,10 @@ import mongoose, { Document, Schema as MongooseSchema } from "mongoose";
 
 @Schema()
 export class Events extends Document implements EventType {
+  serviceId: ObjectId;
+  staffIds: ObjectId[];
+  clientsIds: ObjectId[];
+  hasNoDuration: boolean;
   @ApiProperty()
   @Prop()
   leadClientName: string;

@@ -15,6 +15,7 @@ interface TextFieldCard extends TextFieldProps, Partial<CardIconsProps> {
   title: string;
   isTouched?: boolean;
   rightIconName?: string;
+  disabled?: boolean;
 }
 
 export function TextFieldCard(props: TextFieldCard) {
@@ -33,6 +34,7 @@ export function TextFieldCard(props: TextFieldCard) {
     rightIconName,
     leftIconName,
     rightIconColor,
+    disabled = false,
     ...rest
   } = props;
 
@@ -43,6 +45,7 @@ export function TextFieldCard(props: TextFieldCard) {
     <>
       <Card
         mode="text-field"
+        // disabled={disabled}
         leftIconOnPress={leftIconOnPress}
         rightIconOnPress={rightIconOnPress}
         leftIconSize={leftIconSize}

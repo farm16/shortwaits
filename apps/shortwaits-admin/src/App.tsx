@@ -43,7 +43,7 @@ function WithProviders({ children }) {
     <ReduxProvider store={store}>
       <SafeAreaProvider initialMetrics={initialWindowMetrics}>
         <PaperProvider>
-          <GPortalProvider>{children}</GPortalProvider>
+          <GPortalProvider rootHostName="root">{children}</GPortalProvider>
         </PaperProvider>
       </SafeAreaProvider>
     </ReduxProvider>

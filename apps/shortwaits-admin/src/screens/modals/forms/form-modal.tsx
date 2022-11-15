@@ -1,4 +1,7 @@
-import React, { FC } from "react";
+import { Portal } from "@gorhom/portal";
+import { changeFloatingActionButtonVisibility } from "apps/shortwaits-admin/src/redux";
+import React, { FC, useEffect } from "react";
+import { useDispatch } from "react-redux";
 
 import { AuthorizedScreenProps, FormModalTypes } from "../../../navigation";
 import { AddClientModal } from "./add-client";
@@ -19,5 +22,12 @@ export const FormModalScreen: FC<AuthorizedScreenProps<"form-modal-screen">> = (
 ) => {
   const formType = props.route.params.formType;
   const Form = formTypes[formType];
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(changeFloatingActionButtonVisibility());
+    return () => {
+      dispatch(changeFloatingActionButtonVisibility());
+    };
+  }, [dispatch]);
   return <Form {...props} />;
 };

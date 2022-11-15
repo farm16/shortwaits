@@ -66,7 +66,7 @@ export class EventsService {
 
     const userBusiness = await this.businessModel.findOne({ _id: businessId });
     if (!userBusiness) {
-      console.log("userBusiness", userBusiness);
+      console.log("userBusiness >>>", userBusiness);
       throw new PreconditionFailedException({
         error: "Precondition Failed",
         message: "Unable to create event.",
@@ -74,7 +74,9 @@ export class EventsService {
       });
     }
 
-    if (userBusiness.services.some((service) => service === eventDto.service)) {
+    if (
+      userBusiness.services.some((service) => service === eventDto.serviceId)
+    ) {
       let event = new this.eventsModel(eventDto);
       userBusiness.events.push(event._id);
       const updatedBusiness = await userBusiness.save();
@@ -90,6 +92,7 @@ export class EventsService {
         events: events,
       };
     } else {
+      console.log("serviceId >>>", eventDto.serviceId);
       throw new PreconditionFailedException({
         error: "Precondition Failed",
         message: "Unable to create event.",

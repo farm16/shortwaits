@@ -66,28 +66,28 @@ export const formSchemas = {
       .required("this field is required"),
   }),
   addEvent: Yup.object().shape({
-    leadClientName: Yup.string()
-      .min(3, "a longer name is required")
-      .required("this field is required"),
     name: Yup.string(),
     description: Yup.string(),
-    eventImage: Yup.string(),
-    businessId: Yup.string(),
-    serviceId: Yup.string(),
-    staffIds: Yup.array(),
-    clientsIds: Yup.array(),
-    features: Yup.array(),
-    durationInMin: Yup.number(),
-    startTime: Yup.date(),
-    endTime: Yup.date(),
-    endTimeExpected: Yup.date(),
-    priceExpected: Yup.number(),
-    priceFinal: Yup.number(),
-    isGroupEvent: Yup.boolean(),
-    repeat: Yup.boolean(),
-    // payment: object;
-    notes: Yup.string(),
-    labels: Yup.array(),
+    leadClientName: Yup.string(),
+    //   .min(3, "a longer name is required")
+    //   .required("this field is required"),
+    // eventImage: Yup.string(),
+    // businessId: Yup.string(),
+    // serviceId: Yup.string(),
+    // staffIds: Yup.array(),
+    // clientsIds: Yup.array(),
+    // features: Yup.array(),
+    // durationInMin: Yup.number(),
+    // startTime: Yup.date(),
+    // endTime: Yup.date(),
+    // endTimeExpected: Yup.date(),
+    // priceExpected: Yup.number(),
+    // priceFinal: Yup.number(),
+    // isGroupEvent: Yup.boolean(),
+    // repeat: Yup.boolean(),
+    // // payment: object;
+    // notes: Yup.string(),
+    // labels: Yup.array(),
   }),
   onboarding1: Yup.object().shape({
     businessShortName: Yup.string()

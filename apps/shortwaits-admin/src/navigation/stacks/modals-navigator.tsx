@@ -6,6 +6,7 @@ import {
   StackNavigationOptions,
   TransitionPresets,
 } from "@react-navigation/stack";
+import { Portal } from "@gorhom/portal";
 
 import {
   SelectorScreenModal,
