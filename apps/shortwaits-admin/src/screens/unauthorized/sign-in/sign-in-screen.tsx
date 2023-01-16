@@ -29,7 +29,7 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({
     <Screen preset="fixed">
       <Space size="large" />
       <Logo center />
-      <Text preset="title3" text="Login" />
+      <Text preset="title3" text="Login" style={{ alignSelf: "center" }} />
       <View style={styles.container}>
         <Button icon={Facebook} preset="social" text="with Facebook" />
         <Space size="small" />

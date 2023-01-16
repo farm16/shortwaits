@@ -24,7 +24,11 @@ export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
     <Screen preset="fixed" unsafe style={styles.container}>
       <Space size="large" />
       <Logo center />
-      <Text preset="title3" text="create account" />
+      <Text
+        preset="title3"
+        style={{ alignSelf: "center" }}
+        text="create account"
+      />
       <View style={styles.formContainer}>
         <Button icon={Facebook} preset="social" text="with Facebook" />
         <Space size="small" />
@@ -43,7 +47,7 @@ export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
         <Space size="large" />
         <View style={styles.footerContainer}>
           <Button text="T" preset="subLink" onPress={() => null} />
-          <Text text={"& "} preset="textSmall" />
+          <Text text="&" preset="textTiny" />
           <Button text="C" preset="subLink" onPress={() => null} />
         </View>
         <Space size="xLarge" />
