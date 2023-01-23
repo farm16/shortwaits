@@ -85,7 +85,7 @@ export const Calendar = (props) => {
                 navigate("modals", {
                   screen: "form-modal-screen",
                   params: {
-                    formType: "addEvent",
+                    form: "addEvent",
                     onSaved: () => null,
                   },
                 })

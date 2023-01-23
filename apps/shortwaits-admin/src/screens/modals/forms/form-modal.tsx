@@ -1,15 +1,14 @@
-import { Portal } from "@gorhom/portal";
-import { changeFloatingActionButtonVisibility } from "apps/shortwaits-admin/src/redux";
 import React, { FC, useEffect } from "react";
 import { useDispatch } from "react-redux";
 
-import { AuthorizedScreenProps, FormModalTypes } from "../../../navigation";
+import { changeFloatingActionButtonVisibility } from "../../../redux";
+import { AuthorizedScreenProps, FormType } from "../../../navigation";
 import { AddClientModal } from "./add-client";
 import { AddEventModal } from "./add-event";
 import { AddStaffModal } from "./add-staff";
 
-const formTypes: Record<
-  FormModalTypes,
+const forms: Record<
+  FormType,
   FC<AuthorizedScreenProps<"form-modal-screen">>
 > = {
   addClient: AddClientModal,
@@ -20,8 +19,8 @@ const formTypes: Record<
 export const FormModalScreen: FC<AuthorizedScreenProps<"form-modal-screen">> = (
   props
 ) => {
-  const formType = props.route.params.formType;
-  const Form = formTypes[formType];
+  const form = props.route.params.form;
+  const Form = forms[form];
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(changeFloatingActionButtonVisibility());

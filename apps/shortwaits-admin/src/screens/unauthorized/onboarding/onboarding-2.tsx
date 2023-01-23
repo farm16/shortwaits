@@ -5,7 +5,6 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { useDispatch } from "react-redux";
 import { FlatList, StyleSheet } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { CompositeNavigationProp } from "@react-navigation/native";
@@ -24,7 +23,7 @@ import {
   Button,
   AddServiceForm,
   AddServiceFormValues,
-  FloatingActionButton,
+  CircleIconButton,
 } from "../../../components";
 import { useTheme } from "../../../theme";
 import {
@@ -36,6 +35,7 @@ import {
   useGetServicesByBusinessQuery,
   useRegisterBusinessMutation,
 } from "../../../services";
+import LinearGradient from "react-native-linear-gradient";
 
 export interface OnboardingScreenProps {
   navigation: CompositeNavigationProp<
@@ -80,10 +80,17 @@ export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
 
   const handleCardOnPress = useCallback(
     (item: DocType<ServicesType>) => {
-      setForm({ ...{ data: item, mode: "update" } });
-      handleBottomSheet.expand();
+      // setForm({ ...{ data: item, mode: "update" } });
+      // handleBottomSheet.expand();
+      navigation.navigate("modals", {
+        screen: "service-modal-screen",
+        params: {
+          initialValues: item,
+          mode: "update",
+        },
+      });
     },
-    [handleBottomSheet]
+    [navigation]
   );
   const [registerBusiness, registerBusinessStatus] =
     useRegisterBusinessMutation();
@@ -95,23 +102,17 @@ export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
         <LeftChevronButton onPress={() => navigation.goBack()} />
       ),
       headerRight: () => (
-        <Button
-          preset="none"
-          text="Register"
-          onPress={() => registerBusiness(business)}
-          style={[
-            {
-              backgroundColor: Colors.brandPrimary1,
-              borderColor: Colors.brandPrimary2,
-            },
-            styles.registerButton,
-          ]}
-          textStyle={[
-            {
-              color: Colors.brandPrimary,
-            },
-            styles.registerButtonText,
-          ]}
+        <CircleIconButton
+          onPress={() =>
+            navigation.navigate("modals", {
+              screen: "service-modal-screen",
+              params: {
+                mode: "create",
+              },
+            })
+          }
+          iconType="add"
+          style={{ marginRight: 15 }}
         />
       ),
     });
@@ -128,36 +129,49 @@ export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
   }
   if (isSuccess) {
     return (
-      <Screen unsafe preset="fixed" style={styles.container}>
-        <Space />
-        <FlatList
-          ItemSeparatorComponent={() => <Space size="tiny" />}
-          contentContainerStyle={styles.contentContainer}
-          data={services.data}
-          renderItem={({ item }) => {
-            return (
-              <ServiceItem
-                service={item}
-                onPress={() => handleCardOnPress(item)}
-              />
-            );
+      <>
+        <Screen unsafe preset="fixed" style={styles.container}>
+          <Space />
+          <FlatList
+            ItemSeparatorComponent={() => <Space size="tiny" />}
+            contentContainerStyle={styles.contentContainer}
+            data={services.data}
+            renderItem={({ item }) => {
+              return (
+                <ServiceItem
+                  service={item}
+                  onPress={() => handleCardOnPress(item)}
+                />
+              );
+            }}
+            keyExtractor={(item) => String(item._id)}
+          />
+          <BottomSheet
+            snapPointsLevel={6}
+            ref={bottomSheetRef}
+            onClose={() => setForm({ ...{ data: null, mode: null } })}
+          >
+            {form.data ? (
+              <AddServiceForm mode={form.mode} initialValues={form.data} />
+            ) : null}
+          </BottomSheet>
+        </Screen>
+        <LinearGradient
+          colors={[Colors.background, Colors.background, Colors.brandAccent2]}
+          style={{
+            alignItems: "center",
+            alignSelf: "stretch",
+            paddingTop: 30,
+            paddingBottom: 65,
           }}
-          keyExtractor={(item) => String(item._id)}
-        />
-        <FloatingActionButton
-          actions={[{ icon: "plus" }]}
-          isBottomTab={false}
-        />
-        <BottomSheet
-          snapPointsLevel={6}
-          ref={bottomSheetRef}
-          onClose={() => setForm({ ...{ data: null, mode: null } })}
         >
-          {form.data ? (
-            <AddServiceForm mode={form.mode} initialValues={form.data} />
-          ) : null}
-        </BottomSheet>
-      </Screen>
+          <Button
+            preset={"secondary"}
+            text="REGISTER"
+            onPress={(e) => registerBusiness(business)}
+          />
+        </LinearGradient>
+      </>
     );
   }
 };

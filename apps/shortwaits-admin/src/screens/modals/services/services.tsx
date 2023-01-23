@@ -1,4 +1,11 @@
-import React, { FC, useLayoutEffect } from "react";
+import React, {
+  FC,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from "react";
+import { View, StyleSheet } from "react-native";
 
 import {
   Button,
@@ -10,46 +17,131 @@ import {
   ButtonCard,
   ServiceColors,
   UploadProfileImage,
+  CurrencyFieldCard,
+  TextFieldCard,
+  AddServiceFormValues,
+  Text,
+  CircleIconButton,
+  DurationFieldCard,
+  LeftChevronButton,
 } from "../../../components";
 import { useTheme } from "../../../theme";
 import { ModalsScreenProps } from "../../../navigation";
+import { useMobileAdmin } from "../../../redux";
+import { useForm } from "../../../hooks";
 
-export const ServicesModal: FC<ModalsScreenProps<"schedule-modal-screen">> = ({
+export const ServicesModal: FC<ModalsScreenProps<"service-modal-screen">> = ({
   navigation,
   route,
 }) => {
-  const { type } = route.params;
+  const { mode, initialValues } = route.params;
   const { Colors } = useTheme();
+  const mobileAdminData = useMobileAdmin();
+
+  const [form, setForm] = useState<AddServiceFormValues["data"]>(null);
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "",
-      headerRight: () => null,
+      headerRight: () => (
+        <Text
+          preset="headerLink"
+          text="Save"
+          style={{
+            right: 15,
+          }}
+        />
+      ),
+      title: "",
+      headerLeft: () => (
+        <LeftChevronButton onPress={() => navigation.goBack()} />
+      ),
     });
   }, [navigation]);
+
+  useEffect(() => {
+    if (mode === "update") {
+      setForm({ ...initialValues });
+    }
+    if (mode === "create") {
+      setForm({ ...initialValues });
+    }
+  }, [mode, initialValues]);
+
+  const handlePriceChange = useCallback((price) => {
+    setForm((formValues) => ({ ...formValues, price: price * 100 }));
+  }, []);
+  const handleDurationTimeChange = useCallback((durationTime) => {
+    setForm((formValues) => ({
+      ...formValues,
+      durationInMin: durationTime ? durationTime[0] : 0,
+    }));
+  }, []);
+  const handleServiceColorChange = useCallback((serviceColor) => {
+    setForm((formValues) => ({
+      ...formValues,
+      serviceColor: serviceColor,
+    }));
+  }, []);
+
+  const { touched, errors, values, handleChange, handleSubmit } = useForm(
+    {
+      initialValues,
+      onSubmit: (formData) => {
+        return null;
+      },
+    },
+    "addService"
+  );
+
+  if (!form) {
+    return null;
+  }
+
   return (
-    <Screen preset="scroll" style={{ alignItems: "center" }}>
-      <UploadProfileImage preset="small" style={{ marginVertical: 20 }} />
-      <Card disabled>
-        <ServiceColors />
-      </Card>
-      <TextField name="service" placeholder="service's name" />
-      <TextField name="business name" placeholder="full name" />
-      <TextField name="business name" placeholder="full name" />
-      <TextField name="business name" placeholder="full name" />
-      <ButtonCard
-        title="industry"
-        subTitle="others"
-        onPress={() =>
-          navigation.navigate("modals", {
-            screen: "selector-modal-screen",
-            params: {
-              type: "onboarding-categories",
-            },
-          })
-        }
+    <Screen preset="scroll" unsafe style={styles.container}>
+      {/**
+       * @TODO this will be enabled after MVP
+       * <ServiceAvatar imageUrl={form.imageUrl} size="medium" mode="upload" />
+       * */}
+      <Space />
+      <ServiceColors
+        color={form.serviceColor}
+        onSelect={handleServiceColorChange}
       />
-      <Space size="large" />
+      <Space size="small" />
+      <TextFieldCard
+        title="Name"
+        placeholder="Yoga class"
+        value={form.name}
+        onChangeText={(text) => {
+          setForm((formState) => {
+            return { ...formState, name: text };
+          });
+        }}
+      />
+      <CurrencyFieldCard
+        title="Price"
+        onChangeValue={handlePriceChange}
+        value={form.price! / 100}
+        currencyType={form.currency!}
+      />
+      <DurationFieldCard
+        title="Duration"
+        values={[form.durationInMin!]}
+        onValuesChange={handleDurationTimeChange}
+      />
     </Screen>
   );
 };
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+  },
+  header: {
+    alignItems: "center",
+  },
+  bottomContainer: {
+    marginTop: "auto",
+  },
+});

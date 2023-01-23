@@ -1,12 +1,5 @@
 import React from "react";
-import { StyleSheet } from "react-native";
-import {
-  CardStyleInterpolators,
-  createStackNavigator,
-  StackNavigationOptions,
-  TransitionPresets,
-} from "@react-navigation/stack";
-import { Portal } from "@gorhom/portal";
+import { createStackNavigator } from "@react-navigation/stack";
 
 import {
   SelectorScreenModal,
@@ -14,7 +7,6 @@ import {
   ServicesModal,
 } from "../../screens";
 import { MODAL_SCREENS } from "../navigation-constants";
-import { useTheme } from "../../theme";
 import { ModalStackParamList } from "../navigation-types";
 import { FormModalScreen } from "../../screens/modals/forms";
 
@@ -28,48 +20,6 @@ const {
 const Stack = createStackNavigator<ModalStackParamList>();
 
 export const ModalsNavigator = (): React.ReactElement => {
-  const {
-    Colors,
-    Common: { textPresets },
-  } = useTheme();
-
-  const headerStyles = StyleSheet.create({
-    withBorder: {
-      backgroundColor: Colors.background,
-    },
-    withOutBorder: {
-      backgroundColor: Colors.background,
-      shadowColor: Colors.transparent,
-      borderBottomWidth: 0,
-      elevation: 0, // for Android
-      shadowOffset: {
-        width: 0,
-        height: 0, // for iOS
-      },
-    },
-  });
-  const forFade = ({ current }) => ({
-    cardStyle: {
-      opacity: current.progress,
-    },
-  });
-  const modalScreensOptions: StackNavigationOptions = {
-    // presentation: "modal",
-    headerShown: true,
-    gestureDirection: "vertical",
-    // cardStyleInterpolator: forFade,
-    //cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-    cardStyleInterpolator: CardStyleInterpolators.forBottomSheetAndroid,
-    headerStyle: headerStyles.withOutBorder,
-    headerTitleAlign: "center",
-    headerTitleStyle: {
-      ...textPresets.headerTitle,
-      color: Colors.text,
-      position: "absolute",
-      alignSelf: "center",
-    },
-  };
-
   return (
     <Stack.Navigator>
       <Stack.Screen

@@ -12,28 +12,27 @@ import {
   MODAL_SCREENS,
 } from "./navigation-constants";
 import { selectorConfigs } from "../screens/modals/selector/selector-config";
+import { AddServiceFormValues } from "../components";
 
-export type ScheduleModalType = "My-Business-Hours" | "User-Hours";
-export type SelectorModalType = keyof typeof selectorConfigs;
-// | "My-Business-Currency"
-export type serviceModalType = "My-Business-Services";
+export type ScheduleModalModeType = "My-Business-Hours" | "User-Hours";
+export type SelectorModalModeType = keyof typeof selectorConfigs;
 
-export type ScheduleMode = "";
-export type ServicesMode = "";
-
-export type FormModalTypes = "addClient" | "addEvent" | "addStaff";
+export type FormType = "addClient" | "addEvent" | "addStaff";
 export type ModalStackParamList = {
   [MODAL_SCREENS.SELECTOR_MODAL_SCREEN]: {
-    type: SelectorModalType;
+    type: SelectorModalModeType;
+    mode?: "update" | "create";
   };
   [MODAL_SCREENS.SCHEDULE_MODAL_SCREEN]: {
-    type: ScheduleModalType;
+    type: ScheduleModalModeType;
+    mode?: "update" | "create";
   };
   [MODAL_SCREENS.SERVICE_MODAL_SCREEN]: {
-    type: serviceModalType;
+    mode: "update" | "create";
+    initialValues?: AddServiceFormValues["data"];
   };
   [MODAL_SCREENS.FORM_MODAL_SCREEN]: {
-    formType: FormModalTypes;
+    form: FormType;
     onSaved?(): void;
   };
 };
@@ -109,6 +108,7 @@ export interface AuthorizedScreenProps<T extends AUTHORIZED_SCREENS_TYPES> {
 
 export type STACKS_TYPES =
   typeof NAVIGATION_STACKS[keyof typeof NAVIGATION_STACKS];
+
 export type ALL_SCREENS_TYPE =
   | AUTHORIZED_SCREENS_TYPES
   | UNAUTHORIZED_SCREENS_TYPES;

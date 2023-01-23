@@ -17,9 +17,9 @@ export const AUTHORIZED_SCREENS = {
 } as const;
 
 export const MODAL_SCREENS = {
-  SCHEDULE_MODAL_SCREEN: "schedule-modal-screen",
+  SCHEDULE_MODAL_SCREEN: "schedule-modal-screen", // schedule
+  SELECTOR_MODAL_SCREEN: "selector-modal-screen", // categories + staff
   SERVICE_MODAL_SCREEN: "service-modal-screen",
-  SELECTOR_MODAL_SCREEN: "selector-modal-screen",
   FORM_MODAL_SCREEN: "form-modal-screen",
 } as const;
 

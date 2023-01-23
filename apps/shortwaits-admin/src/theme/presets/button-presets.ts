@@ -35,6 +35,16 @@ export const buttonPresets = ({
       //backgroundColor: "#C4EDDE",
       borderRadius: 25,
     },
+    secondary: {
+      ...VIEW_BASE,
+      backgroundColor: Colors.brandSecondary4,
+      borderRadius: 25,
+    },
+    "secondary-disabled": {
+      ...VIEW_BASE,
+      backgroundColor: Colors.gray,
+      borderRadius: 25,
+    },
     headerLink: {
       backgroundColor: Colors.backgroundOverlay,
       justifyContent: "center",
@@ -120,6 +130,16 @@ export const buttonPresets = ({
     primary: {
       ...TEXT_BASE,
       color: Colors.brandSecondary7,
+      fontWeight: "600",
+    },
+    secondary: {
+      ...TEXT_BASE,
+      color: Colors.white,
+      fontWeight: "600",
+    },
+    "secondary-disabled": {
+      ...TEXT_BASE,
+      color: Colors.white,
       fontWeight: "600",
     },
     headerLink: {

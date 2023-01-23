@@ -69,7 +69,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
                 navigation.navigate("modals", {
                   screen: "form-modal-screen",
                   params: {
-                    formType: "addClient",
+                    form: "addClient",
                     onSaved: () => refetchBusinessClientsQuery(),
                   },
                 })

@@ -1,7 +1,7 @@
 import { cloneDeep } from "lodash";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
-  ServicesType,
+  CategoriesPayloadType,
   ShortwaitsAdminDefaultDataPayloadType,
 } from "@shortwaits/shared-types";
 
@@ -10,6 +10,7 @@ import type { RootState } from "../../../redux";
 
 export interface MobileAdminStateType {
   defaultData: ShortwaitsAdminDefaultDataPayloadType;
+  categories: CategoriesPayloadType[];
   components: {
     premiumMembership: {
       isVisible: boolean;
@@ -21,6 +22,7 @@ export interface MobileAdminStateType {
 }
 export const mobileAdminInitialState: MobileAdminStateType = {
   defaultData: null,
+  categories: null,
   components: {
     floatingActionButton: {
       isVisible: false,
@@ -77,12 +79,19 @@ export const mobileAdminSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addMatcher(
-      shortwaitsApi.endpoints.getAdminMobile.matchFulfilled,
-      (state, action) => {
-        return { ...state, defaultData: action.payload.data };
-      }
-    );
+    builder
+      .addMatcher(
+        shortwaitsApi.endpoints.getAdminMobile.matchFulfilled,
+        (state, action) => {
+          return { ...state, defaultData: action.payload.data };
+        }
+      )
+      .addMatcher(
+        shortwaitsApi.endpoints.getCategories.matchFulfilled,
+        (state, action) => {
+          return { ...state, categories: action.payload.data };
+        }
+      );
   },
 });
 

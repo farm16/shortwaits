@@ -22,7 +22,6 @@ interface SelectorItemProps {
 
 export function CategoriesSelectorItem(props: SelectorItemProps) {
   const { disabled, item, business } = props;
-  const { Colors } = useTheme();
   const dispatch = useDispatch();
 
   const isSelected = useMemo(() => {

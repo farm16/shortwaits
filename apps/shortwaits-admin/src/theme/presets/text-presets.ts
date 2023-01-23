@@ -62,7 +62,9 @@ export const textPresets = ({
     headerLink: {
       ...BASE,
       ...Fonts.textRegular,
-      fontWeight: "bold",
+      color: Colors.brandSecondary,
+      fontWeight: "500" as const,
+      // fontWeight: "",
     },
     title1: {
       ...BASE,

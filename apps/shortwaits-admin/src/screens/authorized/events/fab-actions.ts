@@ -8,7 +8,7 @@ export const actions: FloatingActions = [
       navigate("modals", {
         screen: "form-modal-screen",
         params: {
-          formType: "addEvent",
+          form: "addEvent",
           onSaved: () => null,
         },
       }),
@@ -29,7 +29,7 @@ export const actions: FloatingActions = [
       navigate("modals", {
         screen: "form-modal-screen",
         params: {
-          formType: "addClient",
+          form: "addClient",
           onSaved: () => null,
         },
       }),
@@ -52,7 +52,7 @@ export const actions: FloatingActions = [
       navigate("modals", {
         screen: "form-modal-screen",
         params: {
-          formType: "addStaff",
+          form: "addStaff",
           onSaved: () => null,
         },
       }),
