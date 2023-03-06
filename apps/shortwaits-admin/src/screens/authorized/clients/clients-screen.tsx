@@ -8,7 +8,6 @@ import {
   View,
 } from "react-native";
 import {
-  AddClientsForm,
   BottomSheet,
   BottomSheetType,
   Button,
@@ -31,7 +30,8 @@ import {
 import { AuthorizedScreenProps } from "../../../navigation";
 import { ActivityIndicator } from "react-native-paper";
 import Contacts from "react-native-contacts";
-import { ClientUserType, UserPayloadType } from "@shortwaits/shared-types";
+import { UserPayloadType } from "@shortwaits/shared-types";
+import { getUsersFromOsContacts } from "../../../utils/getUsersFromOsContacts";
 
 export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
   navigation,
@@ -64,7 +64,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
           <Container direction="row">
             <CircleIconButton
               iconType="add"
-              marginRight
+              withMarginRight
               onPress={() =>
                 navigation.navigate("modals", {
                   screen: "form-modal-screen",
@@ -77,7 +77,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
             />
             <CircleIconButton
               iconType="contactSync"
-              marginRight
+              withMarginRight
               onPress={() => {
                 handleBottomSheet.expand();
               }}
@@ -91,14 +91,13 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
   const loadContacts = async () => {
     try {
       const contacts = await Contacts.getAll();
-      const userPayload = contacts.map((contact) => {
-        return getUserFromContact(contact);
-      });
+      const payload = getUsersFromOsContacts(contacts);
       const clientsResults = await createClients({
         businessId: business._id,
-        businessClients: userPayload,
+        businessClients: payload,
       }).unwrap();
       if (clientsResults) {
+        console.log("clientsResults >>>", clientsResults);
         refetchBusinessClientsQuery();
       }
       // console.log(JSON.stringify(userPayload[0], null, 2));
@@ -106,7 +105,10 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
       // be uploading
       const contactsCount = await Contacts.getCount();
       const permission = await Contacts.checkPermission();
-      console.log(contactsCount, permission);
+
+      // console.log("contactsCount >>>", contactsCount);
+      // console.log("permission >>>", permission);
+      // console.log("contacts >>>", contacts);
     } catch (e) {
       console.log(e);
     }
@@ -116,7 +118,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
     if (Platform.OS === "android") {
       PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_CONTACTS, {
         title: "Contacts",
-        message: "This app would like to view your contacts.",
+        message: "This app would like to access your contacts.",
         buttonPositive: "",
       }).then(() => {
         loadContacts();
@@ -179,12 +181,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
           />
         </>
       )}
-      <BottomSheet snapPointsLevel={6} ref={bottomSheetRef}>
-        <AddClientsForm
-          handleBottomSheet={handleBottomSheet}
-          onSaved={() => refetchBusinessClientsQuery()}
-        />
-      </BottomSheet>
+      <BottomSheet snapPointsLevel={6} ref={bottomSheetRef}></BottomSheet>
     </Screen>
   );
 };
@@ -195,36 +192,3 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
   },
 });
-const getUserFromContact = ({
-  givenName,
-  familyName,
-  middleName,
-  displayName,
-  phoneNumbers,
-  postalAddresses,
-  imAddresses,
-}: Contacts.Contact): Partial<ClientUserType> => {
-  return {
-    givenName,
-    familyName,
-    middleName,
-    displayName,
-    phoneNumbers,
-    imAddresses,
-    email: phoneNumbers[0].number,
-    username: phoneNumbers[0].number,
-    alias: "givenName",
-    addresses: postalAddresses.map((postalAddress) => {
-      return {
-        label: postalAddress.label,
-        address1: postalAddress.formattedAddress,
-        address2: null,
-        city: postalAddress.city,
-        region: postalAddress.region,
-        state: postalAddress.state,
-        postCode: Number(postalAddress.postCode),
-        country: postalAddress.country,
-      };
-    }),
-  };
-};

@@ -1,6 +1,6 @@
-import React, { Children, cloneElement } from "react";
-import { Image, ImageStyle, Dimensions, View, TextStyle } from "react-native";
-import { Colors, useTheme } from "../../theme";
+import React, { Children } from "react";
+import { Image, Dimensions, View } from "react-native";
+import { useTheme } from "../../theme";
 import { ThemeColorName } from "../../theme/Colors";
 import { Space, Text } from "../common";
 
@@ -40,8 +40,8 @@ export const NonIdealState = (props: NonIdealStateProps) => {
       <Image
         source={images[image].source}
         style={{
-          width: Dimensions.get("screen").width * 0.8,
-          height: Dimensions.get("screen").width * 0.8,
+          width: Dimensions.get("window").width * 0.75,
+          height: Dimensions.get("window").width * 0.75,
           resizeMode: "stretch",
         }}
         {...rest}

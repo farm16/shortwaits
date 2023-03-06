@@ -1,23 +1,21 @@
 import React, { FC, useLayoutEffect, useMemo } from "react";
-import { ActivityIndicator, Portal } from "react-native-paper";
-import { FormikHelpers } from "formik";
+import { ActivityIndicator } from "react-native-paper";
 import { noop } from "lodash";
 
 import { useCreateBusinessClientsMutation } from "../../../services";
 import { useForm } from "../../../hooks";
-import { formSchemas } from "../../../utils/formSchemas";
 import { useBusiness, useServices } from "../../../redux";
 import {
   Text,
   TextFieldCard,
   TimePickerFieldCard,
-  CircleIconButton,
-  PickerSelectFieldCard,
   Button,
+  BackButton,
+  DurationFieldCard,
+  Card,
 } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { FormBody } from "./commons/form-body";
-import { ServicePayloadType } from "@shortwaits/shared-types";
 
 export const AddEventModal: FC<AuthorizedScreenProps<"form-modal-screen">> = ({
   navigation,
@@ -41,10 +39,10 @@ export const AddEventModal: FC<AuthorizedScreenProps<"form-modal-screen">> = ({
       staffIds: [],
       clientsIds: [],
       features: [],
-
       priceExpected: 0,
       priceFinal: 0,
       isGroupEvent: false,
+      isVideoMeeting: false,
       repeat: false,
       // payment: object;
       notes: "",
@@ -59,32 +57,21 @@ export const AddEventModal: FC<AuthorizedScreenProps<"form-modal-screen">> = ({
     []
   );
 
-  const { touched, errors, values, handleChange, handleSubmit } = useForm(
-    {
-      initialValues,
-      onSubmit: (formData) => {
-        console.log("dd>>>", formData);
+  const { touched, errors, values, handleChange, handleSubmit, setFieldValue } =
+    useForm(
+      {
+        initialValues,
+        onSubmit: (formData) => {
+          console.log("dd>>>", formData);
+        },
       },
-    },
-    "addEvent"
-  );
+      "addEvent"
+    );
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerLeft: () => (
-        <CircleIconButton
-          marginLeft
-          iconType="cancel"
-          onPress={() => navigation.goBack()}
-        />
-      ),
-      headerRight: () => (
-        <CircleIconButton
-          marginRight
-          onPress={(e) => handleSubmit()}
-          iconType="check"
-        />
-      ),
+      headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
+      headerRight: () => <Button preset="headerLink" text="Save" />,
       headerTitle: () => <Text preset="text" text="Add Event" />,
     });
   }, [handleSubmit, navigation]);
@@ -93,14 +80,14 @@ export const AddEventModal: FC<AuthorizedScreenProps<"form-modal-screen">> = ({
     createBusinessClientResult.isLoading &&
     !createBusinessClientResult.isSuccess;
 
-  const getClientsData: GetSelectorData<ServicePayloadType> = getServiceData;
+  const handleFormValue = (values, cb) => cb(values);
 
   return isLoading ? (
     <ActivityIndicator />
   ) : (
     <FormBody>
       <TextFieldCard
-        title="Event Name"
+        title="Name"
         placeholder="Yoga class"
         value={values.name}
         onChangeText={handleChange("name")}
@@ -109,28 +96,11 @@ export const AddEventModal: FC<AuthorizedScreenProps<"form-modal-screen">> = ({
       />
       <TextFieldCard
         title="Description"
-        placeholder="Yoga class description"
+        placeholder="15 minutes hot Yoga"
         value={values.description}
         onChangeText={handleChange("description")}
         isTouched={touched.description}
         errors={errors.description}
-      />
-      {/* <PickerSelectFieldCard
-        title={"Service"}
-        placeholder="Select a service"
-        onChange={(value) => handleChange("serviceId")}
-        data={getClientsData(services, "name", "_id")}
-      />
-      <PickerSelectFieldCard
-        title={"Client"}
-        disabled
-        placeholder="Select a service"
-        onChange={() => null}
-        data={[
-          { label: "Football", value: "football" },
-          { label: "Baseball", value: "baseball" },
-          { label: "Hockey", value: "hockey" },
-        ]}
       />
       <TimePickerFieldCard
         title={"Starts"}
@@ -139,27 +109,32 @@ export const AddEventModal: FC<AuthorizedScreenProps<"form-modal-screen">> = ({
         isTouched={touched.startTime}
         errors={errors.startTime}
       />
-      <TimePickerFieldCard
-        title={"Ends"}
-        date={new Date(values.endTimeExpected)}
-        onChange={handleChange("endTimeExpected")}
-        isTouched={touched.endTimeExpected}
-        errors={errors.endTimeExpected}
-      /> */}
+      <DurationFieldCard
+        title={"Duration"}
+        values={[values.durationInMin]}
+        onValuesChange={(values) =>
+          handleFormValue(values[0].toString(), handleChange("durationInMin"))
+        }
+      />
+      <Card
+        mode="button"
+        rightIconSize={"large"}
+        onPress={() => setFieldValue("isVideoMeeting", !values.isVideoMeeting)}
+        rightIconName={
+          values.isVideoMeeting ? "checkbox-outline" : "checkbox-blank-outline"
+        }
+      >
+        <Text preset="cardTitle" text={"Video call"} />
+      </Card>
+      <TextFieldCard
+        title="Notes"
+        multiline
+        placeholder="Include notes here"
+        value={values.notes}
+        onChangeText={handleChange("notes")}
+        isTouched={touched.notes}
+        errors={errors.notes}
+      />
     </FormBody>
   );
 };
-
-type GetSelectorData<T> = (
-  data: T[],
-  label: keyof T,
-  value: keyof T
-) => { label: string; value: string }[];
-
-const getServiceData = (data, _label, _value) =>
-  data.map((elem) => {
-    const label = elem[_label];
-    const value = elem[_value];
-
-    return { label, value };
-  });

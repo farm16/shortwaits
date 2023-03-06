@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { StyleSheet } from "react-native";
 import { noop } from "lodash";
 
-import { Card, MultiSlider, Text } from "../common";
+import { Card, MultiSlider, Space, Text } from "../common";
 import { useTheme } from "../../theme";
 import { getPrettyStringFromDurationInMin } from "../../utils/time";
 
@@ -20,12 +20,8 @@ export const DurationFieldCard = (props: TimeDurationCardProps) => {
 
   return (
     <Card mode="static" style={styles.container}>
+      <Space size="small" />
       <Text preset="cardTitle" text={title} />
-      <Text
-        preset="none"
-        style={[textFieldPresets.cardSubtitle, styles.cardSubtile]}
-        text={getPrettyStringFromDurationInMin(values ? values[0] : 0)}
-      />
       <MultiSlider
         style={styles.multiSlider}
         values={values}
@@ -34,12 +30,19 @@ export const DurationFieldCard = (props: TimeDurationCardProps) => {
         max={1440}
         onValuesChange={onValuesChange}
       />
+      <Text
+        preset="none"
+        style={[textFieldPresets.cardSubtitle, styles.cardSubtile]}
+        text={getPrettyStringFromDurationInMin(values ? values[0] : 0)}
+      />
+      <Space size="tiny" />
     </Card>
   );
 };
 const styles = StyleSheet.create({
   container: {
-    height: 110,
+    minHeight: undefined,
+    maxHeight: undefined,
   },
   multiSlider: {
     marginLeft: -10, // this is because there is a margin of 15 for any childrem inside a card

@@ -45,15 +45,16 @@ export const Card = (props: CardProps) => {
     children,
     leftIconOnPress,
     rightIconOnPress,
+    style: styleOverride,
     ...rest
   } = props;
 
   return (
     <Button
       preset="card"
-      style={styles.cardHeight}
       {...cardModes[mode]}
       {...rest}
+      style={[styles.cardHeight, styleOverride]}
     >
       {leftIconName && (
         <Button

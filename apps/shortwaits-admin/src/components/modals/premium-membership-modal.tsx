@@ -1,10 +1,10 @@
 import { Portal } from "@gorhom/portal";
 import React, { FC } from "react";
 import { View } from "react-native";
-import { Divider, Modal } from "react-native-paper";
+import { Modal } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useDispatch } from "react-redux";
-import { changePremiumMembershipModalVisibility } from "../../redux";
+import { hidePremiumMembershipModal } from "../../redux";
 import { useTheme } from "../../theme";
 import { Button, Container, Space, Text } from "../common";
 
@@ -42,7 +42,7 @@ export const PremiumMembershipModal: FC<PremiumMembershipModalPropTypes> = (
   const dispatch = useDispatch();
   return (
     <Portal>
-      <Modal visible={visible} onDismiss={onDismiss}>
+      <Modal visible={visible} onDismiss={onDismiss} dismissable={false}>
         <View
           style={{
             backgroundColor: Colors.backgroundOverlay,
@@ -84,7 +84,7 @@ export const PremiumMembershipModal: FC<PremiumMembershipModalPropTypes> = (
           <Space />
           <Button
             onPress={() => {
-              dispatch(changePremiumMembershipModalVisibility());
+              dispatch(hidePremiumMembershipModal());
             }}
             textStyle={{ color: Colors.brandSecondary7 }}
             preset="subLink"

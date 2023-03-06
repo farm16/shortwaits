@@ -66,6 +66,11 @@ export const textPresets = ({
       fontWeight: "500" as const,
       // fontWeight: "",
     },
+    headerTitle: {
+      ...Fonts.textRegular,
+      color: Colors.text,
+      fontWeight: "500" as const,
+    },
     title1: {
       ...BASE,
       ...Fonts.titleLarge,
@@ -122,12 +127,6 @@ export const textPresets = ({
       // marginTop: 0,
       letterSpacing: 0.65,
       color: Colors.subText,
-    },
-    headerTitle: {
-      fontSize: 16,
-      color: Colors.text,
-      letterSpacing: 0.65,
-      fontWeight: "500" as const,
     },
   });
 };

@@ -70,6 +70,7 @@ export const ScheduleModal: FC<ModalsScreenProps<"schedule-modal-screen">> = ({
           }}
         >
           <CircleIconButton
+            withMarginRight
             onPress={() => {
               setIsBusinessClosed((_isBusinessClosed) => {
                 dispatch(setBusinessAllHours(!_isBusinessClosed));
@@ -78,16 +79,6 @@ export const ScheduleModal: FC<ModalsScreenProps<"schedule-modal-screen">> = ({
             }}
             iconType={isBusinessClosed ? "closed-business" : "open-business"}
           />
-          {/* <CircleIconButton
-            text={"save"}
-            onPress={() => {
-              postBusinessHours({
-                businessId: String(business._id),
-                payload: { hours: business.hours },
-              });
-            }}
-            iconType="save"
-          /> */}
         </View>
       ),
     });

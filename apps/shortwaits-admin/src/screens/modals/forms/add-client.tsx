@@ -73,14 +73,14 @@ export const AddClientModal: FC<AuthorizedScreenProps<"form-modal-screen">> = ({
     navigation.setOptions({
       headerLeft: () => (
         <CircleIconButton
-          marginLeft
+          withMarginLeft
           iconType="cancel"
           onPress={() => navigation.goBack()}
         />
       ),
       headerRight: () => (
         <CircleIconButton
-          marginRight
+          withMarginRight
           onPress={() => {
             handleSubmit();
           }}

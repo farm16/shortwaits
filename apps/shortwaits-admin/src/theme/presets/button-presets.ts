@@ -46,13 +46,8 @@ export const buttonPresets = ({
       borderRadius: 25,
     },
     headerLink: {
-      backgroundColor: Colors.backgroundOverlay,
-      justifyContent: "center",
-      alignItems: "center",
-      height: 36,
-      width: 36,
-      borderRadius: 18,
-      marginHorizontal: "10%",
+      margin: 15,
+      backgroundColor: Colors.transparent,
     },
     icon: {
       height: 55,
@@ -143,9 +138,10 @@ export const buttonPresets = ({
       fontWeight: "600",
     },
     headerLink: {
-      // marginHorizontal: 5,
-      // color: Colors.white,
-      // fontWeight: "400"
+      ...TEXT_BASE,
+      ...Fonts.textRegular,
+      color: Colors.brandSecondary,
+      fontWeight: "500",
     },
     outline: {
       ...TEXT_BASE,

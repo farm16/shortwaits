@@ -170,13 +170,13 @@ const _circleIcons = {
     name: "door-open",
     color: "brandSecondary",
     backgroundColor: undefined,
-    size: 22,
+    size: 25,
   },
   "closed-business": {
     name: "door-closed-lock",
-    backgroundColor: "red1",
+    backgroundColor: undefined,
     color: "brandPrimary",
-    size: 20,
+    size: 25,
   },
   "account-cancel": {
     name: "account-cancel",
@@ -197,7 +197,7 @@ const _circleIcons = {
     size: 24,
   },
   "add-staff": {
-    name: "account-tie",
+    name: "account-plus",
     backgroundColor: undefined,
     color: "brandSecondary",
     size: 21,
@@ -224,10 +224,10 @@ const _circleIcons = {
     name: "plus",
     backgroundColor: undefined,
     color: "brandSecondary",
-    size: 24,
+    size: 26,
   },
   contactSync: {
-    name: "phone-sync",
+    name: "sync",
     backgroundColor: undefined,
     color: "brandSecondary",
     size: 24,
@@ -242,7 +242,7 @@ const _circleIcons = {
     name: "plus",
     backgroundColor: undefined,
     color: "brandSecondary",
-    size: 24,
+    size: 26,
   },
 } as const;
 type CircleIconsKeys = keyof typeof _circleIcons;
@@ -259,11 +259,10 @@ const circleIcons = _circleIcons as unknown as Record<
 
 export const CircleIconButton: FC<
   ButtonProps & {
-    noMargin?: boolean;
     iconType: CircleIconsKeys;
     iconSize?: number;
-    marginLeft?: boolean;
-    marginRight?: boolean;
+    withMarginLeft?: boolean;
+    withMarginRight?: boolean;
   }
 > = (props) => {
   const { Colors } = useTheme();
@@ -275,20 +274,20 @@ export const CircleIconButton: FC<
     style: styleOverride,
     text,
     textStyle,
-    marginRight,
-    marginLeft,
+    withMarginRight,
+    withMarginLeft,
     ...rest
   } = props;
 
   const style: StyleProp<ViewStyle> = {
     backgroundColor: Colors[circleIcons[iconType].backgroundColor ?? undefined],
-    width: circleIcons[iconType].size + 10,
-    height: circleIcons[iconType].size + 10,
-    borderRadius: (circleIcons[iconType].size + 10) / 2,
+    width: circleIcons[iconType].size,
+    height: circleIcons[iconType].size,
+    borderRadius: circleIcons[iconType].size / 2,
     justifyContent: "center",
     alignItems: "center",
-    marginLeft: marginLeft ? 15 : undefined,
-    marginRight: marginRight ? 15 : undefined,
+    marginLeft: withMarginLeft ? 15 : undefined,
+    marginRight: withMarginRight ? 15 : undefined,
   };
 
   return (
@@ -354,6 +353,6 @@ export const CancelAndLogOutHeaderButton: FC<ButtonProps> = (props) => {
   );
 };
 
-export const MultipleHeaderButtons: FC = ({ children }) => {
+export const MultipleHeaderButtons = ({ children }) => {
   return <View style={{ flexDirection: "row" }}>{children}</View>;
 };

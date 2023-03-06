@@ -1,16 +1,12 @@
 import React, { FC } from "react";
 import { Alert, StyleSheet, View } from "react-native";
-import {
-  DocType,
-  ServicesPayloadType,
-  ServicesType,
-} from "@shortwaits/shared-types";
+import { DocType, ServicesType } from "@shortwaits/shared-types";
 
 import { Button, ButtonProps, Space, Text } from "../common";
 import { getDimensions, useTheme } from "../../theme";
 import { getPrettyStringFromDurationInMin } from "../../utils/time";
 import { getPrettyStringFromPrice } from "../../utils/currency";
-import { ServiceAvatar } from "../service-avatar/service-avatar";
+import { Avatar } from "../avatar/avatar";
 
 const CARD_HEIGH = 90;
 
@@ -21,16 +17,7 @@ interface ServiceCardProps extends ButtonProps {
 export const ServiceItem: FC<ServiceCardProps> = (props) => {
   const { Colors } = useTheme();
   const {
-    service: {
-      imageUrl,
-      name,
-      serviceColor,
-      durationInMin,
-      price,
-      currency,
-      urls,
-      hours,
-    },
+    service: { imageUrl, name, serviceColor, durationInMin, price, currency },
     ...rest
   } = props;
   const { width } = getDimensions();
@@ -44,12 +31,12 @@ export const ServiceItem: FC<ServiceCardProps> = (props) => {
           [
             {
               text: "Cancel",
-              onPress: () => {},
+              onPress: () => null,
               style: "cancel",
             },
             {
               text: "Delete",
-              onPress: () => {},
+              onPress: () => null,
               style: "destructive",
             },
           ],
@@ -60,7 +47,7 @@ export const ServiceItem: FC<ServiceCardProps> = (props) => {
       }
       preset="none"
       style={[
-        cardStyle.container,
+        styles.container,
         {
           height: CARD_HEIGH,
           width: width * 0.9,
@@ -70,24 +57,21 @@ export const ServiceItem: FC<ServiceCardProps> = (props) => {
       ]}
       {...rest}
     >
-      <View style={cardStyle.textItems}>
-        <Text
-          text={name}
-          style={[cardStyle.textItem1, { color: Colors.text }]}
-        />
+      <View style={styles.textItems}>
+        <Text text={name} style={[styles.textItem1, { color: Colors.text }]} />
         <Text
           text={getPrettyStringFromDurationInMin(durationInMin)}
-          style={[cardStyle.textItem2, { color: Colors.gray }]}
+          style={[styles.textItem2, { color: Colors.subText }]}
         />
         <Text
           text={getPrettyStringFromPrice(currency, price)}
           style={[
-            cardStyle.textItem3,
+            styles.textItem3,
             { color: serviceColor.hexCode || Colors.text },
           ]}
         />
       </View>
-      <ServiceAvatar
+      <Avatar
         imageUrl={imageUrl}
         size={"default"}
         serviceColor={serviceColor}
@@ -96,7 +80,8 @@ export const ServiceItem: FC<ServiceCardProps> = (props) => {
     </Button>
   );
 };
-const cardStyle = StyleSheet.create({
+
+const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     borderLeftWidth: 5,
@@ -105,8 +90,9 @@ const cardStyle = StyleSheet.create({
   },
   textItems: {
     flex: 1,
+    alignSelf: "stretch",
     alignItems: "flex-start",
-    justifyContent: "space-between",
+    justifyContent: "space-evenly",
     paddingHorizontal: 10,
   },
   textItem1: {

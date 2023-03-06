@@ -87,7 +87,7 @@ export const Onboarding1Screen: FC<
       headerTitle: `Welcome ${user?.familyName || ""}`,
       headerLeft: () => (
         <CircleIconButton
-          marginLeft
+          withMarginLeft
           iconType="account-cancel"
           onPress={() => {
             signOut();

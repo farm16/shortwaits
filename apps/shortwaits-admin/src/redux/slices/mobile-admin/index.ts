@@ -59,6 +59,28 @@ export const mobileAdminSlice = createSlice({
         },
       };
     },
+    showPremiumMembershipModal(state) {
+      return {
+        ...state,
+        components: {
+          ...state.components,
+          premiumMembership: {
+            isVisible: true,
+          },
+        },
+      };
+    },
+    hidePremiumMembershipModal(state) {
+      return {
+        ...state,
+        components: {
+          ...state.components,
+          premiumMembership: {
+            isVisible: false,
+          },
+        },
+      };
+    },
     changePremiumMembershipModalVisibility(
       state,
       action: PayloadAction<boolean>
@@ -97,6 +119,8 @@ export const mobileAdminSlice = createSlice({
 
 export const {
   changePremiumMembershipModalVisibility,
+  hidePremiumMembershipModal,
+  showPremiumMembershipModal,
   changeFloatingActionButtonVisibility,
 } = mobileAdminSlice.actions;
 

@@ -11,7 +11,7 @@ import { Defs, LinearGradient, Stop } from "react-native-svg";
 
 import { useTheme } from "../../theme";
 
-export const Graph = (props) => {
+const Graph = (props) => {
   const { data, displayOptions, interpolation = "natural" } = props;
   const { Colors } = useTheme();
   console.log(data.length);
@@ -78,6 +78,7 @@ export const Graph = (props) => {
     </View>
   );
 };
+export const MemoizedGraph = React.memo(Graph);
 
 const sharedAxisStyles = {
   tickLabels: {

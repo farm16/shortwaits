@@ -239,9 +239,16 @@ export class BusinessService {
         return client._id;
       });
       const businessClients = businessData.clients.concat(clientsIds);
-      await this.businessModel.findOneAndUpdate(businessId, {
-        clients: businessClients,
-      });
+      console.log("business ID >>> ", businessId);
+      console.log("inserting clients >>> ", businessClients);
+      const updatedBusiness = await this.businessModel.findByIdAndUpdate(
+        businessId,
+        {
+          clients: businessClients,
+        }
+      );
+      await updatedBusiness.save();
+
       return insertedClients;
     }
   }

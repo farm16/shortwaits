@@ -1,20 +1,14 @@
-import React, { useCallback, useLayoutEffect, useMemo, useRef } from "react";
-import { FlatList, View, StyleSheet } from "react-native";
+import React, { useCallback, useLayoutEffect, useMemo } from "react";
+import { FlatList, StyleSheet } from "react-native";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 
-import {
-  changePremiumMembershipModalVisibility,
-  useUser,
-} from "../../../../../redux";
+import { showPremiumMembershipModal, useUser } from "../../../../../redux";
 import {
   SearchBar,
   Space,
   CircleIconButton,
   LeftChevronButton,
   Text,
-  BottomSheet,
-  BottomSheetType,
-  useBottomSheet,
 } from "../../../../../components";
 import { selectorConfigs } from "../../selector-config";
 import { StaffSelectorItem } from "./staff-selector-item";
@@ -27,11 +21,10 @@ export const StaffSelector: SelectorComponentType = ({ navigation, type }) => {
     () => selectorConfigs[type],
     [type]
   );
-  const bottomSheetRef = useRef<BottomSheetType>(null);
-  // const handleBottomSheet = useBottomSheet(bottomSheetRef);
   const dispatch = useDispatch();
-  const handleCardOnPress = useCallback(() => {
-    dispatch(changePremiumMembershipModalVisibility());
+
+  const handleAddStaffPress = useCallback(() => {
+    dispatch(showPremiumMembershipModal());
   }, [dispatch]);
 
   useLayoutEffect(() => {
@@ -43,12 +36,13 @@ export const StaffSelector: SelectorComponentType = ({ navigation, type }) => {
       headerRight: () =>
         !isReadOnly && (
           <CircleIconButton
-            onPress={() => handleCardOnPress()}
+            onPress={() => handleAddStaffPress()}
+            withMarginRight
             iconType="add-staff"
           />
         ),
     });
-  }, [navigation, headerTitle, isReadOnly, handleCardOnPress]);
+  }, [navigation, headerTitle, isReadOnly, handleAddStaffPress]);
 
   const user = useUser();
 
@@ -67,43 +61,34 @@ export const StaffSelector: SelectorComponentType = ({ navigation, type }) => {
   }
   if (isSuccess) {
     return (
-      <>
-        <FlatList
-          ListHeaderComponent={
-            <SearchBar
-              value={""}
-              style={styles.searchBar}
-              autoCapitalize="none"
-              placeholder={searchPlaceholder}
-              autoComplete={"off"}
-              autoCorrect={false}
+      <FlatList
+        ListHeaderComponent={
+          <SearchBar
+            value={""}
+            style={styles.searchBar}
+            autoCapitalize="none"
+            placeholder={searchPlaceholder}
+            autoComplete={"off"}
+            autoCorrect={false}
+          />
+        }
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={[styles.listContainer]}
+        data={businessStaff.data}
+        ItemSeparatorComponent={() => <Space size="small" />}
+        renderItem={({ item }) => {
+          return (
+            <StaffSelectorItem
+              type={"staff"}
+              index={0}
+              isSelected={false}
+              disabled={false}
+              item={item}
             />
-          }
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={[styles.listContainer]}
-          data={businessStaff.data}
-          ItemSeparatorComponent={() => <Space size="small" />}
-          renderItem={({ item }) => {
-            return (
-              <StaffSelectorItem
-                type={"staff"}
-                index={0}
-                isSelected={false}
-                disabled={false}
-                item={item}
-              />
-            );
-          }}
-          // keyExtractor={(item, index) => `${item.name || ""}${index}`}
-        />
-        <BottomSheet snapPoints={["77%"]} ref={bottomSheetRef}>
-          {/* <AddServiceForm
-            mode="update"
-            initialValues={}
-            onSubmit={(formData) => {}}
-          /> */}
-        </BottomSheet>
-      </>
+          );
+        }}
+        // keyExtractor={(item, index) => `${item.name || ""}${index}`}
+      />
     );
   }
 };

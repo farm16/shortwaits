@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet } from "react-native";
-import { getDimensions, useTheme } from "../../theme";
 
+import { getDimensions, useTheme } from "../../theme";
 import { Card, CardProps, Space, Text } from "../common";
 
 export interface ButtonCardProps extends Omit<CardProps, "mode"> {
@@ -9,6 +9,7 @@ export interface ButtonCardProps extends Omit<CardProps, "mode"> {
   subTitle?: string;
   errors?: string | undefined;
   isTouched?: boolean;
+  withTopBorder?: boolean;
 }
 export const ButtonCard = (props: ButtonCardProps) => {
   const {
@@ -19,12 +20,11 @@ export const ButtonCard = (props: ButtonCardProps) => {
     textStyle,
     errors,
     isTouched,
+    withTopBorder,
     ...rest
   } = props;
   const { Colors } = useTheme();
   const { width } = getDimensions();
-
-  console.log(errors, isTouched);
 
   return (
     <>
@@ -33,6 +33,14 @@ export const ButtonCard = (props: ButtonCardProps) => {
         mode="button"
         rightIconSize={rightIconSize}
         rightIconName={rightIconName}
+        style={
+          withTopBorder
+            ? {
+                borderTopWidth: 1.5,
+                borderTopColor: Colors.inputBackground,
+              }
+            : undefined
+        }
       >
         <Text preset="cardTitle" style={textStyle} text={title} />
         {subTitle && (

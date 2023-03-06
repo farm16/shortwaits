@@ -6,9 +6,10 @@ import {
   ButtonCard,
   CircleIconButton,
   Container,
-  Graph,
   MembershipCard,
+  MemoizedGraph,
   Screen,
+  ScrollView,
   Space,
   Text,
 } from "../../../components";
@@ -23,6 +24,7 @@ export const MyBusinessScreen: FC<
 > = ({ navigation }) => {
   const business = useBusiness();
   const { Colors } = useTheme();
+
   const graphData = useMemo(() => getSampleGraphData(), []);
   const [graphDataType, setGraphDataType] =
     useState<keyof typeof graphData>("week");
@@ -31,8 +33,7 @@ export const MyBusinessScreen: FC<
     navigation.setOptions({
       headerTitle: () => {
         return (
-          <Container direction="row" alignItems="center">
-            <CircleIconButton iconType="business-header" disabled />
+          <Container direction="row" justifyContent="center">
             <Text
               preset="headerTitle"
               text={truncate(business.shortName, { length: 16 })}
@@ -43,8 +44,8 @@ export const MyBusinessScreen: FC<
       headerRight: () => {
         return (
           <Container direction="row" alignItems="center">
-            <CircleIconButton marginRight iconType="edit" />
-            <CircleIconButton marginRight iconType="share" />
+            <CircleIconButton withMarginRight iconType="edit" />
+            <CircleIconButton withMarginRight iconType="share" />
           </Container>
         );
       },
@@ -53,75 +54,99 @@ export const MyBusinessScreen: FC<
 
   const [visible, setVisible] = useState<boolean>(false);
 
-  const graphTopBar = (
-    <View
-      style={[
-        styles.graphBar,
-        { backgroundColor: Colors.staticLightBackground },
-      ]}
-    >
-      <Text
-        preset="textSmall"
-        style={{ fontWeight: "500" }}
-        text={`Total ${graphDataType}'s income: ${graphData[graphDataType].data
-          .reduce((pre, cur) => pre + cur.y, 0)
-          .toLocaleString("en-US", {
-            maximumFractionDigits: 2,
-            minimumFractionDigits: 2,
-          })}`}
-      />
-      <Menu
-        visible={visible}
-        onDismiss={() => setVisible(false)}
-        anchor={
-          <IconButton onPress={() => setVisible(true)} icon={"dots-vertical"} />
-        }
+  const GraphTopBar = () => (
+    <View style={{ alignItems: "center" }}>
+      <MembershipCard business={business} />
+      <Space size="tiny" />
+      <View
+        style={[
+          styles.graphTopBar,
+          {
+            height: 45,
+            backgroundColor: Colors.staticLightBackground,
+          },
+        ]}
       >
-        {Object.keys(graphData).map((name) => {
-          return (
-            <Menu.Item
-              titleStyle={{
-                fontWeight: graphDataType === name ? "bold" : "normal",
-                color:
-                  graphDataType === name ? Colors.brandSecondary : Colors.text,
-              }}
-              onPress={() => {
-                setGraphDataType(name as keyof typeof graphData);
-                setVisible(false);
-              }}
-              title={name}
+        <Text
+          preset="textSmall"
+          style={{ fontWeight: "500" }}
+          text={`Total ${graphDataType}'s income: ${graphData[
+            graphDataType
+          ].data
+            .reduce((pre, cur) => pre + cur.y, 0)
+            .toLocaleString("en-US", {
+              maximumFractionDigits: 2,
+              minimumFractionDigits: 2,
+            })}`}
+        />
+        <Menu
+          visible={visible}
+          onDismiss={() => setVisible(false)}
+          anchor={
+            <IconButton
+              onPress={() => setVisible(true)}
+              icon={"dots-vertical"}
             />
-          );
-        })}
-      </Menu>
+          }
+        >
+          {Object.keys(graphData).map((name) => {
+            return (
+              <Menu.Item
+                titleStyle={{
+                  fontWeight: graphDataType === name ? "bold" : "normal",
+                  color:
+                    graphDataType === name
+                      ? Colors.brandSecondary
+                      : Colors.text,
+                }}
+                onPress={() => {
+                  setGraphDataType(name as keyof typeof graphData);
+                  setVisible(false);
+                }}
+                title={name}
+              />
+            );
+          })}
+        </Menu>
+      </View>
     </View>
   );
 
   return (
-    <>
-      {graphTopBar}
-      <Screen
-        preset="scroll"
-        style={{ alignItems: "center", paddingTop: 10 }}
-        unsafe
-        // stickyHeaderIndices={[0]}
-      >
-        <Graph
+    <Screen preset="fixed" unsafe>
+      <GraphTopBar />
+      <ScrollView contentContainerStyle={{ alignItems: "center" }}>
+        <MemoizedGraph
           displayOptions={graphData[graphDataType].displayOptions}
           data={graphData[graphDataType].data}
         />
         <Space size="small" />
-        <MembershipCard business={business} />
-        <Space size="tiny" />
         <ButtonCard
+          withTopBorder
           leftIconName="account-tie"
           leftIconColor={Colors.brandSecondary6}
           title={"Staff"}
+          onPress={() =>
+            navigation.navigate("modals", {
+              screen: "selector-modal-screen",
+              params: {
+                type: "staff",
+              },
+            })
+          }
         />
         <ButtonCard
           leftIconName="layers-triple"
           leftIconColor={Colors.brandSecondary6}
           title={"Services"}
+          onPress={() =>
+            navigation.navigate("modals", {
+              screen: "selector-modal-screen",
+              params: {
+                type: "services",
+              },
+            })
+          }
         />
         <ButtonCard
           leftIconName="cash-fast"
@@ -138,13 +163,13 @@ export const MyBusinessScreen: FC<
           leftIconColor={Colors.brandSecondary6}
           title={"Reviews"}
         />
-      </Screen>
-    </>
+      </ScrollView>
+    </Screen>
   );
 };
 
 const styles = StyleSheet.create({
-  graphBar: {
+  graphTopBar: {
     alignSelf: "stretch",
     flexDirection: "row",
     alignItems: "center",

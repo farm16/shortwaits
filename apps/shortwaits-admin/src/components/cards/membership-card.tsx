@@ -1,9 +1,9 @@
 import React from "react";
 
-import { Card, CardProps, Text } from "../common";
+import { Card, CardProps, Container, Text } from "../common";
 import { useTheme } from "../../theme";
 import { BusinessPayloadType } from "@shortwaits/shared-types";
-import { View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 interface ButtonCardProps extends Omit<CardProps, "mode"> {
@@ -17,43 +17,37 @@ export const MembershipCard = (props: ButtonCardProps) => {
   };
   const { Colors } = useTheme();
   return (
-    <Card
-      {...rest}
-      mode="button"
-      leftIconColor={Colors.orange5}
-      leftIconName="certificate"
-      leftIconSize={"large"}
+    <TouchableOpacity
       style={{
-        borderBottomColor: undefined,
-        borderBottomWidth: undefined,
-        backgroundColor: Colors.background,
-        borderColor: Colors.brandPrimary2,
-        borderWidth: 2,
-        paddingVertical: 3,
-        borderRadius: 15,
+        height: 60,
+        flexDirection: "row",
+        backgroundColor: Colors.brandPrimary,
+        alignSelf: "stretch",
+        alignItems: "center",
+        justifyContent: "space-around",
       }}
     >
-      <View style={{ marginLeft: 10, marginVertical: 7 }}>
+      <Icon name={"hexagram"} size={23} color={Colors.orange1} />
+      <Container style={{ alignItems: "center" }}>
         <Text
-          style={{ color: Colors.brandPrimary }}
-          preset="title3"
-          text={"Premium"}
+          style={{
+            color: Colors.white,
+            fontWeight: "bold",
+          }}
+          preset="text"
+          text={"Enjoy Premium"}
         />
         <Text
           style={{
-            color: Colors.brandPrimary4,
+            color: Colors.white,
             textAlignVertical: "center",
           }}
           preset="textSmall"
         >
           {membershipMessages["premium"] + " "}
-          <Icon
-            name={"open-in-new"}
-            size={16}
-            color={Colors.brandPrimary4}
-          />{" "}
         </Text>
-      </View>
-    </Card>
+      </Container>
+      <Icon name={"hexagram"} size={23} color={Colors.orange1} />
+    </TouchableOpacity>
   );
 };

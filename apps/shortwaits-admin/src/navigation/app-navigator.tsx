@@ -26,7 +26,6 @@ import {
   useUser,
 } from "../redux";
 import { PremiumMembershipModal } from "../components";
-import { Portal } from "@gorhom/portal";
 
 const RootStack = createStackNavigator<RootStackParamList>();
 

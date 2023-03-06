@@ -11,39 +11,26 @@ import {
   Screen,
   LeftChevronButton,
   Space,
-  Button,
   CircleIconButton,
-} from "../../../components";
-import { useTheme } from "../../../theme";
+} from "../../../../../components";
 import {
   RootStackParamList,
-  UnauthorizedStackParamList,
-} from "../../../navigation";
-import { useBusiness } from "../../../redux";
-import {
-  useGetServicesByBusinessQuery,
-  useRegisterBusinessMutation,
-} from "../../../services";
-import LinearGradient from "react-native-linear-gradient";
+  ModalStackParamList,
+} from "../../../../../navigation";
+import { useBusiness } from "../../../../../redux";
+import { useGetServicesByBusinessQuery } from "../../../../../services";
 
-export interface OnboardingScreenProps {
+export interface ServicesSelectorModalScreenProps {
   navigation: CompositeNavigationProp<
-    StackNavigationProp<UnauthorizedStackParamList, "onboarding-2-screen">,
+    StackNavigationProp<ModalStackParamList, "selector-modal-screen">,
     StackNavigationProp<RootStackParamList>
   >;
 }
 
-export type SampleBusinessServices = number;
-
-export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
-  const { Colors } = useTheme();
+export const ServicesSelector = ({
+  navigation,
+}: ServicesSelectorModalScreenProps) => {
   const business = useBusiness();
-
-  //  TODO: user will not be able create new service during sign-up on update data
-  const handleBusinessRegistration = useCallback(() => {
-    return null;
-    // return registerBusiness(business);
-  }, []);
 
   const {
     data: services,
@@ -65,8 +52,6 @@ export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
     },
     [navigation]
   );
-  const [registerBusiness, registerBusinessStatus] =
-    useRegisterBusinessMutation();
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -91,45 +76,29 @@ export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
     });
   }, [navigation]);
 
-  if (isLoading || registerBusinessStatus.isLoading) {
+  if (isLoading) {
     return <ActivityIndicator />;
   }
+
   if (isSuccess) {
     return (
-      <>
-        <Screen unsafe preset="fixed" style={styles.container}>
-          <Space />
-          <FlatList
-            ItemSeparatorComponent={() => <Space size="tiny" />}
-            contentContainerStyle={styles.contentContainer}
-            data={services.data}
-            renderItem={({ item }) => {
-              return (
-                <ServiceItem
-                  service={item}
-                  onPress={() => handleCardOnPress(item)}
-                />
-              );
-            }}
-            keyExtractor={(item) => String(item._id)}
-          />
-        </Screen>
-        <LinearGradient
-          colors={[Colors.background, Colors.background, Colors.brandAccent2]}
-          style={{
-            alignItems: "center",
-            alignSelf: "stretch",
-            paddingTop: 30,
-            paddingBottom: 65,
+      <Screen unsafe preset="fixed" style={styles.container}>
+        <Space size="small" />
+        <FlatList
+          ItemSeparatorComponent={() => <Space size="tiny" />}
+          contentContainerStyle={styles.contentContainer}
+          data={services.data}
+          renderItem={({ item }) => {
+            return (
+              <ServiceItem
+                service={item}
+                onPress={() => handleCardOnPress(item)}
+              />
+            );
           }}
-        >
-          <Button
-            preset={"secondary"}
-            text="REGISTER"
-            onPress={(e) => registerBusiness(business)}
-          />
-        </LinearGradient>
-      </>
+          keyExtractor={(item) => String(item._id)}
+        />
+      </Screen>
     );
   }
 };

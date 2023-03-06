@@ -4,7 +4,6 @@ import {
   Portal as PaperPortalProvider,
   Provider as PaperProvider,
 } from "react-native-paper";
-import { PersistGate } from "redux-persist/lib/integration/react";
 import {
   SafeAreaProvider,
   initialWindowMetrics,

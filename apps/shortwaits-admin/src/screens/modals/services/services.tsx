@@ -101,7 +101,7 @@ export const ServicesModal: FC<ModalsScreenProps<"service-modal-screen">> = ({
     <Screen preset="scroll" unsafe style={styles.container}>
       {/**
        * @TODO this will be enabled after MVP
-       * <ServiceAvatar imageUrl={form.imageUrl} size="medium" mode="upload" />
+       * <Avatar imageUrl={form.imageUrl} size="medium" mode="upload" />
        * */}
       <Space />
       <ServiceColors
@@ -123,11 +123,11 @@ export const ServicesModal: FC<ModalsScreenProps<"service-modal-screen">> = ({
         title="Price"
         onChangeValue={handlePriceChange}
         value={form.price! / 100}
-        currencyType={form.currency!}
+        currencyType={form.currency}
       />
       <DurationFieldCard
         title="Duration"
-        values={[form.durationInMin!]}
+        values={[form.durationInMin]}
         onValuesChange={handleDurationTimeChange}
       />
     </Screen>

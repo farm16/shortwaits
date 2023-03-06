@@ -6,7 +6,7 @@ import { ServiceColorType } from "@shortwaits/shared-types";
 import { useTheme } from "../../theme";
 import { CircleIconButton } from "../navigator-action-buttons/navigator-action-buttons";
 
-interface ServiceAvatarProps {
+interface AvatarProps {
   imageUrl?: string;
   size: keyof typeof imageSizes;
   serviceColor?: ServiceColorType;
@@ -20,12 +20,12 @@ const imageSizes = {
   default: 90,
 } as const;
 
-export function ServiceAvatar({
+export function Avatar({
   size = "default",
   imageUrl,
   serviceColor,
   mode = "static",
-}: ServiceAvatarProps) {
+}: AvatarProps) {
   const { Colors } = useTheme();
 
   const imageSize = mode === "upload" ? imageSizes.default : imageSizes[size];

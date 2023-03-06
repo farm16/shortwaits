@@ -9,8 +9,6 @@ import {
   Screen,
   getCalendarData,
   Text,
-  CircleIconButton,
-  FloatingActions,
   Container,
 } from "../../../components";
 import { Colors } from "../../../theme";
@@ -30,13 +28,11 @@ export const EventsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
     navigation.setOptions({
       headerTitle: () => {
         return (
-          <Container direction="row" alignItems="center">
-            <CircleIconButton
-              marginRight
-              iconType="business"
-              onPress={() => navigation.navigate("my-business-screen")}
+          <Container direction="row" justifyContent="center">
+            <Text
+              preset="headerTitle"
+              text={truncate(business.shortName, { length: 16 })}
             />
-            <Text text={truncate(business.shortName, { length: 16 })} />
           </Container>
         );
       },
