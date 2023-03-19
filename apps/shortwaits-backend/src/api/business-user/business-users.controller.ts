@@ -52,8 +52,8 @@ export class BusinessUsersController {
   }
 
   @Delete(":id")
-  delete(@Res() res, @Param() params) {
-    this.usersService.remove(params.slug);
+  delete(@Res() res, @Param("id") userId: string) {
+    this.usersService.remove(userId);
     return res.status(HttpStatus.OK);
   }
 }

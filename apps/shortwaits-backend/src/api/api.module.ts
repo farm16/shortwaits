@@ -10,14 +10,14 @@ import { ClientUserModule } from "./client-user/client-user.module";
 
 @Module({
   imports: [
-    BusinessUsersModule,
     AuthModule,
-    ShortwaitsModule,
+    BusinessUsersModule,
     BusinessModule,
-    CategoriesModule,
+    ShortwaitsModule,
     EventsModule,
     ServicesModule,
     ClientUserModule,
+    CategoriesModule,
   ],
 })
 export class ApiModule {}

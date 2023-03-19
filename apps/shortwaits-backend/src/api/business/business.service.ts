@@ -35,8 +35,8 @@ export class BusinessService {
   isUserAdminType(business: Business, userId: any) {
     const id = new mongoose.mongo.ObjectId(userId);
     // console.log(id, userId);
-    const isAdmin = business.admins.includes(id as ObjectId);
-    const isSuperAdmin = business.superAdmins.includes(id as ObjectId);
+    const isAdmin = business.admins.includes(id);
+    const isSuperAdmin = business.superAdmins.includes(id);
 
     if (isAdmin || isSuperAdmin) {
       return { isAdmin, isSuperAdmin };
@@ -55,7 +55,7 @@ export class BusinessService {
     return business;
   }
 
-  async findBusinessById(businessId: ObjectId) {
+  async findBusinessById(businessId: string) {
     const businessData = await this.businessModel.findById(businessId).exec();
 
     if (businessData) {
@@ -69,7 +69,7 @@ export class BusinessService {
    * we need to verify that user is an admin for the requested business
    *
    */
-  async getBusiness(businessId: ObjectId, userId: ObjectId): Promise<Business> {
+  async getBusiness(businessId: string, userId: string): Promise<Business> {
     const businessData = await this.findBusinessById(businessId);
 
     const { isAdmin, isSuperAdmin } = this.isUserAdminType(
@@ -83,7 +83,7 @@ export class BusinessService {
   }
 
   async updateBusiness(
-    userId: ObjectId,
+    userId: string,
     business: BusinessPayloadType,
     isRegistration?: boolean
   ): Promise<Business> {
@@ -106,7 +106,7 @@ export class BusinessService {
   }
 
   async registerBusiness(
-    userId: ObjectId,
+    userId: string,
     business: BusinessPayloadType
   ): Promise<Business> {
     if (business.services.length === 0) {
@@ -127,8 +127,8 @@ export class BusinessService {
   }
 
   async updateBusinessHours(
-    businessId: ObjectId,
-    userId: ObjectId,
+    businessId: string,
+    userId: string,
     dto: { hours: BusinessHoursType }
   ): Promise<Business> {
     const businessData = await this.businessModel.findOne(
@@ -149,7 +149,7 @@ export class BusinessService {
   }
 
   async findByKey(
-    businessId: ObjectId,
+    businessId: string,
     key: keyof BusinessType
   ): Promise<Business[keyof BusinessType]> {
     const data = await this.businessModel
@@ -165,8 +165,8 @@ export class BusinessService {
 
   async getUsers(
     userType: "staff" | "client",
-    businessId: ObjectId,
-    userId: ObjectId
+    businessId: string,
+    userId: string
   ) {
     const businessData = await this.findBusinessById(businessId);
 
@@ -198,8 +198,8 @@ export class BusinessService {
   }
 
   async createBusinessStaff(
-    businessUserId: ObjectId,
-    businessId: ObjectId,
+    businessUserId: string,
+    businessId: string,
     staff: BusinessUserType[]
   ) {
     const businessData = await this.findBusinessById(businessId);
@@ -214,7 +214,7 @@ export class BusinessService {
       const staffIds = insertedStaff.map((client) => {
         return client._id;
       });
-      await this.businessModel.findOneAndUpdate(businessId, {
+      await this.businessModel.findByIdAndUpdate(businessId, {
         $push: { staff: staffIds },
       });
       return insertedStaff;
@@ -222,8 +222,8 @@ export class BusinessService {
   }
 
   async createBusinessClients(
-    businessUserId: ObjectId,
-    businessId: ObjectId,
+    businessUserId: string,
+    businessId: string,
     clients: ClientUserType[]
   ) {
     const businessData = await this.findBusinessById(businessId);

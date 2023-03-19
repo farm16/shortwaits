@@ -20,11 +20,7 @@ import { EventsService } from "./events.service";
 import { CreateEventsDto } from "./dto/create-events.dto";
 import { AtGuard } from "../../common/guards";
 import { TransformInterceptor } from "../../common/interceptors/transform.interceptor";
-import {
-  BusinessEndpointsTypes,
-  EventsEndpointsTypes,
-  EventType,
-} from "@shortwaits/shared-types";
+import { EventsEndpointsTypes, EventType } from "@shortwaits/shared-types";
 import { PaginationParams } from "../../shared/paginationParams";
 
 type ResponseController =
@@ -46,7 +42,7 @@ export class EventsController {
   })
   getAllAdminEvent(
     @Req() request,
-    @Param("id") businessId,
+    @Param("id") businessId: string,
     @Query() { limit, page }: PaginationParams
   ): Promise<ResponseController["GET"]["response"]["data"]> {
     return this.eventsService.getAllAdminEvents(
@@ -70,7 +66,7 @@ export class EventsController {
   })
   createEventByAdmin(
     @Req() request,
-    @Param("id") businessId,
+    @Param("id") businessId: string,
     @Body() createEventsDto: EventType
   ) {
     return this.eventsService.createEventByAdmin(
@@ -96,7 +92,7 @@ export class EventsController {
   })
   createEventByClient(
     @Req() request,
-    @Param("id") clientId: Types.ObjectId,
+    @Param("id") clientId: string,
     @Body() createEventsDto: EventType
   ) {
     return this.eventsService.createEventByClient(
@@ -112,7 +108,7 @@ export class EventsController {
     type: CreateEventsDto,
   })
   @Get(":id")
-  findOne(@Param("id") eventId: Types.ObjectId, @Param() request) {
+  findOne(@Param("id") eventId: string, @Param() request) {
     return this.eventsService.findOne(eventId);
   }
 

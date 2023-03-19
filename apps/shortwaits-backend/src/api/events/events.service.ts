@@ -39,7 +39,7 @@ export class EventsService {
     return event;
   }
 
-  async createEventByClient(eventDto: EventType, clientId: Types.ObjectId) {
+  async createEventByClient(eventDto: EventType, clientId: string) {
     // const user = await this.businessUserModel.findById(clientId);
     // // we are using user.businesses[0]
     // const userBusiness = await this.businessModel.findById(user.businesses[0]);
@@ -51,8 +51,8 @@ export class EventsService {
 
   async createEventByAdmin(
     eventDto: EventType,
-    businessId: Types.ObjectId,
-    adminUserId: Types.ObjectId
+    businessId: string,
+    adminUserId: string
   ) {
     const user = await this.businessUserModel.findById(adminUserId);
     if (!user) {
@@ -102,8 +102,8 @@ export class EventsService {
   }
 
   async getAllAdminEvents(
-    adminUserId: Types.ObjectId,
-    businessId: Types.ObjectId,
+    adminUserId: string,
+    businessId: string,
     limit = 10,
     page = 1
   ) {
@@ -137,14 +137,14 @@ export class EventsService {
     }
   }
 
-  async findAllByAdmin(adminUserId: Types.ObjectId) {
+  async findAllByAdmin(adminUserId: string) {
     return await this.eventsModel.find({ staff: { $in: adminUserId } });
   }
-  async findAllByClient(clientUserId: Types.ObjectId) {
+  async findAllByClient(clientUserId: string) {
     return await this.eventsModel.find({ clients: { $in: clientUserId } });
   }
 
-  async findOne(eventId: Types.ObjectId) {
+  async findOne(eventId: string) {
     return await this.eventsModel.findById(eventId);
   }
 }

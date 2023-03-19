@@ -29,7 +29,7 @@
     "@nestjs/mongoose": "^9.2.0",
     "@nestjs/passport": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
-    "@nestjs/swagger": "^6.0.5",
+    "@nestjs/swagger": "^6.2.0",
     "@ptomasroos/react-native-multi-slider": "^2.2.2",
     "@react-native-community/checkbox": "^0.5.12",
     "@react-native-community/datetimepicker": "^6.3.1",

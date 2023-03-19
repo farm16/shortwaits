@@ -7,6 +7,7 @@ import {
   Param,
   Post,
   Put,
+  Res,
   Req,
   UseGuards,
   UseInterceptors,
@@ -63,10 +64,7 @@ export class BusinessController {
     description: "Returns business record",
     type: BusinessSuccessResponse,
   })
-  async getBusiness(
-    @Req() request,
-    @Param("business_id") businessId: ObjectId
-  ) {
+  async getBusiness(@Req() request, @Param("business_id") businessId: string) {
     return this.businessService.getBusiness(businessId, request.user.sub);
   }
 
@@ -77,7 +75,7 @@ export class BusinessController {
     description: "Returns business services",
     type: BusinessSuccessResponse,
   })
-  getBusinessAdmins(@Param("business_id") businessId: ObjectId) {
+  getBusinessAdmins(@Param("business_id") businessId: string) {
     return this.businessService.findByKey(businessId, "services");
   }
 
@@ -88,7 +86,7 @@ export class BusinessController {
     description: "Returns business services",
     type: BusinessSuccessResponse,
   })
-  getBusinessServices(@Param("business_id") businessId: ObjectId) {
+  getBusinessServices(@Param("business_id") businessId: string) {
     return this.businessService.findByKey(businessId, "services");
   }
 
@@ -99,7 +97,7 @@ export class BusinessController {
     description: "Returns business categories",
     type: BusinessSuccessResponse,
   })
-  getBusinessCategories(@Param("business_id") businessId: ObjectId) {
+  getBusinessCategories(@Param("business_id") businessId: string) {
     return this.businessService.findByKey(businessId, "categories");
   }
 
@@ -110,7 +108,7 @@ export class BusinessController {
     description: "Returns business hours",
     type: BusinessSuccessResponse,
   })
-  getBusinessHours(@Param("business_id") businessId: ObjectId) {
+  getBusinessHours(@Param("business_id") businessId: string) {
     return this.businessService.findByKey(businessId, "hours");
   }
 
@@ -126,7 +124,7 @@ export class BusinessController {
     description: "Returns business hours",
     type: BusinessSuccessResponse,
   })
-  getBusinessEvents(@Param("business_id") businessId: ObjectId) {
+  getBusinessEvents(@Param("business_id") businessId: string) {
     return this.businessService.findByKey(businessId, "events");
   }
   //========== Clients
@@ -141,10 +139,7 @@ export class BusinessController {
     description: "Returns business clients",
     type: BusinessSuccessResponse,
   })
-  getBusinessClients(
-    @Req() request,
-    @Param("business_id") businessId: ObjectId
-  ) {
+  getBusinessClients(@Req() request, @Param("business_id") businessId: string) {
     return this.businessService.getUsers(
       "client",
       businessId,
@@ -161,7 +156,7 @@ export class BusinessController {
   })
   createBusinessClients(
     @Req() request,
-    @Param("business_id") businessId: ObjectId,
+    @Param("business_id") businessId: string,
     @Body() dto: ClientUserType[]
   ) {
     return this.businessService.createBusinessClients(
@@ -185,7 +180,7 @@ export class BusinessController {
   })
   getBusinessStaffByIds(
     @Req() request,
-    @Param("business_id") businessId: ObjectId
+    @Param("business_id") businessId: string
   ) {
     return this.businessService.getUsers("staff", businessId, request.user.sub);
   }
@@ -201,7 +196,7 @@ export class BusinessController {
     @Req() request,
     @Body() dto: BusinessUserType[],
     @Param("business_id")
-    businessId: ObjectId
+    businessId: string
   ) {
     return this.businessService.createBusinessStaff(
       request.user.sub,
@@ -219,7 +214,7 @@ export class BusinessController {
   })
   putBusiness(
     @Req() request,
-    @Param("business_id") businessId: ObjectId,
+    @Param("business_id") businessId: string,
     @Body() dto: ClientUserType[]
   ) {
     return null;
