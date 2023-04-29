@@ -9,7 +9,7 @@
     "admin": "nx serve shortwaits-admin",
     "admin:pods": "nx run-ios shortwaits-admin --install",
     "admin:ios": "nx run-ios shortwaits-admin --install",
-    "admin:react": "nx start shortwaits-admin",
+    "admin:start": "nx start shortwaits-admin",
     "client": "nx serve shortwaits-client",
     "client:ios": "nx run-ios shortwaits-client",
     "backend": "nx serve shortwaits-backend",
@@ -17,7 +17,8 @@
     "generate-keypair": "ts-node ./src/scripts/create-key-pair",
     "many": "nx run-many --target=serve --projects=shortwaits-admin,shortwaits-backend --parallel=2",
     "build": "nx build",
-    "test": "nx test"
+    "test": "nx test",
+    "clean": "sh ./scripts/clean.sh"
   },
   "dependencies": {
     "@gorhom/bottom-sheet": "^4",
@@ -64,7 +65,7 @@
     "passport-jwt": "^4.0.0",
     "prettier": "^2.3.2",
     "react": "18.2.0",
-    "react-native": "0.69.3",
+    "react-native": "0.69.9",
     "react-native-calendars": "^1.1288.2",
     "react-native-config": "1.4.6",
     "react-native-contacts": "^7.0.5",
@@ -98,6 +99,7 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.5.5",
+    "swagger-themes": "^1.2.28",
     "swagger-ui-express": "^4.3.0",
     "tslib": "^2.3.0",
     "typesafe-actions": "^5.1.0",

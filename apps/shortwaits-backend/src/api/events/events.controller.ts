@@ -3,7 +3,6 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   UseGuards,
@@ -12,19 +11,17 @@ import {
   HttpStatus,
   Req,
   Query,
+  Put,
 } from "@nestjs/common";
-import { Types } from "mongoose";
 import { ApiTags, ApiBearerAuth, ApiCreatedResponse } from "@nestjs/swagger";
 
 import { EventsService } from "./events.service";
-import { CreateEventsDto } from "./dto/create-events.dto";
+import { CreateEventsDto } from "./dto/create-event.dto";
 import { AtGuard } from "../../common/guards";
 import { TransformInterceptor } from "../../common/interceptors/transform.interceptor";
-import { EventsEndpointsTypes, EventType } from "@shortwaits/shared-types";
 import { PaginationParams } from "../../shared/paginationParams";
+import { UpdateEventsDto } from "./dto/update-event.dto";
 
-type ResponseController =
-  EventsEndpointsTypes["/events/admin/:business_id"]["methods"];
 @UseGuards(AtGuard)
 @ApiTags("events")
 @ApiBearerAuth("bearer")
@@ -33,31 +30,64 @@ type ResponseController =
 export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
 
-  @Get("admin/:id")
+  @Get("admin/:businessId/:eventId")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
-    description: "Create new event record",
-    type: CreateEventsDto,
+    description: "Get event record for admin",
   })
-  getAllAdminEvent(
+  getEventForAdmin(
     @Req() request,
-    @Param("id") businessId: string,
-    @Query() { limit, page }: PaginationParams
-  ): Promise<ResponseController["GET"]["response"]["data"]> {
-    return this.eventsService.getAllAdminEvents(
-      request.user.sub,
-      businessId,
-      limit,
-      page
-    );
+    @Param("businessId") businessId: string,
+    @Param("eventId") eventId: string
+  ) {
+    // validate if user belongs+has right permission with business
+    // validate if eventId is in business events
+    return this.eventsService.getEvent(eventId);
   }
-  /**
-   * @id  refer to a Business Id.
-   * A business can only post events linked to it \
-   * and an existing user
-   * */
-  @Post("admin/:id")
+
+  @Get("admin/:businessId")
+  @HttpCode(HttpStatus.OK)
+  @ApiCreatedResponse({
+    status: HttpStatus.OK,
+    description: "Get all events for admin",
+  })
+  getEventsForAdmin(
+    @Req() request,
+    @Param("businessId") businessId: string,
+    @Query() { limit, page }: PaginationParams
+  ) {
+    // validate  request.user.sub,
+    return this.eventsService.getEventsByBusiness(businessId, { limit, page });
+  }
+
+  @Get("client/:eventId")
+  @HttpCode(HttpStatus.OK)
+  @ApiCreatedResponse({
+    status: HttpStatus.OK,
+    description: "Get all events record for client user",
+  })
+  getEventForClient(@Req() request, @Param("eventId") eventId: string) {
+    return this.eventsService.getEventByCreator(eventId, request.user.sub);
+  }
+
+  @Get("client")
+  @HttpCode(HttpStatus.OK)
+  @ApiCreatedResponse({
+    status: HttpStatus.OK,
+    description: "Get all events record for client user",
+  })
+  getEventsForClient(
+    @Req() request,
+    @Query() { limit, page }: PaginationParams
+  ) {
+    return this.eventsService.getEventsByCreator(request.user.sub, {
+      limit,
+      page,
+    });
+  }
+
+  @Post("admin/:businessId")
   @HttpCode(HttpStatus.ACCEPTED)
   @ApiCreatedResponse({
     status: HttpStatus.ACCEPTED,
@@ -66,64 +96,72 @@ export class EventsController {
   })
   createEventByAdmin(
     @Req() request,
-    @Param("id") businessId: string,
-    @Body() createEventsDto: EventType
+    @Param("businessId") businessId: string,
+    @Body() event: CreateEventsDto
   ) {
-    return this.eventsService.createEventByAdmin(
-      createEventsDto,
-      businessId,
-      request.user.sub
-    );
+    // validate permission with business
+    return this.eventsService.createEvent(event, request.user.sub);
   }
 
-  /**
-   * @id  refer to a BusinessUser Id
-   * all user are technically clients,
-   * remember business user are also users and
-   * the therefore they can be treated as a clients
-   * users can post new events with any available business
-   * */
-  @Post("client/:id")
+  @Put("admin/:businessId")
   @HttpCode(HttpStatus.ACCEPTED)
   @ApiCreatedResponse({
     status: HttpStatus.ACCEPTED,
     description: "Create new event record",
     type: CreateEventsDto,
   })
-  createEventByClient(
+  updateEventByAdmin(
     @Req() request,
-    @Param("id") clientId: string,
-    @Body() createEventsDto: EventType
+    @Param("businessId") businessId: string,
+    @Body() event: CreateEventsDto
   ) {
-    return this.eventsService.createEventByClient(
-      createEventsDto,
-      request.user.sub
-    );
+    // validate permission
+    return this.eventsService.updateEvent(event, businessId);
   }
 
-  @HttpCode(HttpStatus.OK)
+  @Delete("admin/:businessId")
+  @HttpCode(HttpStatus.ACCEPTED)
   @ApiCreatedResponse({
-    status: HttpStatus.OK,
-    description: "Get event record",
+    status: HttpStatus.ACCEPTED,
+    description: "Deletes from []",
+  })
+  deleteEventsByAdmin(@Req() request, @Body() events: string[]) {
+    // validate businessId and permission with user
+    return this.eventsService.deleteEvents(events, request.user.sub);
+  }
+
+  @Post("client")
+  @HttpCode(HttpStatus.ACCEPTED)
+  @ApiCreatedResponse({
+    status: HttpStatus.ACCEPTED,
+    description: "Create new event record",
     type: CreateEventsDto,
   })
-  @Get(":id")
-  findOne(@Param("id") eventId: string, @Param() request) {
-    return this.eventsService.findOne(eventId);
+  createEventByClient(@Req() request, @Body() event: CreateEventsDto) {
+    // validate permission
+    return this.eventsService.createEvent(event, request.user.sub);
   }
 
-  // @Get()
-  // findAll(@Param() request, @Param("business_id") businessId: Types.ObjectId) {
-  //   return this.eventsService.findAll();
-  // }
+  @Put("client")
+  @HttpCode(HttpStatus.ACCEPTED)
+  @ApiCreatedResponse({
+    status: HttpStatus.ACCEPTED,
+    description: "Create new event record",
+    type: UpdateEventsDto,
+  })
+  updateEventByClient(@Req() request, @Body() event: UpdateEventsDto) {
+    // validate permission
+    return this.eventsService.updateEvent(event, request.user.sub);
+  }
 
-  // @Patch(":id")
-  // update(@Param("id") id: string, @Body() updateEventsDto: UpdateEventsDto) {
-  //   return this.eventsService.update(+id, updateEventsDto);
-  // }
-
-  // @Delete(":id")
-  // remove(@Param("id") id: string) {
-  //   return this.eventsService.remove(+id);
-  // }
+  @Delete("client")
+  @HttpCode(HttpStatus.ACCEPTED)
+  @ApiCreatedResponse({
+    status: HttpStatus.ACCEPTED,
+    description: "Deletes from []",
+  })
+  deleteEventsByClient(@Req() request, @Body() events: string[]) {
+    // validate permission
+    return this.eventsService.deleteEvents(events, request.user.sub);
+  }
 }

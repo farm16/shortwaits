@@ -13,17 +13,13 @@ import {
   UseInterceptors,
   ValidationPipe,
 } from "@nestjs/common";
-import { BusinessService } from "./business.service";
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
-import { BusinessSuccessResponse } from "./business.interface";
+import { BusinessUserType, ClientUserType } from "@shortwaits/shared-types";
+
+import { BusinessService } from "./business.service";
 import { AtGuard } from "../../common/guards";
 import { TransformInterceptor } from "../../common/interceptors/transform.interceptor";
-import {
-  BusinessEndpointsTypes,
-  BusinessUserType,
-  ClientUserType,
-  ObjectId,
-} from "@shortwaits/shared-types";
+import { UpdateBusinessDto, CreateBusinessDto } from "./dto/updateBusiness.dto";
 
 /**
  *
@@ -45,101 +41,89 @@ export class BusinessController {
   @ApiCreatedResponse({
     status: HttpStatus.OK,
     description: "Updates business record",
-    type: BusinessSuccessResponse,
   })
   patchBusiness(
     @Req() request,
     @Body(new ValidationPipe())
-    dto: BusinessEndpointsTypes["/business"]["methods"]["PUT"]["body"]
+    business: UpdateBusinessDto
   ) {
-    return this.businessService.updateBusiness(request.user.sub, dto);
+    return this.businessService.updateBusiness(request.user.sub, business);
   }
+
   /**
    * only admins of the business can retrieve full information
    */
-  @Get(":business_id")
+  @Get(":id")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
     description: "Returns business record",
-    type: BusinessSuccessResponse,
   })
-  async getBusiness(@Req() request, @Param("business_id") businessId: string) {
+  async getBusiness(@Req() request, @Param("id") businessId: string) {
     return this.businessService.getBusiness(businessId, request.user.sub);
   }
 
-  @Get(":business_id/admins")
+  @Get(":id/admins")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
     description: "Returns business services",
-    type: BusinessSuccessResponse,
   })
-  getBusinessAdmins(@Param("business_id") businessId: string) {
+  getBusinessAdmins(@Param("id") businessId: string) {
     return this.businessService.findByKey(businessId, "services");
   }
 
-  @Get(":business_id/services")
+  @Get(":id/services")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
     description: "Returns business services",
-    type: BusinessSuccessResponse,
   })
-  getBusinessServices(@Param("business_id") businessId: string) {
+  getBusinessServices(@Param("id") businessId: string) {
     return this.businessService.findByKey(businessId, "services");
   }
 
-  @Get(":business_id/categories")
+  @Get(":id/categories")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
     description: "Returns business categories",
-    type: BusinessSuccessResponse,
   })
-  getBusinessCategories(@Param("business_id") businessId: string) {
+  getBusinessCategories(@Param("id") businessId: string) {
     return this.businessService.findByKey(businessId, "categories");
   }
 
-  @Get(":business_id/hours")
+  @Get(":id/hours")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
     description: "Returns business hours",
-    type: BusinessSuccessResponse,
   })
-  getBusinessHours(@Param("business_id") businessId: string) {
+  getBusinessHours(@Param("id") businessId: string) {
     return this.businessService.findByKey(businessId, "hours");
   }
 
-  /**
-   *
-   * @todo
-   * we need to paginate
-   */
-  @Get(":business_id/events")
+  // TODO: we need to paginate
+
+  @Get(":id/events")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
     description: "Returns business hours",
-    type: BusinessSuccessResponse,
   })
-  getBusinessEvents(@Param("business_id") businessId: string) {
+  getBusinessEvents(@Param("id") businessId: string) {
     return this.businessService.findByKey(businessId, "events");
   }
-  //========== Clients
-  /**
-   * @todo
-   * we need to paginate
-   */
-  @Get(":business_id/clients")
+
+  // TODO: we need to paginate
+
+  @Get(":id/clients")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
     description: "Returns business clients",
-    type: BusinessSuccessResponse,
   })
-  getBusinessClients(@Req() request, @Param("business_id") businessId: string) {
+  getBusinessClients(@Req() request, @Param("id") businessId: string) {
     return this.businessService.getUsers(
       "client",
       businessId,
@@ -147,16 +131,15 @@ export class BusinessController {
     );
   }
 
-  @Post(":business_id/clients")
+  @Post(":id/clients")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.CREATED,
     description: "Returns created",
-    type: BusinessSuccessResponse,
   })
   createBusinessClients(
     @Req() request,
-    @Param("business_id") businessId: string,
+    @Param("id") businessId: string,
     @Body() dto: ClientUserType[]
   ) {
     return this.businessService.createBusinessClients(
@@ -166,36 +149,28 @@ export class BusinessController {
     );
   }
 
-  //========== Staff
-  /**
-   * @todo
-   * we need to paginate
-   */
-  @Get(":business_id/staff")
+  // TODO: we need to paginate
+
+  @Get(":id/staff")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
     description: "Returns business staff",
-    type: BusinessSuccessResponse,
   })
-  getBusinessStaffByIds(
-    @Req() request,
-    @Param("business_id") businessId: string
-  ) {
+  getBusinessStaffByIds(@Req() request, @Param("id") businessId: string) {
     return this.businessService.getUsers("staff", businessId, request.user.sub);
   }
 
-  @Post(":business_id/staff")
+  @Post(":id/staff")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
     description: "Returns business staff",
-    type: BusinessSuccessResponse,
   })
   createBusinessStaff(
     @Req() request,
     @Body() dto: BusinessUserType[],
-    @Param("business_id")
+    @Param("id")
     businessId: string
   ) {
     return this.businessService.createBusinessStaff(
@@ -204,21 +179,7 @@ export class BusinessController {
       dto
     );
   }
-  //==========
-  @Put(":business_id/hours")
-  @HttpCode(HttpStatus.OK)
-  @ApiCreatedResponse({
-    status: HttpStatus.OK,
-    description: "Updates business hours",
-    type: BusinessSuccessResponse,
-  })
-  putBusiness(
-    @Req() request,
-    @Param("business_id") businessId: string,
-    @Body() dto: ClientUserType[]
-  ) {
-    return null;
-  }
+
   /**
    * only admins of the business can retrieve full information
    */
@@ -227,13 +188,27 @@ export class BusinessController {
   @ApiCreatedResponse({
     status: HttpStatus.OK,
     description: "Register Business",
-    type: BusinessSuccessResponse,
   })
   async registerBusiness(
     @Req() request,
     @Body(new ValidationPipe())
-    dto: BusinessEndpointsTypes["/business"]["methods"]["PUT"]["body"]
+    business: CreateBusinessDto
   ) {
-    return this.businessService.registerBusiness(request.user.sub, dto);
+    return this.businessService.registerBusiness(request.user.sub, business);
+  }
+
+  // TODO !!!
+  @Put(":id/hours")
+  @HttpCode(HttpStatus.OK)
+  @ApiCreatedResponse({
+    status: HttpStatus.OK,
+    description: "Updates business hours",
+  })
+  putBusiness(
+    @Req() request,
+    @Param("id") businessId: string,
+    @Body() dto: ClientUserType[]
+  ) {
+    return null;
   }
 }

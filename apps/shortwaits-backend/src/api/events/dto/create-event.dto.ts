@@ -3,10 +3,18 @@ import { EventType, ObjectId } from "@shortwaits/shared-types";
 import { Types } from "mongoose";
 
 export class CreateEventsDto implements EventType {
+  @ApiProperty()
   serviceId: ObjectId;
+
+  @ApiProperty()
   staffIds: ObjectId[];
+
+  @ApiProperty()
   clientsIds: ObjectId[];
+
+  @ApiProperty()
   hasNoDuration: boolean;
+
   @ApiProperty()
   leadClientName: string;
 

@@ -1,5 +1,6 @@
 import { NestFactory } from "@nestjs/core";
 import { ConfigService } from "@nestjs/config";
+import { SwaggerTheme } from "swagger-themes";
 import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
 
 import { AppModule } from "./app.module";
@@ -21,6 +22,7 @@ async function bootstrap() {
   const HTTP_HOST = configService.get("HTTP_HOST");
 
   //swagger setup
+  const theme = new SwaggerTheme("v3");
   const options = new DocumentBuilder()
     .setTitle("Shortwaits Admin - API")
     .setDescription("Shortwaits's API")
@@ -31,7 +33,11 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup(DOCS_PREFIX, app, document);
+  SwaggerModule.setup(DOCS_PREFIX, app, document, {
+    explorer: true,
+    customCss: theme.getBuffer("dark"),
+  });
+
   fs.writeFile("swagger.json", JSON.stringify(document), (err) => {
     if (err) throw err;
     console.log("[DOCS] Swagger (OpenAPI) document saved to swagger.json");

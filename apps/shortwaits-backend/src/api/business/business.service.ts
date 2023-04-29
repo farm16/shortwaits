@@ -1,6 +1,5 @@
-import mongoose, { Model, Types } from "mongoose";
+import mongoose, { Model } from "mongoose";
 import { InjectModel } from "@nestjs/mongoose";
-import { ConfigService } from "@nestjs/config";
 import {
   ForbiddenException,
   Injectable,
@@ -13,12 +12,11 @@ import {
   BusinessPayloadType,
   ClientUserType,
   BusinessUserType,
-  ObjectId,
 } from "@shortwaits/shared-types";
 import { Business } from "./entities/business.entity";
-import { Service } from "../services/entities/service.entity";
 import { BusinessUser } from "../business-user/entities/business-user.entity";
 import { ClientUser } from "../client-user/entities/client-user.entity";
+import { UpdateBusinessDto } from "./dto/updateBusiness.dto";
 
 @Injectable()
 export class BusinessService {
@@ -45,7 +43,7 @@ export class BusinessService {
     }
   }
 
-  filterBusiness(business: BusinessPayloadType) {
+  filterBusiness(business: Partial<BusinessPayloadType>) {
     delete business.admins;
     delete business.backgroundAdmins;
     delete business.superAdmins;
@@ -84,11 +82,13 @@ export class BusinessService {
 
   async updateBusiness(
     userId: string,
-    business: BusinessPayloadType,
+    business: UpdateBusinessDto,
     isRegistration?: boolean
-  ): Promise<Business> {
+  ) {
     const filteredBusiness = this.filterBusiness(business);
-    if (isRegistration) filteredBusiness.isRegistrationCompleted = true;
+    if (isRegistration) {
+      filteredBusiness.isRegistrationCompleted = true;
+    }
     const updatedBusiness = await this.businessModel.findByIdAndUpdate(
       filteredBusiness._id,
       filteredBusiness,
@@ -107,7 +107,7 @@ export class BusinessService {
 
   async registerBusiness(
     userId: string,
-    business: BusinessPayloadType
+    business: UpdateBusinessDto
   ): Promise<Business> {
     if (business.services.length === 0) {
       throw new PreconditionFailedException({

@@ -1,12 +1,24 @@
-
-
 # Shortwaits
 
-This project was generated using [Nx](https://nx.dev).
+## Scripts
 
-<p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="450"></p>
+```bash
+  # "start": "nx serve",
+  # "admin": "nx serve shortwaits-admin",
+  # "admin:pods": "nx run-ios shortwaits-admin --install",
+  # "admin:ios": "nx run-ios shortwaits-admin --install",
+  # "admin:react": "nx start shortwaits-admin",
+  # "client": "nx serve shortwaits-client",
+  # "client:ios": "nx run-ios shortwaits-client",
+  # "backend": "nx serve shortwaits-backend",
+  # "backend:seed": "yarn nx run shortwaits-backend:seed --configuration=default-data",
 
-🔎 **Smart, Fast and Extensible Build System**
+  yarn start
+  yarn admin
+  yarn admin:pods
+  yarn admin:ios
+  yarn admin:react
+```
 
 ## Adding capabilities to your workspace
 
@@ -78,8 +90,6 @@ Run `nx graph` to see a diagram of the dependencies of your projects.
 ## Further help
 
 Visit the [Nx Documentation](https://nx.dev) to learn more.
-
-
 
 ## ☁ Nx Cloud
 

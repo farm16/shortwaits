@@ -5,9 +5,9 @@ import {
   IsPhoneNumber,
   IsString,
   MaxLength,
-} from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
-import { Trim } from 'class-sanitizer';
+} from "class-validator";
+import { ApiProperty } from "@nestjs/swagger";
+import { Trim } from "class-sanitizer";
 
 export class UpdateBusinessDto {
   @Trim()
@@ -65,3 +65,5 @@ export class UpdateBusinessDto {
   @ApiProperty()
   readonly services: [];
 }
+
+export class CreateBusinessDto extends UpdateBusinessDto {}

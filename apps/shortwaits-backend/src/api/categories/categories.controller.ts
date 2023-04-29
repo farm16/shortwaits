@@ -4,21 +4,16 @@ import {
   HttpCode,
   HttpStatus,
   Param,
-  UseGuards,
   UseInterceptors,
-} from '@nestjs/common';
-import { CategoriesService } from './categories.service';
-import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
-import { AtGuard } from '../../common/guards';
-import { TransformInterceptor } from '../../common/interceptors/transform.interceptor';
-import { Public } from '../../common/decorators/auth.decorator';
+} from "@nestjs/common";
+import { CategoriesService } from "./categories.service";
+import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
+import { TransformInterceptor } from "../../common/interceptors/transform.interceptor";
 
-/**
- * @todo this can be cache !!!
- */
-@ApiTags('categories')
-@Controller('categories')
-@ApiBearerAuth('bearer')
+// TODO: this can be cache !!!
+@ApiTags("categories")
+@Controller("categories")
+@ApiBearerAuth("bearer")
 @UseInterceptors(TransformInterceptor)
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
@@ -27,21 +22,21 @@ export class CategoriesController {
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
-    description: 'Returns all categories record',
+    description: "Returns all categories record",
     // type: CategoriesSuccessResponse,
   })
   getAllCategories() {
     return this.categoriesService.getAllCategories();
   }
 
-  @Get(':category_id')
+  @Get(":id")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
-    description: 'Returns category record',
+    description: "Returns category record",
     // type: CategoriesSuccessResponse,
   })
-  getCategory(@Param('category_id') categoriesId: string) {
+  getCategory(@Param("id") categoriesId: string) {
     return this.categoriesService.getCategory(categoriesId);
   }
 }
