@@ -25,7 +25,25 @@ async function bootstrap() {
   const theme = new SwaggerTheme("v3");
   const options = new DocumentBuilder()
     .setTitle("Shortwaits Admin - API")
-    .setDescription("Shortwaits's API")
+    .setDescription(
+      `Shortwaits's successful response: <br>
+      <code>{data: [
+      { id: 1, name: "Item 1" },
+      { id: 2, name: "Item 2" },
+      { id: 3, name: "Item 3" },
+      ],<br>
+      statusCode: 200,<br>
+      meta: {
+      pagination: {
+      totalItems: 10,
+      totalPages: 2,
+      currentPage: 1,
+      itemsPerPage: 3,
+      },
+      },
+      }<code>
+    `
+    )
     .addServer("https://api.shortwaits.com", "Production server")
     .addServer("http://127.0.0.1:8080", "Dev server")
     .addBearerAuth()

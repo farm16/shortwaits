@@ -16,7 +16,7 @@ import {
 import { Business } from "./entities/business.entity";
 import { BusinessUser } from "../business-user/entities/business-user.entity";
 import { ClientUser } from "../client-user/entities/client-user.entity";
-import { UpdateBusinessDto } from "./dto/updateBusiness.dto";
+import { CreateBusinessDto, UpdateBusinessDto } from "./dto/updateBusiness.dto";
 
 @Injectable()
 export class BusinessService {
@@ -82,7 +82,7 @@ export class BusinessService {
 
   async updateBusiness(
     userId: string,
-    business: UpdateBusinessDto,
+    business: Partial<UpdateBusinessDto>,
     isRegistration?: boolean
   ) {
     const filteredBusiness = this.filterBusiness(business);
@@ -107,7 +107,7 @@ export class BusinessService {
 
   async registerBusiness(
     userId: string,
-    business: UpdateBusinessDto
+    business: CreateBusinessDto
   ): Promise<Business> {
     if (business.services.length === 0) {
       throw new PreconditionFailedException({

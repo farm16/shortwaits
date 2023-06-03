@@ -6,10 +6,9 @@
   "scripts": {
     "postinstall": "patch-package",
     "start": "nx serve",
-    "admin": "nx serve shortwaits-admin",
+    "admin:react": "nx serve shortwaits-admin",
     "admin:pods": "nx run-ios shortwaits-admin --install",
     "admin:ios": "nx run-ios shortwaits-admin --install",
-    "admin:start": "nx start shortwaits-admin",
     "client": "nx serve shortwaits-client",
     "client:ios": "nx run-ios shortwaits-client",
     "backend": "nx serve shortwaits-backend",

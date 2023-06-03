@@ -11,22 +11,20 @@ import { Avatar } from "../avatar/avatar";
 const CARD_HEIGH = 90;
 
 interface ServiceCardProps extends ButtonProps {
+  onPress(ServicesType): void;
   service: DocType<ServicesType>;
 }
 
 export const ServiceItem: FC<ServiceCardProps> = (props) => {
   const { Colors } = useTheme();
-  const {
-    service: { imageUrl, name, serviceColor, durationInMin, price, currency },
-    ...rest
-  } = props;
+  const { service, ...rest } = props;
   const { width } = getDimensions();
 
   return (
     <Button
       onLongPress={() =>
         Alert.alert(
-          `Delete ${name}`,
+          `Delete ${service.name}`,
           `This will remove all reservations, images and publishment related to the service.`,
           [
             {
@@ -51,30 +49,33 @@ export const ServiceItem: FC<ServiceCardProps> = (props) => {
         {
           height: CARD_HEIGH,
           width: width * 0.9,
-          borderLeftColor: serviceColor.hexCode || Colors.transparent,
+          borderLeftColor: service.serviceColor.hexCode || Colors.transparent,
           backgroundColor: Colors.backgroundOverlay,
         },
       ]}
       {...rest}
     >
       <View style={styles.textItems}>
-        <Text text={name} style={[styles.textItem1, { color: Colors.text }]} />
         <Text
-          text={getPrettyStringFromDurationInMin(durationInMin)}
+          text={service.name}
+          style={[styles.textItem1, { color: Colors.text }]}
+        />
+        <Text
+          text={getPrettyStringFromDurationInMin(service.durationInMin)}
           style={[styles.textItem2, { color: Colors.subText }]}
         />
         <Text
-          text={getPrettyStringFromPrice(currency, price)}
+          text={getPrettyStringFromPrice(service.currency, service.price)}
           style={[
             styles.textItem3,
-            { color: serviceColor.hexCode || Colors.text },
+            { color: service.serviceColor.hexCode || Colors.text },
           ]}
         />
       </View>
       <Avatar
-        imageUrl={imageUrl}
+        imageUrl={service.imageUrl}
         size={"default"}
-        serviceColor={serviceColor}
+        serviceColor={service.serviceColor}
       />
       <Space size="tiny" direction="vertical" />
     </Button>

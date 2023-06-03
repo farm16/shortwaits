@@ -24,6 +24,7 @@ export const EventsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
   navigation,
 }) => {
   const business = useBusiness();
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: () => {
@@ -44,20 +45,30 @@ export const EventsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
 
   const { isSuccess: isBusinessServicesSuccess } =
     useGetServicesByBusinessQuery(business ? business._id : skipToken);
+
   const {
     data: eventsData,
     isLoading: isEventsLoading,
     isSuccess: isEventSuccess,
-  } = useGetAllBusinessEventsQuery(
-    business && isBusinessServicesSuccess ? business._id : skipToken
-  );
+    isError,
+  } = useGetAllBusinessEventsQuery(business._id, {
+    skip: !!business._id,
+    refetchOnFocus: true,
+  });
+
+  console.log("eventsData >>> ", {
+    data: eventsData,
+    isLoading: isEventsLoading,
+    isSuccess: isEventSuccess,
+    isError,
+  });
+
   const events = useMemo(
     () => getCalendarData(eventsData?.data.events),
     [eventsData]
   );
-  console.log(events);
 
-  const isLoading = isEventsLoading && !isEventSuccess;
+  const isLoading = isEventsLoading;
 
   return (
     <Screen

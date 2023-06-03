@@ -18,7 +18,7 @@ import { BusinessUserType, ClientUserType } from "@shortwaits/shared-types";
 
 import { BusinessService } from "./business.service";
 import { AtGuard } from "../../common/guards";
-import { TransformInterceptor } from "../../common/interceptors/transform.interceptor";
+
 import { UpdateBusinessDto, CreateBusinessDto } from "./dto/updateBusiness.dto";
 
 /**
@@ -32,7 +32,6 @@ import { UpdateBusinessDto, CreateBusinessDto } from "./dto/updateBusiness.dto";
 @ApiTags("business")
 @ApiBearerAuth("bearer")
 @Controller("business")
-@UseInterceptors(TransformInterceptor)
 export class BusinessController {
   constructor(private readonly businessService: BusinessService) {}
 
@@ -184,7 +183,7 @@ export class BusinessController {
    * only admins of the business can retrieve full information
    */
   @Put("register")
-  @HttpCode(HttpStatus.OK)
+  @HttpCode(HttpStatus.CREATED)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
     description: "Register Business",

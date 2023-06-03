@@ -12,20 +12,19 @@ import {
   ParseBoolPipe,
   Query,
   NotAcceptableException,
-} from '@nestjs/common';
-import { ServicesService } from './services.service';
-import { CreateServiceDto } from './dto/create-service.dto';
-import { UpdateServiceDto } from './dto/update-service.dto';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { AtGuard } from '../../common/guards';
-import { TransformInterceptor } from '../../common/interceptors/transform.interceptor';
-import { GetServicesDto, GetServicesQuery } from './dto/getServiceQuery';
+} from "@nestjs/common";
+import { ServicesService } from "./services.service";
+import { CreateServiceDto } from "./dto/create-service.dto";
+import { UpdateServiceDto } from "./dto/update-service.dto";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+import { AtGuard } from "../../common/guards";
 
+import { GetServicesDto, GetServicesQuery } from "./dto/getServiceQuery";
+
+@ApiTags("services")
+@Controller("services")
 @UseGuards(AtGuard)
-@ApiTags('services')
-@ApiBearerAuth('bearer')
-@UseInterceptors(TransformInterceptor)
-@Controller('services')
+@ApiBearerAuth("bearer")
 export class ServicesController {
   constructor(private readonly servicesService: ServicesService) {}
 
@@ -60,7 +59,7 @@ export class ServicesController {
     ) {
       return this.servicesService.findByIds(dto.services);
     }
-    throw new NotAcceptableException('incorrect service value');
+    throw new NotAcceptableException("incorrect service value");
   }
 
   // @Get('by-ids/:business_id')
@@ -73,21 +72,21 @@ export class ServicesController {
   //   return this.servicesService.findOne(id);
   // }
 
-  @Put(':id')
-  update(@Param('id') id: string, @Body() updateServiceDto: UpdateServiceDto) {
+  @Put(":id")
+  update(@Param("id") id: string, @Body() updateServiceDto: UpdateServiceDto) {
     return this.servicesService.update(id, updateServiceDto);
   }
 
-  @Patch(':id')
+  @Patch(":id")
   updateSome(
-    @Param('id') id: string,
+    @Param("id") id: string,
     @Body() updateServiceDto: UpdateServiceDto
   ) {
     return this.servicesService.update(id, updateServiceDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
+  @Delete(":id")
+  remove(@Param("id") id: string) {
     return this.servicesService.remove(id);
   }
 }

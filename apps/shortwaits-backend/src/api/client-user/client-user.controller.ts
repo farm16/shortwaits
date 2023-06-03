@@ -16,7 +16,6 @@ import {
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 
-import { TransformInterceptor } from "../../common/interceptors/transform.interceptor";
 import { ClientUserService } from "./client-user.service";
 import { CreateUserDto, UpdateUserDto } from "./dto";
 import { AtGuard } from "../../common/guards";
@@ -25,7 +24,6 @@ import { AtGuard } from "../../common/guards";
 @Controller("client-user")
 @ApiBearerAuth("bearer")
 @UseGuards(AtGuard)
-@UseInterceptors(TransformInterceptor)
 export class ClientUserController {
   constructor(private readonly clientUsersService: ClientUserService) {}
 

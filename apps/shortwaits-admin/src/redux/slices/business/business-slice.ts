@@ -18,7 +18,7 @@ export const businessSlice = createSlice({
       return initialState;
     },
   },
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
       .addMatcher(
         shortwaitsApi.endpoints.registerBusiness.matchFulfilled,
@@ -39,11 +39,11 @@ export const businessSlice = createSlice({
         function (state, action) {
           console.log(">>> localSignUp - BUSINESS ", {
             ...state,
-            ...action.payload.attributes.currentBusinessAccounts,
+            ...action.payload.data.attributes.currentBusinessAccounts,
           });
           return {
             ...state,
-            ...action.payload.attributes.currentBusinessAccounts[0],
+            ...action.payload.data.attributes.currentBusinessAccounts[0],
           };
         }
       )
@@ -52,11 +52,11 @@ export const businessSlice = createSlice({
         function (state, action) {
           console.log(">>> localSignIn - BUSINESS ", {
             ...state,
-            ...action.payload.attributes.currentBusinessAccounts,
+            ...action.payload.data.attributes.currentBusinessAccounts,
           });
           return {
             ...state,
-            ...action.payload.attributes.currentBusinessAccounts[0],
+            ...action.payload.data.attributes.currentBusinessAccounts[0],
           };
         }
       );

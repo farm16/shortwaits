@@ -13,24 +13,19 @@ import {
   Space,
   CircleIconButton,
 } from "../../../../../components";
-import {
-  RootStackParamList,
-  ModalStackParamList,
-} from "../../../../../navigation";
 import { useBusiness } from "../../../../../redux";
 import { useGetServicesByBusinessQuery } from "../../../../../services";
+import { SelectorComponentType } from "../../selector";
 
-export interface ServicesSelectorModalScreenProps {
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<ModalStackParamList, "selector-modal-screen">,
-    StackNavigationProp<RootStackParamList>
-  >;
-}
-
-export const ServicesSelector = ({
+export const ServicesSelector: SelectorComponentType = ({
   navigation,
-}: ServicesSelectorModalScreenProps) => {
+  route,
+}) => {
   const business = useBusiness();
+
+  /**
+   * TODO: handle error to non ideal state
+   */
 
   const {
     data: services,
@@ -40,38 +35,11 @@ export const ServicesSelector = ({
     isSuccess,
   } = useGetServicesByBusinessQuery(business ? business?._id : skipToken);
 
-  const handleCardOnPress = useCallback(
-    (item: DocType<ServicesType>) => {
-      navigation.navigate("modals", {
-        screen: "service-modal-screen",
-        params: {
-          initialValues: item,
-          mode: "update",
-        },
-      });
-    },
-    [navigation]
-  );
-
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "Services",
       headerLeft: () => (
         <LeftChevronButton onPress={() => navigation.goBack()} />
-      ),
-      headerRight: () => (
-        <CircleIconButton
-          onPress={() =>
-            navigation.navigate("modals", {
-              screen: "service-modal-screen",
-              params: {
-                mode: "create",
-              },
-            })
-          }
-          iconType="add"
-          withMarginRight
-        />
       ),
     });
   }, [navigation]);
@@ -92,7 +60,10 @@ export const ServicesSelector = ({
             return (
               <ServiceItem
                 service={item}
-                onPress={() => handleCardOnPress(item)}
+                onPress={() => {
+                  route.params.onSelected(item);
+                  navigation.goBack();
+                }}
               />
             );
           }}

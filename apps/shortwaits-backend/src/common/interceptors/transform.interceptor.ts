@@ -17,9 +17,14 @@ export class TransformInterceptor<T>
     next: CallHandler
   ): Observable<CommonResponseType<T>> {
     return next.handle().pipe(
-      map((payload) => {
+      map(payload => {
         let meta = null;
         let message = null;
+        let errorCode = null;
+        const statusCode = context.switchToHttp().getResponse().statusCode;
+        console.log("payload >>>", payload);
+        console.log("statusCode >>>", statusCode);
+
         if (typeof payload === "object" && payload?.meta) {
           meta = payload.meta;
           delete payload.meta;
@@ -28,11 +33,24 @@ export class TransformInterceptor<T>
           message = payload.message;
           delete payload.message;
         }
+        if (typeof payload === "object" && payload?.errorCode) {
+          errorCode = payload.errorCode;
+          delete payload.errorCode;
+        }
+
+        if (statusCode >= 400) {
+          return {
+            data: null,
+            statusCode,
+            message,
+            errorCode,
+          };
+        }
+
         return {
           data: payload,
-          statusCode: context.switchToHttp().getResponse().statusCode,
-          message,
-          meta, // if this is supposed to be the actual return then replace {} with data.result
+          statusCode,
+          meta,
         };
       })
     );

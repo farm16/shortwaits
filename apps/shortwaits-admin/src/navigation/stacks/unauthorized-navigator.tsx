@@ -58,6 +58,7 @@ export const UnauthorizedNavigator = () => {
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         headerShown: false,
       }}
+      initialRouteName={WELCOME_SCREEN}
     >
       <Stack.Screen name={WELCOME_SCREEN} component={WelcomeScreen} />
       <Stack.Group

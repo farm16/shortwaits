@@ -1,3 +1,8 @@
 {
-  "cSpell.words": ["datasource", "persistor", "reduxjs"]
+  "cSpell.words": [
+    "datasource",
+    "persistor",
+    "reduxjs"
+  ],
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

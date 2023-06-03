@@ -1,6 +1,5 @@
-import { PayloadAction, createReducer } from "@reduxjs/toolkit";
+import { PayloadAction } from "@reduxjs/toolkit";
 import {
-  CategoriesPayloadType,
   BusinessDayTimeRangeType,
   BusinessHoursType,
   BusinessLocationType,
@@ -10,7 +9,6 @@ import {
   ServicesPayloadType,
   CurrencyType,
   BusinessPayloadType,
-  BusinessType,
   ObjectId,
 } from "@shortwaits/shared-types";
 import { cloneDeep } from "lodash";
@@ -44,11 +42,11 @@ export const businessReducers = {
     const _categories = state.categories as BusinessPayloadType["categories"];
 
     const isCategoryPresent = _categories.some(
-      (categoryId) => categoryId === action.payload
+      categoryId => categoryId === action.payload
     );
 
     if (isCategoryPresent) {
-      const categories = _categories.filter((categoriesId) => {
+      const categories = _categories.filter(categoriesId => {
         return categoriesId !== action.payload;
       });
       return { ...state, categories };
@@ -63,7 +61,7 @@ export const businessReducers = {
   ) {
     if (state.categories.includes(action.payload)) {
       const categories = state.categories.filter(
-        (elem) => elem !== action.payload
+        elem => elem !== action.payload
       );
       console.log("removing >>>", categories);
       return { ...state, categories };
@@ -78,7 +76,7 @@ export const businessReducers = {
     action: PayloadAction<ObjectId>
   ) {
     if (state.staff.includes(action.payload)) {
-      const staff = state.staff.filter((elem) => elem !== action.payload);
+      const staff = state.staff.filter(elem => elem !== action.payload);
       console.log("removing >>>", staff);
       return { ...state, staff };
     } else {
@@ -119,7 +117,7 @@ export const businessReducers = {
     const clonedHours = cloneDeep(state.hours);
     const days = Object.keys(clonedHours);
 
-    days.forEach((day) => {
+    days.forEach(day => {
       clonedHours[day][0].isActive = action.payload;
     });
 

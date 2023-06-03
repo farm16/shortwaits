@@ -1,7 +1,6 @@
 import { shortwaitsApiEndpoints } from "../../../../configs";
 import { BusinessEndpointsTypes, ObjectId } from "@shortwaits/shared-types";
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
-import { Types } from "mongoose";
 
 const { createBusinessUser } = shortwaitsApiEndpoints.BUSINESS;
 

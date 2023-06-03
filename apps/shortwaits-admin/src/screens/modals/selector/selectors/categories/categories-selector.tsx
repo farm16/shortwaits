@@ -41,14 +41,12 @@ export const CategoriesSelector: SelectorComponentType = ({
     isSuccess,
   } = useGetCategoriesQuery(undefined);
 
-  console.log(categories);
+  // console.log(categories);
 
-  // const insertIsSelected = (arr: CategoriesPayloadType[]) => {
-  //   return arr.map((elem) => ({ ...elem, isSelected: false }));
-  // };
-  // if (isError) {
-  //   return <Text>Error</Text>;
-  // }
+  /**
+   * TODO: handle error to non ideal state
+   */
+
   if (isLoading) {
     return <Text>Loading...</Text>;
   }

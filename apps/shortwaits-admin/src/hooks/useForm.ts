@@ -1,4 +1,5 @@
 import { FormikConfig, FormikProps, useFormik } from "formik";
+import { GestureResponderEvent } from "react-native";
 import { formSchemas } from "../utils";
 
 export const useForm = <T>(
@@ -10,3 +11,5 @@ export const useForm = <T>(
     ...config,
   });
 };
+
+export type HandleOnPress = (event: GestureResponderEvent) => void;

@@ -9,20 +9,9 @@ import {
 import { ApiProperty } from "@nestjs/swagger";
 import { Trim } from "class-sanitizer";
 
-export class UpdateBusinessDto {
-  @Trim()
-  @IsString()
-  @IsNotEmpty()
-  @MaxLength(64)
-  @ApiProperty()
-  readonly country: string;
 
-  @Trim()
-  @IsPhoneNumber()
-  @IsNotEmpty()
-  @MaxLength(64)
-  @ApiProperty()
-  readonly phone1: string;
+
+export class CreateBusinessDto  {
 
   @Trim()
   @IsString()
@@ -30,13 +19,6 @@ export class UpdateBusinessDto {
   @MaxLength(64)
   @ApiProperty()
   readonly shortName: string;
-
-  @Trim()
-  @IsString()
-  @IsNotEmpty()
-  @MaxLength(64)
-  @ApiProperty()
-  readonly longName: string;
 
   @Trim()
   @IsString()
@@ -65,5 +47,26 @@ export class UpdateBusinessDto {
   @ApiProperty()
   readonly services: [];
 }
+export class UpdateBusinessDto extends CreateBusinessDto {
+  @Trim()
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(64)
+  @ApiProperty()
+  readonly country: string;
 
-export class CreateBusinessDto extends UpdateBusinessDto {}
+  @Trim()
+  @IsPhoneNumber()
+  @IsNotEmpty()
+  @MaxLength(64)
+  @ApiProperty()
+  readonly phone1: string;
+  
+  @Trim()
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(64)
+  @ApiProperty()
+  readonly longName: string;
+
+}

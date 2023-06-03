@@ -14,7 +14,7 @@ export const servicesSlice = createSlice({
       return [...state];
     },
   },
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder.addMatcher(
       shortwaitsApi.endpoints.getServicesByBusiness.matchFulfilled,
       (state, action) => {

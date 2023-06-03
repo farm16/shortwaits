@@ -1,4 +1,4 @@
-import { SuccessResponseType } from "./helpers";
+import { CommonResponseType } from "./helpers";
 
 import { BusinessPayloadType, UserPayloadType } from ".";
 
@@ -14,12 +14,12 @@ export type AuthPayloadType = {
   };
 };
 
-export type AuthSuccessResponseType = SuccessResponseType<AuthPayloadType>;
+export type AuthResponseType = CommonResponseType<AuthPayloadType>;
 
-export type AuthSuccessFnType = (
+export type AuthFnType = (
   payload: AuthPayloadType,
   message: string
-) => AuthSuccessResponseType;
+) => AuthResponseType;
 
 export type RegisterWithEmailRequestType = {
   readonly email: string;

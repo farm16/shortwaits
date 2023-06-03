@@ -1,7 +1,11 @@
-import { Injectable, PreconditionFailedException } from "@nestjs/common";
+import {
+  Injectable,
+  InternalServerErrorException,
+  PreconditionFailedException,
+} from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { EventType, ObjectId, UserPayloadType } from "@shortwaits/shared-types";
-import { Model } from "mongoose";
+import { Model, Types } from "mongoose";
 
 import { Business } from "../business/entities/business.entity";
 import { Service } from "../services/entities/service.entity";
@@ -20,33 +24,104 @@ export class EventsService {
     private businessUserModel: Model<BusinessUser>
   ) {}
 
-  private createEventPayload(
-    event: Events & { _id: ObjectId },
+  async createEvent(
+    event: EventType,
     user: UserPayloadType
-  ): Events & { _id: ObjectId } {
-    event.status = { statusCode: 0, statusName: "pending" };
-    event.createdBy = user._id;
-    event.updatedBy = user._id;
-    event.isGroupEvent = event.clients.length > 1;
-    event.deleted = false;
-    event.canceled = false;
+  ): Promise<Events & { _id: Types.ObjectId }> {
+    try {
+      const status = { statusCode: 0, statusName: "PENDING" };
+      const createdBy = user._id;
+      const updatedBy = user._id;
+      const isGroupEvent = event.clientsIds.length > 1;
+      const deleted = false;
+      const canceled = false;
 
-    return event;
+      const eventCreated = await this.eventsModel.create({
+        participantsIds: event.participantsIds,
+        staffIds: event.staffIds,
+        clientsIds: event.clientsIds,
+        businessId: event.businessId,
+        createdBy,
+        updatedBy,
+        leadClientId: event.leadClientId,
+        name: event.name,
+        description: event.description,
+        eventImage: event.eventImage,
+        serviceId: event.serviceId,
+        features: event.features,
+        status,
+        hasNoDuration: event.hasNoDuration,
+        durationInMin: event.durationInMin,
+        startTime: event.startTime,
+        endTime: event.endTime,
+        endTimeExpected: event.endTimeExpected,
+        priceExpected: event.priceExpected,
+        priceFinal: event.priceFinal,
+        canceled,
+        cancellationReason: event.cancellationReason,
+        isGroupEvent,
+        repeat: event.repeat,
+        payment: event.payment,
+        notes: event.notes,
+        labels: event.labels,
+        urls: event.urls,
+        deleted,
+        location: event.location,
+        attendeeLimit: event.attendeeLimit,
+        registrationDeadline: event.registrationDeadline,
+        registrationFee: event.registrationFee,
+      });
+
+      return eventCreated;
+    } catch (error) {
+      console.error(error);
+      throw new InternalServerErrorException("Failed to create event");
+    }
   }
+
   /**
    *
    * this finds all events by business not by createdBy(userID)
    * so all events that relate to a business
    */
-  async getEventsByBusiness(businessId: string, paginateOptions) {
-    // const user = await this.businessUserModel.findById(clientId);
+  async getEventsByBusiness(
+    businessId: string,
+    paginateOptions?: { page: number; limit: number },
+    filterOptions?: { date?: Date; month?: number; year?: number }
+  ): Promise<Events[]> {
+    const { page = 1, limit = 10 } = paginateOptions ?? {};
+    const skip = (page - 1) * limit;
+
+    const { date, month, year } = filterOptions ?? {};
+    const filter: {
+      businessId: string;
+      createdAt?: { $gte: Date; $lte: Date };
+    } = { businessId };
+    if (date) {
+      filter.createdAt = {
+        $gte: date,
+        $lte: new Date(date.getTime() + 24 * 60 * 60 * 1000),
+      };
+      return await this.eventsModel.find(filter).skip(skip).limit(limit).exec();
+    }
+    if (month && year) {
+      const startDate = new Date(year, month - 1, 1);
+      const endDate = new Date(year, month, 0);
+      filter.createdAt = { $gte: startDate, $lte: endDate };
+      return await this.eventsModel.find(filter).skip(skip).limit(limit).exec();
+    } else if (year) {
+      const startDate = new Date(year, 0, 1);
+      const endDate = new Date(year, 11, 31);
+      filter.createdAt = { $gte: startDate, $lte: endDate };
+      return await this.eventsModel.find(filter).skip(skip).limit(limit).exec();
+    }
   }
 
   async getEventsByList(events: string[], paginateOptions) {
     // const user = await this.businessUserModel.findById(clientId);
   }
 
-  async getEvent(eventId: string) {
+  async getEvent(userId: string, eventId: string) {
     // const user = await this.businessUserModel.findById(clientId);
   }
 
@@ -56,10 +131,6 @@ export class EventsService {
 
   async getEventsByCreator(createdById: string, paginateOptions) {
     // const user = await this.businessUserModel.findById(clientId);
-  }
-
-  async createEvent(event: CreateEventsDto, createdBy: string) {
-    //
   }
 
   async updateEvent(event: UpdateEventsDto, updatedBy: string) {

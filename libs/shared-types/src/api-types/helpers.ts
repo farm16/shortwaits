@@ -1,4 +1,3 @@
-import { Types } from "mongoose";
 import { ObjectId } from "../common";
 
 export type ApiResponseWithPayload<Payload> = {
@@ -71,7 +70,9 @@ export interface CommonResponseType<DataPayload = any, MetaPayload = any> {
   data: DataPayload;
   message?: string;
   meta?: MetaPayload;
+  errorCode?: ErrorCodeType;
 }
+
 // } "meta": {
 //   "page": 1,
 //   "per_page": 2,

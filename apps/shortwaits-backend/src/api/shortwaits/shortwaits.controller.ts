@@ -2,13 +2,12 @@ import { Controller, Get, Inject, UseInterceptors } from "@nestjs/common";
 import { ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
 import { ShortwaitsAdminDefaultDataPayloadType } from "@shortwaits/shared-types";
 import { Public } from "../../common/decorators/auth.decorator";
-import { TransformInterceptor } from "../../common/interceptors/transform.interceptor";
+
 import { Shortwaits } from "./shortwaits.schema";
 import { ShortwaitsService } from "./shortwaits.service";
 
 @ApiTags("shortwaits")
 @Controller("shortwaits")
-@UseInterceptors(TransformInterceptor)
 export class ShortwaitsController {
   @Inject(ShortwaitsService)
   private readonly shortwaitsService: ShortwaitsService;

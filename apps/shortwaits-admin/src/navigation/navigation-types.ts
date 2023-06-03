@@ -12,7 +12,6 @@ import {
   MODAL_SCREENS,
 } from "./navigation-constants";
 import { selectorConfigs } from "../screens/modals/selector/selector-config";
-import { AddServiceFormValues } from "../components";
 
 export type ScheduleModalModeType = "My-Business-Hours" | "User-Hours";
 export type SelectorModalModeType = keyof typeof selectorConfigs;
@@ -22,6 +21,7 @@ export type ModalStackParamList = {
   [MODAL_SCREENS.SELECTOR_MODAL_SCREEN]: {
     type: SelectorModalModeType;
     mode?: "update" | "create";
+    onSelected?(arg0: any): void;
   };
   [MODAL_SCREENS.SCHEDULE_MODAL_SCREEN]: {
     type: ScheduleModalModeType;
@@ -29,7 +29,7 @@ export type ModalStackParamList = {
   };
   [MODAL_SCREENS.SERVICE_MODAL_SCREEN]: {
     mode: "update" | "create";
-    initialValues?: AddServiceFormValues["data"];
+    initialValues?: any;
   };
   [MODAL_SCREENS.FORM_MODAL_SCREEN]: {
     form: FormType;

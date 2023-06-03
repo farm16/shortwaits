@@ -8,13 +8,11 @@ import {
 } from "@nestjs/common";
 import { CategoriesService } from "./categories.service";
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
-import { TransformInterceptor } from "../../common/interceptors/transform.interceptor";
 
 // TODO: this can be cache !!!
 @ApiTags("categories")
 @Controller("categories")
 @ApiBearerAuth("bearer")
-@UseInterceptors(TransformInterceptor)
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 

@@ -24,11 +24,11 @@ export const userSlice = createSlice({
         function (state, action) {
           console.log(">>> localSignUp - USER ", {
             ...state,
-            ...action.payload.attributes.currentUser,
+            ...action.payload.data.attributes.currentUser,
           });
           return {
             ...state,
-            ...action.payload.attributes.currentUser,
+            ...action.payload.data.attributes.currentUser,
           };
         }
       )
@@ -37,11 +37,11 @@ export const userSlice = createSlice({
         function (state, action) {
           console.log(">>> localSignIn - USER ", {
             ...state,
-            ...action.payload.attributes.currentUser,
+            ...action.payload.data.attributes.currentUser,
           });
           return {
             ...state,
-            ...action.payload.attributes.currentUser,
+            ...action.payload.data.attributes.currentUser,
           };
         }
       );

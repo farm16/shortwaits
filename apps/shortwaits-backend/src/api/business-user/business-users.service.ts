@@ -1,5 +1,10 @@
-import { Model } from "mongoose";
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Model, Types } from "mongoose";
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { UserPayloadType } from "@shortwaits/shared-types";
 
@@ -22,24 +27,41 @@ export class BusinessUsersService {
   public async findByUserName(
     username: string
   ): Promise<BusinessUser | undefined> {
-    return await this.businessUserModel.findOne({ username: username }).exec();
-  }
-
-  public async findById(userId: string): Promise<BusinessUser> {
-    const businessUser = await this.businessUserModel
-      .findById({ _id: userId, deleted: false })
-      .exec();
-    if (!businessUser) {
-      throw new NotFoundException(`BusinessUser #${userId} not found`);
+    try {
+      return await this.businessUserModel
+        .findOne({ username: username })
+        .exec();
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
     }
-    return businessUser;
   }
 
-  public async create(
-    createCustomerDto: CreateUserDto
-  ): Promise<UserPayloadType> {
-    const newCustomer = await this.businessUserModel.create(createCustomerDto);
-    return newCustomer;
+  async findById(id: string): Promise<BusinessUser | null> {
+    if (!Types.ObjectId.isValid(id)) {
+      throw new BadRequestException("Invalid ID");
+    }
+
+    try {
+      const businessUser = await this.businessUserModel
+        .findById({ _id: id, deleted: false })
+        .exec();
+      console.log("businessUser >>>", businessUser);
+      return businessUser;
+    } catch (error) {
+      console.log("businessUser error >>>", error);
+      throw new InternalServerErrorException(error.message);
+    }
+  }
+
+  public async create(createCustomerDto: CreateUserDto): Promise<BusinessUser> {
+    try {
+      const newCustomer = await this.businessUserModel.create(
+        createCustomerDto
+      );
+      return newCustomer;
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
   }
 
   public async update(

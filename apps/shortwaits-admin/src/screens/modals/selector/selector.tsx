@@ -25,7 +25,7 @@ export const SelectorScreenModal: FC<
   > = {
     staff: StaffSelector,
     categories: CategoriesSelector,
-    // services: ServicesSelector,
+    services: ServicesSelector,
   };
   const SelectorComponent = selectorsComponents[type];
 

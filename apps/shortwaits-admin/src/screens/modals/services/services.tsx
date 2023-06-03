@@ -19,7 +19,6 @@ import {
   UploadProfileImage,
   CurrencyFieldCard,
   TextFieldCard,
-  AddServiceFormValues,
   Text,
   CircleIconButton,
   DurationFieldCard,
@@ -38,7 +37,7 @@ export const ServicesModal: FC<ModalsScreenProps<"service-modal-screen">> = ({
   const { Colors } = useTheme();
   const mobileAdminData = useMobileAdmin();
 
-  const [form, setForm] = useState<AddServiceFormValues["data"]>(null);
+  const [form, setForm] = useState(null);
 
   useLayoutEffect(() => {
     navigation.setOptions({

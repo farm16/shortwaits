@@ -13,10 +13,10 @@ import {
   UseGuards,
   UseInterceptors,
   HttpCode,
+  BadRequestException,
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 
-import { TransformInterceptor } from "../../common/interceptors/transform.interceptor";
 import { BusinessUsersService } from "./business-users.service";
 import { CreateUserDto, UpdateUserDto } from "./dto";
 import { AtGuard } from "../../common/guards";
@@ -25,18 +25,16 @@ import { AtGuard } from "../../common/guards";
 @Controller("business-user")
 @ApiBearerAuth("bearer")
 @UseGuards(AtGuard)
-@UseInterceptors(TransformInterceptor)
 export class BusinessUsersController {
   constructor(private readonly usersService: BusinessUsersService) {}
 
   @Get(":id")
   @HttpCode(HttpStatus.OK)
-  get(@Res() res, @Param("id") userId: string) {
+  get(@Param("id") userId: string) {
     if (!userId) {
-      throw new NotFoundException("Business User ID does not exist");
+      throw new BadRequestException("missing ID");
     }
-    const user = this.usersService.findById(userId);
-    return res.status(HttpStatus.OK).json(user);
+    return this.usersService.findById(userId);
   }
 
   @Put()
@@ -52,8 +50,8 @@ export class BusinessUsersController {
   }
 
   @Delete(":id")
-  delete(@Res() res, @Param("id") userId: string) {
+  delete(@Param("id") userId: string) {
     this.usersService.remove(userId);
-    return res.status(HttpStatus.OK);
+    return "User deleted successfully";
   }
 }

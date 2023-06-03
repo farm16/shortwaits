@@ -3,7 +3,7 @@ import { ActivityIndicator } from "react-native-paper";
 import { noop } from "lodash";
 
 import { useCreateBusinessClientsMutation } from "../../../services";
-import { useForm } from "../../../hooks";
+import { HandleOnPress, useForm } from "../../../hooks";
 import { useBusiness, useServices } from "../../../redux";
 import {
   Text,
@@ -13,6 +13,7 @@ import {
   BackButton,
   DurationFieldCard,
   Card,
+  ButtonCard,
 } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { FormBody } from "./commons/form-body";
@@ -28,14 +29,17 @@ export const AddEventModal: FC<AuthorizedScreenProps<"form-modal-screen">> = ({
 
   const [createBusinessClient, createBusinessClientResult] =
     useCreateBusinessClientsMutation();
-  const initialValues = useMemo(
-    () => ({
+
+  const initialValues = useMemo(() => {
+    const currentDate = new Date();
+    const futureDate = new Date(currentDate.getTime() + 15 * 60000);
+    return {
       name: "",
       description: "",
       leadClientName: "",
       eventImage: "",
-      businessId: "",
-      serviceId: "",
+      businessId: business._id,
+      service: null,
       staffIds: [],
       clientsIds: [],
       features: [],
@@ -49,13 +53,12 @@ export const AddEventModal: FC<AuthorizedScreenProps<"form-modal-screen">> = ({
       labels: [],
       //duration
       durationInMin: 0,
-      startTime: new Date().toISOString(),
-      endTime: new Date().toISOString(),
-      endTimeExpected: new Date().toISOString(),
+      startTime: currentDate.toISOString(),
+      endTime: futureDate.toISOString(),
+      endTimeExpected: futureDate.toISOString(),
       hasNoDuration: false,
-    }),
-    []
-  );
+    };
+  }, [business._id]);
 
   const { touched, errors, values, handleChange, handleSubmit, setFieldValue } =
     useForm(
@@ -71,7 +74,13 @@ export const AddEventModal: FC<AuthorizedScreenProps<"form-modal-screen">> = ({
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
-      headerRight: () => <Button preset="headerLink" text="Save" />,
+      headerRight: () => (
+        <Button
+          onPress={handleSubmit as unknown as HandleOnPress}
+          preset="headerLink"
+          text="Save"
+        />
+      ),
       headerTitle: () => <Text preset="text" text="Add Event" />,
     });
   }, [handleSubmit, navigation]);
@@ -79,8 +88,6 @@ export const AddEventModal: FC<AuthorizedScreenProps<"form-modal-screen">> = ({
   const isLoading =
     createBusinessClientResult.isLoading &&
     !createBusinessClientResult.isSuccess;
-
-  const handleFormValue = (values, cb) => cb(values);
 
   return isLoading ? (
     <ActivityIndicator />
@@ -102,6 +109,21 @@ export const AddEventModal: FC<AuthorizedScreenProps<"form-modal-screen">> = ({
         isTouched={touched.description}
         errors={errors.description}
       />
+      <ButtonCard
+        title="Services"
+        subTitle={values.service ? values.service.name : "Select a service"}
+        onPress={() =>
+          navigation.navigate("modals", {
+            screen: "selector-modal-screen",
+            params: {
+              type: "services",
+              onSelected: (service) => {
+                setFieldValue("service", service);
+              },
+            },
+          })
+        }
+      />
       <TimePickerFieldCard
         title={"Starts"}
         date={new Date(values.startTime)}
@@ -109,12 +131,12 @@ export const AddEventModal: FC<AuthorizedScreenProps<"form-modal-screen">> = ({
         isTouched={touched.startTime}
         errors={errors.startTime}
       />
-      <DurationFieldCard
-        title={"Duration"}
-        values={[values.durationInMin]}
-        onValuesChange={(values) =>
-          handleFormValue(values[0].toString(), handleChange("durationInMin"))
-        }
+      <TimePickerFieldCard
+        title={"Ends"}
+        date={new Date(values.endTime)}
+        onChange={handleChange("startTime")}
+        isTouched={touched.endTime}
+        errors={errors.endTime}
       />
       <Card
         mode="button"

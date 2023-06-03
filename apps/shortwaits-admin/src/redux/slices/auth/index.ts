@@ -22,7 +22,7 @@ export const authSlice = createSlice({
       return initialState;
     },
   },
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
       .addMatcher(
         shortwaitsApi.endpoints.localSignIn.matchFulfilled,
@@ -30,7 +30,7 @@ export const authSlice = createSlice({
           console.log(">>> localSignIn - AUTH ");
           return {
             ...state,
-            ...action.payload.auth,
+            ...action.payload.data.auth,
           };
         }
       )
@@ -39,11 +39,11 @@ export const authSlice = createSlice({
         function (state, action) {
           console.log(">>> localSignUp - AUTH ", {
             ...state,
-            ...action.payload.auth,
+            ...action.payload.data.auth,
           });
           return {
             ...state,
-            ...action.payload.auth,
+            ...action.payload.data.auth,
           };
         }
       );
