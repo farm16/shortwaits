@@ -6,16 +6,16 @@ import {
   BusinessWeekDaysType,
   DocType,
   ServicesType,
-  ServicesPayloadType,
+  ServicesDocType,
   CurrencyType,
-  BusinessPayloadType,
+  BusinessDtoType,
   ObjectId,
 } from "@shortwaits/shared-types";
 import { cloneDeep } from "lodash";
 
 export const businessReducers = {
   setBusinessShortName(
-    state: BusinessPayloadType,
+    state: BusinessDtoType,
     action: PayloadAction<{ shortName: string }>
   ) {
     return { ...state, ...action.payload };
@@ -39,7 +39,7 @@ export const businessReducers = {
     return { ...state, ...action.payload };
   },
   setBusinessCategory(state, action: PayloadAction<ObjectId | string>) {
-    const _categories = state.categories as BusinessPayloadType["categories"];
+    const _categories = state.categories;
 
     const isCategoryPresent = _categories.some(
       categoryId => categoryId === action.payload
@@ -55,10 +55,7 @@ export const businessReducers = {
       return { ...state, categories };
     }
   },
-  setBusinessCategories(
-    state: BusinessPayloadType,
-    action: PayloadAction<ObjectId>
-  ) {
+  setBusinessCategories(state: BusinessDtoType, action: PayloadAction<string>) {
     if (state.categories.includes(action.payload)) {
       const categories = state.categories.filter(
         elem => elem !== action.payload
@@ -71,10 +68,7 @@ export const businessReducers = {
       return { ...state, categories };
     }
   },
-  setBusinessStaff(
-    state: BusinessPayloadType,
-    action: PayloadAction<ObjectId>
-  ) {
+  setBusinessStaff(state: BusinessDtoType, action: PayloadAction<string>) {
     if (state.staff.includes(action.payload)) {
       const staff = state.staff.filter(elem => elem !== action.payload);
       console.log("removing >>>", staff);
@@ -169,7 +163,7 @@ export const businessReducers = {
       return state;
     }
   },
-  setBusinessServices(state, action: PayloadAction<ServicesPayloadType>) {
+  setBusinessServices(state, action: PayloadAction<ServicesDocType>) {
     if (!state) return state;
     return { ...state, services: action.payload };
   },

@@ -1,14 +1,17 @@
-import { ServicesType } from "..";
+import { ConvertIdsToStrings, ServicesType } from "..";
 
-import { DocType, SuccessResponseType } from ".";
+import { DocType, CommonResponseType } from ".";
 
-export type ServicesSuccessResponseType =
-  SuccessResponseType<ServicesPayloadType>;
+export type ServiceDocType = DocType<ServicesType>;
+export type ServicesDocType = ServiceDocType[];
 
-export type ServicesPayloadType = DocType<ServicesType>[];
-export type ServicePayloadType = DocType<ServicesType>;
+export type ServiceDtoType = ConvertIdsToStrings<ServiceDocType>;
+export type ServicesDtoType = ServiceDtoType[];
+
+export type ServiceResponseType = CommonResponseType<ServiceDtoType>;
+export type ServicesResponseType = CommonResponseType<ServicesDtoType>;
 
 export type ServicesSuccessFnType = (
-  payload: ServicesPayloadType,
+  payload: ServicesDocType,
   message: string
-) => ServicesSuccessResponseType;
+) => ServicesResponseType;

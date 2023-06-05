@@ -4,7 +4,7 @@ import {
   PreconditionFailedException,
 } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { EventType, ObjectId, UserPayloadType } from "@shortwaits/shared-types";
+import { EventType, ObjectId, UserDocType } from "@shortwaits/shared-types";
 import { Model, Types } from "mongoose";
 
 import { Business } from "../business/entities/business.entity";
@@ -25,16 +25,21 @@ export class EventsService {
   ) {}
 
   async createEvent(
-    event: EventType,
-    user: UserPayloadType
+    event: CreateEventsDto,
+    user: UserDocType
   ): Promise<Events & { _id: Types.ObjectId }> {
     try {
+      const isTaxable = false; // todo check later if events can be taxable
       const status = { statusCode: 0, statusName: "PENDING" };
       const createdBy = user._id;
       const updatedBy = user._id;
       const isGroupEvent = event.clientsIds.length > 1;
       const deleted = false;
       const canceled = false;
+      const _finalPrice = event.priceExpected;
+      if (isTaxable) {
+        // do something
+      }
 
       const eventCreated = await this.eventsModel.create({
         participantsIds: event.participantsIds,
@@ -56,9 +61,8 @@ export class EventsService {
         endTime: event.endTime,
         endTimeExpected: event.endTimeExpected,
         priceExpected: event.priceExpected,
-        priceFinal: event.priceFinal,
+        priceFinal: _finalPrice,
         canceled,
-        cancellationReason: event.cancellationReason,
         isGroupEvent,
         repeat: event.repeat,
         payment: event.payment,

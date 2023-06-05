@@ -2,18 +2,17 @@ import React, { FC } from "react";
 import { View, StyleSheet } from "react-native";
 
 import { ModalsScreenProps, SelectorModalModeType } from "../../../navigation";
-import { SelectorConfigsKeys } from "./selector-config";
 import { useTheme } from "../../../theme";
 import { CategoriesSelector } from "./selectors/categories/categories-selector";
 import { StaffSelector } from "./selectors/staff/staff-selector";
 import { ServicesSelector } from "./selectors/services/services-selector";
 
 export type SelectorComponentType = FC<
-  ModalsScreenProps<"selector-modal-screen"> & { type: SelectorConfigsKeys }
+  ModalsScreenProps<"selector-modal-screen">
 >;
 export const SelectorScreenModal: FC<
   ModalsScreenProps<"selector-modal-screen">
-> = (props) => {
+> = props => {
   const { route } = props;
   const { type } = route.params;
 
@@ -31,7 +30,7 @@ export const SelectorScreenModal: FC<
 
   return (
     <View style={[styles.container, { backgroundColor: Colors.background }]}>
-      <SelectorComponent {...props} type={type} />
+      <SelectorComponent {...props} />
     </View>
   );
 };

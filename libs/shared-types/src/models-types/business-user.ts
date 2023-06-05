@@ -1,4 +1,4 @@
-import { Document, PaginateModel } from "mongoose";
+import { PaginateModel } from "mongoose";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import * as paginate from "mongoose-paginate-v2";
 
@@ -25,8 +25,6 @@ export type UserModelType = PaginateModel<
   any,
   UserMethodsType
 >;
-
-export type UserDocType = BusinessUserType & Document;
 
 export type BusinessUserType = {
   businesses: ObjectId[];

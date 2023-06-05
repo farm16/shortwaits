@@ -1,10 +1,10 @@
 import { BusinessCategoryType } from "..";
 
-import { DocType, SuccessResponseType } from ".";
+import { DocType, CommonResponseType } from ".";
 
 export type CategoriesPayloadType = DocType<BusinessCategoryType>;
 
-export type CategoriesSuccessResponseType = SuccessResponseType<
+export type CategoriesSuccessResponseType = CommonResponseType<
   CategoriesPayloadType[]
 >;
 

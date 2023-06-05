@@ -1,48 +1,31 @@
 import React, { FC } from "react";
-import { Alert, StyleSheet, View } from "react-native";
-import { DocType, ServicesType } from "@shortwaits/shared-types";
+import { StyleSheet, View } from "react-native";
+import { ServiceDtoType } from "@shortwaits/shared-types";
 
 import { Button, ButtonProps, Space, Text } from "../common";
 import { getDimensions, useTheme } from "../../theme";
 import { getPrettyStringFromDurationInMin } from "../../utils/time";
 import { getPrettyStringFromPrice } from "../../utils/currency";
 import { Avatar } from "../avatar/avatar";
+import { noop } from "lodash";
 
 const CARD_HEIGH = 90;
 
-interface ServiceCardProps extends ButtonProps {
-  onPress(ServicesType): void;
-  service: DocType<ServicesType>;
-}
+type ServiceCardProps = ButtonProps & {
+  onPress(arg: ServiceDtoType): void;
+  onLongPress?(arg: ServiceDtoType): void;
+  service: ServiceDtoType;
+};
 
-export const ServiceItem: FC<ServiceCardProps> = (props) => {
+export const ServiceItem: FC<ServiceCardProps> = props => {
   const { Colors } = useTheme();
-  const { service, ...rest } = props;
+  const { service, onPress, onLongPress = noop, ...rest } = props;
   const { width } = getDimensions();
 
   return (
     <Button
-      onLongPress={() =>
-        Alert.alert(
-          `Delete ${service.name}`,
-          `This will remove all reservations, images and publishment related to the service.`,
-          [
-            {
-              text: "Cancel",
-              onPress: () => null,
-              style: "cancel",
-            },
-            {
-              text: "Delete",
-              onPress: () => null,
-              style: "destructive",
-            },
-          ],
-          {
-            cancelable: true,
-          }
-        )
-      }
+      onPress={() => onPress(service)}
+      onLongPress={onLongPress}
       preset="none"
       style={[
         styles.container,

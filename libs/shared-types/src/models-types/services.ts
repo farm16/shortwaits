@@ -33,6 +33,6 @@ export type ServicesType = {
   updatedBy: ObjectId;
 };
 
-export type ServicesDocType = ServicesType & Document;
+type ServicesDocType = ServicesType & Document;
 
 export type ServicesModelType = PaginatedModel<ServicesDocType>;

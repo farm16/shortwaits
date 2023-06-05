@@ -1,12 +1,13 @@
 import { BusinessUserType } from "../models-types";
 
 import { CommonResponseType, DocType } from ".";
+import { ConvertIdsToStrings } from "../common";
 
-export type UserResponseType = CommonResponseType<UserPayloadType>;
-
-export type UserPayloadType = DocType<BusinessUserType>;
+export type UserDocType = DocType<BusinessUserType>;
+export type UserResponseType = CommonResponseType<UserDocType>;
+export type UserDtoType = ConvertIdsToStrings<UserDocType>;
 
 export type UserSuccessFnType = (
-  payload: UserPayloadType,
+  payload: UserDocType,
   message: string
 ) => UserResponseType;

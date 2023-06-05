@@ -9,7 +9,7 @@ import {
 import {
   BusinessType,
   BusinessHoursType,
-  BusinessPayloadType,
+  BusinessDocType,
   ClientUserType,
   BusinessUserType,
 } from "@shortwaits/shared-types";
@@ -43,7 +43,7 @@ export class BusinessService {
     }
   }
 
-  filterBusiness(business: Partial<BusinessPayloadType>) {
+  filterBusiness(business: Partial<BusinessDocType>) {
     delete business.admins;
     delete business.backgroundAdmins;
     delete business.superAdmins;
@@ -211,7 +211,7 @@ export class BusinessService {
 
     if (isAdmin || isSuperAdmin) {
       const insertedStaff = await this.businessUserModel.insertMany(staff);
-      const staffIds = insertedStaff.map((client) => {
+      const staffIds = insertedStaff.map(client => {
         return client._id;
       });
       await this.businessModel.findByIdAndUpdate(businessId, {
@@ -235,7 +235,7 @@ export class BusinessService {
 
     if (isAdmin || isSuperAdmin) {
       const insertedClients = await this.clientUserModel.insertMany(clients);
-      const clientsIds = insertedClients.map((client) => {
+      const clientsIds = insertedClients.map(client => {
         return client._id;
       });
       const businessClients = businessData.clients.concat(clientsIds);

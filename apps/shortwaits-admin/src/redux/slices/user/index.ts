@@ -1,23 +1,23 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { shortwaitsApi } from "../../../services";
-import { UserPayloadType } from "@shortwaits/shared-types";
+import { UserDtoType } from "@shortwaits/shared-types";
 
 import type { RootState } from "../../types";
 
-const initialState: UserPayloadType = null;
+const initialState: UserDtoType = null;
 
 export const userSlice = createSlice({
   name: "user",
   initialState: initialState,
   reducers: {
-    setUser(state, action: PayloadAction<UserPayloadType>) {
+    setUser(state, action: PayloadAction<UserDtoType>) {
       return { ...state, ...action.payload };
     },
     resetUser() {
       return initialState;
     },
   },
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
       .addMatcher(
         shortwaitsApi.endpoints.localSignUp.matchFulfilled,

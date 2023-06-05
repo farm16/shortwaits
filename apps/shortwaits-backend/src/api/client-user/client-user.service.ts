@@ -1,7 +1,7 @@
 import { Model } from "mongoose";
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { UserPayloadType } from "@shortwaits/shared-types";
+import { UserDocType } from "@shortwaits/shared-types";
 
 import { ClientUser } from "./entities/client-user.entity";
 import { PaginationQueryDto } from "../../common/dto/pagination-query.dto";
@@ -37,7 +37,7 @@ export class ClientUserService {
 
   // public async create(
   //   createCustomerDto: CreateUserDto
-  // ): Promise<UserPayloadType> {
+  // ): Promise<UserDocType> {
   //   const newCustomer = await this.clientUserModel.create(createCustomerDto);
   //   return newCustomer;
   // }
@@ -45,7 +45,7 @@ export class ClientUserService {
   // public async update(
   //   userId: string,
   //   updateUserDto: Partial<UpdateUserDto>
-  // ): Promise<UserPayloadType> {
+  // ): Promise<UserDocType> {
   //   const existingUser = await this.clientUserModel.findByIdAndUpdate(
   //     { _id: userId },
   //     updateUserDto

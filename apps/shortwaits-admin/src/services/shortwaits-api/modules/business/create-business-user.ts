@@ -5,7 +5,7 @@ import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions
 const { createBusinessUser } = shortwaitsApiEndpoints.BUSINESS;
 
 type Endpoint =
-  BusinessEndpointsTypes["/business/:business_id/staff"]["methods"]["POST"];
+  BusinessEndpointsTypes["/business/:businessId/staff"]["methods"]["POST"];
 type ResponseType = Endpoint["response"];
 type PayloadType = {
   businessId: ObjectId;

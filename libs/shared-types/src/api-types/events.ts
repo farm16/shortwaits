@@ -1,18 +1,17 @@
-import {
-  BusinessPayloadType,
-  DocType,
-  GeneralSpecShape,
-  SuccessResponseType,
-  UserPayloadType,
-} from ".";
-import { EventType, ServicesType } from "..";
+import { DocType, GeneralSpecShape, CommonResponseType, UserDocType } from ".";
+import { ConvertIdsToStrings, EventType, ServicesType } from "..";
 
-export type EventsSuccessResponseType = SuccessResponseType<EventPayloadType>;
+export type EventDocType = DocType<EventType>;
+export type EventsDocType = EventDocType[];
 
-export type EventPayloadType = DocType<EventType>;
+export type EventDtoType = ConvertIdsToStrings<EventDocType>;
+export type EventsDtoType = EventDtoType[];
+
+export type EventSuccessResponseType = CommonResponseType<EventDtoType>;
+export type EventsSuccessResponseType = CommonResponseType<EventsDtoType>;
 
 export type EventsSuccessFnType = (
-  payload: EventPayloadType,
+  payload: EventDocType,
   message: string
 ) => EventsSuccessResponseType;
 
@@ -21,36 +20,57 @@ export type NewlyCreatedEvent = Omit<
   "service" | "staff" | "clients"
 > & {
   service: DocType<ServicesType>;
-  staff: UserPayloadType[];
-  clients: UserPayloadType[];
+  staff: UserDocType[];
+  clients: UserDocType[];
 };
 
-type EventQuery = {
-  limit?: number;
-  page?: number;
-};
+type EndpointPath =
+  | "/events"
+  | "/events/:eventId"
+  | "/events/user/:userId"
+  | "/events/business/:businessId";
+
+export type EventsEndpointsPaths = EventsEndpointsTypes[EndpointPath]["path"];
+export type EventsEndpointsMethods = "POST" | "GET" | "PUT" | "DELETE";
+
 export interface EventsEndpointsTypes extends GeneralSpecShape {
-  "/events/admin/:business_id": {
-    path: `/events/admin/${string}`;
+  "/events": {
+    path: `/events`;
     methods: {
       POST: {
         query: undefined;
-        body: EventType;
-        response: {
-          business: BusinessPayloadType;
-          event: EventPayloadType;
-          events: EventPayloadType[];
-        };
+        body: EventDtoType;
+        response: EventSuccessResponseType;
       };
+      PUT: {
+        query: undefined;
+        body: EventDtoType;
+        response: EventSuccessResponseType;
+      };
+    };
+  };
+  "/events/:eventId": {
+    path: `/events/${string}`;
+    methods: {
       GET: {
-        query: EventQuery;
         body: undefined;
-        response: {
-          meta: { count: number };
-          data: {
-            events: EventPayloadType[];
-          };
-        };
+        response: EventSuccessResponseType;
+      };
+    };
+  };
+  "/events/user/:userId": {
+    path: `/events/user/${string}`;
+    methods: {
+      GET: {
+        response: EventsSuccessResponseType;
+      };
+    };
+  };
+  "/events/business/:businessId": {
+    path: `/events/business/${string}`;
+    methods: {
+      GET: {
+        response: EventsSuccessResponseType;
       };
     };
   };

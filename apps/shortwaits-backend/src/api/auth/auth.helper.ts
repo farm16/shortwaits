@@ -9,7 +9,7 @@
 //   HttpStatus,
 //   UnauthorizedException,
 // } from '@nestjs/common';
-// import { TokenPayloadType, UserPayloadType } from '@shortwaits/shared-types';
+// import { TokenPayloadType, UserDocType } from '@shortwaits/shared-types';
 
 // import { User } from '../user/user.schema';
 // import { ConfigService } from '@nestjs/config';
@@ -33,7 +33,7 @@
 //   }
 
 //   // Generate JWT Token
-//   public generateToken(user: UserPayloadType): TokenPayloadType {
+//   public generateToken(user: UserDocType): TokenPayloadType {
 //     const payload = {
 //       email: user.email,
 //       username: user.username,

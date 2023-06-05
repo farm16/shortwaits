@@ -13,7 +13,12 @@ import {
   Query,
   Put,
 } from "@nestjs/common";
-import { ApiTags, ApiBearerAuth, ApiCreatedResponse } from "@nestjs/swagger";
+import {
+  ApiTags,
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiQuery,
+} from "@nestjs/swagger";
 
 import { EventsService } from "./events.service";
 import { CreateEventsDto } from "./dto/create-event.dto";
@@ -48,6 +53,11 @@ export class EventsController {
     status: HttpStatus.OK,
     description: "Get all events for a user",
   })
+  @ApiQuery({ name: "page", type: Number, required: false })
+  @ApiQuery({ name: "limit", type: Number, required: false })
+  @ApiQuery({ name: "date", type: Date, required: false })
+  @ApiQuery({ name: "month", type: Number, required: false })
+  @ApiQuery({ name: "year", type: Number, required: false })
   async getEventsByUser(
     @Param("businessId") businessId: string,
     @Query("page") page?: number,

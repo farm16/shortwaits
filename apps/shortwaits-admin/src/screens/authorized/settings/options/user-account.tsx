@@ -1,12 +1,12 @@
-import { UserPayloadType } from "@shortwaits/shared-types";
+import { UserDocType } from "@shortwaits/shared-types";
 import React, { useState } from "react";
 import { Divider, List } from "react-native-paper";
 
 import { useTheme } from "../../../../theme";
 
-export const UserAccountSettings = ({ user }: { user: UserPayloadType }) => {
+export const UserAccountSettings = ({ user }: { user: UserDocType }) => {
   const [expanded, setExpanded] = useState(false);
-  const handlePress = () => setExpanded((state) => !state);
+  const handlePress = () => setExpanded(state => !state);
   const { Colors } = useTheme();
 
   if (!user) return null;
@@ -22,13 +22,13 @@ export const UserAccountSettings = ({ user }: { user: UserPayloadType }) => {
       <List.Item
         title="Username"
         description={user.displayName}
-        right={(props) => <List.Icon {...props} icon="account" />}
+        right={props => <List.Icon {...props} icon="account" />}
       />
       <Divider />
       <List.Item
         title="Email"
         description={user.email}
-        right={(props) => <List.Icon {...props} icon="email" />}
+        right={props => <List.Icon {...props} icon="email" />}
       />
       {/* <List.Item
         title="Password"

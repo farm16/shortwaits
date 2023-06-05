@@ -1,11 +1,10 @@
-import { cloneDeep } from "lodash";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ServicesPayloadType } from "@shortwaits/shared-types";
+import { createSlice } from "@reduxjs/toolkit";
+import { ServicesDtoType } from "@shortwaits/shared-types";
 
 import { shortwaitsApi } from "../../../services";
 import type { RootState } from "../../../redux";
 
-export const servicesInitialState: ServicesPayloadType = null;
+export const servicesInitialState: ServicesDtoType = null;
 export const servicesSlice = createSlice({
   name: "services",
   initialState: servicesInitialState,

@@ -1,10 +1,35 @@
 import { Schema, Prop, SchemaFactory, raw } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
-import { EventType, ObjectId } from "@shortwaits/shared-types";
-import Mongoose, { Document, Schema as MongooseSchema, Types } from "mongoose";
+import {
+  EventLocationType,
+  EventType,
+  EventUrlsType,
+  ObjectId,
+} from "@shortwaits/shared-types";
+import { Document, Schema as MongooseSchema, Types } from "mongoose";
 
+class EventUrls implements EventUrlsType {
+  type: string;
+  isSupported: boolean;
+  name: string;
+  url: string;
+}
+
+class EventLocation implements EventLocationType {
+  address: string; // Full address of the location
+  latitude: number; // Latitude of the location
+  longitude: number; // Longitude of the location
+}
 @Schema()
 export class Events extends Document implements EventType {
+  @ApiProperty()
+  @Prop()
+  expectedEndTime: Date;
+
+  @ApiProperty()
+  @Prop()
+  registrationDeadlineTime: Date;
+
   @ApiProperty()
   @Prop()
   paymentMethod:
@@ -30,24 +55,15 @@ export class Events extends Document implements EventType {
 
   @ApiProperty()
   @Prop()
-  urls: {
-    type: string;
-    isSupported: boolean;
-    name: string;
-    url: string;
-  }[];
+  urls: EventUrls[];
 
   @ApiProperty()
   @Prop()
-  location: string;
+  location: EventLocation | null;
 
   @ApiProperty()
   @Prop()
   attendeeLimit: number;
-
-  @ApiProperty()
-  @Prop()
-  registrationDeadline: Date;
 
   @ApiProperty()
   @Prop()

@@ -48,6 +48,6 @@ export type BusinessType = {
   };
 };
 
-export type BusinessDocType = BusinessType & Document;
+type BusinessDocType = BusinessType & Document;
 
 export type BusinessModelType = PaginatedModel<BusinessDocType>;

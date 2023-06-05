@@ -12,6 +12,7 @@ import {
   MODAL_SCREENS,
 } from "./navigation-constants";
 import { selectorConfigs } from "../screens/modals/selector/selector-config";
+import { ServicesDtoType } from "@shortwaits/shared-types";
 
 export type ScheduleModalModeType = "My-Business-Hours" | "User-Hours";
 export type SelectorModalModeType = keyof typeof selectorConfigs;
@@ -20,6 +21,7 @@ export type FormType = "addClient" | "addEvent" | "addStaff";
 export type ModalStackParamList = {
   [MODAL_SCREENS.SELECTOR_MODAL_SCREEN]: {
     type: SelectorModalModeType;
+    data?: ServicesDtoType;
     mode?: "update" | "create";
     onSelected?(arg0: any): void;
   };

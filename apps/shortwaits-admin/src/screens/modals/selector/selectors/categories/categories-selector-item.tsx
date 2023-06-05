@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import {
-  BusinessPayloadType,
+  BusinessDocType,
   BusinessType,
   CategoriesPayloadType,
 } from "@shortwaits/shared-types";
@@ -14,7 +14,7 @@ import { setBusinessCategory } from "../../../../../redux";
 interface SelectorItemProps {
   type: SelectorModalType;
   index: number;
-  business: BusinessPayloadType;
+  business: BusinessDocType;
   // isSelected: boolean;
   disabled: boolean;
   item: CategoriesPayloadType;

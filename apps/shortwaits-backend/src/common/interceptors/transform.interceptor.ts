@@ -48,7 +48,7 @@ export class TransformInterceptor<T>
         }
 
         return {
-          data: payload,
+          data: payload ?? null,
           statusCode,
           meta,
         };

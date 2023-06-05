@@ -1,16 +1,16 @@
 import { CommonResponseType } from "./helpers";
 
-import { BusinessPayloadType, UserPayloadType } from ".";
+import { BusinessDocType, UserDocType } from ".";
 
 export type TokenPayloadType = {
-  readonly token: string | null;
-  readonly refreshToken: string | null;
+  token: string | null;
+  refreshToken: string | null;
 };
 export type AuthPayloadType = {
-  readonly auth: TokenPayloadType;
-  readonly attributes: {
-    readonly currentBusinessAccounts: BusinessPayloadType[];
-    readonly currentUser: UserPayloadType;
+  auth: TokenPayloadType;
+  attributes: {
+    currentBusinessAccounts: BusinessDocType[];
+    currentUser: UserDocType;
   };
 };
 
@@ -22,6 +22,6 @@ export type AuthFnType = (
 ) => AuthResponseType;
 
 export type RegisterWithEmailRequestType = {
-  readonly email: string;
-  readonly password: string;
+  email: string;
+  password: string;
 };

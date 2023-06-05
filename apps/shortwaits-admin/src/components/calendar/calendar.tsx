@@ -24,7 +24,7 @@ export type CalendarEventsType = SectionListData<
   Sections
 >[];
 
-export const Calendar = (props) => {
+export const Calendar = props => {
   const { events, isWeekView = false } = props;
 
   const marked = getMarkedDates(events);

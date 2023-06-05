@@ -30,7 +30,7 @@ import {
 import { AuthorizedScreenProps } from "../../../navigation";
 import { ActivityIndicator } from "react-native-paper";
 import Contacts from "react-native-contacts";
-import { UserPayloadType } from "@shortwaits/shared-types";
+import { UserDocType } from "@shortwaits/shared-types";
 import { getUsersFromOsContacts } from "../../../utils/getUsersFromOsContacts";
 
 export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
@@ -128,7 +128,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
     }
   };
 
-  const _renderItem: ListRenderItem<UserPayloadType> = ({ item }) => (
+  const _renderItem: ListRenderItem<UserDocType> = ({ item }) => (
     <ButtonCard
       title={item[item.alias ?? "displayName"]}
       subTitle={item.email}

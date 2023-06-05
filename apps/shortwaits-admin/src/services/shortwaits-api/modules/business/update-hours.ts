@@ -7,10 +7,10 @@ const { updateBusinessHours } = shortwaitsApiEndpoints.BUSINESS;
 
 type RequestType = {
   businessId: string;
-  payload: BusinessEndpointsTypes["/business/:business_id/hours"]["methods"]["PUT"]["body"];
+  payload: BusinessEndpointsTypes["/business/:businessId/hours"]["methods"]["PUT"]["body"];
 };
 type ResponseType =
-  BusinessEndpointsTypes["/business/:business_id/hours"]["methods"]["PUT"]["response"];
+  BusinessEndpointsTypes["/business/:businessId/hours"]["methods"]["PUT"]["response"];
 
 export default (builder: EndpointBuilder<any, any, any>) =>
   builder.mutation<ResponseType, RequestType>({

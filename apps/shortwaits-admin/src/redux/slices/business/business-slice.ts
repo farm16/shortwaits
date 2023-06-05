@@ -1,15 +1,15 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { BusinessPayloadType } from "@shortwaits/shared-types";
+import { BusinessDtoType } from "@shortwaits/shared-types";
 import { shortwaitsApi } from "../../../services";
 import { businessReducers } from "./business-reducers";
 
-const initialState: BusinessPayloadType = null;
+const initialState: BusinessDtoType = null;
 
 export const businessSlice = createSlice({
   name: "business",
   initialState: initialState,
   reducers: {
-    setBusiness: (state, action: PayloadAction<BusinessPayloadType>) => ({
+    setBusiness: (state, action: PayloadAction<BusinessDtoType>) => ({
       ...state,
       ...action.payload,
     }),

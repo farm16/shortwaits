@@ -1,4 +1,4 @@
-import { BusinessPayloadType } from "@shortwaits/shared-types";
+import { BusinessDocType } from "@shortwaits/shared-types";
 import React, { useState } from "react";
 import { Divider, List } from "react-native-paper";
 
@@ -7,10 +7,10 @@ import { useTheme } from "../../../../theme";
 export const IntegrationsSettings = ({
   business,
 }: {
-  business: BusinessPayloadType;
+  business: BusinessDocType;
 }) => {
   const [expanded, setExpanded] = useState(false);
-  const handlePress = () => setExpanded((state) => !state);
+  const handlePress = () => setExpanded(state => !state);
   const { Colors } = useTheme();
 
   return (
@@ -23,16 +23,16 @@ export const IntegrationsSettings = ({
       <Divider />
       <List.Item
         title="Zoom"
-        right={(props) => <List.Icon {...props} icon="video" />}
+        right={props => <List.Icon {...props} icon="video" />}
       />
       <Divider />
       <List.Item
         title="Google"
-        right={(props) => <List.Icon {...props} icon="google" />}
+        right={props => <List.Icon {...props} icon="google" />}
       />
       <List.Item
         title="Add URL link"
-        right={(props) => <List.Icon {...props} icon="link-plus" />}
+        right={props => <List.Icon {...props} icon="link-plus" />}
       />
     </List.Accordion>
   );

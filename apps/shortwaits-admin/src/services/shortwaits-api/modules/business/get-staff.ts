@@ -1,4 +1,4 @@
-import { BusinessEndpointsTypes, ObjectId } from "@shortwaits/shared-types";
+import { BusinessEndpointsTypes } from "@shortwaits/shared-types";
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
 
 import { shortwaitsApiEndpoints } from "../../../../configs";
@@ -6,10 +6,9 @@ import { shortwaitsApiEndpoints } from "../../../../configs";
 const { getBusinessStaff } = shortwaitsApiEndpoints.BUSINESS;
 
 type ResponseType =
-  BusinessEndpointsTypes["/business/:business_id/staff"]["methods"]["GET"]["response"];
+  BusinessEndpointsTypes["/business/:businessId/staff"]["methods"]["GET"]["response"];
 
 export default (builder: EndpointBuilder<any, any, any>) =>
-  builder.query<ResponseType, ObjectId>({
-    query: (businessId) =>
-      getBusinessStaff.getPath(businessId as unknown as string),
+  builder.query<ResponseType, string>({
+    query: businessId => getBusinessStaff.getPath(businessId),
   });

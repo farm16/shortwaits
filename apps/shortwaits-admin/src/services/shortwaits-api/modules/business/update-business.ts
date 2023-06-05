@@ -11,8 +11,8 @@ type PayloadType =
 
 export default (builder: EndpointBuilder<any, any, any>) =>
   builder.mutation<ResponseType, PayloadType>({
-    query: (business) => ({
-      url: updateBusiness.getPath(String(business._id)),
+    query: business => ({
+      url: updateBusiness.getPath(business._id),
       method: updateBusiness.METHOD,
       body: business,
     }),

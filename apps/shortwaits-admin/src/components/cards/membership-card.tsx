@@ -2,12 +2,12 @@ import React from "react";
 
 import { Card, CardProps, Container, Text } from "../common";
 import { useTheme } from "../../theme";
-import { BusinessPayloadType } from "@shortwaits/shared-types";
+import { BusinessDocType } from "@shortwaits/shared-types";
 import { TouchableOpacity, View } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 interface ButtonCardProps extends Omit<CardProps, "mode"> {
-  business: BusinessPayloadType;
+  business: BusinessDocType;
 }
 export const MembershipCard = (props: ButtonCardProps) => {
   const { business, ...rest } = props;

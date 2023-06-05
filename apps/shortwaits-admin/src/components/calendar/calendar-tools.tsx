@@ -1,6 +1,6 @@
 import { isEmpty } from "lodash";
 import { intervalToDuration, formatDuration, format } from "date-fns";
-import { EventPayloadType } from "@shortwaits/shared-types";
+import { EventDocType } from "@shortwaits/shared-types";
 
 export function getFutureDates(numberOfDays: number) {
   const array: string[] = [];
@@ -35,7 +35,7 @@ export function getMarkedDates(items: any[]) {
     color: "green",
   };
 
-  items.forEach((item) => {
+  items.forEach(item => {
     // NOTE: only mark dates with data
     if (item.data && item.data.length > 0 && !isEmpty(item.data[0])) {
       marked[item.title] = {
@@ -88,16 +88,16 @@ export const getEventTime = (milliSeconds: number) => {
 export const formatDateToCalendarDate = (date: string | Date) =>
   format(new Date(date), "MM/dd/yyyy");
 
-export const getCalendarData = (events: EventPayloadType[]) => {
+export const getCalendarData = (events: EventDocType[]) => {
   if (!events) return [];
-  const allDates = events.map((event) =>
+  const allDates = events.map(event =>
     formatDateToCalendarDate(event.startTime)
   );
-  return [...new Set(allDates)].map((date) => {
+  return [...new Set(allDates)].map(date => {
     return {
       title: formatDateToCalendarDate(date),
       data: events.filter(
-        (event) => formatDateToCalendarDate(event.startTime) === date
+        event => formatDateToCalendarDate(event.startTime) === date
       ),
     };
   });

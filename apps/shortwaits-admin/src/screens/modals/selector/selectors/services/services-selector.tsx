@@ -1,8 +1,5 @@
 import React, { useCallback, useLayoutEffect } from "react";
 import { FlatList, StyleSheet } from "react-native";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { CompositeNavigationProp } from "@react-navigation/native";
-import { DocType, ServicesType } from "@shortwaits/shared-types";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { ActivityIndicator } from "react-native-paper";
 
@@ -11,29 +8,30 @@ import {
   Screen,
   LeftChevronButton,
   Space,
-  CircleIconButton,
 } from "../../../../../components";
 import { useBusiness } from "../../../../../redux";
 import { useGetServicesByBusinessQuery } from "../../../../../services";
 import { SelectorComponentType } from "../../selector";
 
+/**
+ * TODO: handle error to non ideal state
+ */
 export const ServicesSelector: SelectorComponentType = ({
   navigation,
   route,
 }) => {
-  const business = useBusiness();
+  const { onSelected, data } = route.params;
 
-  /**
-   * TODO: handle error to non ideal state
-   */
+  const business = useBusiness();
 
   const {
     data: services,
-    // isError,
-    // isFetching,
     isLoading,
     isSuccess,
-  } = useGetServicesByBusinessQuery(business ? business?._id : skipToken);
+    isUninitialized,
+  } = useGetServicesByBusinessQuery(
+    data || !business?._id ? skipToken : business._id
+  );
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -44,33 +42,42 @@ export const ServicesSelector: SelectorComponentType = ({
     });
   }, [navigation]);
 
-  if (isLoading) {
-    return <ActivityIndicator />;
-  }
-
-  if (isSuccess) {
-    return (
+  const List = useCallback(
+    data => (
       <Screen unsafe preset="fixed" style={styles.container}>
         <Space size="small" />
         <FlatList
           ItemSeparatorComponent={() => <Space size="tiny" />}
           contentContainerStyle={styles.contentContainer}
-          data={services.data}
+          data={data}
           renderItem={({ item }) => {
             return (
               <ServiceItem
                 service={item}
-                onPress={() => {
-                  route.params.onSelected(item);
+                onPress={_service => {
+                  onSelected(_service);
                   navigation.goBack();
                 }}
               />
             );
           }}
-          keyExtractor={(item) => String(item._id)}
+          keyExtractor={item => String(item._id)}
         />
       </Screen>
-    );
+    ),
+    [navigation, onSelected]
+  );
+
+  if (isLoading) {
+    return <ActivityIndicator />;
+  }
+
+  if (isSuccess) {
+    return List(services.data);
+  }
+
+  if (data) {
+    return List(data);
   }
 };
 const styles = StyleSheet.create({

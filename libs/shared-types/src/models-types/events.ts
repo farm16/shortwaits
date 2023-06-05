@@ -2,7 +2,20 @@ import { Document, Types } from "mongoose";
 import { PaginatedModel } from "./helpers";
 import { ObjectId } from "../common/index";
 
-type PaymentMethod =
+export type EventUrlsType = {
+  type: string;
+  isSupported: boolean;
+  name: string;
+  url: string;
+};
+
+export type EventLocationType = {
+  address: string; // Full address of the location
+  latitude: number; // Latitude of the location
+  longitude: number; // Longitude of the location
+};
+
+export type EventPaymentMethodType =
   | "CREDIT CARD"
   | "DEBIT CARD"
   | "BANK TRANSFER"
@@ -15,8 +28,40 @@ type PaymentMethod =
   | "ZELLE"
   | "CASH APP";
 
+export type CreateEventDtoType = Pick<
+  EventType,
+  | "paymentMethod"
+  | "participantsIds"
+  | "urls"
+  | "location"
+  | "attendeeLimit"
+  | "registrationFee"
+  | "hasNoDuration"
+  | "eventImage"
+  | "name"
+  | "description"
+  | "features"
+  | "durationInMin"
+  | "priceExpected"
+  | "isGroupEvent"
+  | "repeat"
+  | "payment"
+  | "notes"
+  | "labels"
+  | "registrationDeadlineTime"
+> & {
+  leadClientId: string;
+  serviceId: string;
+  businessId: string;
+  clientsIds: string[];
+  staffIds: string[];
+  startTime: string;
+  endTime: string;
+  endTimeExpected: string;
+};
+
 export type EventType = {
-  participantsIds: ObjectId[]; // Array of participant IDs
+  participantsIds: ObjectId[]; // Array of participant IDs // can be invites by client
   staffIds: ObjectId[]; // Array of staff IDs
   clientsIds: ObjectId[]; // Array of client IDs
   businessId: ObjectId; // ID of the associated business
@@ -39,7 +84,7 @@ export type EventType = {
   durationInMin: number; // Duration of the event in minutes
   startTime: Date; // Start time of the event
   endTime: Date; // End time of the event
-  endTimeExpected: Date; // Expected end time of the event
+  expectedEndTime: Date; // Expected end time of the event
   priceExpected: number; // Expected price for the event
   priceFinal: number; // Final price for the event
   canceled: boolean; // Indicates if the event is canceled
@@ -48,7 +93,7 @@ export type EventType = {
   isGroupEvent: boolean; // Indicates if the event is a group event
   repeat: boolean; // Indicates if the event is repeated
 
-  paymentMethod: PaymentMethod;
+  paymentMethod: EventPaymentMethodType;
 
   payment: {
     paymentMethodId: string; // Stripe payment method ID
@@ -71,14 +116,14 @@ export type EventType = {
 
   deleted: boolean; // Indicates if the event is deleted
 
-  location: string; // Location of the event (added field)
-  attendeeLimit: number; // Maximum participant limit for the event (added field)
-  registrationDeadline: Date; // Deadline for event registration (added field)
-  registrationFee: number; // Registration fee for the event (added field)
+  location: EventLocationType;
 
+  attendeeLimit: number; // Maximum participant limit for the event (added field)
+  registrationDeadlineTime: Date; // Deadline for event registration (added field)
+  registrationFee: number; // Registration fee for the event (added field)
   // Additional metadata fields can be added here as needed
 };
 
-export type EventDocType = EventType & Document;
+type EventDocType = EventType & Document;
 
 export type EventModelType = PaginatedModel<EventDocType>;

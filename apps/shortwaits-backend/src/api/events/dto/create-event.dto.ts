@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { EventType, ObjectId } from "@shortwaits/shared-types";
+import { CreateEventDtoType } from "@shortwaits/shared-types";
 import {
   IsArray,
   IsBoolean,
@@ -27,8 +27,22 @@ class UrlDto {
   url: string;
 }
 
-export class CreateEventsDto implements EventType {
+class LocationDto {
   @IsString()
+  address: string; // Full address of the location
+  @IsNumber()
+  latitude: number; // Latitude of the location
+  @IsNumber()
+  longitude: number; // Longitude of the location
+}
+
+export class CreateEventsDto implements CreateEventDtoType {
+  @IsString()
+  @ApiProperty({ required: false })
+  registrationDeadlineTime: Date;
+
+  @IsString()
+  @ApiProperty({ required: true })
   @IsIn([
     "CREDIT CARD",
     "DEBIT CARD",
@@ -56,130 +70,102 @@ export class CreateEventsDto implements EventType {
     | "CASH APP";
 
   @IsArray()
-  participantsIds: ObjectId[];
+  @ApiProperty({ required: true })
+  participantsIds: Types.ObjectId[];
 
   @IsString()
-  leadClientId: ObjectId;
+  @ApiProperty({ required: false })
+  leadClientId: string;
 
   @ValidateNested({ each: true })
   @Type(() => UrlDto)
-  urls: UrlDto[];
+  @ApiProperty({ required: false })
+  urls: UrlDto[] | null;
 
-  @IsString()
-  location: string;
+  @ValidateNested({ each: true })
+  @Type(() => LocationDto)
+  @ApiProperty({ required: false })
+  location: LocationDto | null;
 
   @IsNumber()
+  @ApiProperty({ required: false })
   attendeeLimit: number;
 
   @IsDateString()
+  @ApiProperty({ required: false })
   registrationDeadline: Date;
 
   @IsNumber()
+  @ApiProperty({ required: false })
   registrationFee: number;
 
   @ApiProperty()
-  @IsString()
-  serviceId: ObjectId;
+  @ApiProperty({ required: true })
+  serviceId: string;
 
   @IsArray()
   @IsString({ each: true })
-  staffIds: ObjectId[];
+  @ApiProperty({ required: true })
+  staffIds: string[];
 
   @IsArray()
   @IsString({ each: true })
-  clientsIds: ObjectId[];
+  @ApiProperty({ required: true })
+  clientsIds: string[];
 
   @IsBoolean()
+  @ApiProperty({ required: false })
   hasNoDuration: boolean;
 
   @IsString()
-  leadClientName: string;
-
-  @IsString()
+  @ApiProperty({ required: false })
   eventImage: string;
 
   @ApiProperty()
-  @IsString()
-  businessId: Types.ObjectId;
-
-  @ApiProperty()
-  @IsString()
-  service: Types.ObjectId;
-
-  @IsArray()
-  @IsString({ each: true })
-  staff: Types.ObjectId[];
-
-  @IsArray()
-  @IsString({ each: true })
-  clients: Types.ObjectId[];
+  @ApiProperty({ required: true })
+  businessId: string;
 
   @IsString()
+  @ApiProperty({ required: true })
   name: string;
 
   @IsString()
+  @ApiProperty({ required: true })
   description: string;
 
-  @ApiProperty()
-  @IsString()
-  createdBy: Types.ObjectId;
-
-  @ApiProperty()
-  @IsString()
-  updatedBy: Types.ObjectId;
-
-  @IsArray()
+  @ApiProperty({ required: false })
   @IsString({ each: true })
   features: string[];
 
-  @ApiProperty()
-  @IsNumber()
-  status: {
-    statusCode: number;
-    statusName: "PENDING" | "APPROVED" | "REJECTED" | "CANCELED" | "COMPLETED";
-  };
-
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsNumber()
   durationInMin: number;
 
-  @ApiProperty()
+  @ApiProperty({ required: true })
   @IsDateString()
-  startTime: Date;
+  startTime: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsDateString()
-  endTime: Date;
+  endTime: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsDateString()
-  endTimeExpected: Date;
+  endTimeExpected: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: true })
   @IsNumber()
   priceExpected: number;
 
-  @ApiProperty()
-  @IsNumber()
-  priceFinal: number;
-
-  @ApiProperty()
-  @IsBoolean()
-  canceled: boolean;
-
-  @ApiProperty()
-  @IsString()
-  cancellationReason: string;
-
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsBoolean()
   isGroupEvent: boolean;
 
-  @ApiProperty()
   @IsBoolean()
+  @ApiProperty({ required: false })
   repeat: boolean;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsObject()
   payment: {
     paymentMethodId: string;
@@ -190,15 +176,12 @@ export class CreateEventsDto implements EventType {
     metadata: { [key: string]: string };
   };
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsString()
   notes: string;
 
   @IsArray()
+  @ApiProperty({ required: false })
   @IsString({ each: true })
   labels: string[];
-
-  @ApiProperty()
-  @IsBoolean()
-  deleted: boolean;
 }

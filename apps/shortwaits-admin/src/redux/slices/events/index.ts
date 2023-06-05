@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { EventPayloadType } from "@shortwaits/shared-types";
+import { EventDocType } from "@shortwaits/shared-types";
 
 import { shortwaitsApi } from "../../../services";
 import type { RootState } from "../../../redux";
 
-export const eventsInitialState: EventPayloadType[] = null;
+export const eventsInitialState: EventDocType[] = null;
 export const eventsSlice = createSlice({
   name: "events",
   initialState: eventsInitialState,
@@ -13,7 +13,7 @@ export const eventsSlice = createSlice({
       return [...state];
     },
   },
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder.addMatcher(
       shortwaitsApi.endpoints.getAllBusinessEvents.matchFulfilled,
       (state, action) => {

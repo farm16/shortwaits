@@ -1,11 +1,11 @@
 import { shortwaitsApiEndpoints } from "../../../../configs";
-import { EventPayloadType, ObjectId } from "@shortwaits/shared-types";
+import { EventDocType, ObjectId } from "@shortwaits/shared-types";
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
 
 const { postEvent } = shortwaitsApiEndpoints.EVENTS;
 
 type ResponseType = {
-  events: EventPayloadType;
+  events: EventDocType;
   event: ObjectId;
   business: ObjectId;
 };
@@ -21,7 +21,7 @@ type RequestType<
 
 export default (builder: EndpointBuilder<any, any, any>) =>
   builder.mutation<ResponseType, RequestType>({
-    query: (payload) => ({
+    query: payload => ({
       url: postEvent.getPath(payload.params.id),
       method: postEvent.METHOD,
       body: payload,

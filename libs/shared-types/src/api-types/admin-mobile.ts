@@ -1,9 +1,9 @@
 import { ShortwaitsAdminDefaultDataType } from "..";
 
-import { DocType, SuccessResponseType } from ".";
+import { DocType, CommonResponseType } from ".";
 
 export type ShortwaitsAdminDefaultDataSuccessResponseType =
-  SuccessResponseType<ShortwaitsAdminDefaultDataPayloadType>;
+  CommonResponseType<ShortwaitsAdminDefaultDataPayloadType>;
 
 export type ShortwaitsAdminDefaultDataPayloadType =
   DocType<ShortwaitsAdminDefaultDataType>;

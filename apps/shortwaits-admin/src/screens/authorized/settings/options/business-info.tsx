@@ -1,4 +1,4 @@
-import { BusinessPayloadType } from "@shortwaits/shared-types";
+import { BusinessDocType } from "@shortwaits/shared-types";
 import React, { useState } from "react";
 import { Divider, List } from "react-native-paper";
 
@@ -7,10 +7,10 @@ import { useTheme } from "../../../../theme";
 export const BusinessInfoSettings = ({
   business,
 }: {
-  business: BusinessPayloadType;
+  business: BusinessDocType;
 }) => {
   const [expanded, setExpanded] = useState(false);
-  const handlePress = () => setExpanded((state) => !state);
+  const handlePress = () => setExpanded(state => !state);
   const { Colors } = useTheme();
 
   return (
@@ -24,13 +24,13 @@ export const BusinessInfoSettings = ({
       <List.Item
         title="Business Name"
         description={business.longName || business.shortName}
-        right={(props) => <List.Icon {...props} icon="store" />}
+        right={props => <List.Icon {...props} icon="store" />}
       />
       <Divider />
       <List.Item
         title="Business Currency"
         description={business?.currency?.code ?? ""}
-        right={(props) => <List.Icon {...props} icon="currency-usd" />}
+        right={props => <List.Icon {...props} icon="currency-usd" />}
       />
     </List.Accordion>
   );

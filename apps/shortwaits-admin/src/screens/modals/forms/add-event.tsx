@@ -1,10 +1,10 @@
-import React, { FC, useLayoutEffect, useMemo } from "react";
+import React, { FC, useLayoutEffect, useMemo, useState } from "react";
 import { ActivityIndicator } from "react-native-paper";
 import { noop } from "lodash";
 
 import { useCreateBusinessClientsMutation } from "../../../services";
 import { HandleOnPress, useForm } from "../../../hooks";
-import { useBusiness, useServices } from "../../../redux";
+import { useBusiness, useServices, useUser } from "../../../redux";
 import {
   Text,
   TextFieldCard,
@@ -14,9 +14,15 @@ import {
   DurationFieldCard,
   Card,
   ButtonCard,
+  CurrencyFieldCard,
 } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { FormBody } from "./commons/form-body";
+import {
+  CreateEventDtoType,
+  EventType,
+  ServiceDtoType,
+} from "@shortwaits/shared-types";
 
 export const AddEventModal: FC<AuthorizedScreenProps<"form-modal-screen">> = ({
   navigation,
@@ -24,48 +30,62 @@ export const AddEventModal: FC<AuthorizedScreenProps<"form-modal-screen">> = ({
 }) => {
   const { onSaved = noop } = route.params;
 
+  const [selectedService, setSelectedService] = useState<ServiceDtoType | null>(
+    null
+  );
+
   const business = useBusiness();
   const services = useServices();
-
-  const [createBusinessClient, createBusinessClientResult] =
-    useCreateBusinessClientsMutation();
+  const user = useUser();
 
   const initialValues = useMemo(() => {
     const currentDate = new Date();
     const futureDate = new Date(currentDate.getTime() + 15 * 60000);
-    return {
+    const _initialValues: CreateEventDtoType = {
+      paymentMethod: "CASH",
+      participantsIds: [],
+      leadClientId: "",
+      urls: [],
+      location: {
+        address: "",
+        latitude: 0,
+        longitude: 0,
+      },
+      attendeeLimit: 0,
+      registrationDeadlineTime: null,
+      registrationFee: 0,
+      serviceId: selectedService?._id ?? "",
+      //TODO will be able to select multiple staff
+      staffIds: [user?._id],
+      //TODO will be able to select multiple clients
+      clientsIds: [],
+      hasNoDuration: true,
+      eventImage: "",
+      businessId: business._id as string,
       name: "",
       description: "",
-      leadClientName: "",
-      eventImage: "",
-      businessId: business._id,
-      service: null,
-      staffIds: [],
-      clientsIds: [],
       features: [],
-      priceExpected: 0,
-      priceFinal: 0,
-      isGroupEvent: false,
-      isVideoMeeting: false,
-      repeat: false,
-      // payment: object;
-      notes: "",
-      labels: [],
-      //duration
       durationInMin: 0,
       startTime: currentDate.toISOString(),
       endTime: futureDate.toISOString(),
       endTimeExpected: futureDate.toISOString(),
-      hasNoDuration: false,
+      priceExpected: null,
+      isGroupEvent: true,
+      repeat: true,
+      payment: null,
+      notes: "",
+      labels: [],
     };
-  }, [business._id]);
+    return _initialValues;
+  }, [business._id, selectedService?._id, user?._id]);
 
   const { touched, errors, values, handleChange, handleSubmit, setFieldValue } =
     useForm(
       {
         initialValues,
-        onSubmit: (formData) => {
-          console.log("dd>>>", formData);
+        onSubmit: formData => {
+          onSaved(formData);
+          console.log("dd>>>", JSON.stringify(formData, null, 3));
         },
       },
       "addEvent"
@@ -85,9 +105,7 @@ export const AddEventModal: FC<AuthorizedScreenProps<"form-modal-screen">> = ({
     });
   }, [handleSubmit, navigation]);
 
-  const isLoading =
-    createBusinessClientResult.isLoading &&
-    !createBusinessClientResult.isSuccess;
+  const isLoading = false;
 
   return isLoading ? (
     <ActivityIndicator />
@@ -109,16 +127,18 @@ export const AddEventModal: FC<AuthorizedScreenProps<"form-modal-screen">> = ({
         isTouched={touched.description}
         errors={errors.description}
       />
+
       <ButtonCard
         title="Services"
-        subTitle={values.service ? values.service.name : "Select a service"}
+        subTitle={selectedService ? selectedService.name : "Select a service"}
         onPress={() =>
           navigation.navigate("modals", {
             screen: "selector-modal-screen",
             params: {
               type: "services",
-              onSelected: (service) => {
-                setFieldValue("service", service);
+              data: services,
+              onSelected: service => {
+                setSelectedService(service);
               },
             },
           })
@@ -138,16 +158,16 @@ export const AddEventModal: FC<AuthorizedScreenProps<"form-modal-screen">> = ({
         isTouched={touched.endTime}
         errors={errors.endTime}
       />
-      <Card
-        mode="button"
-        rightIconSize={"large"}
-        onPress={() => setFieldValue("isVideoMeeting", !values.isVideoMeeting)}
-        rightIconName={
-          values.isVideoMeeting ? "checkbox-outline" : "checkbox-blank-outline"
-        }
-      >
-        <Text preset="cardTitle" text={"Video call"} />
-      </Card>
+      <CurrencyFieldCard
+        title="Price"
+        keyboardType="number-pad"
+        placeholder="Give a price"
+        value={values.priceExpected}
+        onChangeValue={price => setFieldValue("priceExpected", price)}
+        isTouched={touched.notes}
+        errors={errors.notes}
+        currencyType={"USD"}
+      />
       <TextFieldCard
         title="Notes"
         multiline

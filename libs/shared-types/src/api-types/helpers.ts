@@ -87,30 +87,43 @@ export type ApiMetaType = {
   page?: number;
 };
 
-type BusinessQuery = {
+export type CommonQuery = {
   limit?: number;
   page?: number;
 };
-export type GeneralSpecShape = {
-  [x in EndPoints]: {
-    path: string;
-    methods: {
-      [M in HttpMethod]?: {
-        query?: BusinessQuery;
-        body?: unknown;
-        response: any;
-        paginatedResponse?: any;
-      };
+
+export type EndpointProps = {
+  path: string;
+  methods: {
+    [M in HttpMethod]?: {
+      query?: CommonQuery;
+      params?: unknown;
+      body?: unknown;
+      response: CommonResponseType;
     };
   };
 };
 
-export type EndPoints =
+export type GeneralSpecShape = {
+  [x in EndPoints]: EndpointProps;
+};
+
+export type EndPoints = BusinessEndPoints | EventsEndPoints;
+
+export type EventsEndPoints =
+  | "/events/{eventId}"
+  | "/events/user/{userId}"
+  | "/events/business/{businessId}"
+  | "/events";
+
+export type BusinessEndPoints =
   | "/business"
-  | "/business/register"
-  | "/business/:business_id"
-  | "/business/:business_id/admins"
-  | "/business/:business_id/services"
-  | "/business/:business_id/categories"
-  | "/business/:business_id/staff"
-  | "/business/:business_id/hours";
+  | "/business/{businessId}"
+  | "/business/{businessId}/admins"
+  | "/business/{businessId}/services"
+  | "/business/{businessId}/categories"
+  | "/business/{businessId}/hours"
+  | "/business/{businessId}/events"
+  | "/business/{businessId}/clients"
+  | "/business/{businessId}/staff"
+  | "/business/register";

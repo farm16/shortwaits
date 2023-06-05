@@ -1,101 +1,91 @@
-import { BusinessType, ClientUserType } from '..';
 import {
+  BusinessType,
+  ClientUserType,
+  ConvertIdsToStrings,
+  MethodType,
+} from "..";
+import {
+  BusinessEndPoints,
   CommonResponseType,
   DocType,
   GeneralSpecShape,
-  ServicesPayloadType,
-  SuccessResponseType,
-  UserPayloadType,
-} from '.';
+  UserDocType,
+} from ".";
 
-export type BusinessPayloadType = DocType<BusinessType>;
-export type BusinessSuccessResponseType =
-  SuccessResponseType<BusinessPayloadType>;
+export type BusinessDtoType = ConvertIdsToStrings<BusinessDocType>;
+
+export type BusinessDocType = DocType<BusinessType>;
+
+export type BusinessResponseType = CommonResponseType<BusinessDtoType>;
+
 export type BusinessSuccessFnType = (
-  payload: BusinessPayloadType,
+  payload: BusinessDocType,
   message: string
-) => BusinessSuccessResponseType;
-
-type EndpointPath =
-  | '/business'
-  | '/business/register'
-  | `/business/:business_id`
-  | `/business/:business_id/admins`
-  | `/business/:business_id/services`
-  | `/business/:business_id/categories`
-  | `/business/:business_id/staff`
-  | `/business/:business_id/clients`
-  | `/business/:business_id/hours`;
+) => BusinessResponseType;
 
 export type BusinessEndpointsPaths =
-  BusinessEndpointsTypes[EndpointPath]['path'];
-export type BusinessEndpointsMethods =
-  keyof BusinessEndpointsTypes[EndpointPath]['methods'];
+  BusinessEndpointsTypes[BusinessEndPoints]["path"];
 
-type MethodType<T, Q = undefined, B = undefined> = {
-  query: Q;
-  body: B;
-  response: CommonResponseType<T>;
-};
+export type BusinessEndpointsMethods = "POST" | "GET" | "PUT" | "DELETE";
 
 export interface BusinessEndpointsTypes extends GeneralSpecShape {
-  '/business': {
+  "/business": {
     path: `/business`;
     methods: {
-      PUT: MethodType<BusinessPayloadType>;
+      PUT: MethodType<BusinessDtoType, undefined, BusinessDtoType>;
     };
   };
-  '/business/register': {
+  "/business/register": {
     path: `/business/register`;
     methods: {
-      PUT: MethodType<BusinessPayloadType>;
+      PUT: MethodType<BusinessDtoType, undefined, BusinessDtoType>;
     };
   };
-  '/business/:business_id': {
+  "/business/:businessId": {
     path: `/business/${string}`;
     methods: {
-      GET: MethodType<BusinessType>;
+      GET: MethodType<BusinessDtoType>;
     };
   };
-  '/business/:business_id/admins': {
+  "/business/:businessId/admins": {
     path: `/business/${string}/admin`;
     methods: {
-      GET: MethodType<BusinessType>;
+      GET: MethodType<BusinessDtoType>;
     };
   };
-  '/business/:business_id/services': {
+  "/business/:businessId/services": {
     path: `/business/${string}/services`;
     methods: {
-      GET: MethodType<ServicesPayloadType>;
-      PUT: MethodType<ServicesPayloadType>;
-      POST: MethodType<ServicesPayloadType>;
+      GET: MethodType<BusinessDtoType>;
+      PUT: MethodType<BusinessDtoType>;
+      POST: MethodType<BusinessDtoType>;
     };
   };
-  '/business/:business_id/categories': {
+  "/business/:businessId/categories": {
     path: `/business/${string}/categories`;
     methods: {
-      GET: MethodType<BusinessType>;
+      GET: MethodType<BusinessDtoType["services"]>;
     };
   };
-  '/business/:business_id/staff': {
+  "/business/:businessId/staff": {
     path: `/business/${string}/staff`;
     methods: {
-      GET: MethodType<UserPayloadType[]>;
-      POST: MethodType<UserPayloadType[]>;
+      GET: MethodType<UserDocType[]>;
+      POST: MethodType<UserDocType>;
     };
   };
-  '/business/:business_id/clients': {
+  "/business/:businessId/clients": {
     path: `/business/${string}/clients`;
     methods: {
-      GET: MethodType<UserPayloadType[]>;
+      GET: MethodType<UserDocType[]>;
       POST: MethodType<Partial<ClientUserType>[]>;
     };
   };
-  '/business/:business_id/hours': {
+  "/business/:businessId/hours": {
     path: `/business/${string}/hours`;
     methods: {
-      GET: MethodType<BusinessType>;
-      PUT: MethodType<BusinessType>;
+      GET: MethodType<BusinessDtoType["hours"]>;
+      PUT: MethodType<BusinessDtoType["hours"]>;
     };
   };
 }

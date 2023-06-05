@@ -6,7 +6,7 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { UserPayloadType } from "@shortwaits/shared-types";
+import { UserDocType } from "@shortwaits/shared-types";
 
 import { BusinessUser } from "./entities/business-user.entity";
 import { PaginationQueryDto } from "../../common/dto/pagination-query.dto";
@@ -67,7 +67,7 @@ export class BusinessUsersService {
   public async update(
     userId: string,
     updateUserDto: Partial<UpdateUserDto>
-  ): Promise<UserPayloadType> {
+  ): Promise<UserDocType> {
     const existingUser = await this.businessUserModel.findByIdAndUpdate(
       { _id: userId },
       updateUserDto

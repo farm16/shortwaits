@@ -4,15 +4,16 @@ import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions
 
 const { registerBusiness } = shortwaitsApiEndpoints.BUSINESS;
 
-type ResponseType =
-  BusinessEndpointsTypes["/business/register"]["methods"]["PUT"]["response"];
-type PayloadType =
-  BusinessEndpointsTypes["/business"]["methods"]["PUT"]["body"];
+type MutationType =
+  BusinessEndpointsTypes["/business/register"]["methods"]["PUT"];
+
+type ResponseType = MutationType["response"];
+type RequestType = MutationType["body"];
 
 export default (builder: EndpointBuilder<any, any, any>) =>
-  builder.mutation<ResponseType, PayloadType>({
-    query: (business) => ({
-      url: registerBusiness.getPath(String(business._id)),
+  builder.mutation<ResponseType, RequestType>({
+    query: business => ({
+      url: registerBusiness.getPath(business._id),
       method: registerBusiness.METHOD,
       body: business,
     }),

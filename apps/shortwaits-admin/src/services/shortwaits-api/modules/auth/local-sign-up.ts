@@ -12,7 +12,7 @@ interface RequestType {
 export default (builder: EndpointBuilder<any, any, any>) =>
   builder.mutation<AuthResponseType, RequestType>({
     query: payload => ({
-      url: adminLocalSignUp.PATH,
+      url: adminLocalSignUp.getPath(),
       method: adminLocalSignUp.METHOD,
       body: payload,
     }),
