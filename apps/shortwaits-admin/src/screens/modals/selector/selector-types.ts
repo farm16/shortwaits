@@ -5,16 +5,24 @@
  */
 export type ModalPermissions = "WRITE" | "READ" | "DELETE";
 export interface SelectorConfig {
-  headerTitle: string;
+  headerTitle?: string;
   /**
    * should be selectMax > 0,
    * else disable select action
    *  */
   selectMax?: number;
-  searchPlaceholder: string;
+  searchPlaceholder?: string;
   /**
    * func to initialize data
    */
-  isReadOnly: boolean;
+  isReadOnly?: boolean;
   testId?: string;
+}
+
+export interface SelectorItemProps<T> {
+  isSelected?: boolean;
+  disabled?: boolean;
+  item: T;
+  onSelectItem?(item: T): void;
+  multiple?: boolean;
 }

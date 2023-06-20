@@ -2,7 +2,7 @@ const { getObjectId } = require("mongo-seeding");
 const categories = require("../1-categories/categories");
 
 const defaultCategory = categories.find(
-  (category) => category.short_id === "1020"
+  category => category.short_id === "1020"
 );
 const defaultServiceColors = {
   red: {
@@ -104,6 +104,13 @@ const shortwaitsAdminDefaultData = [
     _id: getObjectId("0000001"),
     short_id: "0000001",
     name: "Shortwaits LLC",
+    banners: [
+      {
+        id: "0001",
+        short_id: "0001",
+        name: "Upgrade to Shortwaits Premium",
+      },
+    ],
     description: "Shortwaits Default data for the USA area only",
     links: [""],
     suggestedLang: "en",

@@ -2,7 +2,7 @@ import { shortwaitsApi } from "../shortwaits-api";
 
 export const {
   //Mutations hooks
-
+  useCreateEventMutation,
   useRegisterBusinessMutation,
   useLocalSignUpMutation,
   useLocalSignInMutation,
@@ -12,9 +12,8 @@ export const {
   useCreateBusinessClientsMutation,
   useCreateBusinessStaffMutation,
   //Query hooks
-  useGetBusinessClientsQuery,
-  useGetAllBusinessEventsQuery,
   useGetAdminMobileQuery,
+  useGetBusinessClientsQuery,
   useGetBusinessQuery,
   useGetBusinessCategoryQuery,
   useGetBusinessHoursQuery,
@@ -25,15 +24,16 @@ export const {
   useGetServiceQuery,
   useGetServicesByBusinessQuery,
   useGetUserQuery,
+  useGetEventsByBusinessQuery,
   //Lazy Query hooks
-  useLazyGetBusinessClientsQuery,
-  useLazyGetAllBusinessEventsQuery,
   useLazyGetUserQuery,
-  useLazyGetServiceQuery,
-  useLazyGetServicesByBusinessQuery,
   useLazyGetCategoryQuery,
   useLazyGetCategoriesQuery,
   useLazyGetAdminMobileQuery,
+  useLazyGetServiceQuery,
+  useLazyGetServicesByBusinessQuery,
+  useLazyGetBusinessClientsQuery,
+  useLazyGetEventsByBusinessQuery,
   useLazyGetBusinessQuery,
   useLazyGetBusinessCategoryQuery,
   useLazyGetBusinessHoursQuery,

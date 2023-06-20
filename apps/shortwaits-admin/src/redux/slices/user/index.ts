@@ -22,10 +22,10 @@ export const userSlice = createSlice({
       .addMatcher(
         shortwaitsApi.endpoints.localSignUp.matchFulfilled,
         function (state, action) {
-          console.log(">>> localSignUp - USER ", {
-            ...state,
-            ...action.payload.data.attributes.currentUser,
-          });
+          // console.log(">>> localSignUp - USER ", {
+          //   ...state,
+          //   ...action.payload.data.attributes.currentUser,
+          // });
           return {
             ...state,
             ...action.payload.data.attributes.currentUser,
@@ -35,10 +35,10 @@ export const userSlice = createSlice({
       .addMatcher(
         shortwaitsApi.endpoints.localSignIn.matchFulfilled,
         function (state, action) {
-          console.log(">>> localSignIn - USER ", {
-            ...state,
-            ...action.payload.data.attributes.currentUser,
-          });
+          // console.log(">>> localSignIn - USER ", {
+          //   ...state,
+          //   ...action.payload.data.attributes.currentUser,
+          // });
           return {
             ...state,
             ...action.payload.data.attributes.currentUser,

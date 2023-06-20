@@ -1,9 +1,14 @@
-import React, { FC, useLayoutEffect, useMemo, useState } from "react";
+import React, {
+  FC,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useState,
+} from "react";
 import { ActivityIndicator } from "react-native-paper";
-import { noop } from "lodash";
+import { Alert } from "react-native";
 
-import { useCreateBusinessClientsMutation } from "../../../services";
-import { HandleOnPress, useForm } from "../../../hooks";
+import { useForm } from "../../../hooks";
 import { useBusiness, useServices, useUser } from "../../../redux";
 import {
   Text,
@@ -11,24 +16,19 @@ import {
   TimePickerFieldCard,
   Button,
   BackButton,
-  DurationFieldCard,
-  Card,
   ButtonCard,
   CurrencyFieldCard,
 } from "../../../components";
-import { AuthorizedScreenProps } from "../../../navigation";
+import { ModalsScreenProps } from "../../../navigation";
 import { FormBody } from "./commons/form-body";
-import {
-  CreateEventDtoType,
-  EventType,
-  ServiceDtoType,
-} from "@shortwaits/shared-types";
+import { CreateEventDtoType, ServiceDtoType } from "@shortwaits/shared-types";
+import { useCreateEventMutation } from "../../../services";
 
-export const AddEventModal: FC<AuthorizedScreenProps<"form-modal-screen">> = ({
+export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({
   navigation,
   route,
 }) => {
-  const { onSaved = noop } = route.params;
+  const { onSubmit, onDone, closeOnSubmit = true } = route.params;
 
   const [selectedService, setSelectedService] = useState<ServiceDtoType | null>(
     null
@@ -37,6 +37,8 @@ export const AddEventModal: FC<AuthorizedScreenProps<"form-modal-screen">> = ({
   const business = useBusiness();
   const services = useServices();
   const user = useUser();
+
+  const [createEvent, createEventStatus] = useCreateEventMutation();
 
   const initialValues = useMemo(() => {
     const currentDate = new Date();
@@ -52,7 +54,7 @@ export const AddEventModal: FC<AuthorizedScreenProps<"form-modal-screen">> = ({
         longitude: 0,
       },
       attendeeLimit: 0,
-      registrationDeadlineTime: null,
+      registrationDeadlineTime: "",
       registrationFee: 0,
       serviceId: selectedService?._id ?? "",
       //TODO will be able to select multiple staff
@@ -67,8 +69,7 @@ export const AddEventModal: FC<AuthorizedScreenProps<"form-modal-screen">> = ({
       features: [],
       durationInMin: 0,
       startTime: currentDate.toISOString(),
-      endTime: futureDate.toISOString(),
-      endTimeExpected: futureDate.toISOString(),
+      expectedEndTime: futureDate.toISOString(),
       priceExpected: null,
       isGroupEvent: true,
       repeat: true,
@@ -84,8 +85,11 @@ export const AddEventModal: FC<AuthorizedScreenProps<"form-modal-screen">> = ({
       {
         initialValues,
         onSubmit: formData => {
-          onSaved(formData);
-          console.log("dd>>>", JSON.stringify(formData, null, 3));
+          if (onSubmit) {
+            onSubmit<"addEvent">(formData);
+          } else {
+            createEvent(formData);
+          }
         },
       },
       "addEvent"
@@ -96,18 +100,43 @@ export const AddEventModal: FC<AuthorizedScreenProps<"form-modal-screen">> = ({
       headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
       headerRight: () => (
         <Button
-          onPress={handleSubmit as unknown as HandleOnPress}
+          onPress={() => {
+            handleSubmit();
+          }}
           preset="headerLink"
           text="Save"
         />
       ),
       headerTitle: () => <Text preset="text" text="Add Event" />,
     });
-  }, [handleSubmit, navigation]);
+  }, [closeOnSubmit, createEventStatus.isSuccess, handleSubmit, navigation]);
 
-  const isLoading = false;
+  useEffect(() => {
+    if (createEventStatus.isSuccess && closeOnSubmit) {
+      navigation.goBack();
+    }
+  }, [closeOnSubmit, createEventStatus.isSuccess, navigation]);
 
-  return isLoading ? (
+  useEffect(() => {
+    const cleanup = async () => {
+      if (onDone) {
+        try {
+          await onDone();
+        } catch (error) {
+          console.error("Error in onDone:", error);
+        }
+      }
+    };
+    return () => {
+      cleanup();
+    };
+  }, []);
+
+  if (createEventStatus.isError) {
+    Alert.alert("Error", createEventStatus.error.message);
+  }
+
+  return createEventStatus.isLoading ? (
     <ActivityIndicator />
   ) : (
     <FormBody>
@@ -138,7 +167,9 @@ export const AddEventModal: FC<AuthorizedScreenProps<"form-modal-screen">> = ({
               type: "services",
               data: services,
               onSelected: service => {
+                console.log("selected service:", service._id);
                 setSelectedService(service);
+                setFieldValue("serviceId", service._id);
               },
             },
           })
@@ -153,10 +184,10 @@ export const AddEventModal: FC<AuthorizedScreenProps<"form-modal-screen">> = ({
       />
       <TimePickerFieldCard
         title={"Ends"}
-        date={new Date(values.endTime)}
+        date={new Date(values.expectedEndTime)}
         onChange={handleChange("startTime")}
-        isTouched={touched.endTime}
-        errors={errors.endTime}
+        isTouched={touched.expectedEndTime}
+        errors={errors.expectedEndTime}
       />
       <CurrencyFieldCard
         title="Price"

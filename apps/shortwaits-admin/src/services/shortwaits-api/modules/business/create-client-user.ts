@@ -8,14 +8,14 @@ type Endpoint =
   BusinessEndpointsTypes["/business/:businessId/clients"]["methods"]["POST"];
 type ResponseType = Endpoint["response"];
 type PayloadType = {
-  businessId: ObjectId;
-  businessClients: Endpoint["body"];
+  businessId: string;
+  businessClients: any[];
 };
 
 export default (builder: EndpointBuilder<any, any, any>) =>
   builder.mutation<ResponseType, PayloadType>({
     query: ({ businessId, businessClients }) => ({
-      url: createBusinessClient.getPath(String(businessId)),
+      url: createBusinessClient.getPath(businessId),
       method: createBusinessClient.METHOD,
       body: businessClients,
     }),

@@ -44,8 +44,12 @@ export interface ButtonProps extends TouchableOpacityProps {
    */
   children?: React.ReactNode;
 
-  icon?: React.ComponentType<SvgProps>;
-
+  rightIconName?: string;
+  rightIconSize?: number;
+  rightIconColor?: string;
+  leftIconName?: string;
+  leftIconSize?: number;
+  leftIconColor?: string;
   iconSize?: number;
 
   state?: "loading" | "disabled" | "enabled";

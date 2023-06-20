@@ -1,4 +1,4 @@
-import React, { FC, useLayoutEffect, useRef } from "react";
+import React, { FC, useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   ListRenderItem,
   PermissionsAndroid,
@@ -18,11 +18,12 @@ import {
   NonIdealState,
   Screen,
   Text,
-  SearchBar,
   useBottomSheet,
+  FloatingActionButton,
+  AnimatedSearchBar,
 } from "../../../components";
 import { useTheme } from "../../../theme";
-import { useBusiness } from "../../../redux";
+import { useBusiness, useComponentVisibility } from "../../../redux";
 import {
   useCreateBusinessClientsMutation,
   useGetBusinessClientsQuery,
@@ -32,6 +33,8 @@ import { ActivityIndicator } from "react-native-paper";
 import Contacts from "react-native-contacts";
 import { UserDocType } from "@shortwaits/shared-types";
 import { getUsersFromOsContacts } from "../../../utils/getUsersFromOsContacts";
+import { actions } from "../../../components/floating-action-button/fab-actions";
+import { isEmpty } from "lodash";
 
 export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
   navigation,
@@ -47,6 +50,9 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
     useCreateBusinessClientsMutation();
   const bottomSheetRef = useRef<BottomSheetType>(null);
   const handleBottomSheet = useBottomSheet(bottomSheetRef);
+  const [isListSearchable, setIsListSearchable] = useState(false);
+  const [, setSearchText] = useState("");
+  const [filteredClientsData, setFilteredClientsData] = useState([]);
 
   const { Colors } = useTheme();
 
@@ -59,9 +65,29 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
           </Container>
         );
       },
+      headerLeft: () => {
+        return (
+          <Container direction="row" alignItems="center">
+            <CircleIconButton
+              iconType="contactSync"
+              withMarginLeft
+              onPress={() => {
+                handleBottomSheet.expand();
+              }}
+            />
+          </Container>
+        );
+      },
       headerRight: () => {
         return (
-          <Container direction="row">
+          <Container direction="row" alignItems="center">
+            <CircleIconButton
+              iconType={isListSearchable ? "search-close" : "search"}
+              withMarginRight
+              onPress={() => {
+                setIsListSearchable(s => !s);
+              }}
+            />
             <CircleIconButton
               iconType="add"
               withMarginRight
@@ -70,23 +96,21 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
                   screen: "form-modal-screen",
                   params: {
                     form: "addClient",
-                    onSaved: () => refetchBusinessClientsQuery(),
+                    onSubmit: () => refetchBusinessClientsQuery(),
                   },
                 })
               }
-            />
-            <CircleIconButton
-              iconType="contactSync"
-              withMarginRight
-              onPress={() => {
-                handleBottomSheet.expand();
-              }}
             />
           </Container>
         );
       },
     });
-  }, [handleBottomSheet, navigation, refetchBusinessClientsQuery]);
+  }, [
+    handleBottomSheet,
+    isListSearchable,
+    navigation,
+    refetchBusinessClientsQuery,
+  ]);
 
   const loadContacts = async () => {
     try {
@@ -141,6 +165,15 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
     createClientsResult.isLoading && !createClientsResult.isSuccess;
 
   const isLoading = isClientsDataLoading || isCreateClientsLoading;
+  const { isVisible } = useComponentVisibility("floatingActionButton", true);
+
+  useEffect(() => {
+    if (!isLoading && isBusinessClientsQuerySuccess) {
+      setFilteredClientsData(clientsData?.data);
+    } else {
+      return;
+    }
+  }, [clientsData?.data, isBusinessClientsQuerySuccess, isLoading]);
 
   return (
     <Screen
@@ -154,7 +187,35 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
         <ActivityIndicator />
       ) : (
         <>
-          <SearchBar value={""} style={{ marginTop: 15 }} />
+          <AnimatedSearchBar
+            onChangeText={text => {
+              const trimmedText = text.trim();
+              setSearchText(trimmedText);
+              if (trimmedText !== "") {
+                const filteredItems = clientsData?.data.filter(item => {
+                  // Adjust the filtering logic based on your data structure
+                  const phoneNumberMatch = item.phoneNumbers.some(phone =>
+                    phone.number
+                      .toLowerCase()
+                      .includes(trimmedText.toLowerCase())
+                  );
+                  return (
+                    item.givenName
+                      ?.toLowerCase()
+                      .includes(trimmedText.toLowerCase()) ||
+                    item.email
+                      ?.toLowerCase()
+                      .includes(trimmedText.toLowerCase()) ||
+                    phoneNumberMatch
+                  );
+                });
+                setFilteredClientsData(filteredItems);
+              } else {
+                setFilteredClientsData(clientsData?.data);
+              }
+            }}
+            isVisible={isListSearchable}
+          />
           <List
             refreshControl={
               <RefreshControl
@@ -163,25 +224,38 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
               />
             }
             ListEmptyComponent={
-              <View>
-                <NonIdealState
-                  image={"noClients"}
-                  buttons={[
-                    <Button
-                      text="Sync contacts"
-                      onPress={() => handleSyncContacts()}
-                    />,
-                  ]}
-                />
+              <View
+                style={{
+                  marginTop: 16,
+                  padding: 16,
+                }}
+              >
+                {isEmpty(clientsData?.data) ? (
+                  <NonIdealState
+                    image={"noClients"}
+                    buttons={[
+                      <Button
+                        text="Sync contacts"
+                        onPress={() => handleSyncContacts()}
+                      />,
+                    ]}
+                  />
+                ) : null}
               </View>
             }
             // style={{ backgroundColor: "red" }}
             renderItem={_renderItem}
-            data={clientsData?.data}
+            data={filteredClientsData}
           />
         </>
       )}
       <BottomSheet snapPointsLevel={6} ref={bottomSheetRef}></BottomSheet>
+      <FloatingActionButton
+        isVisible={isVisible}
+        actions={actions}
+        icon={"plus"}
+        pressedIcon={"close"}
+      />
     </Screen>
   );
 };

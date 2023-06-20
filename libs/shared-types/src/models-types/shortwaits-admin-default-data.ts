@@ -4,11 +4,19 @@ import { ObjectId } from "../common";
 import { BusinessHoursType, CurrencyType, ServiceColorsType } from "./helpers";
 import { ServicesType } from "./services";
 
-export type ShortwaitsAdminDefaultDataDocType = ShortwaitsAdminDefaultDataType &
-  Document;
+/**
+ * externalizing this will be a future task/feature
+ * will include deep linking, backgrounds images, themes, etc.
+ */
+export type ShortwaitsAdminBannersType = {
+  id: string;
+  short_id: string;
+  name: string;
+};
 
 export type ShortwaitsAdminDefaultDataType = {
   short_id: string;
+  banners: ShortwaitsAdminBannersType[];
   name: string;
   description: string;
   links: string[];

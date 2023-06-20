@@ -1,24 +1,17 @@
-import React, { FC, useEffect, useLayoutEffect, useMemo } from "react";
-import { skipToken } from "@reduxjs/toolkit/dist/query/react";
-import { ActivityIndicator } from "react-native-paper";
+import React, { FC, useLayoutEffect } from "react";
 import { truncate } from "lodash";
 
 import {
   Calendar,
   FloatingActionButton,
   Screen,
-  getCalendarData,
   Text,
   Container,
+  CircleIconButton,
 } from "../../../components";
 import { Colors } from "../../../theme";
-import {
-  useGetAllBusinessEventsQuery,
-  useGetServicesByBusinessQuery,
-} from "../../../services";
 import { AuthorizedScreenProps } from "../../../navigation";
-import { useBusiness, useComponentVisibility } from "../../../redux";
-import { actions } from "./fab-actions";
+import { useBusiness } from "../../../redux";
 
 export const EventsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
   navigation,
@@ -37,38 +30,17 @@ export const EventsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
           </Container>
         );
       },
+      headerRight: () => {
+        return (
+          <Container direction="row" alignItems="center">
+            <CircleIconButton withMarginRight iconType="magnify" />
+            <CircleIconButton withMarginRight iconType="calendar" />
+          </Container>
+        );
+      },
       headerShadowVisible: false,
     });
   }, [business.shortName, navigation]);
-
-  const { isVisible } = useComponentVisibility("floatingActionButton", true);
-
-  const { isSuccess: isBusinessServicesSuccess } =
-    useGetServicesByBusinessQuery(business ? business._id : skipToken);
-
-  const {
-    data: eventsData,
-    isLoading: isEventsLoading,
-    isSuccess: isEventSuccess,
-    isError,
-  } = useGetAllBusinessEventsQuery(business._id, {
-    skip: !!business._id,
-    refetchOnFocus: true,
-  });
-
-  console.log("eventsData >>> ", {
-    data: eventsData,
-    isLoading: isEventsLoading,
-    isSuccess: isEventSuccess,
-    isError,
-  });
-
-  const events = useMemo(
-    () => getCalendarData(eventsData?.data.events),
-    [eventsData]
-  );
-
-  const isLoading = isEventsLoading;
 
   return (
     <Screen
@@ -77,13 +49,8 @@ export const EventsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
       backgroundColor={Colors.white}
       statusBar="dark-content"
     >
-      {isLoading ? <ActivityIndicator /> : <Calendar events={events} />}
-      <FloatingActionButton
-        isVisible={isVisible}
-        actions={actions}
-        icon={"plus"}
-        pressedIcon={"close"}
-      />
+      <Calendar />
+      <FloatingActionButton />
     </Screen>
   );
 };

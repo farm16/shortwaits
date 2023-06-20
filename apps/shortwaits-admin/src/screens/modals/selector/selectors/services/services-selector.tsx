@@ -1,4 +1,4 @@
-import React, { useCallback, useLayoutEffect } from "react";
+import React, { FC, useCallback, useLayoutEffect } from "react";
 import { FlatList, StyleSheet } from "react-native";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { ActivityIndicator } from "react-native-paper";
@@ -11,16 +11,15 @@ import {
 } from "../../../../../components";
 import { useBusiness } from "../../../../../redux";
 import { useGetServicesByBusinessQuery } from "../../../../../services";
-import { SelectorComponentType } from "../../selector";
+import { ModalsScreenProps } from "../../../../../navigation";
 
 /**
  * TODO: handle error to non ideal state
  */
-export const ServicesSelector: SelectorComponentType = ({
-  navigation,
-  route,
-}) => {
-  const { onSelected, data } = route.params;
+export const ServicesSelector: FC<
+  ModalsScreenProps<"selector-modal-screen">
+> = ({ navigation, route }) => {
+  const { onSelect, data } = route.params;
 
   const business = useBusiness();
 
@@ -55,7 +54,7 @@ export const ServicesSelector: SelectorComponentType = ({
               <ServiceItem
                 service={item}
                 onPress={_service => {
-                  onSelected(_service);
+                  onSelect(_service);
                   navigation.goBack();
                 }}
               />
@@ -65,7 +64,7 @@ export const ServicesSelector: SelectorComponentType = ({
         />
       </Screen>
     ),
-    [navigation, onSelected]
+    [navigation, onSelect]
   );
 
   if (isLoading) {

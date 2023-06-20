@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useMemo } from "react";
+import React, { FC, useLayoutEffect, useMemo } from "react";
 import { FlatList, StyleSheet } from "react-native";
 
 import { useBusiness } from "../../../../../redux";
@@ -10,13 +10,14 @@ import {
 } from "../../../../../components";
 import { selectorConfigs } from "../../selector-config";
 import { CategoriesSelectorItem } from "./categories-selector-item";
-import { SelectorComponentType } from "../../selector";
 import { useGetCategoriesQuery } from "../../../../../services";
+import { ModalsScreenProps } from "../../../../../navigation";
 
-export const CategoriesSelector: SelectorComponentType = ({
-  navigation,
-  type,
-}) => {
+export const CategoriesSelector: FC<
+  ModalsScreenProps<"selector-modal-screen">
+> = ({ navigation, route }) => {
+  const { type, onSelect } = route.params;
+
   const { headerTitle, searchPlaceholder, isReadOnly } = useMemo(
     () => selectorConfigs[type],
     [type]
@@ -73,15 +74,7 @@ export const CategoriesSelector: SelectorComponentType = ({
         data={categories.data}
         ItemSeparatorComponent={() => <Space size="small" />}
         renderItem={({ item }) => {
-          return (
-            <CategoriesSelectorItem
-              business={business}
-              type={"categories"}
-              index={0}
-              disabled={false}
-              item={item}
-            />
-          );
+          return <CategoriesSelectorItem item={item} onSelectItem={onSelect} />;
         }}
         // keyExtractor={(item, index) => `${item.name || ""}${index}`}
       />

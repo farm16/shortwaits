@@ -1,6 +1,10 @@
 import { SelectorConfig } from "./selector-types";
 
-export type SelectorConfigsKeys = "staff" | "categories" | "services";
+export type SelectorConfigsKeys =
+  | "staff"
+  | "categories"
+  | "services"
+  | "static";
 
 export const selectorConfigs: Record<SelectorConfigsKeys, SelectorConfig> = {
   categories: {
@@ -16,6 +20,9 @@ export const selectorConfigs: Record<SelectorConfigsKeys, SelectorConfig> = {
   services: {
     headerTitle: "Services",
     isReadOnly: false,
+    searchPlaceholder: "search",
+  },
+  static: {
     searchPlaceholder: "search",
   },
 };

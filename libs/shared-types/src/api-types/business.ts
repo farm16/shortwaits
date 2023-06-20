@@ -1,18 +1,14 @@
-import {
-  BusinessType,
-  ClientUserType,
-  ConvertIdsToStrings,
-  MethodType,
-} from "..";
+import { BusinessType, ClientUserType, ConvertToDtoType, MethodType } from "..";
 import {
   BusinessEndPoints,
   CommonResponseType,
   DocType,
   GeneralSpecShape,
-  UserDocType,
+  UserDtoType,
+  UsersDtoType,
 } from ".";
 
-export type BusinessDtoType = ConvertIdsToStrings<BusinessDocType>;
+export type BusinessDtoType = ConvertToDtoType<BusinessDocType>;
 
 export type BusinessDocType = DocType<BusinessType>;
 
@@ -70,14 +66,14 @@ export interface BusinessEndpointsTypes extends GeneralSpecShape {
   "/business/:businessId/staff": {
     path: `/business/${string}/staff`;
     methods: {
-      GET: MethodType<UserDocType[]>;
-      POST: MethodType<UserDocType>;
+      GET: MethodType<UsersDtoType>;
+      POST: MethodType<UserDtoType>;
     };
   };
   "/business/:businessId/clients": {
     path: `/business/${string}/clients`;
     methods: {
-      GET: MethodType<UserDocType[]>;
+      GET: MethodType<UsersDtoType>;
       POST: MethodType<Partial<ClientUserType>[]>;
     };
   };

@@ -1,7 +1,7 @@
 import { cloneDeep } from "lodash";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
-  CategoriesPayloadType,
+  CategoriesDtoType,
   ShortwaitsAdminDefaultDataPayloadType,
 } from "@shortwaits/shared-types";
 
@@ -10,8 +10,12 @@ import type { RootState } from "../../../redux";
 
 export interface MobileAdminStateType {
   defaultData: ShortwaitsAdminDefaultDataPayloadType;
-  categories: CategoriesPayloadType[];
+  categories: CategoriesDtoType;
   components: {
+    banner?: {
+      name: string;
+      isVisible: boolean;
+    };
     premiumMembership: {
       isVisible: boolean;
     };
@@ -24,6 +28,10 @@ export const mobileAdminInitialState: MobileAdminStateType = {
   defaultData: null,
   categories: null,
   components: {
+    banner: {
+      name: "",
+      isVisible: false,
+    },
     floatingActionButton: {
       isVisible: false,
     },
@@ -81,26 +89,32 @@ export const mobileAdminSlice = createSlice({
         },
       };
     },
-    changePremiumMembershipModalVisibility(
-      state,
-      action: PayloadAction<boolean>
-    ) {
-      const { payload } = action;
-
+    showPremiumMembershipBanner(state) {
       return {
         ...state,
         components: {
           ...state.components,
-          premiumMembership: {
-            isVisible: payload
-              ? payload
-              : !state.components.premiumMembership.isVisible,
+          banner: {
+            name: "premium-membership",
+            isVisible: true,
+          },
+        },
+      };
+    },
+    hidePremiumMembershipBanner(state) {
+      return {
+        ...state,
+        components: {
+          ...state.components,
+          banner: {
+            name: "",
+            isVisible: false,
           },
         },
       };
     },
   },
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
       .addMatcher(
         shortwaitsApi.endpoints.getAdminMobile.matchFulfilled,
@@ -118,7 +132,8 @@ export const mobileAdminSlice = createSlice({
 });
 
 export const {
-  changePremiumMembershipModalVisibility,
+  showPremiumMembershipBanner,
+  hidePremiumMembershipBanner,
   hidePremiumMembershipModal,
   showPremiumMembershipModal,
   changeFloatingActionButtonVisibility,

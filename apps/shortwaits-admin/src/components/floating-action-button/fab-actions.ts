@@ -1,5 +1,5 @@
-import { navigate } from "../../../navigation";
-import { FloatingActions } from "../../../components";
+import { navigate } from "../../navigation";
+import { FloatingActions } from "..";
 
 export const actions: FloatingActions = [
   {
@@ -9,7 +9,6 @@ export const actions: FloatingActions = [
         screen: "form-modal-screen",
         params: {
           form: "addEvent",
-          onSaved: () => null,
         },
       }),
     icon: "calendar-clock",
@@ -30,7 +29,6 @@ export const actions: FloatingActions = [
         screen: "form-modal-screen",
         params: {
           form: "addClient",
-          onSaved: () => null,
         },
       }),
     icon: "account-group",
@@ -53,7 +51,6 @@ export const actions: FloatingActions = [
         screen: "form-modal-screen",
         params: {
           form: "addStaff",
-          onSaved: () => null,
         },
       }),
     icon: "account-tie",
@@ -65,18 +62,19 @@ export const actions: FloatingActions = [
       borderRadius: 20,
     },
   },
-  {
-    label: "MORE",
-    onPress: () => null,
-    icon: "dots-horizontal",
-    color: "#ffffff",
-    labelTextColor: "#ffffff",
-    style: {
-      backgroundColor: "#63AE9D",
-    },
-    labelStyle: {
-      backgroundColor: "#63AE9D",
-      borderRadius: 20,
-    },
-  },
+  // ,
+  // {
+  //   label: "MORE",
+  //   onPress: () => null,
+  //   icon: "dots-horizontal",
+  //   color: "#ffffff",
+  //   labelTextColor: "#ffffff",
+  //   style: {
+  //     backgroundColor: "#63AE9D",
+  //   },
+  //   labelStyle: {
+  //     backgroundColor: "#63AE9D",
+  //     borderRadius: 20,
+  //   },
+  // },
 ];

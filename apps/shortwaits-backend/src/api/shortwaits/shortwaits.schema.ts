@@ -8,6 +8,7 @@ import {
   ServicesType,
   ShortwaitsAdminDefaultDataType,
   ObjectId,
+  ShortwaitsAdminBannersType,
 } from "@shortwaits/shared-types";
 
 @Schema()
@@ -15,6 +16,9 @@ export class Shortwaits
   extends Document
   implements ShortwaitsAdminDefaultDataType
 {
+  @ApiProperty()
+  @Prop()
+  banners: ShortwaitsAdminBannersType[];
   @ApiProperty()
   @Prop()
   readonly short_id: string;

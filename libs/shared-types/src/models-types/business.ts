@@ -9,6 +9,18 @@ import {
   PaginatedModel,
 } from "./helpers";
 
+export enum AccountType {
+  FREE = "free",
+  STUDENT = "student",
+  BASIC = "basic",
+
+  TRIAL = "trial",
+  BUSINESS = "business",
+  PREMIUM = "premium",
+  ENTERPRISE = "enterprise",
+  PARTNER = "partner",
+}
+
 export type BusinessType = {
   admins: ObjectId[] /** @todo this might not always be received via the API why should it ? */;
   superAdmins: ObjectId[] /** @todo this might not always be received via the API why should it ? */;
@@ -37,6 +49,7 @@ export type BusinessType = {
       tags: string[];
     }
   ];
+  accountType: AccountType;
   /**
    * @todo !!!
    * */

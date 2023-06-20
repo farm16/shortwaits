@@ -6,7 +6,7 @@ import { Button, ButtonProps } from "../button/button";
 import { useTheme } from "../../../theme";
 import { IconSizes } from "../../../theme/Variables";
 
-export interface CardIconsProps {
+export type CardProps = ButtonProps & {
   leftIconName?: string;
   rightIconOnPress?: () => void;
   rightIconName?: string;
@@ -15,13 +15,12 @@ export interface CardIconsProps {
   leftIconSize?: keyof typeof IconSizes;
   rightIconColor?: string;
   leftIconColor?: string;
-}
-export interface CardProps extends ButtonProps, CardIconsProps {
   mode: keyof typeof cardModes;
-}
+};
+
 export const CARD_HEIGHT = 70;
 
-const cardModes: Record<string, ButtonProps> = {
+const cardModes = {
   "text-field": {
     disabled: true,
   },
@@ -30,7 +29,7 @@ const cardModes: Record<string, ButtonProps> = {
   static: {
     disabled: true,
   },
-};
+} as const;
 export const Card = (props: CardProps) => {
   const { Colors } = useTheme();
 
@@ -56,37 +55,39 @@ export const Card = (props: CardProps) => {
       {...rest}
       style={[styles.cardHeight, styleOverride]}
     >
-      {leftIconName && (
-        <Button
-          disabled={leftIconOnPress ? false : true}
-          onPress={leftIconOnPress}
-          preset="none"
-          style={styles.iconContainer}
-        >
-          <Icon
-            style={styles.leftIcon}
-            name={leftIconName}
-            size={IconSizes[leftIconSize]}
-            color={leftIconColor}
-          />
-        </Button>
-      )}
+      {leftIconName &&
+        (mode === "static" || leftIconName === "none" ? null : (
+          <Button
+            disabled={leftIconOnPress ? false : true}
+            onPress={leftIconOnPress}
+            preset="none"
+            style={styles.iconContainer}
+          >
+            <Icon
+              style={styles.leftIcon}
+              name={leftIconName}
+              size={IconSizes[leftIconSize]}
+              color={leftIconColor}
+            />
+          </Button>
+        ))}
       <View style={styles.childrenContainer}>{children}</View>
-      {rightIconName && (
-        <Button
-          disabled={rightIconOnPress ? false : true}
-          onPress={rightIconOnPress}
-          preset="none"
-          style={styles.iconContainer}
-        >
-          <Icon
-            style={styles.rightIcon}
-            name={rightIconName}
-            size={IconSizes[rightIconSize]}
-            color={rightIconColor}
-          />
-        </Button>
-      )}
+      {rightIconName &&
+        (mode === "static" || rightIconName === "none" ? null : (
+          <Button
+            disabled={rightIconOnPress ? false : true}
+            onPress={rightIconOnPress}
+            preset="none"
+            style={styles.iconContainer}
+          >
+            <Icon
+              style={styles.rightIcon}
+              name={rightIconName}
+              size={IconSizes[rightIconSize]}
+              color={rightIconColor}
+            />
+          </Button>
+        ))}
     </Button>
   );
 };

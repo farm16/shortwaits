@@ -64,6 +64,7 @@
     "react-native-paper-dates": "*",
     "victory-native": "*",
     "react-native-timeline-flatlist": "*",
-    "react-native-picker-select": "*"
+    "react-native-picker-select": "*",
+    "react-native-phone-input": "*"
   }
 }

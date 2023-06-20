@@ -1,14 +1,8 @@
-import { BusinessCategoryType } from "..";
+import { BusinessCategoryType, ConvertToDtoType } from "..";
 
 import { DocType, CommonResponseType } from ".";
 
-export type CategoriesPayloadType = DocType<BusinessCategoryType>;
-
-export type CategoriesSuccessResponseType = CommonResponseType<
-  CategoriesPayloadType[]
->;
-
-export type CategoriesSuccessFnType = (
-  payload: CategoriesPayloadType[],
-  message: string
-) => CategoriesSuccessResponseType;
+export type CategoryDtoType = ConvertToDtoType<DocType<BusinessCategoryType>>;
+export type CategoriesDtoType = CategoryDtoType[];
+export type CategoryResponseType = CommonResponseType<CategoryDtoType>;
+export type CategoriesResponseType = CommonResponseType<CategoriesDtoType>;

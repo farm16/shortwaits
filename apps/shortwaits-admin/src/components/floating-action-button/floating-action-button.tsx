@@ -1,17 +1,18 @@
 import { Portal } from "@gorhom/portal";
 import React, { useState } from "react";
-import { StyleSheet, TextStyle, ViewStyle } from "react-native";
+import { StyleSheet, ViewStyle } from "react-native";
 import { FAB } from "react-native-paper";
 import { useComponentVisibility } from "../../redux";
 import { useTheme } from "../../theme";
+import { actions as defaultActions } from "./fab-actions";
 
 type FloatingActionButtonProps = {
-  actions: FloatingActions;
+  actions?: FloatingActions;
   hasPaddingBottom?: boolean;
   onPress?(): null;
-  icon: string;
-  pressedIcon: string;
-  isVisible: boolean;
+  icon?: string;
+  pressedIcon?: string;
+  isVisible?: boolean;
 };
 
 export type FloatingActions = {
@@ -26,15 +27,17 @@ export type FloatingActions = {
 
 export const FloatingActionButton = (props: FloatingActionButtonProps) => {
   const {
-    actions = [],
+    actions = defaultActions,
     icon = "plus",
     pressedIcon = "plus",
     hasPaddingBottom = true,
-    isVisible = true,
+    isVisible: isVisibleOverride,
     ...rest
   } = props;
 
   const { Colors } = useTheme();
+
+  const { isVisible } = useComponentVisibility("floatingActionButton", true);
 
   const [state, setState] = useState({ open: false });
 
@@ -45,7 +48,7 @@ export const FloatingActionButton = (props: FloatingActionButtonProps) => {
   return (
     <Portal>
       <FAB.Group
-        visible={isVisible}
+        visible={isVisibleOverride ?? isVisible}
         open={open}
         style={{
           paddingBottom: hasPaddingBottom ? 100 : 0,

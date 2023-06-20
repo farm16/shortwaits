@@ -7,7 +7,11 @@ import {
   NavigationAction,
   createNavigationContainerRef,
 } from "@react-navigation/native";
-import { ALL_SCREENS_TYPE, STACKS_TYPES } from "./navigation-types";
+import {
+  ALL_SCREENS_TYPE,
+  ScreenProps,
+  STACKS_TYPES,
+} from "./navigation-types";
 
 export const RootNavigation = {
   navigate(_name: string, _params?: any) {},
@@ -96,7 +100,7 @@ export function useNavigationPersistence(storage: any, persistenceKey: string) {
 
   const routeNameRef = useRef<string | undefined>();
 
-  const onNavigationStateChange = (state) => {
+  const onNavigationStateChange = state => {
     const previousRouteName = routeNameRef.current;
     const currentRouteName = getActiveRouteName(state);
 
@@ -138,9 +142,13 @@ export function useNavigationPersistence(storage: any, persistenceKey: string) {
  * prop. If you have access to the navigation prop, do not use this.
  * More info: https://reactnavigation.org/docs/navigating-without-navigation-prop/
  */
-export function navigate(
+
+export function navigate<T extends ALL_SCREENS_TYPE>(
   name: STACKS_TYPES,
-  params?: { screen: ALL_SCREENS_TYPE; params: any }
+  params?: {
+    screen: ALL_SCREENS_TYPE;
+    params: ScreenProps[T];
+  }
 ) {
   if (navigationRef.isReady()) {
     navigationRef.navigate(name as never, params as never);

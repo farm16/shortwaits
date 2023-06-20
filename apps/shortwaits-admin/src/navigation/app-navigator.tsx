@@ -19,13 +19,9 @@ import {
   UnauthorizedNavigator,
   AuthorizedNavigator,
 } from "./stacks";
-import {
-  useAuth,
-  useBusiness,
-  useComponentVisibility,
-  useUser,
-} from "../redux";
+import { useAuth, useBusiness, useComponentVisibility } from "../redux";
 import { PremiumMembershipModal } from "../components";
+import { Banner } from "../components/banners/banner";
 
 const RootStack = createStackNavigator<RootStackParamList>();
 
@@ -68,7 +64,6 @@ const AppStack = () => {
           component={UnauthorizedNavigator}
         />
       )}
-
       <RootStack.Screen
         options={{
           gestureEnabled: true,
@@ -98,6 +93,7 @@ export const AppNavigator = (props: NavigationProps): React.ReactElement => {
       theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
       {...props}
     >
+      <Banner />
       <AppStack />
       <PremiumMembershipModal visible={isVisible} onDismiss={() => null} />
     </NavigationContainer>

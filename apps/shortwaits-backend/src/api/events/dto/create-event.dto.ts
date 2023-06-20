@@ -11,7 +11,6 @@ import {
   ValidateNested,
 } from "class-validator";
 import { Type } from "class-transformer";
-import { Types } from "mongoose";
 
 class UrlDto {
   @IsString()
@@ -38,8 +37,12 @@ class LocationDto {
 
 export class CreateEventsDto implements CreateEventDtoType {
   @IsString()
+  @ApiProperty({ required: true })
+  expectedEndTime: string;
+
+  @IsString()
   @ApiProperty({ required: false })
-  registrationDeadlineTime: Date;
+  registrationDeadlineTime: string;
 
   @IsString()
   @ApiProperty({ required: true })
@@ -71,7 +74,7 @@ export class CreateEventsDto implements CreateEventDtoType {
 
   @IsArray()
   @ApiProperty({ required: true })
-  participantsIds: Types.ObjectId[];
+  participantsIds: string[];
 
   @IsString()
   @ApiProperty({ required: false })

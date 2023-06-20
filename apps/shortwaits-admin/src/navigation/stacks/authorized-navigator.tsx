@@ -13,16 +13,23 @@ import {
 import { useTheme } from "../../theme";
 import { AUTHORIZED_SCREENS } from "../navigation-constants";
 import { Platform } from "react-native";
+import { useMobileAdmin } from "../../redux";
 
 const Tab = createBottomTabNavigator();
 
 export const AuthorizedNavigator = () => {
   const { Colors } = useTheme();
+  const {
+    components: { banner },
+  } = useMobileAdmin();
+
   return (
     <Tab.Navigator
       initialRouteName={AUTHORIZED_SCREENS.EVENTS_SCREEN}
       screenOptions={{
         unmountOnBlur: true,
+        headerShown: true,
+        headerStatusBarHeight: banner?.isVisible ? 0 : undefined,
         tabBarStyle: {
           borderTopWidth: 0,
           backgroundColor: Colors.white,

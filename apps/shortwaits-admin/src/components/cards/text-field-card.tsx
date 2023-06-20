@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 
 import { getDimensions, useTheme } from "../../theme";
 import {
@@ -7,16 +7,17 @@ import {
   TextFieldProps,
   Card,
   Text,
-  CardIconsProps,
+  CardProps,
   Space,
 } from "../common";
 
-interface TextFieldCard extends TextFieldProps, Partial<CardIconsProps> {
+type TextFieldCard = {
   title: string;
   isTouched?: boolean;
   rightIconName?: string;
   disabled?: boolean;
-}
+} & TextFieldProps &
+  Partial<CardProps>;
 
 export function TextFieldCard(props: TextFieldCard) {
   const {

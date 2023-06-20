@@ -1,13 +1,13 @@
 import React, { FC } from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
-import { Shadow } from "react-native-shadow-2";
 import Spinner from "react-native-spinkit";
 
 import { Text } from "../text/text";
 import { useTheme } from "../../../theme";
 import { ButtonProps } from "./button-types";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
-export const Button: FC<ButtonProps> = (props) => {
+export const Button: FC<ButtonProps> = props => {
   const {
     preset = "primary",
     withShadow = false,
@@ -17,7 +17,12 @@ export const Button: FC<ButtonProps> = (props) => {
     style: styleOverride,
     textStyle: textStyleOverride,
     children,
-    icon,
+    rightIconName,
+    rightIconSize = 20,
+    rightIconColor,
+    leftIconName,
+    leftIconSize = 20,
+    leftIconColor,
     disabled = false,
     state = "enabled",
     ...rest
@@ -41,32 +46,32 @@ export const Button: FC<ButtonProps> = (props) => {
   const defaultStyle = buttonViewPresets[preset] || buttonViewPresets.primary;
   const textStyle = buttonTextPresets[preset] || buttonTextPresets.primary;
   const textStyles = [textStyle, textStyleOverride];
-  const Icon = icon;
+
   const content = children || (
     <Text iText={iText} text={text} style={textStyles} />
   );
 
-  const WithOutShadow = (
+  return (
     <TouchableOpacity
       {...rest}
       style={[defaultStyle, styleOverride]}
       disabled={disabled || state === "disabled"}
     >
-      {Icon && (
-        <Icon
-          height={props.iconSize || buttonViewPresets.socialIcon.height}
-          width={props.iconSize || buttonViewPresets.socialIcon.width}
-          style={buttonViewPresets.socialIcon}
-        />
-      )}
-
+      {leftIconName &&
+        (leftIconName === "none" ? null : (
+          <Icon name={leftIconName} size={leftIconSize} color={leftIconColor} />
+        ))}
       {content}
+      {rightIconName &&
+        (rightIconName === "none" ? null : (
+          <Icon
+            name={rightIconName}
+            size={rightIconSize}
+            color={rightIconColor}
+          />
+        ))}
     </TouchableOpacity>
   );
-
-  const WithShadow = <Shadow distance={6} children={WithOutShadow} />;
-
-  return withShadow ? WithShadow : WithOutShadow;
 };
 
 const styles = StyleSheet.create({

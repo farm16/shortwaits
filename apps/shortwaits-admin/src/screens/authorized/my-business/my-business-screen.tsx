@@ -1,4 +1,10 @@
-import React, { FC, useLayoutEffect, useMemo, useState } from "react";
+import React, {
+  FC,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useState,
+} from "react";
 import { StyleSheet, View } from "react-native";
 import { truncate } from "lodash";
 
@@ -6,8 +12,8 @@ import {
   ButtonCard,
   CircleIconButton,
   Container,
-  MembershipCard,
-  MemoizedGraph,
+  FloatingActionButton,
+  Graph,
   Screen,
   ScrollView,
   Space,
@@ -15,19 +21,40 @@ import {
 } from "../../../components";
 import { useTheme } from "../../../theme";
 import { IconButton, Menu } from "react-native-paper";
-import { useBusiness } from "../../../redux";
+import {
+  showPremiumMembershipBanner,
+  useBusiness,
+  hidePremiumMembershipBanner,
+} from "../../../redux";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { getSampleGraphData } from "./utils";
+import { useDispatch } from "react-redux";
+import { useIsFocused } from "@react-navigation/native";
 
 export const MyBusinessScreen: FC<
   AuthorizedScreenProps<"my-business-screen">
 > = ({ navigation }) => {
   const business = useBusiness();
   const { Colors } = useTheme();
-
+  const dispatch = useDispatch();
   const graphData = useMemo(() => getSampleGraphData(), []);
   const [graphDataType, setGraphDataType] =
     useState<keyof typeof graphData>("week");
+  const isFocused = useIsFocused();
+
+  const checkAccountType = accountType =>
+    ["free", "basic", "student"].some(type => type === accountType);
+
+  useLayoutEffect(() => {
+    if (checkAccountType(business.accountType) && isFocused) {
+      dispatch(showPremiumMembershipBanner());
+    } else {
+      dispatch(hidePremiumMembershipBanner());
+    }
+    return () => {
+      dispatch(hidePremiumMembershipBanner());
+    };
+  }, [business.accountType, dispatch, isFocused]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -56,8 +83,6 @@ export const MyBusinessScreen: FC<
 
   const GraphTopBar = () => (
     <View style={{ alignItems: "center" }}>
-      <MembershipCard business={business} />
-      <Space size="tiny" />
       <View
         style={[
           styles.graphTopBar,
@@ -89,7 +114,7 @@ export const MyBusinessScreen: FC<
             />
           }
         >
-          {Object.keys(graphData).map((name) => {
+          {Object.keys(graphData).map(name => {
             return (
               <Menu.Item
                 titleStyle={{
@@ -116,7 +141,7 @@ export const MyBusinessScreen: FC<
     <Screen preset="fixed" unsafe>
       <GraphTopBar />
       <ScrollView contentContainerStyle={{ alignItems: "center" }}>
-        <MemoizedGraph
+        <Graph
           displayOptions={graphData[graphDataType].displayOptions}
           data={graphData[graphDataType].data}
         />
@@ -164,6 +189,7 @@ export const MyBusinessScreen: FC<
           title={"Reviews"}
         />
       </ScrollView>
+      <FloatingActionButton />
     </Screen>
   );
 };

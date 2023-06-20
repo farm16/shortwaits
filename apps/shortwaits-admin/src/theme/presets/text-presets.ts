@@ -123,8 +123,6 @@ export const textPresets = ({
     cardSubtitle: {
       ...Fonts.textSmall,
       fontWeight: "400" as const,
-      // paddingTop: 0,
-      // marginTop: 0,
       letterSpacing: 0.65,
       color: Colors.subText,
     },

@@ -1,20 +1,16 @@
 import React from "react";
-import { BusinessUserType } from "@shortwaits/shared-types";
+import { ServiceDtoType } from "@shortwaits/shared-types";
+import { ButtonCard } from "../../../../../components";
+import { SelectorItemProps } from "../../selector-types";
 
-import { ButtonCard, Card, Text } from "../../../../../components";
-import { useTheme } from "../../../../../theme";
-import { SelectorModalType } from "../../../../../navigation";
+export function StaffSelectorItem(props: SelectorItemProps<ServiceDtoType>) {
+  const { item, onSelectItem } = props;
 
-interface SelectorItemProps {
-  type: SelectorModalType;
-  index: number;
-  isSelected: boolean;
-  disabled: boolean;
-  item: BusinessUserType;
-}
-
-export function StaffSelectorItem(props: SelectorItemProps) {
-  const { item } = props;
-
-  return <ButtonCard title={item.username} subTitle={item.username} />;
+  return (
+    <ButtonCard
+      onPress={() => onSelectItem(item)}
+      title={item.name}
+      subTitle={item.price.toString()}
+    />
+  );
 }

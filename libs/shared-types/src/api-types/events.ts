@@ -1,28 +1,35 @@
-import { DocType, GeneralSpecShape, CommonResponseType, UserDocType } from ".";
-import { ConvertIdsToStrings, EventType, ServicesType } from "..";
+import { GeneralSpecShape, CommonResponseType } from ".";
+import { ConvertToDtoType, EventType, WithDbProps } from "..";
 
-export type EventDocType = DocType<EventType>;
-export type EventsDocType = EventDocType[];
-
-export type EventDtoType = ConvertIdsToStrings<EventDocType>;
-export type EventsDtoType = EventDtoType[];
-
-export type EventSuccessResponseType = CommonResponseType<EventDtoType>;
-export type EventsSuccessResponseType = CommonResponseType<EventsDtoType>;
-
-export type EventsSuccessFnType = (
-  payload: EventDocType,
-  message: string
-) => EventsSuccessResponseType;
-
-export type NewlyCreatedEvent = Omit<
-  DocType<EventType>,
-  "service" | "staff" | "clients"
-> & {
-  service: DocType<ServicesType>;
-  staff: UserDocType[];
-  clients: UserDocType[];
-};
+export type FilteredEvent = Pick<
+  EventType,
+  | "paymentMethod"
+  | "participantsIds"
+  | "urls"
+  | "location"
+  | "attendeeLimit"
+  | "registrationFee"
+  | "hasNoDuration"
+  | "eventImage"
+  | "name"
+  | "description"
+  | "features"
+  | "durationInMin"
+  | "priceExpected"
+  | "isGroupEvent"
+  | "repeat"
+  | "payment"
+  | "notes"
+  | "labels"
+  | "registrationDeadlineTime"
+  | "leadClientId"
+  | "serviceId"
+  | "businessId"
+  | "clientsIds"
+  | "staffIds"
+  | "startTime"
+  | "expectedEndTime"
+>;
 
 type EndpointPath =
   | "/events"
@@ -33,6 +40,15 @@ type EndpointPath =
 export type EventsEndpointsPaths = EventsEndpointsTypes[EndpointPath]["path"];
 export type EventsEndpointsMethods = "POST" | "GET" | "PUT" | "DELETE";
 
+export type CreateEventDtoType = ConvertToDtoType<FilteredEvent>;
+export type UpdateEventDtoType = ConvertToDtoType<FilteredEvent>;
+
+export type EventDtoType = ConvertToDtoType<WithDbProps<EventType>>;
+export type EventsDtoType = EventDtoType[];
+
+export type EventResponseType = CommonResponseType<EventDtoType>;
+export type EventsResponseType = CommonResponseType<EventsDtoType>;
+
 export interface EventsEndpointsTypes extends GeneralSpecShape {
   "/events": {
     path: `/events`;
@@ -40,12 +56,12 @@ export interface EventsEndpointsTypes extends GeneralSpecShape {
       POST: {
         query: undefined;
         body: EventDtoType;
-        response: EventSuccessResponseType;
+        response: EventResponseType;
       };
       PUT: {
         query: undefined;
         body: EventDtoType;
-        response: EventSuccessResponseType;
+        response: EventResponseType;
       };
     };
   };
@@ -54,7 +70,7 @@ export interface EventsEndpointsTypes extends GeneralSpecShape {
     methods: {
       GET: {
         body: undefined;
-        response: EventSuccessResponseType;
+        response: EventsResponseType;
       };
     };
   };
@@ -62,7 +78,7 @@ export interface EventsEndpointsTypes extends GeneralSpecShape {
     path: `/events/user/${string}`;
     methods: {
       GET: {
-        response: EventsSuccessResponseType;
+        response: EventsResponseType;
       };
     };
   };
@@ -70,7 +86,7 @@ export interface EventsEndpointsTypes extends GeneralSpecShape {
     path: `/events/business/${string}`;
     methods: {
       GET: {
-        response: EventsSuccessResponseType;
+        response: EventsResponseType;
       };
     };
   };

@@ -27,6 +27,7 @@ import { AtGuard } from "../../common/guards";
 import { PaginationParams } from "../../shared/paginationParams";
 import { UpdateEventsDto } from "./dto/update-event.dto";
 import { Events } from "./entities/events.entity";
+import { EventDocType, EventsDocType } from "@shortwaits/shared-types";
 
 @UseGuards(AtGuard)
 @ApiTags("events")
@@ -47,34 +48,34 @@ export class EventsController {
     return this.eventsService.getEvent(request.user.sub, eventId);
   }
 
-  @Get("user/:userId")
-  @HttpCode(HttpStatus.OK)
-  @ApiCreatedResponse({
-    status: HttpStatus.OK,
-    description: "Get all events for a user",
-  })
-  @ApiQuery({ name: "page", type: Number, required: false })
-  @ApiQuery({ name: "limit", type: Number, required: false })
-  @ApiQuery({ name: "date", type: Date, required: false })
-  @ApiQuery({ name: "month", type: Number, required: false })
-  @ApiQuery({ name: "year", type: Number, required: false })
-  async getEventsByUser(
-    @Param("businessId") businessId: string,
-    @Query("page") page?: number,
-    @Query("limit") limit?: number,
-    @Query("date") date?: Date,
-    @Query("month") month?: number,
-    @Query("year") year?: number
-  ): Promise<Events[]> {
-    const paginateOptions = { page, limit };
-    const filterOptions = { date, month, year };
-    // todo will validate if user in Business has permission to view events
-    return this.eventsService.getEventsByBusiness(
-      businessId,
-      paginateOptions,
-      filterOptions
-    );
-  }
+  // @Get("user/:userId")
+  // @HttpCode(HttpStatus.OK)
+  // @ApiCreatedResponse({
+  //   status: HttpStatus.OK,
+  //   description: "Get all events for a user",
+  // })
+  // @ApiQuery({ name: "page", type: Number, required: false })
+  // @ApiQuery({ name: "limit", type: Number, required: false })
+  // @ApiQuery({ name: "date", type: Date, required: false })
+  // @ApiQuery({ name: "month", type: Number, required: false })
+  // @ApiQuery({ name: "year", type: Number, required: false })
+  // async getEventsByUser(
+  //   @Param("businessId") businessId: string,
+  //   @Query("page") page?: number,
+  //   @Query("limit") limit?: number,
+  //   @Query("date") date?: Date,
+  //   @Query("month") month?: number,
+  //   @Query("year") year?: number
+  // ): Promise<Events[]> {
+  //   const paginateOptions = { page, limit };
+  //   const filterOptions = { date, month, year };
+  //   // todo will validate if user in Business has permission to view events
+  //   return this.eventsService.getEventsByBusiness(
+  //     businessId,
+  //     paginateOptions,
+  //     filterOptions
+  //   );
+  // }
 
   @Get("business/:businessId")
   @HttpCode(HttpStatus.OK)
@@ -89,14 +90,16 @@ export class EventsController {
     @Query("date") date?: Date,
     @Query("month") month?: number,
     @Query("year") year?: number
-  ): Promise<Events[]> {
-    const paginateOptions = { page, limit };
-    const filterOptions = { date, month, year };
+  ): Promise<EventsDocType> {
+    console.log(businessId);
+    // const paginateOptions = { page: page ?? 1, limit: limit ?? 10 };
+    // const filterOptions = { date, month, year };
     // todo will validate if user in Business has permission to view events
     return this.eventsService.getEventsByBusiness(
       businessId,
-      paginateOptions,
-      filterOptions
+      //paginateOptions
+      undefined,
+      { year: 2023 }
     );
   }
 

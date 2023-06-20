@@ -105,7 +105,7 @@ export type EndpointProps = {
 };
 
 export type GeneralSpecShape = {
-  [x in EndPoints]: EndpointProps;
+  [x in EndPoints]?: EndpointProps;
 };
 
 export type EndPoints = BusinessEndPoints | EventsEndPoints;

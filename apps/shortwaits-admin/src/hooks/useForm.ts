@@ -1,4 +1,4 @@
-import { FormikConfig, FormikProps, useFormik } from "formik";
+import { FormikConfig, useFormik } from "formik";
 import { GestureResponderEvent } from "react-native";
 import { formSchemas } from "../utils";
 

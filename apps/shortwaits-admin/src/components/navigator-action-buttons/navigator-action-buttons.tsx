@@ -8,7 +8,7 @@ import { ThemeColorName } from "../../theme/Colors";
 
 const disabledStates = ["loading", "disabled", "enable"];
 
-export const BackButton: FC<ButtonProps> = (props) => (
+export const BackButton: FC<ButtonProps> = props => (
   <Button {...props} preset="icon">
     <Icon
       name="chevron-left"
@@ -18,19 +18,19 @@ export const BackButton: FC<ButtonProps> = (props) => (
   </Button>
 );
 
-export const ForwardButton: FC<ButtonProps> = (props) => (
+export const ForwardButton: FC<ButtonProps> = props => (
   <Button {...props} preset="icon">
     <Icon name="chevron-right" color={useTheme().Colors.text} size={30} />
   </Button>
 );
 
-export const CloseButton: FC<ButtonProps> = (props) => (
+export const CloseButton: FC<ButtonProps> = props => (
   <Button {...props} preset="headerLink">
     <Icon name="close" color={useTheme().Colors.brandSecondary} size={22} />
   </Button>
 );
 
-export const TextHeaderButton: FC<ButtonProps> = (props) => {
+export const TextHeaderButton: FC<ButtonProps> = props => {
   const { disabled, text, textStyle, ...rest } = props;
   const {
     Colors: { brandPrimary6 },
@@ -49,7 +49,7 @@ export const TextHeaderButton: FC<ButtonProps> = (props) => {
   );
 };
 
-export const RightArrowButton: FC<ButtonProps> = (props) => {
+export const RightArrowButton: FC<ButtonProps> = props => {
   const {
     Colors: { brandSecondary, inputBackground },
   } = useTheme();
@@ -67,7 +67,7 @@ export const RightArrowButton: FC<ButtonProps> = (props) => {
   );
 };
 
-export const LeftArrowButton: FC<ButtonProps> = (props) => {
+export const LeftArrowButton: FC<ButtonProps> = props => {
   const { Colors } = useTheme();
   const { state = "enable", ...rest } = props;
 
@@ -87,7 +87,7 @@ export const LeftArrowButton: FC<ButtonProps> = (props) => {
   );
 };
 
-export const RightChevronButton: FC<ButtonProps> = (props) => {
+export const RightChevronButton: FC<ButtonProps> = props => {
   const { Colors } = useTheme();
   const { state = "enabled", ...rest } = props;
   const stateIcons = {
@@ -105,7 +105,7 @@ export const RightChevronButton: FC<ButtonProps> = (props) => {
     </Button>
   );
 };
-export const LeftChevronButton: FC<ButtonProps> = (props) => {
+export const LeftChevronButton: FC<ButtonProps> = props => {
   const {
     Colors: { brandSecondary, backgroundOverlay },
   } = useTheme();
@@ -129,6 +129,18 @@ const _circleIcons = {
     color: "brandSecondary",
     backgroundColor: undefined,
     size: 21,
+  },
+  search: {
+    name: "magnify",
+    color: "brandSecondary",
+    backgroundColor: undefined,
+    size: 23,
+  },
+  "search-close": {
+    name: "magnify-close",
+    color: "brandSecondary",
+    backgroundColor: undefined,
+    size: 23,
   },
   check: {
     name: "check",
@@ -227,13 +239,25 @@ const _circleIcons = {
     size: 26,
   },
   contactSync: {
-    name: "sync",
+    name: "account-sync-outline",
     backgroundColor: undefined,
     color: "brandSecondary",
     size: 24,
   },
   share: {
     name: "share-variant",
+    backgroundColor: undefined,
+    color: "brandSecondary",
+    size: 21,
+  },
+  calendar: {
+    name: "calendar-range-outline",
+    backgroundColor: undefined,
+    color: "brandSecondary",
+    size: 21,
+  },
+  magnify: {
+    name: "magnify",
     backgroundColor: undefined,
     color: "brandSecondary",
     size: 21,
@@ -264,7 +288,7 @@ export const CircleIconButton: FC<
     withMarginLeft?: boolean;
     withMarginRight?: boolean;
   }
-> = (props) => {
+> = props => {
   const { Colors } = useTheme();
 
   const {
@@ -286,8 +310,8 @@ export const CircleIconButton: FC<
     borderRadius: circleIcons[iconType].size / 2,
     justifyContent: "center",
     alignItems: "center",
-    marginLeft: withMarginLeft ? 15 : undefined,
-    marginRight: withMarginRight ? 15 : undefined,
+    marginLeft: withMarginLeft ? 16 : undefined,
+    marginRight: withMarginRight ? 16 : undefined,
   };
 
   return (
@@ -324,7 +348,7 @@ export const CircleIconButton: FC<
     </Button>
   );
 };
-export const SubmitHeaderIconButton: FC<ButtonProps> = (props) => {
+export const SubmitHeaderIconButton: FC<ButtonProps> = props => {
   const {
     Colors: { brandSecondary, gray },
   } = useTheme();
@@ -338,7 +362,7 @@ export const SubmitHeaderIconButton: FC<ButtonProps> = (props) => {
     </Button>
   );
 };
-export const CancelAndLogOutHeaderButton: FC<ButtonProps> = (props) => {
+export const CancelAndLogOutHeaderButton: FC<ButtonProps> = props => {
   const {
     Colors: { brandSecondary, gray },
   } = useTheme();

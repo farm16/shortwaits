@@ -1,10 +1,10 @@
 import {
   Injectable,
   InternalServerErrorException,
-  PreconditionFailedException,
+  UnauthorizedException,
 } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { EventType, ObjectId, UserDocType } from "@shortwaits/shared-types";
+import { EventsDocType, ObjectId, UserDocType } from "@shortwaits/shared-types";
 import { Model, Types } from "mongoose";
 
 import { Business } from "../business/entities/business.entity";
@@ -26,13 +26,29 @@ export class EventsService {
 
   async createEvent(
     event: CreateEventsDto,
-    user: UserDocType
+    userId: string
   ): Promise<Events & { _id: Types.ObjectId }> {
     try {
+      const businessRecord = await this.businessModel.findById(
+        event.businessId
+      );
+
+      if (!businessRecord) {
+        throw new UnauthorizedException("Business not found");
+      }
+
+      const isAdmin = businessRecord.admins.some(
+        adminId => adminId.toString() === userId
+      );
+
+      if (!isAdmin) {
+        throw new UnauthorizedException("User not found");
+      }
+
       const isTaxable = false; // todo check later if events can be taxable
       const status = { statusCode: 0, statusName: "PENDING" };
-      const createdBy = user._id;
-      const updatedBy = user._id;
+      const createdBy = userId;
+      const updatedBy = userId;
       const isGroupEvent = event.clientsIds.length > 1;
       const deleted = false;
       const canceled = false;
@@ -76,6 +92,10 @@ export class EventsService {
         registrationFee: event.registrationFee,
       });
 
+      await businessRecord
+        .updateOne({ $push: { events: eventCreated._id } })
+        .exec();
+
       return eventCreated;
     } catch (error) {
       console.error(error);
@@ -92,32 +112,51 @@ export class EventsService {
     businessId: string,
     paginateOptions?: { page: number; limit: number },
     filterOptions?: { date?: Date; month?: number; year?: number }
-  ): Promise<Events[]> {
-    const { page = 1, limit = 10 } = paginateOptions ?? {};
-    const skip = (page - 1) * limit;
+  ): Promise<EventsDocType> {
+    try {
+      const { page = 1, limit = 10 } = paginateOptions ?? {};
+      const skip = (page - 1) * limit;
 
-    const { date, month, year } = filterOptions ?? {};
-    const filter: {
-      businessId: string;
-      createdAt?: { $gte: Date; $lte: Date };
-    } = { businessId };
-    if (date) {
-      filter.createdAt = {
-        $gte: date,
-        $lte: new Date(date.getTime() + 24 * 60 * 60 * 1000),
-      };
-      return await this.eventsModel.find(filter).skip(skip).limit(limit).exec();
-    }
-    if (month && year) {
-      const startDate = new Date(year, month - 1, 1);
-      const endDate = new Date(year, month, 0);
-      filter.createdAt = { $gte: startDate, $lte: endDate };
-      return await this.eventsModel.find(filter).skip(skip).limit(limit).exec();
-    } else if (year) {
-      const startDate = new Date(year, 0, 1);
-      const endDate = new Date(year, 11, 31);
-      filter.createdAt = { $gte: startDate, $lte: endDate };
-      return await this.eventsModel.find(filter).skip(skip).limit(limit).exec();
+      const { date, month, year } = filterOptions ?? {};
+      const filter: {
+        businessId: string;
+        createdAt?: { $gte: Date; $lte: Date };
+      } = { businessId };
+
+      if (date) {
+        filter.createdAt = {
+          $gte: date,
+          $lte: new Date(date.getTime() + 24 * 60 * 60 * 1000),
+        };
+        return await this.eventsModel
+          .find(filter)
+          .skip(skip)
+          .limit(limit)
+          .exec();
+      }
+      if (month && year) {
+        const startDate = new Date(year, month - 1, 1);
+        const endDate = new Date(year, month, 0);
+        filter.createdAt = { $gte: startDate, $lte: endDate };
+        return await this.eventsModel
+          .find(filter)
+          .skip(skip)
+          .limit(limit)
+          .exec();
+      } else if (year) {
+        console.log("year", year);
+        const startDate = new Date(year, 0, 1);
+        const endDate = new Date(year, 11, 31);
+        filter.createdAt = { $gte: startDate, $lte: endDate };
+        return await this.eventsModel
+          .find(filter)
+          .skip(skip)
+          .limit(limit)
+          .exec();
+      }
+    } catch (error) {
+      console.error(error);
+      throw new InternalServerErrorException("Failed to get events");
     }
   }
 

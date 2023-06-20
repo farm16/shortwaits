@@ -1,4 +1,4 @@
-import React, { useCallback, useLayoutEffect, useMemo } from "react";
+import React, { FC, useCallback, useLayoutEffect, useMemo } from "react";
 import { FlatList, StyleSheet } from "react-native";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 
@@ -12,15 +12,21 @@ import {
 } from "../../../../../components";
 import { selectorConfigs } from "../../selector-config";
 import { StaffSelectorItem } from "./staff-selector-item";
-import { SelectorComponentType } from "../../selector";
 import { useGetBusinessStaffQuery } from "../../../../../services";
 import { useDispatch } from "react-redux";
+import { ModalsScreenProps } from "../../../../../navigation";
 
-export const StaffSelector: SelectorComponentType = ({ navigation, type }) => {
+export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({
+  navigation,
+  route,
+}) => {
+  const type = route.params.type;
+
   const { headerTitle, searchPlaceholder, isReadOnly } = useMemo(
     () => selectorConfigs[type],
     [type]
   );
+
   const dispatch = useDispatch();
 
   const handleAddStaffPress = useCallback(() => {
@@ -47,7 +53,7 @@ export const StaffSelector: SelectorComponentType = ({ navigation, type }) => {
   const user = useUser();
 
   const {
-    data: businessStaff,
+    data: payload,
     isError,
     isLoading,
     isSuccess,
@@ -74,13 +80,11 @@ export const StaffSelector: SelectorComponentType = ({ navigation, type }) => {
         }
         showsVerticalScrollIndicator={false}
         contentContainerStyle={[styles.listContainer]}
-        data={businessStaff.data}
+        data={payload.data}
         ItemSeparatorComponent={() => <Space size="small" />}
         renderItem={({ item }) => {
           return (
             <StaffSelectorItem
-              type={"staff"}
-              index={0}
               isSelected={false}
               disabled={false}
               item={item}

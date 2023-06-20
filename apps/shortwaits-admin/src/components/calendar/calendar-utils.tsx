@@ -1,6 +1,6 @@
 import { isEmpty } from "lodash";
 import { intervalToDuration, formatDuration, format } from "date-fns";
-import { EventDocType } from "@shortwaits/shared-types";
+import { EventsDtoType } from "@shortwaits/shared-types";
 
 export function getFutureDates(numberOfDays: number) {
   const array: string[] = [];
@@ -18,7 +18,7 @@ export function getPastDate(numberOfDays: number) {
     .split("T")[0];
 }
 
-export function getMarkedDates(items: any[]) {
+export function getMarkedDates(items: EventsDtoType) {
   const marked: MarkedDates = {};
   const vacation = {
     key: "vacation",
@@ -37,7 +37,7 @@ export function getMarkedDates(items: any[]) {
 
   items.forEach(item => {
     // NOTE: only mark dates with data
-    if (item.data && item.data.length > 0 && !isEmpty(item.data[0])) {
+    if (item && item > 0 && !isEmpty(item[0])) {
       marked[item.title] = {
         dots: [vacation, massage, workout],
         selected: false,
@@ -88,19 +88,22 @@ export const getEventTime = (milliSeconds: number) => {
 export const formatDateToCalendarDate = (date: string | Date) =>
   format(new Date(date), "MM/dd/yyyy");
 
-export const getCalendarData = (events: EventDocType[]) => {
+export const getCalendarItems = (events: EventsDtoType) => {
   if (!events) return [];
   const allDates = events.map(event =>
     formatDateToCalendarDate(event.startTime)
   );
-  return [...new Set(allDates)].map(date => {
+  const items = [...new Set(allDates)].map((date, index) => {
     return {
       title: formatDateToCalendarDate(date),
       data: events.filter(
         event => formatDateToCalendarDate(event.startTime) === date
       ),
+      index,
     };
   });
+  // console.log("getCalendarItems >>>", JSON.stringify(items));
+  return items;
 };
 
 type MarkedDates = {

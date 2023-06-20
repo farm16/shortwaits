@@ -1,6 +1,7 @@
 import { Schema, Prop, SchemaFactory, raw } from "@nestjs/mongoose";
 import { Document, Schema as MongooseSchema } from "mongoose";
 import {
+  AccountType,
   BusinessHoursType,
   BusinessLocationType,
   BusinessType,
@@ -21,6 +22,9 @@ export class Business extends Document implements BusinessType {
 
   @Prop()
   backgroundAdmins: ObjectId[];
+
+  @Prop({ type: String, enum: AccountType, default: AccountType.FREE })
+  accountType: AccountType;
 
   @Prop()
   staff: ObjectId[];

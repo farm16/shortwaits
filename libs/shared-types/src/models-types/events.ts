@@ -1,4 +1,4 @@
-import { Document, Types } from "mongoose";
+import { Document } from "mongoose";
 import { PaginatedModel } from "./helpers";
 import { ObjectId } from "../common/index";
 
@@ -15,6 +15,13 @@ export type EventLocationType = {
   longitude: number; // Longitude of the location
 };
 
+export type EventStatusName =
+  | "PENDING"
+  | "APPROVED"
+  | "REJECTED"
+  | "CANCELED"
+  | "COMPLETED";
+
 export type EventPaymentMethodType =
   | "CREDIT CARD"
   | "DEBIT CARD"
@@ -27,38 +34,6 @@ export type EventPaymentMethodType =
   | "CASH"
   | "ZELLE"
   | "CASH APP";
-
-export type CreateEventDtoType = Pick<
-  EventType,
-  | "paymentMethod"
-  | "participantsIds"
-  | "urls"
-  | "location"
-  | "attendeeLimit"
-  | "registrationFee"
-  | "hasNoDuration"
-  | "eventImage"
-  | "name"
-  | "description"
-  | "features"
-  | "durationInMin"
-  | "priceExpected"
-  | "isGroupEvent"
-  | "repeat"
-  | "payment"
-  | "notes"
-  | "labels"
-  | "registrationDeadlineTime"
-> & {
-  leadClientId: string;
-  serviceId: string;
-  businessId: string;
-  clientsIds: string[];
-  staffIds: string[];
-  startTime: string;
-  endTime: string;
-  endTimeExpected: string;
-};
 
 export type EventType = {
   participantsIds: ObjectId[]; // Array of participant IDs // can be invites by client
@@ -77,7 +52,7 @@ export type EventType = {
 
   status: {
     statusCode: number; // Status code for the event
-    statusName: "PENDING" | "APPROVED" | "REJECTED" | "CANCELED" | "COMPLETED"; // Status name for the event
+    statusName: EventStatusName; // Status name for the event
   };
 
   hasNoDuration: boolean; // Indicates if the event has no duration
@@ -124,6 +99,7 @@ export type EventType = {
   // Additional metadata fields can be added here as needed
 };
 
-type EventDocType = EventType & Document;
+export type EventDocType = EventType & Document;
+export type EventsDocType = EventDocType[];
 
 export type EventModelType = PaginatedModel<EventDocType>;

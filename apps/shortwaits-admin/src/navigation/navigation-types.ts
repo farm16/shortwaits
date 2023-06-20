@@ -12,7 +12,7 @@ import {
   MODAL_SCREENS,
 } from "./navigation-constants";
 import { selectorConfigs } from "../screens/modals/selector/selector-config";
-import { ServicesDtoType } from "@shortwaits/shared-types";
+import { CreateEventDtoType } from "@shortwaits/shared-types";
 
 export type ScheduleModalModeType = "My-Business-Hours" | "User-Hours";
 export type SelectorModalModeType = keyof typeof selectorConfigs;
@@ -21,9 +21,12 @@ export type FormType = "addClient" | "addEvent" | "addStaff";
 export type ModalStackParamList = {
   [MODAL_SCREENS.SELECTOR_MODAL_SCREEN]: {
     type: SelectorModalModeType;
-    data?: ServicesDtoType;
+    headerTitle?: string;
+    multiple?: boolean;
+    data?: (string | { title: string; subTitle: string })[];
     mode?: "update" | "create";
-    onSelected?(arg0: any): void;
+    onSelect?<T>(arg0: T): void;
+    closeOnSubmit?: boolean;
   };
   [MODAL_SCREENS.SCHEDULE_MODAL_SCREEN]: {
     type: ScheduleModalModeType;
@@ -35,8 +38,15 @@ export type ModalStackParamList = {
   };
   [MODAL_SCREENS.FORM_MODAL_SCREEN]: {
     form: FormType;
-    onSaved?(): void;
+    onSubmit?<T extends keyof FormData>(arg: FormData[T]): void;
+    onDone?(): void;
+    closeOnSubmit?: boolean;
   };
+};
+
+type FormData = {
+  addEvent: CreateEventDtoType;
+  addClient: any;
 };
 
 export type AuthorizedStackParamList = {
@@ -62,17 +72,6 @@ export type RootStackParamList = {
   [NAVIGATION_STACKS.AUTHORIZED]: NavigatorScreenParams<AuthorizedStackParamList>;
   [NAVIGATION_STACKS.MODALS]: NavigatorScreenParams<ModalStackParamList>;
 };
-
-/**
- * @ModalsScreenProps
- */
-export interface ModalsScreenProps<T extends keyof ModalStackParamList> {
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<RootStackParamList>,
-    StackNavigationProp<ModalStackParamList, T>
-  >;
-  route: RouteProp<ModalStackParamList, T>;
-}
 
 type MODAL_SCREENS_KEYS = keyof typeof MODAL_SCREENS;
 type MODAL_SCREENS_TYPES = typeof MODAL_SCREENS[MODAL_SCREENS_KEYS];
@@ -108,9 +107,29 @@ export interface AuthorizedScreenProps<T extends AUTHORIZED_SCREENS_TYPES> {
   route: RouteProp<AuthorizedStackParamList & ModalStackParamList, T>;
 }
 
+export interface ModalsScreenProps<T extends keyof ModalStackParamList> {
+  navigation: CompositeNavigationProp<
+    StackNavigationProp<RootStackParamList>,
+    StackNavigationProp<
+      UnauthorizedStackParamList &
+        AuthorizedStackParamList &
+        ModalStackParamList,
+      T
+    >
+  >;
+  route: RouteProp<
+    UnauthorizedStackParamList & AuthorizedStackParamList & ModalStackParamList,
+    T
+  >;
+}
+
 export type STACKS_TYPES =
   typeof NAVIGATION_STACKS[keyof typeof NAVIGATION_STACKS];
 
 export type ALL_SCREENS_TYPE =
   | AUTHORIZED_SCREENS_TYPES
   | UNAUTHORIZED_SCREENS_TYPES;
+
+export type ScreenProps = AuthorizedStackParamList &
+  ModalStackParamList &
+  UnauthorizedStackParamList;

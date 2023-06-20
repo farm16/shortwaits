@@ -11,7 +11,7 @@ import { Defs, LinearGradient, Stop } from "react-native-svg";
 
 import { useTheme } from "../../theme";
 
-const Graph = (props) => {
+const ComponentGraph = props => {
   const { data, displayOptions, interpolation = "natural" } = props;
   const { Colors } = useTheme();
   console.log(data.length);
@@ -48,12 +48,12 @@ const Graph = (props) => {
         />
         <VictoryAxis
           dependentAxis
-          tickFormat={(tick) => `$${Math.round(tick)}`}
+          tickFormat={tick => `$${Math.round(tick)}`}
           style={sharedAxisStyles}
         />
 
         <VictoryAxis
-          tickValues={data.map((d) => d.x)}
+          tickValues={data.map(d => d.x)}
           tickFormat={(_data, index) => {
             console.log(
               "graphData >>> ",
@@ -78,7 +78,7 @@ const Graph = (props) => {
     </View>
   );
 };
-export const MemoizedGraph = React.memo(Graph);
+export const Graph = React.memo(ComponentGraph);
 
 const sharedAxisStyles = {
   tickLabels: {

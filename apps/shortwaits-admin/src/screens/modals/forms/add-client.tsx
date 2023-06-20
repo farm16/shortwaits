@@ -1,6 +1,6 @@
-import React, { FC, useLayoutEffect, useMemo } from "react";
+import React, { FC, useEffect, useLayoutEffect, useMemo } from "react";
 import { ActivityIndicator } from "react-native-paper";
-import { noop } from "lodash";
+import { Alert } from "react-native";
 
 import { useCreateBusinessClientsMutation } from "../../../services";
 import { useForm } from "../../../hooks";
@@ -10,21 +10,24 @@ import {
   Text,
   TextFieldCard,
   TimePickerFieldCard,
-  CircleIconButton,
+  BackButton,
+  Button,
 } from "../../../components";
-import { AuthorizedScreenProps } from "../../../navigation";
+import { ModalsScreenProps } from "../../../navigation";
 import { formatAddClientsValues } from "./form-utils";
 import { FormBody } from "./commons/form-body";
 
-export const AddClientModal: FC<AuthorizedScreenProps<"form-modal-screen">> = ({
+export const AddClientModal: FC<ModalsScreenProps<"form-modal-screen">> = ({
   navigation,
   route,
 }) => {
-  const { onSaved = noop } = route.params;
+  const { onSubmit, onDone, closeOnSubmit = true } = route.params;
 
   const business = useBusiness();
-  const [createBusinessClient, createBusinessClientResult] =
+
+  const [createBusinessClients, createBusinessClientsStatus] =
     useCreateBusinessClientsMutation();
+
   const initialValues = useMemo(
     () => ({
       displayName: "",
@@ -46,66 +49,78 @@ export const AddClientModal: FC<AuthorizedScreenProps<"form-modal-screen">> = ({
     }),
     [business._id]
   );
-  const { touched, errors, values, handleChange, handleSubmit } = useForm(
-    {
-      initialValues,
-      onSubmit: async (formData, { resetForm }) => {
-        const formattedValues = formatAddClientsValues(formData);
-        // console.log("formData", JSON.stringify(formattedValues, null, 2));
-        try {
-          const newBusinessClient = await createBusinessClient({
-            businessId: business._id,
-            businessClients: formattedValues,
-          }).unwrap();
-          if (newBusinessClient) {
-            resetForm();
-            onSaved();
-            navigation.goBack();
+
+  const { touched, errors, values, handleChange, handleSubmit, setFieldValue } =
+    useForm(
+      {
+        initialValues,
+        onSubmit: formData => {
+          const formattedValues = formatAddClientsValues(formData);
+          if (onSubmit) {
+            onSubmit<"addClient">(formattedValues);
+          } else {
+            createBusinessClients({
+              businessId: business._id,
+              businessClients: formattedValues,
+            });
           }
-        } catch (error) {
-          console.log(error);
-        }
+        },
       },
-    },
-    "addClient"
-  );
+      "addClient"
+    );
+
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerLeft: () => (
-        <CircleIconButton
-          withMarginLeft
-          iconType="cancel"
-          onPress={() => navigation.goBack()}
-        />
-      ),
+      headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
       headerRight: () => (
-        <CircleIconButton
-          withMarginRight
+        <Button
           onPress={() => {
             handleSubmit();
           }}
-          iconType="check"
+          preset="headerLink"
+          text="Save"
         />
       ),
-      headerTitle: () => <Text preset="text" text="Add Clients" />,
+      headerTitle: () => <Text preset="text" text="Add Client" />,
     });
-  }, [handleSubmit, navigation]);
+  }, [closeOnSubmit, handleSubmit, navigation]);
 
-  const isLoading =
-    createBusinessClientResult.isLoading &&
-    !createBusinessClientResult.isSuccess;
+  useEffect(() => {
+    if (createBusinessClientsStatus.isSuccess && closeOnSubmit) {
+      navigation.goBack();
+    }
+  }, [closeOnSubmit, createBusinessClientsStatus.isSuccess, navigation]);
 
-  return isLoading ? (
+  useEffect(() => {
+    const cleanup = async () => {
+      if (onDone) {
+        try {
+          await onDone();
+        } catch (error) {
+          console.error("Error in onDone:", error);
+        }
+      }
+    };
+    return () => {
+      cleanup();
+    };
+  }, []);
+
+  if (createBusinessClientsStatus.isError) {
+    Alert.alert("Error", createBusinessClientsStatus.error.message);
+  }
+
+  return createBusinessClientsStatus.isLoading ? (
     <ActivityIndicator />
   ) : (
     <FormBody>
-      <Card mode="button">
+      {/* <Card mode="button">
         <Text preset="cardTitle" text={"Tag"} />
         <Text
           preset="cardSubtitle"
           text={"Add an emoji to represent your client"}
         />
-      </Card>
+      </Card> */}
       <TextFieldCard
         title="Name"
         placeholder="John Smith"
@@ -131,7 +146,7 @@ export const AddClientModal: FC<AuthorizedScreenProps<"form-modal-screen">> = ({
         isTouched={touched.phoneNumber1}
         errors={errors.phoneNumber1}
       />
-      <TextFieldCard
+      {/* <TextFieldCard
         title="Home Number"
         placeholder="+1 (234) 567-8910"
         keyboardType="number-pad"
@@ -139,7 +154,7 @@ export const AddClientModal: FC<AuthorizedScreenProps<"form-modal-screen">> = ({
         onChangeText={handleChange("phoneNumber2")}
         isTouched={touched.phoneNumber2}
         errors={errors.phoneNumber2}
-      />
+      /> */}
       <TextFieldCard
         title="Address 1"
         placeholder="123 Maiden Ave."
@@ -158,7 +173,7 @@ export const AddClientModal: FC<AuthorizedScreenProps<"form-modal-screen">> = ({
       />
       <TextFieldCard
         title="City"
-        placeholder="New York City"
+        placeholder="New York"
         keyboardType="number-pad"
         value={values.city}
         onChangeText={handleChange("city")}
@@ -193,6 +208,7 @@ export const AddClientModal: FC<AuthorizedScreenProps<"form-modal-screen">> = ({
         errors={errors.postCode}
       />
       <TimePickerFieldCard
+        withTime={false}
         title={"DOE (date of birth)"}
         date={new Date(values.doe)}
         onChange={handleChange("doe")}

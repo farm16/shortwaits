@@ -1,7 +1,7 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 //modules
 import {
-  GetAllBusinessEvents,
+  GetEventsByBusiness,
   GetAdminMobile,
   GetLocalSignIn,
   GetLocalSignUp,
@@ -22,14 +22,14 @@ import {
   UpdateBusiness,
   CreateBusinessStaff,
   CreateBusinessClients,
-  CreateBusinessEvent,
+  CreateEvent,
 } from "./modules";
 import { baseQueryWithInterceptor } from "./interceptor";
 
 export const shortwaitsApi = createApi({
   reducerPath: "shortwaitsApi",
   baseQuery: baseQueryWithInterceptor,
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     //default mobile data
     getAdminMobile: GetAdminMobile(builder),
     //auth
@@ -58,7 +58,7 @@ export const shortwaitsApi = createApi({
     //user
     getUser: GetUser(builder),
     //events
-    createBusinessEvent: CreateBusinessEvent(builder),
-    getAllBusinessEvents: GetAllBusinessEvents(builder),
+    createEvent: CreateEvent(builder),
+    getEventsByBusiness: GetEventsByBusiness(builder),
   }),
 });
