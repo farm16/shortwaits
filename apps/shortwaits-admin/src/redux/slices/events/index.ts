@@ -4,7 +4,8 @@ import { EventsDtoType } from "@shortwaits/shared-types";
 import { shortwaitsApi } from "../../../services";
 import type { RootState } from "../../../redux";
 
-export const eventsInitialState: EventsDtoType[] = null;
+export const eventsInitialState: EventsDtoType = null;
+
 export const eventsSlice = createSlice({
   name: "events",
   initialState: eventsInitialState,

@@ -76,6 +76,16 @@ export class EventsController {
   //     filterOptions
   //   );
   // }
+  @Get("summary/business/:businessId")
+  @HttpCode(HttpStatus.OK)
+  @ApiCreatedResponse({
+    status: HttpStatus.OK,
+    description:
+      "Get a summary of all events in a business (business is NOT a user!!!)",
+  })
+  async getEventsSummaryByBusiness(@Param("businessId") businessId: string) {
+    return this.eventsService.getEventsSummaryByBusiness(businessId);
+  }
 
   @Get("business/:businessId")
   @HttpCode(HttpStatus.OK)
@@ -90,7 +100,7 @@ export class EventsController {
     @Query("date") date?: Date,
     @Query("month") month?: number,
     @Query("year") year?: number
-  ): Promise<EventsDocType> {
+  ) {
     console.log(businessId);
     // const paginateOptions = { page: page ?? 1, limit: limit ?? 10 };
     // const filterOptions = { date, month, year };

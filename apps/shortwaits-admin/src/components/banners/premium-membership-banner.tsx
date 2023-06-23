@@ -14,7 +14,7 @@ export function PremiumMembershipBanner() {
       style={styles.container}
       imageStyle={styles.image}
     >
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="light-content" />
       <View style={{ marginTop: statusBarHeight }}>
         <Text preset="text" style={styles.title}>
           <Text preset="text" style={[styles.title, { color: "white" }]}>

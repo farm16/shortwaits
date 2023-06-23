@@ -18,6 +18,7 @@ import {
   //persistor,
   store,
 } from "./redux";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 enableLogging();
 
@@ -42,7 +43,9 @@ function WithProviders({ children }) {
     <ReduxProvider store={store}>
       <SafeAreaProvider initialMetrics={initialWindowMetrics}>
         <PaperProvider>
-          <GPortalProvider rootHostName="root">{children}</GPortalProvider>
+          <GestureHandlerRootView style={{ flex: 1 }}>
+            <GPortalProvider rootHostName="root">{children}</GPortalProvider>
+          </GestureHandlerRootView>
         </PaperProvider>
       </SafeAreaProvider>
     </ReduxProvider>

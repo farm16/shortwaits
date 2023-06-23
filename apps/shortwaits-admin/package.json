@@ -65,6 +65,10 @@
     "victory-native": "*",
     "react-native-timeline-flatlist": "*",
     "react-native-picker-select": "*",
-    "react-native-phone-input": "*"
+    "react-native-phone-input": "*",
+    "metro-config": "*",
+    "mongodb": "*",
+    "lodash": "*",
+    "@react-navigation/elements": "*"
   }
 }

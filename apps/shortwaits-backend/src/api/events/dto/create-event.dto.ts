@@ -171,6 +171,7 @@ export class CreateEventsDto implements CreateEventDtoType {
   @ApiProperty({ required: false })
   @IsObject()
   payment: {
+    paymentProcessedOn: string; // Date when the payment was processed
     paymentMethodId: string;
     amount: number;
     currency: string;

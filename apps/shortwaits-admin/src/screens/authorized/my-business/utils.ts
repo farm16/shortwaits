@@ -1,3 +1,5 @@
+import { BusinessIncomeInfoProps } from "../../../components";
+
 function getPreviousMonday(date = new Date()) {
   const previousMonday = new Date();
   previousMonday.setDate(date.getDate() - ((date.getDay() + 6) % 7));
@@ -12,7 +14,7 @@ export const getSampleGraphData = () => {
       displayOptions: {
         hour12: true,
         hour: "2-digit",
-      } as Intl.DateTimeFormatOptions,
+      },
       data: [...new Array(24)].map((_, index) => {
         return {
           x: new Date(
@@ -26,7 +28,7 @@ export const getSampleGraphData = () => {
     week: {
       displayOptions: {
         weekday: "short",
-      } as Intl.DateTimeFormatOptions,
+      },
       data: [...new Array(7)].map((_, index) => {
         return {
           x: new Date(now.setDate(getPreviousMonday(now).getDate() + index)),
@@ -37,7 +39,7 @@ export const getSampleGraphData = () => {
     month: {
       displayOptions: {
         day: "2-digit",
-      } as Intl.DateTimeFormatOptions,
+      },
       data: [...new Array(new Date(2022, now.getMonth(), 0).getDate())].map(
         (_, index) => {
           return {
@@ -58,5 +60,5 @@ export const getSampleGraphData = () => {
         };
       }),
     },
-  };
+  } as BusinessIncomeInfoProps["data"];
 };

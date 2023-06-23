@@ -18,39 +18,6 @@ export function getPastDate(numberOfDays: number) {
     .split("T")[0];
 }
 
-export function getMarkedDates(items: EventsDtoType) {
-  const marked: MarkedDates = {};
-  const vacation = {
-    key: "vacation",
-    color: "red",
-    selectedDotColor: "blue",
-  };
-  const massage = {
-    key: "massage",
-    color: "blue",
-    selectedDotColor: "blue",
-  };
-  const workout = {
-    key: "workout",
-    color: "green",
-  };
-
-  items.forEach(item => {
-    // NOTE: only mark dates with data
-    if (item && item > 0 && !isEmpty(item[0])) {
-      marked[item.title] = {
-        dots: [vacation, massage, workout],
-        selected: false,
-        selectedColor: "orange",
-      };
-    } else {
-      marked[item.title] = { disabled: true };
-    }
-  });
-
-  return marked;
-}
-
 export const today = new Date().toISOString().split("T")[0];
 export const fastDate = getPastDate(3);
 export const futureDates = getFutureDates(9);
@@ -85,8 +52,11 @@ export const getEventTime = (milliSeconds: number) => {
   });
 };
 
-export const formatDateToCalendarDate = (date: string | Date) =>
-  format(new Date(date), "MM/dd/yyyy");
+export const formatDateToCalendarDate = (date: string | Date) => {
+  const _date = typeof date === "string" ? new Date(date) : date;
+  const formattedDate = format(_date, "MM/dd/yyyy");
+  return formattedDate;
+};
 
 export const getCalendarItems = (events: EventsDtoType) => {
   if (!events) return [];
@@ -95,7 +65,7 @@ export const getCalendarItems = (events: EventsDtoType) => {
   );
   const items = [...new Set(allDates)].map((date, index) => {
     return {
-      title: formatDateToCalendarDate(date),
+      title: "",
       data: events.filter(
         event => formatDateToCalendarDate(event.startTime) === date
       ),

@@ -24,6 +24,11 @@ export const EVENTS = {
       `${EVENTS_BASE_PATH}/business/${businessId}`,
     METHOD: "GET",
   } as EventProps,
+  getEventsSummaryByBusiness: {
+    getPath: (businessId: string) =>
+      `${EVENTS_BASE_PATH}/summary/business/${businessId}`,
+    METHOD: "GET",
+  } as EventProps,
   updateEvent: {
     getPath: () => `${EVENTS_BASE_PATH}`,
     METHOD: "PUT",

@@ -25,6 +25,7 @@ export const {
   useGetServicesByBusinessQuery,
   useGetUserQuery,
   useGetEventsByBusinessQuery,
+  useGetEventsSummaryByBusinessQuery,
   //Lazy Query hooks
   useLazyGetUserQuery,
   useLazyGetCategoryQuery,
@@ -39,4 +40,5 @@ export const {
   useLazyGetBusinessHoursQuery,
   useLazyGetBusinessServicesQuery,
   useLazyGetBusinessStaffQuery,
+  useLazyGetEventsSummaryByBusinessQuery,
 } = shortwaitsApi;

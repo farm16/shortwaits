@@ -184,6 +184,7 @@ export class Events extends Document implements EventType {
     })
   )
   payment: {
+    paymentProcessedOn: string; // Date when the payment was processed
     paymentMethodId: string; // Stripe payment method ID
     amount: number; // Payment amount
     currency: string; // Payment currency (e.g., "USD", "EUR", "GBP")

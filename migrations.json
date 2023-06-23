@@ -1,0 +1,60 @@
+{
+  "migrations": [
+    {
+      "version": "14.5.5-beta.0",
+      "cli": "nx",
+      "description": "Change include field from string to array for sync-deps target",
+      "factory": "./src/migrations/update-14-5-5/add-exclude-sync-deps",
+      "package": "@nx/react-native",
+      "name": "add-exclude-sync-deps-14-5-5"
+    },
+    {
+      "version": "14.5.8-beta.0",
+      "cli": "nx",
+      "description": "Change searchDir field from string to array for storybook target",
+      "factory": "./src/migrations/update-14-5-8/change-searchDir-storybook",
+      "package": "@nx/react-native",
+      "name": "change-searchDir-storybook-14-5-8"
+    },
+    {
+      "version": "14.6.0-beta.0",
+      "cli": "nx",
+      "description": "Remove transform in jest.config",
+      "factory": "./src/migrations/update-14-6-0/remove-jest-transform",
+      "package": "@nx/react-native",
+      "name": "rename-jest-preprocessor-14-6-0"
+    },
+    {
+      "cli": "nx",
+      "version": "15.0.0-beta.0",
+      "description": "Adds babel.config.json to the hash of all tasks",
+      "factory": "./src/migrations/update-15-0-0/add-babel-inputs",
+      "package": "@nx/react-native",
+      "name": "add-babel-inputs"
+    },
+    {
+      "cli": "nx",
+      "version": "15.9.1-beta.0",
+      "description": "Add target build-ios and pod-install for react native apps",
+      "factory": "./src/migrations/update-15-9-1/add-build-ios-target",
+      "package": "@nx/react-native",
+      "name": "add-build-ios-target"
+    },
+    {
+      "cli": "nx",
+      "version": "16.0.0-beta.1",
+      "description": "Replace @nx/react-native with @nx/react-native",
+      "implementation": "./src/migrations/update-16-0-0-add-nx-packages/update-16-0-0-add-nx-packages",
+      "package": "@nx/react-native",
+      "name": "update-16-0-0-add-nx-packages"
+    },
+    {
+      "cli": "nx",
+      "version": "16.1.0-beta.0",
+      "description": "Upgrade @storybook/react-native to 6.5",
+      "implementation": "./src/migrations/update-16-1-0/upgrade-storybook-6-5",
+      "package": "@nx/react-native",
+      "name": "update-16-1-0-upgrade-storybook-6-5"
+    }
+  ]
+}

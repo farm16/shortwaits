@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState } from "react";
 import {
   SafeAreaView,
   StyleSheet,
@@ -9,20 +9,20 @@ import {
   StatusBar,
   TouchableOpacity,
   Linking,
-} from 'react-native';
+} from "react-native";
 
-import Checkmark from './icons/checkmark.svg';
-import Book from './icons/book.svg';
-import ChevronRight from './icons/chevron-right.svg';
-import Blog from './icons/blog.svg';
-import Courses from './icons/courses.svg';
-import YouTube from './icons/youtube.svg';
-import Pointer from './icons/pointer.svg';
-import VSCode from './icons/vscode.svg';
-import NxCloud from './icons/nx-cloud.svg';
-import GitHub from './icons/github.svg';
-import Terminal from './icons/terminal.svg';
-import Heart from './icons/heart.svg';
+import Checkmark from "./icons/checkmark.svg";
+import Book from "./icons/book.svg";
+import ChevronRight from "./icons/chevron-right.svg";
+import Blog from "./icons/blog.svg";
+import Courses from "./icons/courses.svg";
+import YouTube from "./icons/youtube.svg";
+import Pointer from "./icons/pointer.svg";
+import VSCode from "./icons/vscode.svg";
+import NxCloud from "./icons/nx-cloud.svg";
+import GitHub from "./icons/github.svg";
+import Terminal from "./icons/terminal.svg";
+import Heart from "./icons/heart.svg";
 
 export const App = () => {
   const [whatsNextYCoord, setWhatsNextYCoord] = useState<number>(0);
@@ -33,7 +33,7 @@ export const App = () => {
       <StatusBar barStyle="dark-content" />
       <SafeAreaView>
         <ScrollView
-          ref={(ref) => {
+          ref={ref => {
             scrollViewRef.current = ref;
           }}
           contentInsetAdjustmentBehavior="automatic"
@@ -81,7 +81,7 @@ export const App = () => {
                 style={[styles.listItem, styles.learning]}
                 onPress={() =>
                   Linking.openURL(
-                    'https://nx.dev/getting-started/intro?utm_source=nx-project'
+                    "https://nx.dev/getting-started/intro?utm_source=nx-project"
                   )
                 }
               >
@@ -97,7 +97,7 @@ export const App = () => {
               <TouchableOpacity
                 style={[styles.listItem, styles.learning]}
                 onPress={() =>
-                  Linking.openURL('https://blog.nrwl.io/?utm_source=nx-project')
+                  Linking.openURL("https://blog.nrwl.io/?utm_source=nx-project")
                 }
               >
                 <Blog width={24} height={24} stroke="#000000" />
@@ -113,7 +113,7 @@ export const App = () => {
                 style={[styles.listItem, styles.learning]}
                 onPress={() =>
                   Linking.openURL(
-                    'https://www.youtube.com/c/Nrwl_io/videos?utm_source=nx-project'
+                    "https://www.youtube.com/c/Nrwl_io/videos?utm_source=nx-project"
                   )
                 }
               >
@@ -130,7 +130,7 @@ export const App = () => {
                 style={[styles.listItem, styles.learning]}
                 onPress={() =>
                   Linking.openURL(
-                    'https://nx.dev/react-tutorial/01-create-application?utm_source=nx-project'
+                    "https://nx.dev/react-tutorial/01-create-application?utm_source=nx-project"
                   )
                 }
               >
@@ -147,7 +147,7 @@ export const App = () => {
                 style={[styles.listItem, styles.learning]}
                 onPress={() =>
                   Linking.openURL(
-                    'https://nxplaybook.com/?utm_source=nx-project'
+                    "https://nxplaybook.com/?utm_source=nx-project"
                   )
                 }
               >
@@ -166,7 +166,7 @@ export const App = () => {
             <TouchableOpacity
               onPress={() =>
                 Linking.openURL(
-                  'https://marketplace.visualstudio.com/items?itemName=nrwl.angular-console&utm_source=nx-project'
+                  "https://marketplace.visualstudio.com/items?itemName=nrwl.angular-console&utm_source=nx-project"
                 )
               }
             >
@@ -192,7 +192,7 @@ export const App = () => {
           <View style={styles.section}>
             <TouchableOpacity
               onPress={() =>
-                Linking.openURL('https://nx.app/?utm_source=nx-project')
+                Linking.openURL("https://nx.app/?utm_source=nx-project")
               }
             >
               <View style={styles.shadowBox}>
@@ -222,7 +222,7 @@ export const App = () => {
           <View style={styles.section}>
             <TouchableOpacity
               onPress={() =>
-                Linking.openURL('https://nx.app/?utm_source=nx-project')
+                Linking.openURL("https://nx.app/?utm_source=nx-project")
               }
             >
               <View style={[styles.listItem, styles.shadowBox]}>
@@ -246,7 +246,7 @@ export const App = () => {
           </View>
           <View
             style={styles.section}
-            onLayout={(event) => {
+            onLayout={event => {
               const layout = event.nativeEvent.layout;
               setWhatsNextYCoord(layout.y);
             }}
@@ -277,14 +277,14 @@ export const App = () => {
                     styles.marginBottomMd,
                   ]}
                 >
-                  nx g @nrwl/react-native:lib ui
+                  nx g @nx/react-native:lib ui
                 </Text>
                 <Text style={[styles.textXS, styles.monospace, styles.comment]}>
                   # Add a component
                 </Text>
                 <Text style={[styles.textXS, styles.monospace]}>nx g \</Text>
                 <Text style={[styles.textXS, styles.monospace]}>
-                  @nrwl/react-native:component \
+                  @nx/react-native:component \
                 </Text>
                 <Text style={[styles.textXS, styles.monospace]}>
                   button --project ui
@@ -355,21 +355,21 @@ export const App = () => {
 };
 const styles = StyleSheet.create({
   scrollView: {
-    backgroundColor: '#ffffff',
+    backgroundColor: "#ffffff",
   },
   codeBlock: {
-    backgroundColor: 'rgba(55, 65, 81, 1)',
+    backgroundColor: "rgba(55, 65, 81, 1)",
     marginVertical: 12,
     padding: 12,
     borderRadius: 4,
   },
   monospace: {
-    color: '#ffffff',
-    fontFamily: 'Courier New',
+    color: "#ffffff",
+    fontFamily: "Courier New",
     marginVertical: 4,
   },
   comment: {
-    color: '#cccccc',
+    color: "#cccccc",
   },
   marginBottomSm: {
     marginBottom: 6,
@@ -381,13 +381,13 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   textLight: {
-    fontWeight: '300',
+    fontWeight: "300",
   },
   textBold: {
-    fontWeight: '500',
+    fontWeight: "500",
   },
   textCenter: {
-    textAlign: 'center',
+    textAlign: "center",
   },
   text2XS: {
     fontSize: 12,
@@ -411,16 +411,16 @@ const styles = StyleSheet.create({
     marginVertical: 12,
   },
   textSubtle: {
-    color: '#6b7280',
+    color: "#6b7280",
   },
   section: {
     marginVertical: 24,
     marginHorizontal: 12,
   },
   shadowBox: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 24,
-    shadowColor: 'black',
+    shadowColor: "black",
     shadowOpacity: 0.15,
     shadowOffset: {
       width: 1,
@@ -431,9 +431,9 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   listItem: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
   },
   listItemTextContainer: {
     marginLeft: 12,
@@ -441,31 +441,31 @@ const styles = StyleSheet.create({
   },
   appTitleText: {
     paddingTop: 12,
-    fontWeight: '500',
+    fontWeight: "500",
   },
   hero: {
     borderRadius: 12,
-    backgroundColor: '#143055',
+    backgroundColor: "#143055",
     padding: 36,
     marginBottom: 24,
   },
   heroTitle: {
     flex: 1,
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   heroTitleText: {
-    color: '#ffffff',
+    color: "#ffffff",
     marginLeft: 12,
   },
   heroText: {
-    color: '#ffffff',
+    color: "#ffffff",
     marginVertical: 12,
   },
   whatsNextButton: {
-    backgroundColor: '#ffffff',
+    backgroundColor: "#ffffff",
     paddingVertical: 16,
     borderRadius: 8,
-    width: '50%',
+    width: "50%",
     marginTop: 24,
   },
   learning: {
@@ -473,7 +473,7 @@ const styles = StyleSheet.create({
   },
   love: {
     marginTop: 12,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
 });
 

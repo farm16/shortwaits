@@ -4,7 +4,6 @@ import {
   UnauthorizedException,
 } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { EventsDocType, ObjectId, UserDocType } from "@shortwaits/shared-types";
 import { Model, Types } from "mongoose";
 
 import { Business } from "../business/entities/business.entity";
@@ -13,6 +12,8 @@ import { BusinessUser } from "../business-user/entities/business-user.entity";
 import { Events } from "./entities/events.entity";
 import { CreateEventsDto } from "./dto/create-event.dto";
 import { UpdateEventsDto } from "./dto/update-event.dto";
+
+const WEEK_DAY = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 @Injectable()
 export class EventsService {
@@ -103,6 +104,111 @@ export class EventsService {
     }
   }
 
+  async getEventsSummaryByBusiness(businessId: string) {
+    try {
+      const filter: {
+        businessId: string;
+      } = { businessId };
+
+      const events = await this.eventsModel
+        .find(filter)
+        .select("payment")
+        .exec();
+
+      const totalAmountPerDayHour = {};
+      const totalAmountPerWeekDay = {
+        Sun: 0,
+        Mon: 0,
+        Tue: 0,
+        Wed: 0,
+        Thu: 0,
+        Fri: 0,
+        Sat: 0,
+      };
+      const totalAmountPerMonthDay = {};
+      const totalAmountPerYearMonth = {};
+
+      for (let hour = 0; hour < 24; hour++) {
+        totalAmountPerDayHour[hour] = 0;
+      }
+      for (let month = 0; month < 12; month++) {
+        totalAmountPerYearMonth[month + 1] = 0;
+      }
+      events.forEach(item => {
+        if (item.payment?.paymentProcessedOn) {
+          const date = new Date(item.payment.paymentProcessedOn);
+
+          const today = new Date(Date.now());
+          const daysInCurrentMonth = new Date(
+            today.getFullYear(),
+            today.getMonth() + 1,
+            0
+          ).getDate();
+
+          for (let day = 1; day <= daysInCurrentMonth; day++) {
+            totalAmountPerMonthDay[day] = 0;
+          }
+
+          if (date.getDate() === today.getDate()) {
+            const dayHourKey = date.getHours();
+            totalAmountPerDayHour[dayHourKey] += item.payment.amount || 0;
+          }
+
+          // Subtract 7 from the start and end to get the dates for last week
+          const lastWeekStart = new Date(
+            today.getFullYear(),
+            today.getMonth(),
+            today.getDate() - today.getDay() - 7
+          );
+          const lastWeekEnd = new Date(
+            today.getFullYear(),
+            today.getMonth(),
+            today.getDate() - today.getDay() + 6 - 7
+          );
+
+          if (
+            date.getFullYear() >= lastWeekStart.getFullYear() &&
+            date.getMonth() >= lastWeekStart.getMonth() &&
+            date.getDate() >= lastWeekStart.getDate() &&
+            date.getFullYear() <= lastWeekEnd.getFullYear() &&
+            date.getMonth() <= lastWeekEnd.getMonth() &&
+            date.getDate() <= lastWeekEnd.getDate()
+          ) {
+            const weekDayKey = date.getDay();
+            const weekDayFullName = WEEK_DAY[weekDayKey];
+
+            totalAmountPerWeekDay[weekDayFullName] += item.payment.amount || 0;
+          }
+          if (
+            date.getFullYear() === today.getFullYear() &&
+            date.getMonth() === today.getMonth()
+          ) {
+            const monthDayKey = date.getDate();
+
+            totalAmountPerMonthDay[monthDayKey] += item.payment.amount || 0;
+          }
+
+          if (date.getFullYear() === today.getFullYear()) {
+            const monthKey = date.getMonth() + 1;
+            totalAmountPerYearMonth[monthKey] += item.payment.amount || 0;
+          }
+        }
+      });
+
+      const response = {
+        Yesterday: totalAmountPerDayHour,
+        Week: totalAmountPerWeekDay,
+        Month: totalAmountPerMonthDay,
+        Year: totalAmountPerYearMonth,
+      };
+
+      return response;
+    } catch (error) {
+      console.error(error);
+      throw new InternalServerErrorException("Failed to get events");
+    }
+  }
+
   /**
    *
    * this finds all events by business not by createdBy(userID)
@@ -112,7 +218,7 @@ export class EventsService {
     businessId: string,
     paginateOptions?: { page: number; limit: number },
     filterOptions?: { date?: Date; month?: number; year?: number }
-  ): Promise<EventsDocType> {
+  ) {
     try {
       const { page = 1, limit = 10 } = paginateOptions ?? {};
       const skip = (page - 1) * limit;

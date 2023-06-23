@@ -1,10 +1,11 @@
 {
+  "name": "shortwaits-client",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/shortwaits-client/src",
   "projectType": "application",
   "targets": {
     "start": {
-      "executor": "@nrwl/react-native:start",
+      "executor": "@nx/react-native:start",
       "options": {
         "port": 8081
       }
@@ -16,12 +17,12 @@
       }
     },
     "run-ios": {
-      "executor": "@nrwl/react-native:run-ios",
+      "executor": "@nx/react-native:run-ios",
       "options": {}
     },
     "bundle-ios": {
-      "executor": "@nrwl/react-native:bundle",
-      "outputs": ["apps/shortwaits-client/build"],
+      "executor": "@nx/react-native:bundle",
+      "outputs": ["{projectRoot}/build"],
       "options": {
         "entryFile": "src/main.tsx",
         "platform": "ios",
@@ -29,19 +30,19 @@
       }
     },
     "run-android": {
-      "executor": "@nrwl/react-native:run-android",
+      "executor": "@nx/react-native:run-android",
       "options": {}
     },
     "build-android": {
-      "executor": "@nrwl/react-native:build-android",
+      "executor": "@nx/react-native:build-android",
       "outputs": [
-        "apps/shortwaits-client/android/app/build/outputs/bundle",
-        "apps/shortwaits-client/android/app/build/outputs/apk"
+        "{projectRoot}/android/app/build/outputs/bundle",
+        "{projectRoot}/android/app/build/outputs/apk"
       ],
       "options": {}
     },
     "bundle-android": {
-      "executor": "@nrwl/react-native:bundle",
+      "executor": "@nx/react-native:bundle",
       "options": {
         "entryFile": "src/main.tsx",
         "platform": "android",
@@ -49,11 +50,11 @@
       }
     },
     "sync-deps": {
-      "executor": "@nrwl/react-native:sync-deps",
+      "executor": "@nx/react-native:sync-deps",
       "options": {}
     },
     "ensure-symlink": {
-      "executor": "@nrwl/react-native:ensure-symlink",
+      "executor": "@nx/react-native:ensure-symlink",
       "options": {}
     },
     "lint": {
@@ -65,11 +66,20 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/shortwaits-client"],
+      "outputs": ["{workspaceRoot}/coverage/apps/shortwaits-client"],
       "options": {
         "jestConfig": "apps/shortwaits-client/jest.config.ts",
         "passWithNoTests": true
       }
+    },
+    "build-ios": {
+      "executor": "@nx/react-native:build-ios",
+      "outputs": ["{projectRoot}/ios/build/Build"],
+      "options": {}
+    },
+    "pod-install": {
+      "executor": "@nx/react-native:pod-install",
+      "options": {}
     }
   },
   "tags": []
