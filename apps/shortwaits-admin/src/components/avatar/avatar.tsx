@@ -1,5 +1,5 @@
 import React from "react";
-import { ImageBackground, StyleSheet, View, ViewStyle } from "react-native";
+import { ImageBackground, StyleSheet, View } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { ServiceColorType } from "@shortwaits/shared-types";
 

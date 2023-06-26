@@ -1,27 +1,6 @@
 import { isEmpty } from "lodash";
-import { intervalToDuration, formatDuration, format } from "date-fns";
+import { intervalToDuration, formatDuration } from "date-fns";
 import { EventsDtoType } from "@shortwaits/shared-types";
-
-export function getFutureDates(numberOfDays: number) {
-  const array: string[] = [];
-  for (let index = 1; index <= numberOfDays; index++) {
-    const date = new Date(Date.now() + 864e5 * index); // 864e5 == 86400000 == 24*60*60*1000
-    const dateString = date.toISOString().split("T")[0];
-    array.push(dateString);
-  }
-  return array;
-}
-
-export function getPastDate(numberOfDays: number) {
-  return new Date(Date.now() - 864e5 * numberOfDays)
-    .toISOString()
-    .split("T")[0];
-}
-
-export const today = new Date().toISOString().split("T")[0];
-export const fastDate = getPastDate(3);
-export const futureDates = getFutureDates(9);
-export const dates = [fastDate, today].concat(futureDates);
 
 export function milliSecondsToDuration(milliSeconds: number): Duration {
   const epoch = new Date(0);
@@ -52,30 +31,69 @@ export const getEventTime = (milliSeconds: number) => {
   });
 };
 
-export const formatDateToCalendarDate = (date: string | Date) => {
-  const _date = typeof date === "string" ? new Date(date) : date;
-  const formattedDate = format(_date, "MM/dd/yyyy");
-  return formattedDate;
+export function getUniqueDatesFromEvents(events: EventsDtoType) {
+  if (isEmpty(events)) {
+    return [];
+  }
+
+  const uniqueDates = new Set<string>();
+
+  for (const event of events) {
+    const date = event.startTime.split("T")[0] + "T00:00:00.000Z";
+    uniqueDates.add(date);
+  }
+
+  return Array.from(uniqueDates);
+}
+
+export const getAgendaData = (events: EventsDtoType) => {
+  if (isEmpty(events)) {
+    return [];
+  }
+
+  const agendaData: { title: string; data: EventsDtoType }[] = [];
+  const uniqueDates = new Set<string>();
+
+  for (const event of events) {
+    const date = event.startTime.split("T")[0] + "T00:00:00.000Z";
+
+    if (!uniqueDates.has(date)) {
+      uniqueDates.add(date);
+      agendaData.push({ title: date, data: [] });
+    }
+
+    const agendaItem = agendaData.find(item => item.title === date);
+    if (agendaItem) {
+      agendaItem.data.push(event);
+    }
+  }
+
+  return agendaData;
 };
 
-export const getCalendarItems = (events: EventsDtoType) => {
-  if (!events) return [];
-  const allDates = events.map(event =>
-    formatDateToCalendarDate(event.startTime)
-  );
-  const items = [...new Set(allDates)].map((date, index) => {
-    return {
-      title: "",
-      data: events.filter(
-        event => formatDateToCalendarDate(event.startTime) === date
-      ),
-      index,
-    };
+export function getMarkedDates(agendaItems) {
+  const marked = {};
+
+  agendaItems.forEach(item => {
+    // NOTE: only mark dates with data
+    if (item.data && item.data.length > 0 && !isEmpty(item.data[0])) {
+      marked[item.title] = { marked: true };
+    } else {
+      marked[item.title] = { disabled: true };
+    }
   });
-  // console.log("getCalendarItems >>>", JSON.stringify(items));
-  return items;
-};
+  return marked;
+}
 
-type MarkedDates = {
-  [key: string]: object;
-};
+// export type ContextProp = {
+//   context?: CalendarContextProps;
+// };
+// export type MarkingTypes =
+//   | "dot"
+//   | "multi-dot"
+//   | "period"
+//   | "multi-period"
+//   | "custom";
+// export type MarkedDates = {
+//   [key: string]: MarkingProps;
+// };

@@ -60,8 +60,8 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
     navigation.setOptions({
       headerTitle: () => {
         return (
-          <Container>
-            <Text text={"Clients"} />
+          <Container direction="row" justifyContent="center">
+            <Text preset="headerTitle" text={"Clients"} />
           </Container>
         );
       },

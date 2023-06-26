@@ -21,10 +21,9 @@ import { useService } from "../../redux";
 //   index: number;
 //   section: { title: string; data: EventDtoType[] };
 // };
-type AgendaItemProps = SectionListRenderItem<
-  EventDtoType,
-  { title: string; data: EventDtoType[]; index: number }
->;
+type AgendaItemProps = {
+  item: EventDtoType;
+};
 
 const BORDER_RADIUS = 6;
 const statusDisplayMessages: Record<EventStatusName, string> = {
@@ -35,84 +34,108 @@ const statusDisplayMessages: Record<EventStatusName, string> = {
   COMPLETED: "Request Completed",
 };
 
-export const AgendaItem: AgendaItemProps = props => {
-  const { item, index, section } = props;
+export const AgendaItem = (props: AgendaItemProps) => {
+  const { item } = props;
   // console.log("AgendaItem >>>", JSON.stringify(props));
 
   const { Colors } = useTheme();
-  const service = useService(item?.serviceId);
+  const service = useService(item?.serviceId ?? "");
 
-  console.log("serviceId >>> ", index, item?.serviceId, section.index);
-  console.log("service >>>", JSON.stringify(service, null, 2));
+  // console.log("serviceId >>> ", index, item?.serviceId, section.index);
+  // console.log("service >>>", JSON.stringify(service, null, 2));
 
   const itemPressed = useCallback(() => {
     Alert.alert(item.name);
   }, [item.name]);
 
-  const EventServiceColor = () => (
-    <View
-      style={[
-        styles.eventServiceColor,
-        {
-          backgroundColor:
-            service?.serviceColor?.hexCode ?? Colors.brandAccent1,
-        },
-      ]}
-    />
-  );
-  const EventTime = () => (
-    <View style={[styles.eventTime, { borderLeftColor: Colors.lightGray }]}>
-      <Text
-        preset="none"
-        style={[styles.eventTimeRow1, { color: Colors.text }]}
-        text={new Date(item.startTime).toLocaleTimeString("en-US", {
-          hour: "2-digit",
-          minute: "2-digit",
-        })}
+  const eventServiceColor = useCallback(
+    () => (
+      <View
+        style={[
+          styles.eventServiceColor,
+          {
+            backgroundColor:
+              service?.serviceColor?.hexCode ?? Colors.brandAccent1,
+          },
+        ]}
       />
-      <Text
-        preset="none"
-        style={[styles.eventTimeRow2, { color: Colors.subText }]}
-        text={getEventTime(item.durationInMin * 60000)}
-      />
-    </View>
+    ),
+    [Colors.brandAccent1, service?.serviceColor?.hexCode]
   );
-  const EventName = () => (
-    <View style={styles.eventName}>
-      <View style={styles.eventNameFloatingLabels}>
-        <Emoji name="wheelchair" />
-        <Emoji name="star2" />
-      </View>
-      {item?.leadClientId ? (
+
+  const eventTime = useCallback(
+    () => (
+      <View style={[styles.eventTime, { borderLeftColor: Colors.lightGray }]}>
         <Text
           preset="none"
-          style={[styles.eventNameRow1, { color: Colors.text }]}
-          text={truncate(item.leadClientId, { length: 10, separator: "." })}
+          style={[styles.eventTimeRow1, { color: Colors.text }]}
+          text={new Date(item.startTime).toLocaleTimeString("en-US", {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
         />
-      ) : null}
-      <Text
-        preset="none"
-        style={[
-          styles.eventNameRow2,
-          { color: service?.serviceColor?.hexCode ?? Colors.subText },
-        ]}
-        text={truncate(item?.name ?? "", { length: 21, separator: "." })}
-      />
-      <Text
-        style={[
-          styles.eventNameRow3,
-          { color: Colors[item.status?.statusName ?? "text"] },
-        ]}
-        preset={"text"}
-        text={
-          item.status?.statusName
-            ? statusDisplayMessages[item.status.statusName]
-            : ""
-        }
-      />
-    </View>
+        <Text
+          preset="none"
+          style={[styles.eventTimeRow2, { color: Colors.subText }]}
+          text={getEventTime(item.durationInMin * 60000)}
+        />
+      </View>
+    ),
+    [
+      Colors.lightGray,
+      Colors.subText,
+      Colors.text,
+      item.durationInMin,
+      item.startTime,
+    ]
   );
-  const EventClientImage = ({ item }) => {
+
+  const eventName = useCallback(
+    () => (
+      <View style={styles.eventName}>
+        <View style={styles.eventNameFloatingLabels}>
+          <Emoji name="wheelchair" />
+          <Emoji name="star2" />
+        </View>
+        {item?.leadClientId ? (
+          <Text
+            preset="none"
+            style={[styles.eventNameRow1, { color: Colors.text }]}
+            text={truncate(item.leadClientId, { length: 10, separator: "." })}
+          />
+        ) : null}
+        <Text
+          preset="none"
+          style={[
+            styles.eventNameRow2,
+            { color: service?.serviceColor?.hexCode ?? Colors.subText },
+          ]}
+          text={truncate(item?.name ?? "", { length: 21, separator: "." })}
+        />
+        <Text
+          style={[
+            styles.eventNameRow3,
+            { color: Colors[item.status?.statusName ?? "text"] },
+          ]}
+          preset={"text"}
+          text={
+            item.status?.statusName
+              ? statusDisplayMessages[item.status.statusName]
+              : ""
+          }
+        />
+      </View>
+    ),
+    [
+      Colors,
+      item.leadClientId,
+      item?.name,
+      item.status.statusName,
+      service?.serviceColor?.hexCode,
+    ]
+  );
+
+  const eventClientImage = useCallback(() => {
     return (
       <View style={styles.eventClientImage}>
         <Image
@@ -121,7 +144,7 @@ export const AgendaItem: AgendaItemProps = props => {
         />
       </View>
     );
-  };
+  }, []);
 
   return (
     <TouchableOpacity
@@ -131,10 +154,10 @@ export const AgendaItem: AgendaItemProps = props => {
         { backgroundColor: Colors.white, borderBottomColor: Colors.lightGray },
       ]}
     >
-      <EventServiceColor />
-      <EventClientImage item={item} />
-      <EventName />
-      <EventTime />
+      {eventServiceColor()}
+      {eventClientImage()}
+      {eventName()}
+      {eventTime()}
     </TouchableOpacity>
   );
 };
@@ -216,7 +239,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     alignItems: "center",
     flexDirection: "row",
-
     marginHorizontal: 5,
     borderRadius: BORDER_RADIUS,
   },

@@ -26,6 +26,7 @@ export type GraphData = {
 };
 
 export type GraphPropTypes = {
+  isLoading: boolean;
   timeIdentifier: GraphIdentifier;
   data: GraphData;
   interpolation?:

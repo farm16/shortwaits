@@ -51,7 +51,7 @@ export const FloatingActionButton = (props: FloatingActionButtonProps) => {
         visible={isVisibleOverride ?? isVisible}
         open={open}
         style={{
-          paddingBottom: hasPaddingBottom ? 100 : 0,
+          paddingBottom: hasPaddingBottom ? "15%" : 0,
         }}
         fabStyle={{
           backgroundColor: Colors.brandSecondary,

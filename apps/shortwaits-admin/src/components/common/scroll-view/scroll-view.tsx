@@ -1,6 +1,6 @@
 import React from "react";
 import { ScrollViewProps, StyleSheet } from "react-native";
-import { ScrollView as RNGH_ScrollView } from "react-native-gesture-handler";
+import { ScrollView as ScrollViewRn } from "react-native-gesture-handler";
 
 export function ScrollView(props: ScrollViewProps) {
   const {
@@ -13,13 +13,13 @@ export function ScrollView(props: ScrollViewProps) {
     contentContainerStyleOverride,
   ];
   return (
-    <RNGH_ScrollView
+    <ScrollViewRn
       showsVerticalScrollIndicator={false}
       contentContainerStyle={contentContainerStyle}
       {...rest}
     >
       {children}
-    </RNGH_ScrollView>
+    </ScrollViewRn>
   );
 }
 

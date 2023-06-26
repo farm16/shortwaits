@@ -69,6 +69,15 @@
     "metro-config": "*",
     "mongodb": "*",
     "lodash": "*",
-    "@react-navigation/elements": "*"
+    "@react-navigation/elements": "*",
+    "rn-placeholder": "*",
+    "prop-types": "*",
+    "xdate": "*",
+    "memoize-one": "*",
+    "@shopify/flash-list": "*",
+    "react-native-swipe-gestures": "*",
+    "hoist-non-react-statics": "*",
+    "recyclerlistview": "*",
+    "moment": "*"
   }
 }

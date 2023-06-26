@@ -32,8 +32,11 @@ export const MyBusinessScreen: FC<
   const { Colors } = useTheme();
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
-  const { data: eventSummary, isLoading: isEventSummaryLoading } =
-    useGetEventsSummaryByBusinessQuery(business?._id ?? skipToken);
+  const {
+    data: eventSummary,
+    isLoading: isEventSummaryLoading,
+    error: errorEventSummary,
+  } = useGetEventsSummaryByBusinessQuery(business?._id ?? skipToken);
 
   console.log(">>>", eventSummary);
   const checkAccountType = accountType =>
@@ -55,10 +58,7 @@ export const MyBusinessScreen: FC<
       headerTitle: () => {
         return (
           <Container direction="row" justifyContent="center">
-            <Text
-              preset="headerTitle"
-              text={truncate(business.shortName, { length: 16 })}
-            />
+            <Text text={truncate(business.shortName, { length: 16 })} />
           </Container>
         );
       },
@@ -75,8 +75,12 @@ export const MyBusinessScreen: FC<
 
   return (
     <Screen preset="fixed" unsafe>
-      <BusinessIncomeInfo data={ex} />
       <ScrollView contentContainerStyle={{ alignItems: "center" }}>
+        <BusinessIncomeInfo
+          data={eventSummary?.data}
+          isLoading={isEventSummaryLoading}
+          error={errorEventSummary}
+        />
         <Space size="small" />
         <ButtonCard
           withTopBorder

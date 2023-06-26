@@ -12,20 +12,30 @@ import {
   MODAL_SCREENS,
 } from "./navigation-constants";
 import { selectorConfigs } from "../screens/modals/selector/selector-config";
-import { CreateEventDtoType } from "@shortwaits/shared-types";
+import {
+  CategoryDtoType,
+  CreateEventDtoType,
+  ServiceDtoType,
+} from "@shortwaits/shared-types";
 
 export type ScheduleModalModeType = "My-Business-Hours" | "User-Hours";
 export type SelectorModalModeType = keyof typeof selectorConfigs;
 
+type SelectorModalData =
+  | string
+  | CategoryDtoType
+  | ServiceDtoType
+  | { title: string; subTitle: string };
 export type FormType = "addClient" | "addEvent" | "addStaff";
+
 export type ModalStackParamList = {
   [MODAL_SCREENS.SELECTOR_MODAL_SCREEN]: {
     type: SelectorModalModeType;
     headerTitle?: string;
     multiple?: boolean;
-    data?: (string | { title: string; subTitle: string })[];
+    data?: SelectorModalData[];
     mode?: "update" | "create";
-    onSelect?<T>(arg0: T): void;
+    onSelect?(arg0): void;
     closeOnSubmit?: boolean;
   };
   [MODAL_SCREENS.SCHEDULE_MODAL_SCREEN]: {

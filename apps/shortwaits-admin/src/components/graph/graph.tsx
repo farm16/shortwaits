@@ -14,9 +14,14 @@ import {
   GraphPropTypes,
   isGraphEmpty,
 } from "./graph-utils";
+import { ex } from "./ex";
 
 const ComponentGraph = (props: GraphPropTypes) => {
-  const { data: graphData, interpolation = "linear", timeIdentifier } = props;
+  const {
+    data: graphData = ex,
+    interpolation = "linear",
+    timeIdentifier,
+  } = props;
   const { Colors } = useTheme();
   const [isEmpty, setIsEmpty] = React.useState<boolean>(false);
   const coordinates = useMemo(

@@ -3,10 +3,17 @@ import { View, StyleSheet, ImageBackground, StatusBar } from "react-native";
 import { Button, Text } from "../common";
 import image from "./background_1.png";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useDispatch } from "react-redux";
+import { hidePremiumMembershipBanner } from "../../redux";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 export function PremiumMembershipBanner() {
   const insets = useSafeAreaInsets();
   const statusBarHeight = insets.top;
+  const dispatch = useDispatch();
+  const handleClose = () => {
+    dispatch(hidePremiumMembershipBanner());
+  };
   return (
     <ImageBackground
       source={image}
@@ -14,6 +21,21 @@ export function PremiumMembershipBanner() {
       style={styles.container}
       imageStyle={styles.image}
     >
+      <View
+        style={{
+          position: "absolute",
+          right: 16,
+          top: statusBarHeight - 10,
+          backgroundColor: "rgba(0,0,0,0.5)",
+          width: 30,
+          height: 30,
+          borderRadius: 15,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Icon name="close" color="white" size={24} onPress={handleClose} />
+      </View>
       <StatusBar barStyle="light-content" />
       <View style={{ marginTop: statusBarHeight }}>
         <Text preset="text" style={styles.title}>

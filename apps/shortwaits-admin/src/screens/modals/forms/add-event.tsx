@@ -166,7 +166,7 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({
             params: {
               type: "services",
               data: services,
-              onSelected: service => {
+              onSelect: (service: ServiceDtoType) => {
                 console.log("selected service:", service._id);
                 setSelectedService(service);
                 setFieldValue("serviceId", service._id);
