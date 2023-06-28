@@ -1,32 +1,20 @@
-import React, {
-  FC,
-  memo,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { Platform, RefreshControl, SectionListData, View } from "react-native";
-import { EventType, EventsDtoType } from "@shortwaits/shared-types";
+import React, { FC, memo, useCallback, useMemo } from "react";
+import { RefreshControl, SectionListData } from "react-native";
+import { EventType } from "@shortwaits/shared-types";
 import {
   CalendarProvider,
   ExpandableCalendar,
   AgendaList,
 } from "@shortwaits/calendar";
 
-import { Button, NonIdealState } from "..";
-import { AuthorizedScreenProps } from "../../navigation";
 import { Colors } from "../../theme";
 import { useCalendarTheme } from "./calendar-hooks";
 import { AgendaItem } from "./calendar-item";
-import { Space, Text } from "../common";
-import { getAgendaData, getMarkedDates } from "./calendar-utils";
+import { Space } from "../common";
+import { getAgendaData } from "./calendar-utils";
 import { useGetEventsByBusinessQuery } from "../../services";
 import { useBusiness } from "../../redux";
 import { ActivityIndicator } from "react-native-paper";
-import { useNavigation } from "@react-navigation/native";
-// import { format } from "date-fns";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 
 type CalendarSectionData = EventType;
@@ -47,8 +35,6 @@ export const Calendar: FC<CalendarProps> = memo(props => {
 
   const theme = useCalendarTheme();
   const business = useBusiness();
-  // const { navigate } =
-  //   useNavigation<AuthorizedScreenProps<"form-modal-screen">["navigation"]>();
 
   const {
     data: eventsPayload,
@@ -61,7 +47,6 @@ export const Calendar: FC<CalendarProps> = memo(props => {
     [eventsPayload?.data]
   );
 
-  // const marked = useRef(getMarkedDates(agendaData));
   const renderItem = useCallback(({ item }) => {
     return <AgendaItem item={item} />;
   }, []);

@@ -11,8 +11,7 @@ import React, {
   useCallback,
   useMemo,
 } from "react";
-import { FlatList, Text, View, ViewStyle, FlatListProps } from "react-native";
-import { FlashList } from "@shopify/flash-list";
+import { FlatList, View, ViewStyle, FlatListProps } from "react-native";
 
 import { extractHeaderProps, extractCalendarProps } from "../componentUpdater";
 import { xdateToData, parseDate, toMarkingFormat } from "../interface";
@@ -124,7 +123,7 @@ const CalendarList = (props: CalendarListProps & ContextProp, ref: any) => {
   const [currentMonth, setCurrentMonth] = useState(parseDate(current));
 
   const style = useRef(styleConstructor(theme));
-  const list = useRef<any>(null);
+  const list = useRef();
   const range = useRef(horizontal ? 1 : 3);
   const initialDate = useRef(parseDate(current) || new XDate());
   const visibleMonth = useRef(currentMonth);
@@ -208,7 +207,7 @@ const CalendarList = (props: CalendarListProps & ContextProp, ref: any) => {
     }
 
     if (scrollAmount !== 0) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
       list?.current?.scrollToOffset({ offset: scrollAmount, animated });
     }
   };
@@ -226,7 +225,7 @@ const CalendarList = (props: CalendarListProps & ContextProp, ref: any) => {
         calendarSize * pastScrollRange + diffMonths * calendarSize;
 
       if (scrollAmount !== 0) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
         list?.current?.scrollToOffset({
           offset: scrollAmount,
           animated: animateScroll,
@@ -261,16 +260,19 @@ const CalendarList = (props: CalendarListProps & ContextProp, ref: any) => {
     [markedDates]
   );
 
-  const getItemLayout = useCallback((_, index: number) => {
-    return {
-      length: calendarSize,
-      offset: calendarSize * index,
-      index,
-    };
-  }, []);
+  const getItemLayout = useCallback(
+    (_: Array<XDate> | undefined | null, index: number) => {
+      return {
+        length: calendarSize,
+        offset: calendarSize * index,
+        index,
+      };
+    },
+    []
+  );
 
   const isDateInRange = useCallback(
-    (date: XDate | undefined) => {
+    date => {
       for (let i = -range.current; i <= range.current; i++) {
         const newMonth = currentMonth?.clone().addMonths(i, true);
         if (sameMonth(date, newMonth)) {
@@ -293,7 +295,7 @@ const CalendarList = (props: CalendarListProps & ContextProp, ref: any) => {
           testID={testId}
           markedDates={getMarkedDatesForItem(item)}
           item={item}
-          style={[calendarStyle]}
+          style={calendarStyle}
           // @ts-expect-error - type mismatch - ScrollView's 'horizontal' is nullable
           horizontal={horizontal}
           calendarWidth={calendarWidth}
@@ -304,15 +306,13 @@ const CalendarList = (props: CalendarListProps & ContextProp, ref: any) => {
       );
     },
     [
-      testID,
-      calendarProps,
-      getMarkedDatesForItem,
-      calendarStyle,
       horizontal,
+      calendarStyle,
       calendarWidth,
-      calendarHeight,
-      scrollToMonth,
+      testID,
+      getMarkedDatesForItem,
       isDateInRange,
+      calendarProps,
     ]
   );
 
@@ -352,17 +352,19 @@ const CalendarList = (props: CalendarListProps & ContextProp, ref: any) => {
       onViewableItemsChanged,
     },
   ]);
-  console.log("items", items.length);
+
   return (
     <View style={style.current.flatListContainer} testID={testID}>
-      <FlashList
-        estimatedItemSize={375}
-        data={items}
-        renderItem={renderItem}
-        horizontal={horizontal}
+      <FlatList
+        // @ts-expect-error
         ref={list}
+        style={listStyle}
         showsVerticalScrollIndicator={showScrollIndicator}
         showsHorizontalScrollIndicator={showScrollIndicator}
+        data={items}
+        renderItem={renderItem}
+        getItemLayout={getItemLayout}
+        initialNumToRender={range.current}
         initialScrollIndex={initialDateIndex}
         viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
         testID={`${testID}.list`}
@@ -371,6 +373,7 @@ const CalendarList = (props: CalendarListProps & ContextProp, ref: any) => {
         pagingEnabled={pagingEnabled}
         scrollEnabled={scrollEnabled}
         scrollsToTop={scrollsToTop}
+        horizontal={horizontal}
         keyboardShouldPersistTaps={keyboardShouldPersistTaps}
         keyExtractor={keyExtractor}
         onEndReachedThreshold={onEndReachedThreshold}

@@ -2,16 +2,19 @@
   "name": "shortwaits-backend",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/shortwaits-backend/src",
-  "projectType": "application",
   "targets": {
     "build": {
-      "executor": "@nrwl/node:webpack",
+      "executor": "@nx/webpack:webpack",
       "outputs": ["{options.outputPath}"],
       "options": {
+        "target": "node",
+        "compiler": "tsc",
         "outputPath": "dist/apps/shortwaits-backend",
         "main": "apps/shortwaits-backend/src/main.ts",
         "tsConfig": "apps/shortwaits-backend/tsconfig.app.json",
-        "assets": ["apps/shortwaits-backend/src/assets"]
+        "assets": ["apps/shortwaits-backend/src/assets"],
+        "isolatedConfig": true,
+        "webpackConfig": "apps/shortwaits-backend/webpack.config.js"
       },
       "configurations": {
         "production": {
@@ -28,7 +31,7 @@
       }
     },
     "serve": {
-      "executor": "@nrwl/node:node",
+      "executor": "@nx/js:node",
       "options": {
         "buildTarget": "shortwaits-backend:build"
       },
@@ -39,14 +42,14 @@
       }
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": ["apps/shortwaits-backend/**/*.ts"]
       }
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
+      "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/apps/shortwaits-backend"],
       "options": {
         "jestConfig": "apps/shortwaits-backend/jest.config.ts",
@@ -54,7 +57,7 @@
       }
     },
     "seed": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "@nx/workspace:run-commands",
       "configurations": {
         "default-data": {
           "commands": [

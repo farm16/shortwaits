@@ -7,8 +7,8 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { View, ViewToken } from "react-native";
-import { FlashList } from "@shopify/flash-list";
+import { FlatList, View, ViewToken } from "react-native";
+
 import { sameWeek, onSameDateRange, getWeekDates } from "../../dateutils";
 import { toMarkingFormat } from "../../interface";
 import { DateData, MarkedDates } from "../../types";
@@ -56,7 +56,7 @@ const WeekCalendar = (props: WeekCalendarProps) => {
   );
   const [listData, setListData] = useState(items.current);
   const changedItems = useRef(constants.isRTL);
-  const list = useRef<any>(null);
+  const list = useRef<FlatList>(null);
   const currentIndex = useRef(NUMBER_OF_PAGES);
 
   useDidUpdate(() => {
@@ -142,7 +142,7 @@ const WeekCalendar = (props: WeekCalendarProps) => {
           markedDates={markings}
           current={item}
           firstDay={firstDay}
-          style={[weekStyle]}
+          style={weekStyle}
           context={currentContext}
           onDayPress={_onDayPress}
           numberOfDays={numberOfDays}
@@ -153,7 +153,7 @@ const WeekCalendar = (props: WeekCalendarProps) => {
     [firstDay, _onDayPress, context, date, markedDates]
   );
 
-  const keyExtractor = useCallback(item => item, []);
+  const keyExtractor = useCallback((item: string) => item, []);
 
   const renderWeekDaysNames = useMemo(() => {
     return (
@@ -234,28 +234,31 @@ const WeekCalendar = (props: WeekCalendarProps) => {
   ]);
 
   return (
-    <View testID={testID} style={[weekCalendarStyle]}>
+    <View testID={testID} style={weekCalendarStyle}>
       {!hideDayNames && (
         <View style={containerStyle}>{renderWeekDaysNames}</View>
       )}
-      {/* <View style={[style.current.container, { backgroundColor: "red" }]}> */}
-      <FlashList
-        estimatedItemSize={375}
-        testID={`${testID}.list`}
-        ref={list}
-        data={listData}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        pagingEnabled
-        scrollEnabled
-        renderItem={renderItem}
-        keyExtractor={keyExtractor}
-        initialScrollIndex={NUMBER_OF_PAGES}
-        viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
-        onEndReached={onEndReached}
-        onEndReachedThreshold={1 / NUM_OF_ITEMS}
-      />
-      {/* </View> */}
+      <View style={style.current.container}>
+        <FlatList
+          testID={`${testID}.list`}
+          ref={list}
+          style={style.current.container}
+          data={listData}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          pagingEnabled
+          scrollEnabled
+          renderItem={renderItem}
+          keyExtractor={keyExtractor}
+          initialScrollIndex={NUMBER_OF_PAGES}
+          getItemLayout={getItemLayout}
+          viewabilityConfigCallbackPairs={
+            viewabilityConfigCallbackPairs.current
+          }
+          onEndReached={onEndReached}
+          onEndReachedThreshold={1 / NUM_OF_ITEMS}
+        />
+      </View>
     </View>
   );
 };

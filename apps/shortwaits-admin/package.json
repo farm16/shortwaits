@@ -78,6 +78,8 @@
     "react-native-swipe-gestures": "*",
     "hoist-non-react-statics": "*",
     "recyclerlistview": "*",
-    "moment": "*"
+    "moment": "*",
+    "uuid": "*",
+    "react-native-get-random-values": "*"
   }
 }

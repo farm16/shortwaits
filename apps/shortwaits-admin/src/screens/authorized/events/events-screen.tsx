@@ -12,11 +12,14 @@ import {
 import { Colors } from "../../../theme";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useBusiness } from "../../../redux";
+import { useGetServicesByBusinessQuery } from "../../../services";
+import { skipToken } from "@reduxjs/toolkit/dist/query";
 
 export const EventsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
   navigation,
 }) => {
   const business = useBusiness();
+  useGetServicesByBusinessQuery(business._id ?? skipToken);
 
   useLayoutEffect(() => {
     navigation.setOptions({
