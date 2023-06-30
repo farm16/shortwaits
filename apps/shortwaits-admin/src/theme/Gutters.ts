@@ -14,11 +14,6 @@ import { ThemeVariables } from "./theme.type";
  * <value>: is the value of the <size>
  */
 
-/**
- *
- * @param Theme can be spread like {Colors, NavigationColors, Gutters, Layout, Common, ...args}
- * @return {*}
- */
 export default function ({ MetricsSizes }: ThemeVariables) {
   return StyleSheet.create({
     ...Object.entries(MetricsSizes).reduce(

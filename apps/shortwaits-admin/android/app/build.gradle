@@ -1,5 +1,17 @@
 apply plugin: "com.android.application"
+
+// https://github.com/luggit/react-native-config#extra-step-for-android
+apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
+//
+
 apply plugin: "com.facebook.react"
+
+// https://github.com/oblador/react-native-vector-icons#option-with-gradle-recommended
+project.ext.vectoricons = [
+    iconFontNames: [ 'MaterialIcons.ttf', 'MaterialCommunityIcons.ttf' ] // Name of the font files you want to copy
+]
+apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
+//
 
 import com.android.build.OutputFile
 

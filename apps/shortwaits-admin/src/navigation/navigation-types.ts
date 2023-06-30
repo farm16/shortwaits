@@ -35,7 +35,8 @@ export type ModalStackParamList = {
     multiple?: boolean;
     data?: SelectorModalData[];
     mode?: "update" | "create";
-    onSelect?(arg0): void;
+    searchable?: boolean;
+    onSelect(arg0): void;
     closeOnSubmit?: boolean;
   };
   [MODAL_SCREENS.SCHEDULE_MODAL_SCREEN]: {

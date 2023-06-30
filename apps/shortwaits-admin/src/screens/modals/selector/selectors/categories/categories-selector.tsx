@@ -1,39 +1,87 @@
-import React, { FC, useLayoutEffect, useMemo } from "react";
+import React, { FC, useLayoutEffect, useMemo, useState } from "react";
 import { FlatList, StyleSheet } from "react-native";
 
 import { useBusiness } from "../../../../../redux";
 import {
-  SearchBar,
+  // SearchBar,
   Space,
   LeftChevronButton,
   Text,
+  Button,
 } from "../../../../../components";
 import { selectorConfigs } from "../../selector-config";
 import { CategoriesSelectorItem } from "./categories-selector-item";
 import { useGetCategoriesQuery } from "../../../../../services";
 import { ModalsScreenProps } from "../../../../../navigation";
+import { useTheme } from "../../../../../theme";
 
 export const CategoriesSelector: FC<
   ModalsScreenProps<"selector-modal-screen">
 > = ({ navigation, route }) => {
-  const { type, onSelect } = route.params;
+  const {
+    type,
+    onSelect,
+    // searchable,
+    closeOnSubmit,
+    multiple = false,
+  } = route.params;
+
+  const business = useBusiness();
+  const [selectedItems, setSelectedItems] = useState(business.categories ?? []);
 
   const { headerTitle, searchPlaceholder, isReadOnly } = useMemo(
     () => selectorConfigs[type],
     [type]
   );
-
-  const business = useBusiness();
-
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: headerTitle,
       headerLeft: () => (
         <LeftChevronButton onPress={() => navigation.goBack()} />
       ),
-      headerRight: undefined,
+      headerRight: () =>
+        multiple ? (
+          <Button
+            text="Done"
+            preset="headerLink"
+            onPress={() => {
+              if (closeOnSubmit) {
+                onSelect(selectedItems);
+                navigation.goBack();
+              } else {
+                onSelect(selectedItems);
+              }
+            }}
+          />
+        ) : null,
     });
-  }, [navigation, headerTitle, isReadOnly]);
+  }, [
+    navigation,
+    headerTitle,
+    multiple,
+    closeOnSubmit,
+    onSelect,
+    selectedItems,
+  ]);
+
+  const { Colors } = useTheme();
+
+  const handleOnSelect = item => {
+    if (multiple) {
+      if (selectedItems.includes(item._id)) {
+        setSelectedItems(selectedItems.filter(id => id !== item._id));
+      } else {
+        setSelectedItems([...selectedItems, item._id]);
+      }
+    } else {
+      if (closeOnSubmit) {
+        onSelect(item);
+        navigation.goBack();
+      } else {
+        onSelect(item);
+      }
+    }
+  };
 
   const {
     data: categories,
@@ -55,26 +103,23 @@ export const CategoriesSelector: FC<
     // return null;
     return (
       <FlatList
-        ListHeaderComponent={
-          <>
-            <SearchBar
-              value={""}
-              style={styles.searchBar}
-              autoCapitalize="none"
-              placeholder={searchPlaceholder}
-              autoComplete={"off"}
-              autoCorrect={false}
-            />
-            <Space size="small" />
-          </>
-        }
+        style={{
+          backgroundColor: Colors.backgroundOverlay,
+        }}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={[styles.listContainer]}
         //data={insertIsSelected(categories.data)}
         data={categories.data}
         ItemSeparatorComponent={() => <Space size="small" />}
         renderItem={({ item }) => {
-          return <CategoriesSelectorItem item={item} onSelectItem={onSelect} />;
+          return (
+            <CategoriesSelectorItem
+              item={item}
+              onSelectItem={handleOnSelect}
+              isSelected={selectedItems.includes(item._id)}
+              multiple={multiple}
+            />
+          );
         }}
         // keyExtractor={(item, index) => `${item.name || ""}${index}`}
       />

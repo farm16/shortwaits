@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useColorScheme } from "react-native";
-import {
-  NavigationContainer,
-  DefaultTheme,
-  DarkTheme,
-} from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import {
   createStackNavigator,
   TransitionPresets,
@@ -22,6 +17,7 @@ import {
 import { useAuth, useBusiness, useComponentVisibility } from "../redux";
 import { PremiumMembershipModal } from "../components";
 import { Banner } from "../components/banners/banner";
+import { useTheme } from "../theme";
 
 const RootStack = createStackNavigator<RootStackParamList>();
 
@@ -83,16 +79,12 @@ type NavigationProps = Partial<
 
 export const AppNavigator = (props: NavigationProps): React.ReactElement => {
   useFlipper(navigationRef);
-  const colorScheme = useColorScheme();
   useBackButtonHandler(canExit);
+
+  const { NavigationTheme } = useTheme();
   const { isVisible } = useComponentVisibility("premiumMembership");
-  console.log("isVisible >>>", isVisible);
   return (
-    <NavigationContainer
-      ref={navigationRef}
-      theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-      {...props}
-    >
+    <NavigationContainer ref={navigationRef} theme={NavigationTheme} {...props}>
       <Banner />
       <AppStack />
       <PremiumMembershipModal visible={isVisible} onDismiss={() => null} />

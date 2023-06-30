@@ -45,7 +45,7 @@ export interface ButtonProps extends TouchableOpacityProps {
   children?: React.ReactNode;
 
   rightIconName?: string;
-  rightIconSize?: number;
+  rightIconSize?: number | string;
   rightIconColor?: string;
   leftIconName?: string;
   leftIconSize?: number;

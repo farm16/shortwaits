@@ -9,6 +9,8 @@ import {
 import { MODAL_SCREENS } from "../navigation-constants";
 import { ModalStackParamList } from "../navigation-types";
 import { FormModalScreen } from "../../screens/modals/forms";
+import { useTheme } from "../../theme";
+import { Platform } from "react-native";
 
 const {
   SELECTOR_MODAL_SCREEN,
@@ -20,8 +22,16 @@ const {
 const Stack = createStackNavigator<ModalStackParamList>();
 
 export const ModalsNavigator = (): React.ReactElement => {
+  const { Colors } = useTheme();
+
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: Colors.backgroundOverlay,
+        },
+      }}
+    >
       <Stack.Screen
         name={SELECTOR_MODAL_SCREEN}
         component={SelectorScreenModal}

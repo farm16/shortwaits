@@ -9,7 +9,7 @@ import {
   Container,
   CircleIconButton,
 } from "../../../components";
-import { Colors } from "../../../theme";
+import { Colors, useTheme } from "../../../theme";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useBusiness } from "../../../redux";
 import { useGetServicesByBusinessQuery } from "../../../services";
@@ -49,6 +49,7 @@ export const EventsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
     <Screen
       preset="fixed"
       unsafe
+      unsafeBottom
       backgroundColor={Colors.white}
       statusBar="dark-content"
     >

@@ -38,35 +38,26 @@ export const businessReducers = {
   setBusinessPhone1(state, action: PayloadAction<{ phone1: string }>) {
     return { ...state, ...action.payload };
   },
-  setBusinessCategory(state, action: PayloadAction<ObjectId | string>) {
-    const _categories = state.categories;
+  setBusinessCategory(state, action: PayloadAction<string>) {
+    const newCategory = action.payload;
+    const updatedCategories = state.categories.filter(
+      category => category !== newCategory
+    ); // Remove the new category if it already exists in the state
 
-    const isCategoryPresent = _categories.some(
-      categoryId => categoryId === action.payload
-    );
+    const categories = [...updatedCategories, newCategory]; // Add the new category to the existing unique categories
 
-    if (isCategoryPresent) {
-      const categories = _categories.filter(categoriesId => {
-        return categoriesId !== action.payload;
-      });
-      return { ...state, categories };
-    } else {
-      const categories = [...state.categories, action.payload];
-      return { ...state, categories };
-    }
+    console.log("categories >>>", categories);
+    return { ...state, categories };
   },
-  setBusinessCategories(state: BusinessDtoType, action: PayloadAction<string>) {
-    if (state.categories.includes(action.payload)) {
-      const categories = state.categories.filter(
-        elem => elem !== action.payload
-      );
-      console.log("removing >>>", categories);
-      return { ...state, categories };
-    } else {
-      const categories = [...state.categories, action.payload];
-      console.log("adding >>>", categories);
-      return { ...state, categories };
-    }
+  setBusinessCategories(
+    state: BusinessDtoType,
+    action: PayloadAction<string[]>
+  ) {
+    console.log("action.payload >>>", action.payload);
+    const uniquePayloadCategories = [...new Set(action.payload)]; // Remove duplicates from the incoming array
+    const categories = [...uniquePayloadCategories]; // Combine the updated and unique categories
+
+    return { ...state, categories };
   },
   setBusinessStaff(state: BusinessDtoType, action: PayloadAction<string>) {
     if (state.staff.includes(action.payload)) {

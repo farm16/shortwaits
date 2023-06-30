@@ -1,23 +1,31 @@
 import React from "react";
 import { CategoryDtoType } from "@shortwaits/shared-types";
 
-import { Card, Text } from "../../../../../components";
+import { ButtonCard, Card, Text } from "../../../../../components";
 import { SelectorItemProps } from "../../selector-types";
 
 export function CategoriesSelectorItem(
   props: SelectorItemProps<CategoryDtoType>
 ) {
-  const { disabled = false, item, isSelected, onSelectItem } = props;
+  const {
+    item,
+    onSelectItem,
+    disabled = false,
+    multiple = false,
+    isSelected,
+  } = props;
+
+  const getCheckIcon = () =>
+    isSelected ? "checkbox-outline" : "checkbox-blank-outline";
 
   return (
-    <Card
-      mode="button"
+    <ButtonCard
+      rightIconName={multiple ? getCheckIcon() : "none"}
       disabled={disabled}
-      rightIconSize={"large"}
-      onPress={() => onSelectItem(item)}
-      rightIconName={isSelected ? "checkbox-outline" : "checkbox-blank-outline"}
-    >
-      <Text preset="cardTitle" text={item.name} />
-    </Card>
+      title={item.name}
+      onPress={() => {
+        onSelectItem(item);
+      }}
+    />
   );
 }

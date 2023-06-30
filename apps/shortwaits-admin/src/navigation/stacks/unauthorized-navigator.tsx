@@ -41,7 +41,7 @@ export const UnauthorizedNavigator = () => {
       backgroundColor: Colors.background,
     },
     withOutBorder: {
-      backgroundColor: Colors.background,
+      backgroundColor: Colors.backgroundOverlay,
       shadowColor: Colors.transparent,
       borderBottomWidth: 0,
       elevation: 0, // for Android
@@ -64,7 +64,9 @@ export const UnauthorizedNavigator = () => {
       <Stack.Group
         screenOptions={({ navigation }) => ({
           headerShown: true,
-          headerStyle: headerStyles.withOutBorder,
+          headerStyle: {
+            ...headerStyles.withOutBorder,
+          },
           headerTitle: "",
           headerTitleAlign: "center",
           headerTitleStyle: {
@@ -77,11 +79,11 @@ export const UnauthorizedNavigator = () => {
         })}
       >
         <Stack.Screen name={SIGN_IN_SCREEN} component={SignInScreen} />
+        <Stack.Screen name={SIGN_UP_SCREEN} component={SignUpScreen} />
         <Stack.Screen
           name={SIGN_IN_WITH_EMAIL_SCREEN}
           component={SignInWithEmail}
         />
-        <Stack.Screen name={SIGN_UP_SCREEN} component={SignUpScreen} />
         <Stack.Screen
           name={SIGN_UP_WITH_EMAIL_SCREEN}
           component={SignUpWithEmail}

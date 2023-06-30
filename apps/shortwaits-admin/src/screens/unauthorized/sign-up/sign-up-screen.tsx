@@ -3,7 +3,7 @@ import { View, StyleSheet } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { CompositeNavigationProp } from "@react-navigation/native";
 
-import { Screen, Button, Text, Space, Logo } from "../../../components";
+import { Screen, Button, Text, Space, Container } from "../../../components";
 import Facebook from "../../../assets/icons/facebook.svg";
 import Google from "../../../assets/icons/google.svg";
 import EMail from "../../../assets/icons/email.svg";
@@ -11,6 +11,7 @@ import {
   RootStackParamList,
   UnauthorizedStackParamList,
 } from "../../../navigation";
+import { useTheme } from "../../../theme";
 
 export interface SignUpScreenProps {
   navigation: CompositeNavigationProp<
@@ -20,35 +21,78 @@ export interface SignUpScreenProps {
 }
 
 export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
+  const { Colors } = useTheme();
+
   return (
-    <Screen preset="fixed" unsafe style={styles.container}>
-      <Space size="large" />
-      <Logo center />
-      <Text
-        preset="title3"
-        style={{ alignSelf: "center" }}
-        text="create account"
-      />
+    <Screen preset="fixed">
+      <View style={{ justifyContent: "center", marginBottom: 100, flex: 1 }}>
+        <Text
+          style={{
+            textAlign: "center",
+            fontSize: 37,
+            lineHeight: 37,
+            fontStyle: "italic",
+            fontWeight: "bold",
+            alignSelf: "center",
+            color: Colors.brandSecondary,
+          }}
+        >
+          SHORT{"\n"}WAITS
+        </Text>
+        <Text
+          style={{
+            color: Colors.subText,
+            textTransform: "uppercase",
+            fontWeight: "500",
+            marginTop: 21,
+            alignSelf: "center",
+          }}
+          text="create account"
+        />
+      </View>
+
       <View style={styles.formContainer}>
-        <Button icon={Facebook} preset="social" text="with Facebook" />
+        <Button preset="social">
+          <Container style={styles.buttonContainer}>
+            <Facebook width={30} height={30} />
+            <Space direction="vertical" size="tiny" />
+            <Text preset="social">with Facebook</Text>
+          </Container>
+        </Button>
         <Space size="small" />
-        <Button icon={Google} preset="social" text="with Google" />
+        <Button preset="social">
+          <Container style={styles.buttonContainer}>
+            <Google width={30} height={30} />
+            <Space direction="vertical" size="tiny" />
+            <Text preset="social">with Gmail</Text>
+          </Container>
+        </Button>
         <Space size="small" />
         <Button
-          icon={EMail}
           preset="social"
-          text="with your email"
+          style={{ backgroundColor: Colors.brandSecondary3 }}
           onPress={() =>
             navigation.navigate("unauthorized", {
               screen: "sign-up-with-email-screen",
             })
           }
-        />
+        >
+          <Container style={styles.buttonContainer}>
+            <EMail width={30} height={30} />
+            <Space direction="vertical" size="tiny" />
+            <Text style={{ color: "white" }} preset="social">
+              with Email
+            </Text>
+          </Container>
+        </Button>
+
         <Space size="large" />
         <View style={styles.footerContainer}>
-          <Button text="T" preset="subLink" onPress={() => null} />
-          <Text text="&" preset="textTiny" />
-          <Button text="C" preset="subLink" onPress={() => null} />
+          <Button preset="subLink" onPress={() => {}}>
+            <Text text="T" preset="subLink" />
+            <Text text="&" preset="subLink" />
+            <Text text="C" preset="subLink" />
+          </Button>
         </View>
         <Space size="xLarge" />
       </View>
@@ -57,9 +101,6 @@ export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    justifyContent: "flex-start",
-  },
   footerContainer: {
     flexDirection: "row",
     alignSelf: "stretch",
@@ -71,5 +112,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-end",
   },
-  subLink: { fontWeight: "bold" },
+  subLink: {
+    fontWeight: "bold",
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1,
+  },
 });

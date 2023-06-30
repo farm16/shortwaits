@@ -28,9 +28,46 @@ const basicColors = {
   orange: getPaletteWithContrast("orange", "#ffa500"),
 };
 
-// dark #26242b
+const staticColors = {
+  welcomeBackground: brandColors.secondary.brandSecondary1,
+  welcomeButtonBackground: "#FBFBFB",
+  welcomeButtonText: brandColors.secondary.brandSecondary6,
+  welcomeLinkText: "#ffffff",
+  white: "#ffffff",
+  black: "#26242b",
+};
 
-export const staticCustomColors = {
+export const customDarkColors = {
+  static: { ...staticColors },
+
+  transparent: "rgba(0,0,0,0)",
+  background: "#ffffff",
+  backgroundOverlay: "#FBFBFB",
+  white: "#26242b",
+  black: "#ffffff",
+
+  //grays
+  lightGray: "rgb(239,239,239)",
+  gray: "rgb(200,200,200)",
+  darkGray: "rgb(50,50,50)",
+
+  text: "rgba(38, 36, 43, 1)",
+  subText: "rgba(38, 36, 43, 0.60)",
+  disabledText: "rgba(38, 36, 43, 0.38)",
+
+  success: "#28a745",
+  pending: "#e0c01f",
+  failed: "#dc3545",
+
+  inputBackground: "rgb(218,226,226)",
+
+  staticLightBackground: "#f0f9f8",
+  staticDarkBackground: "#356E6E",
+};
+
+export const customColors = {
+  static: { ...staticColors },
+
   transparent: "rgba(0,0,0,0)",
   background: "#ffffff",
   backgroundOverlay: "#FBFBFB",
@@ -81,7 +118,12 @@ export const reversedPalettes = {
 };
 
 export const getColors = () => ({
-  ...staticCustomColors,
+  ...customColors,
+  ...palettes,
+});
+
+export const getDarkColors = () => ({
+  ...customDarkColors,
   ...palettes,
 });
 

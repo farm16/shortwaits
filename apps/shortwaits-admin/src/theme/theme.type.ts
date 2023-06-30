@@ -2,27 +2,17 @@ import { ImageStyle, TextStyle, ViewStyle } from "react-native";
 import Common from "./Common";
 import { ThemeColors } from "./Colors";
 import { MetricsSizes } from "./Variables";
-
+import { Theme as ThemeNavigationColors } from "@react-navigation/native";
 export type StyleType = TextStyle & ViewStyle & ImageStyle;
-
 export type ThemeNavigationTheme = {
   dark: boolean;
   colors: ThemeNavigationColors;
-};
-export type ThemeNavigationColors = {
-  primary: string;
-  background: string;
-  card: string;
-  text: string;
-  border: string;
-  notification: string;
 };
 export type ThemeFontSize = { [key: string]: number };
 export type ThemeMetricsSizes = typeof MetricsSizes;
 
 export type ThemeVariables = {
   Colors: ThemeColors;
-  NavigationColors: ThemeNavigationColors;
   FontSize: ThemeFontSize;
   MetricsSizes: ThemeMetricsSizes;
 };
@@ -35,7 +25,6 @@ export type ThemeImages = { [key: string]: any };
 
 export type Theme = {
   Colors: ThemeColors;
-  NavigationColors: ThemeNavigationColors;
   FontSize: ThemeFontSize;
   MetricsSizes: ThemeMetricsSizes;
   Fonts: ThemeFonts;
@@ -47,7 +36,6 @@ export type Theme = {
 };
 export interface ThemeCommonParams {
   Colors: ThemeColors;
-  NavigationColors: ThemeNavigationColors;
   FontSize: ThemeFontSize;
   MetricsSizes: ThemeMetricsSizes;
   Fonts: ThemeFonts;
@@ -56,3 +44,5 @@ export interface ThemeCommonParams {
   Gutters: ThemeGutters;
   Variables?: Partial<ThemeVariables>;
 }
+
+export { ThemeNavigationColors };

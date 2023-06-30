@@ -15,8 +15,8 @@ export function Logo({ withMargin = true, center = true }: LogoProps) {
   const [currentHeight, setCurrentHeight] = React.useState(MAX_LOGO_HEIGHT);
   const { height: SCREEN_HEIGHT } = getDimensions();
 
-  const minViewHeight = SCREEN_HEIGHT * 0.3;
-  const maxViewHeight = SCREEN_HEIGHT * 0.5;
+  const minViewHeight = SCREEN_HEIGHT * 0.25;
+  const maxViewHeight = SCREEN_HEIGHT * 0.4;
 
   const fromCurrentViewHeight = currentHeight * 0.5;
 
@@ -25,12 +25,12 @@ export function Logo({ withMargin = true, center = true }: LogoProps) {
     <View
       style={{
         alignItems: "center",
-        backgroundColor: undefined,
+        backgroundColor: "transparent",
         minHeight: minViewHeight,
         maxHeight: maxViewHeight,
         justifyContent: center ? "center" : "flex-start",
       }}
-      onLayout={(e) => setCurrentHeight(e.nativeEvent.layout.height)}
+      onLayout={e => setCurrentHeight(e.nativeEvent.layout.height)}
     >
       <Image
         source={logo}

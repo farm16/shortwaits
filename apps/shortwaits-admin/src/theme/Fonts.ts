@@ -4,11 +4,6 @@
 import { StyleSheet } from "react-native";
 import { ThemeVariables, ThemeFonts } from "./theme.type";
 
-/**
- *
- * @param Theme can be spread like {Colors, NavigationColors, Gutters, Layout, Common, ...args}
- * @return {*}
- */
 export default function ({ FontSize, Colors }: ThemeVariables): ThemeFonts {
   return StyleSheet.create({
     textTiny: {

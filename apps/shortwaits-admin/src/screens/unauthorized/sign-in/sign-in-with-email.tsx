@@ -10,6 +10,7 @@ import {
   Checkbox,
   Space,
   TextFieldCard,
+  Screen,
 } from "../../../components";
 import { useTheme } from "../../../theme";
 import {
@@ -18,7 +19,6 @@ import {
 } from "../../../navigation";
 import { useForm } from "../../../hooks";
 import { useLocalSignInMutation } from "../../../services";
-
 interface SignInWithEmailScreenProps {
   navigation: CompositeNavigationProp<
     StackNavigationProp<
@@ -45,7 +45,7 @@ export const SignInWithEmail: FC<SignInWithEmailScreenProps> = ({
     useForm(
       {
         initialValues,
-        onSubmit: (formData) => {
+        onSubmit: formData => {
           localSignIn({
             email: formData.email,
             password: formData.password,
@@ -55,18 +55,11 @@ export const SignInWithEmail: FC<SignInWithEmailScreenProps> = ({
       "signInSchema"
     );
   const handlePasswordVisibility = useCallback(() => {
-    setIsVisible((visibility) => !visibility);
+    setIsVisible(visibility => !visibility);
   }, []);
 
   return (
-    <View
-      style={[
-        styles.container,
-        {
-          backgroundColor: Colors.background,
-        },
-      ]}
-    >
+    <Screen preset="fixed" style={{ alignItems: "center" }}>
       <Space />
       <ScrollView>
         <TextFieldCard
@@ -115,26 +108,31 @@ export const SignInWithEmail: FC<SignInWithEmailScreenProps> = ({
             text="Forgot password?"
           />
         </View>
-      </ScrollView>
-      <Space />
-      <Button onPress={() => handleSubmit()} preset="primary" text="Sign In" />
-      <Space />
-      <View style={{ flexDirection: "row", alignSelf: "center" }}>
-        <Text
-          preset="subLink"
-          style={{ color: Colors.text }}
-          text="Need an account? "
-        />
+
+        <Space />
         <Button
-          preset="subLink"
-          text="Sign Up"
-          onPress={() => {
-            navigation.navigate("unauthorized", { screen: "sign-up-screen" });
-          }}
+          onPress={() => handleSubmit()}
+          preset="primary"
+          text="Sign In"
         />
-      </View>
-      <Space size="xLarge" />
-    </View>
+        <Space />
+        <View style={{ flexDirection: "row", alignSelf: "center" }}>
+          <Text
+            preset="subLink"
+            style={{ color: Colors.text }}
+            text="Need an account? "
+          />
+          <Button
+            preset="subLink"
+            text="Sign Up"
+            onPress={() => {
+              navigation.navigate("unauthorized", { screen: "sign-up-screen" });
+            }}
+          />
+        </View>
+        <Space size="xLarge" />
+      </ScrollView>
+    </Screen>
   );
 };
 const styles = StyleSheet.create({

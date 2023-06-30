@@ -58,7 +58,10 @@ export const MyBusinessScreen: FC<
       headerTitle: () => {
         return (
           <Container direction="row" justifyContent="center">
-            <Text text={truncate(business.shortName, { length: 16 })} />
+            <Text
+              preset="headerTitle"
+              text={truncate(business.shortName, { length: 16 })}
+            />
           </Container>
         );
       },
@@ -81,9 +84,7 @@ export const MyBusinessScreen: FC<
           isLoading={isEventSummaryLoading}
           error={errorEventSummary}
         />
-        <Space size="small" />
         <ButtonCard
-          withTopBorder
           leftIconName="account-tie"
           leftIconColor={Colors.brandSecondary6}
           title={"Staff"}
@@ -92,6 +93,9 @@ export const MyBusinessScreen: FC<
               screen: "selector-modal-screen",
               params: {
                 type: "staff",
+                onSelect: staff => {
+                  console.log(">>>", staff);
+                },
               },
             })
           }
@@ -105,6 +109,9 @@ export const MyBusinessScreen: FC<
               screen: "selector-modal-screen",
               params: {
                 type: "services",
+                onSelect: services => {
+                  console.log(">>>", services);
+                },
               },
             })
           }

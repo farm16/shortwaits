@@ -5,18 +5,11 @@
  * That allows to change them more easily later on.
  */
 
-import {
-  ThemeFontSize,
-  ThemeMetricsSizes,
-  ThemeNavigationColors,
-} from "./theme.type";
+import { ThemeFontSize } from "./theme.type";
 import { getColors } from "./Colors";
 
 export const Colors = {
   ...getColors(),
-};
-export const NavigationColors: Partial<ThemeNavigationColors> = {
-  primary: Colors.brandPrimary,
 };
 
 /**

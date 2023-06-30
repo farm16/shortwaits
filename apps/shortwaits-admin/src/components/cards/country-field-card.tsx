@@ -35,6 +35,7 @@ export function CurrencyFieldCard(props: TextFieldCard) {
     Colors,
     Common: { textFieldPresets },
   } = useTheme();
+
   const { width } = getDimensions();
 
   return (

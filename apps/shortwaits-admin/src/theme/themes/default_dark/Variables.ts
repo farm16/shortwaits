@@ -1,16 +1,9 @@
-import { ThemeNavigationColors } from "../../theme.type";
+import { getDarkColors } from "../../Colors";
 
 const Colors = {
-  primary: "lightblue",
-  text: "white",
-  inputBackground: "gray",
-};
-
-const NavigationColors: Partial<ThemeNavigationColors> = {
-  primary: Colors.primary,
+  ...getDarkColors(),
 };
 
 export default {
   Colors,
-  NavigationColors,
 };

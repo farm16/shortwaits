@@ -9,6 +9,7 @@ import {
   Text,
   TextFieldCard,
   ScrollView,
+  Screen,
 } from "../../../components";
 import { useForm } from "../../../hooks";
 import { useTheme } from "../../../theme";
@@ -49,7 +50,7 @@ export const SignUpWithEmail: FC<SignUpWithEmailScreenProps> = ({
     useForm(
       {
         initialValues,
-        onSubmit: (formData) => {
+        onSubmit: formData => {
           localSignUp({
             username: formData.email,
             email: formData.email,
@@ -61,18 +62,11 @@ export const SignUpWithEmail: FC<SignUpWithEmailScreenProps> = ({
     );
 
   const handlePasswordVisibility = useCallback(() => {
-    setIsVisible((visibility) => !visibility);
+    setIsVisible(visibility => !visibility);
   }, []);
 
   return (
-    <View
-      style={[
-        styles.container,
-        {
-          backgroundColor: Colors.background,
-        },
-      ]}
-    >
+    <Screen preset="fixed" style={{ alignItems: "center" }}>
       <Space />
       <ScrollView>
         <TextFieldCard
@@ -133,7 +127,7 @@ export const SignUpWithEmail: FC<SignUpWithEmailScreenProps> = ({
         />
       </View>
       <Space size="xLarge" />
-    </View>
+    </Screen>
   );
 };
 

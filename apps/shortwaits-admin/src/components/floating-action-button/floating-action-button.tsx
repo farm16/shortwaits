@@ -5,6 +5,7 @@ import { FAB } from "react-native-paper";
 import { useComponentVisibility } from "../../redux";
 import { useTheme } from "../../theme";
 import { actions as defaultActions } from "./fab-actions";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type FloatingActionButtonProps = {
   actions?: FloatingActions;
@@ -30,19 +31,14 @@ export const FloatingActionButton = (props: FloatingActionButtonProps) => {
     actions = defaultActions,
     icon = "plus",
     pressedIcon = "plus",
-    hasPaddingBottom = true,
     isVisible: isVisibleOverride,
     ...rest
   } = props;
-
   const { Colors } = useTheme();
-
   const { isVisible } = useComponentVisibility("floatingActionButton", true);
-
   const [state, setState] = useState({ open: false });
-
   const onStateChange = ({ open }) => setState({ open });
-
+  const insets = useSafeAreaInsets();
   const { open } = state;
 
   return (
@@ -51,7 +47,8 @@ export const FloatingActionButton = (props: FloatingActionButtonProps) => {
         visible={isVisibleOverride ?? isVisible}
         open={open}
         style={{
-          paddingBottom: hasPaddingBottom ? "15%" : 0,
+          paddingBottom: insets.bottom + 70,
+          paddingRight: insets.right + 8,
         }}
         fabStyle={{
           backgroundColor: Colors.brandSecondary,
@@ -71,13 +68,3 @@ export const FloatingActionButton = (props: FloatingActionButtonProps) => {
     </Portal>
   );
 };
-
-const styles = StyleSheet.create({
-  fab: {
-    position: "absolute",
-    marginRight: 25,
-    marginBottom: 40,
-    right: 0,
-    bottom: 0,
-  },
-});

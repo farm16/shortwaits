@@ -22,7 +22,7 @@ export interface ScreenProps extends ScrollViewProps {
   /**
    * An optional style override useful for padding & margin.
    */
-  style?: StyleProp<ViewStyle>;
+  style?: ViewStyle;
 
   /**
    * One of the different types of presets.

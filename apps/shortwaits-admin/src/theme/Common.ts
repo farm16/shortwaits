@@ -6,11 +6,7 @@ import { StyleSheet } from "react-native";
  */
 import { buttonPresets, textFieldPresets, textPresets } from "./presets";
 import { ThemeCommonParams } from "./theme.type";
-/**
- *
- * @param Theme can be spread like {Colors, NavigationColors, Gutters, Layout, Common, ...args}
- * @return {*}
- */
+
 export default function ({ Colors, ...args }: ThemeCommonParams) {
   return {
     buttonTextPresets: buttonPresets({ Colors, ...args }).textPresets,

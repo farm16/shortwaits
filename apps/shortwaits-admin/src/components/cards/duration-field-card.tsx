@@ -14,7 +14,6 @@ export interface TimeDurationCardProps {
 export const DurationFieldCard = (props: TimeDurationCardProps) => {
   const { title, values, onValuesChange = noop } = props;
   const {
-    Colors,
     Common: { textFieldPresets },
   } = useTheme();
 

@@ -30,7 +30,7 @@ export const AuthorizedNavigator = () => {
         unmountOnBlur: true,
         headerShown: true,
         headerStatusBarHeight: banner?.isVisible ? 0 : undefined,
-        tabBarStyle: {
+        headerStyle: {
           borderTopWidth: 0,
           backgroundColor: Colors.white,
           ...Platform.select({

@@ -9,7 +9,7 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 export function PremiumMembershipBanner() {
   const insets = useSafeAreaInsets();
-  const statusBarHeight = insets.top;
+
   const dispatch = useDispatch();
   const handleClose = () => {
     dispatch(hidePremiumMembershipBanner());
@@ -25,7 +25,7 @@ export function PremiumMembershipBanner() {
         style={{
           position: "absolute",
           right: 16,
-          top: statusBarHeight - 10,
+          top: insets.top,
           backgroundColor: "rgba(0,0,0,0.5)",
           width: 30,
           height: 30,
@@ -37,7 +37,7 @@ export function PremiumMembershipBanner() {
         <Icon name="close" color="white" size={24} onPress={handleClose} />
       </View>
       <StatusBar barStyle="light-content" />
-      <View style={{ marginTop: statusBarHeight }}>
+      <View style={{ paddingTop: insets.top }}>
         <Text preset="text" style={styles.title}>
           <Text preset="text" style={[styles.title, { color: "white" }]}>
             {"love "}
@@ -62,10 +62,10 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: "flex-end",
     alignItems: "center",
-    height: 180,
+    minHeight: 180,
   },
   image: {
-    height: 180,
+    minHeight: 180,
   },
   title: {
     fontSize: 23,

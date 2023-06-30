@@ -35,7 +35,7 @@ function BusinessIncomeInfoComponent({
   }
 
   return (
-    <View style={{ alignItems: "center" }}>
+    <View style={styles.root}>
       {isLoading ? (
         <Placeholder Animation={Fade}>
           <PlaceholderLine width={80} />
@@ -45,7 +45,6 @@ function BusinessIncomeInfoComponent({
           style={[
             styles.graphTopBar,
             {
-              height: 45,
               backgroundColor: Colors.staticLightBackground,
             },
           ]}
@@ -100,18 +99,15 @@ function BusinessIncomeInfoComponent({
 export const BusinessIncomeInfo = React.memo(BusinessIncomeInfoComponent);
 
 const styles = StyleSheet.create({
-  graphTopBar: {
-    alignSelf: "stretch",
-    flexDirection: "row",
-    alignItems: "center",
-    paddingLeft: 20,
-    justifyContent: "space-between",
-  },
-  graphBarButtons: {
+  root: {
     flex: 1,
-    flexDirection: "row",
+    width: "100%",
+  },
+  graphTopBar: {
+    height: 49,
+    justifyContent: "space-between",
+    paddingLeft: 21,
     alignItems: "center",
-    paddingHorizontal: 15,
-    justifyContent: "flex-end",
+    flexDirection: "row",
   },
 });

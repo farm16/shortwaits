@@ -24,6 +24,7 @@ import {
   useSignOut,
   useAuth,
   useMobileAdmin,
+  setBusinessCategories,
 } from "../../../redux";
 
 export const Onboarding1Screen: FC<
@@ -44,8 +45,8 @@ export const Onboarding1Screen: FC<
     selectedCategories: any[]
   ): string => {
     const _selectedCategories = availableCategories
-      .filter((element) => selectedCategories.includes(element._id))
-      .map((elem) => elem.name);
+      .filter(element => selectedCategories.includes(element._id))
+      .map(elem => elem.name);
 
     if (_selectedCategories.length > 2) {
       return _selectedCategories.slice(0, 2).join(", ") + ", ...";
@@ -67,7 +68,7 @@ export const Onboarding1Screen: FC<
   const { touched, errors, values, handleChange, handleSubmit } = useForm(
     {
       initialValues,
-      onSubmit: (formData) => {
+      onSubmit: formData => {
         dispatch(
           setBusinessDescription({ description: formData.businessDescription })
         );
@@ -161,6 +162,11 @@ export const Onboarding1Screen: FC<
               screen: "selector-modal-screen",
               params: {
                 type: "categories",
+                multiple: true,
+                closeOnSubmit: true,
+                onSelect: (categories: string[]) => {
+                  dispatch(setBusinessCategories(categories));
+                },
               },
             });
           }}
@@ -185,12 +191,15 @@ export const Onboarding1Screen: FC<
         <Space size="small" />
         <ButtonCard
           title="Staff"
-          subTitle={getStaffCount(business?.staff)}
+          subTitle={getStaffCount(business.staff)}
           onPress={() =>
             navigation.navigate("modals", {
               screen: "selector-modal-screen",
               params: {
                 type: "staff",
+                onSelect: (staff: any) => {
+                  console.log("staff", staff);
+                },
               },
             })
           }
@@ -219,7 +228,7 @@ export const Onboarding1Screen: FC<
         <Button
           preset={"secondary"}
           text="CONTINUE"
-          onPress={(e) => {
+          onPress={e => {
             setIsCategoriesTouched(true);
             if (
               !(

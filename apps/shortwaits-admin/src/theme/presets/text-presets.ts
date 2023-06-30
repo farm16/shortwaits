@@ -29,6 +29,12 @@ export const textPresets = ({
       ...BASE,
       fontWeight: "bold",
     },
+    social: {
+      ...BASE,
+      ...Fonts.textSmall,
+      color: Colors.text,
+      fontWeight: "600",
+    },
     pending: {
       ...Fonts.textTiny,
       fontWeight: "400",
@@ -56,7 +62,7 @@ export const textPresets = ({
     subLink: {
       ...BASE,
       ...Fonts.textSmall,
-      color: Colors.brandAccent,
+      color: Colors.brandSecondary6,
       fontWeight: "400",
     },
     headerLink: {

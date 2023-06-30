@@ -6,7 +6,8 @@ import { EVENTS } from "./endpoints/events";
 import { SERVICES } from "./endpoints/services";
 import { USERS } from "./endpoints/users";
 
-export const API_BASE_URL = ENV.API_BASE_URL;
+const API_VERSION = "v1";
+export const API_BASE_URL = ENV.API_BASE_URL + "/" + API_VERSION;
 
 console.log("API_BASE_URL >>>", API_BASE_URL);
 
