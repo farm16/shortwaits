@@ -39,28 +39,52 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({
   if (isLoading) return <Text>Loading ...</Text>;
   if (isSuccess) {
     return (
-      <Screen preset="scroll" unsafe>
-        <List.Section>
-          <List.Item title="Activate web booking" right={() => <Switch />} />
-          <Divider />
-          <List.Item title="App notifications" right={() => <Switch />} />
-          <Divider />
-          <List.Item title="SMS notifications" right={() => <Switch />} />
-          <Divider />
+      <Screen preset="scroll" unsafe backgroundColor="backgroundOverlay">
+        <List.Section
+          style={{
+            backgroundColor: Colors.backgroundOverlay,
+          }}
+        >
+          <List.Item
+            titleStyle={{ color: Colors.text }}
+            title="Activate web booking"
+            right={() => <Switch />}
+          />
+          <List.Item
+            titleStyle={{ color: Colors.text }}
+            title="App notifications"
+            right={() => <Switch />}
+          />
+          <List.Item
+            titleStyle={{ color: Colors.text }}
+            title="SMS notifications"
+            right={() => <Switch />}
+          />
           <ContactsSettings business={business} />
-          <Divider />
           <IntegrationsSettings business={business} />
-          <Divider />
           <UserAccountSettings user={user} />
-          <Divider />
           <BusinessInfoSettings business={business} />
-          <Divider />
-          <List.Item title="Disable Store" right={() => <Switch />} />
-          <Divider />
           <SupportSettings />
-          <Divider />
+          <List.Item
+            titleStyle={{ color: Colors.text }}
+            title="Disable Store"
+            right={() => <Switch />}
+          />
           <Button
-            preset="link"
+            style={{
+              flex: undefined,
+              width: "50%",
+              height: 45,
+              backgroundColor: Colors.white,
+              borderColor: Colors.red3,
+              borderWidth: 2,
+              alignSelf: "center",
+              marginVertical: 20,
+            }}
+            textStyle={{
+              // textTransform: "uppercase",
+              color: Colors.red5,
+            }}
             text="Sign Out"
             onPress={() => {
               signOut();
@@ -72,5 +96,8 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({
   }
 };
 const styles = StyleSheet.create({
+  itemText: {
+    color: "red",
+  },
   container: {},
 });

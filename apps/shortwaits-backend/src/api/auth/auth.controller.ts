@@ -47,9 +47,8 @@ export class AuthController {
     description: "Returns existing user record",
     type: AuthSuccessResponse,
   })
-  signInLocal(
-    @Body(new ValidationPipe()) body: SignInWithEmailDto
-  ): Promise<AuthPayloadType> {
+  signInLocal(@Body(new ValidationPipe()) body: SignInWithEmailDto) {
+    console.log("signInLocal controller", body);
     return this.authService.signInLocal(body);
   }
 

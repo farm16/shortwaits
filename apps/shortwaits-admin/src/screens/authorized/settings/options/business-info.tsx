@@ -1,4 +1,4 @@
-import { BusinessDocType } from "@shortwaits/shared-types";
+import { BusinessDtoType } from "@shortwaits/shared-types";
 import React, { useState } from "react";
 import { Divider, List } from "react-native-paper";
 
@@ -7,7 +7,7 @@ import { useTheme } from "../../../../theme";
 export const BusinessInfoSettings = ({
   business,
 }: {
-  business: BusinessDocType;
+  business: BusinessDtoType;
 }) => {
   const [expanded, setExpanded] = useState(false);
   const handlePress = () => setExpanded(state => !state);
@@ -16,21 +16,40 @@ export const BusinessInfoSettings = ({
   return (
     <List.Accordion
       title="Business Information"
-      style={{ backgroundColor: Colors.background }}
       expanded={expanded}
       onPress={handlePress}
+      style={{ backgroundColor: Colors.backgroundOverlay }}
+      titleStyle={{ color: Colors.text }}
+      descriptionStyle={{ color: Colors.subText }}
+      right={props => (
+        <List.Icon
+          {...props}
+          color={Colors.text}
+          icon={props.isExpanded ? "chevron-up" : "chevron-down"}
+        />
+      )}
     >
       <Divider />
       <List.Item
-        title="Business Name"
+        title="Business name"
+        style={{ backgroundColor: Colors.lightGray }}
+        titleStyle={{ color: Colors.text }}
+        descriptionStyle={{ color: Colors.subText }}
         description={business.longName || business.shortName}
-        right={props => <List.Icon {...props} icon="store" />}
+        right={props => (
+          <List.Icon {...props} color={Colors.text} icon="store" />
+        )}
       />
       <Divider />
       <List.Item
         title="Business Currency"
+        style={{ backgroundColor: Colors.lightGray }}
+        titleStyle={{ color: Colors.text }}
+        descriptionStyle={{ color: Colors.subText }}
         description={business?.currency?.code ?? ""}
-        right={props => <List.Icon {...props} icon="currency-usd" />}
+        right={props => (
+          <List.Icon {...props} color={Colors.text} icon="currency-usd" />
+        )}
       />
     </List.Accordion>
   );

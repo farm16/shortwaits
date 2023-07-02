@@ -1,4 +1,4 @@
-import { BusinessDocType } from "@shortwaits/shared-types";
+import { BusinessDtoType } from "@shortwaits/shared-types";
 import React, { useState } from "react";
 import { Divider, List } from "react-native-paper";
 
@@ -7,7 +7,7 @@ import { useTheme } from "../../../../theme";
 export const IntegrationsSettings = ({
   business,
 }: {
-  business: BusinessDocType;
+  business: BusinessDtoType;
 }) => {
   const [expanded, setExpanded] = useState(false);
   const handlePress = () => setExpanded(state => !state);
@@ -16,23 +16,46 @@ export const IntegrationsSettings = ({
   return (
     <List.Accordion
       title="Video conferences"
-      style={{ backgroundColor: Colors.background }}
       expanded={expanded}
       onPress={handlePress}
+      style={{ backgroundColor: Colors.backgroundOverlay }}
+      titleStyle={{ color: Colors.text }}
+      descriptionStyle={{ color: Colors.subText }}
+      right={props => (
+        <List.Icon
+          {...props}
+          color={Colors.text}
+          icon={props.isExpanded ? "chevron-up" : "chevron-down"}
+        />
+      )}
     >
-      <Divider />
       <List.Item
+        style={{ backgroundColor: Colors.lightGray }}
+        titleStyle={{ color: Colors.text }}
+        descriptionStyle={{ color: Colors.subText }}
         title="Zoom"
-        right={props => <List.Icon {...props} icon="video" />}
+        right={props => (
+          <List.Icon {...props} color={Colors.text} icon="video" />
+        )}
       />
-      <Divider />
+
       <List.Item
+        style={{ backgroundColor: Colors.lightGray }}
+        titleStyle={{ color: Colors.text }}
+        descriptionStyle={{ color: Colors.subText }}
         title="Google"
-        right={props => <List.Icon {...props} icon="google" />}
+        right={props => (
+          <List.Icon {...props} color={Colors.text} icon="google" />
+        )}
       />
       <List.Item
+        style={{ backgroundColor: Colors.lightGray }}
+        titleStyle={{ color: Colors.text }}
+        descriptionStyle={{ color: Colors.subText }}
         title="Add URL link"
-        right={props => <List.Icon {...props} icon="link-plus" />}
+        right={props => (
+          <List.Icon {...props} color={Colors.text} icon="link-plus" />
+        )}
       />
     </List.Accordion>
   );

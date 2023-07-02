@@ -1,11 +1,10 @@
 module.exports = {
-  displayName: "@shortwaits/shared-types",
-  preset: "react-native",
-
-  resolver: "@nrwl/jest/plugins/resolver",
-  moduleFileExtensions: ["ts", "js", "html", "tsx", "jsx"],
-  setupFilesAfterEnv: ["<rootDir>/test-setup.ts"],
-  moduleNameMapper: {
-    ".svg": "@nx/react-native/plugins/jest/svg-mock",
+  displayName: "shared-types",
+  preset: "../../jest.preset.js",
+  testEnvironment: "node",
+  transform: {
+    "^.+\\.[tj]s$": ["ts-jest", { tsconfig: "<rootDir>/tsconfig.spec.json" }],
   },
+  moduleFileExtensions: ["ts", "js", "html"],
+  coverageDirectory: "../../coverage/libs/lib",
 };

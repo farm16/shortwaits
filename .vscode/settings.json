@@ -1,8 +1,5 @@
 {
-  "cSpell.words": [
-    "datasource",
-    "persistor",
-    "reduxjs"
-  ],
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "cSpell.words": ["datasource", "persistor", "reduxjs"],
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "svg.preview.background": "dark-transparent"
 }

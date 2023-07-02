@@ -20,10 +20,11 @@ export const buttonPresets = ({
   const VIEW_BASE = StyleSheet.flatten([
     {
       ...Layout.center,
-      height: 55,
+      height: 50,
       width: width * 0.85,
       backgroundColor: Colors.brandPrimary,
       flexDirection: "row",
+      borderRadius: 25,
     },
   ]) as ViewStyle;
 
@@ -33,17 +34,19 @@ export const buttonPresets = ({
       ...VIEW_BASE,
       backgroundColor: Colors.brandSecondary1,
       //backgroundColor: "#C4EDDE",
-      borderRadius: 25,
     },
     secondary: {
       ...VIEW_BASE,
       backgroundColor: Colors.brandSecondary4,
-      borderRadius: 25,
     },
     "secondary-disabled": {
       ...VIEW_BASE,
       backgroundColor: Colors.gray,
-      borderRadius: 25,
+    },
+    accent: {
+      ...VIEW_BASE,
+      backgroundColor: Colors.brandAccent1,
+      width: undefined,
     },
     headerLink: {
       margin: 15,
@@ -136,6 +139,12 @@ export const buttonPresets = ({
       ...TEXT_BASE,
       color: Colors.white,
       fontWeight: "600",
+    },
+    accent: {
+      ...TEXT_BASE,
+      color: Colors.brandAccent,
+      fontWeight: "600",
+      paddingHorizontal: 21,
     },
     headerLink: {
       ...TEXT_BASE,

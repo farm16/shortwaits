@@ -61,13 +61,13 @@ export const Calendar: FC<CalendarProps> = memo(props => {
     if (!isEventsLoading) refetchEvents();
   }, [isEventsLoading, refetchEvents]);
 
-  console.log("rendering calendar");
-  console.log("agendaData >>>", JSON.stringify(agendaData, null, 2));
+  // console.log("rendering calendar");
+  // console.log("agendaData >>>", JSON.stringify(agendaData, null, 2));
 
   const nowDate = useMemo(() => new Date().toISOString(), []);
 
-  console.log(nowDate);
-  console.log(agendaData[0]?.title);
+  console.log("eventsPayload?.data", eventsPayload?.data);
+  console.log("agendaData", agendaData);
 
   if (isEventsLoading) {
     return <ActivityIndicator />;
@@ -78,45 +78,50 @@ export const Calendar: FC<CalendarProps> = memo(props => {
       date={isEmpty(agendaData) ? nowDate : agendaData[0]?.title}
       showTodayButton={true}
       todayButtonStyle={{
-        backgroundColor: Colors.brandSecondary,
+        backgroundColor: Colors.brandPrimary,
       }}
-      theme={{
-        todayButtonTextColor: Colors.white,
-      }}
+      theme={theme}
     >
-      <ExpandableCalendar firstDay={1} theme={theme} />
-      {isEmpty(agendaData) ? (
-        <NonIdealState
-          image={"noEvents"}
-          buttons={
-            <Button
-              text="Add Event"
-              onPress={() => {
-                navigate("modals", {
-                  screen: "form-modal-screen",
-                  params: {
-                    form: "addEvent",
-                  },
-                });
-              }}
-            />
-          }
-        />
-      ) : (
-        <AgendaList
-          sections={agendaData}
-          renderItem={renderItem}
-          stickySectionHeadersEnabled={false}
-          refreshControl={
-            <RefreshControl
-              refreshing={isEventsLoading}
-              onRefresh={handleRefresh}
-            />
-          }
-          ItemSeparatorComponent={renderSeparatorItem}
-          style={{ backgroundColor: Colors.staticLightBackground }}
-        />
-      )}
+      <ExpandableCalendar theme={theme} firstDay={1} />
+      <AgendaList
+        sectionStyle={{
+          backgroundColor: Colors.backgroundOverlay,
+          color: Colors.brandPrimary5,
+          fontWeight: "400",
+          fontSize: 16,
+        }}
+        ListEmptyComponent={() => (
+          <NonIdealState
+            image={"noEvents"}
+            buttons={
+              <Button
+                text="Add Event"
+                preset="accent"
+                onPress={() => {
+                  navigate("modals", {
+                    screen: "form-modal-screen",
+                    params: {
+                      form: "addEvent",
+                    },
+                  });
+                }}
+              />
+            }
+          />
+        )}
+        theme={theme}
+        sections={agendaData}
+        renderItem={renderItem}
+        stickySectionHeadersEnabled={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={isEventsLoading}
+            onRefresh={handleRefresh}
+          />
+        }
+        ItemSeparatorComponent={renderSeparatorItem}
+        style={{ backgroundColor: Colors.backgroundOverlay }}
+      />
     </CalendarProvider>
   );
 });

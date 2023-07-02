@@ -35,7 +35,9 @@ export const SignInWithEmail: FC<SignInWithEmailScreenProps> = ({
   const { Colors } = useTheme();
   const [isVisible, setIsVisible] = useState(false);
 
-  const [localSignIn, { isLoading }] = useLocalSignInMutation();
+  const [localSignIn, response] = useLocalSignInMutation();
+
+  console.log("response >>>", response);
 
   const initialValues = {
     email: "",
@@ -108,9 +110,19 @@ export const SignInWithEmail: FC<SignInWithEmailScreenProps> = ({
             text="Forgot password?"
           />
         </View>
-
+        <View>
+          <Text
+            preset="error"
+            text={
+              response.isError
+                ? "* " + (response?.error?.data?.message ?? "unknown error")
+                : ""
+            }
+          />
+        </View>
         <Space />
         <Button
+          disabled={response.isLoading}
           onPress={() => handleSubmit()}
           preset="primary"
           text="Sign In"

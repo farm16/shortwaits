@@ -1,12 +1,9 @@
-import {
-  BusinessEndpointsMethods,
-  BusinessEndpointsPaths,
-} from "@shortwaits/shared-types";
+import { BusinessEndpointsMethods } from "@shortwaits/shared-types";
 
 const BUSINESS_BASE_PATH = "/business";
 
 type BusinessProps = {
-  getPath(id?: string): BusinessEndpointsPaths;
+  getPath(id?: string): string;
   METHOD: BusinessEndpointsMethods;
 };
 

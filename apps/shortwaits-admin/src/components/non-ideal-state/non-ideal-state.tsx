@@ -3,49 +3,54 @@ import { Image, Dimensions, View } from "react-native";
 import { useTheme } from "../../theme";
 import { ThemeColorName } from "../../theme/Colors";
 import { Space, Text } from "../common";
+import { NoClients } from "../../assets/images/svg-components/no-clients";
+import { NoEvents } from "../../assets/images/svg-components/no-events";
+import { SvgProps } from "react-native-svg";
 
 interface NonIdealStateProps {
   image: keyof typeof images;
   buttons?: React.ReactNode | React.ReactNode[];
+  imageProps?: SvgProps;
 }
 
 const images = {
   noClients: {
-    source: require("./assets/no-clients.png"),
+    Image: props => <NoClients {...props} />,
     message: "No registered clients",
     messageColor: "brandAccent" as ThemeColorName,
   },
   noEvents: {
-    source: require("./assets/no-events.png"),
+    Image: props => <NoEvents {...props} />,
     message: "No events",
     messageColor: "brandAccent" as ThemeColorName,
   },
 };
 
 export const NonIdealState = (props: NonIdealStateProps) => {
-  const { image = "noClients", buttons, ...rest } = props;
+  const {
+    image = "noClients",
+    buttons,
+    imageProps = {
+      width: Dimensions.get("window").width * 0.5,
+      height: Dimensions.get("window").width * 0.5,
+    },
+  } = props;
 
   const arrayChildren = Children.toArray(buttons);
 
   const { Colors } = useTheme();
+
+  const Image = images[image].Image;
   return (
     <View
       style={{
         flex: 1,
         justifyContent: "flex-start",
         alignItems: "center",
-        //backgroundColor: "red",
+        backgroundColor: Colors.transparent,
+        marginVertical: 20,
       }}
     >
-      <Image
-        source={images[image].source}
-        style={{
-          width: Dimensions.get("window").width * 0.75,
-          height: Dimensions.get("window").width * 0.75,
-          resizeMode: "stretch",
-        }}
-        {...rest}
-      />
       <Text
         text={images[image].message}
         preset="text"
@@ -53,9 +58,11 @@ export const NonIdealState = (props: NonIdealStateProps) => {
           {
             color: Colors[images[image].messageColor],
             textTransform: "uppercase",
+            padding: 16,
           },
         ]}
       />
+      <Image {...imageProps} />
       {Children.map(arrayChildren, (child, _index) => {
         return (
           <>

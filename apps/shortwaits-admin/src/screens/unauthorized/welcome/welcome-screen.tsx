@@ -73,9 +73,9 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation }) => {
       <View style={{ alignItems: "center", position: "absolute", bottom: 0 }}>
         <Button
           style={{
-            backgroundColor: Colors.static.welcomeButtonBackground,
+            backgroundColor: Colors.static_welcomeButtonBackground,
           }}
-          textStyle={{ color: Colors.static.welcomeButtonText }}
+          textStyle={{ color: Colors.static_welcomeButtonText }}
           preset="primary"
           text="Register"
           onPress={() =>
@@ -89,7 +89,7 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation }) => {
           style={{ backgroundColor: Colors.transparent }}
           textStyle={{
             fontWeight: "500",
-            color: Colors.static.welcomeLinkText,
+            color: Colors.static_welcomeLinkText,
           }}
           preset="primary"
           text="Login"

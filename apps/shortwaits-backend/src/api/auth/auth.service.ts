@@ -6,6 +6,7 @@ import {
   NotFoundException,
   Injectable,
   UnprocessableEntityException,
+  InternalServerErrorException,
 } from "@nestjs/common";
 import { AuthPayloadType, TokenPayloadType } from "@shortwaits/shared-types";
 import { JwtService } from "@nestjs/jwt";
@@ -62,12 +63,12 @@ export class AuthService {
         hours: shortwaitsAdmin[0].sampleBusinessData.hours,
       });
       const services = shortwaitsAdmin[0].sampleBusinessData.services.map(
-        (service) => {
+        service => {
           return { ...service, businessId: newBusinessAccount._id };
         }
       );
       const insertedServices = await this.serviceModel.insertMany(services);
-      const servicesIds = insertedServices.map((service) => service._id);
+      const servicesIds = insertedServices.map(service => service._id);
 
       const tokens = await this.signTokens(currentUser);
       const hashedRefreshToken = bcrypt.hashSync(tokens.refreshToken, salt);
@@ -103,7 +104,7 @@ export class AuthService {
     });
 
     if (!currentUser) {
-      throw new NotFoundException("BusinessUser not registered");
+      throw new NotFoundException("User not registered");
     }
 
     const isPasswordValid: boolean = bcrypt.compareSync(
@@ -112,7 +113,7 @@ export class AuthService {
     );
 
     if (!isPasswordValid) {
-      throw new ForbiddenException("Access Denied");
+      throw new ForbiddenException("Invalid password or username");
     }
 
     const signedTokens = await this.signTokens(currentUser);

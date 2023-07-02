@@ -53,6 +53,14 @@ export const textPresets = ({
       // textTransform: "uppercase",
       color: Colors.failed,
     },
+    error: {
+      ...Fonts.textSmall,
+      alignSelf: "flex-start",
+      textAlign: "right",
+      color: Colors.red3,
+      fontWeight: "500" as const,
+      letterSpacing: 0.65,
+    },
     link: {
       ...BASE,
       ...Fonts.textSmall,

@@ -6,6 +6,7 @@
     "build": {
       "executor": "@nx/webpack:webpack",
       "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
       "options": {
         "target": "node",
         "compiler": "tsc",
@@ -17,25 +18,20 @@
         "webpackConfig": "apps/shortwaits-backend/webpack.config.js"
       },
       "configurations": {
-        "production": {
-          "optimization": true,
-          "extractLicenses": true,
-          "inspect": false,
-          "fileReplacements": [
-            {
-              "replace": "apps/shortwaits-backend/src/environments/environment.ts",
-              "with": "apps/shortwaits-backend/src/environments/environment.prod.ts"
-            }
-          ]
-        }
+        "development": {},
+        "production": {}
       }
     },
     "serve": {
       "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
       "options": {
         "buildTarget": "shortwaits-backend:build"
       },
       "configurations": {
+        "development": {
+          "buildTarget": "shortwaits-backend:build:development"
+        },
         "production": {
           "buildTarget": "shortwaits-backend:build:production"
         }
@@ -50,20 +46,24 @@
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/apps/shortwaits-backend"],
+      "outputs": ["{options.outputFile}"],
       "options": {
         "jestConfig": "apps/shortwaits-backend/jest.config.ts",
         "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
       }
     },
     "seed": {
-      "executor": "@nx/workspace:run-commands",
-      "configurations": {
-        "default-data": {
-          "commands": [
-            "DEBUG=mongo-seeding node apps/shortwaits-backend/scripts/seeds/default-data.js"
-          ]
-        }
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "DEBUG=mongo-seeding node apps/shortwaits-backend/scripts/seeds/default-data.js"
+        ]
       }
     }
   },

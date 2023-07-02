@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { NavigationContainer } from "@react-navigation/native";
+import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
 import {
   createStackNavigator,
   TransitionPresets,
@@ -80,11 +80,10 @@ type NavigationProps = Partial<
 export const AppNavigator = (props: NavigationProps): React.ReactElement => {
   useFlipper(navigationRef);
   useBackButtonHandler(canExit);
-
-  const { NavigationTheme } = useTheme();
   const { isVisible } = useComponentVisibility("premiumMembership");
+
   return (
-    <NavigationContainer ref={navigationRef} theme={NavigationTheme} {...props}>
+    <NavigationContainer ref={navigationRef} theme={DefaultTheme} {...props}>
       <Banner />
       <AppStack />
       <PremiumMembershipModal visible={isVisible} onDismiss={() => null} />

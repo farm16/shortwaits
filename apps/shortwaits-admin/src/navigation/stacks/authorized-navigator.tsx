@@ -32,7 +32,7 @@ export const AuthorizedNavigator = () => {
         headerStatusBarHeight: banner?.isVisible ? 0 : undefined,
         headerStyle: {
           borderTopWidth: 0,
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.backgroundOverlay,
           ...Platform.select({
             ios: {
               shadowColor: "#858F96",
@@ -49,6 +49,10 @@ export const AuthorizedNavigator = () => {
         // tabBarIconStyle: { color: Colors.brandSecondary },
         tabBarActiveTintColor: Colors.brandAccent,
         tabBarInactiveTintColor: Colors.brandAccent2,
+        tabBarStyle: {
+          shadowColor: "#858F96",
+          backgroundColor: Colors.backgroundOverlay,
+        },
       }}
     >
       <Tab.Screen

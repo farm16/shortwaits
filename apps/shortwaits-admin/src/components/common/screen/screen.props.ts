@@ -1,11 +1,7 @@
 import React from "react";
-import {
-  ColorValue,
-  StyleProp,
-  ScrollViewProps,
-  ViewStyle,
-} from "react-native";
+import { ColorValue, ScrollViewProps, ViewStyle } from "react-native";
 import { KeyboardOffsets, ScreenPresets } from "./screen.presets";
+import { ThemeColorName } from "../../../theme/Colors";
 
 export interface ScreenProps extends ScrollViewProps {
   header?: JSX.Element;
@@ -32,7 +28,7 @@ export interface ScreenProps extends ScrollViewProps {
   /**
    * An optional background color
    */
-  backgroundColor?: string;
+  backgroundColor?: ThemeColorName;
 
   /**
    * An optional status bar setting. Defaults to light-content.

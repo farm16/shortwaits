@@ -5,6 +5,7 @@ const { Seeder } = require("mongo-seeding");
 dotenv.config({ path: "apps/shortwaits-backend/src/assets/development.env" });
 
 console.log("TARGETING => " + process.env.MONGO_DB_URL);
+
 const config = {
   database: process.env.MONGO_DB_URL,
   dropDatabase: true,
@@ -28,7 +29,7 @@ seeder
     console.log("************ Database seeded !!! ***************");
     console.log("************************************************");
   })
-  .catch((error) => {
+  .catch(error => {
     console.log("***********************************************");
     console.log("****************** ERROR !!! ******************");
     console.log("***********************************************");

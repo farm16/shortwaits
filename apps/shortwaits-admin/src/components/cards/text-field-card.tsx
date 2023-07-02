@@ -61,15 +61,7 @@ export function TextFieldCard(props: TextFieldCard) {
         <TextField preset="cardSubtitle" placeholder={placeholder} {...rest} />
       </Card>
       {errors && isTouched ? (
-        <Text
-          preset="cardTitle"
-          style={{
-            ...styles.errorField,
-            width: width * 0.87,
-            color: Colors.red3,
-          }}
-          text={"* " + errors}
-        />
+        <Text preset="error" text={"* " + errors} />
       ) : null}
     </>
   );

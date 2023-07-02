@@ -1,10 +1,10 @@
-import { UserDocType } from "@shortwaits/shared-types";
+import { UserDtoType } from "@shortwaits/shared-types";
 import React, { useState } from "react";
 import { Divider, List } from "react-native-paper";
 
 import { useTheme } from "../../../../theme";
 
-export const UserAccountSettings = ({ user }: { user: UserDocType }) => {
+export const UserAccountSettings = ({ user }: { user: UserDtoType }) => {
   const [expanded, setExpanded] = useState(false);
   const handlePress = () => setExpanded(state => !state);
   const { Colors } = useTheme();
@@ -15,22 +15,44 @@ export const UserAccountSettings = ({ user }: { user: UserDocType }) => {
     <List.Accordion
       title="Account"
       expanded={expanded}
-      style={{ backgroundColor: Colors.background }}
       onPress={handlePress}
+      style={{ backgroundColor: Colors.backgroundOverlay }}
+      titleStyle={{ color: Colors.text }}
+      descriptionStyle={{ color: Colors.subText }}
+      right={props => (
+        <List.Icon
+          {...props}
+          color={Colors.text}
+          icon={props.isExpanded ? "chevron-up" : "chevron-down"}
+        />
+      )}
     >
-      <Divider />
       <List.Item
+        style={{ backgroundColor: Colors.lightGray }}
+        titleStyle={{ color: Colors.text }}
+        descriptionStyle={{ color: Colors.subText }}
         title="Username"
         description={user.displayName}
-        right={props => <List.Icon {...props} icon="account" />}
+        right={props => (
+          <List.Icon {...props} color={Colors.text} icon="account" />
+        )}
       />
-      <Divider />
+
       <List.Item
+        style={{ backgroundColor: Colors.lightGray }}
+        titleStyle={{ color: Colors.text }}
+        descriptionStyle={{ color: Colors.subText }}
         title="Email"
         description={user.email}
-        right={props => <List.Icon {...props} icon="email" />}
+        right={props => (
+          <List.Icon {...props} color={Colors.text} icon="email" />
+        )}
       />
       {/* <List.Item
+            style={{ backgroundColor: Colors.lightGray }}
+        titleStyle={{ color: Colors.text }}
+        descriptionStyle={{ color: Colors.subText }}
+            titleStyle={{ color: Colors.text }}
         title="Password"
         description={"***"}
         right={props => <List.Icon {...props} icon="folder" />}

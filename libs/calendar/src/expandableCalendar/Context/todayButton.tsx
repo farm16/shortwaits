@@ -1,19 +1,33 @@
-import XDate from 'xdate';
+import XDate from "xdate";
 
-import React, {forwardRef, useImperativeHandle, useEffect, useRef, useState, useContext, useCallback} from 'react';
-import {Animated, TouchableOpacity, ViewStyle, ViewProps, StyleProp} from 'react-native';
+import React, {
+  forwardRef,
+  useImperativeHandle,
+  useEffect,
+  useRef,
+  useState,
+  useContext,
+  useCallback,
+} from "react";
+import {
+  Animated,
+  TouchableOpacity,
+  ViewStyle,
+  ViewProps,
+  StyleProp,
+} from "react-native";
 
-import {Theme} from '../../types';
-import {getDefaultLocale} from '../../services';
-import {toMarkingFormat} from '../../interface';
-import {isToday, isPastDate} from '../../dateutils';
-import {UpdateSources, todayString} from '../commons';
-import styleConstructor from '../style';
-import Context from './index';
+import { Theme } from "../../types";
+import { getDefaultLocale } from "../../services";
+import { toMarkingFormat } from "../../interface";
+import { isToday, isPastDate } from "../../dateutils";
+import { UpdateSources, todayString } from "../commons";
+import styleConstructor from "../style";
+import Context from "./index";
+import DOWN_ICON from "../../img/down.png";
+import UP_ICON from "../../img/up.png";
 
 const TOP_POSITION = 65;
-const DOWN_ICON = require('../../img/down.png');
-const UP_ICON = require('../../img/up.png');
 
 export interface TodayButtonProps extends ViewProps {
   /** The opacity for the disabled button (0-1) */
@@ -33,16 +47,11 @@ const TodayButton = (props: TodayButtonProps, ref: any) => {
   useImperativeHandle(ref, () => ({
     disable: (shouldDisable: boolean) => {
       disable(shouldDisable);
-    }
+    },
   }));
 
-  const {
-    margin = 0,
-    disabledOpacity = 0.3,
-    theme,
-    style: propsStyle,
-  } = props;
-  const {date, setDate} = useContext(Context);
+  const { margin = 0, disabledOpacity = 0.3, theme, style: propsStyle } = props;
+  const { date, setDate } = useContext(Context);
   const [disabled, setDisabled] = useState(false);
   const style = useRef(styleConstructor(theme));
   const state = isToday(date) ? 0 : isPastDate(date) ? -1 : 1;
@@ -102,29 +111,29 @@ const TodayButton = (props: TodayButtonProps, ref: any) => {
       toValue,
       tension: 30,
       friction: 8,
-      useNativeDriver: true
+      useNativeDriver: true,
     };
   };
-  
+
   const getOpacityAnimation = () => {
     return {
       toValue: disabled ? disabledOpacity : 1,
       duration: 500,
-      useNativeDriver: true
+      useNativeDriver: true,
     };
   };
 
   const animatePosition = () => {
     const animationData = getPositionAnimation();
     Animated.spring(buttonY.current, {
-      ...animationData
+      ...animationData,
     }).start();
   };
 
   const animateOpacity = () => {
     const animationData = getOpacityAnimation();
     Animated.timing(opacity.current, {
-      ...animationData
+      ...animationData,
     }).start();
   };
 
@@ -137,14 +146,25 @@ const TodayButton = (props: TodayButtonProps, ref: any) => {
   }, [setDate]);
 
   return (
-    <Animated.View style={[style.current.todayButtonContainer, {transform: [{translateY: buttonY.current}]}]}>
+    <Animated.View
+      style={[
+        style.current.todayButtonContainer,
+        { transform: [{ translateY: buttonY.current }] },
+      ]}
+    >
       <TouchableOpacity
         style={[style.current.todayButton, propsStyle]}
         onPress={onPress}
         disabled={disabled}
       >
-        <Animated.Image style={[style.current.todayButtonImage, {opacity: opacity.current}]} source={buttonIcon}/>
-        <Animated.Text allowFontScaling={false} style={[style.current.todayButtonText, {opacity: opacity.current}]}>
+        <Animated.Image
+          style={[style.current.todayButtonImage, { opacity: opacity.current }]}
+          source={buttonIcon}
+        />
+        <Animated.Text
+          allowFontScaling={false}
+          style={[style.current.todayButtonText, { opacity: opacity.current }]}
+        >
           {today.current}
         </Animated.Text>
       </TouchableOpacity>

@@ -19,9 +19,6 @@ export type BusinessSuccessFnType = (
   message: string
 ) => BusinessResponseType;
 
-export type BusinessEndpointsPaths =
-  BusinessEndpointsTypes[BusinessEndPoints]["path"];
-
 export type BusinessEndpointsMethods = "POST" | "GET" | "PUT" | "DELETE";
 
 export interface BusinessEndpointsTypes extends GeneralSpecShape {

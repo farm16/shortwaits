@@ -11,9 +11,9 @@ import { getPaletteWithContrast, getReversePalette } from "./utils";
  */
 
 const brandColors = {
-  primary: getPaletteWithContrast("brandPrimary", "#F73859"),
+  primary: getPaletteWithContrast("brandPrimary", "#2f2e41"),
   secondary: getPaletteWithContrast("brandSecondary", "#63AE9D"),
-  accent: getPaletteWithContrast("brandAccent", "#384259"),
+  accent: getPaletteWithContrast("brandAccent", "#3f3d56"),
 };
 
 // console.log(getPaletteWithContrast("brandAccent", "#E24939"))
@@ -29,31 +29,31 @@ const basicColors = {
 };
 
 const staticColors = {
-  welcomeBackground: brandColors.secondary.brandSecondary1,
-  welcomeButtonBackground: "#FBFBFB",
-  welcomeButtonText: brandColors.secondary.brandSecondary6,
-  welcomeLinkText: "#ffffff",
-  white: "#ffffff",
-  black: "#26242b",
+  static_welcomeBackground: brandColors.secondary.brandSecondary1,
+  static_welcomeButtonBackground: "#FBFBFB",
+  static_welcomeButtonText: brandColors.secondary.brandSecondary6,
+  static_welcomeLinkText: "#ffffff",
+  static_white: "#ffffff",
+  static_black: "#26242b",
 };
 
 export const customDarkColors = {
-  static: { ...staticColors },
+  ...staticColors,
 
   transparent: "rgba(0,0,0,0)",
   background: "#ffffff",
   backgroundOverlay: "#FBFBFB",
-  white: "#26242b",
-  black: "#ffffff",
+  white: "#ffffff",
+  black: "#26242b",
 
   //grays
   lightGray: "rgb(239,239,239)",
   gray: "rgb(200,200,200)",
   darkGray: "rgb(50,50,50)",
 
-  text: "rgba(38, 36, 43, 1)",
-  subText: "rgba(38, 36, 43, 0.60)",
-  disabledText: "rgba(38, 36, 43, 0.38)",
+  text: "rgba(0,0,0,0.87)",
+  subText: "rgba(0,0,0,0.60)",
+  disabledText: "rgba(0,0,0,0.38)",
 
   success: "#28a745",
   pending: "#e0c01f",
@@ -66,7 +66,7 @@ export const customDarkColors = {
 };
 
 export const customColors = {
-  static: { ...staticColors },
+  ...staticColors,
 
   transparent: "rgba(0,0,0,0)",
   background: "#ffffff",

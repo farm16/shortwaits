@@ -1,4 +1,4 @@
-import { BusinessDocType } from "@shortwaits/shared-types";
+import { BusinessDtoType } from "@shortwaits/shared-types";
 import React, { useState } from "react";
 import { Divider, List } from "react-native-paper";
 
@@ -7,7 +7,7 @@ import { useTheme } from "../../../../theme";
 export const ContactsSettings = ({
   business,
 }: {
-  business: BusinessDocType;
+  business: BusinessDtoType;
 }) => {
   const [expanded, setExpanded] = useState(false);
   const handlePress = () => setExpanded(state => !state);
@@ -16,19 +16,41 @@ export const ContactsSettings = ({
   return (
     <List.Accordion
       title="Contacts"
-      style={{ backgroundColor: Colors.background }}
       expanded={expanded}
       onPress={handlePress}
+      style={{ backgroundColor: Colors.backgroundOverlay }}
+      titleStyle={{ color: Colors.text }}
+      descriptionStyle={{ color: Colors.subText }}
+      right={props => (
+        <List.Icon
+          {...props}
+          color={Colors.text}
+          icon={props.isExpanded ? "chevron-up" : "chevron-down"}
+        />
+      )}
     >
-      <Divider />
       <List.Item
+        style={{ backgroundColor: Colors.lightGray }}
+        titleStyle={{ color: Colors.text }}
+        descriptionStyle={{ color: Colors.subText }}
         title="Upload Contacts"
-        right={props => <List.Icon {...props} icon="cloud-upload-outline" />}
+        right={props => (
+          <List.Icon
+            {...props}
+            color={Colors.text}
+            icon="cloud-upload-outline"
+          />
+        )}
       />
-      <Divider />
+
       <List.Item
+        style={{ backgroundColor: Colors.lightGray }}
+        titleStyle={{ color: Colors.text }}
+        descriptionStyle={{ color: Colors.subText }}
         title="Sync Contacts"
-        right={props => <List.Icon {...props} icon="book-sync" />}
+        right={props => (
+          <List.Icon {...props} color={Colors.text} icon="book-sync" />
+        )}
       />
     </List.Accordion>
   );

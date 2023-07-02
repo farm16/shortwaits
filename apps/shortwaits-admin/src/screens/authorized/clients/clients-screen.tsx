@@ -178,7 +178,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
   return (
     <Screen
       preset="fixed"
-      backgroundColor={Colors.white}
+      backgroundColor={"backgroundOverlay"}
       statusBar="dark-content"
       style={styles.root}
       unsafe

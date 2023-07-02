@@ -50,8 +50,7 @@ export const EventsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
       preset="fixed"
       unsafe
       unsafeBottom
-      backgroundColor={Colors.white}
-      statusBar="dark-content"
+      backgroundColor="backgroundOverlay"
     >
       <Calendar />
       <FloatingActionButton />
