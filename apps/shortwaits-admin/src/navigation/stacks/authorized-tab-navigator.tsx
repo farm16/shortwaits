@@ -9,15 +9,16 @@ import {
   MyBusinessScreen,
   ActivityScreen,
   ClientsScreen,
+  EventScreen,
 } from "../../screens";
 import { useTheme } from "../../theme";
-import { AUTHORIZED_SCREENS } from "../navigation-constants";
+import { AUTHORIZED_TAB_SCREENS } from "../navigation-constants";
 import { Platform } from "react-native";
 import { useMobileAdmin } from "../../redux";
 
 const Tab = createBottomTabNavigator();
 
-export const AuthorizedNavigator = () => {
+export const AuthorizedTabNavigator = () => {
   const { Colors } = useTheme();
   const {
     components: { banner },
@@ -25,7 +26,7 @@ export const AuthorizedNavigator = () => {
 
   return (
     <Tab.Navigator
-      initialRouteName={AUTHORIZED_SCREENS.EVENTS_SCREEN}
+      initialRouteName={AUTHORIZED_TAB_SCREENS.EVENTS_SCREEN}
       screenOptions={{
         unmountOnBlur: true,
         headerShown: true,
@@ -56,7 +57,7 @@ export const AuthorizedNavigator = () => {
       }}
     >
       <Tab.Screen
-        name={AUTHORIZED_SCREENS.EVENTS_SCREEN}
+        name={AUTHORIZED_TAB_SCREENS.EVENTS_SCREEN}
         component={EventsScreen}
         options={{
           tabBarLabel: "Events",
@@ -69,8 +70,9 @@ export const AuthorizedNavigator = () => {
           ),
         }}
       />
+
       <Tab.Screen
-        name={AUTHORIZED_SCREENS.CLIENTS_SCREEN}
+        name={AUTHORIZED_TAB_SCREENS.CLIENTS_SCREEN}
         component={ClientsScreen}
         options={{
           tabBarLabel: "Clients",
@@ -84,7 +86,7 @@ export const AuthorizedNavigator = () => {
         }}
       />
       <Tab.Screen
-        name={AUTHORIZED_SCREENS.MY_BUSINESS_SCREEN}
+        name={AUTHORIZED_TAB_SCREENS.MY_BUSINESS_SCREEN}
         component={MyBusinessScreen}
         options={{
           tabBarLabel: "My Business",
@@ -98,7 +100,7 @@ export const AuthorizedNavigator = () => {
         }}
       />
       <Tab.Screen
-        name={AUTHORIZED_SCREENS.ACTIVITY_SCREEN}
+        name={AUTHORIZED_TAB_SCREENS.ACTIVITY_SCREEN}
         component={ActivityScreen}
         options={{
           tabBarLabel: "Activity",
@@ -112,7 +114,7 @@ export const AuthorizedNavigator = () => {
         }}
       />
       <Tab.Screen
-        name={AUTHORIZED_SCREENS.SETTINGS_SCREEN}
+        name={AUTHORIZED_TAB_SCREENS.SETTINGS_SCREEN}
         component={SettingsScreen}
         options={{
           tabBarLabel: "Settings",

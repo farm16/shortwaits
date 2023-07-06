@@ -66,17 +66,17 @@ export const ServicesModal: FC<ModalsScreenProps<"service-modal-screen">> = ({
     }
   }, [mode, initialValues]);
 
-  const handlePriceChange = useCallback((price) => {
-    setForm((formValues) => ({ ...formValues, price: price * 100 }));
+  const handlePriceChange = useCallback(price => {
+    setForm(formValues => ({ ...formValues, price: price * 100 }));
   }, []);
-  const handleDurationTimeChange = useCallback((durationTime) => {
-    setForm((formValues) => ({
+  const handleDurationTimeChange = useCallback(durationTime => {
+    setForm(formValues => ({
       ...formValues,
       durationInMin: durationTime ? durationTime[0] : 0,
     }));
   }, []);
-  const handleServiceColorChange = useCallback((serviceColor) => {
-    setForm((formValues) => ({
+  const handleServiceColorChange = useCallback(serviceColor => {
+    setForm(formValues => ({
       ...formValues,
       serviceColor: serviceColor,
     }));
@@ -85,7 +85,7 @@ export const ServicesModal: FC<ModalsScreenProps<"service-modal-screen">> = ({
   const { touched, errors, values, handleChange, handleSubmit } = useForm(
     {
       initialValues,
-      onSubmit: (formData) => {
+      onSubmit: formData => {
         return null;
       },
     },
@@ -112,8 +112,8 @@ export const ServicesModal: FC<ModalsScreenProps<"service-modal-screen">> = ({
         title="Name"
         placeholder="Yoga class"
         value={form.name}
-        onChangeText={(text) => {
-          setForm((formState) => {
+        onChangeText={text => {
+          setForm(formState => {
             return { ...formState, name: text };
           });
         }}
@@ -123,6 +123,7 @@ export const ServicesModal: FC<ModalsScreenProps<"service-modal-screen">> = ({
         onChangeValue={handlePriceChange}
         value={form.price! / 100}
         currencyType={form.currency}
+        errors={""}
       />
       <DurationFieldCard
         title="Duration"

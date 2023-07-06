@@ -48,17 +48,28 @@ export const Card = (props: CardProps) => {
     ...rest
   } = props;
 
+  const getIsDisabled = () => {
+    if (leftIconOnPress || rightIconOnPress) {
+      return true;
+    }
+    if (mode === ("static" || "text-field")) {
+      return true;
+    }
+    return false;
+  };
+
   return (
     <Button
       preset="card"
       {...cardModes[mode]}
       {...rest}
+      disabled={getIsDisabled()}
       style={[styles.cardHeight, styleOverride]}
     >
       {leftIconName &&
         (mode === "static" || leftIconName === "none" ? null : (
           <Button
-            disabled={leftIconOnPress ? false : true}
+            disabled={!getIsDisabled()}
             onPress={leftIconOnPress}
             preset="none"
             style={styles.iconContainer}
@@ -75,7 +86,7 @@ export const Card = (props: CardProps) => {
       {rightIconName &&
         (mode === "static" || rightIconName === "none" ? null : (
           <Button
-            disabled={rightIconOnPress ? false : true}
+            disabled={!getIsDisabled()}
             onPress={rightIconOnPress}
             preset="none"
             style={styles.iconContainer}

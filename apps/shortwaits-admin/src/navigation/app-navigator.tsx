@@ -12,12 +12,12 @@ import { navigationRef, useBackButtonHandler } from "./navigation-utils";
 import {
   ModalsNavigator,
   UnauthorizedNavigator,
-  AuthorizedNavigator,
+  AuthorizedTabNavigator,
+  AuthorizedStackNavigator,
 } from "./stacks";
-import { useAuth, useBusiness, useComponentVisibility } from "../redux";
-import { PremiumMembershipModal } from "../components";
+import { useAuth, useBusiness } from "../redux";
+import { FloatingActionButton, PremiumMembershipModal } from "../components";
 import { Banner } from "../components/banners/banner";
-import { useTheme } from "../theme";
 
 const RootStack = createStackNavigator<RootStackParamList>();
 
@@ -46,14 +46,20 @@ const AppStack = () => {
       }}
     >
       {isAuthenticated ? (
-        <RootStack.Screen
-          name={NAVIGATION_STACKS.AUTHORIZED}
-          component={AuthorizedNavigator}
-          options={{
-            headerShown: false,
-            animationEnabled: false,
-          }}
-        />
+        <>
+          <RootStack.Screen
+            name={NAVIGATION_STACKS.AUTHORIZED_TAB}
+            component={AuthorizedTabNavigator}
+            options={{
+              headerShown: false,
+              animationEnabled: false,
+            }}
+          />
+          <RootStack.Screen
+            name={NAVIGATION_STACKS.AUTHORIZED_STACK}
+            component={AuthorizedStackNavigator}
+          />
+        </>
       ) : (
         <RootStack.Screen
           name={NAVIGATION_STACKS.UNAUTHORIZED}
@@ -80,13 +86,13 @@ type NavigationProps = Partial<
 export const AppNavigator = (props: NavigationProps): React.ReactElement => {
   useFlipper(navigationRef);
   useBackButtonHandler(canExit);
-  const { isVisible } = useComponentVisibility("premiumMembership");
 
   return (
     <NavigationContainer ref={navigationRef} theme={DefaultTheme} {...props}>
       <Banner />
       <AppStack />
-      <PremiumMembershipModal visible={isVisible} onDismiss={() => null} />
+      <FloatingActionButton />
+      <PremiumMembershipModal />
     </NavigationContainer>
   );
 };

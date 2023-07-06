@@ -136,6 +136,12 @@ const _circleIcons = {
     backgroundColor: undefined,
     size: 23,
   },
+  share: {
+    name: "share",
+    color: "brandSecondary",
+    backgroundColor: undefined,
+    size: 23,
+  },
   "search-close": {
     name: "magnify-close",
     color: "brandSecondary",

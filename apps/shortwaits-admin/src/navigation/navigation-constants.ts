@@ -8,12 +8,21 @@ export const UNAUTHORIZED_SCREENS = {
   SIGN_UP_WITH_EMAIL_SCREEN: "sign-up-with-email-screen",
 } as const;
 
-export const AUTHORIZED_SCREENS = {
+export const AUTHORIZED_TAB_SCREENS = {
   EVENTS_SCREEN: "events-screen",
   CLIENTS_SCREEN: "clients-screen",
   MY_BUSINESS_SCREEN: "my-business-screen",
   ACTIVITY_SCREEN: "activity-screen",
   SETTINGS_SCREEN: "settings-screen",
+} as const;
+
+export const AUTHORIZED_STACK_SCREENS = {
+  EVENT_SCREEN: "event-screen",
+} as const;
+
+export const AUTHORIZED_SCREENS = {
+  ...AUTHORIZED_TAB_SCREENS,
+  ...AUTHORIZED_STACK_SCREENS,
 } as const;
 
 export const MODAL_SCREENS = {
@@ -24,7 +33,8 @@ export const MODAL_SCREENS = {
 } as const;
 
 export const NAVIGATION_STACKS = {
-  AUTHORIZED: "authorized",
+  AUTHORIZED_TAB: "authorized-tab",
+  AUTHORIZED_STACK: "authorized-stack",
   UNAUTHORIZED: "unauthorized",
   MODALS: "modals",
 } as const;

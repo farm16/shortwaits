@@ -2,33 +2,29 @@ import React, { FC, useLayoutEffect } from "react";
 import { truncate } from "lodash";
 
 import {
-  Calendar,
-  FloatingActionButton,
   Screen,
   Text,
   Container,
   CircleIconButton,
+  BackButton,
 } from "../../../components";
-import { Colors, useTheme } from "../../../theme";
 import { AuthorizedScreenProps } from "../../../navigation";
-import { useBusiness, useGhostComponent } from "../../../redux";
-import { useGetServicesByBusinessQuery } from "../../../services";
-import { skipToken } from "@reduxjs/toolkit/dist/query";
+import { EventScreenTabs } from "./event-tabs";
 
-export const EventsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
+export const EventScreen: FC<AuthorizedScreenProps<"event-screen">> = ({
   navigation,
+  route,
 }) => {
-  const business = useBusiness();
-  useGetServicesByBusinessQuery(business._id ?? skipToken);
-  useGhostComponent("floatingActionButton");
+  const { event } = route.params;
   useLayoutEffect(() => {
     navigation.setOptions({
+      headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
       headerTitle: () => {
         return (
           <Container direction="row" justifyContent="center">
             <Text
               preset="headerTitle"
-              text={truncate(business.shortName, { length: 16 })}
+              text={truncate(event.name, { length: 16 })}
             />
           </Container>
         );
@@ -36,15 +32,14 @@ export const EventsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
       headerRight: () => {
         return (
           <Container direction="row" alignItems="center">
-            <CircleIconButton withMarginRight iconType="magnify" />
-            <CircleIconButton withMarginRight iconType="calendar" />
+            <CircleIconButton withMarginRight iconType="edit" />
+            <CircleIconButton withMarginRight iconType="share" />
           </Container>
         );
       },
       headerShadowVisible: false,
     });
-  }, [business.shortName, navigation]);
-
+  }, [event.name, navigation]);
   return (
     <Screen
       preset="fixed"
@@ -52,7 +47,7 @@ export const EventsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
       unsafeBottom
       backgroundColor="backgroundOverlay"
     >
-      <Calendar />
+      <EventScreenTabs event={event} />
     </Screen>
   );
 };

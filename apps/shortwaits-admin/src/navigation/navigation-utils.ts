@@ -147,11 +147,11 @@ export function navigate<T extends ALL_SCREENS_TYPE>(
   name: STACKS_TYPES,
   params?: {
     screen: ALL_SCREENS_TYPE;
-    params: ScreenProps[T];
+    params?: ScreenProps[T];
   }
 ) {
   if (navigationRef.isReady()) {
-    navigationRef.navigate(name as never, params as never);
+    navigationRef.navigate(name, params);
   }
 }
 

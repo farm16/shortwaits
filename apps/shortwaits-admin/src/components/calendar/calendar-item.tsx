@@ -1,42 +1,37 @@
-import React, { FC, useCallback } from "react";
+import React, { useCallback } from "react";
 import {
   Alert,
-  TouchableOpacity,
   View,
   Image,
+  Animated,
   StyleSheet,
-  SectionListRenderItem,
+  Pressable,
 } from "react-native";
-import { EventDtoType, EventStatusName } from "@shortwaits/shared-types";
-import { isEmpty, truncate } from "lodash";
-
-import { Emoji, Text } from "../";
+import { EventDtoType } from "@shortwaits/shared-types";
+import { truncate } from "lodash";
+import { Container, Emoji, EmojiType, Text } from "../";
 import { useTheme } from "../../theme";
 import { getEventTime } from "./calendar-utils";
 import defaultUserImage from "../../assets/images/user.png";
 import { useService } from "../../redux";
+import { RectButton } from "react-native-gesture-handler";
+import Swipeable from "react-native-gesture-handler/Swipeable";
+import { navigate } from "../../navigation";
+import {
+  statusDisplayMessages,
+  statusDisplayMessagesColor,
+} from "../../utils/status-color";
 
-// type AgendaItemProps = {
-//   item: EventDtoType;
-//   index: number;
-//   section: { title: string; data: EventDtoType[] };
-// };
 type AgendaItemProps = {
   item: EventDtoType;
 };
 
 const BORDER_RADIUS = 6;
-const statusDisplayMessages: Record<EventStatusName, string> = {
-  PENDING: "Waiting on response",
-  APPROVED: "Request accepted",
-  REJECTED: "Request denied",
-  CANCELED: "Request Canceled",
-  COMPLETED: "Request Completed",
-};
 
 export const AgendaItem = (props: AgendaItemProps) => {
   const { item } = props;
-  // console.log("AgendaItem >>>", JSON.stringify(props));
+  // const { navigate } = useNavigation();
+  console.log("AgendaItem >>>", JSON.stringify(item, null, 2));
 
   const { Colors } = useTheme();
   const service = useService(item?.serviceId ?? "");
@@ -44,7 +39,14 @@ export const AgendaItem = (props: AgendaItemProps) => {
   // console.log("serviceId >>> ", index, item?.serviceId, section.index);
   // console.log("service >>>", JSON.stringify(service, null, 2));
 
-  const itemPressed = useCallback(() => {
+  const handleOnPress = useCallback(() => {
+    navigate("authorized-stack", {
+      screen: "event-screen",
+      params: { event: item },
+    });
+  }, [item]);
+
+  const handleOnLongPress = useCallback(() => {
     Alert.alert(item.name);
   }, [item.name]);
 
@@ -62,6 +64,29 @@ export const AgendaItem = (props: AgendaItemProps) => {
     ),
     [Colors.brandAccent1, service?.serviceColor?.hexCode]
   );
+  const renderRightActions = (
+    _progress: Animated.AnimatedInterpolation<any>,
+    dragX: Animated.AnimatedInterpolation<any>
+  ) => {
+    const trans = dragX.interpolate({
+      inputRange: [-150, 0],
+      outputRange: [1, 0],
+      extrapolate: "clamp",
+    });
+
+    return (
+      <RectButton
+        style={styles.rightAction}
+        onPress={() => console.log("Swiped right")}
+      >
+        <Animated.Text
+          style={[styles.actionText, { transform: [{ translateX: trans }] }]}
+        >
+          Cancel
+        </Animated.Text>
+      </RectButton>
+    );
+  };
 
   const eventTime = useCallback(
     () => (
@@ -94,82 +119,88 @@ export const AgendaItem = (props: AgendaItemProps) => {
     () => (
       <View style={styles.eventName}>
         <View style={styles.eventNameFloatingLabels}>
-          <Emoji name="wheelchair" />
-          <Emoji name="star2" />
+          {item.labels.map(label => {
+            return <Emoji name={label as EmojiType} />;
+          })}
         </View>
-        {item?.leadClientId ? (
-          <Text
-            preset="none"
-            style={[styles.eventNameRow1, { color: Colors.text }]}
-            text={truncate(item.leadClientId, { length: 10, separator: "." })}
-          />
-        ) : null}
         <Text
           preset="none"
-          style={[
-            styles.eventNameRow2,
-            { color: service?.serviceColor?.hexCode ?? Colors.subText },
-          ]}
+          style={[styles.eventNameRow1, { color: Colors.darkGray }]}
           text={truncate(item?.name ?? "", { length: 21, separator: "." })}
         />
-        <Text
-          style={[
-            styles.eventNameRow3,
-            { color: Colors[item.status?.statusName ?? "text"] },
-          ]}
-          preset={"text"}
-          text={
-            item.status?.statusName
-              ? statusDisplayMessages[item.status.statusName]
-              : ""
-          }
-        />
+        <Container direction="row">
+          <Text
+            style={[styles.eventNameRow2, { color: Colors.subText }]}
+            preset="none"
+            text={"status: "}
+          />
+          <Text
+            style={[
+              styles.eventNameRow2,
+              {
+                color: statusDisplayMessagesColor[item.status.statusName],
+                textTransform: "uppercase",
+                fontWeight: "600",
+              },
+            ]}
+            preset={"none"}
+            text={
+              item.status?.statusName
+                ? statusDisplayMessages[item.status.statusName]
+                : ""
+            }
+          />
+        </Container>
       </View>
     ),
     [
-      Colors,
-      item.leadClientId,
+      Colors.darkGray,
+      Colors.subText,
+      item.labels,
       item?.name,
       item.status.statusName,
-      service?.serviceColor?.hexCode,
     ]
   );
 
   const eventClientImage = useCallback(() => {
+    const isGroupEvent = item.isGroupEvent;
+    const client = isGroupEvent ? "" : item.leadClientId ?? "";
     return (
       <View style={styles.eventClientImage}>
         <Image
           source={defaultUserImage}
           style={styles.eventClientImageColumn}
         />
+        {client && (
+          <Text style={styles.eventClientName} preset={"none"} text={client} />
+        )}
       </View>
     );
-  }, []);
+  }, [item.isGroupEvent, item.leadClientId]);
 
   return (
-    <TouchableOpacity
-      onPress={itemPressed}
-      style={[
-        styles.calendarItem,
-        { backgroundColor: Colors.white, borderBottomColor: Colors.lightGray },
-      ]}
-    >
-      {eventServiceColor()}
-      {eventClientImage()}
-      {eventName()}
-      {eventTime()}
-    </TouchableOpacity>
+    <Swipeable renderRightActions={renderRightActions}>
+      <Pressable
+        onPress={handleOnPress}
+        onLongPress={handleOnLongPress}
+        style={[
+          styles.calendarItem,
+          {
+            backgroundColor: Colors.backgroundOverlay,
+            borderBottomColor: Colors.lightGray,
+          },
+        ]}
+      >
+        {eventServiceColor()}
+        {eventClientImage()}
+        {eventName()}
+        {eventTime()}
+      </Pressable>
+    </Swipeable>
   );
 };
 
 const styles = StyleSheet.create({
-  emptyItem: {
-    paddingLeft: 20,
-    height: 52,
-    justifyContent: "center",
-    borderBottomWidth: 1,
-    borderBottomColor: "lightgrey",
-  },
   emptyItemText: {
     color: "lightgrey",
     fontSize: 14,
@@ -183,7 +214,8 @@ const styles = StyleSheet.create({
   eventTime: {
     paddingHorizontal: 5,
     justifyContent: "center",
-
+    alignItems: "center",
+    width: 100,
     borderLeftWidth: 1,
     height: "100%",
   },
@@ -215,12 +247,8 @@ const styles = StyleSheet.create({
     textTransform: "capitalize",
   },
   eventNameRow2: {
-    fontSize: 14.5,
-    fontWeight: "500",
-  },
-  eventNameRow3: {
-    fontSize: 14.5,
-    fontWeight: "500",
+    fontSize: 13.5,
+    fontWeight: "400",
   },
   eventClientImage: {
     height: "100%",
@@ -233,6 +261,12 @@ const styles = StyleSheet.create({
     height: 55,
     width: 55,
     resizeMode: "contain",
+    borderWidth: 0.2,
+    borderColor: "lightgrey",
+  },
+  eventClientName: {
+    fontSize: 14.5,
+    fontWeight: "500",
   },
   calendarItem: {
     height: 75,
@@ -241,5 +275,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginHorizontal: 5,
     borderRadius: BORDER_RADIUS,
+  },
+  rightAction: {
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#ff6347",
+  },
+  actionText: {
+    color: "#fff",
+    fontWeight: "600",
+    padding: 20,
   },
 });

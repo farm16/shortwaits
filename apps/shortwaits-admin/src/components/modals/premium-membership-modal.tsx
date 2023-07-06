@@ -4,14 +4,9 @@ import { View } from "react-native";
 import { Modal } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useDispatch } from "react-redux";
-import { hidePremiumMembershipModal } from "../../redux";
+import { hidePremiumMembershipModal, useGhostComponent } from "../../redux";
 import { useTheme } from "../../theme";
 import { Button, Container, Space, Text } from "../common";
-
-interface PremiumMembershipModalPropTypes {
-  visible: boolean;
-  onDismiss(): void;
-}
 
 const premiumAccountFeatures = [
   { name: "", description: "Text(SMS) Reminders" },
@@ -34,15 +29,14 @@ const CheckedList = ({ text }) => {
   );
 };
 
-export const PremiumMembershipModal: FC<PremiumMembershipModalPropTypes> = (
-  props
-) => {
-  const { onDismiss, visible } = props;
+export const PremiumMembershipModal = props => {
+  const { isVisible } = useGhostComponent("premiumMembership");
+
   const { Colors } = useTheme();
   const dispatch = useDispatch();
   return (
     <Portal>
-      <Modal visible={visible} onDismiss={onDismiss} dismissable={false}>
+      <Modal visible={isVisible} dismissable={true}>
         <View
           style={{
             backgroundColor: Colors.backgroundOverlay,

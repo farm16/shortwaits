@@ -24,7 +24,6 @@ import { ModalsScreenProps } from "../../../navigation";
 import { formatAddClientsValues } from "./form-utils";
 import { FormBody } from "./commons/form-body";
 import { useTheme } from "../../../theme";
-import { cp } from "fs";
 
 export const AddStaffModal: FC<ModalsScreenProps<"form-modal-screen">> = ({
   navigation,

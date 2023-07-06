@@ -1,11 +1,12 @@
 import { Portal } from "@gorhom/portal";
-import React, { useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { StyleSheet, ViewStyle } from "react-native";
 import { FAB } from "react-native-paper";
-import { useComponentVisibility } from "../../redux";
+import { selectCurrentMobileAdminState } from "../../redux";
 import { useTheme } from "../../theme";
 import { actions as defaultActions } from "./fab-actions";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useSelector } from "react-redux";
 
 type FloatingActionButtonProps = {
   actions?: FloatingActions;
@@ -35,17 +36,23 @@ export const FloatingActionButton = (props: FloatingActionButtonProps) => {
     ...rest
   } = props;
   const { Colors } = useTheme();
-  const { isVisible } = useComponentVisibility("floatingActionButton", true);
-  const [state, setState] = useState({ open: false });
-  const onStateChange = ({ open }) => setState({ open });
   const insets = useSafeAreaInsets();
-  const { open } = state;
+  const [isOpen, setIsOpen] = useState(false);
+  const mobileAdmin = useSelector(selectCurrentMobileAdminState);
+
+  const { isVisible } = useMemo(() => {
+    return mobileAdmin ? mobileAdmin.components.floatingActionButton : null;
+  }, [mobileAdmin]);
+
+  console.log("floatingActionButton visibility >>>", isVisible);
+
+  const onStateChange = useCallback(({ open }) => setIsOpen(open), []);
 
   return (
     <Portal>
       <FAB.Group
         visible={isVisibleOverride ?? isVisible}
-        open={open}
+        open={isOpen}
         style={{
           paddingBottom: insets.bottom + 70,
           paddingRight: insets.right + 8,
@@ -54,12 +61,12 @@ export const FloatingActionButton = (props: FloatingActionButtonProps) => {
           backgroundColor: Colors.brandSecondary,
         }}
         backdropColor={"rgba(0, 0, 0, 0.32)"}
-        icon={open ? pressedIcon : icon}
+        icon={isOpen ? pressedIcon : icon}
         color={Colors.white}
         actions={actions}
         onStateChange={onStateChange}
         onPress={() => {
-          if (open) {
+          if (isOpen) {
             // do something if the speed dial is open
           }
         }}

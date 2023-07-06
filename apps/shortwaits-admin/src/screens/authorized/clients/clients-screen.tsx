@@ -23,7 +23,7 @@ import {
   AnimatedSearchBar,
 } from "../../../components";
 import { useTheme } from "../../../theme";
-import { useBusiness, useComponentVisibility } from "../../../redux";
+import { useBusiness, useGhostComponent } from "../../../redux";
 import {
   useCreateBusinessClientsMutation,
   useGetBusinessClientsQuery,
@@ -165,7 +165,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
     createClientsResult.isLoading && !createClientsResult.isSuccess;
 
   const isLoading = isClientsDataLoading || isCreateClientsLoading;
-  const { isVisible } = useComponentVisibility("floatingActionButton", true);
+  useGhostComponent("floatingActionButton");
 
   useEffect(() => {
     if (!isLoading && isBusinessClientsQuerySuccess) {
@@ -250,12 +250,6 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
         </>
       )}
       <BottomSheet snapPointsLevel={6} ref={bottomSheetRef}></BottomSheet>
-      <FloatingActionButton
-        isVisible={isVisible}
-        actions={actions}
-        icon={"plus"}
-        pressedIcon={"close"}
-      />
     </Screen>
   );
 };

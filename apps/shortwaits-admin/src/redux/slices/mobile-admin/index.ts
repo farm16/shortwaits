@@ -8,20 +8,17 @@ import {
 import { shortwaitsApi } from "../../../services";
 import type { RootState } from "../../../redux";
 
+type GhostComponentProps = {
+  [key: string]: string | boolean;
+  isVisible: boolean;
+};
 export interface MobileAdminStateType {
   defaultData: ShortwaitsAdminDefaultDataPayloadType;
   categories: CategoriesDtoType;
   components: {
-    banner?: {
-      name: string;
-      isVisible: boolean;
-    };
-    premiumMembership: {
-      isVisible: boolean;
-    };
-    floatingActionButton: {
-      isVisible: boolean;
-    };
+    banner: GhostComponentProps;
+    premiumMembership: GhostComponentProps;
+    floatingActionButton: GhostComponentProps;
   };
 }
 export const mobileAdminInitialState: MobileAdminStateType = {

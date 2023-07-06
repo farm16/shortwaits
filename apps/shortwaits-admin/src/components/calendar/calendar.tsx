@@ -66,8 +66,8 @@ export const Calendar: FC<CalendarProps> = memo(props => {
 
   const nowDate = useMemo(() => new Date().toISOString(), []);
 
-  console.log("eventsPayload?.data", eventsPayload?.data);
-  console.log("agendaData", agendaData);
+  // console.log("eventsPayload?.data", eventsPayload?.data);
+  // console.log("agendaData", agendaData);
 
   if (isEventsLoading) {
     return <ActivityIndicator />;
@@ -85,7 +85,7 @@ export const Calendar: FC<CalendarProps> = memo(props => {
       <ExpandableCalendar theme={theme} firstDay={1} />
       <AgendaList
         sectionStyle={{
-          backgroundColor: Colors.backgroundOverlay,
+          backgroundColor: Colors.background,
           color: Colors.brandPrimary5,
           fontWeight: "400",
           fontSize: 16,
@@ -120,7 +120,7 @@ export const Calendar: FC<CalendarProps> = memo(props => {
           />
         }
         ItemSeparatorComponent={renderSeparatorItem}
-        style={{ backgroundColor: Colors.backgroundOverlay }}
+        style={{ backgroundColor: Colors.background }}
       />
     </CalendarProvider>
   );

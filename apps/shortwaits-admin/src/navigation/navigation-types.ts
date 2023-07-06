@@ -9,23 +9,30 @@ import {
   NAVIGATION_STACKS,
   UNAUTHORIZED_SCREENS,
   AUTHORIZED_SCREENS,
+  AUTHORIZED_STACK_SCREENS,
   MODAL_SCREENS,
 } from "./navigation-constants";
 import { selectorConfigs } from "../screens/modals/selector/selector-config";
 import {
   CategoryDtoType,
   CreateEventDtoType,
+  EventDtoType,
   ServiceDtoType,
 } from "@shortwaits/shared-types";
 
-export type ScheduleModalModeType = "My-Business-Hours" | "User-Hours";
-export type SelectorModalModeType = keyof typeof selectorConfigs;
+type FormData = {
+  addEvent: CreateEventDtoType;
+  addClient: any;
+};
 
 type SelectorModalData =
   | string
   | CategoryDtoType
   | ServiceDtoType
   | { title: string; subTitle: string };
+
+export type ScheduleModalModeType = "My-Business-Hours" | "User-Hours";
+export type SelectorModalModeType = keyof typeof selectorConfigs;
 export type FormType = "addClient" | "addEvent" | "addStaff";
 
 export type ModalStackParamList = {
@@ -55,17 +62,18 @@ export type ModalStackParamList = {
   };
 };
 
-type FormData = {
-  addEvent: CreateEventDtoType;
-  addClient: any;
-};
-
-export type AuthorizedStackParamList = {
+export type AuthorizedTabsParamList = {
   [AUTHORIZED_SCREENS.ACTIVITY_SCREEN]: undefined;
   [AUTHORIZED_SCREENS.EVENTS_SCREEN]: undefined;
   [AUTHORIZED_SCREENS.MY_BUSINESS_SCREEN]: undefined;
   [AUTHORIZED_SCREENS.SETTINGS_SCREEN]: undefined;
   [AUTHORIZED_SCREENS.CLIENTS_SCREEN]: undefined;
+};
+
+export type AuthorizedStackParamList = {
+  [AUTHORIZED_STACK_SCREENS.EVENT_SCREEN]: {
+    event: EventDtoType;
+  };
 };
 
 export type UnauthorizedStackParamList = {
@@ -80,21 +88,22 @@ export type UnauthorizedStackParamList = {
 
 export type RootStackParamList = {
   [NAVIGATION_STACKS.UNAUTHORIZED]: NavigatorScreenParams<UnauthorizedStackParamList>;
-  [NAVIGATION_STACKS.AUTHORIZED]: NavigatorScreenParams<AuthorizedStackParamList>;
+  [NAVIGATION_STACKS.AUTHORIZED_TAB]: NavigatorScreenParams<AuthorizedTabsParamList>;
+  [NAVIGATION_STACKS.AUTHORIZED_STACK]: NavigatorScreenParams<AuthorizedStackParamList>;
   [NAVIGATION_STACKS.MODALS]: NavigatorScreenParams<ModalStackParamList>;
 };
 
 type MODAL_SCREENS_KEYS = keyof typeof MODAL_SCREENS;
-type MODAL_SCREENS_TYPES = typeof MODAL_SCREENS[MODAL_SCREENS_KEYS];
+type MODAL_SCREENS_TYPES = (typeof MODAL_SCREENS)[MODAL_SCREENS_KEYS];
 
 type UNAUTHORIZED_SCREENS_KEYS = keyof typeof UNAUTHORIZED_SCREENS;
 type UNAUTHORIZED_SCREENS_TYPES =
-  | typeof UNAUTHORIZED_SCREENS[UNAUTHORIZED_SCREENS_KEYS]
+  | (typeof UNAUTHORIZED_SCREENS)[UNAUTHORIZED_SCREENS_KEYS]
   | MODAL_SCREENS_TYPES;
 
 type AUTHORIZED_SCREENS_KEYS = keyof typeof AUTHORIZED_SCREENS;
 type AUTHORIZED_SCREENS_TYPES =
-  | typeof AUTHORIZED_SCREENS[AUTHORIZED_SCREENS_KEYS]
+  | (typeof AUTHORIZED_SCREENS)[AUTHORIZED_SCREENS_KEYS]
   | MODAL_SCREENS_TYPES;
 
 /**
@@ -113,9 +122,15 @@ export interface UnauthorizedScreenProps<T extends UNAUTHORIZED_SCREENS_TYPES> {
 export interface AuthorizedScreenProps<T extends AUTHORIZED_SCREENS_TYPES> {
   navigation: CompositeNavigationProp<
     StackNavigationProp<RootStackParamList>,
-    StackNavigationProp<AuthorizedStackParamList & ModalStackParamList, T>
+    StackNavigationProp<
+      AuthorizedTabsParamList & AuthorizedStackParamList & ModalStackParamList,
+      T
+    >
   >;
-  route: RouteProp<AuthorizedStackParamList & ModalStackParamList, T>;
+  route: RouteProp<
+    AuthorizedTabsParamList & AuthorizedStackParamList & ModalStackParamList,
+    T
+  >;
 }
 
 export interface ModalsScreenProps<T extends keyof ModalStackParamList> {
@@ -123,24 +138,29 @@ export interface ModalsScreenProps<T extends keyof ModalStackParamList> {
     StackNavigationProp<RootStackParamList>,
     StackNavigationProp<
       UnauthorizedStackParamList &
+        AuthorizedTabsParamList &
         AuthorizedStackParamList &
         ModalStackParamList,
       T
     >
   >;
   route: RouteProp<
-    UnauthorizedStackParamList & AuthorizedStackParamList & ModalStackParamList,
+    UnauthorizedStackParamList &
+      AuthorizedTabsParamList &
+      AuthorizedStackParamList &
+      ModalStackParamList,
     T
   >;
 }
 
 export type STACKS_TYPES =
-  typeof NAVIGATION_STACKS[keyof typeof NAVIGATION_STACKS];
+  (typeof NAVIGATION_STACKS)[keyof typeof NAVIGATION_STACKS];
 
 export type ALL_SCREENS_TYPE =
   | AUTHORIZED_SCREENS_TYPES
   | UNAUTHORIZED_SCREENS_TYPES;
 
-export type ScreenProps = AuthorizedStackParamList &
+export type ScreenProps = AuthorizedTabsParamList &
+  AuthorizedStackParamList &
   ModalStackParamList &
   UnauthorizedStackParamList;

@@ -29,6 +29,12 @@ export const textPresets = ({
       ...BASE,
       fontWeight: "bold",
     },
+    subText: {
+      ...BASE,
+      ...Fonts.textSmall,
+      color: "rgba(152,152,152,1)",
+      fontWeight: "500",
+    },
     social: {
       ...BASE,
       ...Fonts.textSmall,

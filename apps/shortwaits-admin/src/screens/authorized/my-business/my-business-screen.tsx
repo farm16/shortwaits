@@ -17,6 +17,7 @@ import {
   showPremiumMembershipBanner,
   useBusiness,
   hidePremiumMembershipBanner,
+  useGhostComponent,
 } from "../../../redux";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useDispatch } from "react-redux";
@@ -28,6 +29,7 @@ import { skipToken } from "@reduxjs/toolkit/dist/query";
 export const MyBusinessScreen: FC<
   AuthorizedScreenProps<"my-business-screen">
 > = ({ navigation }) => {
+  useGhostComponent("floatingActionButton");
   const business = useBusiness();
   const { Colors } = useTheme();
   const dispatch = useDispatch();
@@ -132,7 +134,6 @@ export const MyBusinessScreen: FC<
           title={"Reviews"}
         />
       </ScrollView>
-      <FloatingActionButton />
     </Screen>
   );
 };

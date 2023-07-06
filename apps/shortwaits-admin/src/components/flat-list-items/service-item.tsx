@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, ViewStyle } from "react-native";
 import { ServiceDtoType } from "@shortwaits/shared-types";
 
 import { Button, ButtonProps, Space, Text } from "../common";
@@ -15,11 +15,18 @@ type ServiceCardProps = ButtonProps & {
   onPress(arg: ServiceDtoType): void;
   onLongPress?(arg: ServiceDtoType): void;
   service: ServiceDtoType;
+  style?: ViewStyle;
 };
 
 export const ServiceItem: FC<ServiceCardProps> = props => {
   const { Colors } = useTheme();
-  const { service, onPress, onLongPress = noop, ...rest } = props;
+  const {
+    service,
+    onPress,
+    onLongPress = noop,
+    style: styleOverride,
+    ...rest
+  } = props;
   const { width } = getDimensions();
 
   return (
@@ -35,6 +42,7 @@ export const ServiceItem: FC<ServiceCardProps> = props => {
           borderLeftColor: service.serviceColor.hexCode || Colors.transparent,
           backgroundColor: Colors.backgroundOverlay,
         },
+        styleOverride,
       ]}
       {...rest}
     >

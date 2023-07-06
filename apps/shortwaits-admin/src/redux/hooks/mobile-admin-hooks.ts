@@ -5,6 +5,8 @@ import {
   mobileAdminInitialState,
   selectCurrentMobileAdminState,
 } from "..";
+import { useIsFocused } from "@react-navigation/native";
+
 /**
  *
  * @returns returns element 0 which is `short_id: 0001`
@@ -23,21 +25,28 @@ export const useMobileDefaultData = () => {
   }, [mobileAdmin]);
 };
 
-export const useComponentVisibility = (
-  modal: keyof typeof mobileAdminInitialState["components"],
-  initialVisibleState?: boolean
+export const useGhostComponent = (
+  component: keyof (typeof mobileAdminInitialState)["components"]
 ) => {
   const dispatch = useDispatch();
+  const isFocused = useIsFocused();
 
   useEffect(() => {
-    if (initialVisibleState) {
-      dispatch(changeFloatingActionButtonVisibility(initialVisibleState));
+    if (isFocused) {
+      if (component === "floatingActionButton") {
+        dispatch(changeFloatingActionButtonVisibility(true));
+      }
     }
-  }, []);
+    return () => {
+      if (component === "floatingActionButton") {
+        dispatch(changeFloatingActionButtonVisibility(false));
+      }
+    };
+  }, [component, dispatch, isFocused]);
 
   const mobileAdmin = useSelector(selectCurrentMobileAdminState);
 
   return useMemo(() => {
-    return mobileAdmin ? mobileAdmin.components[modal] : null;
-  }, [mobileAdmin, modal]);
+    return mobileAdmin ? mobileAdmin.components[component] : null;
+  }, [mobileAdmin, component]);
 };

@@ -80,6 +80,9 @@
     "recyclerlistview": "*",
     "moment": "*",
     "uuid": "*",
-    "react-native-get-random-values": "*"
+    "react-native-get-random-values": "*",
+    "react-native-tab-view": "*",
+    "react-native-pager-view": "*",
+    "@react-native-clipboard/clipboard": "*"
   }
 }

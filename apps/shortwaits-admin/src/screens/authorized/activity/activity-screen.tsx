@@ -20,11 +20,12 @@ import {
   Text,
 } from "../../../components";
 import { useTheme } from "../../../theme";
+import { useGhostComponent } from "../../../redux";
 
 export const ActivityScreen: FC<AuthorizedScreenProps<"activity-screen">> = ({
   navigation,
 }) => {
-  const dispatch = useDispatch();
+  useGhostComponent("floatingActionButton");
   const { Colors } = useTheme();
   const [activityType, setActivityType] = useState<"business" | "staff">(
     "business"
@@ -45,12 +46,12 @@ export const ActivityScreen: FC<AuthorizedScreenProps<"activity-screen">> = ({
           <Container direction="row" alignItems="center">
             <CircleIconButton
               onPress={() => setActivityType("business")}
-              marginRight
+              withMarginRight
               iconType="business"
             />
             <CircleIconButton
               onPress={() => setActivityType("staff")}
-              marginRight
+              withMarginRight
               iconType="add-staff"
             />
           </Container>
