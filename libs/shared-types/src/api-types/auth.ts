@@ -8,7 +8,7 @@ export type TokenPayloadType = {
 };
 export type AuthPayloadType = {
   auth: TokenPayloadType;
-  attributes: {
+  attributes?: {
     currentBusinessAccounts: BusinessDocType[];
     currentUser: UserDocType;
   };
@@ -16,7 +16,7 @@ export type AuthPayloadType = {
 
 export type AuthDtoType = {
   auth: TokenPayloadType;
-  attributes: {
+  attributes?: {
     currentBusinessAccounts: BusinessDtoType[];
     currentUser: UserDtoType;
   };

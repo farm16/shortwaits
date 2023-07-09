@@ -20,12 +20,22 @@ export const userSlice = createSlice({
   extraReducers: builder => {
     builder
       .addMatcher(
+        shortwaitsApi.endpoints.localSignOut.matchRejected,
+        function () {
+          console.log(">>> resetting USER state  ");
+          return initialState;
+        }
+      )
+      .addMatcher(
+        shortwaitsApi.endpoints.localSignOut.matchFulfilled,
+        function () {
+          console.log(">>> resetting USER state  ");
+          return initialState;
+        }
+      )
+      .addMatcher(
         shortwaitsApi.endpoints.localSignUp.matchFulfilled,
         function (state, action) {
-          // console.log(">>> localSignUp - USER ", {
-          //   ...state,
-          //   ...action.payload.data.attributes.currentUser,
-          // });
           return {
             ...state,
             ...action.payload.data.attributes.currentUser,
@@ -35,10 +45,6 @@ export const userSlice = createSlice({
       .addMatcher(
         shortwaitsApi.endpoints.localSignIn.matchFulfilled,
         function (state, action) {
-          // console.log(">>> localSignIn - USER ", {
-          //   ...state,
-          //   ...action.payload.data.attributes.currentUser,
-          // });
           return {
             ...state,
             ...action.payload.data.attributes.currentUser,

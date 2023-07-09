@@ -2,7 +2,7 @@ const path = require("path");
 const dotenv = require("dotenv");
 const { Seeder } = require("mongo-seeding");
 
-dotenv.config({ path: "apps/sw-api/src/assets/development.env" });
+dotenv.config({ path: "apps/sw-api/src/assets/.env.development" });
 
 console.log("TARGETING => " + process.env.MONGO_DB_URL);
 

@@ -17,3 +17,11 @@ export class AuthSuccessResponse implements AuthPayloadType {
     readonly currentUser: UserDocType;
   };
 }
+
+export class AuthRefreshSuccessResponse implements AuthPayloadType {
+  @ApiProperty()
+  auth: {
+    readonly token: string;
+    readonly refreshToken: string;
+  };
+}

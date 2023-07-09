@@ -4,20 +4,24 @@ import {
   HttpCode,
   HttpStatus,
   Post,
+  Req,
   UseGuards,
   ValidationPipe,
 } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { SignUpWithEmailDto } from "./dto/sign-up-with-email.dto";
 import { SignInWithEmailDto } from "./dto/sign-in-with-email.dto";
-import { ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
 import {
   GetCurrentUser,
   GetCurrentUserId,
   Public,
 } from "../../common/decorators/auth.decorator";
-import { RtGuard } from "../../common/guards";
-import { AuthSuccessResponse } from "./auth.interface";
+import { AtGuard, RtGuard } from "../../common/guards";
+import {
+  AuthSuccessResponse,
+  AuthRefreshSuccessResponse,
+} from "./auth.interface";
 
 @ApiTags("auth")
 @Controller("auth")
@@ -32,7 +36,9 @@ export class AuthController {
     description: "Returns new user & business record",
     type: AuthSuccessResponse,
   })
-  signUpLocal(@Body(new ValidationPipe()) dto: SignUpWithEmailDto) {
+  async signUpLocal(
+    @Body(new ValidationPipe()) dto: SignUpWithEmailDto
+  ): Promise<AuthSuccessResponse> {
     return this.authService.signUpLocal(dto);
   }
 
@@ -44,22 +50,26 @@ export class AuthController {
     description: "Returns existing user record",
     type: AuthSuccessResponse,
   })
-  signInLocal(@Body(new ValidationPipe()) body: SignInWithEmailDto) {
+  async signInLocal(
+    @Body(new ValidationPipe()) body: SignInWithEmailDto
+  ): Promise<AuthSuccessResponse> {
     console.log("signInLocal controller", body);
     return this.authService.signInLocal(body);
   }
 
-  @Post("sign-out")
+  @UseGuards(AtGuard)
+  @ApiBearerAuth("bearer")
+  @Post("admin/local/sign-out")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
     description: "Revokes tokens",
   })
-  logout(@GetCurrentUserId() userId: number) {
-    return this.authService.logout(userId);
+  async logout(@Req() request) {
+    console.log("logout controller", request.user.sub);
+    await this.authService.logout(request.user.sub);
   }
 
-  @Public()
   @UseGuards(RtGuard)
   @Post("refresh")
   @HttpCode(HttpStatus.OK)
@@ -67,10 +77,10 @@ export class AuthController {
     status: HttpStatus.OK,
     description: "Returns refreshed token",
   })
-  refreshTokens(
+  async refreshTokens(
     @GetCurrentUserId() userId: string,
     @GetCurrentUser("refreshToken") refreshToken: string
-  ) {
+  ): Promise<AuthRefreshSuccessResponse> {
     return this.authService.refreshTokens(userId, refreshToken);
   }
 }

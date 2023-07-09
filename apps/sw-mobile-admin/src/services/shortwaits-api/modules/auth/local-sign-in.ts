@@ -4,10 +4,10 @@ import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions
 
 const { adminLocalSignIn } = shortwaitsApiEndpoints.AUTH;
 
-interface RequestType {
+type RequestType = {
   email: string;
   password: string;
-}
+};
 export default (builder: EndpointBuilder<any, any, any>) =>
   builder.mutation<AuthResponseType, RequestType>({
     query: payload => ({

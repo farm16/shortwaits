@@ -1,4 +1,4 @@
-import React, { FC, useLayoutEffect } from "react";
+import React, { FC, useCallback, useLayoutEffect } from "react";
 import { StyleSheet } from "react-native";
 import { useDispatch } from "react-redux";
 import { Divider, List, Switch } from "react-native-paper";
@@ -19,7 +19,10 @@ import { SupportSettings } from "./options/support";
 import { BusinessInfoSettings } from "./options/business-info";
 import { IntegrationsSettings } from "./options/integrations";
 import { ContactsSettings } from "./options/contacts";
-import { useGetBusinessQuery } from "../../../services";
+import {
+  useGetBusinessQuery,
+  useLocalSignOutMutation,
+} from "../../../services";
 import { AuthorizedScreenProps } from "../../../navigation";
 
 export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({
@@ -33,23 +36,8 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
-      // headerTitle: () => {
-      //   return (
-      //     <Container direction="row" justifyContent="center">
-      //       <Text preset="headerTitle" text={"Settings"} />
-      //     </Container>
-      //   );
-      // },
-      // headerRight: () => {
-      //   return (
-      //     <Container direction="row" alignItems="center">
-      //       {/* <CircleIconButton withMarginRight iconType="edit" />
-      //       <CircleIconButton withMarginRight iconType="share" /> */}
-      //     </Container>
-      //   );
-      // },
     });
-  }, [business.shortName, navigation]);
+  }, [navigation]);
 
   const {
     data: currentBusiness,
@@ -58,10 +46,13 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({
     isError,
   } = useGetBusinessQuery(business ? business._id : skipToken);
 
-  const signOut = useSignOut();
+  // const signOut = useSignOut();
   const [expanded, setExpanded] = React.useState(true);
-
+  const [signOut] = useLocalSignOutMutation();
   const handlePress = () => setExpanded(!expanded);
+  const handleSignOut = useCallback(async () => {
+    await signOut(undefined);
+  }, [signOut]);
 
   if (isError) return null;
   if (isLoading) return <Text>Loading ...</Text>;
@@ -136,7 +127,7 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({
             }}
             text="Sign Out"
             onPress={() => {
-              signOut();
+              handleSignOut();
             }}
           />
         </List.Section>

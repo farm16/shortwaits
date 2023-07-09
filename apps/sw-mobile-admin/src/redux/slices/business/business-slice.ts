@@ -21,6 +21,19 @@ export const businessSlice = createSlice({
   extraReducers: builder => {
     builder
       .addMatcher(
+        shortwaitsApi.endpoints.localSignOut.matchRejected,
+        function () {
+          console.log(">>> resetting USER state  ");
+          return initialState;
+        }
+      )
+      .addMatcher(
+        shortwaitsApi.endpoints.localSignOut.matchFulfilled,
+        function () {
+          return initialState;
+        }
+      )
+      .addMatcher(
         shortwaitsApi.endpoints.registerBusiness.matchFulfilled,
         (state, action) => ({
           ...state,

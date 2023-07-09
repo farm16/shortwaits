@@ -1,12 +1,12 @@
-import * as bcrypt from "bcryptjs";
-import { Model } from "mongoose";
-import { InjectModel } from "@nestjs/mongoose";
 import {
   ForbiddenException,
-  NotFoundException,
   Injectable,
+  NotFoundException,
   UnprocessableEntityException,
 } from "@nestjs/common";
+import { InjectModel } from "@nestjs/mongoose";
+import { Model } from "mongoose";
+import bcrypt from "bcryptjs";
 import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
 
@@ -26,75 +26,68 @@ export class AuthService {
     @InjectModel(Business.name) private businessModel: Model<Business>,
     @InjectModel(Service.name) private serviceModel: Model<Service>,
     private jwtService: JwtService,
-    private config: ConfigService
+    private configService: ConfigService
   ) {}
 
   async signUpLocal(dto: SignUpWithEmailDto) {
-    try {
-      const user = await this.businessUserModel.findOne({
-        email: dto.email,
-      });
+    const existingUser = await this.businessUserModel.findOne({
+      email: dto.email,
+    });
 
-      if (user) {
-        throw new UnprocessableEntityException("Invalid email or username");
-      }
-
-      const salt: string = bcrypt.genSaltSync(
-        Number(this.config.get("SALT_ROUNDS"))
-      );
-      const encodedPassword = bcrypt.hashSync(dto.password, salt);
-
-      const currentUser = new this.businessUserModel({
-        ...dto,
-        password: encodedPassword,
-      });
-
-      const newBusinessAccount = new this.businessModel({
-        isRegistrationCompleted: false,
-        clients: [],
-        taggedClients: [],
-        admins: [currentUser._id],
-        superAdmins: [currentUser._id],
-        createdBy: [currentUser._id],
-        updatedBy: [currentUser._id],
-        staff: [currentUser._id],
-        hours: shortwaitsAdmin[0].sampleBusinessData.hours,
-      });
-
-      const services = shortwaitsAdmin[0].sampleBusinessData.services.map(
-        service => {
-          return { ...service, businessId: newBusinessAccount._id };
-        }
-      );
-      const insertedServices = await this.serviceModel.insertMany(services);
-      const servicesIds = insertedServices.map(service => service._id);
-
-      const tokens = await this.signTokens(currentUser);
-      const hashedRefreshToken = bcrypt.hashSync(tokens.refreshToken, salt);
-
-      newBusinessAccount.services = servicesIds as [];
-      currentUser.businesses = [newBusinessAccount._id];
-      currentUser.hashedRt = hashedRefreshToken;
-      currentUser.lastSignInAt = new Date();
-
-      const [newUserDoc, newBusinessAccDoc] = await Promise.all([
-        currentUser.save(),
-        newBusinessAccount.save(),
-      ]);
-
-      newUserDoc.password = null;
-
-      return {
-        auth: tokens,
-        attributes: {
-          currentBusinessAccounts: [newBusinessAccDoc],
-          currentUser: newUserDoc,
-        },
-      };
-    } catch (error) {
-      console.log(error);
-      throw error;
+    if (existingUser) {
+      throw new UnprocessableEntityException("Invalid email or username");
     }
+
+    const saltRounds = Number(this.configService.get("SALT_ROUNDS"));
+    const salt = await bcrypt.genSalt(saltRounds);
+    const encodedPassword = await bcrypt.hash(dto.password, salt);
+
+    const currentUser = new this.businessUserModel({
+      ...dto,
+      password: encodedPassword,
+    });
+
+    const newBusinessAccount = new this.businessModel({
+      isRegistrationCompleted: false,
+      clients: [],
+      taggedClients: [],
+      admins: [currentUser._id],
+      superAdmins: [currentUser._id],
+      createdBy: [currentUser._id],
+      updatedBy: [currentUser._id],
+      staff: [currentUser._id],
+      hours: shortwaitsAdmin[0].sampleBusinessData.hours,
+    });
+    const services = shortwaitsAdmin[0].sampleBusinessData.services.map(
+      service => {
+        return { ...service, businessId: newBusinessAccount._id };
+      }
+    );
+    const insertedServices = await this.serviceModel.insertMany(services);
+    const servicesIds = insertedServices.map(service => service._id);
+
+    const tokens = await this.signTokens(currentUser);
+    const hashedRefreshToken = await bcrypt.hash(tokens.refreshToken, salt);
+
+    newBusinessAccount.services = servicesIds;
+    currentUser.businesses = [newBusinessAccount._id];
+    currentUser.hashedRt = hashedRefreshToken;
+    currentUser.lastSignInAt = new Date();
+
+    const [newUserDoc, newBusinessAccDoc] = await Promise.all([
+      currentUser.save(),
+      newBusinessAccount.save(),
+    ]);
+
+    newUserDoc.password = null;
+
+    return {
+      auth: tokens,
+      attributes: {
+        currentBusinessAccounts: [newBusinessAccDoc],
+        currentUser: newUserDoc,
+      },
+    };
   }
 
   async signInLocal(dto: SignInWithEmailDto) {
@@ -106,7 +99,7 @@ export class AuthService {
       throw new NotFoundException("User not registered");
     }
 
-    const isPasswordValid: boolean = bcrypt.compareSync(
+    const isPasswordValid = await bcrypt.compare(
       dto.password,
       currentUser.password
     );
@@ -138,6 +131,7 @@ export class AuthService {
   }
 
   async logout(userId: number) {
+    console.log("logout user id: ", userId);
     await this.businessUserModel.findByIdAndUpdate(userId, {
       hashedRt: null,
     });
@@ -153,26 +147,26 @@ export class AuthService {
   async refreshTokens(userId: string, rt: string) {
     const user = await this.businessUserModel.findById(userId).exec();
 
-    if (!user) throw new ForbiddenException("Unable to reauthenticate user");
+    if (!user) {
+      throw new ForbiddenException("Unable to reauthenticate user");
+    }
 
-    const rtMatches = bcrypt.compareSync(rt, user.hashedRt);
+    const rtMatches = await bcrypt.compare(rt, user.hashedRt);
 
-    if (!rtMatches) throw new ForbiddenException("Unable to reauthenticate");
+    if (!rtMatches) {
+      throw new ForbiddenException("Unable to reauthenticate");
+    }
 
     const signedTokens = await this.signTokens(user);
-
-    console.log("signedTokens>>>", signedTokens);
-
     await this.updateRtHash(user, signedTokens.refreshToken);
 
     return { auth: signedTokens };
   }
 
-  async updateRtHash(user: BusinessUser, rt: string): Promise<void> {
-    const salt: string = bcrypt.genSaltSync(
-      Number(this.config.get("SALT_ROUNDS"))
-    );
-    const hash = bcrypt.hashSync(rt, salt);
+  private async updateRtHash(user: BusinessUser, rt: string): Promise<void> {
+    const saltRounds = Number(this.configService.get("SALT_ROUNDS"));
+    const salt = await bcrypt.genSalt(saltRounds);
+    const hash = await bcrypt.hash(rt, salt);
 
     await this.businessUserModel.findByIdAndUpdate(
       { _id: user._id },
@@ -183,23 +177,23 @@ export class AuthService {
     );
   }
 
-  async signTokens(user: BusinessUser) {
+  private async signTokens(user: BusinessUser) {
     const payload = { sub: user._id, email: user.email };
 
-    const [at, rt] = await Promise.all([
+    const [token, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload, {
-        secret: this.config.get<string>("AT_SECRET"),
-        expiresIn: this.config.get<string>("AT_EXPIRES_IN"),
+        secret: this.configService.get<string>("AT_SECRET"),
+        expiresIn: this.configService.get<string>("AT_EXPIRES_IN"),
       }),
       this.jwtService.signAsync(payload, {
-        secret: this.config.get<string>("RT_SECRET"),
-        expiresIn: this.config.get<string>("RT_EXPIRES_IN"),
+        secret: this.configService.get<string>("RT_SECRET"),
+        expiresIn: this.configService.get<string>("RT_EXPIRES_IN"),
       }),
     ]);
 
     return {
-      token: at,
-      refreshToken: rt,
+      token,
+      refreshToken,
     };
   }
 }

@@ -25,6 +25,20 @@ export const authSlice = createSlice({
   extraReducers: builder => {
     builder
       .addMatcher(
+        shortwaitsApi.endpoints.localSignOut.matchRejected,
+        function () {
+          console.log(">>> resetting USER state  ");
+          return initialState;
+        }
+      )
+      .addMatcher(
+        shortwaitsApi.endpoints.localSignOut.matchFulfilled,
+        function () {
+          console.log(">>> resetting AUTH state  ");
+          return initialState;
+        }
+      )
+      .addMatcher(
         shortwaitsApi.endpoints.localSignIn.matchFulfilled,
         function (state, action) {
           console.log(">>> localSignIn - AUTH ");
