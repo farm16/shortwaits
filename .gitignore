@@ -99,7 +99,3 @@ buck-out/
 # Ruby / CocoaPods
 **/ios/Pods/
 **/vendor/bundle/
-
-
-apps/shortwaits-admin-e2e/artifacts
-apps/shortwaits-client-e2e/artifacts

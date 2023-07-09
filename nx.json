@@ -29,7 +29,7 @@
       ]
     }
   },
-  "defaultProject": "shortwaits-admin",
+  "defaultProject": "sw-mobile-admin",
   "namedInputs": {
     "default": ["{projectRoot}/**/*", "sharedGlobals"],
     "production": [

@@ -10,7 +10,7 @@
 # RUN yarn install --frozen-lockfile 
 # COPY . .
 # RUN --chown=node:node yarn build:backend
-# CMD ["node", "dist/apps/shortwaits-backend/main.js"]
+# CMD ["node", "dist/apps/sw-api/main.js"]
 
 # ###################
 # # BUILD FOR PRODUCTION
@@ -24,7 +24,7 @@
 # RUN yarn install --frozen-lockfile 
 # COPY . .
 # RUN --chown=node:node yarn build:backend
-# CMD ["node", "dist/apps/shortwaits-backend/main.js"]
+# CMD ["node", "dist/apps/sw-api/main.js"]
 
 ###################
 # PRODUCTION
@@ -40,6 +40,6 @@ COPY --chown=node:node . .
 RUN yarn install --frozen-lockfile
 RUN yarn build:backend
 ENV NODE_ENV production
-CMD ["node", "dist/apps/shortwaits-backend/main.js"]
+CMD ["node", "dist/apps/sw-api/main.js"]
 
 # https://www.tomray.dev/nestjs-docker-production#conclusion

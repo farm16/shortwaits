@@ -4,14 +4,12 @@
 
 ```bash
   # "start": "nx serve",
-  # "admin": "nx serve shortwaits-admin",
-  # "admin:pods": "nx run-ios shortwaits-admin --install",
-  # "admin:ios": "nx run-ios shortwaits-admin --install",
-  # "admin:react": "nx start shortwaits-admin",
-  # "client": "nx serve shortwaits-client",
-  # "client:ios": "nx run-ios shortwaits-client",
-  # "backend": "nx serve shortwaits-backend",
-  # "backend:seed": "yarn nx run shortwaits-backend:seed --configuration=default-data",
+  # "admin": "nx serve sw-mobile-admin",
+  # "admin:pods": "nx run-ios sw-mobile-admin --install",
+  # "admin:ios": "nx run-ios sw-mobile-admin --install",
+  # "admin:react": "nx start sw-mobile-admin",
+  # "backend": "nx serve sw-api",
+  # "backend:seed": "yarn nx run sw-api:seed --configuration=default-data",
 
   yarn start
   yarn admin
