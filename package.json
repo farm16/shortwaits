@@ -15,8 +15,8 @@
     "backend": "nx serve shortwaits-backend",
     "backend:seed": "yarn nx run shortwaits-backend:seed --configuration=default-data",
     "generate-keypair": "ts-node ./src/scripts/create-key-pair",
-    "many": "nx run-many --target=serve --projects=shortwaits-admin,shortwaits-backend --parallel=2",
-    "build": "nx build",
+    "all": "nx run-many --target=serve --projects=shortwaits-admin,shortwaits-backend --parallel=2",
+    "build:backend": "nx build shortwaits-backend --verbose",
     "build:shared-types": "nx build shared-types --verbose",
     "test": "nx test",
     "clean": "sh ./scripts/clean.sh"

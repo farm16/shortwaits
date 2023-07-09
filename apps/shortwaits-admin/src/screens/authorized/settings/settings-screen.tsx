@@ -1,10 +1,17 @@
-import React, { FC } from "react";
+import React, { FC, useLayoutEffect } from "react";
 import { StyleSheet } from "react-native";
 import { useDispatch } from "react-redux";
 import { Divider, List, Switch } from "react-native-paper";
 import { skipToken } from "@reduxjs/toolkit/dist/query/react";
 
-import { Button, Screen, Text } from "../../../components";
+import {
+  Button,
+  CircleIconButton,
+  Container,
+  Screen,
+  Space,
+  Text,
+} from "../../../components";
 import { useTheme } from "../../../theme";
 import { useUser, useBusiness, useSignOut } from "../../../redux";
 import { UserAccountSettings } from "./options/user-account";
@@ -23,6 +30,27 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({
   const user = useUser();
   const business = useBusiness();
 
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerShown: false,
+      // headerTitle: () => {
+      //   return (
+      //     <Container direction="row" justifyContent="center">
+      //       <Text preset="headerTitle" text={"Settings"} />
+      //     </Container>
+      //   );
+      // },
+      // headerRight: () => {
+      //   return (
+      //     <Container direction="row" alignItems="center">
+      //       {/* <CircleIconButton withMarginRight iconType="edit" />
+      //       <CircleIconButton withMarginRight iconType="share" /> */}
+      //     </Container>
+      //   );
+      // },
+    });
+  }, [business.shortName, navigation]);
+
   const {
     data: currentBusiness,
     isLoading,
@@ -39,7 +67,8 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({
   if (isLoading) return <Text>Loading ...</Text>;
   if (isSuccess) {
     return (
-      <Screen preset="scroll" unsafe backgroundColor="backgroundOverlay">
+      <Screen preset="scroll" backgroundColor="backgroundOverlay">
+        <Space direction="horizontal" />
         <List.Section
           style={{
             backgroundColor: Colors.backgroundOverlay,
@@ -47,17 +76,30 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({
         >
           <List.Item
             titleStyle={{ color: Colors.text }}
+            style={{
+              borderColor: Colors.gray,
+              borderBottomWidth: StyleSheet.hairlineWidth,
+              borderTopWidth: StyleSheet.hairlineWidth,
+            }}
             title="Activate web booking"
             right={() => <Switch />}
           />
           <List.Item
             titleStyle={{ color: Colors.text }}
             title="App notifications"
+            style={{
+              borderBottomColor: Colors.gray,
+              borderBottomWidth: StyleSheet.hairlineWidth,
+            }}
             right={() => <Switch />}
           />
           <List.Item
             titleStyle={{ color: Colors.text }}
             title="SMS notifications"
+            style={{
+              borderBottomColor: Colors.gray,
+              borderBottomWidth: StyleSheet.hairlineWidth,
+            }}
             right={() => <Switch />}
           />
           <ContactsSettings business={business} />
@@ -66,10 +108,17 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({
           <BusinessInfoSettings business={business} />
           <SupportSettings />
           <List.Item
-            titleStyle={{ color: Colors.text }}
+            titleStyle={{
+              color: Colors.text,
+            }}
+            style={{
+              borderBottomColor: Colors.gray,
+              borderBottomWidth: StyleSheet.hairlineWidth,
+            }}
             title="Disable Store"
             right={() => <Switch />}
           />
+          <Space direction="horizontal" />
           <Button
             style={{
               flex: undefined,

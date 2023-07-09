@@ -3,6 +3,7 @@ import { Divider, List } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 import { useTheme } from "../../../../theme";
+import { StyleSheet } from "react-native";
 
 export const SupportSettings = () => {
   const [expanded, setExpanded] = useState(false);
@@ -14,7 +15,11 @@ export const SupportSettings = () => {
       title="Support"
       expanded={expanded}
       onPress={handlePress}
-      style={{ backgroundColor: Colors.backgroundOverlay }}
+      style={{
+        backgroundColor: Colors.backgroundOverlay,
+        borderBottomColor: Colors.gray,
+        borderBottomWidth: StyleSheet.hairlineWidth,
+      }}
       titleStyle={{ color: Colors.text }}
       descriptionStyle={{ color: Colors.subText }}
       right={props => (

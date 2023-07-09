@@ -1,7 +1,7 @@
 import { UserDtoType } from "@shortwaits/shared-types";
 import React, { useState } from "react";
 import { Divider, List } from "react-native-paper";
-
+import { StyleSheet } from "react-native";
 import { useTheme } from "../../../../theme";
 
 export const UserAccountSettings = ({ user }: { user: UserDtoType }) => {
@@ -16,7 +16,11 @@ export const UserAccountSettings = ({ user }: { user: UserDtoType }) => {
       title="Account"
       expanded={expanded}
       onPress={handlePress}
-      style={{ backgroundColor: Colors.backgroundOverlay }}
+      style={{
+        backgroundColor: Colors.backgroundOverlay,
+        borderBottomColor: Colors.gray,
+        borderBottomWidth: StyleSheet.hairlineWidth,
+      }}
       titleStyle={{ color: Colors.text }}
       descriptionStyle={{ color: Colors.subText }}
       right={props => (
