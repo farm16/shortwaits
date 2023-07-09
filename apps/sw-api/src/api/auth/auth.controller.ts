@@ -11,7 +11,6 @@ import { AuthService } from "./auth.service";
 import { SignUpWithEmailDto } from "./dto/sign-up-with-email.dto";
 import { SignInWithEmailDto } from "./dto/sign-in-with-email.dto";
 import { ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
-import { AuthPayloadType, TokenPayloadType } from "@shortwaits/shared-types";
 import {
   GetCurrentUser,
   GetCurrentUserId,
@@ -33,9 +32,7 @@ export class AuthController {
     description: "Returns new user & business record",
     type: AuthSuccessResponse,
   })
-  signUpLocal(
-    @Body(new ValidationPipe()) dto: SignUpWithEmailDto
-  ): Promise<AuthPayloadType> {
+  signUpLocal(@Body(new ValidationPipe()) dto: SignUpWithEmailDto) {
     return this.authService.signUpLocal(dto);
   }
 
@@ -58,7 +55,7 @@ export class AuthController {
     status: HttpStatus.OK,
     description: "Revokes tokens",
   })
-  logout(@GetCurrentUserId() userId: number): Promise<AuthPayloadType> {
+  logout(@GetCurrentUserId() userId: number) {
     return this.authService.logout(userId);
   }
 
@@ -73,8 +70,7 @@ export class AuthController {
   refreshTokens(
     @GetCurrentUserId() userId: string,
     @GetCurrentUser("refreshToken") refreshToken: string
-  ): Promise<{ auth: TokenPayloadType }> {
-    console.log("refreshTokens controller");
+  ) {
     return this.authService.refreshTokens(userId, refreshToken);
   }
 }

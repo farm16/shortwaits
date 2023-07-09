@@ -6,9 +6,7 @@ import {
   NotFoundException,
   Injectable,
   UnprocessableEntityException,
-  InternalServerErrorException,
 } from "@nestjs/common";
-import { AuthPayloadType, TokenPayloadType } from "@shortwaits/shared-types";
 import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
 
@@ -31,7 +29,7 @@ export class AuthService {
     private config: ConfigService
   ) {}
 
-  async signUpLocal(dto: SignUpWithEmailDto): Promise<AuthPayloadType> {
+  async signUpLocal(dto: SignUpWithEmailDto) {
     try {
       const user = await this.businessUserModel.findOne({
         email: dto.email,
@@ -62,6 +60,7 @@ export class AuthService {
         staff: [currentUser._id],
         hours: shortwaitsAdmin[0].sampleBusinessData.hours,
       });
+
       const services = shortwaitsAdmin[0].sampleBusinessData.services.map(
         service => {
           return { ...service, businessId: newBusinessAccount._id };
@@ -98,7 +97,7 @@ export class AuthService {
     }
   }
 
-  async signInLocal(dto: SignInWithEmailDto): Promise<AuthPayloadType> {
+  async signInLocal(dto: SignInWithEmailDto) {
     const currentUser = await this.businessUserModel.findOne({
       email: dto.email,
     });
@@ -128,6 +127,7 @@ export class AuthService {
         },
       })
       .select("-__v -hashedRt");
+
     return {
       auth: signedTokens,
       attributes: {
@@ -137,7 +137,7 @@ export class AuthService {
     };
   }
 
-  async logout(userId: number): Promise<AuthPayloadType> {
+  async logout(userId: number) {
     await this.businessUserModel.findByIdAndUpdate(userId, {
       hashedRt: null,
     });
@@ -150,13 +150,7 @@ export class AuthService {
     };
   }
 
-  async refreshTokens(
-    userId: string,
-    rt: string
-  ): Promise<{ auth: TokenPayloadType }> {
-    // console.log('userId>>>', userId);
-    // console.log('rt>>>', rt);
-
+  async refreshTokens(userId: string, rt: string) {
     const user = await this.businessUserModel.findById(userId).exec();
 
     if (!user) throw new ForbiddenException("Unable to reauthenticate user");
@@ -189,7 +183,7 @@ export class AuthService {
     );
   }
 
-  async signTokens(user: BusinessUser): Promise<TokenPayloadType> {
+  async signTokens(user: BusinessUser) {
     const payload = { sub: user._id, email: user.email };
 
     const [at, rt] = await Promise.all([
