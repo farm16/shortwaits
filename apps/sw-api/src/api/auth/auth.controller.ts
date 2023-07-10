@@ -71,7 +71,7 @@ export class AuthController {
   }
 
   @UseGuards(RtGuard)
-  @Post("refresh")
+  @Post("admin/local/refresh")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,

@@ -7,10 +7,8 @@ import {
   Param,
   Post,
   Put,
-  Res,
   Req,
   UseGuards,
-  UseInterceptors,
   ValidationPipe,
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
@@ -18,16 +16,8 @@ import { BusinessUserType, ClientUserType } from "@shortwaits/shared-types";
 
 import { BusinessService } from "./business.service";
 import { AtGuard } from "../../common/guards";
-
 import { UpdateBusinessDto, CreateBusinessDto } from "./dto/updateBusiness.dto";
 
-/**
- *
- * POST is always for creating a resource ( does not matter if it was duplicated )
- * PUT is for checking if resource exists then update, else create new resource
- * PATCH is always for updating a resource
- *
- */
 @UseGuards(AtGuard)
 @ApiTags("business")
 @ApiBearerAuth("bearer")

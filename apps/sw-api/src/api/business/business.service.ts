@@ -13,6 +13,7 @@ import {
   ClientUserType,
   BusinessUserType,
 } from "@shortwaits/shared-types";
+
 import { Business } from "./entities/business.entity";
 import { BusinessUser } from "../business-user/entities/business-user.entity";
 import { ClientUser } from "../client-user/entities/client-user.entity";

@@ -40,7 +40,6 @@ export const AuthorizedTabNavigator = () => {
               shadowOpacity: 0.25,
               shadowRadius: 5,
               shadowOffset: { height: -2, width: 0 },
-              zIndex: 99,
             },
             android: {
               elevation: 3,

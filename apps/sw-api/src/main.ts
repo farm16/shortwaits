@@ -2,13 +2,13 @@ import { NestFactory } from "@nestjs/core";
 import { ConfigService } from "@nestjs/config";
 import { SwaggerTheme } from "swagger-themes";
 import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
-
-import { AppModule } from "./app.module";
 import helmet from "helmet";
 import * as fs from "fs";
 
+import { AppModule } from "./app.module";
+
 const API_PREFIX = "v1";
-const DOCS_PREFIX = API_PREFIX + "/docs";
+const DOCS_PREFIX = `${API_PREFIX}/docs`;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

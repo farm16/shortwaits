@@ -18,7 +18,6 @@ export default function styleConstructor(theme: Theme = {}) {
           shadowOpacity: 0.25,
           shadowRadius: 10,
           shadowOffset: { height: 2, width: 0 },
-          zIndex: 99,
         },
         android: {
           elevation: 3,
