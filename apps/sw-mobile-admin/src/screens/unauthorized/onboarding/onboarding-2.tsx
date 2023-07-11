@@ -2,7 +2,6 @@ import React, { useCallback, useLayoutEffect } from "react";
 import { FlatList, StyleSheet } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { CompositeNavigationProp } from "@react-navigation/native";
-import { DocType, ServicesType } from "@shortwaits/shared-types";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { ActivityIndicator } from "react-native-paper";
 
@@ -39,12 +38,6 @@ export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
   const { Colors } = useTheme();
   const business = useBusiness();
 
-  //  TODO: user will not be able create new service during sign-up on update data
-  const handleBusinessRegistration = useCallback(() => {
-    return null;
-    // return registerBusiness(business);
-  }, []);
-
   const {
     data: services,
     // isError,
@@ -54,7 +47,7 @@ export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
   } = useGetServicesByBusinessQuery(business ? business?._id : skipToken);
 
   const handleCardOnPress = useCallback(
-    (item: DocType<ServicesType>) => {
+    item => {
       navigation.navigate("modals", {
         screen: "service-modal-screen",
         params: {
@@ -67,6 +60,10 @@ export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
   );
   const [registerBusiness, registerBusinessStatus] =
     useRegisterBusinessMutation();
+
+  const handleBusinessRegistration = useCallback(() => {
+    registerBusiness(business);
+  }, [business, registerBusiness]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -111,11 +108,16 @@ export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
                 />
               );
             }}
-            keyExtractor={(item) => String(item._id)}
+            keyExtractor={item => String(item._id)}
           />
         </Screen>
         <LinearGradient
-          colors={[Colors.background, Colors.background, Colors.brandAccent2]}
+          colors={[
+            Colors.backgroundOverlay,
+            Colors.backgroundOverlay,
+            Colors.backgroundOverlay,
+            Colors.brandAccent2,
+          ]}
           style={{
             alignItems: "center",
             alignSelf: "stretch",
@@ -125,8 +127,8 @@ export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
         >
           <Button
             preset={"secondary"}
-            text="REGISTER"
-            onPress={(e) => registerBusiness(business)}
+            text="COMPLETE"
+            onPress={e => handleBusinessRegistration()}
           />
         </LinearGradient>
       </>

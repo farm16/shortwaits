@@ -19,14 +19,12 @@ export class BusinessUsersService {
     private readonly businessUserModel: Model<BusinessUser>
   ) {}
 
-  public async findAll(query: PaginationQueryDto): Promise<BusinessUser[]> {
+  async findAll(query: PaginationQueryDto): Promise<BusinessUser[]> {
     const { limit, offset } = query;
     return await this.businessUserModel.find().skip(offset).limit(limit).exec();
   }
 
-  public async findByUserName(
-    username: string
-  ): Promise<BusinessUser | undefined> {
+  async findByUserName(username: string): Promise<BusinessUser | undefined> {
     try {
       return await this.businessUserModel
         .findOne({ username: username })
@@ -53,7 +51,7 @@ export class BusinessUsersService {
     }
   }
 
-  public async create(createCustomerDto: CreateUserDto): Promise<BusinessUser> {
+  async create(createCustomerDto: CreateUserDto): Promise<BusinessUser> {
     try {
       const newCustomer = await this.businessUserModel.create(
         createCustomerDto
@@ -64,7 +62,7 @@ export class BusinessUsersService {
     }
   }
 
-  public async update(
+  async update(
     userId: string,
     updateUserDto: Partial<UpdateUserDto>
   ): Promise<UserDocType> {
@@ -78,7 +76,7 @@ export class BusinessUsersService {
     return existingUser;
   }
 
-  public async remove(userId: string): Promise<any> {
+  async remove(userId: string): Promise<any> {
     const deletedUser = await this.businessUserModel.findByIdAndRemove(userId);
     return deletedUser;
   }

@@ -1,6 +1,6 @@
 export * from "./admin-mobile";
 export * from "./categories";
-export * from "./endpoints";
+// export * from "./endpoints";
 export * from "./business";
 export * from "./services";
 export * from "./helpers";

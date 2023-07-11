@@ -11,7 +11,7 @@ import { ClientUserModule } from "./client-user/client-user.module";
 @Module({
   imports: [
     AuthModule,
-    BusinessUsersModule,
+    // BusinessUsersModule,
     BusinessModule,
     ShortwaitsModule,
     EventsModule,

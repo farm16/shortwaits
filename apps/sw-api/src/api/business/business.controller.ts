@@ -25,13 +25,13 @@ import { UpdateBusinessDto, CreateBusinessDto } from "./dto/updateBusiness.dto";
 export class BusinessController {
   constructor(private readonly businessService: BusinessService) {}
 
-  @Put()
+  @Put(":id")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
     description: "Updates business record",
   })
-  patchBusiness(
+  async updateBusiness(
     @Req() request,
     @Body(new ValidationPipe())
     business: UpdateBusinessDto
@@ -92,19 +92,15 @@ export class BusinessController {
     return this.businessService.findByKey(businessId, "hours");
   }
 
-  // TODO: we need to paginate
-
   @Get(":id/events")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
-    description: "Returns business hours",
+    description: "Returns business events",
   })
   getBusinessEvents(@Param("id") businessId: string) {
     return this.businessService.findByKey(businessId, "events");
   }
-
-  // TODO: we need to paginate
 
   @Get(":id/clients")
   @HttpCode(HttpStatus.OK)
@@ -137,8 +133,6 @@ export class BusinessController {
       dto
     );
   }
-
-  // TODO: we need to paginate
 
   @Get(":id/staff")
   @HttpCode(HttpStatus.OK)
@@ -184,20 +178,5 @@ export class BusinessController {
     business: CreateBusinessDto
   ) {
     return this.businessService.registerBusiness(request.user.sub, business);
-  }
-
-  // TODO !!!
-  @Put(":id/hours")
-  @HttpCode(HttpStatus.OK)
-  @ApiCreatedResponse({
-    status: HttpStatus.OK,
-    description: "Updates business hours",
-  })
-  putBusiness(
-    @Req() request,
-    @Param("id") businessId: string,
-    @Body() dto: ClientUserType[]
-  ) {
-    return null;
   }
 }

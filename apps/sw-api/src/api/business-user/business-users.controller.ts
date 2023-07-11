@@ -7,11 +7,8 @@ import {
   Param,
   Controller,
   Req,
-  Res,
-  NotFoundException,
   HttpStatus,
   UseGuards,
-  UseInterceptors,
   HttpCode,
   BadRequestException,
 } from "@nestjs/common";

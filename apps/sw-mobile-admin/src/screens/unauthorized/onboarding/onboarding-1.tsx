@@ -217,7 +217,12 @@ export const Onboarding1Screen: FC<
       /> */}
       </Screen>
       <LinearGradient
-        colors={[Colors.background, Colors.background, Colors.brandAccent2]}
+        colors={[
+          Colors.backgroundOverlay,
+          Colors.backgroundOverlay,
+          Colors.backgroundOverlay,
+          Colors.brandAccent2,
+        ]}
         style={{
           alignItems: "center",
           alignSelf: "stretch",

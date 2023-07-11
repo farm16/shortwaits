@@ -1,4 +1,4 @@
-import { Controller, Get, Inject, UseInterceptors } from "@nestjs/common";
+import { Controller, Get, Inject } from "@nestjs/common";
 import { ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
 import { ShortwaitsAdminDefaultDataPayloadType } from "@shortwaits/shared-types";
 import { Public } from "../../common/decorators/auth.decorator";

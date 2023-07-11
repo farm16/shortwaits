@@ -1,202 +1,251 @@
-const AUTH_ENDPOINTS = {
-  postAuthAdminSignIn: {
-    endpoint: '/auth/admin/sign-in',
-    method: 'post',
-    description: '',
-  },
-  getAuthAdminSignOut: {
-    endpoint: '/auth/admin/sign-out',
-    method: 'get',
-    description: '',
-  },
-  postAuthAdminSignUp: {
-    endpoint: '/auth/admin/sign-up',
-    method: 'post',
-    description: '',
-  },
-  putAuthAdminChangePassword: {
-    endpoint: '/auth/admin/change-password',
-    method: 'put',
-    description: '',
-  },
-  postAuthAdminRefreshToken: {
-    endpoint: '/auth/admin/refresh-token',
-    method: 'post',
-    description: '',
-  },
-} as const;
+type HttpMethod = "POST" | "GET" | "PUT" | "DELETE";
+type Endpoints =
+  | "auth/admin/local/sign-in"
+  | "auth/admin/local/sign-out"
+  | "auth/admin/local/sign-up"
+  | "auth/admin/local/forgot-password"
+  | "auth/admin/local/refresh"
+  | "business/:businessId"
+  | "business/:businessId/admins"
+  | "business/:businessId/services"
+  | "business/:businessId/categories"
+  | "business/:businessId/hours"
+  | "business/:businessId/events"
+  | "business/:businessId/clients"
+  | "business/:businessId/staff"
+  | "business/register"
+  | "shortwaits/admin/mobile"
+  | "events/:eventId"
+  | "events/summary/business/:businessId"
+  | "events/business/:businessId"
+  | "events"
+  | "services"
+  | "services/:serviceId";
 
-const BUSINESS_ENDPOINTS = {
-  getAllBusiness: {
-    endpoint: '/business/all/:limit?/:page',
-    method: 'get',
-    description: '',
-  },
-  getBusinessById: {
-    endpoint: '/business/:id',
-    method: 'get',
-    description: '',
-  },
-  postBusiness: {
-    endpoint: '/business',
-    method: 'post',
-    description: '',
-  },
-  putBusinessById: {
-    endpoint: '/business/:id',
-    method: 'put',
-    description: '',
-  },
-  deleteBusinessById: {
-    endpoint: '/business/:id',
-    method: 'delete',
-    description: '',
-  },
-  getBusinessCategoriesById: {
-    endpoint: '/business/categories/:id',
-    method: 'get',
-    description: '',
-  },
-  getBusinessHoursById: {
-    endpoint: '/business/hours/:id',
-    method: 'get',
-    description: '',
-  },
-  getBusinessStaffById: {
-    endpoint: '/business/staff/:id',
-    method: 'get',
-    description: '',
-  },
-  getBusinessCurrencyById: {
-    endpoint: '/business/currency/:id',
-    method: 'get',
-    description: '',
-  },
-  getBusinessServicesById: {
-    endpoint: '/business/services/:id',
-    method: 'get',
-    description: '',
-  },
-} as const;
+type EndpointProps = {
+  methods: {
+    [key in HttpMethod]?: {
+      params?: string[];
+    };
+  };
+};
+type EndpointConfig = {
+  [key in Endpoints]: EndpointProps;
+};
 
-const SERVICES_ENDPOINTS = {
-  getAllServices: {
-    endpoint: '/services/all/:limit?/:page?',
-    method: 'get',
-    description: '',
+export const allEndpoints: EndpointConfig = {
+  "auth/admin/local/sign-in": {
+    methods: {
+      POST: {},
+    },
   },
-  getServicesById: {
-    endpoint: '/services/:id',
-    method: 'get',
-    description: '',
+  "auth/admin/local/sign-out": {
+    methods: {
+      POST: {},
+    },
   },
-  postServices: {
-    endpoint: '/services',
-    method: 'post',
-    description: '',
+  "auth/admin/local/sign-up": {
+    methods: {
+      POST: {},
+    },
   },
-  putServicesById: {
-    endpoint: '/services/:id',
-    method: 'put',
-    description: '',
+  "auth/admin/local/forgot-password": {
+    methods: {
+      POST: {},
+    },
   },
-  deleteServicesById: {
-    endpoint: '/services/:id',
-    method: 'delete',
-    description: '',
+  "auth/admin/local/refresh": {
+    methods: {
+      PUT: {},
+    },
   },
-} as const;
+  "business/:businessId": {
+    methods: {
+      GET: {
+        params: ["businessId"],
+      },
+      PUT: {
+        params: ["businessId"],
+      },
+    },
+  },
+  "business/:businessId/admins": {
+    methods: {
+      GET: {
+        params: ["businessId"],
+      },
+      POST: {
+        params: ["businessId"],
+      },
+    },
+  },
+  "business/:businessId/services": {
+    methods: {
+      GET: {
+        params: ["businessId"],
+      },
+      POST: {
+        params: ["businessId"],
+      },
+    },
+  },
+  "business/:businessId/categories": {
+    methods: {
+      GET: {
+        params: ["businessId"],
+      },
+      POST: {
+        params: ["businessId"],
+      },
+    },
+  },
+  "business/:businessId/hours": {
+    methods: {
+      GET: {
+        params: ["businessId"],
+      },
+      POST: {
+        params: ["businessId"],
+      },
+    },
+  },
+  "business/:businessId/events": {
+    methods: {
+      GET: {
+        params: ["businessId"],
+      },
+      POST: {
+        params: ["businessId"],
+      },
+    },
+  },
+  "business/:businessId/clients": {
+    methods: {
+      GET: {
+        params: ["businessId"],
+      },
+      POST: {
+        params: ["businessId"],
+      },
+    },
+  },
+  "business/:businessId/staff": {
+    methods: {
+      GET: {
+        params: ["businessId"],
+      },
+      POST: {
+        params: ["businessId"],
+      },
+    },
+  },
+  "business/register": {
+    methods: {
+      PUT: {},
+    },
+  },
+  "shortwaits/admin/mobile": {
+    methods: {
+      GET: {},
+    },
+  },
+  "events/:eventId": {
+    methods: {
+      GET: {
+        params: ["eventId"],
+      },
+    },
+  },
+  "events/summary/business/:businessId": {
+    methods: {
+      GET: {
+        params: ["businessId"],
+      },
+    },
+  },
+  "events/business/:businessId": {
+    methods: {
+      GET: {
+        params: ["businessId"],
+      },
+    },
+  },
+  events: {
+    methods: {
+      GET: {},
+      POST: {},
+    },
+  },
+  services: {
+    methods: {
+      GET: {},
+      POST: {},
+    },
+  },
+  "services/:serviceId": {
+    methods: {
+      GET: {
+        params: ["serviceId"],
+      },
+      POST: {
+        params: ["serviceId"],
+      },
+      DELETE: {
+        params: ["serviceId"],
+      },
+    },
+  },
+};
 
-const CATEGORIES_ENDPOINT = {
-  getCategoriesById: {
-    endpoint: '/categories/:id',
-    method: 'get',
-    description: '',
-  },
-  getAllCategories: {
-    endpoint: '/categories/all',
-    method: 'get',
-    description: '',
-  },
-  postCategories: {
-    endpoint: '/categories',
-    method: 'post',
-    description: '',
-  },
-  putCategoriesById: {
-    endpoint: '/categories/:id',
-    method: 'put',
-    description: '',
-  },
-  deleteCategoriesById: {
-    endpoint: '/categories/:id',
-    method: 'delete',
-    description: '',
-  },
-} as const;
+export function getEndpointWithParams(
+  endpoint: Endpoints,
+  method: HttpMethod,
+  params: Record<string, string>,
+  isDebug?: boolean
+): { url: string; method: HttpMethod } {
+  const endpointObj = allEndpoints[endpoint];
+  if (!endpointObj) {
+    throw new Error(`Endpoint "${endpoint}" not found.`);
+  }
 
-const USERS_ENDPOINTS = {
-  getAllUsers: {
-    endpoint: '/users',
-    method: 'get',
-    description: '',
-  },
-  getUsersById: {
-    endpoint: '/users/:id',
-    method: 'get',
-    description: '',
-  },
-  postUsers: {
-    endpoint: '/users',
-    method: 'post',
-    description: '',
-  },
-  putUsersById: {
-    endpoint: '/users',
-    method: 'put',
-    description: '',
-  },
-  deleteUsersById: {
-    endpoint: '/users/:id',
-    method: 'delete',
-    description: '',
-  },
-} as const;
+  const endpointMethod = endpointObj.methods[method];
+  if (!endpointMethod) {
+    throw new Error(
+      `Method "${method}" not allowed for endpoint "${endpoint}".`
+    );
+  }
 
-const DEFAULT_DATA_ENDPOINTS = {
-  getMobileDefaultData: {
-    endpoint: '/mobile-admin/default',
-    method: 'get',
-    description: '',
-  },
-} as const;
+  const endpointParams = endpointMethod.params;
+  if (endpointParams) {
+    const missingParams = endpointParams.filter(
+      param => !Object.prototype.hasOwnProperty.call(params, param)
+    );
+    if (missingParams.length > 0) {
+      throw new Error(
+        `Missing required parameters for endpoint "${endpoint}": ${missingParams.join(
+          ", "
+        )}.`
+      );
+    }
 
-export const API_ENDPOINT_CONFIG = {
-  ...AUTH_ENDPOINTS,
-  ...BUSINESS_ENDPOINTS,
-  ...SERVICES_ENDPOINTS,
-  ...CATEGORIES_ENDPOINT,
-  ...USERS_ENDPOINTS,
-  ...DEFAULT_DATA_ENDPOINTS,
-} as const;
+    const endpointParamsObj = endpointParams.reduce((acc, param) => {
+      acc[param] = params[param];
+      return acc;
+    }, {} as Record<string, string>);
 
-export type ApiEndpointsType =
-  typeof API_ENDPOINT_CONFIG[keyof typeof API_ENDPOINT_CONFIG]['endpoint'];
+    if (isDebug) {
+      console.log("returning URL >>>", endpoint);
+      console.log("returning METHOD >>>", method);
+    }
 
-export type AuthEndpointsType =
-  typeof AUTH_ENDPOINTS[keyof typeof AUTH_ENDPOINTS]['endpoint'];
-
-export type BusinessEndpointsType =
-  typeof BUSINESS_ENDPOINTS[keyof typeof BUSINESS_ENDPOINTS]['endpoint'];
-
-export type ServicesEndpointsType =
-  typeof SERVICES_ENDPOINTS[keyof typeof SERVICES_ENDPOINTS]['endpoint'];
-
-export type CategoriesEndpointsType =
-  typeof CATEGORIES_ENDPOINT[keyof typeof CATEGORIES_ENDPOINT]['endpoint'];
-
-export type UsersEndpointsType =
-  typeof USERS_ENDPOINTS[keyof typeof USERS_ENDPOINTS]['endpoint'];
-
-export type DefaultDataEndpointsType =
-  typeof DEFAULT_DATA_ENDPOINTS[keyof typeof DEFAULT_DATA_ENDPOINTS]['endpoint'];
+    return {
+      url: endpoint.replace(/:(\w+)/g, (_, param) => endpointParamsObj[param]),
+      method,
+    };
+  }
+  if (isDebug) {
+    console.log("returning URL >>>", endpoint);
+    console.log("returning METHOD >>>", method);
+  }
+  return { url: endpoint, method };
+}
