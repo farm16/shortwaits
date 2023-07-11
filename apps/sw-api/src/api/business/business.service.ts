@@ -17,7 +17,8 @@ import {
 import { Business } from "./entities/business.entity";
 import { BusinessUser } from "../business-user/entities/business-user.entity";
 import { ClientUser } from "../client-user/entities/client-user.entity";
-import { CreateBusinessDto, UpdateBusinessDto } from "./dto/updateBusiness.dto";
+import { UpdateBusinessDto } from "./dto/updateBusiness.dto";
+import { RegisterBusinessDto } from "./dto/registerBusiness.dto";
 
 @Injectable()
 export class BusinessService {
@@ -68,7 +69,7 @@ export class BusinessService {
    * we need to verify that user is an admin for the requested business
    *
    */
-  async getBusiness(businessId: string, userId: string): Promise<Business> {
+  async getBusiness(businessId: string, userId: string) {
     const businessData = await this.findBusinessById(businessId);
 
     const { isAdmin, isSuperAdmin } = this.isUserAdminType(
@@ -84,17 +85,24 @@ export class BusinessService {
   async updateBusiness(
     userId: string,
     business: Partial<UpdateBusinessDto>,
-    isRegistration?: boolean
+    isRegistrationCompleted: boolean
   ) {
-    const filteredBusiness = this.filterBusiness(business);
-    if (isRegistration) {
-      filteredBusiness.isRegistrationCompleted = true;
-    }
+    const filteredBusiness = {
+      ...this.filterBusiness(business),
+      isRegistrationCompleted: isRegistrationCompleted ? true : undefined,
+    }; // we need prevent certain fields from being updated by the user [security]
+
+    console.log("isRegistrationCompleted", isRegistrationCompleted);
+
     const updatedBusiness = await this.businessModel.findByIdAndUpdate(
       filteredBusiness._id,
       filteredBusiness,
       { new: true }
     );
+
+    if (updatedBusiness) {
+      throw new NotFoundException("Business not available");
+    }
 
     const { isAdmin, isSuperAdmin } = this.isUserAdminType(
       updatedBusiness,
@@ -103,13 +111,15 @@ export class BusinessService {
 
     if (isAdmin || isSuperAdmin) {
       return await updatedBusiness.save();
+    } else {
+      throw new ForbiddenException("Not enough permissions");
     }
   }
 
-  async registerBusiness(
-    userId: string,
-    business: CreateBusinessDto
-  ): Promise<Business> {
+  async registerBusiness(userId: string, business: RegisterBusinessDto) {
+    console.log("registerBusiness ****");
+    const isRegistrationCompleted = true;
+
     if (business.services.length === 0) {
       throw new PreconditionFailedException({
         error: "Precondition Failed",
@@ -124,14 +134,20 @@ export class BusinessService {
         statusCode: 412,
       });
     }
-    return this.updateBusiness(userId, business, true);
+
+    const updatedBusiness = this.updateBusiness(
+      userId,
+      business,
+      isRegistrationCompleted
+    );
+    return updatedBusiness;
   }
 
   async updateBusinessHours(
     businessId: string,
     userId: string,
     dto: { hours: BusinessHoursType }
-  ): Promise<Business> {
+  ) {
     const businessData = await this.businessModel.findOne(
       { _id: businessId },
       null,

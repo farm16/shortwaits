@@ -52,7 +52,10 @@ export const Card = (props: CardProps) => {
     if (leftIconOnPress || rightIconOnPress) {
       return true;
     }
-    if (mode === ("static" || "text-field")) {
+    if (mode === "text-field") {
+      return true;
+    }
+    if (mode === "static") {
       return true;
     }
     return false;

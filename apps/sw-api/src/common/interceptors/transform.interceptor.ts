@@ -22,8 +22,8 @@ export class TransformInterceptor<T>
         let message = null;
         let errorCode = null;
         const statusCode = context.switchToHttp().getResponse().statusCode;
-        console.log("payload >>>", payload);
-        console.log("statusCode >>>", statusCode);
+        // console.log("payload >>>", payload);
+        // console.log("statusCode >>>", statusCode);
 
         if (typeof payload === "object" && payload?.meta) {
           meta = payload.meta;

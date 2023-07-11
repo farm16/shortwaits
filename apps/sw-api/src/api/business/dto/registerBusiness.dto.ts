@@ -2,31 +2,14 @@ import {
   IsArray,
   IsBoolean,
   IsNotEmpty,
-  IsPhoneNumber,
   IsString,
   MaxLength,
+  IsOptional,
 } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 import { Trim } from "class-sanitizer";
 
-export class UpdateBusinessDto {
-  @Trim()
-  @IsString()
-  @MaxLength(64)
-  @ApiProperty()
-  country: string;
-
-  @Trim()
-  @MaxLength(64)
-  @ApiProperty()
-  phone1: string;
-
-  @Trim()
-  @IsString()
-  @MaxLength(64)
-  @ApiProperty()
-  longName: string;
-
+export class RegisterBusinessDto {
   @Trim()
   @IsString()
   @IsNotEmpty()
@@ -57,7 +40,15 @@ export class UpdateBusinessDto {
   categories: [];
 
   @IsArray()
-  @IsNotEmpty()
   @ApiProperty()
   services: [];
+
+  //   @IsOptional()
+  //   country: string;
+
+  //   @IsOptional()
+  //   phone1: string;
+
+  //   @IsOptional()
+  //   longName: string;
 }

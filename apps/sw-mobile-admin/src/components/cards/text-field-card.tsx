@@ -1,7 +1,4 @@
 import React from "react";
-import { StyleSheet } from "react-native";
-
-import { getDimensions, useTheme } from "../../theme";
 import {
   TextField,
   TextFieldProps,
@@ -20,42 +17,11 @@ type TextFieldCard = {
   Partial<CardProps>;
 
 export function TextFieldCard(props: TextFieldCard) {
-  const {
-    placeholder,
-    preset = "default",
-    style,
-    errors,
-    isTouched,
-    title,
-    leftIconOnPress,
-    rightIconOnPress,
-    leftIconSize,
-    rightIconSize,
-    leftIconColor,
-    rightIconName,
-    leftIconName,
-    rightIconColor,
-    disabled = false,
-    ...rest
-  } = props;
-
-  const { Colors } = useTheme();
-  const { width } = getDimensions();
+  const { placeholder, errors, isTouched, title, ...rest } = props;
 
   return (
     <>
-      <Card
-        mode="text-field"
-        // disabled={disabled}
-        leftIconOnPress={leftIconOnPress}
-        rightIconOnPress={rightIconOnPress}
-        leftIconSize={leftIconSize}
-        rightIconSize={rightIconSize}
-        leftIconColor={leftIconColor}
-        rightIconName={rightIconName}
-        leftIconName={leftIconName}
-        rightIconColor={rightIconColor}
-      >
+      <Card mode="text-field">
         <Text preset="cardTitle" text={title} />
         <Space size="tiny" />
         <TextField preset="cardSubtitle" placeholder={placeholder} {...rest} />
@@ -66,15 +32,3 @@ export function TextFieldCard(props: TextFieldCard) {
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  errorField: {
-    alignSelf: "center",
-    textAlign: "right",
-  },
-  cardTitle: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    margin: 0,
-  },
-});

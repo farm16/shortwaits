@@ -12,6 +12,9 @@ import {
 @Schema()
 export class Business extends Document implements BusinessType {
   @Prop()
+  email: string;
+
+  @Prop()
   events: ObjectId[];
 
   @Prop()

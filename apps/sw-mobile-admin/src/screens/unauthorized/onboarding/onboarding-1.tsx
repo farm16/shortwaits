@@ -19,13 +19,13 @@ import { useForm } from "../../../hooks";
 import {
   useBusiness,
   useUser,
-  setBusinessDescription,
-  setBusinessShortName,
+  setBusiness,
   useSignOut,
   useAuth,
   useMobileAdmin,
   setBusinessCategories,
 } from "../../../redux";
+import { useGetCategoriesQuery } from "../../../services";
 
 export const Onboarding1Screen: FC<
   UnauthorizedScreenProps<"onboarding-1-screen">
@@ -39,6 +39,12 @@ export const Onboarding1Screen: FC<
   const user = useUser();
   const auth = useAuth();
   const { Colors } = useTheme();
+  const {
+    data: categories,
+    isError,
+    isLoading,
+    isSuccess,
+  } = useGetCategoriesQuery(undefined);
 
   const getSelectedCategoryNames = (
     availableCategories: any[],
@@ -62,19 +68,17 @@ export const Onboarding1Screen: FC<
   }, [auth, navigation]);
 
   const initialValues = {
-    businessShortName: "",
-    businessDescription: "",
+    shortName: "",
+    description: "",
+    longName: "",
+    phone1: "",
+    country: "",
   };
   const { touched, errors, values, handleChange, handleSubmit } = useForm(
     {
       initialValues,
       onSubmit: formData => {
-        dispatch(
-          setBusinessDescription({ description: formData.businessDescription })
-        );
-        dispatch(
-          setBusinessShortName({ shortName: formData.businessShortName })
-        );
+        dispatch(setBusiness(formData));
         navigation.navigate("unauthorized", {
           screen: "onboarding-2-screen",
         });
@@ -124,10 +128,10 @@ export const Onboarding1Screen: FC<
         <TextFieldCard
           title="Business Name"
           placeholder={`The name of your business`}
-          value={values.businessShortName}
-          onChangeText={handleChange("businessShortName")}
-          isTouched={touched.businessShortName}
-          errors={errors.businessShortName}
+          value={values.shortName}
+          onChangeText={handleChange("shortName")}
+          isTouched={touched.shortName}
+          errors={errors.shortName}
         />
         <Space size="small" />
         <TextFieldCard
@@ -135,10 +139,10 @@ export const Onboarding1Screen: FC<
           placeholder="A short description about your business"
           multiline
           maxLength={150} // get reduced to 140 by the form's validation
-          value={values.businessDescription}
-          onChangeText={handleChange("businessDescription")}
-          isTouched={touched.businessDescription}
-          errors={errors.businessDescription}
+          value={values.description}
+          onChangeText={handleChange("description")}
+          isTouched={touched.description}
+          errors={errors.description}
         />
         <Space size="small" />
         <ButtonCard
@@ -147,7 +151,7 @@ export const Onboarding1Screen: FC<
             !Array.isArray(business.categories) || !business.categories.length
               ? "Select a business category"
               : getSelectedCategoryNames(
-                  mobileData.categories,
+                  categories?.data || [],
                   business.categories
                 )
           }

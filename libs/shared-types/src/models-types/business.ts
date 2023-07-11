@@ -59,6 +59,7 @@ export type BusinessType = {
   web?: {
     isActive: boolean;
   };
+  email: string;
 };
 
 type BusinessDocType = BusinessType & Document;

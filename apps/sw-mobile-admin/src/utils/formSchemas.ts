@@ -120,12 +120,13 @@ export const formSchemas = {
   }),
   addEvent,
   onboarding1: Yup.object().shape({
-    businessShortName: Yup.string()
+    longName: Yup.string().optional(),
+    phone1: Yup.string().optional(),
+    country: Yup.string().optional(),
+    shortName: Yup.string()
       .min(3, "a longer name is required")
       .required("this field is required"),
-    businessDescription: Yup.string()
-      .max(140)
-      .required("this field is required"),
+    description: Yup.string().max(140).required("this field is required"),
   }),
   signInSchema: Yup.object().shape({
     email: Yup.string().email("invalid email").required("no email provided."),

@@ -9,7 +9,7 @@ export const businessSlice = createSlice({
   name: "business",
   initialState: initialState,
   reducers: {
-    setBusiness: (state, action: PayloadAction<BusinessDtoType>) => ({
+    setBusiness: (state, action: PayloadAction<Partial<BusinessDtoType>>) => ({
       ...state,
       ...action.payload,
     }),

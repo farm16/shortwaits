@@ -1,12 +1,11 @@
-import { Model } from 'mongoose';
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { CreateServiceDto } from './dto/create-service.dto';
-import { UpdateServiceDto } from './dto/update-service.dto';
-import { ConfigService } from '@nestjs/config';
-import { Service } from './entities/service.entity';
-import { Business } from '../business/entities/business.entity';
-import { ServicesType, ObjectId } from '@shortwaits/shared-types';
+import { Model } from "mongoose";
+import { Injectable } from "@nestjs/common";
+import { InjectModel } from "@nestjs/mongoose";
+import { CreateServiceDto } from "./dto/create-service.dto";
+import { UpdateServiceDto } from "./dto/update-service.dto";
+import { ConfigService } from "@nestjs/config";
+import { Service } from "./entities/service.entity";
+import { Business } from "../business/entities/business.entity";
 
 /**
  * docs
@@ -32,7 +31,7 @@ export class ServicesService {
   }
 
   async findByIds(servicesId: string[]) {
-    const services = await this.serviceModel.find().where('_id').in(servicesId);
+    const services = await this.serviceModel.find().where("_id").in(servicesId);
     console.log(services);
     return services;
   }
@@ -58,17 +57,17 @@ export class ServicesService {
   }
 
   async findAllByBusiness(id: string) {
-    console.log('businessID >>>', id);
+    console.log("businessID >>>", id);
 
     const businessServices = await this.businessModel.findById(id);
 
-    console.log('businessServices >>>', businessServices.services);
+    console.log("businessServices >>>", businessServices.services);
     // const businessServicesIds = businessServices.map((e) => e.toString());
     const services = await this.serviceModel
       .find()
-      .where('_id')
+      .where("_id")
       .in(businessServices.services);
-    console.log('services >>>', services);
+    console.log("services >>>", services);
 
     return services;
   }

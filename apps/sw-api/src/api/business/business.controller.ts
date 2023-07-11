@@ -16,7 +16,8 @@ import { BusinessUserType, ClientUserType } from "@shortwaits/shared-types";
 
 import { BusinessService } from "./business.service";
 import { AtGuard } from "../../common/guards";
-import { UpdateBusinessDto, CreateBusinessDto } from "./dto/updateBusiness.dto";
+import { UpdateBusinessDto } from "./dto/updateBusiness.dto";
+import { RegisterBusinessDto } from "./dto/registerBusiness.dto";
 
 @UseGuards(AtGuard)
 @ApiTags("business")
@@ -25,90 +26,97 @@ import { UpdateBusinessDto, CreateBusinessDto } from "./dto/updateBusiness.dto";
 export class BusinessController {
   constructor(private readonly businessService: BusinessService) {}
 
-  @Put(":id")
+  @Put(":businessId")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
     description: "Updates business record",
   })
   async updateBusiness(
+    @Param("businessId") businessId: string,
     @Req() request,
-    @Body(new ValidationPipe())
-    business: UpdateBusinessDto
+    @Body(new ValidationPipe()) business: UpdateBusinessDto
   ) {
-    return this.businessService.updateBusiness(request.user.sub, business);
+    return this.businessService.updateBusiness(
+      request.user.sub,
+      business,
+      false
+    );
   }
 
   /**
-   * only admins of the business can retrieve full information
+   * Only admins of the business can retrieve full information
    */
-  @Get(":id")
+  @Get(":businessId")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
     description: "Returns business record",
   })
-  async getBusiness(@Req() request, @Param("id") businessId: string) {
+  async getBusiness(@Param("businessId") businessId: string, @Req() request) {
     return this.businessService.getBusiness(businessId, request.user.sub);
   }
 
-  @Get(":id/admins")
+  @Get(":businessId/admins")
+  @HttpCode(HttpStatus.OK)
+  @ApiCreatedResponse({
+    status: HttpStatus.OK,
+    description: "Returns business admins",
+  })
+  async getBusinessAdmins(@Param("businessId") businessId: string) {
+    return this.businessService.findByKey(businessId, "admins");
+  }
+
+  @Get(":businessId/services")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
     description: "Returns business services",
   })
-  getBusinessAdmins(@Param("id") businessId: string) {
+  async getBusinessServices(@Param("businessId") businessId: string) {
     return this.businessService.findByKey(businessId, "services");
   }
 
-  @Get(":id/services")
-  @HttpCode(HttpStatus.OK)
-  @ApiCreatedResponse({
-    status: HttpStatus.OK,
-    description: "Returns business services",
-  })
-  getBusinessServices(@Param("id") businessId: string) {
-    return this.businessService.findByKey(businessId, "services");
-  }
-
-  @Get(":id/categories")
+  @Get(":businessId/categories")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
     description: "Returns business categories",
   })
-  getBusinessCategories(@Param("id") businessId: string) {
+  async getBusinessCategories(@Param("businessId") businessId: string) {
     return this.businessService.findByKey(businessId, "categories");
   }
 
-  @Get(":id/hours")
+  @Get(":businessId/hours")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
     description: "Returns business hours",
   })
-  getBusinessHours(@Param("id") businessId: string) {
+  async getBusinessHours(@Param("businessId") businessId: string) {
     return this.businessService.findByKey(businessId, "hours");
   }
 
-  @Get(":id/events")
+  @Get(":businessId/events")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
     description: "Returns business events",
   })
-  getBusinessEvents(@Param("id") businessId: string) {
+  async getBusinessEvents(@Param("businessId") businessId: string) {
     return this.businessService.findByKey(businessId, "events");
   }
 
-  @Get(":id/clients")
+  @Get(":businessId/clients")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
     description: "Returns business clients",
   })
-  getBusinessClients(@Req() request, @Param("id") businessId: string) {
+  async getBusinessClients(
+    @Param("businessId") businessId: string,
+    @Req() request
+  ) {
     return this.businessService.getUsers(
       "client",
       businessId,
@@ -116,15 +124,15 @@ export class BusinessController {
     );
   }
 
-  @Post(":id/clients")
+  @Post(":businessId/clients")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.CREATED,
     description: "Returns created",
   })
-  createBusinessClients(
+  async createBusinessClients(
+    @Param("businessId") businessId: string,
     @Req() request,
-    @Param("id") businessId: string,
     @Body() dto: ClientUserType[]
   ) {
     return this.businessService.createBusinessClients(
@@ -134,27 +142,29 @@ export class BusinessController {
     );
   }
 
-  @Get(":id/staff")
+  @Get(":businessId/staff")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
     description: "Returns business staff",
   })
-  getBusinessStaffByIds(@Req() request, @Param("id") businessId: string) {
+  async getBusinessStaffByIds(
+    @Param("businessId") businessId: string,
+    @Req() request
+  ) {
     return this.businessService.getUsers("staff", businessId, request.user.sub);
   }
 
-  @Post(":id/staff")
+  @Post(":businessId/staff")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
     description: "Returns business staff",
   })
-  createBusinessStaff(
+  async createBusinessStaff(
+    @Param("businessId") businessId: string,
     @Req() request,
-    @Body() dto: BusinessUserType[],
-    @Param("id")
-    businessId: string
+    @Body() dto: BusinessUserType[]
   ) {
     return this.businessService.createBusinessStaff(
       request.user.sub,
@@ -163,20 +173,17 @@ export class BusinessController {
     );
   }
 
-  /**
-   * only admins of the business can retrieve full information
-   */
   @Put("register")
-  @HttpCode(HttpStatus.CREATED)
+  @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
     description: "Register Business",
   })
   async registerBusiness(
     @Req() request,
-    @Body(new ValidationPipe())
-    business: CreateBusinessDto
+    @Body(new ValidationPipe()) business: RegisterBusinessDto
   ) {
+    console.log("registerBusiness ****");
     return this.businessService.registerBusiness(request.user.sub, business);
   }
 }
