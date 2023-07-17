@@ -15,10 +15,11 @@ type Endpoints =
   | "business/:businessId/staff"
   | "business/register"
   | "shortwaits/admin/mobile"
-  | "events/:eventId"
-  | "events/summary/business/:businessId"
+  | "events/business/summary/:businessId"
   | "events/business/:businessId"
   | "events"
+  | "events/delete/:eventId"
+  | "events/delete"
   | "services"
   | "services/:serviceId";
 
@@ -149,14 +150,7 @@ export const allEndpoints: EndpointConfig = {
       GET: {},
     },
   },
-  "events/:eventId": {
-    methods: {
-      GET: {
-        params: ["eventId"],
-      },
-    },
-  },
-  "events/summary/business/:businessId": {
+  "events/business/summary/:businessId": {
     methods: {
       GET: {
         params: ["businessId"],
@@ -168,12 +162,29 @@ export const allEndpoints: EndpointConfig = {
       GET: {
         params: ["businessId"],
       },
+      POST: {
+        params: ["businessId"],
+      },
+      PUT: {
+        params: ["businessId"],
+      },
     },
   },
   events: {
     methods: {
       GET: {},
-      POST: {},
+    },
+  },
+  "events/delete/:eventId": {
+    methods: {
+      PUT: {
+        params: ["eventId"],
+      },
+    },
+  },
+  "events/delete": {
+    methods: {
+      PUT: {},
     },
   },
   services: {

@@ -1,7 +1,7 @@
 import React, { FC, useLayoutEffect, useMemo, useState } from "react";
 import { FlatList, StyleSheet } from "react-native";
 
-import { useBusiness } from "../../../../../redux";
+import { useBusiness } from "../../../../../store";
 import {
   // SearchBar,
   Space,

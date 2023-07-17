@@ -1,24 +1,25 @@
-import React, { FC } from "react";
+import React, { FC, useCallback, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
-
 import { CompositeNavigationProp } from "@react-navigation/native";
-import {
-  Screen,
-  Logo,
-  Button,
-  Text,
-  Space,
-  Container,
-} from "../../../components";
-import Facebook from "../../../assets/icons/facebook.svg";
-import Google from "../../../assets/icons/google.svg";
-import EMail from "../../../assets/icons/email.svg";
-import { useTheme } from "../../../theme";
+
+import { getDimensions, useTheme } from "../../../theme";
 import {
   RootStackParamList,
   UnauthorizedStackParamList,
-} from "../../../navigation/navigation-types";
+} from "../../../navigation";
+import { useForm } from "../../../hooks";
+import { useLocalSignInMutation } from "../../../services";
+import {
+  Container,
+  Button,
+  Text,
+  Space,
+  TextFieldCard,
+  Screen,
+} from "../../../components";
+import Facebook from "../../../assets/icons/facebook.svg";
+import Google from "../../../assets/icons/google.svg";
 
 export interface RegisterWithEmailScreenProps {
   navigation: CompositeNavigationProp<
@@ -31,10 +32,39 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({
   navigation,
 }) => {
   const { Colors } = useTheme();
+  const [isVisible, setIsVisible] = useState(false);
+  const { width } = getDimensions();
 
+  const [localSignIn, response] = useLocalSignInMutation();
+
+  const initialValues = {
+    email: "",
+    password: "",
+  };
+  const { touched, errors, values, handleChange, handleSubmit, dirty } =
+    useForm(
+      {
+        initialValues,
+        onSubmit: formData => {
+          localSignIn({
+            email: formData.email,
+            password: formData.password,
+          });
+        },
+      },
+      "signInSchema"
+    );
+  const handlePasswordVisibility = useCallback(() => {
+    setIsVisible(visibility => !visibility);
+  }, []);
   return (
-    <Screen preset="fixed">
-      <View style={{ justifyContent: "center", marginBottom: 100, flex: 1 }}>
+    <Screen preset="fixed" unsafe unsafeBottom withHorizontalPadding>
+      <View
+        style={{
+          justifyContent: "center",
+          flex: 1,
+        }}
+      >
         <Text
           style={{
             textAlign: "center",
@@ -43,87 +73,107 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({
             fontStyle: "italic",
             fontWeight: "bold",
             alignSelf: "center",
-            color: Colors.brandSecondary,
+            color: Colors.brandSecondary3,
           }}
         >
           SHORT{"\n"}WAITS
         </Text>
+      </View>
+      <TextFieldCard
+        autoCapitalize="none"
+        keyboardType="email-address"
+        title="Email"
+        placeholder="bod_ross@shortwaits.com"
+        value={values.email}
+        onChangeText={handleChange("email")}
+        isTouched={touched.email}
+        errors={errors.email}
+      />
+      <Space size="small" />
+      <TextFieldCard
+        secureTextEntry={!isVisible}
+        title="Password"
+        placeholder=""
+        value={values.password}
+        rightIconOnPress={handlePasswordVisibility}
+        rightIconName={isVisible ? "eye-off" : "eye"}
+        rightIconColor={isVisible ? Colors.disabledText : Colors.brandSecondary}
+        onChangeText={handleChange("password")}
+        isTouched={touched.password}
+        errors={errors.password}
+      />
+      <View
+        style={{
+          flexDirection: "row",
+        }}
+      >
+        <Button
+          style={{ marginLeft: "auto" }}
+          preset="subLink"
+          text="Forgot password?"
+        />
+      </View>
+      <Button
+        preset="primary"
+        style={{ backgroundColor: Colors.brandSecondary }}
+        onPress={() => handleSubmit()}
+      >
+        <Text style={{ color: "white" }} preset="social">
+          Log in
+        </Text>
+      </Button>
+      <Space size="large" />
+      <Button preset="social">
+        <Facebook
+          width={30}
+          height={30}
+          style={{ position: "absolute", left: 0, margin: 16 }}
+        />
+        <Container style={styles.buttonContainer}>
+          <Text preset="social">with Facebook</Text>
+        </Container>
+      </Button>
+      <Space size="small" />
+      <Button preset="social">
+        <Container style={styles.buttonContainer}>
+          <Google
+            width={30}
+            height={30}
+            style={{ position: "absolute", left: 0, margin: 16 }}
+          />
+          <Text preset="social">with Gmail</Text>
+        </Container>
+      </Button>
+      <Space size="tiny" />
+      <View style={styles.footer}>
         <Text
-          text="Login"
-          style={{
-            color: Colors.subText,
-            textTransform: "uppercase",
-            fontWeight: "500",
-            marginTop: 21,
-            alignSelf: "center",
+          preset="subLink"
+          style={{ color: Colors.text }}
+          text="Don't have an account?   "
+        />
+        <Button
+          preset="subLink"
+          textStyle={{ color: Colors.brandSecondary6 }}
+          text="Sign up"
+          onPress={() => {
+            navigation.navigate("unauthorized", { screen: "sign-up-screen" });
           }}
         />
       </View>
-      <View style={styles.container}>
-        <Button preset="social">
-          <Container style={styles.buttonContainer}>
-            <Facebook width={30} height={30} />
-            <Space direction="vertical" size="tiny" />
-            <Text preset="social">with Facebook</Text>
-          </Container>
-        </Button>
-        <Space size="small" />
-        <Button preset="social">
-          <Container style={styles.buttonContainer}>
-            <Google width={30} height={30} />
-            <Space direction="vertical" size="tiny" />
-            <Text preset="social">with Gmail</Text>
-          </Container>
-        </Button>
-        <Space size="small" />
-        <Button
-          preset="social"
-          style={{ backgroundColor: Colors.brandSecondary3 }}
-          onPress={() => {
-            navigation.navigate("unauthorized", {
-              screen: "sign-in-with-email-screen",
-            });
-          }}
-        >
-          <Container style={styles.buttonContainer}>
-            <EMail width={30} height={30} />
-            <Space direction="vertical" size="tiny" />
-            <Text style={{ color: "white" }} preset="social">
-              with Email
-            </Text>
-          </Container>
-        </Button>
-        <Space size="large" />
-        <View style={styles.footer}>
-          <Text
-            preset="subLink"
-            style={{ color: Colors.text }}
-            text="Don't have an account?   "
-          />
-          <Button
-            preset="subLink"
-            textStyle={{ color: Colors.brandSecondary6 }}
-            text="Sign up"
-            onPress={() => {
-              navigation.navigate("unauthorized", { screen: "sign-up-screen" });
-            }}
-          />
-        </View>
-        <Space size="xLarge" />
-      </View>
+      <Space size="xLarge" />
     </Screen>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: "center",
     justifyContent: "flex-end",
   },
   footer: {
     flexDirection: "row",
     alignSelf: "center",
+    alignItems: "center",
   },
   buttonContainer: {
     flexDirection: "row",

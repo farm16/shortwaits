@@ -52,4 +52,8 @@ export interface ScreenProps extends ScrollViewProps {
   keyboardShouldPersistTaps?: "handled" | "always" | "never";
 
   showsVerticalScrollIndicator?: boolean;
+
+  withHorizontalPadding?: boolean;
+
+  withVerticalPadding?: boolean;
 }

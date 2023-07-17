@@ -23,6 +23,7 @@ function ScreenWithoutScrolling(props: ScreenProps) {
     style: styleOverride,
     unsafe,
     unsafeBottom,
+    withHorizontalPadding,
   } = props;
 
   const insets = useSafeAreaInsets();
@@ -41,6 +42,7 @@ function ScreenWithoutScrolling(props: ScreenProps) {
   const insetStyle = {
     paddingTop: unsafe ? 0 : insets.top,
     paddingBottom: unsafeBottom ? 0 : insets.bottom,
+    paddingHorizontal: withHorizontalPadding ? 16 : 0,
   };
 
   return (

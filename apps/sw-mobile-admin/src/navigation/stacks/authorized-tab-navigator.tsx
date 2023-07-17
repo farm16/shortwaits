@@ -14,7 +14,7 @@ import {
 import { useTheme } from "../../theme";
 import { AUTHORIZED_TAB_SCREENS } from "../navigation-constants";
 import { Platform } from "react-native";
-import { useMobileAdmin } from "../../redux";
+import { useMobileAdmin } from "../../store";
 
 const Tab = createBottomTabNavigator();
 

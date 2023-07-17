@@ -13,13 +13,13 @@ export class SignUpWithEmailDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(32)
-  @ApiProperty({ example: "shortwaits123" })
+  @ApiProperty({ example: "sw" })
   readonly username: string;
 
   @Trim()
   @IsEmail()
   @IsNotEmpty()
-  @ApiProperty({ example: "shortwaits123@123.com" })
+  @ApiProperty({ example: "sw@sw.com" })
   readonly email: string;
 
   @Trim()

@@ -4,7 +4,7 @@ import { Alert } from "react-native";
 
 import { useCreateBusinessClientsMutation } from "../../../services";
 import { useForm } from "../../../hooks";
-import { useBusiness } from "../../../redux";
+import { useBusiness } from "../../../store";
 import {
   Card,
   Text,

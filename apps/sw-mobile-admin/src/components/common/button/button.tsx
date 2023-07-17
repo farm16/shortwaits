@@ -66,7 +66,7 @@ export const Button: FC<ButtonProps> = props => {
         (rightIconName === "none" ? null : (
           <Icon
             name={rightIconName}
-            size={rightIconSize}
+            size={rightIconSize as number}
             color={rightIconColor}
           />
         ))}

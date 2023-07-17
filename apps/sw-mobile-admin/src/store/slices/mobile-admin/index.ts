@@ -52,6 +52,7 @@ export const mobileAdminSlice = createSlice({
     ) {
       const { payload } = action;
       const currentState = cloneDeep(state);
+      console.log("changeFloatingActionButtonVisibility", payload);
       return {
         ...currentState,
         components: {

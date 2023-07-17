@@ -13,7 +13,7 @@ import {
   Text,
 } from "../../../components";
 import { useTheme } from "../../../theme";
-import { useUser, useBusiness, useSignOut } from "../../../redux";
+import { useUser, useBusiness, useSignOut } from "../../../store";
 import { UserAccountSettings } from "./options/user-account";
 import { SupportSettings } from "./options/support";
 import { BusinessInfoSettings } from "./options/business-info";

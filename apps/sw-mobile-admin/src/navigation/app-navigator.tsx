@@ -15,7 +15,7 @@ import {
   AuthorizedTabNavigator,
   AuthorizedStackNavigator,
 } from "./stacks";
-import { useAuth, useBusiness } from "../redux";
+import { useAuth, useBusiness } from "../store";
 import { FloatingActionButton, PremiumMembershipModal } from "../components";
 import { Banner } from "../components/banners/banner";
 

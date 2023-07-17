@@ -9,7 +9,7 @@ import {
   LeftChevronButton,
   Space,
 } from "../../../../../components";
-import { useBusiness } from "../../../../../redux";
+import { useBusiness } from "../../../../../store";
 import { useGetServicesByBusinessQuery } from "../../../../../services";
 import { ModalsScreenProps } from "../../../../../navigation";
 

@@ -1,7 +1,6 @@
 import React, { FC, useEffect } from "react";
-import { useDispatch } from "react-redux";
 
-import { changeFloatingActionButtonVisibility } from "../../../redux";
+import { useHideGhostComponent } from "../../../store";
 import { ModalsScreenProps, FormType } from "../../../navigation";
 import { AddClientModal } from "./add-client";
 import { AddEventModal } from "./add-event";
@@ -18,12 +17,8 @@ export const FormModalScreen: FC<
 > = props => {
   const form = props.route.params.form;
   const Form = forms[form];
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(changeFloatingActionButtonVisibility());
-    return () => {
-      dispatch(changeFloatingActionButtonVisibility());
-    };
-  }, [dispatch]);
+
+  useHideGhostComponent();
+
   return <Form {...props} />;
 };

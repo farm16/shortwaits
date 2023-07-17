@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 
 import { getDimensions, useTheme } from "../../../theme";
 import { Button, Container, Text, TimeRangeText } from "../../../components";
-import { setBusinessDayActivity } from "../../../redux";
+import { setBusinessDayActivity } from "../../../store";
 import { ScheduleModalType } from "../../../navigation";
 import { DayType } from "./schedule";
 

@@ -26,7 +26,7 @@ import {
 } from "../../../components";
 import { useTheme } from "../../../theme";
 import { ModalsScreenProps } from "../../../navigation";
-import { useMobileAdmin } from "../../../redux";
+import { useMobileAdmin } from "../../../store";
 import { useForm } from "../../../hooks";
 
 export const ServicesModal: FC<ModalsScreenProps<"service-modal-screen">> = ({

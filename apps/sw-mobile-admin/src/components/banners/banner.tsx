@@ -1,5 +1,5 @@
 import React from "react";
-import { useMobileAdmin } from "../../redux";
+import { useMobileAdmin } from "../../store";
 import { PremiumMembershipBanner } from "./premium-membership-banner";
 
 const banners = {

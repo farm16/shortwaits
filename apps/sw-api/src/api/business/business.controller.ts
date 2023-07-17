@@ -155,6 +155,19 @@ export class BusinessController {
     return this.businessService.getUsers("staff", businessId, request.user.sub);
   }
 
+  @Put("registration/complete")
+  @HttpCode(HttpStatus.OK)
+  @ApiCreatedResponse({
+    status: HttpStatus.OK,
+    description: "Register Business",
+  })
+  async registerBusiness(
+    @Req() request,
+    @Body(new ValidationPipe()) business: RegisterBusinessDto
+  ) {
+    return this.businessService.registerBusiness(request.user.sub, business);
+  }
+
   @Post(":businessId/staff")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
@@ -171,19 +184,5 @@ export class BusinessController {
       businessId,
       dto
     );
-  }
-
-  @Put("register")
-  @HttpCode(HttpStatus.OK)
-  @ApiCreatedResponse({
-    status: HttpStatus.OK,
-    description: "Register Business",
-  })
-  async registerBusiness(
-    @Req() request,
-    @Body(new ValidationPipe()) business: RegisterBusinessDto
-  ) {
-    console.log("registerBusiness ****");
-    return this.businessService.registerBusiness(request.user.sub, business);
   }
 }

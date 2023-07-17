@@ -26,8 +26,8 @@ async function bootstrap() {
   const options = new DocumentBuilder()
     .setTitle("Shortwaits Admin - API")
     .setDescription(html)
-    .addServer("https://api.shortwaits.com", "Production server")
     .addServer("http://127.0.0.1:8080", "Dev server")
+    .addServer("https://api.shortwaits.com", "Production server")
     .addBearerAuth()
     .setVersion("1.0")
     .build();

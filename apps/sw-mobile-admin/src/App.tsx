@@ -14,11 +14,9 @@ import {
 } from "@gorhom/portal";
 
 import { AppNavigator } from "./navigation";
-import {
-  //persistor,
-  store,
-} from "./redux";
+import { persistor, store } from "./store";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { PersistGate } from "redux-persist/integration/react";
 
 enableLogging();
 
@@ -41,13 +39,15 @@ export const App = () => {
 function WithProviders({ children }) {
   return (
     <ReduxProvider store={store}>
-      <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-        <PaperProvider>
-          <GestureHandlerRootView style={{ flex: 1 }}>
-            <GPortalProvider rootHostName="root">{children}</GPortalProvider>
-          </GestureHandlerRootView>
-        </PaperProvider>
-      </SafeAreaProvider>
+      <PersistGate loading={null} persistor={persistor}>
+        <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+          <PaperProvider>
+            <GestureHandlerRootView style={{ flex: 1 }}>
+              <GPortalProvider rootHostName="root">{children}</GPortalProvider>
+            </GestureHandlerRootView>
+          </PaperProvider>
+        </SafeAreaProvider>
+      </PersistGate>
     </ReduxProvider>
   );
 }

@@ -14,7 +14,7 @@ import {
 import { useTheme } from "../../theme";
 import { AUTHORIZED_STACK_SCREENS } from "../navigation-constants";
 import { Platform } from "react-native";
-import { useMobileAdmin } from "../../redux";
+import { useMobileAdmin } from "../../store";
 import { createStackNavigator } from "@react-navigation/stack";
 import { AuthorizedStackParamList } from "../navigation-types";
 

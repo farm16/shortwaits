@@ -100,7 +100,7 @@ export class BusinessService {
       { new: true }
     );
 
-    if (updatedBusiness) {
+    if (!updatedBusiness) {
       throw new NotFoundException("Business not available");
     }
 

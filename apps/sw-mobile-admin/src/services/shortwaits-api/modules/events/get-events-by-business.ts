@@ -1,10 +1,13 @@
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
-import { shortwaitsApiEndpoints } from "../../../../configs";
-import { EventsResponseType } from "@shortwaits/shared-types";
-
-const { getEventsByBusiness } = shortwaitsApiEndpoints.EVENTS;
+import {
+  EventsResponseType,
+  getEndpointWithParams,
+} from "@shortwaits/shared-types";
 
 export default (builder: EndpointBuilder<any, any, any>) =>
   builder.query<EventsResponseType, string>({
-    query: businessId => getEventsByBusiness.getPath(businessId),
+    query: businessId =>
+      getEndpointWithParams("events/business/:businessId", "GET", {
+        businessId,
+      }).url,
   });

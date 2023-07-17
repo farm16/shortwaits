@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useLayoutEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   changeFloatingActionButtonVisibility,
@@ -36,17 +36,33 @@ export const useGhostComponent = (
       if (component === "floatingActionButton") {
         dispatch(changeFloatingActionButtonVisibility(true));
       }
-    }
+    } else dispatch(changeFloatingActionButtonVisibility(false));
+
     return () => {
       if (component === "floatingActionButton") {
         dispatch(changeFloatingActionButtonVisibility(false));
       }
     };
-  }, [component, dispatch, isFocused]);
+  }, [isFocused]);
 
   const mobileAdmin = useSelector(selectCurrentMobileAdminState);
 
   return useMemo(() => {
     return mobileAdmin ? mobileAdmin.components[component] : null;
   }, [mobileAdmin, component]);
+};
+
+export const useHideGhostComponent = () => {
+  const dispatch = useDispatch();
+  const mobileAdmin = useSelector(selectCurrentMobileAdminState);
+
+  useEffect(() => {
+    if (mobileAdmin.components.floatingActionButton.isVisible === false) {
+      return;
+    } else dispatch(changeFloatingActionButtonVisibility(false));
+
+    return () => {
+      dispatch(changeFloatingActionButtonVisibility(false));
+    };
+  }, []);
 };

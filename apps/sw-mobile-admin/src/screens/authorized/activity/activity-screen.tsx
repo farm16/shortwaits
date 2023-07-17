@@ -20,7 +20,7 @@ import {
   Text,
 } from "../../../components";
 import { useTheme } from "../../../theme";
-import { useGhostComponent } from "../../../redux";
+import { useGhostComponent } from "../../../store";
 
 export const ActivityScreen: FC<AuthorizedScreenProps<"activity-screen">> = ({
   navigation,

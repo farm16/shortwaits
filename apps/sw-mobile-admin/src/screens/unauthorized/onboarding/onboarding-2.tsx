@@ -18,7 +18,7 @@ import {
   RootStackParamList,
   UnauthorizedStackParamList,
 } from "../../../navigation";
-import { useBusiness } from "../../../redux";
+import { useBusiness } from "../../../store";
 import {
   useGetServicesByBusinessQuery,
   useRegisterBusinessMutation,

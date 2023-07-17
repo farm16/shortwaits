@@ -9,7 +9,7 @@ import { ActivityIndicator } from "react-native-paper";
 import { Alert } from "react-native";
 
 import { useForm } from "../../../hooks";
-import { useBusiness, useServices, useUser } from "../../../redux";
+import { useBusiness, useServices, useUser } from "../../../store";
 import {
   Text,
   TextFieldCard,
@@ -88,7 +88,7 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({
           if (onSubmit) {
             onSubmit<"addEvent">(formData);
           } else {
-            createEvent(formData);
+            createEvent({ businessId: business._id, body: formData });
           }
         },
       },

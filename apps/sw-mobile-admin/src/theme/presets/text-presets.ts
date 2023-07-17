@@ -38,7 +38,7 @@ export const textPresets = ({
     social: {
       ...BASE,
       ...Fonts.textSmall,
-      color: Colors.text,
+      color: Colors.darkGray,
       fontWeight: "600",
     },
     pending: {

@@ -27,9 +27,15 @@ import {
   PostLocalSignOut,
 } from "./modules";
 import { baseQueryWithInterceptor } from "./interceptor";
+import { REHYDRATE } from "redux-persist";
 
 export const shortwaitsApi = createApi({
   reducerPath: "shortwaitsApi",
+  // extractRehydrationInfo(action, { reducerPath }) {
+  //   if (action.type === REHYDRATE) {
+  //     return action.payload[reducerPath];
+  //   }
+  // },
   baseQuery: baseQueryWithInterceptor,
   endpoints: builder => ({
     //default mobile data

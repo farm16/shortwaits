@@ -16,7 +16,7 @@ import {
   useBusiness,
   hidePremiumMembershipBanner,
   useGhostComponent,
-} from "../../../redux";
+} from "../../../store";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useDispatch } from "react-redux";
 import { useIsFocused } from "@react-navigation/native";

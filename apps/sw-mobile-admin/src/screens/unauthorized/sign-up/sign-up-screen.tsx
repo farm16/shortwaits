@@ -24,7 +24,7 @@ export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
   const { Colors } = useTheme();
 
   return (
-    <Screen preset="fixed">
+    <Screen preset="fixed" withHorizontalPadding>
       <View style={{ justifyContent: "center", marginBottom: 100, flex: 1 }}>
         <Text
           style={{
@@ -53,33 +53,45 @@ export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
 
       <View style={styles.formContainer}>
         <Button preset="social">
+          <Facebook
+            width={30}
+            height={30}
+            style={{ position: "absolute", left: 0, margin: 16 }}
+          />
           <Container style={styles.buttonContainer}>
-            <Facebook width={30} height={30} />
-            <Space direction="vertical" size="tiny" />
             <Text preset="social">with Facebook</Text>
           </Container>
         </Button>
         <Space size="small" />
         <Button preset="social">
+          <Google
+            width={30}
+            height={30}
+            style={{ position: "absolute", left: 0, margin: 16 }}
+          />
           <Container style={styles.buttonContainer}>
-            <Google width={30} height={30} />
-            <Space direction="vertical" size="tiny" />
             <Text preset="social">with Gmail</Text>
           </Container>
         </Button>
         <Space size="small" />
         <Button
           preset="social"
-          style={{ backgroundColor: Colors.brandSecondary3 }}
+          style={{
+            backgroundColor: Colors.brandSecondary4,
+            borderColor: Colors.brandSecondary4,
+          }}
           onPress={() =>
             navigation.navigate("unauthorized", {
               screen: "sign-up-with-email-screen",
             })
           }
         >
+          <EMail
+            width={30}
+            height={30}
+            style={{ position: "absolute", left: 0, margin: 16 }}
+          />
           <Container style={styles.buttonContainer}>
-            <EMail width={30} height={30} />
-            <Space direction="vertical" size="tiny" />
             <Text style={{ color: "white" }} preset="social">
               with Email
             </Text>
@@ -94,7 +106,6 @@ export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
             <Text text="C" preset="subLink" />
           </Button>
         </View>
-        <Space size="xLarge" />
       </View>
     </Screen>
   );
@@ -119,6 +130,5 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    flex: 1,
   },
 });

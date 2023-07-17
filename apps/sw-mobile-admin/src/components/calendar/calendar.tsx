@@ -13,7 +13,7 @@ import { AgendaItem } from "./calendar-item";
 import { Button, Space } from "../common";
 import { getAgendaData } from "./calendar-utils";
 import { useGetEventsByBusinessQuery } from "../../services";
-import { useBusiness } from "../../redux";
+import { useBusiness } from "../../store";
 import { ActivityIndicator } from "react-native-paper";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { isEmpty } from "lodash";
@@ -102,6 +102,11 @@ export const Calendar: FC<CalendarProps> = memo(props => {
                     screen: "form-modal-screen",
                     params: {
                       form: "addEvent",
+                      onDone: () => {
+                        if (!isEventsLoading) {
+                          refetchEvents();
+                        }
+                      },
                     },
                   });
                 }}

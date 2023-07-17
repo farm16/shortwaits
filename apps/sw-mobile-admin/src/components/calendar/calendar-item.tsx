@@ -13,7 +13,7 @@ import { Container, Emoji, EmojiType, Text } from "..";
 import { useTheme } from "../../theme";
 import { getEventTime } from "./calendar-utils";
 import defaultUserImage from "../../assets/images/user.png";
-import { useService } from "../../redux";
+import { useService } from "../../store";
 import { RectButton } from "react-native-gesture-handler";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import { navigate } from "../../navigation";

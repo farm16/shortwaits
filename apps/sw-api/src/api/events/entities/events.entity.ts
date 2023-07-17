@@ -205,6 +205,19 @@ export class Events extends Document implements EventType {
   @ApiProperty()
   @Prop({ default: false })
   deleted: boolean;
+
+  @ApiProperty()
+  @Prop({ type: MongooseSchema.Types.Date, default: Date.now })
+  createdAt: Date;
+
+  @ApiProperty()
+  @Prop({ type: MongooseSchema.Types.Date, default: Date.now })
+  updatedAt: Date;
 }
 
 export const EventsSchema = SchemaFactory.createForClass(Events);
+
+EventsSchema.pre<Events>("save", function (next) {
+  this.updatedAt = new Date();
+  next();
+});

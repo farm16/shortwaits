@@ -4,7 +4,7 @@ import { View } from "react-native";
 import { Modal } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useDispatch } from "react-redux";
-import { hidePremiumMembershipModal, useGhostComponent } from "../../redux";
+import { hidePremiumMembershipModal, useGhostComponent } from "../../store";
 import { useTheme } from "../../theme";
 import { Button, Container, Space, Text } from "../common";
 

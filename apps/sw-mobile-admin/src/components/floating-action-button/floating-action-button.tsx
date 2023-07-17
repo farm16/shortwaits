@@ -2,7 +2,7 @@ import { Portal } from "@gorhom/portal";
 import React, { useCallback, useMemo, useState } from "react";
 import { StyleSheet, ViewStyle } from "react-native";
 import { FAB } from "react-native-paper";
-import { selectCurrentMobileAdminState } from "../../redux";
+import { selectCurrentMobileAdminState } from "../../store";
 import { useTheme } from "../../theme";
 import { actions as defaultActions } from "./fab-actions";
 import { useSafeAreaInsets } from "react-native-safe-area-context";

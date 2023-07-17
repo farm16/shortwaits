@@ -66,7 +66,7 @@ export const SignUpWithEmail: FC<SignUpWithEmailScreenProps> = ({
   }, []);
 
   return (
-    <Screen preset="fixed" style={{ alignItems: "center" }}>
+    <Screen preset="fixed" withHorizontalPadding>
       <Space />
       <ScrollView>
         <TextFieldCard
@@ -79,21 +79,22 @@ export const SignUpWithEmail: FC<SignUpWithEmailScreenProps> = ({
           isTouched={touched.email}
           errors={errors.email}
         />
-        <Space />
+        <Space size="small" />
         <TextFieldCard
           secureTextEntry={!isVisible}
           title="Password"
           placeholder=""
           value={values.password}
-          rightIconSize={"regular"}
           rightIconOnPress={handlePasswordVisibility}
           rightIconName={isVisible ? "eye" : "eye-off"}
-          rightIconColor={isVisible ? Colors.brandPrimary : Colors.lightGray}
+          rightIconColor={
+            isVisible ? Colors.disabledText : Colors.brandSecondary
+          }
           onChangeText={handleChange("password")}
           isTouched={touched.password}
           errors={errors.password}
         />
-        <Space />
+        <Space size="small" />
         <TextFieldCard
           secureTextEntry={!isVisible}
           title="Confirm password"
@@ -138,6 +139,8 @@ const styles = StyleSheet.create({
   },
   signInRow: {
     flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
   },
   subLink: {
     fontWeight: "bold",

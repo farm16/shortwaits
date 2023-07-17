@@ -1,6 +1,7 @@
 import {
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
   UnauthorizedException,
 } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
@@ -12,6 +13,8 @@ import { BusinessUser } from "../business-user/entities/business-user.entity";
 import { Events } from "./entities/events.entity";
 import { CreateEventsDto } from "./dto/create-event.dto";
 import { UpdateEventsDto } from "./dto/update-event.dto";
+import { convertArrayToObjectId } from "../../utils/converters";
+import { EventDtoType } from "@shortwaits/shared-types";
 
 const WEEK_DAY = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -58,7 +61,7 @@ export class EventsService {
         // do something
       }
 
-      const eventCreated = await this.eventsModel.create({
+      const newEvent = await this.eventsModel.create({
         participantsIds: event.participantsIds,
         staffIds: event.staffIds,
         clientsIds: event.clientsIds,
@@ -94,13 +97,125 @@ export class EventsService {
       });
 
       await businessRecord
-        .updateOne({ $push: { events: eventCreated._id } })
+        .updateOne({ $push: { events: newEvent._id } })
         .exec();
 
-      return eventCreated;
+      return newEvent;
     } catch (error) {
       console.error(error);
       throw new InternalServerErrorException("Failed to create event");
+    }
+  }
+
+  async updateEvent(
+    event: EventDtoType,
+    businessId: string,
+    updatedBy: string
+  ) {
+    try {
+      const updatedEvent = await this.eventsModel.findOneAndUpdate(
+        { _id: event._id, deleted: false },
+        { ...event, updatedBy },
+        { new: true }
+      );
+
+      if (!updatedEvent) {
+        throw new NotFoundException("Event not found");
+      }
+
+      return updatedEvent;
+    } catch (error) {
+      console.error(error);
+      throw new InternalServerErrorException("Failed to update event");
+    }
+  }
+
+  async deleteEvent(eventId: string, deletedBy: string) {
+    try {
+      // Find and delete the event
+      const deleteResult = await this.eventsModel
+        .findOneAndUpdate(
+          {
+            _id: eventId,
+            deleted: false,
+          },
+          {
+            $set: {
+              deleted: true,
+              updatedBy: deletedBy,
+            },
+          },
+          { new: true }
+        )
+        .exec();
+
+      // Check if the event was found and deleted
+      if (!deleteResult) {
+        throw new NotFoundException("Event not found");
+      }
+
+      // Update the business record to remove the deleted event
+      await this.businessModel
+        .updateOne({ events: eventId }, { $pull: { events: eventId } })
+        .exec();
+
+      // Return the deleted event
+      return deleteResult;
+    } catch (error) {
+      console.error(error);
+      throw new InternalServerErrorException("Failed to delete event");
+    }
+  }
+
+  async deleteEvents(eventIds: string[], deletedBy: string) {
+    try {
+      const _eventIds = convertArrayToObjectId(eventIds);
+      console.log(_eventIds);
+      const updatedEvents = await this.eventsModel
+        .updateMany(
+          {
+            _id: { $in: _eventIds },
+            deleted: false,
+          },
+          {
+            $set: {
+              deleted: true,
+              updatedBy: deletedBy,
+            },
+          }
+        )
+        .exec();
+
+      if (updatedEvents.modifiedCount === 0) {
+        return {
+          modifiedEventCount: updatedEvents.modifiedCount,
+          modifiedBusinessCount: 0,
+          modifiedClientCount: null, //pending
+        };
+      }
+
+      // const updatedClient =  await this.businessModel
+      // .updateOne(
+      //   { events: { $in: _eventIds } },
+      //   { $pullAll: { events: _eventIds } }
+      // )
+      // .exec();
+
+      const updatedBusiness = await this.businessModel
+        .updateOne(
+          { events: { $in: _eventIds } },
+          { $pullAll: { events: _eventIds } }
+        )
+        .exec();
+
+      return {
+        modifiedCount: updatedEvents.modifiedCount,
+        modifiedBusinessCount: updatedBusiness.modifiedCount,
+        modifiedClientCount: null, //pending
+      };
+    } catch (error) {
+      console.error(error);
+      throw new InternalServerErrorException("Failed to delete events");
     }
   }
 
@@ -209,84 +324,56 @@ export class EventsService {
     }
   }
 
-  /**
-   *
-   * this finds all events by business not by createdBy(userID)
-   * so all events that relate to a business
-   */
   async getEventsByBusiness(
     businessId: string,
-    paginateOptions?: { page: number; limit: number },
-    filterOptions?: { date?: Date; month?: number; year?: number }
+    paginateOptions?: { page?: number; limit?: number },
+    filterOptions?: { date: string; filterBy: "day" | "month" | "year" }
   ) {
     try {
       const { page = 1, limit = 10 } = paginateOptions ?? {};
       const skip = (page - 1) * limit;
 
-      const { date, month, year } = filterOptions ?? {};
+      const { date, filterBy } = filterOptions ?? {};
+      const _date = new Date(date);
+
       const filter: {
         businessId: string;
-        createdAt?: { $gte: Date; $lte: Date };
-      } = { businessId };
+        deleted: boolean;
+        startTime?: { $gte: Date; $lte: Date };
+      } = {
+        businessId,
+        deleted: false,
+      };
 
-      if (date) {
-        filter.createdAt = {
-          $gte: date,
-          $lte: new Date(date.getTime() + 24 * 60 * 60 * 1000),
+      if (_date && filterBy === "day") {
+        console.log({
+          $gte: _date,
+          $lte: new Date(_date.getTime() + 24 * 60 * 60 * 1000),
+        });
+        filter.startTime = {
+          $gte: _date,
+          $lte: new Date(_date.getTime() + 24 * 60 * 60 * 1000),
         };
-        return await this.eventsModel
-          .find(filter)
-          .skip(skip)
-          .limit(limit)
-          .exec();
+      } else if (_date && filterBy === "month") {
+        const startDate = new Date(_date.getFullYear(), _date.getMonth(), 1);
+        const endDate = new Date(_date.getFullYear(), _date.getMonth() + 1, 0);
+        filter.startTime = {
+          $gte: startDate,
+          $lte: endDate,
+        };
+      } else if (_date && filterBy === "year") {
+        const startDate = new Date(_date.getFullYear(), 0, 1);
+        const endDate = new Date(_date.getFullYear(), 11, 31);
+        filter.startTime = {
+          $gte: startDate,
+          $lte: endDate,
+        };
       }
-      if (month && year) {
-        const startDate = new Date(year, month - 1, 1);
-        const endDate = new Date(year, month, 0);
-        filter.createdAt = { $gte: startDate, $lte: endDate };
-        return await this.eventsModel
-          .find(filter)
-          .skip(skip)
-          .limit(limit)
-          .exec();
-      } else if (year) {
-        console.log("year", year);
-        const startDate = new Date(year, 0, 1);
-        const endDate = new Date(year, 11, 31);
-        filter.createdAt = { $gte: startDate, $lte: endDate };
-        return await this.eventsModel
-          .find(filter)
-          .skip(skip)
-          .limit(limit)
-          .exec();
-      }
+
+      return await this.eventsModel.find(filter).skip(skip).limit(limit).exec();
     } catch (error) {
       console.error(error);
       throw new InternalServerErrorException("Failed to get events");
     }
-  }
-
-  async getEventsByList(events: string[], paginateOptions) {
-    // const user = await this.businessUserModel.findById(clientId);
-  }
-
-  async getEvent(userId: string, eventId: string) {
-    // const user = await this.businessUserModel.findById(clientId);
-  }
-
-  async getEventByCreator(eventId: string, createdById: string) {
-    // const user = await this.businessUserModel.findById(clientId);
-  }
-
-  async getEventsByCreator(createdById: string, paginateOptions) {
-    // const user = await this.businessUserModel.findById(clientId);
-  }
-
-  async updateEvent(event: UpdateEventsDto, updatedBy: string) {
-    //
-  }
-
-  async deleteEvents(eventIds: string[], deletedBy: string) {
-    //
   }
 }

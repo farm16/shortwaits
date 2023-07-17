@@ -1,5 +1,5 @@
 import { API_BASE_URL, shortwaitsApiEndpoints } from "../../configs";
-import { setCredentials, RootState } from "../../redux";
+import { setCredentials, RootState } from "../../store";
 import {
   BaseQueryFn,
   FetchArgs,

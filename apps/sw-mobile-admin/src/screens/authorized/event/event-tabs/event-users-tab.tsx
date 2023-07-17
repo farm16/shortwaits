@@ -32,7 +32,7 @@ import {
   PeopleCard,
 } from "../../../../components";
 import { useTheme } from "../../../../theme";
-import { useBusiness, useGhostComponent } from "../../../../redux";
+import { useBusiness, useGhostComponent } from "../../../../store";
 import {
   useCreateBusinessClientsMutation,
   useGetBusinessClientsQuery,

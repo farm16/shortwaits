@@ -11,7 +11,7 @@ import {
 } from "../../../components";
 import { Colors, useTheme } from "../../../theme";
 import { AuthorizedScreenProps } from "../../../navigation";
-import { useBusiness, useGhostComponent } from "../../../redux";
+import { useBusiness, useGhostComponent } from "../../../store";
 import { useGetServicesByBusinessQuery } from "../../../services";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 

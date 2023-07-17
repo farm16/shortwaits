@@ -5,7 +5,7 @@ import { ServiceColorType } from "@shortwaits/shared-types";
 
 import { getDimensions } from "../../theme";
 import { Button, ButtonProps } from "../common";
-import { useMobileAdmin } from "../../redux";
+import { useMobileAdmin } from "../../store";
 
 interface ServiceColorsProps {
   color?: ServiceColorType;
@@ -59,7 +59,7 @@ export function ServiceColors({ color, onSelect }: ServiceColorsProps) {
 
   return (
     <View style={[styles.container, { width }]}>
-      {Object.keys(mobileAdminData.defaultData?.serviceColors).map((elem) => (
+      {Object.keys(mobileAdminData.defaultData?.serviceColors).map(elem => (
         <Circle
           key={mobileAdminData.defaultData?.serviceColors[elem].colorId}
           onSelect={() =>

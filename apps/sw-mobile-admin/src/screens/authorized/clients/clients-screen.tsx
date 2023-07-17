@@ -23,7 +23,7 @@ import {
   AnimatedSearchBar,
 } from "../../../components";
 import { useTheme } from "../../../theme";
-import { useBusiness, useGhostComponent } from "../../../redux";
+import { useBusiness, useGhostComponent } from "../../../store";
 import {
   useCreateBusinessClientsMutation,
   useGetBusinessClientsQuery,
@@ -176,13 +176,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
   }, [clientsData?.data, isBusinessClientsQuerySuccess, isLoading]);
 
   return (
-    <Screen
-      preset="fixed"
-      backgroundColor={"backgroundOverlay"}
-      statusBar="dark-content"
-      style={styles.root}
-      unsafe
-    >
+    <Screen preset="fixed" unsafe>
       {isLoading ? (
         <ActivityIndicator />
       ) : (

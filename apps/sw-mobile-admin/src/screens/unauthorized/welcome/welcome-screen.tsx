@@ -5,13 +5,13 @@ import SplashScreen from "react-native-splash-screen";
 import { CompositeNavigationProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { Button, Space, Text } from "../../../components";
+import { Button, Screen, Space, Text } from "../../../components";
 import { useTheme } from "../../../theme";
 import {
   RootStackParamList,
   UnauthorizedStackParamList,
 } from "../../../navigation";
-import { useBusiness, useMobileAdmin } from "../../../redux";
+import { useBusiness, useMobileAdmin } from "../../../store";
 import { useGetAdminMobileQuery } from "../../../services";
 import { skipToken } from "@reduxjs/toolkit/dist/query/react";
 
@@ -44,18 +44,17 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation }) => {
   if (isAdminMobileLoading) return <Text>Loading ...</Text>;
 
   return (
-    <SafeAreaView
-      style={{
-        alignItems: "center",
-        flex: 1,
-        backgroundColor: Colors.brandSecondary,
-      }}
+    <Screen
+      style={{ backgroundColor: Colors.brandSecondary3 }}
+      withHorizontalPadding
+      statusBar="light-content"
     >
-      <StatusBar
-        backgroundColor={Colors.brandSecondary}
-        barStyle="light-content"
-      />
-      <View style={{ justifyContent: "center", marginBottom: 100, flex: 1 }}>
+      <View
+        style={{
+          justifyContent: "center",
+          flex: 1,
+        }}
+      >
         <Text
           style={{
             textAlign: "center",
@@ -69,13 +68,12 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation }) => {
           SHORT{"\n"}WAITS
         </Text>
       </View>
-
-      <View style={{ alignItems: "center", position: "absolute", bottom: 0 }}>
+      <View style={{ width: "85%", alignSelf: "center" }}>
         <Button
           style={{
-            backgroundColor: Colors.static_welcomeButtonBackground,
+            backgroundColor: Colors.brandSecondary,
           }}
-          textStyle={{ color: Colors.static_welcomeButtonText }}
+          textStyle={{ color: Colors.white }}
           preset="primary"
           text="Register"
           onPress={() =>
@@ -86,10 +84,10 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation }) => {
         />
         <Space />
         <Button
-          style={{ backgroundColor: Colors.transparent }}
+          style={{ backgroundColor: Colors.static_welcomeButtonBackground }}
           textStyle={{
             fontWeight: "500",
-            color: Colors.static_welcomeLinkText,
+            color: Colors.static_welcomeButtonText,
           }}
           preset="primary"
           text="Login"
@@ -101,6 +99,6 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation }) => {
         />
         <Space size="large" />
       </View>
-    </SafeAreaView>
+    </Screen>
   );
 };

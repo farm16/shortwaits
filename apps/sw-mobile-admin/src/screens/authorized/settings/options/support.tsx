@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { Divider, List } from "react-native-paper";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { StyleSheet } from "react-native";
+import { List } from "react-native-paper";
 
 import { useTheme } from "../../../../theme";
-import { StyleSheet } from "react-native";
 
 export const SupportSettings = () => {
   const [expanded, setExpanded] = useState(false);

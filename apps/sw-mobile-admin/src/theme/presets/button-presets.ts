@@ -20,11 +20,12 @@ export const buttonPresets = ({
   const VIEW_BASE = StyleSheet.flatten([
     {
       ...Layout.center,
-      height: 50,
-      width: width * 0.85,
+      // height: 50,
+      width: "100%",
       backgroundColor: Colors.brandPrimary,
       flexDirection: "row",
       borderRadius: 25,
+      paddingVertical: 16,
     },
   ]) as ViewStyle;
 
@@ -84,14 +85,12 @@ export const buttonPresets = ({
     },
     social: {
       ...VIEW_BASE,
-      height: 55 - 2,
-      width: width * 0.85 - 2,
       borderRadius: 25,
       backgroundColor: Colors.transparent,
       flexDirection: "row",
       // backgroundColor: Colors.brandAccent,
       borderWidth: 2,
-      borderColor: Colors.brandSecondary3,
+      borderColor: Colors.brandAccent1,
     },
     socialIcon: {
       position: "absolute",
@@ -101,11 +100,11 @@ export const buttonPresets = ({
       width: 27,
     },
     card: {
+      width: "100%",
       paddingLeft: 10,
       flexDirection: "row",
       justifyContent: "center",
       alignItems: "center",
-      width: width * 0.87,
       borderBottomWidth: 1.5,
       borderBottomColor: Colors.inputBackground,
     },

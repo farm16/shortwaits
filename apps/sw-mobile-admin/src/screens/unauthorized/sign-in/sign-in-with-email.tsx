@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useState } from "react";
+import React, { FC, useCallback, useLayoutEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { CompositeNavigationProp } from "@react-navigation/native";
@@ -37,7 +37,11 @@ export const SignInWithEmail: FC<SignInWithEmailScreenProps> = ({
 
   const [localSignIn, response] = useLocalSignInMutation();
 
-  console.log("response >>>", response);
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: "Welcome back",
+    });
+  }, [navigation]);
 
   const initialValues = {
     email: "",
@@ -80,7 +84,6 @@ export const SignInWithEmail: FC<SignInWithEmailScreenProps> = ({
           title="Password"
           placeholder=""
           value={values.password}
-          rightIconSize={"regular"}
           rightIconOnPress={handlePasswordVisibility}
           rightIconName={isVisible ? "eye-off" : "eye"}
           rightIconColor={
@@ -125,7 +128,7 @@ export const SignInWithEmail: FC<SignInWithEmailScreenProps> = ({
           disabled={response.isLoading}
           onPress={() => handleSubmit()}
           preset="primary"
-          text="Sign In"
+          text="Sign in"
         />
         <Space />
         <View style={{ flexDirection: "row", alignSelf: "center" }}>
@@ -136,7 +139,7 @@ export const SignInWithEmail: FC<SignInWithEmailScreenProps> = ({
           />
           <Button
             preset="subLink"
-            text="Sign Up"
+            text="Sign up"
             onPress={() => {
               navigation.navigate("unauthorized", { screen: "sign-up-screen" });
             }}
@@ -147,15 +150,3 @@ export const SignInWithEmail: FC<SignInWithEmailScreenProps> = ({
     </Screen>
   );
 };
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-  },
-  signInRow: {
-    flexDirection: "row",
-  },
-  subLink: {
-    fontWeight: "bold",
-  },
-});

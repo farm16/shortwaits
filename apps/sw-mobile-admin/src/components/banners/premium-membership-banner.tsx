@@ -4,7 +4,7 @@ import { Button, Text } from "../common";
 import image from "./background_1.png";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useDispatch } from "react-redux";
-import { hidePremiumMembershipBanner } from "../../redux";
+import { hidePremiumMembershipBanner } from "../../store";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 export function PremiumMembershipBanner() {

@@ -2,7 +2,7 @@ import React, { FC, useCallback, useLayoutEffect, useMemo } from "react";
 import { FlatList, StyleSheet } from "react-native";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 
-import { showPremiumMembershipModal, useUser } from "../../../../../redux";
+import { showPremiumMembershipModal, useUser } from "../../../../../store";
 import {
   SearchBar,
   Space,

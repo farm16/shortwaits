@@ -37,7 +37,7 @@ export const BUSINESS = {
     METHOD: "PUT",
   } as BusinessProps,
   registerBusiness: {
-    getPath: (_id: string) => `${BUSINESS_BASE_PATH}/register`,
+    getPath: (_id: string) => `${BUSINESS_BASE_PATH}/registration/complete`,
     METHOD: "PUT",
   } as BusinessProps,
   createBusinessUser: {

@@ -29,7 +29,7 @@ import { useTheme } from "../../../theme";
 import { ScheduleCard } from "./schedule-card";
 import { SelectTimeRange } from "./select-time-range";
 import { scheduleConfigs } from "./schedule-config";
-import { setBusinessAllHours, useBusiness } from "../../../redux";
+import { setBusinessAllHours, useBusiness } from "../../../store";
 import { useUpdateBusinessHoursMutation } from "../../../services";
 
 export type DayType = BusinessDayTimeRangeType & {
@@ -72,7 +72,7 @@ export const ScheduleModal: FC<ModalsScreenProps<"schedule-modal-screen">> = ({
           <CircleIconButton
             withMarginRight
             onPress={() => {
-              setIsBusinessClosed((_isBusinessClosed) => {
+              setIsBusinessClosed(_isBusinessClosed => {
                 dispatch(setBusinessAllHours(!_isBusinessClosed));
                 return !_isBusinessClosed;
               });
@@ -138,7 +138,7 @@ export const ScheduleModal: FC<ModalsScreenProps<"schedule-modal-screen">> = ({
              * which is why we default to [0].
              */
             day={{ ...business?.hours[day][0], name: day }}
-            handlePress={(_day) => handlePress(_day)}
+            handlePress={_day => handlePress(_day)}
           />
         );
       })}

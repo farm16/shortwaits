@@ -24,7 +24,7 @@ import {
   useAuth,
   useMobileAdmin,
   setBusinessCategories,
-} from "../../../redux";
+} from "../../../store";
 import { useGetCategoriesQuery } from "../../../services";
 
 export const Onboarding1Screen: FC<

@@ -72,21 +72,24 @@ export class ServicesController {
   //   return this.servicesService.findOne(id);
   // }
 
-  @Put(":id")
-  update(@Param("id") id: string, @Body() updateServiceDto: UpdateServiceDto) {
-    return this.servicesService.update(id, updateServiceDto);
-  }
-
-  @Patch(":id")
-  updateSome(
-    @Param("id") id: string,
+  @Put(":serviceId")
+  update(
+    @Param("serviceId") serviceId: string,
     @Body() updateServiceDto: UpdateServiceDto
   ) {
-    return this.servicesService.update(id, updateServiceDto);
+    return this.servicesService.update(serviceId, updateServiceDto);
   }
 
-  @Delete(":id")
-  remove(@Param("id") id: string) {
-    return this.servicesService.remove(id);
+  @Patch(":serviceId")
+  updateSome(
+    @Param("serviceId") serviceId: string,
+    @Body() updateServiceDto: UpdateServiceDto
+  ) {
+    return this.servicesService.update(serviceId, updateServiceDto);
+  }
+
+  @Delete(":serviceId")
+  remove(@Param("id") serviceId: string) {
+    return this.servicesService.remove(serviceId);
   }
 }

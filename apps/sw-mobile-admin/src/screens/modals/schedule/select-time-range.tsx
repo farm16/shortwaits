@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 
 import { Text, MultiSlider, Space, TimeRangeText } from "../../../components";
 import { getDimensions } from "../../../theme";
-import { setBusinessDayHours, useBusiness } from "../../../redux";
+import { setBusinessDayHours, useBusiness } from "../../../store";
 
 interface SelectTimeRangeProps {
   day: BusinessWeekDaysType;
