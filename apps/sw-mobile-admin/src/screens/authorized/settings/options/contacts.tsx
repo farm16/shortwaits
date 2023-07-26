@@ -1,4 +1,4 @@
-import { BusinessDtoType } from "@shortwaits/shared-types";
+import { BusinessDtoType } from "@shortwaits/shared-lib";
 import React, { useState } from "react";
 import { Divider, List } from "react-native-paper";
 import { StyleSheet } from "react-native";

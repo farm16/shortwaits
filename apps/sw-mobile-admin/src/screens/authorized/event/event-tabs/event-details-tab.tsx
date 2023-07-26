@@ -1,4 +1,4 @@
-import { EventDtoType, ServiceDtoType } from "@shortwaits/shared-types";
+import { EventDtoType, ServiceDtoType } from "@shortwaits/shared-lib";
 import { useTheme } from "../../../../theme";
 import React from "react";
 import { View, ScrollView, StyleSheet, Switch, Platform } from "react-native";

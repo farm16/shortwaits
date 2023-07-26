@@ -1,6 +1,6 @@
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
 import { shortwaitsApiEndpoints } from "../../../../configs";
-import { BusinessResponseType } from "@shortwaits/shared-types";
+import { BusinessResponseType } from "@shortwaits/shared-lib";
 
 const { getBusiness } = shortwaitsApiEndpoints.BUSINESS;
 

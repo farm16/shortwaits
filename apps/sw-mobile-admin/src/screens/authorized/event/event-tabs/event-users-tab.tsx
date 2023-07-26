@@ -20,7 +20,7 @@ import {
   BottomSheetType,
   Button,
   ButtonCard,
-  CircleIconButton,
+  IconButton,
   Container,
   List,
   NonIdealState,
@@ -41,7 +41,7 @@ import {
 import { AuthorizedScreenProps } from "../../../../navigation";
 import { ActivityIndicator } from "react-native-paper";
 import Contacts from "react-native-contacts";
-import { EventDtoType, UserDtoType } from "@shortwaits/shared-types";
+import { EventDtoType, UserDtoType } from "@shortwaits/shared-lib";
 import { getUsersFromOsContacts } from "../../../../utils/getUsersFromOsContacts";
 import { actions } from "../../../../components/floating-action-button/fab-actions";
 import { isEmpty } from "lodash";
@@ -101,7 +101,9 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
     <View
       style={{
         flex: 1,
-        backgroundColor: Colors.backgroundOverlay,
+        // backgroundColor: Colors.backgroundOverlay,
+        // backgroundColor: "red",
+        paddingHorizontal: 16,
         alignItems: "center",
       }}
     >
@@ -109,7 +111,11 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
         refreshControl={
           <RefreshControl refreshing={isLoading} onRefresh={handleRefresh} />
         }
+        showsVerticalScrollIndicator={false}
         keyExtractor={item => item._id}
+        style={{
+          width: "100%",
+        }}
         ListEmptyComponent={
           <View
             style={{

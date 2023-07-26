@@ -1,19 +1,14 @@
-import { shortwaitsApiEndpoints } from "../../../../configs";
-import { BusinessEndpointsTypes } from "@shortwaits/shared-types";
+import {
+  BusinessDtoType,
+  BusinessResponseType,
+  endpoints,
+} from "@shortwaits/shared-lib";
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
 
-const { updateBusiness } = shortwaitsApiEndpoints.BUSINESS;
-
-type ResponseType =
-  BusinessEndpointsTypes["/business"]["methods"]["PUT"]["response"];
-type PayloadType =
-  BusinessEndpointsTypes["/business"]["methods"]["PUT"]["body"];
-
 export default (builder: EndpointBuilder<any, any, any>) =>
-  builder.mutation<ResponseType, PayloadType>({
+  builder.mutation<BusinessResponseType, BusinessDtoType>({
     query: business => ({
-      url: updateBusiness.getPath(business._id),
-      method: updateBusiness.METHOD,
+      ...endpoints.updateBusiness.getConfig([business._id], {}),
       body: business,
     }),
   });

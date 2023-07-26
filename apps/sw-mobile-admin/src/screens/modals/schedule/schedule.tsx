@@ -11,13 +11,13 @@ import {
   BusinessDayTimeRangeType,
   BusinessWeekDaysType,
   WEEKDAYS,
-} from "@shortwaits/shared-types";
+} from "@shortwaits/shared-lib";
 import { Alert, View } from "react-native";
 
 import {
   BottomSheet,
   BottomSheetType,
-  CircleIconButton,
+  IconButton,
   LeftChevronButton,
   Screen,
   Space,
@@ -69,7 +69,7 @@ export const ScheduleModal: FC<ModalsScreenProps<"schedule-modal-screen">> = ({
             alignItems: "flex-end",
           }}
         >
-          <CircleIconButton
+          <IconButton
             withMarginRight
             onPress={() => {
               setIsBusinessClosed(_isBusinessClosed => {

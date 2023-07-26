@@ -7,11 +7,10 @@ import {
   Screen,
   Text,
   Container,
-  CircleIconButton,
+  IconButton,
 } from "../../../components";
-import { Colors, useTheme } from "../../../theme";
 import { AuthorizedScreenProps } from "../../../navigation";
-import { useBusiness, useGhostComponent } from "../../../store";
+import { useBusiness, useShowGhostComponent } from "../../../store";
 import { useGetServicesByBusinessQuery } from "../../../services";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 
@@ -20,7 +19,7 @@ export const EventsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
 }) => {
   const business = useBusiness();
   useGetServicesByBusinessQuery(business._id ?? skipToken);
-  useGhostComponent("floatingActionButton");
+  useShowGhostComponent();
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: () => {
@@ -36,8 +35,8 @@ export const EventsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
       headerRight: () => {
         return (
           <Container direction="row" alignItems="center">
-            <CircleIconButton withMarginRight iconType="magnify" />
-            <CircleIconButton withMarginRight iconType="calendar" />
+            <IconButton withMarginRight iconType="magnify" />
+            <IconButton withMarginRight iconType="calendar" />
           </Container>
         );
       },

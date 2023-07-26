@@ -7,7 +7,7 @@ import {
   FetchBaseQueryError,
 } from "@reduxjs/toolkit/query/react";
 import { Mutex } from "async-mutex";
-import { TokenPayloadType } from "@shortwaits/shared-types";
+import { TokenPayloadType } from "@shortwaits/shared-lib";
 import { Alert } from "react-native";
 
 const AUTH = shortwaitsApiEndpoints.AUTH;

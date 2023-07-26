@@ -12,7 +12,7 @@
   ],
   "include": [
     "../../libs/calendar/**/*.ts",
-    "../../libs/shared-types/**/*.ts",
+    "../../libs/shared-lib/**/*.ts",
     "src/**/*.ts",
     "src/**/*.tsx",
     "src/**/*.js",

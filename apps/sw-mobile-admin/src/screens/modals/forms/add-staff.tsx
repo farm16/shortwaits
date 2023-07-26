@@ -22,7 +22,7 @@ import {
 } from "../../../components";
 import { ModalsScreenProps } from "../../../navigation";
 import { formatAddClientsValues } from "./form-utils";
-import { FormBody } from "./commons/form-body";
+import { FormContainer } from "./commons/form-container";
 import { useTheme } from "../../../theme";
 
 export const AddStaffModal: FC<ModalsScreenProps<"form-modal-screen">> = ({
@@ -129,7 +129,7 @@ export const AddStaffModal: FC<ModalsScreenProps<"form-modal-screen">> = ({
   return createBusinessClientsStatus.isLoading ? (
     <ActivityIndicator />
   ) : (
-    <FormBody>
+    <FormContainer>
       {/* <Card mode="button">
         <Text preset="cardTitle" text={"Tag"} />
         <Text
@@ -256,6 +256,6 @@ export const AddStaffModal: FC<ModalsScreenProps<"form-modal-screen">> = ({
           errors={errors.postCode}
         />
       </AnimatedHiddenView>
-    </FormBody>
+    </FormContainer>
   );
 };

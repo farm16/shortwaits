@@ -5,11 +5,13 @@ import { ModalsScreenProps, FormType } from "../../../navigation";
 import { AddClientModal } from "./add-client";
 import { AddEventModal } from "./add-event";
 import { AddStaffModal } from "./add-staff";
+import { UpdateEventModal } from "./update-event";
 
 const forms: Record<FormType, FC<ModalsScreenProps<"form-modal-screen">>> = {
   addClient: AddClientModal,
   addEvent: AddEventModal,
   addStaff: AddStaffModal,
+  updateEvent: UpdateEventModal,
 };
 
 export const FormModalScreen: FC<

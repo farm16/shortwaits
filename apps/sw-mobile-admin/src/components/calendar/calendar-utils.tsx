@@ -1,6 +1,6 @@
 import { isEmpty } from "lodash";
 import { intervalToDuration, formatDuration } from "date-fns";
-import { EventsDtoType } from "@shortwaits/shared-types";
+import { EventsDtoType } from "@shortwaits/shared-lib";
 
 export function milliSecondsToDuration(milliSeconds: number): Duration {
   const epoch = new Date(0);
@@ -47,26 +47,28 @@ export function getUniqueDatesFromEvents(events: EventsDtoType) {
 }
 
 export const getAgendaData = (events: EventsDtoType) => {
-  if (isEmpty(events)) {
+  if (events.length === 0) {
     return [];
   }
 
-  const agendaData: { title: string; data: EventsDtoType }[] = [];
-  const uniqueDates = new Set<string>();
+  const uniqueDatesSet = new Set(
+    events.map(item => item.startTime.split("T")[0] + "T00:00:00.000Z")
+  );
+  const uniqueDates = Array.from(uniqueDatesSet);
+  const eventsByDate = {};
 
   for (const event of events) {
-    const date = event.startTime.split("T")[0] + "T00:00:00.000Z";
-
-    if (!uniqueDates.has(date)) {
-      uniqueDates.add(date);
-      agendaData.push({ title: date, data: [] });
+    const date = event.startTime.split("T")[0];
+    if (!eventsByDate[date]) {
+      eventsByDate[date] = [];
     }
-
-    const agendaItem = agendaData.find(item => item.title === date);
-    if (agendaItem) {
-      agendaItem.data.push(event);
-    }
+    eventsByDate[date].push(event);
   }
+
+  const agendaData = uniqueDates.map(date => ({
+    title: date,
+    data: eventsByDate[date.split("T")[0]],
+  }));
 
   return agendaData;
 };

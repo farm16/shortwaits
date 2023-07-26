@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   changeFloatingActionButtonVisibility,
@@ -43,7 +43,7 @@ export const useGhostComponent = (
         dispatch(changeFloatingActionButtonVisibility(false));
       }
     };
-  }, [isFocused]);
+  }, [component, dispatch, isFocused]);
 
   const mobileAdmin = useSelector(selectCurrentMobileAdminState);
 
@@ -52,14 +52,49 @@ export const useGhostComponent = (
   }, [mobileAdmin, component]);
 };
 
-export const useHideGhostComponent = () => {
+export const useHideGhostComponent = (
+  componentName = "floatingActionButton"
+) => {
   const dispatch = useDispatch();
   const mobileAdmin = useSelector(selectCurrentMobileAdminState);
 
   useEffect(() => {
-    if (mobileAdmin.components.floatingActionButton.isVisible === false) {
-      return;
-    } else dispatch(changeFloatingActionButtonVisibility(false));
+    const actions = {
+      floatingActionButton: changeFloatingActionButtonVisibility,
+    };
+
+    if (mobileAdmin.components[componentName].isVisible === false) {
+      return dispatch(
+        actions[componentName](mobileAdmin.components[componentName].isVisible)
+      );
+    } else {
+      dispatch(actions[componentName](false));
+    }
+
+    return () => {
+      dispatch(changeFloatingActionButtonVisibility(false));
+    };
+  }, []);
+};
+
+export const useShowGhostComponent = (
+  componentName = "floatingActionButton"
+) => {
+  const dispatch = useDispatch();
+  const mobileAdmin = useSelector(selectCurrentMobileAdminState);
+
+  useEffect(() => {
+    const actions = {
+      floatingActionButton: changeFloatingActionButtonVisibility,
+    };
+
+    if (mobileAdmin.components[componentName].isVisible === false) {
+      return dispatch(
+        actions[componentName](mobileAdmin.components[componentName].isVisible)
+      );
+    } else {
+      dispatch(actions[componentName](false));
+    }
 
     return () => {
       dispatch(changeFloatingActionButtonVisibility(false));

@@ -10,7 +10,7 @@ import {
   CurrencyType,
   BusinessDtoType,
   ObjectId,
-} from "@shortwaits/shared-types";
+} from "@shortwaits/shared-lib";
 import { cloneDeep } from "lodash";
 
 export const businessReducers = {

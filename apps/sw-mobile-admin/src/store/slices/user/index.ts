@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { shortwaitsApi } from "../../../services";
-import { UserDtoType } from "@shortwaits/shared-types";
+import { UserDtoType } from "@shortwaits/shared-lib";
 
 import type { RootState } from "../../types";
 

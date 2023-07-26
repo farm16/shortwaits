@@ -12,7 +12,7 @@ import {
   BusinessDocType,
   ClientUserType,
   BusinessUserType,
-} from "@shortwaits/shared-types";
+} from "@shortwaits/shared-lib";
 
 import { Business } from "./entities/business.entity";
 import { BusinessUser } from "../business-user/entities/business-user.entity";
@@ -165,10 +165,7 @@ export class BusinessService {
     }
   }
 
-  async findByKey(
-    businessId: string,
-    key: keyof BusinessType
-  ): Promise<Business[keyof BusinessType]> {
+  async findByKey(businessId: string, key: keyof BusinessType) {
     const data = await this.businessModel
       .findById(businessId, String(key))
       .exec();

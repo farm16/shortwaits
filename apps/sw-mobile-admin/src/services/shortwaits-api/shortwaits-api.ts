@@ -16,7 +16,6 @@ import {
   GetService,
   GetServicesByBusiness,
   GetUser,
-  UpdateBusinessServices,
   UpdateBusinessHours,
   RegisterBusiness,
   UpdateBusiness,
@@ -52,7 +51,6 @@ export const shortwaitsApi = createApi({
     getBusinessServices: GetBusinessServices(builder),
     getBusinessStaff: GetBusinessStaff(builder),
     //business (mutation)
-    updateBusinessServices: UpdateBusinessServices(builder),
     updateBusiness: UpdateBusiness(builder),
     updateBusinessHours: UpdateBusinessHours(builder),
     registerBusiness: RegisterBusiness(builder),

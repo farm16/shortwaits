@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, View, ViewStyle } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { ServiceColorType } from "@shortwaits/shared-types";
+import { ServiceColorType } from "@shortwaits/shared-lib";
 
 import { getDimensions } from "../../theme";
 import { Button, ButtonProps } from "../common";

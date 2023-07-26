@@ -1,10 +1,10 @@
 import React from "react";
 import { ImageBackground, StyleSheet, View } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { ServiceColorType } from "@shortwaits/shared-types";
+import { ServiceColorType } from "@shortwaits/shared-lib";
 
 import { useTheme } from "../../theme";
-import { CircleIconButton } from "../navigator-action-buttons/navigator-action-buttons";
+import { IconButton } from "../navigator-action-buttons/navigator-action-buttons";
 
 interface AvatarProps {
   imageUrl?: string;
@@ -44,20 +44,14 @@ export function Avatar({
         source={{ uri: imageUrl }}
       />
       {mode === "upload" ? (
-        <CircleIconButton
-          style={styles.circleIconButton}
-          iconType="add-image"
-        />
+        <IconButton style={styles.IconButton} iconType="add-image" />
       ) : null}
     </View>
   ) : (
     <View style={[styles.imageContainer, containerStyle]}>
       <Icon name="image" color={Colors.white} size={imageSize * 0.5} />
       {mode === "upload" ? (
-        <CircleIconButton
-          style={styles.circleIconButton}
-          iconType="add-image"
-        />
+        <IconButton style={styles.IconButton} iconType="add-image" />
       ) : null}
     </View>
   );
@@ -70,7 +64,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignItems: "center",
   },
-  circleIconButton: {
+  IconButton: {
     position: "absolute",
     bottom: -7,
     right: -6.5,

@@ -1,8 +1,8 @@
-import { ClientUserType } from "@shortwaits/shared-types";
+import { ClientUserType } from "@shortwaits/shared-lib";
 import { Contact } from "react-native-contacts";
 
 export function getUsersFromOsContacts(contacts: Contact[]) {
-  return contacts.map((contact) => getUserFromOsContact(contact));
+  return contacts.map(contact => getUserFromOsContact(contact));
 }
 
 function getUserFromOsContact({
@@ -14,7 +14,7 @@ function getUserFromOsContact({
   postalAddresses,
   imAddresses,
 }: Contact): Partial<ClientUserType> {
-  const addresses = postalAddresses.map((postalAddress) => {
+  const addresses = postalAddresses.map(postalAddress => {
     return {
       label: postalAddress.label,
       address1: postalAddress.formattedAddress,

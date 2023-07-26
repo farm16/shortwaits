@@ -1,6 +1,6 @@
 import React, { FC, memo, useCallback, useMemo } from "react";
 import { RefreshControl, SectionListData } from "react-native";
-import { EventType } from "@shortwaits/shared-types";
+import { EventType } from "@shortwaits/shared-lib";
 import {
   CalendarProvider,
   ExpandableCalendar,
@@ -42,8 +42,11 @@ export const Calendar: FC<CalendarProps> = memo(props => {
   const {
     data: eventsPayload,
     isLoading: isEventsLoading,
+    isError: isEventsError,
     refetch: refetchEvents,
   } = useGetEventsByBusinessQuery(business._id ?? skipToken);
+
+  console.log(eventsPayload?.data.length);
 
   const agendaData = useMemo(
     () => getAgendaData(eventsPayload?.data ?? []),
@@ -63,26 +66,42 @@ export const Calendar: FC<CalendarProps> = memo(props => {
 
   // console.log("rendering calendar");
   // console.log("agendaData >>>", JSON.stringify(agendaData, null, 2));
-
-  const nowDate = useMemo(() => new Date().toISOString(), []);
-
   // console.log("eventsPayload?.data", eventsPayload?.data);
-  // console.log("agendaData", agendaData);
+  // console.log("agendaData");
+
+  const formattedDate = useMemo(() => {
+    // const date = isEmpty(agendaData)
+    //   ? new Date()
+    //   : new Date(agendaData[0].title);
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const currentDate = `${year}-${month}-${day}`;
+    console.log("currentDate", currentDate);
+    return currentDate;
+  }, []);
 
   if (isEventsLoading) {
     return <ActivityIndicator />;
   }
-
   return (
     <CalendarProvider
-      date={isEmpty(agendaData) ? nowDate : agendaData[0]?.title}
+      date={formattedDate}
       showTodayButton={true}
       todayButtonStyle={{
         backgroundColor: Colors.brandPrimary,
       }}
       theme={theme}
     >
-      <ExpandableCalendar theme={theme} firstDay={1} />
+      <ExpandableCalendar
+        keyExtractor={item => {
+          // console.log("item", item);
+          return item;
+        }}
+        theme={theme}
+        firstDay={1}
+      />
       <AgendaList
         sectionStyle={{
           backgroundColor: Colors.background,
@@ -114,6 +133,10 @@ export const Calendar: FC<CalendarProps> = memo(props => {
             }
           />
         )}
+        keyExtractor={item => {
+          // console.log("item._id", item._id);
+          return item._id;
+        }}
         theme={theme}
         sections={agendaData}
         renderItem={renderItem}

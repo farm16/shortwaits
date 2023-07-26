@@ -1,11 +1,13 @@
 import { Schema, Prop, SchemaFactory, raw } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
 import {
+  BusinessLabelsType,
   EventLocationType,
+  EventPaymentMethodType,
   EventType,
   EventUrlsType,
   ObjectId,
-} from "@shortwaits/shared-types";
+} from "@shortwaits/shared-lib";
 import { Document, Schema as MongooseSchema, Types } from "mongoose";
 
 class EventUrls implements EventUrlsType {
@@ -31,19 +33,8 @@ export class Events extends Document implements EventType {
   registrationDeadlineTime: Date;
 
   @ApiProperty()
-  @Prop()
-  paymentMethod:
-    | "CREDIT CARD"
-    | "DEBIT CARD"
-    | "BANK TRANSFER"
-    | "PAYPAL"
-    | "APPLE PAY"
-    | "GOOGLE PAY"
-    | "BITCOIN"
-    | "AMAZON PAY"
-    | "CASH"
-    | "ZELLE"
-    | "CASH APP";
+  @Prop({ type: Array })
+  paymentMethod: EventPaymentMethodType;
 
   @ApiProperty()
   @Prop({ type: Array })
@@ -128,8 +119,7 @@ export class Events extends Document implements EventType {
   @ApiProperty()
   @Prop(
     raw({
-      statusCode: Number,
-      statusName: String,
+      type: MongooseSchema.Types.Mixed,
     })
   )
   status: {
@@ -199,8 +189,12 @@ export class Events extends Document implements EventType {
   notes: string;
 
   @ApiProperty()
-  @Prop()
-  labels: string[];
+  @Prop(
+    raw({
+      type: MongooseSchema.Types.Mixed,
+    })
+  )
+  labels: BusinessLabelsType;
 
   @ApiProperty()
   @Prop({ default: false })

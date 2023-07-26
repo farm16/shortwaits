@@ -8,7 +8,6 @@ export const {
   useLocalSignInMutation,
   useLocalSignOutMutation,
   useUpdateBusinessMutation,
-  useUpdateBusinessServicesMutation,
   useUpdateBusinessHoursMutation,
   useCreateBusinessClientsMutation,
   useCreateBusinessStaffMutation,

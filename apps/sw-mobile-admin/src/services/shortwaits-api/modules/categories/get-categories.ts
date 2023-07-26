@@ -1,5 +1,5 @@
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
-import { CategoriesResponseType } from "@shortwaits/shared-types";
+import { CategoriesResponseType } from "@shortwaits/shared-lib";
 import { shortwaitsApiEndpoints } from "../../../../configs";
 
 const { getCategories } = shortwaitsApiEndpoints.CATEGORIES;

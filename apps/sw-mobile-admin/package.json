@@ -78,6 +78,10 @@
     "react-native-pager-view": "*",
     "@react-native-clipboard/clipboard": "*",
     "react-native-mmkv": "*",
-    "@testing-library/react-native": "*"
+    "@testing-library/react-native": "*",
+    "@testing-library/jest-native": "*",
+    "react-native-get-random-values": "*",
+    "react-test-renderer": "*",
+    "react-native-share": "*"
   }
 }

@@ -1,7 +1,4 @@
-import {
-  getEndpointWithParams,
-  type AuthResponseType,
-} from "@shortwaits/shared-types";
+import { endpoints, type AuthResponseType } from "@shortwaits/shared-lib";
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
 
 type RequestType = undefined;
@@ -9,12 +6,7 @@ type RequestType = undefined;
 export default (builder: EndpointBuilder<any, any, any>) =>
   builder.mutation<AuthResponseType, RequestType>({
     query: payload => {
-      const { url, method } = getEndpointWithParams(
-        "auth/admin/local/refresh",
-        "POST",
-        {},
-        true
-      );
+      const { url, method } = endpoints.refreshLocal.getConfig([], {});
       return {
         url,
         method,

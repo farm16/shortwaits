@@ -136,11 +136,17 @@ const _circleIcons = {
     backgroundColor: undefined,
     size: 23,
   },
-  share: {
-    name: "share",
-    color: "brandSecondary",
+  cancel: {
+    name: "cancel",
+    color: "red4",
     backgroundColor: undefined,
-    size: 23,
+    size: 24,
+  },
+  delete: {
+    name: "delete-forever",
+    color: "red4",
+    backgroundColor: undefined,
+    size: 26,
   },
   "search-close": {
     name: "magnify-close",
@@ -154,7 +160,7 @@ const _circleIcons = {
     backgroundColor: "brandSecondary",
     size: 26,
   },
-  cancel: {
+  close: {
     name: "close",
     color: "white",
     backgroundColor: "red3",
@@ -287,7 +293,7 @@ const circleIcons = _circleIcons as unknown as Record<
   CircleIconsValues
 >;
 
-export const CircleIconButton: FC<
+export const IconButton: FC<
   ButtonProps & {
     iconType: CircleIconsKeys;
     iconSize?: number;

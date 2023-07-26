@@ -1,5 +1,7 @@
 import React, { useRef } from "react";
+import { StyleSheet, Pressable, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+
 import {
   TextField,
   TextFieldProps,
@@ -8,7 +10,7 @@ import {
   CardProps,
   Space,
 } from "../common";
-import { Pressable, TouchableOpacity } from "react-native";
+import { getDimensions, useTheme } from "../../theme";
 
 type TextFieldCard = {
   title: string;
@@ -35,6 +37,9 @@ export function TextFieldCard(props: TextFieldCard) {
   } = props;
 
   const textInputRef = useRef(null);
+  const { Colors } = useTheme();
+  const { width } = getDimensions();
+
   const handleSetFocus = () => {
     if (textInputRef.current) {
       textInputRef.current.focus();
@@ -74,8 +79,28 @@ export function TextFieldCard(props: TextFieldCard) {
         ) : null}
       </Card>
       {errors && isTouched ? (
-        <Text preset="error" text={"* " + errors} />
+        <Text
+          preset="cardTitle"
+          style={{
+            ...styles.errorField,
+            width: width * 0.87,
+            color: Colors.red3,
+          }}
+          text={"* " + errors}
+        />
       ) : null}
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  errorField: {
+    alignSelf: "center",
+    textAlign: "right",
+  },
+  cardTitle: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    margin: 0,
+  },
+});

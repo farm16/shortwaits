@@ -12,14 +12,14 @@
       }
     },
     "run-pods": {
+      "executor": "@nx/react-native:pod-install",
+      "options": {}
+    },
+    "run-ios": {
       "executor": "@nx/react-native:run-ios",
       "options": {
         "install": true
       }
-    },
-    "run-ios": {
-      "executor": "@nx/react-native:run-ios",
-      "options": {}
     },
     "bundle-ios": {
       "executor": "@nx/react-native:bundle",

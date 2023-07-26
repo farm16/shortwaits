@@ -1,7 +1,7 @@
 import {
   BusinessAvailableCurrenciesType,
   CurrencyType,
-} from "@shortwaits/shared-types";
+} from "@shortwaits/shared-lib";
 
 /**
  * @todo this might need translation

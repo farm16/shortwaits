@@ -4,7 +4,7 @@ import { truncate } from "lodash";
 import {
   BusinessIncomeInfo,
   ButtonCard,
-  CircleIconButton,
+  IconButton,
   Container,
   Screen,
   ScrollView,
@@ -67,8 +67,8 @@ export const MyBusinessScreen: FC<
       headerRight: () => {
         return (
           <Container direction="row" alignItems="center">
-            <CircleIconButton withMarginRight iconType="edit" />
-            <CircleIconButton withMarginRight iconType="share" />
+            <IconButton withMarginRight iconType="edit" />
+            <IconButton withMarginRight iconType="share" />
           </Container>
         );
       },

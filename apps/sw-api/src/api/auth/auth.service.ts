@@ -15,6 +15,7 @@ import { SignUpWithEmailDto } from "./dto/sign-up-with-email.dto";
 import { SignInWithEmailDto } from "./dto/sign-in-with-email.dto";
 import { Business } from "../business/entities/business.entity";
 import { Service } from "../services/entities/service.entity";
+import { convertDomainToLowercase } from "../../utils/converters";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const shortwaitsAdmin = require("../../assets/default-data/2-shortwaits/shortwaits.js");
 
@@ -58,11 +59,17 @@ export class AuthService {
       staff: [currentUser._id],
       hours: shortwaitsAdmin[0].sampleBusinessData.hours,
     });
+
+    // create default services (3) for the business from shortwaitsAdmin template
     const services = shortwaitsAdmin[0].sampleBusinessData.services.map(
       service => {
         return { ...service, businessId: newBusinessAccount._id };
       }
     );
+    // create default labels (3) for the business from shortwaitsAdmin template
+
+    const labels = shortwaitsAdmin[0].sampleBusinessData.labels;
+
     const insertedServices = await this.serviceModel.insertMany(services);
     const servicesIds = insertedServices.map(service => service._id);
 
@@ -70,6 +77,8 @@ export class AuthService {
     const hashedRefreshToken = await bcrypt.hash(tokens.refreshToken, salt);
 
     newBusinessAccount.services = servicesIds;
+    newBusinessAccount.labels = labels;
+
     currentUser.businesses = [newBusinessAccount._id];
     currentUser.hashedRt = hashedRefreshToken;
     currentUser.lastSignInAt = new Date();
@@ -92,7 +101,7 @@ export class AuthService {
 
   async signInLocal(dto: SignInWithEmailDto) {
     const currentUser = await this.businessUserModel.findOne({
-      email: dto.email,
+      email: convertDomainToLowercase(dto.email),
     });
 
     if (!currentUser) {

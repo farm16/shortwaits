@@ -5,7 +5,7 @@ import {
   Space,
   LeftChevronButton,
   AnimatedSearchBar,
-  CircleIconButton,
+  IconButton,
   Container,
 } from "../../../../../components";
 import { StaticSelectorItem } from "./static-selector-item";
@@ -35,7 +35,7 @@ export const StaticSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({
       ),
       headerRight: () => (
         <Container direction="row" alignItems="center">
-          <CircleIconButton
+          <IconButton
             withMarginRight
             iconType={isListSearchable ? "search-close" : "search"}
             onPress={() => {
@@ -63,17 +63,19 @@ export const StaticSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({
       <AnimatedSearchBar
         onChangeText={text => {
           setSearchText(text);
-          const filteredItems = data.filter(item => {
-            // Adjust the filtering logic based on your data structure
-            if (typeof item === "string") {
-              return item.toLowerCase().includes(text.toLowerCase());
-            } else {
-              return (
-                item.title.toLowerCase().includes(text.toLowerCase()) ||
-                item.subTitle.toLowerCase().includes(text.toLowerCase())
-              );
+          const filteredItems = data.filter(
+            (item: string | { title: string; subTitle: string }) => {
+              // Adjust the filtering logic based on your data structure
+              if (typeof item === "string") {
+                return item.toLowerCase().includes(text.toLowerCase());
+              } else {
+                return (
+                  item.title.toLowerCase().includes(text.toLowerCase()) ||
+                  item.subTitle.toLowerCase().includes(text.toLowerCase())
+                );
+              }
             }
-          });
+          );
           setFilteredData(filteredItems);
         }}
         isVisible={isListSearchable}

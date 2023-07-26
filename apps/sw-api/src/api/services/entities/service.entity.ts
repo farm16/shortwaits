@@ -6,7 +6,7 @@ import {
   ObjectId,
   ServiceColorType,
   ServicesType,
-} from "@shortwaits/shared-types";
+} from "@shortwaits/shared-lib";
 
 @Schema()
 export class Service extends Document implements ServicesType {

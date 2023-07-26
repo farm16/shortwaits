@@ -20,7 +20,7 @@ import {
   CurrencyFieldCard,
   TextFieldCard,
   Text,
-  CircleIconButton,
+  IconButton,
   DurationFieldCard,
   LeftChevronButton,
 } from "../../../components";

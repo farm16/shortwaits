@@ -18,11 +18,19 @@ import {
   BackButton,
   ButtonCard,
   CurrencyFieldCard,
+  Space,
 } from "../../../components";
 import { ModalsScreenProps } from "../../../navigation";
-import { FormBody } from "./commons/form-body";
-import { CreateEventDtoType, ServiceDtoType } from "@shortwaits/shared-types";
+import { FormContainer } from "./commons/form-container";
+import {
+  BusinessLabelType,
+  BusinessLabelsType,
+  CreateEventDtoType,
+  ServiceDtoType,
+  eventPaymentMethods,
+} from "@shortwaits/shared-lib";
 import { useCreateEventMutation } from "../../../services";
+import { FormikErrors } from "formik";
 
 export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({
   navigation,
@@ -33,18 +41,33 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({
   const [selectedService, setSelectedService] = useState<ServiceDtoType | null>(
     null
   );
-
+  const [isFree, setIsFree] = useState<boolean>(true);
   const business = useBusiness();
   const services = useServices();
   const user = useUser();
-
   const [createEvent, createEventStatus] = useCreateEventMutation();
+
+  const validateDates = (
+    formData: CreateEventDtoType
+  ): FormikErrors<CreateEventDtoType> => {
+    const errors: FormikErrors<CreateEventDtoType> = {};
+    const startTime = new Date(formData.startTime);
+    const expectedEndTime = new Date(formData.expectedEndTime);
+
+    if (startTime && expectedEndTime) {
+      if (startTime > expectedEndTime) {
+        errors.startTime = "Start date must not be after the end date.";
+        errors.expectedEndTime = "End date must not be before the start date.";
+      }
+    }
+
+    return errors;
+  };
 
   const initialValues = useMemo(() => {
     const currentDate = new Date();
     const futureDate = new Date(currentDate.getTime() + 15 * 60000);
     const _initialValues: CreateEventDtoType = {
-      paymentMethod: "CASH",
       participantsIds: [],
       leadClientId: "",
       urls: [],
@@ -70,10 +93,10 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({
       durationInMin: 0,
       startTime: currentDate.toISOString(),
       expectedEndTime: futureDate.toISOString(),
-      priceExpected: null,
+      priceExpected: 0,
       isGroupEvent: true,
       repeat: true,
-      payment: null,
+      paymentMethod: "CASH",
       notes: "",
       labels: [],
     };
@@ -84,6 +107,7 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({
     useForm(
       {
         initialValues,
+        validate: validateDates,
         onSubmit: formData => {
           if (onSubmit) {
             onSubmit<"addEvent">(formData);
@@ -92,24 +116,18 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({
           }
         },
       },
-      "addEvent"
+      "createEvent"
     );
+
+  console.log(errors);
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
-      headerRight: () => (
-        <Button
-          onPress={() => {
-            handleSubmit();
-          }}
-          preset="headerLink"
-          text="Save"
-        />
-      ),
-      headerTitle: () => <Text preset="text" text="Add Event" />,
+      headerRight: () => <BackButton onPress={() => handleSubmit()} />,
+      headerTitle: () => <Text preset="text" text="Create Event" />,
     });
-  }, [closeOnSubmit, createEventStatus.isSuccess, handleSubmit, navigation]);
+  }, [handleSubmit, navigation]);
 
   useEffect(() => {
     if (createEventStatus.isSuccess && closeOnSubmit) {
@@ -130,16 +148,39 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({
     return () => {
       cleanup();
     };
-  }, []);
+  }, [onDone]);
 
   if (createEventStatus.isError) {
     Alert.alert("Error", createEventStatus.error.message);
   }
 
+  const renderSubmitButton = (
+    <Button
+      text="Create Event"
+      onPress={() => {
+        handleSubmit();
+      }}
+    />
+  );
+
+  const getIsLabelInArray = (
+    arrayOfLabels: BusinessLabelsType,
+    labelToCheck: BusinessLabelType
+  ): boolean => {
+    return arrayOfLabels.some(_label => {
+      return (
+        _label.name === labelToCheck.name &&
+        _label.description === labelToCheck.description &&
+        _label.isFavorite === labelToCheck.isFavorite &&
+        _label.emojiShortName === labelToCheck.emojiShortName
+      );
+    });
+  };
+
   return createEventStatus.isLoading ? (
     <ActivityIndicator />
   ) : (
-    <FormBody>
+    <FormContainer footer={renderSubmitButton}>
       <TextFieldCard
         title="Name"
         placeholder="Yoga class"
@@ -147,6 +188,26 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({
         onChangeText={handleChange("name")}
         isTouched={touched.name}
         errors={errors.name}
+      />
+      <ButtonCard
+        title="Labels"
+        subTitle={`${values.labels.length} selected`}
+        onPress={() =>
+          navigation.navigate("modals", {
+            screen: "selector-modal-screen",
+            params: {
+              type: "labels",
+              data: business.labels,
+              closeOnSubmit: true,
+              onSelect: label => {
+                const isLabelInArray = getIsLabelInArray(values.labels, label);
+                if (!isLabelInArray) {
+                  setFieldValue("labels", [...values.labels, label]);
+                }
+              },
+            },
+          })
+        }
       />
       <TextFieldCard
         title="Description"
@@ -174,6 +235,17 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({
             },
           })
         }
+        isTouched={touched.serviceId}
+        errors={errors.serviceId}
+      />
+      <ButtonCard
+        rightIconName={
+          values?.hasNoDuration ? "checkbox-blank-outline" : "checkbox-outline"
+        }
+        title={"Limited time"}
+        onPress={() => {
+          setFieldValue("hasNoDuration", !values?.hasNoDuration);
+        }}
       />
       <TimePickerFieldCard
         title={"Starts"}
@@ -182,15 +254,56 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({
         isTouched={touched.startTime}
         errors={errors.startTime}
       />
-      <TimePickerFieldCard
-        title={"Ends"}
-        date={new Date(values.expectedEndTime)}
-        onChange={handleChange("startTime")}
-        isTouched={touched.expectedEndTime}
-        errors={errors.expectedEndTime}
+      {values?.hasNoDuration ? null : (
+        <TimePickerFieldCard
+          title={"Ends"}
+          date={new Date(values.expectedEndTime)}
+          onChange={handleChange("startTime")}
+          isTouched={touched.expectedEndTime}
+          errors={errors.expectedEndTime}
+        />
+      )}
+      <ButtonCard
+        rightIconName={isFree ? "checkbox-outline" : "checkbox-blank-outline"}
+        title={"Free"}
+        onPress={() => {
+          setIsFree(isFree => {
+            if (!isFree) {
+              setFieldValue("priceExpected", 0);
+            }
+            return !isFree;
+          });
+        }}
+      />
+      <ButtonCard
+        title="Payment method"
+        subTitle={
+          values.paymentMethod
+            ? eventPaymentMethods[values.paymentMethod]
+            : "Select a payment method"
+        }
+        onPress={() =>
+          navigation.navigate("modals", {
+            screen: "selector-modal-screen",
+            params: {
+              type: "static",
+              headerTitle: "Payment method",
+              data: Object.keys(eventPaymentMethods).map(key => {
+                return {
+                  key,
+                  title: eventPaymentMethods[key],
+                };
+              }),
+              onSelect: paymentMethod => {
+                setFieldValue("paymentMethod", paymentMethod.key);
+              },
+            },
+          })
+        }
       />
       <CurrencyFieldCard
         title="Price"
+        disabled={isFree}
         keyboardType="number-pad"
         placeholder="Give a price"
         value={values.priceExpected}
@@ -208,6 +321,7 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({
         isTouched={touched.notes}
         errors={errors.notes}
       />
-    </FormBody>
+      <Space size="large" />
+    </FormContainer>
   );
 };

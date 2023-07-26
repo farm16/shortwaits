@@ -1,7 +1,4 @@
-import {
-  getEndpointWithParams,
-  type AuthResponseType,
-} from "@shortwaits/shared-types";
+import { type AuthResponseType, endpoints } from "@shortwaits/shared-lib";
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
 
 type RequestType = {
@@ -13,12 +10,8 @@ type RequestType = {
 export default (builder: EndpointBuilder<any, any, any>) =>
   builder.mutation<AuthResponseType, RequestType>({
     query: payload => {
-      const { url, method } = getEndpointWithParams(
-        "auth/admin/local/sign-up",
-        "POST",
-        {},
-        true
-      );
+      const { url, method } = endpoints.signUpLocal.getConfig([], {});
+
       return {
         url,
         method,

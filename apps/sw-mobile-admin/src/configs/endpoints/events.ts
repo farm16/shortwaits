@@ -1,7 +1,7 @@
 import {
   EventsEndpointsMethods,
   EventsEndpointsPaths,
-} from "@shortwaits/shared-types";
+} from "@shortwaits/shared-lib";
 
 const EVENTS_BASE_PATH = "/events";
 

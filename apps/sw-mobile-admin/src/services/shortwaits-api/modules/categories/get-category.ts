@@ -1,10 +1,10 @@
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
-import { CategoriesPayloadType, ObjectId } from "@shortwaits/shared-types";
+import { CategoryResponseType } from "@shortwaits/shared-lib";
 import { shortwaitsApiEndpoints } from "../../../../configs";
 
 const { getCategory } = shortwaitsApiEndpoints.CATEGORIES;
 
 export default (build: EndpointBuilder<any, any, any>) =>
-  build.query<CategoriesPayloadType, ObjectId | string>({
+  build.query<CategoryResponseType, string>({
     query: (categoryId: string) => getCategory.getPath(categoryId),
   });

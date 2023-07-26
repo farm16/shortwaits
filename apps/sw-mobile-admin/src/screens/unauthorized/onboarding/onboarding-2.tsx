@@ -11,7 +11,7 @@ import {
   LeftChevronButton,
   Space,
   Button,
-  CircleIconButton,
+  IconButton,
 } from "../../../components";
 import { useTheme } from "../../../theme";
 import {
@@ -72,7 +72,7 @@ export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
         <LeftChevronButton onPress={() => navigation.goBack()} />
       ),
       headerRight: () => (
-        <CircleIconButton
+        <IconButton
           onPress={() =>
             navigation.navigate("modals", {
               screen: "service-modal-screen",

@@ -2,9 +2,9 @@
 import React from "react";
 import { TextStyle } from "react-native";
 import EmojiData from "emoji-datasource/emoji.json";
+import { EmojiType } from "@shortwaits/shared-lib";
 
 import { Text } from "../common";
-import { EmojiType } from "./tools";
 
 type EmojiProps = {
   name: EmojiType;

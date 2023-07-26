@@ -12,7 +12,7 @@ import {
   ValidationPipe,
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
-import { BusinessUserType, ClientUserType } from "@shortwaits/shared-types";
+import { BusinessUserType, ClientUserType } from "@shortwaits/shared-lib";
 
 import { BusinessService } from "./business.service";
 import { AtGuard } from "../../common/guards";

@@ -7,11 +7,23 @@ import {
   BusinessType,
   CurrencyType,
   ObjectId,
-} from "@shortwaits/shared-types";
+  BusinessLabelsType,
+} from "@shortwaits/shared-lib";
 import { ApiProperty } from "@nestjs/swagger";
 
 @Schema()
 export class Business extends Document implements BusinessType {
+  @ApiProperty()
+  @Prop(
+    raw({
+      name: String,
+      description: String,
+      isFavorite: Boolean,
+      emojiShortName: String,
+    })
+  )
+  labels: BusinessLabelsType;
+
   @ApiProperty()
   @Prop()
   email: string;

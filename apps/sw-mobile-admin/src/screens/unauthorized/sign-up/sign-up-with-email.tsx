@@ -58,7 +58,7 @@ export const SignUpWithEmail: FC<SignUpWithEmailScreenProps> = ({
           });
         },
       },
-      "signUpSchema"
+      "userLocalSignUp"
     );
 
   const handlePasswordVisibility = useCallback(() => {

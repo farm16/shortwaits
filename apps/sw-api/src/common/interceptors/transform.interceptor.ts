@@ -4,7 +4,7 @@ import {
   ExecutionContext,
   CallHandler,
 } from "@nestjs/common";
-import { CommonResponseType } from "@shortwaits/shared-types";
+import { CommonResponseType } from "@shortwaits/shared-lib";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 

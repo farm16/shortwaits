@@ -1,4 +1,4 @@
-import { UserDtoType } from "@shortwaits/shared-types";
+import { UserDtoType } from "@shortwaits/shared-lib";
 import React, { useState } from "react";
 import { Divider, List } from "react-native-paper";
 import { StyleSheet } from "react-native";

@@ -1,4 +1,4 @@
-import { EventStatusName } from "@shortwaits/shared-types";
+import { EventStatusName } from "@shortwaits/shared-lib";
 
 export const statusDisplayMessages: Record<EventStatusName, string> = {
   PENDING: "pending",

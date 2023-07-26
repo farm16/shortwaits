@@ -1,5 +1,5 @@
-import React, { FC, useCallback, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import React, { FC, useCallback, useEffect, useState } from "react";
+import { Alert, AlertButton, StyleSheet, View } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { CompositeNavigationProp } from "@react-navigation/native";
 
@@ -33,7 +33,6 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({
 }) => {
   const { Colors } = useTheme();
   const [isVisible, setIsVisible] = useState(false);
-  const { width } = getDimensions();
 
   const [localSignIn, response] = useLocalSignInMutation();
 
@@ -52,11 +51,39 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({
           });
         },
       },
-      "signInSchema"
+      "userLocalSignIn"
     );
   const handlePasswordVisibility = useCallback(() => {
     setIsVisible(visibility => !visibility);
   }, []);
+
+  useEffect(() => {
+    if (response.isError) {
+      const canRegister =
+        response?.error?.data?.message === "User not registered";
+      const buttons: AlertButton[] = [{ text: "Back", style: "cancel" }];
+      if (canRegister) {
+        buttons.push({
+          text: "Register",
+          onPress: () => {
+            navigation.navigate("unauthorized", {
+              screen: "sign-up-with-email-screen",
+            });
+          },
+          style: "default",
+        });
+      }
+      Alert.alert(
+        "Oops",
+        response?.error?.data?.message ?? "unknown error",
+        buttons,
+        {
+          cancelable: true,
+        }
+      );
+    } else return;
+  }, [navigation, response?.error?.data?.message, response.isError]);
+
   return (
     <Screen preset="fixed" unsafe unsafeBottom withHorizontalPadding>
       <View

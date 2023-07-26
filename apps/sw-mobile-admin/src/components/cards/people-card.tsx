@@ -10,7 +10,7 @@ import {
 
 import { Button, ButtonProps, Text } from "../common";
 import { useTheme } from "../../theme";
-import { UserDtoType } from "@shortwaits/shared-types";
+import { UserDtoType } from "@shortwaits/shared-lib";
 
 export type PeopleCardProps = ButtonProps & {
   user: UserDtoType;

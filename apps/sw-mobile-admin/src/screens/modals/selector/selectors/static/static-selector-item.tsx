@@ -2,9 +2,10 @@ import React from "react";
 
 import { ButtonCard } from "../../../../../components";
 import { SelectorItemProps } from "../../selector-types";
+import { SelectorModalData } from "../../../../../navigation";
 
 export function StaticSelectorItem(
-  props: SelectorItemProps<string | { title: string; subTitle: string }>
+  props: SelectorItemProps<SelectorModalData>
 ) {
   const {
     item,

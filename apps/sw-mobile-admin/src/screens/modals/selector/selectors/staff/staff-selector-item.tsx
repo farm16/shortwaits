@@ -1,5 +1,5 @@
 import React from "react";
-import { UserDtoType } from "@shortwaits/shared-types";
+import { UserDtoType } from "@shortwaits/shared-lib";
 
 import { ButtonCard } from "../../../../../components";
 import { SelectorItemProps } from "../../selector-types";

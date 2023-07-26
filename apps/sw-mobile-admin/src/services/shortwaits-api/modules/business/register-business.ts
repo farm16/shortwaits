@@ -1,5 +1,5 @@
 import { shortwaitsApiEndpoints } from "../../../../configs";
-import { BusinessEndpointsTypes } from "@shortwaits/shared-types";
+import { BusinessEndpointsTypes } from "@shortwaits/shared-lib";
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
 
 const { registerBusiness } = shortwaitsApiEndpoints.BUSINESS;

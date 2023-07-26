@@ -1,6 +1,6 @@
 import { Controller, Get, Inject } from "@nestjs/common";
 import { ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
-import { ShortwaitsAdminDefaultDataPayloadType } from "@shortwaits/shared-types";
+import { ShortwaitsAdminDefaultDataPayloadType } from "@shortwaits/shared-lib";
 import { Public } from "../../common/decorators/auth.decorator";
 
 import { Shortwaits } from "./shortwaits.schema";

@@ -1,5 +1,10 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { CreateEventDtoType } from "@shortwaits/shared-types";
+import {
+  BusinessLabelsType,
+  CreateEventDtoType,
+  EventPaymentMethodType,
+  eventPaymentMethodsKeys,
+} from "@shortwaits/shared-lib";
 import {
   IsArray,
   IsBoolean,
@@ -46,31 +51,8 @@ export class CreateEventsDto implements CreateEventDtoType {
 
   @IsString()
   @ApiProperty({ required: true })
-  @IsIn([
-    "CREDIT CARD",
-    "DEBIT CARD",
-    "BANK TRANSFER",
-    "PAYPAL",
-    "APPLE PAY",
-    "GOOGLE PAY",
-    "BITCOIN",
-    "AMAZON PAY",
-    "CASH",
-    "ZELLE",
-    "CASH APP",
-  ])
-  paymentMethod:
-    | "CREDIT CARD"
-    | "DEBIT CARD"
-    | "BANK TRANSFER"
-    | "PAYPAL"
-    | "APPLE PAY"
-    | "GOOGLE PAY"
-    | "BITCOIN"
-    | "AMAZON PAY"
-    | "CASH"
-    | "ZELLE"
-    | "CASH APP";
+  @IsIn(eventPaymentMethodsKeys)
+  paymentMethod: EventPaymentMethodType;
 
   @IsArray()
   @ApiProperty({ required: true })
@@ -187,5 +169,5 @@ export class CreateEventsDto implements CreateEventDtoType {
   @IsArray()
   @ApiProperty({ required: false })
   @IsString({ each: true })
-  labels: string[];
+  labels: BusinessLabelsType;
 }

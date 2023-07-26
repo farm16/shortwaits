@@ -1,4 +1,4 @@
-import { BusinessEndpointsMethods } from "@shortwaits/shared-types";
+import { BusinessEndpointsMethods } from "@shortwaits/shared-lib";
 
 const BUSINESS_BASE_PATH = "/business";
 

@@ -12,9 +12,8 @@ import { Service } from "../services/entities/service.entity";
 import { BusinessUser } from "../business-user/entities/business-user.entity";
 import { Events } from "./entities/events.entity";
 import { CreateEventsDto } from "./dto/create-event.dto";
-import { UpdateEventsDto } from "./dto/update-event.dto";
 import { convertArrayToObjectId } from "../../utils/converters";
-import { EventDtoType } from "@shortwaits/shared-types";
+import { EventDtoType } from "@shortwaits/shared-lib";
 
 const WEEK_DAY = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -41,6 +40,8 @@ export class EventsService {
         throw new UnauthorizedException("Business not found");
       }
 
+      console.log(event.labels);
+
       const isAdmin = businessRecord.admins.some(
         adminId => adminId.toString() === userId
       );
@@ -61,7 +62,7 @@ export class EventsService {
         // do something
       }
 
-      const newEvent = await this.eventsModel.create({
+      const _newEvent = {
         participantsIds: event.participantsIds,
         staffIds: event.staffIds,
         clientsIds: event.clientsIds,
@@ -94,7 +95,11 @@ export class EventsService {
         attendeeLimit: event.attendeeLimit,
         registrationDeadline: event.registrationDeadline,
         registrationFee: event.registrationFee,
-      });
+      };
+
+      console.log(JSON.stringify(_newEvent, null, 2));
+
+      const newEvent = await this.eventsModel.create(_newEvent);
 
       await businessRecord
         .updateOne({ $push: { events: newEvent._id } })
@@ -330,7 +335,7 @@ export class EventsService {
     filterOptions?: { date: string; filterBy: "day" | "month" | "year" }
   ) {
     try {
-      const { page = 1, limit = 10 } = paginateOptions ?? {};
+      const { page, limit } = paginateOptions ?? {};
       const skip = (page - 1) * limit;
 
       const { date, filterBy } = filterOptions ?? {};
@@ -369,8 +374,12 @@ export class EventsService {
           $lte: endDate,
         };
       }
-
-      return await this.eventsModel.find(filter).skip(skip).limit(limit).exec();
+      const events = await this.eventsModel
+        .find(filter)
+        .skip(skip)
+        .limit(limit)
+        .exec();
+      return events;
     } catch (error) {
       console.error(error);
       throw new InternalServerErrorException("Failed to get events");

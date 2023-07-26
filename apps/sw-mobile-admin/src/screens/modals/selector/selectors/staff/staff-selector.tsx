@@ -6,7 +6,7 @@ import { showPremiumMembershipModal, useUser } from "../../../../../store";
 import {
   SearchBar,
   Space,
-  CircleIconButton,
+  IconButton,
   LeftChevronButton,
   Text,
 } from "../../../../../components";
@@ -41,7 +41,7 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({
       ),
       headerRight: () =>
         !isReadOnly && (
-          <CircleIconButton
+          <IconButton
             onPress={() => handleAddStaffPress()}
             withMarginRight
             iconType="add-staff"

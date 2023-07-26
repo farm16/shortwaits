@@ -14,26 +14,34 @@ import {
 } from "./navigation-constants";
 import { selectorConfigs } from "../screens/modals/selector/selector-config";
 import {
+  BusinessLabelType,
+  BusinessLabelsType,
   CategoryDtoType,
   CreateEventDtoType,
   EventDtoType,
   ServiceDtoType,
-} from "@shortwaits/shared-types";
+  UpdateEventDtoType,
+  UserDtoType,
+} from "@shortwaits/shared-lib";
 
-type FormData = {
+export type FormData = {
   addEvent: CreateEventDtoType;
-  addClient: any;
+  addClient: UserDtoType;
+  addStaff: UserDtoType;
+  updateEvent: UpdateEventDtoType;
 };
+export type FormType = keyof FormData;
+export type FormDataType = FormData[FormType];
 
-type SelectorModalData =
+export type SelectorModalData =
   | string
   | CategoryDtoType
   | ServiceDtoType
-  | { title: string; subTitle: string };
+  | BusinessLabelType
+  | { key: string; title: string; subTitle?: string };
+export type SelectorModalModeType = keyof typeof selectorConfigs;
 
 export type ScheduleModalModeType = "My-Business-Hours" | "User-Hours";
-export type SelectorModalModeType = keyof typeof selectorConfigs;
-export type FormType = "addClient" | "addEvent" | "addStaff";
 
 export type ModalStackParamList = {
   [MODAL_SCREENS.SELECTOR_MODAL_SCREEN]: {
@@ -54,8 +62,10 @@ export type ModalStackParamList = {
     mode: "update" | "create";
     initialValues?: any;
   };
+  // multiple forms in one modal ex. addClient, addEvent, addStaff, etc.
   [MODAL_SCREENS.FORM_MODAL_SCREEN]: {
     form: FormType;
+    initialValues?: FormData[FormType];
     onSubmit?<T extends keyof FormData>(arg: FormData[T]): void;
     onDone?(): void;
     closeOnSubmit?: boolean;
@@ -102,6 +112,7 @@ type UNAUTHORIZED_SCREENS_TYPES =
   | MODAL_SCREENS_TYPES;
 
 type AUTHORIZED_SCREENS_KEYS = keyof typeof AUTHORIZED_SCREENS;
+
 type AUTHORIZED_SCREENS_TYPES =
   | (typeof AUTHORIZED_SCREENS)[AUTHORIZED_SCREENS_KEYS]
   | MODAL_SCREENS_TYPES;

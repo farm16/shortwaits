@@ -13,7 +13,7 @@ import { AuthorizedScreenProps } from "../../../navigation";
 import {
   AuthorizedScreenHeader,
   Button,
-  CircleIconButton,
+  IconButton,
   Container,
   Screen,
   Space,
@@ -44,12 +44,12 @@ export const ActivityScreen: FC<AuthorizedScreenProps<"activity-screen">> = ({
       headerRight: () => {
         return (
           <Container direction="row" alignItems="center">
-            <CircleIconButton
+            <IconButton
               onPress={() => setActivityType("business")}
               withMarginRight
               iconType="business"
             />
-            <CircleIconButton
+            <IconButton
               onPress={() => setActivityType("staff")}
               withMarginRight
               iconType="add-staff"

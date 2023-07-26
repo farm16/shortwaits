@@ -7,9 +7,9 @@ import {
   StyleSheet,
   Pressable,
 } from "react-native";
-import { EventDtoType } from "@shortwaits/shared-types";
-import { truncate } from "lodash";
-import { Container, Emoji, EmojiType, Text } from "..";
+import { EmojiType, EventDtoType } from "@shortwaits/shared-lib";
+import { isEmpty, truncate } from "lodash";
+import { Container, Emoji, Text } from "..";
 import { useTheme } from "../../theme";
 import { getEventTime } from "./calendar-utils";
 import defaultUserImage from "../../assets/images/user.png";
@@ -31,7 +31,7 @@ const BORDER_RADIUS = 6;
 export const AgendaItem = (props: AgendaItemProps) => {
   const { item } = props;
   // const { navigate } = useNavigation();
-  console.log("AgendaItem >>>", JSON.stringify(item, null, 2));
+  // console.log("AgendaItem >>>", JSON.stringify(item, null, 2));
 
   const { Colors } = useTheme();
   const service = useService(item?.serviceId ?? "");
@@ -119,9 +119,11 @@ export const AgendaItem = (props: AgendaItemProps) => {
     () => (
       <View style={styles.eventName}>
         <View style={styles.eventNameFloatingLabels}>
-          {item.labels.map(label => {
-            return <Emoji name={label as EmojiType} />;
-          })}
+          {isEmpty(item.labels)
+            ? null
+            : item.labels.map(label => {
+                return <Emoji name={label.emojiShortName} />;
+              })}
         </View>
         <Text
           preset="none"

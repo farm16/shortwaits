@@ -12,7 +12,7 @@ import {
   BottomSheetType,
   Button,
   ButtonCard,
-  CircleIconButton,
+  IconButton,
   Container,
   List,
   NonIdealState,
@@ -31,7 +31,7 @@ import {
 import { AuthorizedScreenProps } from "../../../navigation";
 import { ActivityIndicator } from "react-native-paper";
 import Contacts from "react-native-contacts";
-import { UserDocType } from "@shortwaits/shared-types";
+import { UserDocType } from "@shortwaits/shared-lib";
 import { getUsersFromOsContacts } from "../../../utils/getUsersFromOsContacts";
 import { actions } from "../../../components/floating-action-button/fab-actions";
 import { isEmpty } from "lodash";
@@ -68,7 +68,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
       headerLeft: () => {
         return (
           <Container direction="row" alignItems="center">
-            <CircleIconButton
+            <IconButton
               iconType="contactSync"
               withMarginLeft
               onPress={() => {
@@ -81,14 +81,14 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
       headerRight: () => {
         return (
           <Container direction="row" alignItems="center">
-            <CircleIconButton
+            <IconButton
               iconType={isListSearchable ? "search-close" : "search"}
               withMarginRight
               onPress={() => {
                 setIsListSearchable(s => !s);
               }}
             />
-            <CircleIconButton
+            <IconButton
               iconType="add"
               withMarginRight
               onPress={() =>

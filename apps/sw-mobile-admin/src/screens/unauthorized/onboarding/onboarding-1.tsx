@@ -8,7 +8,7 @@ import {
   TextFieldCard,
   ButtonCard,
   Space,
-  CircleIconButton,
+  IconButton,
   Button,
 } from "../../../components";
 import { UnauthorizedScreenProps } from "../../../navigation";
@@ -91,7 +91,7 @@ export const Onboarding1Screen: FC<
     navigation.setOptions({
       headerTitle: `Welcome ${user?.familyName || ""}`,
       headerLeft: () => (
-        <CircleIconButton
+        <IconButton
           withMarginLeft
           iconType="account-cancel"
           onPress={() => {

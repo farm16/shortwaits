@@ -15,7 +15,7 @@ import {
 } from "../../../components";
 import { ModalsScreenProps } from "../../../navigation";
 import { formatAddClientsValues } from "./form-utils";
-import { FormBody } from "./commons/form-body";
+import { FormContainer } from "./commons/form-container";
 
 export const AddClientModal: FC<ModalsScreenProps<"form-modal-screen">> = ({
   navigation,
@@ -113,7 +113,7 @@ export const AddClientModal: FC<ModalsScreenProps<"form-modal-screen">> = ({
   return createBusinessClientsStatus.isLoading ? (
     <ActivityIndicator />
   ) : (
-    <FormBody>
+    <FormContainer>
       {/* <Card mode="button">
         <Text preset="cardTitle" text={"Tag"} />
         <Text
@@ -215,6 +215,6 @@ export const AddClientModal: FC<ModalsScreenProps<"form-modal-screen">> = ({
         isTouched={touched.postCode}
         errors={errors.postCode}
       />
-    </FormBody>
+    </FormContainer>
   );
 };

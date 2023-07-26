@@ -3,7 +3,7 @@ import {
   AuthPayloadType,
   BusinessDocType,
   UserDocType,
-} from "@shortwaits/shared-types";
+} from "@shortwaits/shared-lib";
 
 export class AuthSuccessResponse implements AuthPayloadType {
   @ApiProperty()

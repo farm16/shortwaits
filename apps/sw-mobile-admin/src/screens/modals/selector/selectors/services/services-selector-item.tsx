@@ -1,5 +1,5 @@
 import React from "react";
-import { ServiceDtoType } from "@shortwaits/shared-types";
+import { ServiceDtoType } from "@shortwaits/shared-lib";
 import { ButtonCard } from "../../../../../components";
 import { SelectorItemProps } from "../../selector-types";
 

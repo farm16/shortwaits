@@ -1,8 +1,8 @@
 import {
   CreateEventDtoType,
   EventResponseType,
-  getEndpointWithParams,
-} from "@shortwaits/shared-types";
+  endpoints,
+} from "@shortwaits/shared-lib";
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
 
 type RequestType = {
@@ -13,9 +13,7 @@ type RequestType = {
 export default (builder: EndpointBuilder<any, any, any>) =>
   builder.mutation<EventResponseType, RequestType>({
     query: ({ businessId, body }) => ({
-      ...getEndpointWithParams("events/business/:businessId", "POST", {
-        businessId,
-      }),
+      ...endpoints.createEventForBusiness.getConfig([businessId], {}),
       body,
     }),
   });

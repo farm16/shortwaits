@@ -1,5 +1,5 @@
 import React from "react";
-import { CategoryDtoType } from "@shortwaits/shared-types";
+import { CategoryDtoType } from "@shortwaits/shared-lib";
 
 import { ButtonCard, Card, Text } from "../../../../../components";
 import { SelectorItemProps } from "../../selector-types";

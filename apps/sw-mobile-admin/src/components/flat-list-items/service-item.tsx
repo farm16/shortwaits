@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { StyleSheet, View, ViewStyle } from "react-native";
-import { ServiceDtoType } from "@shortwaits/shared-types";
+import { ServiceDtoType } from "@shortwaits/shared-lib";
 
 import { Button, ButtonProps, Space, Text } from "../common";
 import { getDimensions, useTheme } from "../../theme";

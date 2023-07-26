@@ -1,6 +1,6 @@
 import React, { FC, useMemo } from "react";
 import { View, StyleSheet } from "react-native";
-import { BusinessWeekDaysType, WEEKDAYS } from "@shortwaits/shared-types";
+import { BusinessWeekDaysType, WEEKDAYS } from "@shortwaits/shared-lib";
 import { useDispatch } from "react-redux";
 
 import { Text, MultiSlider, Space, TimeRangeText } from "../../../components";

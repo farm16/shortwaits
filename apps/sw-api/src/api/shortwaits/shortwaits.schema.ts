@@ -9,7 +9,7 @@ import {
   ShortwaitsAdminDefaultDataType,
   ObjectId,
   ShortwaitsAdminBannersType,
-} from "@shortwaits/shared-types";
+} from "@shortwaits/shared-lib";
 
 @Schema()
 export class Shortwaits

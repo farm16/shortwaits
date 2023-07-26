@@ -28,7 +28,7 @@ import { AtGuard } from "../../common/guards";
 import { Events } from "./entities/events.entity";
 import { DeleteEventsDto } from "./dto/delete-events.dto";
 import { GetEventsByBusinessDto } from "./dto/get-events-by-business.dto";
-import { EventDtoType } from "@shortwaits/shared-types";
+import { EventDtoType } from "@shortwaits/shared-lib";
 
 @UseGuards(AtGuard)
 @ApiTags("events")
@@ -60,8 +60,8 @@ export class EventsController {
     @Query() query: GetEventsByBusinessDto
   ) {
     const {
-      page,
-      limit,
+      page = 1,
+      limit = 10,
       date = new Date().toISOString(),
       filterBy = "year",
     } = query;

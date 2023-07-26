@@ -3,7 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   CategoriesDtoType,
   ShortwaitsAdminDefaultDataPayloadType,
-} from "@shortwaits/shared-types";
+} from "@shortwaits/shared-lib";
 
 import { shortwaitsApi } from "../../../services";
 import type { RootState } from "../..";

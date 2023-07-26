@@ -1,7 +1,7 @@
 import { Model } from "mongoose";
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { UserDocType } from "@shortwaits/shared-types";
+import { UserDocType } from "@shortwaits/shared-lib";
 
 import { ClientUser } from "./entities/client-user.entity";
 import { PaginationQueryDto } from "../../common/dto/pagination-query.dto";

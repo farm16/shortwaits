@@ -2,7 +2,7 @@ import {
   ServicesType,
   DocType,
   CommonResponseType,
-} from "@shortwaits/shared-types";
+} from "@shortwaits/shared-lib";
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
 
 import { shortwaitsApiEndpoints } from "../../../../configs";

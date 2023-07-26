@@ -4,6 +4,7 @@ export type SelectorConfigsKeys =
   | "staff"
   | "categories"
   | "services"
+  | "labels"
   | "static";
 
 export const selectorConfigs: Record<SelectorConfigsKeys, SelectorConfig> = {
@@ -19,6 +20,11 @@ export const selectorConfigs: Record<SelectorConfigsKeys, SelectorConfig> = {
   },
   services: {
     headerTitle: "Services",
+    isReadOnly: false,
+    searchPlaceholder: "search",
+  },
+  labels: {
+    headerTitle: "My Labels",
     isReadOnly: false,
     searchPlaceholder: "search",
   },

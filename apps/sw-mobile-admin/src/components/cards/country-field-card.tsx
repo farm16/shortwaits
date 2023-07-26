@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import { TextFieldProps, Card, Text, CardIconsProps, Space } from "../common";
 import CurrencyInput, { CurrencyInputProps } from "react-native-currency-input";
-import { BusinessAvailableCurrenciesType } from "@shortwaits/shared-types";
+import { BusinessAvailableCurrenciesType } from "@shortwaits/shared-lib";
 
 import { getDimensions, useTheme } from "../../theme";
 import { getCurrencySymbolFromCurrencyType } from "../../utils/currency";

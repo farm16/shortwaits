@@ -1,7 +1,7 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
 import { Container, Space, Text } from "../../../components";
-import { EventDtoType } from "@shortwaits/shared-types";
+import { EventDtoType } from "@shortwaits/shared-lib";
 import { useTheme } from "../../../theme";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import {
