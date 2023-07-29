@@ -1,10 +1,10 @@
-import { UserDtoType } from "@shortwaits/shared-lib";
+import { BusinessUserDtoType } from "@shortwaits/shared-lib";
 import React, { useState } from "react";
 import { Divider, List } from "react-native-paper";
 import { StyleSheet } from "react-native";
 import { useTheme } from "../../../../theme";
 
-export const UserAccountSettings = ({ user }: { user: UserDtoType }) => {
+export const UserAccountSettings = ({ user }: { user: BusinessUserDtoType }) => {
   const [expanded, setExpanded] = useState(false);
   const handlePress = () => setExpanded(state => !state);
   const { Colors } = useTheme();
@@ -24,11 +24,7 @@ export const UserAccountSettings = ({ user }: { user: UserDtoType }) => {
       titleStyle={{ color: Colors.text }}
       descriptionStyle={{ color: Colors.subText }}
       right={props => (
-        <List.Icon
-          {...props}
-          color={Colors.text}
-          icon={props.isExpanded ? "chevron-up" : "chevron-down"}
-        />
+        <List.Icon {...props} color={Colors.text} icon={props.isExpanded ? "chevron-up" : "chevron-down"} />
       )}
     >
       <List.Item
@@ -37,9 +33,7 @@ export const UserAccountSettings = ({ user }: { user: UserDtoType }) => {
         descriptionStyle={{ color: Colors.subText }}
         title="Username"
         description={user.displayName}
-        right={props => (
-          <List.Icon {...props} color={Colors.text} icon="account" />
-        )}
+        right={props => <List.Icon {...props} color={Colors.text} icon="account" />}
       />
 
       <List.Item
@@ -48,9 +42,7 @@ export const UserAccountSettings = ({ user }: { user: UserDtoType }) => {
         descriptionStyle={{ color: Colors.subText }}
         title="Email"
         description={user.email}
-        right={props => (
-          <List.Icon {...props} color={Colors.text} icon="email" />
-        )}
+        right={props => <List.Icon {...props} color={Colors.text} icon="email" />}
       />
       {/* <List.Item
             style={{ backgroundColor: Colors.lightGray }}

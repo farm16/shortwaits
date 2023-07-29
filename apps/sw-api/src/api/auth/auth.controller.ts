@@ -1,27 +1,11 @@
-import {
-  Body,
-  Controller,
-  HttpCode,
-  HttpStatus,
-  Post,
-  Req,
-  UseGuards,
-  ValidationPipe,
-} from "@nestjs/common";
+import { Body, Controller, HttpCode, HttpStatus, Post, Req, UseGuards, ValidationPipe } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { SignUpWithEmailDto } from "./dto/sign-up-with-email.dto";
 import { SignInWithEmailDto } from "./dto/sign-in-with-email.dto";
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
-import {
-  GetCurrentUser,
-  GetCurrentUserId,
-  Public,
-} from "../../common/decorators/auth.decorator";
+import { GetCurrentUser, GetCurrentUserId, Public } from "../../common/decorators/auth.decorator";
 import { AtGuard, RtGuard } from "../../common/guards";
-import {
-  AuthSuccessResponse,
-  AuthRefreshSuccessResponse,
-} from "./auth.interface";
+import { AuthSuccessResponse, AuthRefreshSuccessResponse } from "./auth.interface";
 
 @ApiTags("auth")
 @Controller("auth")
@@ -36,9 +20,7 @@ export class AuthController {
     description: "Returns new user & business record",
     type: AuthSuccessResponse,
   })
-  async signUpLocal(
-    @Body(new ValidationPipe()) dto: SignUpWithEmailDto
-  ): Promise<AuthSuccessResponse> {
+  async signUpLocal(@Body(new ValidationPipe()) dto: SignUpWithEmailDto) {
     return this.authService.signUpLocal(dto);
   }
 
@@ -50,9 +32,7 @@ export class AuthController {
     description: "Returns existing user record",
     type: AuthSuccessResponse,
   })
-  async signInLocal(
-    @Body(new ValidationPipe()) body: SignInWithEmailDto
-  ): Promise<AuthSuccessResponse> {
+  async signInLocal(@Body(new ValidationPipe()) body: SignInWithEmailDto) {
     console.log("signInLocal controller", body);
     return this.authService.signInLocal(body);
   }

@@ -1,10 +1,13 @@
 import { Schema, Prop, SchemaFactory, raw } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
 import { Document, Types } from "mongoose";
-import { BusinessUserType } from "@shortwaits/shared-lib";
+import { BusinessUserType, ObjectId } from "@shortwaits/shared-lib";
 
 @Schema({ collection: "business-users" })
 export class BusinessUser extends Document implements BusinessUserType {
+  @ApiProperty()
+  @Prop()
+  roleId: Types.ObjectId;
   @ApiProperty()
   @Prop()
   displayName: string;
@@ -147,9 +150,6 @@ export class BusinessUser extends Document implements BusinessUserType {
   @ApiProperty()
   @Prop()
   lastSignInAt: Date;
-  @ApiProperty()
-  @Prop()
-  rolId: Types.ObjectId;
   @ApiProperty()
   @Prop({ default: null })
   hashedRt: string;

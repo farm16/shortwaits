@@ -11,13 +11,13 @@ import { ClientUserModule } from "./client-user/client-user.module";
 @Module({
   imports: [
     AuthModule,
-    // BusinessUsersModule,
     BusinessModule,
     ShortwaitsModule,
     EventsModule,
     ServicesModule,
-    ClientUserModule,
     CategoriesModule,
+    ClientUserModule,
+    BusinessUsersModule,
   ],
 })
 export class ApiModule {}

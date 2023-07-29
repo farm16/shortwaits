@@ -1,9 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import {
-  AuthPayloadType,
-  BusinessDocType,
-  UserDocType,
-} from "@shortwaits/shared-lib";
+import { AuthPayloadType, BusinessDocType, BusinessUserDtoType } from "@shortwaits/shared-lib";
 
 export class AuthSuccessResponse implements AuthPayloadType {
   @ApiProperty()
@@ -14,7 +10,7 @@ export class AuthSuccessResponse implements AuthPayloadType {
   @ApiProperty()
   readonly attributes: {
     readonly currentBusinessAccounts: BusinessDocType[];
-    readonly currentUser: UserDocType;
+    readonly currentUser: BusinessUserDtoType;
   };
 }
 

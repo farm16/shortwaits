@@ -66,8 +66,6 @@ export type EventType = {
   startTime: Date; // Start time of the event
   endTime: Date; // End time of the event
   expectedEndTime: Date; // Expected end time of the event
-  priceExpected: number; // Expected price for the event
-  priceFinal: number; // Final price for the event
   canceled: boolean; // Indicates if the event is canceled
   cancellationReason: string; // Reason for event cancellation
 
@@ -76,6 +74,8 @@ export type EventType = {
 
   paymentMethod: EventPaymentMethodType;
 
+  priceExpected: number; // Expected price for the event
+  priceFinal: number; // Final price for the event
   payment: {
     paymentProcessedOn: string; // Date when the payment was processed ISO 8601 format
     paymentMethodId?: string; // Stripe payment method ID
@@ -86,6 +86,7 @@ export type EventType = {
     metadata?: { [key: string]: string }; // Metadata associated with the payment (optional)
     // Additional Stripe-specific properties as needed
   };
+
   notes: string; // Additional notes or comments about the event
   labels: BusinessLabelsType; // Array of labels or tags for the event
 

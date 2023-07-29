@@ -1,9 +1,5 @@
 import { StackNavigationProp } from "@react-navigation/stack";
-import {
-  CompositeNavigationProp,
-  NavigatorScreenParams,
-  RouteProp,
-} from "@react-navigation/native";
+import { CompositeNavigationProp, NavigatorScreenParams, RouteProp } from "@react-navigation/native";
 
 import {
   NAVIGATION_STACKS,
@@ -21,13 +17,13 @@ import {
   EventDtoType,
   ServiceDtoType,
   UpdateEventDtoType,
-  UserDtoType,
+  BusinessUserDtoType,
 } from "@shortwaits/shared-lib";
 
 export type FormData = {
   addEvent: CreateEventDtoType;
-  addClient: UserDtoType;
-  addStaff: UserDtoType;
+  addClient: BusinessUserDtoType;
+  addStaff: BusinessUserDtoType;
   updateEvent: UpdateEventDtoType;
 };
 export type FormType = keyof FormData;
@@ -107,15 +103,11 @@ type MODAL_SCREENS_KEYS = keyof typeof MODAL_SCREENS;
 type MODAL_SCREENS_TYPES = (typeof MODAL_SCREENS)[MODAL_SCREENS_KEYS];
 
 type UNAUTHORIZED_SCREENS_KEYS = keyof typeof UNAUTHORIZED_SCREENS;
-type UNAUTHORIZED_SCREENS_TYPES =
-  | (typeof UNAUTHORIZED_SCREENS)[UNAUTHORIZED_SCREENS_KEYS]
-  | MODAL_SCREENS_TYPES;
+type UNAUTHORIZED_SCREENS_TYPES = (typeof UNAUTHORIZED_SCREENS)[UNAUTHORIZED_SCREENS_KEYS] | MODAL_SCREENS_TYPES;
 
 type AUTHORIZED_SCREENS_KEYS = keyof typeof AUTHORIZED_SCREENS;
 
-type AUTHORIZED_SCREENS_TYPES =
-  | (typeof AUTHORIZED_SCREENS)[AUTHORIZED_SCREENS_KEYS]
-  | MODAL_SCREENS_TYPES;
+type AUTHORIZED_SCREENS_TYPES = (typeof AUTHORIZED_SCREENS)[AUTHORIZED_SCREENS_KEYS] | MODAL_SCREENS_TYPES;
 
 /**
  * @UnauthorizedScreenProps
@@ -133,43 +125,28 @@ export interface UnauthorizedScreenProps<T extends UNAUTHORIZED_SCREENS_TYPES> {
 export interface AuthorizedScreenProps<T extends AUTHORIZED_SCREENS_TYPES> {
   navigation: CompositeNavigationProp<
     StackNavigationProp<RootStackParamList>,
-    StackNavigationProp<
-      AuthorizedTabsParamList & AuthorizedStackParamList & ModalStackParamList,
-      T
-    >
+    StackNavigationProp<AuthorizedTabsParamList & AuthorizedStackParamList & ModalStackParamList, T>
   >;
-  route: RouteProp<
-    AuthorizedTabsParamList & AuthorizedStackParamList & ModalStackParamList,
-    T
-  >;
+  route: RouteProp<AuthorizedTabsParamList & AuthorizedStackParamList & ModalStackParamList, T>;
 }
 
 export interface ModalsScreenProps<T extends keyof ModalStackParamList> {
   navigation: CompositeNavigationProp<
     StackNavigationProp<RootStackParamList>,
     StackNavigationProp<
-      UnauthorizedStackParamList &
-        AuthorizedTabsParamList &
-        AuthorizedStackParamList &
-        ModalStackParamList,
+      UnauthorizedStackParamList & AuthorizedTabsParamList & AuthorizedStackParamList & ModalStackParamList,
       T
     >
   >;
   route: RouteProp<
-    UnauthorizedStackParamList &
-      AuthorizedTabsParamList &
-      AuthorizedStackParamList &
-      ModalStackParamList,
+    UnauthorizedStackParamList & AuthorizedTabsParamList & AuthorizedStackParamList & ModalStackParamList,
     T
   >;
 }
 
-export type STACKS_TYPES =
-  (typeof NAVIGATION_STACKS)[keyof typeof NAVIGATION_STACKS];
+export type STACKS_TYPES = (typeof NAVIGATION_STACKS)[keyof typeof NAVIGATION_STACKS];
 
-export type ALL_SCREENS_TYPE =
-  | AUTHORIZED_SCREENS_TYPES
-  | UNAUTHORIZED_SCREENS_TYPES;
+export type ALL_SCREENS_TYPE = AUTHORIZED_SCREENS_TYPES | UNAUTHORIZED_SCREENS_TYPES;
 
 export type ScreenProps = AuthorizedTabsParamList &
   AuthorizedStackParamList &

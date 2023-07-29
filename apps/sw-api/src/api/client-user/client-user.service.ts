@@ -1,11 +1,10 @@
 import { Model } from "mongoose";
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { UserDocType } from "@shortwaits/shared-lib";
-
 import { ClientUser } from "./entities/client-user.entity";
-import { PaginationQueryDto } from "../../common/dto/pagination-query.dto";
-import { CreateUserDto, UpdateUserDto } from "./dto";
+// import { ClientUserCreateDtoType } from "@shortwaits/shared-lib";
+import { CreateClientUserDto } from "./dto";
+import { getFilteredClientUser } from "../../utils/filtersForDtos";
 
 @Injectable()
 export class ClientUserService {
@@ -14,50 +13,28 @@ export class ClientUserService {
     private readonly clientUserModel: Model<ClientUser>
   ) {}
 
-  public async findAll(query: PaginationQueryDto): Promise<ClientUser[]> {
-    const { limit, offset } = query;
-    return await this.clientUserModel.find().skip(offset).limit(limit).exec();
-  }
-
-  public async findByUserName(
-    username: string
-  ): Promise<ClientUser | undefined> {
-    return await this.clientUserModel.findOne({ username: username }).exec();
-  }
-
-  public async findById(userId: string): Promise<ClientUser> {
-    const businessUser = await this.clientUserModel
-      .findById({ _id: userId, deleted: false })
-      .exec();
-    if (!businessUser) {
-      throw new NotFoundException(`ClientUser #${userId} not found`);
+  async findMultiple(userIds: string[]) {
+    if (!userIds || !userIds.length) {
+      return [];
     }
-    return businessUser;
+    try {
+      const clientUsers = await this.clientUserModel.find({ _id: { $in: userIds } }).exec();
+      return clientUsers;
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
   }
 
-  // public async create(
-  //   createCustomerDto: CreateUserDto
-  // ): Promise<UserDocType> {
-  //   const newCustomer = await this.clientUserModel.create(createCustomerDto);
-  //   return newCustomer;
-  // }
-
-  // public async update(
-  //   userId: string,
-  //   updateUserDto: Partial<UpdateUserDto>
-  // ): Promise<UserDocType> {
-  //   const existingUser = await this.clientUserModel.findByIdAndUpdate(
-  //     { _id: userId },
-  //     updateUserDto
-  //   );
-  //   if (!existingUser) {
-  //     throw new NotFoundException(`Customer #${userId} not found`);
-  //   }
-  //   return existingUser;
-  // }
-
-  public async remove(userId: string): Promise<any> {
-    const deletedUser = await this.clientUserModel.findByIdAndRemove(userId);
-    return deletedUser;
+  async create(createCustomerDto: CreateClientUserDto) {
+    const existingUser = await this.clientUserModel.findOne({ username: createCustomerDto.username }).exec();
+    if (existingUser) {
+      throw new NotFoundException(`User #${createCustomerDto.username} already exists`);
+    }
+    try {
+      const newCustomer = await this.clientUserModel.create(getFilteredClientUser(createCustomerDto));
+      return newCustomer;
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
   }
 }

@@ -1,10 +1,7 @@
 import ENV from "react-native-config";
-import { AUTH } from "./endpoints/auth";
 import { BUSINESS } from "./endpoints/business";
 import { CATEGORIES } from "./endpoints/categories";
-import { EVENTS } from "./endpoints/events";
 import { SERVICES } from "./endpoints/services";
-import { USERS } from "./endpoints/users";
 
 const API_VERSION = "v1";
 export const API_BASE_URL = ENV.API_BASE_URL + "/" + API_VERSION;
@@ -18,10 +15,10 @@ export const shortwaitsApiEndpoints = {
       METHOD: "GET",
     },
   },
-  AUTH,
-  USERS,
+
+  // this is still being used
+  // todo: remove this
   CATEGORIES,
   SERVICES,
-  EVENTS,
   BUSINESS,
 } as const;

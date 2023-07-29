@@ -1,23 +1,15 @@
 import { EventDtoType, ServiceDtoType } from "@shortwaits/shared-lib";
 import { useTheme } from "../../../../theme";
 import React from "react";
-import { View, ScrollView, StyleSheet, Switch, Platform } from "react-native";
-import {
-  UrlCard,
-  Text,
-  UrlTypes,
-  Space,
-  ServiceItem,
-  Emoji,
-  EmojiType,
-} from "../../../../components";
+import { View, ScrollView, StyleSheet, Switch, Platform, Alert } from "react-native";
+import { UrlCard, Text, UrlTypes, Space, ServiceItem, Emoji } from "../../../../components";
 
-export function EventDetailsTab({ event }: { event: EventDtoType }) {
+export function EventMoreTab({ event }: { event: EventDtoType }) {
   const { Colors } = useTheme();
   console.log("event", JSON.stringify(event, null, 2));
 
   const EventLabels = () => {
-    if (event.labels.length === 0) return null;
+    if (event?.labels?.length === 0) return null;
     return (
       <View
         style={{
@@ -28,8 +20,8 @@ export function EventDetailsTab({ event }: { event: EventDtoType }) {
         }}
       >
         <Text preset="none" style={styles.title} text="Labels" />
-        {event.labels.map(label => {
-          return <Emoji size={30} name={label as EmojiType} />;
+        {event?.labels?.map(label => {
+          return <Emoji size={30} name={label.emojiShortName} />;
         })}
       </View>
     );
@@ -40,11 +32,7 @@ export function EventDetailsTab({ event }: { event: EventDtoType }) {
       <View>
         <Text preset="none" style={styles.title} text="Service" />
         <Space direction="horizontal" size="tiny" />
-        <ServiceItem
-          service={item}
-          onPress={_service => {}}
-          style={[styles.withShadow, { alignSelf: "center" }]}
-        />
+        <ServiceItem service={item} onPress={_service => {}} style={[styles.withShadow, { alignSelf: "center" }]} />
       </View>
     );
   };
@@ -54,17 +42,21 @@ export function EventDetailsTab({ event }: { event: EventDtoType }) {
       <View>
         <Text preset="none" style={styles.title} text="Notes" />
         <Space direction="horizontal" size="tiny" />
-        <Text
-          preset="none"
-          style={[styles.notes, styles.withShadow]}
-          text="This are test notes"
-        />
+        <Text preset="none" style={[styles.notes, styles.withShadow]} text="This are test notes" />
       </View>
     );
   };
 
   const EventRepeat = () => {
-    const isActive = event.isGroupEvent;
+    let isActive = event.isGroupEvent;
+    if (event.clientsIds?.length > 0) isActive = false;
+
+    const handleSwitch = () => {
+      if (event.clientsIds?.length > 0) {
+        Alert.alert("You can't change this option", "This event has clients assigned to it");
+      }
+    };
+
     return (
       <View
         style={{
@@ -73,13 +65,13 @@ export function EventDetailsTab({ event }: { event: EventDtoType }) {
           alignItems: "center",
         }}
       >
-        <Text preset="none" style={styles.title} text="Repeat event" />
+        <Text preset="none" style={styles.title} text="Repeat" />
         <Switch
           style={{ marginHorizontal: 16 }}
-          trackColor={{ false: Colors.red1, true: Colors.brandSecondary1 }}
+          trackColor={{ false: Colors.red1, true: Colors.backgroundOverlay }}
           thumbColor={isActive ? Colors.brandSecondary2 : Colors.gray}
           ios_backgroundColor={Colors.backgroundOverlay}
-          onChange={() => null}
+          onChange={handleSwitch}
           value={isActive}
         />
       </View>
@@ -95,7 +87,7 @@ export function EventDetailsTab({ event }: { event: EventDtoType }) {
           alignItems: "center",
         }}
       >
-        <Text preset="none" style={styles.title} text="Group event" />
+        <Text preset="none" style={styles.title} text="Group" />
         <Switch
           style={{ marginHorizontal: 16 }}
           trackColor={{ false: Colors.red1, true: Colors.brandSecondary1 }}
@@ -138,11 +130,7 @@ export function EventDetailsTab({ event }: { event: EventDtoType }) {
         {mock.map((item, index) => {
           return (
             <React.Fragment key={index}>
-              <UrlCard
-                key={index}
-                url={item.link}
-                type={item.type as UrlTypes}
-              />
+              <UrlCard key={index} url={item.link} type={item.type as UrlTypes} />
               <Space direction="horizontal" size="small" />
             </React.Fragment>
           );
@@ -153,12 +141,8 @@ export function EventDetailsTab({ event }: { event: EventDtoType }) {
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: Colors.backgroundOverlay }}>
-      <Space direction="horizontal" size="regular" />
-      <EventLabels />
       <Space direction="horizontal" size="tiny" />
       <EventService />
-      <Space direction="horizontal" size="regular" />
-      <EventNotes />
       <Space direction="horizontal" size="regular" />
       <EventMeetingUrls />
       <Space direction="horizontal" size="tiny" />
@@ -238,11 +222,7 @@ const mock = [
 
 const item: ServiceDtoType = {
   _id: "63e756bc6048b02c398bcf7c",
-  applicableCategories: [
-    "1ccacea16652f70da4bfc923",
-    "ff1eb8bd6cb17940ab78c0ee",
-    "cea8be18f8249fdbaaa535b0",
-  ],
+  applicableCategories: ["1ccacea16652f70da4bfc923", "ff1eb8bd6cb17940ab78c0ee", "cea8be18f8249fdbaaa535b0"],
   currency: "USD",
   deleted: false,
   description: "Describe your service here =)",

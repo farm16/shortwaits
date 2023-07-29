@@ -1,12 +1,5 @@
 import React, { FC, useEffect, useLayoutEffect, useRef, useState } from "react";
-import {
-  ListRenderItem,
-  PermissionsAndroid,
-  Platform,
-  RefreshControl,
-  StyleSheet,
-  View,
-} from "react-native";
+import { ListRenderItem, PermissionsAndroid, Platform, RefreshControl, StyleSheet, View } from "react-native";
 import {
   BottomSheet,
   BottomSheetType,
@@ -24,21 +17,16 @@ import {
 } from "../../../components";
 import { useTheme } from "../../../theme";
 import { useBusiness, useGhostComponent } from "../../../store";
-import {
-  useCreateBusinessClientsMutation,
-  useGetBusinessClientsQuery,
-} from "../../../services";
+import { useCreateBusinessClientsMutation, useGetBusinessClientsQuery } from "../../../services";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { ActivityIndicator } from "react-native-paper";
 import Contacts from "react-native-contacts";
-import { UserDocType } from "@shortwaits/shared-lib";
+import { ClientUserDtoType } from "@shortwaits/shared-lib";
 import { getUsersFromOsContacts } from "../../../utils/getUsersFromOsContacts";
 import { actions } from "../../../components/floating-action-button/fab-actions";
 import { isEmpty } from "lodash";
 
-export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
-  navigation,
-}) => {
+export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({ navigation }) => {
   const business = useBusiness();
   const {
     data: clientsData,
@@ -46,8 +34,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
     isSuccess: isBusinessClientsQuerySuccess,
     refetch: refetchBusinessClientsQuery,
   } = useGetBusinessClientsQuery(business._id, {});
-  const [createClients, createClientsResult] =
-    useCreateBusinessClientsMutation();
+  const [createClients, createClientsResult] = useCreateBusinessClientsMutation();
   const bottomSheetRef = useRef<BottomSheetType>(null);
   const handleBottomSheet = useBottomSheet(bottomSheetRef);
   const [isListSearchable, setIsListSearchable] = useState(false);
@@ -105,12 +92,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
         );
       },
     });
-  }, [
-    handleBottomSheet,
-    isListSearchable,
-    navigation,
-    refetchBusinessClientsQuery,
-  ]);
+  }, [handleBottomSheet, isListSearchable, navigation, refetchBusinessClientsQuery]);
 
   const loadContacts = async () => {
     try {
@@ -152,17 +134,12 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
     }
   };
 
-  const _renderItem: ListRenderItem<UserDocType> = ({ item }) => (
-    <ButtonCard
-      title={item[item.alias ?? "displayName"]}
-      subTitle={item.email}
-    />
+  const _renderItem: ListRenderItem<ClientUserDtoType> = ({ item }) => (
+    <ButtonCard title={item[item.alias ?? "displayName"]} subTitle={item.email} />
   );
 
-  const isClientsDataLoading =
-    isBusinessClientsQueryLoading && !isBusinessClientsQuerySuccess;
-  const isCreateClientsLoading =
-    createClientsResult.isLoading && !createClientsResult.isSuccess;
+  const isClientsDataLoading = isBusinessClientsQueryLoading && !isBusinessClientsQuerySuccess;
+  const isCreateClientsLoading = createClientsResult.isLoading && !createClientsResult.isSuccess;
 
   const isLoading = isClientsDataLoading || isCreateClientsLoading;
   useGhostComponent("floatingActionButton");
@@ -176,7 +153,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
   }, [clientsData?.data, isBusinessClientsQuerySuccess, isLoading]);
 
   return (
-    <Screen preset="fixed" unsafe>
+    <Screen preset="fixed" unsafe withHorizontalPadding>
       {isLoading ? (
         <ActivityIndicator />
       ) : (
@@ -189,17 +166,11 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
                 const filteredItems = clientsData?.data.filter(item => {
                   // Adjust the filtering logic based on your data structure
                   const phoneNumberMatch = item.phoneNumbers.some(phone =>
-                    phone.number
-                      .toLowerCase()
-                      .includes(trimmedText.toLowerCase())
+                    phone.number.toLowerCase().includes(trimmedText.toLowerCase())
                   );
                   return (
-                    item.givenName
-                      ?.toLowerCase()
-                      .includes(trimmedText.toLowerCase()) ||
-                    item.email
-                      ?.toLowerCase()
-                      .includes(trimmedText.toLowerCase()) ||
+                    item.givenName?.toLowerCase().includes(trimmedText.toLowerCase()) ||
+                    item.email?.toLowerCase().includes(trimmedText.toLowerCase()) ||
                     phoneNumberMatch
                   );
                 });
@@ -212,10 +183,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
           />
           <List
             refreshControl={
-              <RefreshControl
-                refreshing={isBusinessClientsQueryLoading}
-                onRefresh={refetchBusinessClientsQuery}
-              />
+              <RefreshControl refreshing={isBusinessClientsQueryLoading} onRefresh={refetchBusinessClientsQuery} />
             }
             ListEmptyComponent={
               <View
@@ -227,12 +195,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({
                 {isEmpty(clientsData?.data) ? (
                   <NonIdealState
                     image={"noClients"}
-                    buttons={[
-                      <Button
-                        text="Sync contacts"
-                        onPress={() => handleSyncContacts()}
-                      />,
-                    ]}
+                    buttons={[<Button text="Sync contacts" onPress={() => handleSyncContacts()} />]}
                   />
                 ) : null}
               </View>

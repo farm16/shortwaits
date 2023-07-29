@@ -1,16 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { shortwaitsApi } from "../../../services";
-import { UserDtoType } from "@shortwaits/shared-lib";
+import { BusinessUserDtoType } from "@shortwaits/shared-lib";
 
 import type { RootState } from "../../types";
 
-const initialState: UserDtoType = null;
+const initialState: BusinessUserDtoType = null;
 
 export const userSlice = createSlice({
   name: "user",
   initialState: initialState,
   reducers: {
-    setUser(state, action: PayloadAction<UserDtoType>) {
+    setUser(state, action: PayloadAction<BusinessUserDtoType>) {
       return { ...state, ...action.payload };
     },
     resetUser() {
@@ -19,38 +19,26 @@ export const userSlice = createSlice({
   },
   extraReducers: builder => {
     builder
-      .addMatcher(
-        shortwaitsApi.endpoints.localSignOut.matchRejected,
-        function () {
-          console.log(">>> resetting USER state  ");
-          return initialState;
-        }
-      )
-      .addMatcher(
-        shortwaitsApi.endpoints.localSignOut.matchFulfilled,
-        function () {
-          console.log(">>> resetting USER state  ");
-          return initialState;
-        }
-      )
-      .addMatcher(
-        shortwaitsApi.endpoints.localSignUp.matchFulfilled,
-        function (state, action) {
-          return {
-            ...state,
-            ...action.payload.data.attributes.currentUser,
-          };
-        }
-      )
-      .addMatcher(
-        shortwaitsApi.endpoints.localSignIn.matchFulfilled,
-        function (state, action) {
-          return {
-            ...state,
-            ...action.payload.data.attributes.currentUser,
-          };
-        }
-      );
+      .addMatcher(shortwaitsApi.endpoints.localSignOut.matchRejected, function () {
+        console.log(">>> resetting USER state  ");
+        return initialState;
+      })
+      .addMatcher(shortwaitsApi.endpoints.localSignOut.matchFulfilled, function () {
+        console.log(">>> resetting USER state  ");
+        return initialState;
+      })
+      .addMatcher(shortwaitsApi.endpoints.localSignUp.matchFulfilled, function (state, action) {
+        return {
+          ...state,
+          ...action.payload.data.attributes.currentUser,
+        };
+      })
+      .addMatcher(shortwaitsApi.endpoints.localSignIn.matchFulfilled, function (state, action) {
+        return {
+          ...state,
+          ...action.payload.data.attributes.currentUser,
+        };
+      });
   },
 });
 

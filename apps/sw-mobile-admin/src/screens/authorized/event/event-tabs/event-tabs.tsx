@@ -1,14 +1,7 @@
 import React, { useCallback, useState } from "react";
-import {
-  View,
-  useWindowDimensions,
-  StyleSheet,
-  StatusBar,
-  Animated,
-  Pressable,
-} from "react-native";
+import { View, useWindowDimensions, StyleSheet, StatusBar, Animated, Pressable } from "react-native";
 import { TabView, SceneMap, TabBarProps } from "react-native-tab-view";
-import { EventDetailsTab } from "./event-details-tab";
+import { EventMoreTab } from "./event-more-tab";
 import { EventUsersTab } from "./event-users-tab";
 import { EventScreenHeader } from "../event-screen-header";
 import { useTheme } from "../../../../theme";
@@ -35,7 +28,7 @@ export const EventScreenTabs = props => {
   }, [event]);
 
   const renderMoreTab = useCallback(() => {
-    return <EventDetailsTab event={event} />;
+    return <EventMoreTab event={event} />;
   }, [event]);
 
   const renderScene = SceneMap({
@@ -53,25 +46,17 @@ export const EventScreenTabs = props => {
             {tabBarProps.navigationState.routes.map((route, i) => {
               const opacity = tabBarProps.position.interpolate({
                 inputRange,
-                outputRange: inputRange.map(inputIndex =>
-                  inputIndex === i ? 1 : 0.65
-                ),
+                outputRange: inputRange.map(inputIndex => (inputIndex === i ? 1 : 0.65)),
               });
               const isSelected = index === i;
               return (
-                <Pressable
-                  key={route.key}
-                  style={styles.tabContainer}
-                  onPress={() => setIndex(i)}
-                >
+                <Pressable key={route.key} style={styles.tabContainer} onPress={() => setIndex(i)}>
                   <Animated.View
                     style={[
                       styles.tabView,
                       {
                         backgroundColor: Colors.brandSecondary1,
-                        borderBottomColor: isSelected
-                          ? Colors.brandSecondary
-                          : "transparent",
+                        borderBottomColor: isSelected ? Colors.brandSecondary : "transparent",
                         opacity,
                       },
                     ]}
@@ -95,13 +80,7 @@ export const EventScreenTabs = props => {
         </View>
       );
     },
-    [
-      Colors.brandSecondary,
-      Colors.brandSecondary1,
-      Colors.brandSecondary8,
-      event,
-      index,
-    ]
+    [Colors.brandSecondary, Colors.brandSecondary1, Colors.brandSecondary8, event, index]
   );
 
   return (

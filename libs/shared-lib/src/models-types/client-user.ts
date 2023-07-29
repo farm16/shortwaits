@@ -1,6 +1,9 @@
+// warning:
+// don't remove this comment
 import { Document, PaginateModel } from "mongoose";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import * as paginate from "mongoose-paginate-v2";
+// end of warning //
 
 import { ObjectId } from "../common-types";
 
@@ -19,25 +22,37 @@ export type ClientUserMethodsType = {
   matchPassword: (param1: string) => Promise<boolean>;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type ClientUserModelType = PaginateModel<
-  ClientUserType,
-  any,
-  ClientUserMethodsType
->;
-
-export type ClientUserDocType = ClientUserType & Document;
-
 export type ClientUserType = {
-  // "partial" comes from imported contacts
-  // or added manually added from admin app,
-  // "full" clients registered from client app
+  // User details
   clientType: "partial" | "full";
+  username: string;
+  alias: "username" | "familyName" | "givenName" | "middleName" | "displayName";
+  displayName: string;
+  familyName: string;
+  givenName: string;
+  middleName: string;
+  accountImageUrl: string;
+  email: string;
+  password?: string;
+  locale: {
+    countryCode: string;
+    isRTL: boolean;
+    languageCode: string;
+    languageTag: string;
+  };
+
+  // Registration details
   registration: {
-    state: string;
     stateDescriptions: string[];
     isRegistered: boolean;
+    state: {
+      screenName: string;
+      state: number;
+      isCompleted: boolean;
+    };
   };
+
+  // Membership details
   currentMembership: {
     membershipTypeId: ObjectId;
     invoiceId: ObjectId;
@@ -49,19 +64,14 @@ export type ClientUserType = {
     isFaulty: boolean;
     faultyReason: string[];
   };
+
+  // Billing details
   billing: {
-    // billing info cc stripe etc
     invoiceId: ObjectId;
+    // Add more billing info as needed (e.g., cc, stripe, etc.).
   };
-  businesses: ObjectId[];
-  doe: Date;
-  username: string;
-  alias: "username" | "familyName" | "givenName" | "middleName" | "displayName";
-  displayName: string;
-  familyName: string;
-  givenName: string;
-  middleName: string;
-  accountImageUrl: string;
+
+  // Contact details
   phoneNumbers: {
     label: string;
     number: string;
@@ -80,30 +90,24 @@ export type ClientUserType = {
     postCode: number;
     country: string;
   }[];
+
+  // Social account details
   socialAccounts: {
     kind: string;
     uid?: string;
     username?: string;
     password?: string;
   }[];
-  registrationState: {
-    screenName: string;
-    state: number;
-    isCompleted: boolean;
-  };
-  email: string;
-  password?: string;
+
+  // Other details
+  businesses: ObjectId[];
   desiredCurrencies: string[];
-  locale: {
-    countryCode: string;
-    isRTL: boolean;
-    languageCode: string;
-    languageTag: string;
-  };
   deleted: boolean;
   createdAt: string;
   updatedAt: string;
   lastSignInAt: Date;
-  rolId: ObjectId;
+  roleId: ObjectId;
   hashedRt: string;
 };
+
+export type ClientUserDocumentType = ClientUserType & Document;

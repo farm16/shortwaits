@@ -23,6 +23,7 @@ const symbols = {
   USD: "$",
   PEN: "S/.",
 };
+
 export const getCurrencySymbolFromCurrencyType = (
   currency: BusinessAvailableCurrenciesType
 ) => {
@@ -50,5 +51,21 @@ export const getPrettyStringFromPrice = (
     localesWithOptions[currency].locales,
     localesWithOptions[currency].options
   );
+  return priceString;
+};
+
+/**
+ * Todo: we are hardcoding the currency symbol here to be USD!!!
+ */
+export const getPrettyStringFromPriceWithSymbol = (
+  currency: string,
+  priceInCents: number
+) => {
+  const dollars = priceInCents / 100;
+  dollars.toString(10);
+  const priceString = dollars.toLocaleString("en-US", {
+    style: "currency",
+    currency: currency,
+  });
   return priceString;
 };

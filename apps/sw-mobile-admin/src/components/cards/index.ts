@@ -5,5 +5,6 @@ export * from "./duration-field-card";
 export * from "./time-picker-field-card";
 export * from "./picker-select-field-card";
 export * from "./phone-number-card";
-export * from "./people-card";
+export * from "./business-user-card";
+export * from "./client-user-card";
 export * from "./url-card";

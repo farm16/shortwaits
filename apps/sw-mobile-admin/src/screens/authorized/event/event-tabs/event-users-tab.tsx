@@ -1,51 +1,14 @@
-import React, {
-  FC,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-  useMemo,
-} from "react";
-import {
-  ListRenderItem,
-  PermissionsAndroid,
-  Platform,
-  RefreshControl,
-  SectionList,
-  StyleSheet,
-  View,
-} from "react-native";
-import {
-  BottomSheet,
-  BottomSheetType,
-  Button,
-  ButtonCard,
-  IconButton,
-  Container,
-  List,
-  NonIdealState,
-  Screen,
-  Text,
-  useBottomSheet,
-  FloatingActionButton,
-  AnimatedSearchBar,
-  PeopleCard,
-} from "../../../../components";
+import React, { useMemo } from "react";
+import { SectionListRenderItem, RefreshControl, SectionList, View } from "react-native";
+import { Button, NonIdealState, Text, BusinessUserCard, ClientUserCard } from "../../../../components";
 import { useTheme } from "../../../../theme";
-import { useBusiness, useGhostComponent } from "../../../../store";
-import {
-  useCreateBusinessClientsMutation,
-  useGetBusinessClientsQuery,
-  useGetBusinessStaffQuery,
-} from "../../../../services";
-import { AuthorizedScreenProps } from "../../../../navigation";
-import { ActivityIndicator } from "react-native-paper";
-import Contacts from "react-native-contacts";
-import { EventDtoType, UserDtoType } from "@shortwaits/shared-lib";
-import { getUsersFromOsContacts } from "../../../../utils/getUsersFromOsContacts";
-import { actions } from "../../../../components/floating-action-button/fab-actions";
+import { useBusiness } from "../../../../store";
+import { useGetBusinessClientsQuery, useGetBusinessStaffQuery } from "../../../../services";
+import { EventDtoType, BusinessUserDtoType, ClientUserDtoType } from "@shortwaits/shared-lib";
 import { isEmpty } from "lodash";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
+
+type PeopleDtoType = BusinessUserDtoType | ClientUserDtoType;
 
 export function EventUsersTab({ event }: { event: EventDtoType }) {
   const { Colors } = useTheme();
@@ -67,16 +30,17 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
   } = useGetBusinessStaffQuery(business._id ? business._id : skipToken);
 
   const _data = useMemo(
-    () => [
-      {
-        title: "Staff",
-        data: staffData?.data ?? [],
-      },
-      {
-        title: "Clients",
-        data: clientsData?.data ?? [],
-      },
-    ],
+    () =>
+      [
+        {
+          title: "Staff",
+          data: staffData?.data ?? [],
+        },
+        {
+          title: "Clients",
+          data: clientsData?.data ?? [],
+        },
+      ] as const,
     [clientsData?.data, staffData?.data]
   );
 
@@ -85,15 +49,17 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
     refetchBusinessStaffQuery();
   };
 
-  const _renderItem: ListRenderItem<UserDtoType> = ({ item }) => (
-    <PeopleCard user={item} />
-  );
+  const _renderItem: SectionListRenderItem<PeopleDtoType> = data => {
+    if (data.section.title === "Staff") {
+      return <BusinessUserCard user={data.item as BusinessUserDtoType} />;
+    } else {
+      return <ClientUserCard user={data.item as ClientUserDtoType} />;
+    }
+  };
 
-  const isStaffDataLoading =
-    isBusinessStaffQueryLoading && !isBusinessStaffQuerySuccess;
+  const isStaffDataLoading = isBusinessStaffQueryLoading && !isBusinessStaffQuerySuccess;
 
-  const isClientsDataLoading =
-    isBusinessClientsQueryLoading && !isBusinessClientsQuerySuccess;
+  const isClientsDataLoading = isBusinessClientsQueryLoading && !isBusinessClientsQuerySuccess;
 
   const isLoading = isClientsDataLoading || isStaffDataLoading;
 
@@ -108,9 +74,7 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
       }}
     >
       <SectionList
-        refreshControl={
-          <RefreshControl refreshing={isLoading} onRefresh={handleRefresh} />
-        }
+        refreshControl={<RefreshControl refreshing={isLoading} onRefresh={handleRefresh} />}
         showsVerticalScrollIndicator={false}
         keyExtractor={item => item._id}
         style={{
@@ -124,10 +88,7 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
             }}
           >
             {isEmpty(clientsData?.data) ? (
-              <NonIdealState
-                image={"noClients"}
-                buttons={[<Button text="Sync contacts" onPress={() => null} />]}
-              />
+              <NonIdealState image={"noClients"} buttons={[<Button text="Sync contacts" onPress={() => null} />]} />
             ) : null}
           </View>
         }
@@ -143,9 +104,7 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
               backgroundColor: Colors.backgroundOverlay,
             }}
           >
-            {`${title} (${
-              _data.find(({ title: _title }) => _title === title).data.length
-            })`}
+            {`${title} (${_data.find(({ title: _title }) => _title === title).data.length})`}
           </Text>
         )}
         renderItem={_renderItem}

@@ -31,15 +31,6 @@ export type FilteredEvent = Pick<
   | "expectedEndTime"
 >;
 
-type EndpointPath =
-  | "/events"
-  | "/events/:eventId"
-  | "/events/user/:userId"
-  | "/events/business/:businessId";
-
-export type EventsEndpointsPaths = EventsEndpointsTypes[EndpointPath]["path"];
-export type EventsEndpointsMethods = "POST" | "GET" | "PUT" | "DELETE";
-
 export type CreateEventDtoType = ConvertToDtoType<FilteredEvent>;
 export type UpdateEventDtoType = ConvertToDtoType<FilteredEvent>;
 
@@ -57,46 +48,3 @@ export type EventSummaryType = {
 };
 export type EventsSummaryResponseType = CommonResponseType<EventSummaryType>;
 type WeekDay = "Sun" | "Mon" | "Tue" | "Wed" | "Thu" | "Fri" | "Sat";
-
-export interface EventsEndpointsTypes extends GeneralSpecShape {
-  "/events": {
-    path: `/events`;
-    methods: {
-      POST: {
-        query: undefined;
-        body: EventDtoType;
-        response: EventResponseType;
-      };
-      PUT: {
-        query: undefined;
-        body: EventDtoType;
-        response: EventResponseType;
-      };
-    };
-  };
-  "/events/:eventId": {
-    path: `/events/${string}`;
-    methods: {
-      GET: {
-        body: undefined;
-        response: EventsResponseType;
-      };
-    };
-  };
-  "/events/user/:userId": {
-    path: `/events/user/${string}`;
-    methods: {
-      GET: {
-        response: EventsResponseType;
-      };
-    };
-  };
-  "/events/business/:businessId": {
-    path: `/events/business/${string}`;
-    methods: {
-      GET: {
-        response: EventsResponseType;
-      };
-    };
-  };
-}

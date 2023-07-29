@@ -1,6 +1,9 @@
-import { PaginateModel } from "mongoose";
+// warning:
+// don't remove this comment
+import { Document, PaginateModel } from "mongoose";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import * as paginate from "mongoose-paginate-v2";
+// end of warning //
 
 import { ObjectId } from "../common-types";
 
@@ -18,13 +21,6 @@ export type UserMethodsType = {
   encryptPassword: (param1: string) => Promise<string>;
   matchPassword: (param1: string) => Promise<boolean>;
 };
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type UserModelType = PaginateModel<
-  BusinessUserType,
-  any,
-  UserMethodsType
->;
 
 export type BusinessUserType = {
   businesses: ObjectId[];
@@ -82,6 +78,8 @@ export type BusinessUserType = {
   createdAt: string;
   updatedAt: string;
   lastSignInAt: Date;
-  rolId: ObjectId;
+  roleId: ObjectId;
   hashedRt: string;
 };
+
+export type BusinessUserDocument = BusinessUserType & Document;

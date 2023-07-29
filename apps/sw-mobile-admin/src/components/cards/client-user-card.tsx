@@ -1,24 +1,18 @@
 import React from "react";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import {
-  StyleSheet,
-  View,
-  Image,
-  Pressable,
-  TouchableOpacity,
-} from "react-native";
+import { StyleSheet, View, Image, Pressable, TouchableOpacity } from "react-native";
 
 import { Button, ButtonProps, Text } from "../common";
 import { useTheme } from "../../theme";
-import { UserDtoType } from "@shortwaits/shared-lib";
+import { ClientUserDtoType } from "@shortwaits/shared-lib";
 
-export type PeopleCardProps = ButtonProps & {
-  user: UserDtoType;
+export type ClientUserCardProps = ButtonProps & {
+  user: ClientUserDtoType;
 };
 
-export const CARD_HEIGHT = 70;
+const CARD_HEIGHT = 70;
 
-export const PeopleCard = (props: PeopleCardProps) => {
+export const ClientUserCard = (props: ClientUserCardProps) => {
   const { Colors } = useTheme();
 
   const { user } = props;
@@ -48,11 +42,7 @@ export const PeopleCard = (props: PeopleCardProps) => {
         <Icon name="phone" color={Colors.brandSecondary} size={23} />
       </TouchableOpacity>
       <TouchableOpacity style={styles.icons} onPress={() => {}}>
-        <Icon
-          name="message-text-outline"
-          color={Colors.brandSecondary}
-          size={23}
-        />
+        <Icon name="message-text-outline" color={Colors.brandSecondary} size={23} />
       </TouchableOpacity>
     </Button>
   );

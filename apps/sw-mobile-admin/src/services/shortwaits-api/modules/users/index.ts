@@ -1,6 +1,6 @@
-import GetUser from "./get-user"
+import GetUsers from "./get-users";
 
-export { GetUser }
+export { GetUsers };
 
 // export const {
 //   useGetUserQuery, useLazyGetUserQuery } = usersApi

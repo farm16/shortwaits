@@ -1,24 +1,17 @@
-import { API_BASE_URL, shortwaitsApiEndpoints } from "../../configs";
+import { API_BASE_URL } from "../../configs";
 import { setCredentials, RootState } from "../../store";
-import {
-  BaseQueryFn,
-  FetchArgs,
-  fetchBaseQuery,
-  FetchBaseQueryError,
-} from "@reduxjs/toolkit/query/react";
+import { BaseQueryFn, FetchArgs, fetchBaseQuery, FetchBaseQueryError } from "@reduxjs/toolkit/query/react";
 import { Mutex } from "async-mutex";
 import { TokenPayloadType } from "@shortwaits/shared-lib";
 import { Alert } from "react-native";
 
-const AUTH = shortwaitsApiEndpoints.AUTH;
-
 const mutex = new Mutex();
 
-export const baseQueryWithInterceptor: BaseQueryFn<
-  string | FetchArgs,
-  unknown,
-  FetchBaseQueryError
-> = async (args, api, extraOptions) => {
+export const baseQueryWithInterceptor: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (
+  args,
+  api,
+  extraOptions
+) => {
   // wait until the mutex is available without locking it
 
   const {

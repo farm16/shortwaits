@@ -4,9 +4,7 @@ import {
   Post,
   Body,
   Param,
-  Delete,
   UseGuards,
-  UseInterceptors,
   HttpCode,
   HttpStatus,
   Req,
@@ -15,18 +13,12 @@ import {
   NotFoundException,
   InternalServerErrorException,
 } from "@nestjs/common";
-import {
-  ApiTags,
-  ApiBearerAuth,
-  ApiCreatedResponse,
-  ApiQuery,
-} from "@nestjs/swagger";
+import { ApiTags, ApiBearerAuth, ApiCreatedResponse } from "@nestjs/swagger";
 
 import { EventsService } from "./events.service";
 import { CreateEventsDto } from "./dto/create-event.dto";
 import { AtGuard } from "../../common/guards";
 import { Events } from "./entities/events.entity";
-import { DeleteEventsDto } from "./dto/delete-events.dto";
 import { GetEventsByBusinessDto } from "./dto/get-events-by-business.dto";
 import { EventDtoType } from "@shortwaits/shared-lib";
 
@@ -41,8 +33,7 @@ export class EventsController {
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
-    description:
-      "Get a summary of all events in a business (business is NOT a user!!!)",
+    description: "Get a summary of all events in a business (business is NOT a user!!!)",
   })
   async getEventsSummaryByBusiness(@Param("businessId") businessId: string) {
     return this.eventsService.getEventsSummaryByBusiness(businessId);
@@ -55,16 +46,8 @@ export class EventsController {
     status: HttpStatus.OK,
     description: "Get all events in a business (business is NOT a user!!!)",
   })
-  async getEventsByBusiness(
-    @Param("businessId") businessId: string,
-    @Query() query: GetEventsByBusinessDto
-  ) {
-    const {
-      page = 1,
-      limit = 10,
-      date = new Date().toISOString(),
-      filterBy = "year",
-    } = query;
+  async getEventsByBusiness(@Param("businessId") businessId: string, @Query() query: GetEventsByBusinessDto) {
+    const { page = 1, limit = 10, date = new Date().toISOString(), filterBy = "year" } = query;
     console.log(page, limit, date, filterBy);
 
     return this.eventsService.getEventsByBusiness(
@@ -85,14 +68,9 @@ export class EventsController {
   @ApiCreatedResponse({
     status: HttpStatus.ACCEPTED,
     type: Events,
-    description:
-      "Create new event record by Business User (not client user or business)",
+    description: "Create new event record by Business User (not client user or business)",
   })
-  createEventByBusiness(
-    @Req() request,
-    @Param("businessId") businessId: string,
-    @Body() event: CreateEventsDto
-  ) {
+  createEventByBusiness(@Req() request, @Param("businessId") businessId: string, @Body() event: CreateEventsDto) {
     // todo: validate permission with business
     return this.eventsService.createEvent(event, request.user.sub);
   }
@@ -120,11 +98,7 @@ export class EventsController {
     description: "Create new event record",
     type: CreateEventsDto,
   })
-  updateEventByBusiness(
-    @Req() request,
-    @Param("businessId") businessId: string,
-    @Body() event: EventDtoType
-  ) {
+  updateEventByBusiness(@Req() request, @Param("businessId") businessId: string, @Body() event: EventDtoType) {
     // validate permission
     return this.eventsService.updateEvent(event, businessId, request.user.sub);
   }
@@ -138,11 +112,7 @@ export class EventsController {
   })
   updateEventByUser(@Req() request, @Body() event: EventDtoType) {
     // validate permission
-    return this.eventsService.updateEvent(
-      event,
-      request.user.sub,
-      request.user.sub
-    );
+    return this.eventsService.updateEvent(event, request.user.sub, request.user.sub);
   }
 
   @Put("delete/:eventId")

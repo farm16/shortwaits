@@ -23,11 +23,11 @@ export const {
   useGetCategoryQuery,
   useGetServiceQuery,
   useGetServicesByBusinessQuery,
-  useGetUserQuery,
+  useGetUsersQuery,
   useGetEventsByBusinessQuery,
   useGetEventsSummaryByBusinessQuery,
   //Lazy Query hooks
-  useLazyGetUserQuery,
+  useLazyGetUsersQuery,
   useLazyGetCategoryQuery,
   useLazyGetCategoriesQuery,
   useLazyGetAdminMobileQuery,

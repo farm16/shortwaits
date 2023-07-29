@@ -1,8 +1,20 @@
 import { IsNotEmpty, IsOptional } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
-import { ClientUserCreateDtoType } from "@shortwaits/shared-lib";
+import { BusinessUserCreateDtoType } from "@shortwaits/shared-lib";
 
-export class CreateClientUserDto implements ClientUserCreateDtoType {
+export class CreateBusinessUserDto implements BusinessUserCreateDtoType {
+  @ApiProperty()
+  @IsNotEmpty()
+  birthday: { year: number; month: number; day: number };
+
+  @ApiProperty()
+  @IsNotEmpty()
+  registrationState: { screenName: string; state: number; isCompleted: boolean };
+
+  @ApiProperty()
+  @IsNotEmpty()
+  roleId: string;
+
   @ApiProperty()
   @IsNotEmpty()
   clientType: "partial" | "full";
@@ -13,7 +25,7 @@ export class CreateClientUserDto implements ClientUserCreateDtoType {
 
   @ApiProperty()
   @IsNotEmpty()
-  alias: "username" | "displayName" | "familyName" | "givenName" | "middleName";
+  alias: "displayName" | "familyName" | "givenName" | "middleName";
 
   @ApiProperty()
   @IsNotEmpty()

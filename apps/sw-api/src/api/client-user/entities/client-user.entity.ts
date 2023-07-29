@@ -6,6 +6,13 @@ import { ClientUserType, ObjectId } from "@shortwaits/shared-lib";
 @Schema({ collection: "client-users" })
 export class ClientUser extends Document implements ClientUserType {
   @ApiProperty()
+  @Prop(
+    raw({
+      type: MongooseSchema.Types.ObjectId,
+    })
+  )
+  roleId: ObjectId;
+  @ApiProperty()
   @Prop()
   businesses: ObjectId[];
   @ApiProperty()
@@ -49,12 +56,7 @@ export class ClientUser extends Document implements ClientUserType {
   @ApiProperty()
   @Prop(
     raw({
-      address1: { type: String, default: "" },
-      address2: { type: String, default: "" },
-      city: { type: String, default: "" },
-      state: { type: String, default: "" },
-      zip: { type: Number, default: 0 },
-      countryCode: { type: String, default: "" },
+      type: Array,
     })
   )
   addresses: {
@@ -70,10 +72,7 @@ export class ClientUser extends Document implements ClientUserType {
   @ApiProperty()
   @Prop(
     raw({
-      kind: String,
-      uid: String,
-      username: String,
-      password: String,
+      type: Array,
     })
   )
   socialAccounts: {
@@ -85,9 +84,7 @@ export class ClientUser extends Document implements ClientUserType {
   @ApiProperty()
   @Prop(
     raw({
-      screenName: { type: String, default: "" },
-      state: { type: Number, trim: true, default: 0 },
-      isCompleted: { type: Boolean, default: false },
+      type: MongooseSchema.Types.Mixed,
     })
   )
   registrationState: {
@@ -107,10 +104,7 @@ export class ClientUser extends Document implements ClientUserType {
   @ApiProperty()
   @Prop(
     raw({
-      countryCode: { type: String, default: "" },
-      isRTL: { type: Boolean, default: true },
-      languageCode: { type: String, default: "" },
-      languageTag: { type: String, default: "" },
+      type: MongooseSchema.Types.Mixed,
     })
   )
   locale: {
@@ -133,9 +127,6 @@ export class ClientUser extends Document implements ClientUserType {
   lastSignInAt: Date;
   @ApiProperty()
   @Prop()
-  rolId: MongooseSchema.Types.ObjectId;
-  @ApiProperty()
-  @Prop()
   hashedRt: string;
   @ApiProperty()
   @Prop()
@@ -143,28 +134,22 @@ export class ClientUser extends Document implements ClientUserType {
   @ApiProperty()
   @Prop(
     raw({
-      state: String,
-      stateDescriptions: Array,
-      isRegistered: Boolean,
+      type: MongooseSchema.Types.Mixed,
     })
   )
   registration: {
-    state: string;
     stateDescriptions: string[];
     isRegistered: boolean;
+    state: {
+      screenName: string;
+      state: number;
+      isCompleted: boolean;
+    };
   };
   @ApiProperty()
   @Prop(
     raw({
-      membershipTypeId: MongooseSchema.Types.ObjectId,
-      invoiceId: MongooseSchema.Types.ObjectId,
-      type: String,
-      price: Number,
-      code: String,
-      status: String,
-      description: String,
-      isFaulty: Boolean,
-      faultyReason: Array,
+      type: MongooseSchema.Types.Mixed,
     })
   )
   currentMembership: {
@@ -181,7 +166,7 @@ export class ClientUser extends Document implements ClientUserType {
   @ApiProperty()
   @Prop(
     raw({
-      invoiceId: MongooseSchema.Types.ObjectId,
+      type: MongooseSchema.Types.Mixed,
     })
   )
   billing: {

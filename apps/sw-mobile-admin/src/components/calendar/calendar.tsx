@@ -16,7 +16,6 @@ import { useGetEventsByBusinessQuery } from "../../services";
 import { useBusiness } from "../../store";
 import { ActivityIndicator } from "react-native-paper";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
-import { isEmpty } from "lodash";
 import { NonIdealState } from "../non-ideal-state/non-ideal-state";
 import { navigate } from "../../utils";
 
@@ -38,13 +37,21 @@ export const Calendar: FC<CalendarProps> = memo(props => {
 
   const theme = useCalendarTheme();
   const business = useBusiness();
+  const [limit, setLimit] = React.useState(100);
 
   const {
     data: eventsPayload,
     isLoading: isEventsLoading,
     isError: isEventsError,
     refetch: refetchEvents,
-  } = useGetEventsByBusinessQuery(business._id ?? skipToken);
+  } = useGetEventsByBusinessQuery(
+    {
+      businessId: business._id,
+      query: {
+        limit,
+      },
+    } ?? skipToken
+  );
 
   console.log(eventsPayload?.data.length);
 
@@ -78,9 +85,11 @@ export const Calendar: FC<CalendarProps> = memo(props => {
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const day = String(date.getDate()).padStart(2, "0");
     const currentDate = `${year}-${month}-${day}`;
-    console.log("currentDate", currentDate);
     return currentDate;
   }, []);
+
+  console.log("formattedDate", agendaData[agendaData.length - 1]?.title);
+  console.log("formattedDate", formattedDate);
 
   if (isEventsLoading) {
     return <ActivityIndicator />;
@@ -149,6 +158,11 @@ export const Calendar: FC<CalendarProps> = memo(props => {
         }
         ItemSeparatorComponent={renderSeparatorItem}
         style={{ backgroundColor: Colors.background }}
+        onEndReached={() => {
+          if (limit < eventsPayload?.data.length) {
+            setLimit(limit + 100);
+          }
+        }}
       />
     </CalendarProvider>
   );
