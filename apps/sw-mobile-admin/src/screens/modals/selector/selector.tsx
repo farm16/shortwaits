@@ -8,20 +8,16 @@ import { ServicesSelector } from "./selectors/services/services-selector";
 import { StaticSelector } from "./selectors/static/static-selector";
 import { LabelsSelector } from "./selectors/labels/labels-selector";
 
-const selectorsComponents: Record<
-  SelectorModalModeType,
-  FC<ModalsScreenProps<"selector-modal-screen">>
-> = {
+const selectorsComponents: Record<SelectorModalModeType, FC<ModalsScreenProps<"selector-modal-screen">>> = {
   staff: StaffSelector,
+  clients: StaffSelector,
   categories: CategoriesSelector,
   services: ServicesSelector,
   static: StaticSelector,
   labels: LabelsSelector,
 };
 
-export const SelectorScreenModal: FC<
-  ModalsScreenProps<"selector-modal-screen">
-> = props => {
+export const SelectorScreenModal: FC<ModalsScreenProps<"selector-modal-screen">> = props => {
   const type = props.route.params.type;
   const Selector = selectorsComponents[type];
 

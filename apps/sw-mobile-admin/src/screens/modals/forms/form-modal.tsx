@@ -1,6 +1,5 @@
 import React, { FC, useEffect } from "react";
 
-import { useHideGhostComponent } from "../../../store";
 import { ModalsScreenProps, FormType } from "../../../navigation";
 import { AddClientModal } from "./add-client";
 import { AddEventModal } from "./add-event";
@@ -14,13 +13,9 @@ const forms: Record<FormType, FC<ModalsScreenProps<"form-modal-screen">>> = {
   updateEvent: UpdateEventModal,
 };
 
-export const FormModalScreen: FC<
-  ModalsScreenProps<"form-modal-screen">
-> = props => {
+export const FormModalScreen: FC<ModalsScreenProps<"form-modal-screen">> = props => {
   const form = props.route.params.form;
   const Form = forms[form];
-
-  useHideGhostComponent();
 
   return <Form {...props} />;
 };

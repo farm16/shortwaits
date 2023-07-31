@@ -1,59 +1,28 @@
 import React, { FC, useLayoutEffect, useState } from "react";
-import {
-  View,
-  StyleSheet,
-  StyleProp,
-  ViewStyle,
-  FlatListProps,
-} from "react-native";
+import { View, StyleSheet, StyleProp, ViewStyle, FlatListProps } from "react-native";
 import { useDispatch } from "react-redux";
 import Timeline from "react-native-timeline-flatlist";
 
 import { AuthorizedScreenProps } from "../../../navigation";
-import {
-  AuthorizedScreenHeader,
-  Button,
-  IconButton,
-  Container,
-  Screen,
-  Space,
-  Text,
-} from "../../../components";
+import { AuthorizedScreenHeader, Button, IconButton, Container, Screen, Space, Text } from "../../../components";
 import { useTheme } from "../../../theme";
-import { useGhostComponent } from "../../../store";
+import { useShowGhostComponent } from "../../../store";
 
-export const ActivityScreen: FC<AuthorizedScreenProps<"activity-screen">> = ({
-  navigation,
-}) => {
-  useGhostComponent("floatingActionButton");
+export const ActivityScreen: FC<AuthorizedScreenProps<"activity-screen">> = ({ navigation }) => {
+  useShowGhostComponent("floatingActionButton");
   const { Colors } = useTheme();
-  const [activityType, setActivityType] = useState<"business" | "staff">(
-    "business"
-  );
+  const [activityType, setActivityType] = useState<"business" | "staff">("business");
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: () => {
-        return (
-          <Text
-            preset="headerTitle"
-            style={{ textTransform: "capitalize" }}
-            text={`${activityType} Activity`}
-          />
-        );
+        return <Text preset="headerTitle" style={{ textTransform: "capitalize" }} text={`${activityType} Activity`} />;
       },
       headerRight: () => {
         return (
           <Container direction="row" alignItems="center">
-            <IconButton
-              onPress={() => setActivityType("business")}
-              withMarginRight
-              iconType="business"
-            />
-            <IconButton
-              onPress={() => setActivityType("staff")}
-              withMarginRight
-              iconType="add-staff"
-            />
+            <IconButton onPress={() => setActivityType("business")} withMarginRight iconType="business" />
+            <IconButton onPress={() => setActivityType("staff")} withMarginRight iconType="add-staff" />
           </Container>
         );
       },
@@ -101,10 +70,7 @@ export const ActivityScreen: FC<AuthorizedScreenProps<"activity-screen">> = ({
           height: 40,
           borderRadius: 13,
 
-          backgroundColor:
-            sectionID % 2 === 0
-              ? Colors.staticLightBackground
-              : Colors.brandSecondary1,
+          backgroundColor: sectionID % 2 === 0 ? Colors.staticLightBackground : Colors.brandSecondary1,
           alignItems: "center",
           justifyContent: "center",
         }}
@@ -124,10 +90,7 @@ export const ActivityScreen: FC<AuthorizedScreenProps<"activity-screen">> = ({
           paddingVertical: 10,
           marginBottom: 15,
           borderRadius: 10,
-          backgroundColor:
-            sectionID % 2 === 0
-              ? Colors.staticLightBackground
-              : Colors.brandSecondary1,
+          backgroundColor: sectionID % 2 === 0 ? Colors.staticLightBackground : Colors.brandSecondary1,
         }}
       >
         <Text preset="cardTitle">{rowData.title}</Text>

@@ -65,35 +65,20 @@ export const Card = (props: CardProps) => {
     <Button
       preset="card"
       {...cardModes[mode]}
-      {...rest}
       disabled={getIsDisabled()}
+      {...rest}
       style={[styles.cardHeight, styleOverride]}
     >
       {leftIconName &&
         (mode === "static" || leftIconName === "none" ? null : (
-          <Button
-            disabled={!getIsDisabled()}
-            onPress={leftIconOnPress}
-            preset="none"
-            style={styles.iconContainer}
-          >
-            <Icon
-              style={styles.leftIcon}
-              name={leftIconName}
-              size={IconSizes[leftIconSize]}
-              color={leftIconColor}
-            />
+          <Button disabled={!getIsDisabled()} onPress={leftIconOnPress} preset="none" style={styles.iconContainer}>
+            <Icon style={styles.leftIcon} name={leftIconName} size={IconSizes[leftIconSize]} color={leftIconColor} />
           </Button>
         ))}
       <View style={styles.childrenContainer}>{children}</View>
       {rightIconName &&
         (mode === "static" || rightIconName === "none" ? null : (
-          <Button
-            disabled={!getIsDisabled()}
-            onPress={rightIconOnPress}
-            preset="none"
-            style={styles.iconContainer}
-          >
+          <Button disabled={!getIsDisabled()} onPress={rightIconOnPress} preset="none" style={styles.iconContainer}>
             <Icon
               style={styles.rightIcon}
               name={rightIconName}

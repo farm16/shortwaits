@@ -23,8 +23,7 @@ export type ClientUserMethodsType = {
 };
 
 export type ClientUserType = {
-  // User details
-  clientType: "partial" | "full";
+  clientType: "local" | "external"; // local means the user is created by the admin, external means the user is created by the client
   username: string;
   alias: "username" | "familyName" | "givenName" | "middleName" | "displayName";
   displayName: string;
@@ -33,45 +32,13 @@ export type ClientUserType = {
   middleName: string;
   accountImageUrl: string;
   email: string;
-  password?: string;
+  password: string;
   locale: {
     countryCode: string;
     isRTL: boolean;
     languageCode: string;
     languageTag: string;
   };
-
-  // Registration details
-  registration: {
-    stateDescriptions: string[];
-    isRegistered: boolean;
-    state: {
-      screenName: string;
-      state: number;
-      isCompleted: boolean;
-    };
-  };
-
-  // Membership details
-  currentMembership: {
-    membershipTypeId: ObjectId;
-    invoiceId: ObjectId;
-    type: string;
-    price: number;
-    code: string;
-    status: string;
-    description: string;
-    isFaulty: boolean;
-    faultyReason: string[];
-  };
-
-  // Billing details
-  billing: {
-    invoiceId: ObjectId;
-    // Add more billing info as needed (e.g., cc, stripe, etc.).
-  };
-
-  // Contact details
   phoneNumbers: {
     label: string;
     number: string;
@@ -87,27 +54,46 @@ export type ClientUserType = {
     city: string;
     region: string;
     state: string;
-    postCode: number;
+    postCode: string;
     country: string;
   }[];
-
-  // Social account details
   socialAccounts: {
     kind: string;
     uid?: string;
     username?: string;
-    password?: string;
   }[];
-
-  // Other details
-  businesses: ObjectId[];
   desiredCurrencies: string[];
+  // below are fields from the that are not in the CreateClientUserDtoType
+  billing: {
+    invoiceId: ObjectId;
+  };
+  businesses: ObjectId[];
   deleted: boolean;
   createdAt: string;
   updatedAt: string;
   lastSignInAt: Date;
   roleId: ObjectId;
   hashedRt: string;
+  registration: {
+    stateDescriptions: string[];
+    isRegistered: boolean;
+    state: {
+      screenName: string;
+      state: number;
+      isCompleted: boolean;
+    };
+  };
+  currentMembership: {
+    membershipTypeId: ObjectId;
+    invoiceId: ObjectId;
+    type: string;
+    price: number;
+    code: string;
+    status: string;
+    description: string;
+    isFaulty: boolean;
+    faultyReason: string[];
+  };
 };
 
 export type ClientUserDocumentType = ClientUserType & Document;

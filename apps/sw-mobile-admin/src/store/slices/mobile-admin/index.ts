@@ -1,9 +1,6 @@
 import { cloneDeep } from "lodash";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import {
-  CategoriesDtoType,
-  ShortwaitsAdminDefaultDataPayloadType,
-} from "@shortwaits/shared-lib";
+import { CategoriesDtoType, ShortwaitsAdminDefaultDataPayloadType } from "@shortwaits/shared-lib";
 
 import { shortwaitsApi } from "../../../services";
 import type { RootState } from "../..";
@@ -46,21 +43,16 @@ export const mobileAdminSlice = createSlice({
      * updates by index since_id is not defined
      * on sample services.
      */
-    changeFloatingActionButtonVisibility(
-      state,
-      action: PayloadAction<boolean>
-    ) {
+    changeFloatingActionButtonVisibility(state, action: PayloadAction<boolean>) {
       const { payload } = action;
       const currentState = cloneDeep(state);
-      console.log("changeFloatingActionButtonVisibility", payload);
+      console.log("changeFloatingActionButtonVisibility Action >>>", payload);
       return {
         ...currentState,
         components: {
           ...currentState.components,
           floatingActionButton: {
-            isVisible: payload
-              ? payload
-              : !currentState.components.floatingActionButton.isVisible,
+            isVisible: payload ? payload : !currentState.components.floatingActionButton.isVisible,
           },
         },
       };
@@ -114,18 +106,12 @@ export const mobileAdminSlice = createSlice({
   },
   extraReducers: builder => {
     builder
-      .addMatcher(
-        shortwaitsApi.endpoints.getAdminMobile.matchFulfilled,
-        (state, action) => {
-          return { ...state, defaultData: action.payload.data };
-        }
-      )
-      .addMatcher(
-        shortwaitsApi.endpoints.getCategories.matchFulfilled,
-        (state, action) => {
-          return { ...state, categories: action.payload.data };
-        }
-      );
+      .addMatcher(shortwaitsApi.endpoints.getAdminMobile.matchFulfilled, (state, action) => {
+        return { ...state, defaultData: action.payload.data };
+      })
+      .addMatcher(shortwaitsApi.endpoints.getCategories.matchFulfilled, (state, action) => {
+        return { ...state, categories: action.payload.data };
+      });
   },
 });
 
@@ -137,5 +123,4 @@ export const {
   changeFloatingActionButtonVisibility,
 } = mobileAdminSlice.actions;
 
-export const selectCurrentMobileAdminState = (state: RootState) =>
-  state.mobileAdmin;
+export const selectCurrentMobileAdminState = (state: RootState) => state.mobileAdmin;

@@ -6,7 +6,7 @@ import { UrlCard, Text, UrlTypes, Space, ServiceItem, Emoji } from "../../../../
 
 export function EventMoreTab({ event }: { event: EventDtoType }) {
   const { Colors } = useTheme();
-  console.log("event", JSON.stringify(event, null, 2));
+  // console.log("event", JSON.stringify(event, null, 2));
 
   const EventLabels = () => {
     if (event?.labels?.length === 0) return null;

@@ -15,23 +15,17 @@ import {
 } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { EventScreenTabs } from "./event-tabs";
-import { useHideGhostComponent } from "../../../store";
 import { Alert, FlatList, View } from "react-native";
 import { useTheme } from "../../../theme";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 // TODO: test this with real device ios and android
 // TODO: add config for android (missing)
-export const EventScreen: FC<AuthorizedScreenProps<"event-screen">> = ({
-  navigation,
-  route,
-}) => {
+export const EventScreen: FC<AuthorizedScreenProps<"event-screen">> = ({ navigation, route }) => {
   const { event } = route.params;
 
   const bottomSheetRef = useRef<BottomSheetType>(null);
   const handleBottomSheet = useBottomSheet(bottomSheetRef);
-
-  useHideGhostComponent();
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -39,21 +33,14 @@ export const EventScreen: FC<AuthorizedScreenProps<"event-screen">> = ({
       headerTitle: () => {
         return (
           <Container direction="row" justifyContent="center">
-            <Text
-              preset="headerTitle"
-              text={truncate(event.name, { length: 16 })}
-            />
+            <Text preset="headerTitle" text={truncate(event.name, { length: 16 })} />
           </Container>
         );
       },
       headerRight: () => {
         return (
           <Container direction="row" alignItems="center">
-            <IconButton
-              onPress={() => handleBottomSheet.expand()}
-              withMarginRight
-              iconType="share"
-            />
+            <IconButton onPress={() => handleBottomSheet.expand()} withMarginRight iconType="share" />
             <IconButton
               onPress={() => {
                 navigation.navigate("modals", {
@@ -80,17 +67,12 @@ export const EventScreen: FC<AuthorizedScreenProps<"event-screen">> = ({
   const checkIfPackageIsInstalled = async packageSearch => {
     const { isInstalled } = await Share.isPackageInstalled(packageSearch);
 
-    Alert.alert(
-      `Package: ${packageSearch}`,
-      `${isInstalled ? "Installed" : "Not Installed"}`
-    );
+    Alert.alert(`Package: ${packageSearch}`, `${isInstalled ? "Installed" : "Not Installed"}`);
   };
 
   const singleShare = async (customOptions: ShareSingleOptions) => {
     try {
-      const { isInstalled } = await Share.isPackageInstalled(
-        "com.whatsapp.android"
-      );
+      const { isInstalled } = await Share.isPackageInstalled("com.whatsapp.android");
 
       // if (isInstalled) {
       await Share.shareSingle(customOptions);
@@ -146,12 +128,7 @@ export const EventScreen: FC<AuthorizedScreenProps<"event-screen">> = ({
   // });
 
   return (
-    <Screen
-      preset="fixed"
-      unsafe
-      unsafeBottom
-      backgroundColor="backgroundOverlay"
-    >
+    <Screen preset="fixed" unsafe unsafeBottom backgroundColor="backgroundOverlay">
       <EventScreenTabs event={event} />
       <BottomSheet ref={bottomSheetRef}>
         <View style={{ flex: 1 }}>

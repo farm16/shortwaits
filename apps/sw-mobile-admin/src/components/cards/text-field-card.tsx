@@ -2,14 +2,7 @@ import React, { useRef } from "react";
 import { StyleSheet, Pressable, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
-import {
-  TextField,
-  TextFieldProps,
-  Card,
-  Text,
-  CardProps,
-  Space,
-} from "../common";
+import { TextField, TextFieldProps, Card, Text, CardProps, Space } from "../common";
 import { getDimensions, useTheme } from "../../theme";
 
 type TextFieldCard = {
@@ -26,7 +19,7 @@ type TextFieldCard = {
 export function TextFieldCard(props: TextFieldCard) {
   const {
     placeholder,
-    errors,
+    errors = "",
     isTouched,
     rightIconColor,
     rightIconName,
@@ -53,12 +46,7 @@ export function TextFieldCard(props: TextFieldCard) {
           <Text preset="cardTitle" text={title} />
           <Space size="tiny" />
         </Pressable>
-        <TextField
-          preset="cardSubtitle"
-          ref={textInputRef}
-          placeholder={placeholder}
-          {...rest}
-        />
+        <TextField preset="cardSubtitle" ref={textInputRef} placeholder={placeholder} {...rest} />
         {rightIconName ? (
           <TouchableOpacity
             style={{
@@ -70,11 +58,7 @@ export function TextFieldCard(props: TextFieldCard) {
             }}
             onPress={rightIconOnPress}
           >
-            <Icon
-              size={rightIconSize}
-              color={rightIconColor}
-              name={rightIconName}
-            />
+            <Icon size={rightIconSize} color={rightIconColor} name={rightIconName} />
           </TouchableOpacity>
         ) : null}
       </Card>

@@ -1,11 +1,7 @@
 import React, { FC, memo, useCallback, useMemo } from "react";
 import { RefreshControl, SectionListData } from "react-native";
 import { EventType } from "@shortwaits/shared-lib";
-import {
-  CalendarProvider,
-  ExpandableCalendar,
-  AgendaList,
-} from "@shortwaits/calendar";
+import { CalendarProvider, ExpandableCalendar, AgendaList } from "@shortwaits/calendar";
 
 import { Colors } from "../../theme";
 import { useCalendarTheme } from "./calendar-hooks";
@@ -23,10 +19,7 @@ type CalendarSectionData = EventType;
 type Sections = {
   title: string;
 };
-export type CalendarEventsType = SectionListData<
-  CalendarSectionData,
-  Sections
->[];
+export type CalendarEventsType = SectionListData<CalendarSectionData, Sections>[];
 
 type CalendarProps = {
   isWeekView?: boolean;
@@ -53,20 +46,14 @@ export const Calendar: FC<CalendarProps> = memo(props => {
     } ?? skipToken
   );
 
-  console.log(eventsPayload?.data.length);
+  // console.log(eventsPayload?.data.length);
 
-  const agendaData = useMemo(
-    () => getAgendaData(eventsPayload?.data ?? []),
-    [eventsPayload?.data]
-  );
+  const agendaData = useMemo(() => getAgendaData(eventsPayload?.data ?? []), [eventsPayload?.data]);
 
   const renderItem = useCallback(({ item }) => {
     return <AgendaItem item={item} />;
   }, []);
-  const renderSeparatorItem = useCallback(
-    () => <Space size="tiny" direction="horizontal" />,
-    []
-  );
+  const renderSeparatorItem = useCallback(() => <Space size="tiny" direction="horizontal" />, []);
   const handleRefresh = useCallback(() => {
     if (!isEventsLoading) refetchEvents();
   }, [isEventsLoading, refetchEvents]);
@@ -88,8 +75,8 @@ export const Calendar: FC<CalendarProps> = memo(props => {
     return currentDate;
   }, []);
 
-  console.log("formattedDate", agendaData[agendaData.length - 1]?.title);
-  console.log("formattedDate", formattedDate);
+  // console.log("formattedDate", agendaData[agendaData.length - 1]?.title);
+  // console.log("formattedDate", formattedDate);
 
   if (isEventsLoading) {
     return <ActivityIndicator />;
@@ -150,12 +137,7 @@ export const Calendar: FC<CalendarProps> = memo(props => {
         sections={agendaData}
         renderItem={renderItem}
         stickySectionHeadersEnabled={false}
-        refreshControl={
-          <RefreshControl
-            refreshing={isEventsLoading}
-            onRefresh={handleRefresh}
-          />
-        }
+        refreshControl={<RefreshControl refreshing={isEventsLoading} onRefresh={handleRefresh} />}
         ItemSeparatorComponent={renderSeparatorItem}
         style={{ backgroundColor: Colors.background }}
         onEndReached={() => {

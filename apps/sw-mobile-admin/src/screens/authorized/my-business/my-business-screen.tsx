@@ -1,21 +1,13 @@
 import React, { FC, useLayoutEffect } from "react";
 import { truncate } from "lodash";
 
-import {
-  BusinessIncomeInfo,
-  ButtonCard,
-  IconButton,
-  Container,
-  Screen,
-  ScrollView,
-  Text,
-} from "../../../components";
+import { BusinessIncomeInfo, ButtonCard, IconButton, Container, Screen, ScrollView, Text } from "../../../components";
 import { useTheme } from "../../../theme";
 import {
   showPremiumMembershipBanner,
   useBusiness,
   hidePremiumMembershipBanner,
-  useGhostComponent,
+  useShowGhostComponent,
 } from "../../../store";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useDispatch } from "react-redux";
@@ -23,10 +15,8 @@ import { useIsFocused } from "@react-navigation/native";
 import { useGetEventsSummaryByBusinessQuery } from "../../../services";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 
-export const MyBusinessScreen: FC<
-  AuthorizedScreenProps<"my-business-screen">
-> = ({ navigation }) => {
-  useGhostComponent("floatingActionButton");
+export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> = ({ navigation }) => {
+  useShowGhostComponent("floatingActionButton");
   const business = useBusiness();
   const { Colors } = useTheme();
   const dispatch = useDispatch();
@@ -38,8 +28,7 @@ export const MyBusinessScreen: FC<
   } = useGetEventsSummaryByBusinessQuery(business?._id ?? skipToken);
 
   console.log(">>>", eventSummary);
-  const checkAccountType = accountType =>
-    ["free", "basic", "student"].some(type => type === accountType);
+  const checkAccountType = accountType => ["free", "basic", "student"].some(type => type === accountType);
 
   useLayoutEffect(() => {
     if (checkAccountType(business.accountType) && isFocused) {
@@ -57,10 +46,7 @@ export const MyBusinessScreen: FC<
       headerTitle: () => {
         return (
           <Container direction="row" justifyContent="center">
-            <Text
-              preset="headerTitle"
-              text={truncate(business.shortName, { length: 16 })}
-            />
+            <Text preset="headerTitle" text={truncate(business.shortName, { length: 16 })} />
           </Container>
         );
       },
@@ -78,11 +64,7 @@ export const MyBusinessScreen: FC<
   return (
     <Screen preset="fixed" unsafe>
       <ScrollView contentContainerStyle={{ alignItems: "center" }}>
-        <BusinessIncomeInfo
-          data={eventSummary?.data}
-          isLoading={isEventSummaryLoading}
-          error={errorEventSummary}
-        />
+        <BusinessIncomeInfo data={eventSummary?.data} isLoading={isEventSummaryLoading} error={errorEventSummary} />
         <ButtonCard
           leftIconName="account-tie"
           leftIconColor={Colors.brandSecondary6}
@@ -115,21 +97,9 @@ export const MyBusinessScreen: FC<
             })
           }
         />
-        <ButtonCard
-          leftIconName="cash-fast"
-          leftIconColor={Colors.brandSecondary6}
-          title={"Payments"}
-        />
-        <ButtonCard
-          leftIconName="puzzle"
-          leftIconColor={Colors.brandSecondary6}
-          title={"Integrations"}
-        />
-        <ButtonCard
-          leftIconName="message-star"
-          leftIconColor={Colors.brandSecondary6}
-          title={"Reviews"}
-        />
+        <ButtonCard leftIconName="cash-fast" leftIconColor={Colors.brandSecondary6} title={"Payments"} />
+        <ButtonCard leftIconName="puzzle" leftIconColor={Colors.brandSecondary6} title={"Integrations"} />
+        <ButtonCard leftIconName="message-star" leftIconColor={Colors.brandSecondary6} title={"Reviews"} />
       </ScrollView>
     </Screen>
   );

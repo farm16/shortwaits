@@ -1,11 +1,6 @@
 import mongoose, { Model } from "mongoose";
 import { InjectModel } from "@nestjs/mongoose";
-import {
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-  PreconditionFailedException,
-} from "@nestjs/common";
+import { ForbiddenException, Injectable, NotFoundException, PreconditionFailedException } from "@nestjs/common";
 import {
   BusinessType,
   BusinessHoursType,
@@ -72,21 +67,14 @@ export class BusinessService {
   async getBusiness(businessId: string, userId: string) {
     const businessData = await this.findBusinessById(businessId);
 
-    const { isAdmin, isSuperAdmin } = this.isUserAdminType(
-      businessData,
-      userId
-    );
+    const { isAdmin, isSuperAdmin } = this.isUserAdminType(businessData, userId);
 
     if (isAdmin || isSuperAdmin) {
       return businessData;
     }
   }
 
-  async updateBusiness(
-    userId: string,
-    business: Partial<UpdateBusinessDto>,
-    isRegistrationCompleted: boolean
-  ) {
+  async updateBusiness(userId: string, business: Partial<UpdateBusinessDto>, isRegistrationCompleted: boolean) {
     const filteredBusiness = {
       ...this.filterBusiness(business),
       isRegistrationCompleted: isRegistrationCompleted ? true : undefined,
@@ -94,20 +82,15 @@ export class BusinessService {
 
     console.log("isRegistrationCompleted", isRegistrationCompleted);
 
-    const updatedBusiness = await this.businessModel.findByIdAndUpdate(
-      filteredBusiness._id,
-      filteredBusiness,
-      { new: true }
-    );
+    const updatedBusiness = await this.businessModel.findByIdAndUpdate(filteredBusiness._id, filteredBusiness, {
+      new: true,
+    });
 
     if (!updatedBusiness) {
       throw new NotFoundException("Business not available");
     }
 
-    const { isAdmin, isSuperAdmin } = this.isUserAdminType(
-      updatedBusiness,
-      userId
-    );
+    const { isAdmin, isSuperAdmin } = this.isUserAdminType(updatedBusiness, userId);
 
     if (isAdmin || isSuperAdmin) {
       return await updatedBusiness.save();
@@ -135,29 +118,14 @@ export class BusinessService {
       });
     }
 
-    const updatedBusiness = this.updateBusiness(
-      userId,
-      business,
-      isRegistrationCompleted
-    );
+    const updatedBusiness = this.updateBusiness(userId, business, isRegistrationCompleted);
     return updatedBusiness;
   }
 
-  async updateBusinessHours(
-    businessId: string,
-    userId: string,
-    dto: { hours: BusinessHoursType }
-  ) {
-    const businessData = await this.businessModel.findOne(
-      { _id: businessId },
-      null,
-      { new: true }
-    );
+  async updateBusinessHours(businessId: string, userId: string, dto: { hours: BusinessHoursType }) {
+    const businessData = await this.businessModel.findOne({ _id: businessId }, null, { new: true });
 
-    const { isAdmin, isSuperAdmin } = this.isUserAdminType(
-      businessData,
-      userId
-    );
+    const { isAdmin, isSuperAdmin } = this.isUserAdminType(businessData, userId);
     if (isAdmin || isSuperAdmin) {
       businessData.hours = dto.hours;
       console.log({ ...dto });
@@ -166,9 +134,7 @@ export class BusinessService {
   }
 
   async findByKey(businessId: string, key: keyof BusinessType) {
-    const data = await this.businessModel
-      .findById(businessId, String(key))
-      .exec();
+    const data = await this.businessModel.findById(businessId, String(key)).exec();
     data;
     if (data) {
       return data[key];
@@ -177,17 +143,10 @@ export class BusinessService {
     }
   }
 
-  async getUsers(
-    userType: "staff" | "client",
-    businessId: string,
-    userId: string
-  ) {
+  async getUsers(userType: "staff" | "client", businessId: string, userId: string) {
     const businessData = await this.findBusinessById(businessId);
 
-    const { isAdmin, isSuperAdmin } = this.isUserAdminType(
-      businessData,
-      userId
-    );
+    const { isAdmin, isSuperAdmin } = this.isUserAdminType(businessData, userId);
     if (isAdmin || isSuperAdmin) {
       if (userType === "staff") {
         const staff = this.businessUserModel
@@ -211,17 +170,10 @@ export class BusinessService {
     }
   }
 
-  async createBusinessStaff(
-    businessUserId: string,
-    businessId: string,
-    staff: BusinessUserType[]
-  ) {
+  async createBusinessStaff(businessUserId: string, businessId: string, staff: BusinessUserType[]) {
     const businessData = await this.findBusinessById(businessId);
 
-    const { isAdmin, isSuperAdmin } = this.isUserAdminType(
-      businessData,
-      businessUserId
-    );
+    const { isAdmin, isSuperAdmin } = this.isUserAdminType(businessData, businessUserId);
 
     if (isAdmin || isSuperAdmin) {
       const insertedStaff = await this.businessUserModel.insertMany(staff);
@@ -235,17 +187,10 @@ export class BusinessService {
     }
   }
 
-  async createBusinessClients(
-    businessUserId: string,
-    businessId: string,
-    clients: ClientUserType[]
-  ) {
+  async createBusinessClients(businessUserId: string, businessId: string, clients: ClientUserType[]) {
     const businessData = await this.findBusinessById(businessId);
 
-    const { isAdmin, isSuperAdmin } = this.isUserAdminType(
-      businessData,
-      businessUserId
-    );
+    const { isAdmin, isSuperAdmin } = this.isUserAdminType(businessData, businessUserId);
 
     if (isAdmin || isSuperAdmin) {
       const insertedClients = await this.clientUserModel.insertMany(clients);
@@ -253,14 +198,9 @@ export class BusinessService {
         return client._id;
       });
       const businessClients = businessData.clients.concat(clientsIds);
-      console.log("business ID >>> ", businessId);
-      console.log("inserting clients >>> ", businessClients);
-      const updatedBusiness = await this.businessModel.findByIdAndUpdate(
-        businessId,
-        {
-          clients: businessClients,
-        }
-      );
+      const updatedBusiness = await this.businessModel.findByIdAndUpdate(businessId, {
+        clients: businessClients,
+      });
       await updatedBusiness.save();
 
       return insertedClients;

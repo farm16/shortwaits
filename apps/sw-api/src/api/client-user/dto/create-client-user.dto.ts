@@ -1,11 +1,11 @@
 import { IsNotEmpty, IsOptional } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
-import { ClientUserCreateDtoType } from "@shortwaits/shared-lib";
+import { CreateClientUserDtoType } from "@shortwaits/shared-lib";
 
-export class CreateClientUserDto implements ClientUserCreateDtoType {
+export class CreateClientUserDto implements CreateClientUserDtoType {
   @ApiProperty()
   @IsNotEmpty()
-  clientType: "partial" | "full";
+  clientType: "local" | "external";
 
   @ApiProperty()
   @IsNotEmpty()
@@ -41,7 +41,7 @@ export class CreateClientUserDto implements ClientUserCreateDtoType {
 
   @ApiProperty()
   @IsNotEmpty()
-  password?: string;
+  password: string;
 
   @ApiProperty()
   @IsOptional()
@@ -53,11 +53,17 @@ export class CreateClientUserDto implements ClientUserCreateDtoType {
   };
   @ApiProperty()
   @IsOptional()
-  phoneNumbers: { label: string; number: string }[];
+  phoneNumbers: {
+    label: string;
+    number: string;
+  }[];
 
   @ApiProperty()
   @IsOptional()
-  imAddresses: { username: string; service: string }[];
+  imAddresses: {
+    username: string;
+    service: string;
+  }[];
 
   @ApiProperty()
   @IsOptional()
@@ -68,12 +74,16 @@ export class CreateClientUserDto implements ClientUserCreateDtoType {
     city: string;
     region: string;
     state: string;
-    postCode: number;
+    postCode: string;
     country: string;
   }[];
   @ApiProperty()
   @IsOptional()
-  socialAccounts: { kind: string; uid?: string; username?: string; password?: string }[];
+  socialAccounts: {
+    kind: string;
+    uid?: string;
+    username?: string;
+  }[];
 
   @ApiProperty()
   @IsOptional()

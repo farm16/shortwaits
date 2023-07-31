@@ -44,7 +44,7 @@ export const FloatingActionButton = (props: FloatingActionButtonProps) => {
     return mobileAdmin ? mobileAdmin.components.floatingActionButton : null;
   }, [mobileAdmin]);
 
-  console.log("floatingActionButton visibility >>>", isVisible);
+  // console.log("floatingActionButton visibility >>>", isVisible);
 
   const onStateChange = useCallback(({ open }) => setIsOpen(open), []);
 

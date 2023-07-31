@@ -1,10 +1,4 @@
-import React, {
-  FC,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { FC, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { ActivityIndicator } from "react-native-paper";
 import { Alert } from "react-native";
 
@@ -32,24 +26,17 @@ import {
 import { useCreateEventMutation } from "../../../services";
 import { FormikErrors } from "formik";
 
-export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({
-  navigation,
-  route,
-}) => {
+export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navigation, route }) => {
   const { onSubmit, onDone, closeOnSubmit = true } = route.params;
 
-  const [selectedService, setSelectedService] = useState<ServiceDtoType | null>(
-    null
-  );
+  const [selectedService, setSelectedService] = useState<ServiceDtoType | null>(null);
   const [isFree, setIsFree] = useState<boolean>(true);
   const business = useBusiness();
   const services = useServices();
   const user = useUser();
   const [createEvent, createEventStatus] = useCreateEventMutation();
 
-  const validateDates = (
-    formData: CreateEventDtoType
-  ): FormikErrors<CreateEventDtoType> => {
+  const validateDates = (formData: CreateEventDtoType): FormikErrors<CreateEventDtoType> => {
     const errors: FormikErrors<CreateEventDtoType> = {};
     const startTime = new Date(formData.startTime);
     const expectedEndTime = new Date(formData.expectedEndTime);
@@ -103,28 +90,26 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({
     return _initialValues;
   }, [business._id, selectedService?._id, user?._id]);
 
-  const { touched, errors, values, handleChange, handleSubmit, setFieldValue } =
-    useForm(
-      {
-        initialValues,
-        validate: validateDates,
-        onSubmit: formData => {
-          if (onSubmit) {
-            onSubmit<"addEvent">(formData);
-          } else {
-            createEvent({ businessId: business._id, body: formData });
-          }
-        },
+  const { touched, errors, values, handleChange, handleSubmit, setFieldValue } = useForm(
+    {
+      initialValues,
+      validate: validateDates,
+      onSubmit: formData => {
+        if (onSubmit) {
+          onSubmit<"addEvent">(formData);
+        } else {
+          createEvent({ businessId: business._id, body: formData });
+        }
       },
-      "createEvent"
-    );
+    },
+    "createEvent"
+  );
 
   console.log(errors);
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
-      headerRight: () => <BackButton onPress={() => handleSubmit()} />,
       headerTitle: () => <Text preset="text" text="Create Event" />,
     });
   }, [handleSubmit, navigation]);
@@ -163,10 +148,7 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({
     />
   );
 
-  const getIsLabelInArray = (
-    arrayOfLabels: BusinessLabelsType,
-    labelToCheck: BusinessLabelType
-  ): boolean => {
+  const getIsLabelInArray = (arrayOfLabels: BusinessLabelsType, labelToCheck: BusinessLabelType): boolean => {
     return arrayOfLabels.some(_label => {
       return (
         _label.name === labelToCheck.name &&
@@ -217,7 +199,6 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({
         isTouched={touched.description}
         errors={errors.description}
       />
-
       <ButtonCard
         title="Services"
         subTitle={selectedService ? selectedService.name : "Select a service"}
@@ -239,9 +220,7 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({
         errors={errors.serviceId}
       />
       <ButtonCard
-        rightIconName={
-          values?.hasNoDuration ? "checkbox-blank-outline" : "checkbox-outline"
-        }
+        rightIconName={values?.hasNoDuration ? "checkbox-blank-outline" : "checkbox-outline"}
         title={"Limited time"}
         onPress={() => {
           setFieldValue("hasNoDuration", !values?.hasNoDuration);
@@ -277,11 +256,7 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({
       />
       <ButtonCard
         title="Payment method"
-        subTitle={
-          values.paymentMethod
-            ? eventPaymentMethods[values.paymentMethod]
-            : "Select a payment method"
-        }
+        subTitle={values.paymentMethod ? eventPaymentMethods[values.paymentMethod] : "Select a payment method"}
         onPress={() =>
           navigation.navigate("modals", {
             screen: "selector-modal-screen",

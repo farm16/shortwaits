@@ -12,41 +12,52 @@ export class ClientUser extends Document implements ClientUserType {
     })
   )
   roleId: ObjectId;
+
   @ApiProperty()
   @Prop()
   businesses: ObjectId[];
+
   @ApiProperty()
   @Prop()
   doe: Date;
+
   @ApiProperty()
   @Prop()
   username: string;
+
   @ApiProperty()
   @Prop({
     default: "displayName",
   })
   alias: "displayName" | "familyName" | "givenName" | "middleName" | "username";
+
   @ApiProperty()
   @Prop()
   displayName: string;
+
   @ApiProperty()
   @Prop()
   familyName: string;
+
   @ApiProperty()
   @Prop()
   givenName: string;
+
   @ApiProperty()
   @Prop()
   middleName: string;
+
   @ApiProperty()
   @Prop()
   accountImageUrl: string;
+
   @ApiProperty()
   @Prop()
   phoneNumbers: {
     label: string;
     number: string;
   }[];
+
   @ApiProperty()
   @Prop()
   imAddresses: {
@@ -66,9 +77,10 @@ export class ClientUser extends Document implements ClientUserType {
     city: string;
     region: string;
     state: string;
-    postCode: number;
+    postCode: string;
     country: string;
   }[];
+
   @ApiProperty()
   @Prop(
     raw({
@@ -79,8 +91,8 @@ export class ClientUser extends Document implements ClientUserType {
     kind: string;
     uid?: string;
     username?: string;
-    password?: string;
   }[];
+
   @ApiProperty()
   @Prop(
     raw({
@@ -92,12 +104,15 @@ export class ClientUser extends Document implements ClientUserType {
     state: number;
     isCompleted: boolean;
   };
+
   @ApiProperty()
   @Prop()
   email: string;
+
   @ApiProperty()
   @Prop()
-  password?: string;
+  password: string;
+
   @ApiProperty()
   @Prop()
   desiredCurrencies: string[];
@@ -113,24 +128,31 @@ export class ClientUser extends Document implements ClientUserType {
     languageCode: string;
     languageTag: string;
   };
+
   @ApiProperty()
   @Prop()
   deleted: boolean;
+
   @ApiProperty()
   @Prop()
   createdAt: string;
+
   @ApiProperty()
   @Prop()
   updatedAt: string;
+
   @ApiProperty()
   @Prop()
   lastSignInAt: Date;
+
   @ApiProperty()
   @Prop()
   hashedRt: string;
+
   @ApiProperty()
   @Prop()
-  clientType: "partial" | "full";
+  clientType: "local" | "external";
+
   @ApiProperty()
   @Prop(
     raw({

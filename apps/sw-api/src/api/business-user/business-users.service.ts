@@ -1,4 +1,4 @@
-import { Model, Types } from "mongoose";
+import { Model, ObjectId, Types } from "mongoose";
 import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { BusinessUser } from "./entities/business-user.entity";
@@ -6,13 +6,13 @@ import { CreateBusinessUserDto, UpdateBusinessUserDto } from "./dto";
 import { getFilteredBusinessUser } from "../../utils/filtersForDtos";
 
 @Injectable()
-export class BusinessUsersService {
+export class BusinessUserService {
   constructor(
     @InjectModel(BusinessUser.name)
     private readonly businessUserModel: Model<BusinessUser>
   ) {}
 
-  async findMultiple(userIds: string[]) {
+  async findMultiple(userIds: string[] | ObjectId[]) {
     if (!userIds || userIds.length === 0) {
       return [];
     }

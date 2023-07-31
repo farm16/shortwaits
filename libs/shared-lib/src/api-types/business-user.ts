@@ -8,20 +8,18 @@ export type BusinessUsersDtoType = BusinessUserDtoType[];
 export type BusinessUserResponseType = CommonResponseType<BusinessUserDtoType>;
 export type BusinessUsersResponseType = CommonResponseType<BusinessUsersDtoType>;
 
-export type BusinessUserCreateDtoType = Omit<
+export type CreateBusinessUserDtoType = Omit<
   BusinessUserDtoType,
   | "_id"
   | "__v"
-  | "registration"
-  | "currentMembership"
-  | "billing"
-  | "hashedRt"
-  | "roleId"
+  | "registrationState"
+  | "businesses"
   | "deleted"
   | "createdAt"
   | "updatedAt"
   | "lastSignInAt"
-  | "businesses"
+  | "roleId"
+  | "hashedRt"
 >;
 
-export type BusinessUserUpdateDtoType = Partial<BusinessUserCreateDtoType>;
+export type BusinessUserUpdateDtoType = Partial<CreateBusinessUserDtoType>;

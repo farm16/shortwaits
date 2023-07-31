@@ -16,14 +16,13 @@ import {
   AnimatedSearchBar,
 } from "../../../components";
 import { useTheme } from "../../../theme";
-import { useBusiness, useGhostComponent } from "../../../store";
+import { useBusiness, useShowGhostComponent } from "../../../store";
 import { useCreateBusinessClientsMutation, useGetBusinessClientsQuery } from "../../../services";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { ActivityIndicator } from "react-native-paper";
 import Contacts from "react-native-contacts";
 import { ClientUserDtoType } from "@shortwaits/shared-lib";
 import { getUsersFromOsContacts } from "../../../utils/getUsersFromOsContacts";
-import { actions } from "../../../components/floating-action-button/fab-actions";
 import { isEmpty } from "lodash";
 
 export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({ navigation }) => {
@@ -42,6 +41,8 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({ navi
   const [filteredClientsData, setFilteredClientsData] = useState([]);
 
   const { Colors } = useTheme();
+
+  useShowGhostComponent("floatingActionButton");
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -142,7 +143,6 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({ navi
   const isCreateClientsLoading = createClientsResult.isLoading && !createClientsResult.isSuccess;
 
   const isLoading = isClientsDataLoading || isCreateClientsLoading;
-  useGhostComponent("floatingActionButton");
 
   useEffect(() => {
     if (!isLoading && isBusinessClientsQuerySuccess) {

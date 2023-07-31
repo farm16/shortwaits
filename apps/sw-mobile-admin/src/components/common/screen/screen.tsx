@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StatusBar,
-  View,
-} from "react-native";
+import { KeyboardAvoidingView, Platform, ScrollView, StatusBar, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { useTheme } from "../../../theme";
@@ -37,8 +31,6 @@ function ScreenWithoutScrolling(props: ScreenProps) {
     ? style.backgroundColor
     : Colors.backgroundOverlay;
 
-  console.log("backgroundColor", backgroundColor);
-
   const insetStyle = {
     paddingTop: unsafe ? 0 : insets.top,
     paddingBottom: unsafeBottom ? 0 : insets.bottom,
@@ -51,10 +43,7 @@ function ScreenWithoutScrolling(props: ScreenProps) {
       behavior={isIos ? "padding" : undefined}
       keyboardVerticalOffset={offsets[keyboardOffset || "none"]}
     >
-      <StatusBar
-        barStyle={statusBar || "dark-content"}
-        backgroundColor={backgroundColor}
-      />
+      <StatusBar barStyle={statusBar || "dark-content"} backgroundColor={backgroundColor} />
       <View style={[preset.inner, style, insetStyle]}>{children}</View>
     </KeyboardAvoidingView>
   );
@@ -95,10 +84,7 @@ function ScreenWithScrolling(props: ScreenProps) {
       behavior={isIos ? "padding" : undefined}
       keyboardVerticalOffset={offsets[keyboardOffset || "none"]}
     >
-      <StatusBar
-        barStyle={statusBar || "dark-content"}
-        backgroundColor={backgroundColor}
-      />
+      <StatusBar barStyle={statusBar || "dark-content"} backgroundColor={backgroundColor} />
       <View style={[preset.outer, { backgroundColor }, insetStyle]}>
         <ScrollView
           stickyHeaderIndices={stickyHeaderIndices}

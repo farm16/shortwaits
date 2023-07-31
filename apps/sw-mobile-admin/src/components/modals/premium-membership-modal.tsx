@@ -60,9 +60,7 @@ export const PremiumMembershipModal = props => {
           <Space size="small" />
           <View>
             {premiumAccountFeatures.map((elem, index) => {
-              return (
-                <CheckedList key={elem.name + index} text={elem.description} />
-              );
+              return <CheckedList key={elem.name + index} text={elem.description} />;
             })}
           </View>
           <Space />

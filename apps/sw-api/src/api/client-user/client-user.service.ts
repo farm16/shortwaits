@@ -1,8 +1,8 @@
-import { Model } from "mongoose";
+import { Model, ObjectId } from "mongoose";
 import { Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { ClientUser } from "./entities/client-user.entity";
-// import { ClientUserCreateDtoType } from "@shortwaits/shared-lib";
+// import { CreateClientUserDtoType } from "@shortwaits/shared-lib";
 import { CreateClientUserDto } from "./dto";
 import { getFilteredClientUser } from "../../utils/filtersForDtos";
 
@@ -13,7 +13,7 @@ export class ClientUserService {
     private readonly clientUserModel: Model<ClientUser>
   ) {}
 
-  async findMultiple(userIds: string[]) {
+  async findMultiple(userIds: string[] | ObjectId[]) {
     if (!userIds || !userIds.length) {
       return [];
     }

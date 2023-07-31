@@ -1,52 +1,53 @@
-import React, { useMemo } from "react";
-import { SectionListRenderItem, RefreshControl, SectionList, View } from "react-native";
-import { Button, NonIdealState, Text, BusinessUserCard, ClientUserCard } from "../../../../components";
+import React, { Fragment, useCallback, useMemo } from "react";
+import { SectionListRenderItem, RefreshControl, SectionList, View, SectionListData } from "react-native";
+import {
+  Button,
+  NonIdealState,
+  Text,
+  BusinessUserCard,
+  ClientUserCard,
+  Container,
+  IconButton,
+  Space,
+} from "../../../../components";
 import { useTheme } from "../../../../theme";
-import { useBusiness } from "../../../../store";
-import { useGetBusinessClientsQuery, useGetBusinessStaffQuery } from "../../../../services";
+import { useGetPeopleInEventQuery } from "../../../../services";
 import { EventDtoType, BusinessUserDtoType, ClientUserDtoType } from "@shortwaits/shared-lib";
 import { isEmpty } from "lodash";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
+import { ActivityIndicator } from "react-native-paper";
+import { navigate } from "../../../../utils";
 
 type PeopleDtoType = BusinessUserDtoType | ClientUserDtoType;
 
 export function EventUsersTab({ event }: { event: EventDtoType }) {
   const { Colors } = useTheme();
-  const business = useBusiness();
-  const {
-    data: clientsData,
-    isLoading: isBusinessClientsQueryLoading,
-    isSuccess: isBusinessClientsQuerySuccess,
-    isError: isBusinessClientQueryError,
-    refetch: refetchBusinessClientsQuery,
-  } = useGetBusinessClientsQuery(business._id ? business._id : skipToken);
 
   const {
-    data: staffData,
-    isLoading: isBusinessStaffQueryLoading,
-    isSuccess: isBusinessStaffQuerySuccess,
-    isError: isBusinessStaffQueryError,
-    refetch: refetchBusinessStaffQuery,
-  } = useGetBusinessStaffQuery(business._id ? business._id : skipToken);
+    data: peopleInEventData,
+    isLoading: isPeopleInEventQueryLoading,
+    isSuccess: isPeopleInEventQuerySuccess,
+    isError: isPeopleInEventQueryError,
+    refetch: refetchPeopleInEventQuery,
+  } = useGetPeopleInEventQuery(event._id ? event._id : skipToken);
 
+  console.log("peopleInEventData", peopleInEventData);
   const _data = useMemo(
-    () =>
-      [
-        {
-          title: "Staff",
-          data: staffData?.data ?? [],
-        },
-        {
-          title: "Clients",
-          data: clientsData?.data ?? [],
-        },
-      ] as const,
-    [clientsData?.data, staffData?.data]
+    () => [
+      {
+        title: "Staff",
+        data: peopleInEventData?.data?.businessUsers ?? [],
+      },
+      {
+        title: "Clients",
+        data: peopleInEventData?.data?.clientUsers ?? [],
+      },
+    ],
+    [peopleInEventData?.data]
   );
 
   const handleRefresh = () => {
-    refetchBusinessClientsQuery();
-    refetchBusinessStaffQuery();
+    refetchPeopleInEventQuery();
   };
 
   const _renderItem: SectionListRenderItem<PeopleDtoType> = data => {
@@ -57,11 +58,122 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
     }
   };
 
-  const isStaffDataLoading = isBusinessStaffQueryLoading && !isBusinessStaffQuerySuccess;
+  const nonIdealState = useCallback(section => {
+    const { title } = section;
+    return !isEmpty(section.data) ? null : title === "Clients" ? (
+      <NonIdealState
+        image={"noClientsInEvent"}
+        buttons={[
+          <Button
+            style={{
+              width: "auto",
+              paddingHorizontal: 28,
+            }}
+            text="Add client"
+            onPress={() => {
+              navigate("modals", {
+                screen: "selector-modal-screen",
+                params: {
+                  type: title === "Staff" ? "staff" : "clients",
+                  onSelect: user => {
+                    console.log("selected user:", user);
+                  },
+                },
+              });
+            }}
+          />,
+        ]}
+      />
+    ) : (
+      <NonIdealState
+        image={"noStaffInEvent"}
+        buttons={[
+          <Button
+            style={{
+              width: "auto",
+              paddingHorizontal: 28,
+            }}
+            text="Add staff"
+            onPress={() => {
+              navigate("modals", {
+                screen: "selector-modal-screen",
+                params: {
+                  type: title === "Staff" ? "staff" : "clients",
+                  onSelect: user => {
+                    console.log("selected user:", user);
+                  },
+                },
+              });
+            }}
+          />,
+        ]}
+      />
+    );
+  }, []);
 
-  const isClientsDataLoading = isBusinessClientsQueryLoading && !isBusinessClientsQuerySuccess;
+  const _renderSectionHeader = useCallback(
+    ({ section }) => {
+      const { title } = section as SectionListData<PeopleDtoType>;
+      console.log("section", section);
+      return (
+        <Fragment>
+          <Container
+            direction="row"
+            style={{
+              width: "100%",
+              justifyContent: "space-between",
+              alignItems: "center",
+              backgroundColor: Colors.backgroundOverlay,
+            }}
+          >
+            <Text
+              preset="none"
+              style={{
+                paddingTop: 24,
+                paddingBottom: 16,
+                fontSize: 14,
+                fontWeight: "500",
+                textTransform: "uppercase",
+              }}
+            >
+              {`${title} (${_data.find(({ title: _title }) => _title === title).data.length})`}
+            </Text>
+            <IconButton
+              iconType="add"
+              onPress={() => {
+                navigate("modals", {
+                  screen: "selector-modal-screen",
+                  params: {
+                    type: title === "Staff" ? "staff" : "clients",
+                    onSelect: user => {
+                      console.log("selected user:", user);
+                    },
+                  },
+                });
+              }}
+            />
+          </Container>
+          {nonIdealState(section as SectionListData<PeopleDtoType>)}
+        </Fragment>
+      );
+    },
+    [Colors.backgroundOverlay, _data, nonIdealState]
+  );
 
-  const isLoading = isClientsDataLoading || isStaffDataLoading;
+  const _renderListEmptyComponent = useCallback(() => {
+    return (
+      <View
+        style={{
+          marginTop: 16,
+          padding: 16,
+        }}
+      >
+        <NonIdealState image={"noClients"} buttons={[<Button text="Sync contacts" onPress={() => null} />]} />
+      </View>
+    );
+  }, []);
+
+  if (isPeopleInEventQueryLoading) return <ActivityIndicator animating={true} color={Colors.brandPrimary} />;
 
   return (
     <View
@@ -74,42 +186,16 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
       }}
     >
       <SectionList
-        refreshControl={<RefreshControl refreshing={isLoading} onRefresh={handleRefresh} />}
+        refreshControl={<RefreshControl refreshing={isPeopleInEventQueryLoading} onRefresh={handleRefresh} />}
         showsVerticalScrollIndicator={false}
         keyExtractor={item => item._id}
-        style={{
-          width: "100%",
-        }}
-        ListEmptyComponent={
-          <View
-            style={{
-              marginTop: 16,
-              padding: 16,
-            }}
-          >
-            {isEmpty(clientsData?.data) ? (
-              <NonIdealState image={"noClients"} buttons={[<Button text="Sync contacts" onPress={() => null} />]} />
-            ) : null}
-          </View>
-        }
-        renderSectionHeader={({ section: { title } }) => (
-          <Text
-            preset="none"
-            style={{
-              paddingTop: 24,
-              paddingBottom: 16,
-              fontSize: 14,
-              fontWeight: "500",
-              textTransform: "uppercase",
-              backgroundColor: Colors.backgroundOverlay,
-            }}
-          >
-            {`${title} (${_data.find(({ title: _title }) => _title === title).data.length})`}
-          </Text>
-        )}
+        style={{ width: "100%" }}
+        ListEmptyComponent={_renderListEmptyComponent}
+        renderSectionHeader={_renderSectionHeader}
         renderItem={_renderItem}
         sections={_data}
       />
+      <Space />
     </View>
   );
 }

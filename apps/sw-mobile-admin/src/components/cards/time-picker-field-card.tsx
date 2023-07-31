@@ -1,11 +1,7 @@
 import React, { useCallback, useState } from "react";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { Pressable, StyleSheet, TouchableOpacity } from "react-native";
 import { DefaultTheme, Provider as PaperProvider } from "react-native-paper";
-import {
-  DatePickerModal,
-  registerTranslation,
-  TimePickerModal,
-} from "react-native-paper-dates";
+import { DatePickerModal, registerTranslation, TimePickerModal } from "react-native-paper-dates";
 import format from "date-fns/format";
 
 import { Card, Container, Space, Text } from "../common";
@@ -27,8 +23,7 @@ registerTranslation("en", {
   notAccordingToDateFormat: inputFormat => `Date format must be ${inputFormat}`,
   mustBeHigherThan: date => `Must be later then ${date}`,
   mustBeLowerThan: date => `Must be earlier then ${date}`,
-  mustBeBetween: (startDate, endDate) =>
-    `Must be between ${startDate} - ${endDate}`,
+  mustBeBetween: (startDate, endDate) => `Must be between ${startDate} - ${endDate}`,
   dateIsDisabled: "Day is not allowed",
   previous: "Previous",
   next: "Next",
@@ -77,17 +72,34 @@ export function TimePickerFieldCard(props: TimePickerInputProps) {
       accent: Colors.brandAccent,
     },
   };
+  const handleSetFocus = () => {
+    if (!withTime) {
+      setIsDatePickerOpen(true);
+    }
+  };
+
   return (
     <>
-      <Card mode="text-field">
+      <Card mode="text-field" disabled={withTime} onPress={handleSetFocus}>
         <Text preset="cardTitle" text={title} />
         <Space size="tiny" />
         <Container direction="row" justifyContent="space-between">
-          <TouchableOpacity onPress={() => setIsDatePickerOpen(true)}>
+          <TouchableOpacity
+            style={{
+              flex: 1,
+            }}
+            onPress={() => setIsDatePickerOpen(true)}
+          >
             <Text preset="cardSubtitle" text={format(date, "MM/dd/yyyy")} />
           </TouchableOpacity>
           {withTime ? (
-            <TouchableOpacity onPress={() => setIsTimePickerOpen(true)}>
+            <TouchableOpacity
+              style={{
+                flex: 1,
+                alignItems: "flex-end",
+              }}
+              onPress={() => setIsTimePickerOpen(true)}
+            >
               <Text preset="cardSubtitle" text={format(date, "hh:mm aa")} />
             </TouchableOpacity>
           ) : null}

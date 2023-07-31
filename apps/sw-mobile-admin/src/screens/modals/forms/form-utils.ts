@@ -1,7 +1,7 @@
-export const formatAddClientsValues = (formValues) => {
+export const formatAddClientsValues = formValues => {
   const formattedValues = [];
   const values = {
-    clientType: "partial",
+    clientType: "local",
     businesses: [formValues.businessId],
     doe: formValues.doe,
     username: formValues.email,

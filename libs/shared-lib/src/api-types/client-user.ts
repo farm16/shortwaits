@@ -8,20 +8,20 @@ export type ClientUsersDtoType = ClientUserDtoType[];
 export type ClientUserResponseType = CommonResponseType<ClientUserDtoType>;
 export type ClientUsersResponseType = CommonResponseType<ClientUsersDtoType>;
 
-export type ClientUserCreateDtoType = Omit<
+export type CreateClientUserDtoType = Omit<
   ClientUserDtoType,
   | "_id"
   | "__v"
-  | "registration"
-  | "currentMembership"
   | "billing"
-  | "hashedRt"
-  | "roleId"
+  | "businesses"
   | "deleted"
   | "createdAt"
   | "updatedAt"
   | "lastSignInAt"
-  | "businesses"
+  | "roleId"
+  | "hashedRt"
+  | "registration"
+  | "currentMembership"
 >;
 
-export type ClientUserUpdateDtoType = Partial<ClientUserCreateDtoType>;
+export type ClientUserUpdateDtoType = Partial<CreateClientUserDtoType>;

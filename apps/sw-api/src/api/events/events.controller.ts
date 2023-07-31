@@ -75,22 +75,6 @@ export class EventsController {
     return this.eventsService.createEvent(event, request.user.sub);
   }
 
-  // @Post("client")
-  // @HttpCode(HttpStatus.ACCEPTED)
-  // @ApiCreatedResponse({
-  //   status: HttpStatus.ACCEPTED,
-  //   type: Events,
-  //   description:
-  //     "Create new event record by client (not business user or business)",
-  // })
-  // createEventByClient(
-  //   @Req() request,
-  //   @Body() event: CreateEventsDto
-  // ) {
-  //   // todo: validate permission with business
-  //   return this.eventsService.createEvent(event, request.user.sub);
-  // }
-
   @Put("business/:businessId")
   @HttpCode(HttpStatus.ACCEPTED)
   @ApiCreatedResponse({
@@ -142,45 +126,20 @@ export class EventsController {
   async deleteEvents(@Req() request, @Body() eventIds: string[]) {
     return await this.eventsService.deleteEvents(eventIds, request.user.sub);
   }
+
+  @Get("people")
+  @HttpCode(HttpStatus.OK)
+  @ApiCreatedResponse({
+    status: HttpStatus.OK,
+    description: "Get all people involved in a event",
+  })
+  async getPeopleByEvent(@Req() request, @Query("eventId") eventId: string) {
+    if (!eventId) {
+      throw new NotFoundException("Event not found");
+    }
+    if (!request.user.sub) {
+      throw new NotFoundException("User not found");
+    }
+    return await this.eventsService.getPeopleByEvent(eventId, request.user.sub);
+  }
 }
-
-// @Get(":eventId")
-// @HttpCode(HttpStatus.OK)
-// @ApiCreatedResponse({
-//   status: HttpStatus.OK,
-//   description: "Get a event record by id",
-// })
-// getEvent(@Req() request, @Param("eventId") eventId: string) {
-//   // todo validate if user belongs+has right permission with business
-//   // todo validate if eventId is in business events
-//   return this.eventsService.getEvent(request.user.sub, eventId);
-// }
-
-// @Get("user/:userId")
-// @HttpCode(HttpStatus.OK)
-// @ApiCreatedResponse({
-//   status: HttpStatus.OK,
-//   description: "Get all events for a user",
-// })
-// @ApiQuery({ name: "page", type: Number, required: false })
-// @ApiQuery({ name: "limit", type: Number, required: false })
-// @ApiQuery({ name: "date", type: Date, required: false })
-// @ApiQuery({ name: "month", type: Number, required: false })
-// @ApiQuery({ name: "year", type: Number, required: false })
-// async getEventsByUser(
-//   @Param("businessId") businessId: string,
-//   @Query("page") page?: number,
-//   @Query("limit") limit?: number,
-//   @Query("date") date?: Date,
-//   @Query("month") month?: number,
-//   @Query("year") year?: number
-// ): Promise<Events[]> {
-//   const paginateOptions = { page, limit };
-//   const filterOptions = { date, month, year };
-//   // todo will validate if user in Business has permission to view events
-//   return this.eventsService.getEventsByBusiness(
-//     businessId,
-//     paginateOptions,
-//     filterOptions
-//   );
-// }

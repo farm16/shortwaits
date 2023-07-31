@@ -26,7 +26,9 @@ export const {
   useGetUsersQuery,
   useGetEventsByBusinessQuery,
   useGetEventsSummaryByBusinessQuery,
+  useGetPeopleInEventQuery,
   //Lazy Query hooks
+  useLazyGetPeopleInEventQuery,
   useLazyGetUsersQuery,
   useLazyGetCategoryQuery,
   useLazyGetCategoriesQuery,

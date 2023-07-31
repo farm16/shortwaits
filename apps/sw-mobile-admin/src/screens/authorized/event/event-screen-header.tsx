@@ -6,7 +6,7 @@ import { useTheme } from "../../../theme";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { statusDisplayMessages, statusDisplayMessagesColor } from "../../../utils/status-color";
 import { getPrettyStringFromPriceWithSymbol, getPrettyDateFromISO, getPrettyTimeRangeFromISO } from "../../../utils";
-import { truncate } from "lodash";
+import { isEmpty, truncate } from "lodash";
 
 const IconNames = {
   date: "calendar-month-outline",
@@ -48,9 +48,9 @@ function InfoItem({ title, value, iconName }: InfoItemProps) {
 
       {title === "Labels" ? (
         <Container direction="row">
-          {(value as BusinessLabelsType).map(label => (
-            <Emoji size={14} name={label.emojiShortName} />
-          ))}
+          {isEmpty(value)
+            ? null
+            : (value as BusinessLabelsType).map(label => <Emoji size={14} name={label.emojiShortName} />)}
         </Container>
       ) : (
         <Text
@@ -72,7 +72,7 @@ function InfoItem({ title, value, iconName }: InfoItemProps) {
 }
 
 export function EventScreenHeader({ event }: { event: EventDtoType }) {
-  console.log("event", JSON.stringify(event, null, 2));
+  // console.log("event", JSON.stringify(event, null, 2));
   return (
     <View style={styles.root}>
       {event?.description ? (

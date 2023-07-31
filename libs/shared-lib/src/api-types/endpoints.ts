@@ -18,6 +18,7 @@ type Endpoint =
   | "shortwaits/admin/mobile"
   | `events/business/summary/${string}`
   | `events/business/${string}`
+  | "events/people"
   | `events/${string}`
   | "events"
   | `events/delete/${string}`
@@ -25,10 +26,7 @@ type Endpoint =
   | "services"
   | `services/${string}`;
 
-export const createEndpoint = <T = any>(
-  endpoint: Endpoint,
-  method: HttpMethod
-) => {
+export const createEndpoint = <T = any>(endpoint: Endpoint, method: HttpMethod) => {
   return {
     getConfig: (pathVars: string[], queryParams: T) => {
       const url = endpoint
@@ -36,9 +34,7 @@ export const createEndpoint = <T = any>(
         .map(part => (part.startsWith(":") ? pathVars.shift() : part))
         .join("/");
 
-      const queryString = queryParams
-        ? new URLSearchParams(queryParams ?? {}).toString()
-        : undefined;
+      const queryString = queryParams ? new URLSearchParams(queryParams ?? {}).toString() : undefined;
       const urlWithQuery = queryString ? `${url}?${queryString}` : url;
       if (process.env["NODE_ENV"] !== "production") {
         console.log(`${method} - ${urlWithQuery}`);
@@ -57,10 +53,7 @@ export const endpoints = {
   signInLocal: createEndpoint("auth/admin/local/sign-in", "POST"),
   signOutLocal: createEndpoint("auth/admin/local/sign-out", "POST"),
   signUpLocal: createEndpoint("auth/admin/local/sign-up", "POST"),
-  forgotPasswordLocal: createEndpoint(
-    "auth/admin/local/forgot-password",
-    "POST"
-  ),
+  forgotPasswordLocal: createEndpoint("auth/admin/local/forgot-password", "POST"),
   refreshLocal: createEndpoint("auth/admin/local/refresh", "PUT"),
 
   // business
@@ -68,10 +61,7 @@ export const endpoints = {
   updateBusiness: createEndpoint(`business/:businessId`, "PUT"),
   getBusinessAdmins: createEndpoint(`business/:businessId/admins`, "GET"),
   getBusinessServices: createEndpoint(`business/:businessId/services`, "GET"),
-  getBusinessCategories: createEndpoint(
-    `business/:businessId/categories`,
-    "GET"
-  ),
+  getBusinessCategories: createEndpoint(`business/:businessId/categories`, "GET"),
   getBusinessHours: createEndpoint(`business/:businessId/hours`, "GET"),
   getBusinessEvents: createEndpoint(`business/:businessId/events`, "GET"),
   getBusinessClients: createEndpoint(`business/:businessId/clients`, "GET"),
@@ -82,10 +72,7 @@ export const endpoints = {
   getShortwaitsAdminMobile: createEndpoint("shortwaits/admin/mobile", "GET"),
 
   //events
-  getEventsBusinessSummary: createEndpoint(
-    `events/business/summary/:businessId`,
-    "GET"
-  ),
+  getEventsBusinessSummary: createEndpoint(`events/business/summary/:businessId`, "GET"),
   getEventsForBusiness: createEndpoint<{
     page?: number;
     limit?: number;
@@ -98,6 +85,9 @@ export const endpoints = {
   updateEvents: createEndpoint(`events/:eventId`, "PUT"),
   deleteEvent: createEndpoint(`events/delete/:eventId`, "PUT"),
   deleteEvents: createEndpoint("events/delete", "PUT"),
+  getPeopleInEvent: createEndpoint<{
+    eventId: string;
+  }>(`events/people`, "GET"),
 
   //services
   getServices: createEndpoint("services", "GET"),

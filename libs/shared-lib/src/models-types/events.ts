@@ -43,8 +43,8 @@ export type EventPaymentMethodType = keyof typeof eventPaymentMethods;
 
 export type EventType = {
   participantsIds: ObjectId[]; // Array of participant IDs // can be invites by client
-  staffIds: ObjectId[]; // Array of staff IDs
-  clientsIds: ObjectId[]; // Array of client IDs
+  staffIds: ObjectId[]; // Array of business user IDs
+  clientsIds: ObjectId[]; // Array of client user IDs
   businessId: ObjectId; // ID of the associated business
   createdBy: ObjectId; // ID of the user who created the event
   updatedBy: ObjectId; // ID of the user who last updated the event

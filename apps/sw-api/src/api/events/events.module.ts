@@ -5,10 +5,8 @@ import { MongooseModule } from "@nestjs/mongoose";
 import { Events, EventsSchema } from "./entities/events.entity";
 import { Service, ServiceSchema } from "../services/entities/service.entity";
 import { Business, BusinessSchema } from "../business/entities/business.entity";
-import {
-  BusinessUser,
-  BusinessUserSchema,
-} from "../business-user/entities/business-user.entity";
+import { BusinessUser, BusinessUserSchema } from "../business-user/entities/business-user.entity";
+import { ClientUser, ClientUserSchema } from "../client-user/entities/client-user.entity";
 
 @Module({
   imports: [
@@ -28,6 +26,10 @@ import {
       {
         name: BusinessUser.name,
         schema: BusinessUserSchema,
+      },
+      {
+        name: ClientUser.name,
+        schema: ClientUserSchema,
       },
     ]),
   ],

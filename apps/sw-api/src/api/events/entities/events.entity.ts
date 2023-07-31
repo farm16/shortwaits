@@ -22,6 +22,7 @@ class EventLocation implements EventLocationType {
   latitude: number; // Latitude of the location
   longitude: number; // Longitude of the location
 }
+
 @Schema()
 export class Events extends Document implements EventType {
   @ApiProperty()
@@ -103,10 +104,6 @@ export class Events extends Document implements EventType {
   @ApiProperty()
   @Prop({ type: Types.ObjectId })
   updatedBy: ObjectId;
-
-  @ApiProperty()
-  @Prop()
-  staff: ObjectId[];
 
   @ApiProperty()
   @Prop()

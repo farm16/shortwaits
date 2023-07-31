@@ -13,21 +13,14 @@ type EmojiProps = {
 };
 
 export function Emoji({ name, size = 15, style: styleOverride }: EmojiProps) {
-  console.log("Emoji >>>", name);
-  const charFromUtf16 = utf16 =>
-    String.fromCodePoint(...utf16.split("-").map(u => "0x" + u));
+  const charFromUtf16 = utf16 => String.fromCodePoint(...utf16.split("-").map(u => "0x" + u));
 
   const emojis = (function () {
-    return charFromUtf16(
-      EmojiData.find(emoji => emoji.short_name === name).unified
-    );
+    return charFromUtf16(EmojiData.find(emoji => emoji.short_name === name).unified);
   })();
 
   return (
-    <Text
-      preset="none"
-      style={[{ fontSize: size, textAlign: "center" }, styleOverride]}
-    >
+    <Text preset="none" style={[{ fontSize: size, textAlign: "center" }, styleOverride]}>
       {emojis ?? ""}
     </Text>
   );

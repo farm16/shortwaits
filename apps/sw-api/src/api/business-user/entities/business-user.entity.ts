@@ -1,37 +1,44 @@
 import { Schema, Prop, SchemaFactory, raw } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
 import { Document, Types } from "mongoose";
-import { BusinessUserType, ObjectId } from "@shortwaits/shared-lib";
+import { BusinessUserType } from "@shortwaits/shared-lib";
 
 @Schema({ collection: "business-users" })
 export class BusinessUser extends Document implements BusinessUserType {
   @ApiProperty()
   @Prop()
   roleId: Types.ObjectId;
+
   @ApiProperty()
   @Prop()
   displayName: string;
+
   @ApiProperty()
   @Prop()
   familyName: string;
+
   @ApiProperty()
   @Prop()
   givenName: string;
+
   @ApiProperty()
   @Prop()
   middleName: string;
+
   @ApiProperty()
   @Prop()
   phoneNumbers: {
     label: string;
     number: string;
   }[];
+
   @ApiProperty()
   @Prop()
   imAddresses: {
     username: string;
     service: string;
   }[];
+
   @ApiProperty()
   @Prop()
   addresses: {
@@ -41,9 +48,10 @@ export class BusinessUser extends Document implements BusinessUserType {
     city: string;
     region: string;
     state: string;
-    postCode: number;
+    postCode: string;
     country: string;
   }[];
+
   @ApiProperty()
   @Prop(
     raw({
@@ -52,32 +60,36 @@ export class BusinessUser extends Document implements BusinessUserType {
       day: { type: Number },
     })
   )
-  birthday: {
-    year: number;
-    month: number;
-    day: number;
-  };
+  birthday: string;
+
   @ApiProperty()
   @Prop()
   businesses: Types.ObjectId[];
+
   @ApiProperty()
   @Prop()
   alias: "familyName" | "givenName" | "middleName" | "displayName";
+
   @ApiProperty()
   @Prop()
   customAlias: string;
+
   @ApiProperty()
   @Prop({ unique: true, trim: true, required: true })
   username: string;
+
   @ApiProperty()
   @Prop()
   firstName: string;
+
   @ApiProperty()
   @Prop()
   lastName: string;
+
   @ApiProperty()
   @Prop()
   accountImageUrl: string;
+
   @ApiProperty()
   @Prop(
     raw({
@@ -97,9 +109,11 @@ export class BusinessUser extends Document implements BusinessUserType {
     zip: number;
     countryCode: string;
   };
+
   @ApiProperty()
   @Prop()
   socialAccounts: [];
+
   @ApiProperty()
   @Prop(
     raw({
@@ -113,16 +127,19 @@ export class BusinessUser extends Document implements BusinessUserType {
     state: number;
     isCompleted: boolean;
   };
+
   @ApiProperty()
   @Prop({ unique: true, trim: true, required: true })
   email: string;
 
   @ApiProperty()
   @Prop()
-  password?: string;
+  password: string;
+
   @ApiProperty()
   @Prop()
   desiredCurrencies: string[];
+
   @ApiProperty()
   @Prop(
     raw({
@@ -138,18 +155,23 @@ export class BusinessUser extends Document implements BusinessUserType {
     languageCode: string;
     languageTag: string;
   };
+
   @ApiProperty()
   @Prop({ default: false })
   deleted: boolean;
+
   @ApiProperty()
   @Prop()
   createdAt: string;
+
   @ApiProperty()
   @Prop()
   updatedAt: string;
+
   @ApiProperty()
   @Prop()
   lastSignInAt: Date;
+
   @ApiProperty()
   @Prop({ default: null })
   hashedRt: string;

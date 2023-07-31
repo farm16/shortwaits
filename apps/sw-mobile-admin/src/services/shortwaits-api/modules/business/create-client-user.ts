@@ -1,11 +1,10 @@
 import { shortwaitsApiEndpoints } from "../../../../configs";
-import { BusinessEndpointsTypes, ObjectId } from "@shortwaits/shared-lib";
+import { BusinessEndpointsTypes } from "@shortwaits/shared-lib";
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
 
 const { createBusinessClient } = shortwaitsApiEndpoints.BUSINESS;
 
-type Endpoint =
-  BusinessEndpointsTypes["/business/:businessId/clients"]["methods"]["POST"];
+type Endpoint = BusinessEndpointsTypes["/business/:businessId/clients"]["methods"]["POST"];
 type ResponseType = Endpoint["response"];
 type PayloadType = {
   businessId: string;
@@ -13,7 +12,7 @@ type PayloadType = {
 };
 
 export default (builder: EndpointBuilder<any, any, any>) =>
-  builder.mutation<ResponseType, PayloadType>({
+  builder.mutation<any, any>({
     query: ({ businessId, businessClients }) => ({
       url: createBusinessClient.getPath(businessId),
       method: createBusinessClient.METHOD,

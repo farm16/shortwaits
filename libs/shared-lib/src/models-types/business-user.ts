@@ -23,10 +23,8 @@ export type UserMethodsType = {
 };
 
 export type BusinessUserType = {
-  businesses: ObjectId[];
   alias: "familyName" | "givenName" | "middleName" | "displayName";
   displayName: string;
-  //
   familyName: string;
   givenName: string;
   middleName: string;
@@ -46,27 +44,16 @@ export type BusinessUserType = {
     city: string;
     region: string;
     state: string;
-    postCode: number;
+    postCode: string;
     country: string;
   }[];
   socialAccounts: {
     kind: string;
     uid?: string;
     username?: string;
-    password?: string;
   }[];
-  birthday: {
-    year: number;
-    month: number;
-    day: number;
-  };
-  registrationState: {
-    screenName: string;
-    state: number;
-    isCompleted: boolean;
-  };
+  birthday: string;
   email: string;
-  password?: string;
   desiredCurrencies: string[];
   locale: {
     countryCode: string;
@@ -74,6 +61,14 @@ export type BusinessUserType = {
     languageCode: string;
     languageTag: string;
   };
+  // bellow are fields from the that are not in the CreateBusinessUserDtoType
+  registrationState: {
+    screenName: string;
+    state: number;
+    isCompleted: boolean;
+  };
+  password: string;
+  businesses: ObjectId[];
   deleted: boolean;
   createdAt: string;
   updatedAt: string;

@@ -1,15 +1,19 @@
 import { IsNotEmpty, IsOptional } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
-import { BusinessUserCreateDtoType } from "@shortwaits/shared-lib";
+import { CreateBusinessUserDtoType } from "@shortwaits/shared-lib";
 
-export class CreateBusinessUserDto implements BusinessUserCreateDtoType {
+export class CreateBusinessUserDto implements CreateBusinessUserDtoType {
   @ApiProperty()
   @IsNotEmpty()
-  birthday: { year: number; month: number; day: number };
+  birthday: string;
 
   @ApiProperty()
   @IsNotEmpty()
-  registrationState: { screenName: string; state: number; isCompleted: boolean };
+  registrationState: {
+    screenName: string;
+    state: number;
+    isCompleted: boolean;
+  };
 
   @ApiProperty()
   @IsNotEmpty()
@@ -17,7 +21,7 @@ export class CreateBusinessUserDto implements BusinessUserCreateDtoType {
 
   @ApiProperty()
   @IsNotEmpty()
-  clientType: "partial" | "full";
+  clientType: "local" | "external";
 
   @ApiProperty()
   @IsNotEmpty()
@@ -53,7 +57,7 @@ export class CreateBusinessUserDto implements BusinessUserCreateDtoType {
 
   @ApiProperty()
   @IsNotEmpty()
-  password?: string;
+  password: string;
 
   @ApiProperty()
   @IsOptional()
@@ -65,11 +69,17 @@ export class CreateBusinessUserDto implements BusinessUserCreateDtoType {
   };
   @ApiProperty()
   @IsOptional()
-  phoneNumbers: { label: string; number: string }[];
+  phoneNumbers: {
+    label: string;
+    number: string;
+  }[];
 
   @ApiProperty()
   @IsOptional()
-  imAddresses: { username: string; service: string }[];
+  imAddresses: {
+    username: string;
+    service: string;
+  }[];
 
   @ApiProperty()
   @IsOptional()
@@ -80,12 +90,16 @@ export class CreateBusinessUserDto implements BusinessUserCreateDtoType {
     city: string;
     region: string;
     state: string;
-    postCode: number;
+    postCode: string;
     country: string;
   }[];
   @ApiProperty()
   @IsOptional()
-  socialAccounts: { kind: string; uid?: string; username?: string; password?: string }[];
+  socialAccounts: {
+    kind: string;
+    uid?: string;
+    username?: string;
+  }[];
 
   @ApiProperty()
   @IsOptional()

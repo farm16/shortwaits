@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { StyleSheet } from "react-native";
+import { Pressable, StyleSheet } from "react-native";
 
 import { getDimensions, useTheme } from "../../theme";
 import { Card, CardProps, Space, Text, TextFieldProps } from "../common";
@@ -16,24 +16,24 @@ type PhoneNumberProps = {
   Partial<CardProps>;
 
 export const PhoneNumberCard = (props: PhoneNumberProps) => {
-  const {
-    initialValue,
-    errors,
-    isTouched,
-    title,
-    isValid,
-    disabled = false,
-    onChangeText,
-  } = props;
+  const { initialValue, errors, isTouched, title, isValid, disabled = false, onChangeText } = props;
   const { Colors } = useTheme();
   const { width } = getDimensions();
 
   const phoneNumber = useRef<PhoneInput>(null);
 
+  const handleSetFocus = () => {
+    if (phoneNumber.current) {
+      phoneNumber.current.focus();
+    }
+  };
+
   return (
     <>
       <Card mode="text-field">
-        <Text preset="cardTitle" text={title} />
+        <Pressable onPress={handleSetFocus}>
+          <Text preset="cardTitle" text={title} />
+        </Pressable>
         <PhoneInput
           disabled={disabled}
           ref={phoneNumber}

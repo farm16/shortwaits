@@ -24,6 +24,7 @@ import {
   CreateEvent,
   GetEventsSummaryByBusiness,
   PostLocalSignOut,
+  GetPeopleInEvent,
 } from "./modules";
 import { baseQueryWithInterceptor } from "./interceptor";
 import { REHYDRATE } from "redux-persist";
@@ -68,5 +69,6 @@ export const shortwaitsApi = createApi({
     createEvent: CreateEvent(builder),
     getEventsByBusiness: GetEventsByBusiness(builder),
     getEventsSummaryByBusiness: GetEventsSummaryByBusiness(builder),
+    getPeopleInEvent: GetPeopleInEvent(builder),
   }),
 });

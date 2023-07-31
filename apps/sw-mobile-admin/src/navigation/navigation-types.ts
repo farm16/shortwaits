@@ -11,19 +11,19 @@ import {
 import { selectorConfigs } from "../screens/modals/selector/selector-config";
 import {
   BusinessLabelType,
-  BusinessLabelsType,
   CategoryDtoType,
   CreateEventDtoType,
   EventDtoType,
   ServiceDtoType,
   UpdateEventDtoType,
-  BusinessUserDtoType,
+  CreateBusinessUserDtoType,
+  CreateClientUserDtoType,
 } from "@shortwaits/shared-lib";
 
 export type FormData = {
   addEvent: CreateEventDtoType;
-  addClient: BusinessUserDtoType;
-  addStaff: BusinessUserDtoType;
+  addClient: CreateClientUserDtoType;
+  addStaff: CreateBusinessUserDtoType;
   updateEvent: UpdateEventDtoType;
 };
 export type FormType = keyof FormData;
@@ -35,6 +35,7 @@ export type SelectorModalData =
   | ServiceDtoType
   | BusinessLabelType
   | { key: string; title: string; subTitle?: string };
+
 export type SelectorModalModeType = keyof typeof selectorConfigs;
 
 export type ScheduleModalModeType = "My-Business-Hours" | "User-Hours";

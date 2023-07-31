@@ -39,10 +39,10 @@ export const ClientUserCard = (props: ClientUserCardProps) => {
         <Text preset="cardTitle" text={user.familyName ?? ""} />
       </Pressable>
       <TouchableOpacity style={styles.icons} onPress={() => {}}>
-        <Icon name="phone" color={Colors.brandSecondary} size={23} />
+        <Icon name="phone" color={Colors.darkGray} size={23} />
       </TouchableOpacity>
       <TouchableOpacity style={styles.icons} onPress={() => {}}>
-        <Icon name="message-text-outline" color={Colors.brandSecondary} size={23} />
+        <Icon name="message-text-outline" color={Colors.darkGray} size={23} />
       </TouchableOpacity>
     </Button>
   );

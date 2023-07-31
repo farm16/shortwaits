@@ -1,7 +1,7 @@
 import { Get, Post, Body, Put, Delete, Param, Controller, Req, HttpStatus, UseGuards, HttpCode } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 
-import { BusinessUsersService } from "./business-users.service";
+import { BusinessUserService } from "./business-users.service";
 import { AtGuard } from "../../common/guards";
 import { CreateBusinessUserDto } from "./dto";
 
@@ -10,7 +10,7 @@ import { CreateBusinessUserDto } from "./dto";
 @ApiBearerAuth("bearer")
 @UseGuards(AtGuard)
 export class BusinessUsersController {
-  constructor(private readonly businessUserService: BusinessUsersService) {}
+  constructor(private readonly businessUserService: BusinessUserService) {}
 
   @Post("multiple")
   @HttpCode(HttpStatus.OK)

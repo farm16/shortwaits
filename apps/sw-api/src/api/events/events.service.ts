@@ -1,11 +1,12 @@
 import {
+  ForbiddenException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
   UnauthorizedException,
 } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Model, Types } from "mongoose";
+import { Model, ObjectId, Types } from "mongoose";
 
 import { Business } from "../business/entities/business.entity";
 import { Service } from "../services/entities/service.entity";
@@ -14,6 +15,8 @@ import { Events } from "./entities/events.entity";
 import { CreateEventsDto } from "./dto/create-event.dto";
 import { convertArrayToObjectId } from "../../utils/converters";
 import { EventDtoType } from "@shortwaits/shared-lib";
+import { getFilteredNewEvent } from "../../utils/filtersForDtos";
+import { ClientUser } from "../client-user/entities/client-user.entity";
 
 const WEEK_DAY = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -21,89 +24,38 @@ const WEEK_DAY = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 export class EventsService {
   constructor(
     @InjectModel(Events.name) private eventsModel: Model<Events>,
-    @InjectModel(Service.name) private servicesModel: Model<Service>,
     @InjectModel(Business.name) private businessModel: Model<Business>,
-    @InjectModel(BusinessUser.name)
-    private businessUserModel: Model<BusinessUser>
+    @InjectModel(Service.name) private servicesModel: Model<Service>,
+    @InjectModel(BusinessUser.name) private businessUserModel: Model<BusinessUser>,
+    @InjectModel(ClientUser.name) private clientUserModel: Model<ClientUser>
   ) {}
 
-  async createEvent(
-    event: CreateEventsDto,
-    userId: string
-  ): Promise<Events & { _id: Types.ObjectId }> {
+  async createEvent(event: CreateEventsDto, userId: string): Promise<Events & { _id: Types.ObjectId }> {
     try {
-      const businessRecord = await this.businessModel.findById(
-        event.businessId
-      );
+      const businessRecord = await this.businessModel.findById(event.businessId);
 
       if (!businessRecord) {
         throw new UnauthorizedException("Business not found");
       }
 
-      console.log(event.labels);
-
-      const isAdmin = businessRecord.admins.some(
-        adminId => adminId.toString() === userId
-      );
+      const isAdmin = businessRecord.admins.some(adminId => adminId.toString() === userId);
 
       if (!isAdmin) {
         throw new UnauthorizedException("User not found");
       }
 
       const isTaxable = false; // todo check later if events can be taxable
-      const status = { statusCode: 0, statusName: "PENDING" };
-      const createdBy = userId;
-      const updatedBy = userId;
-      const isGroupEvent = event.clientsIds.length > 1;
-      const deleted = false;
-      const canceled = false;
-      const _finalPrice = event.priceExpected;
+
       if (isTaxable) {
         // do something
       }
 
-      const _newEvent = {
-        participantsIds: event.participantsIds,
-        staffIds: event.staffIds,
-        clientsIds: event.clientsIds,
-        businessId: event.businessId,
-        createdBy,
-        updatedBy,
-        leadClientId: event.leadClientId,
-        name: event.name,
-        description: event.description,
-        eventImage: event.eventImage,
-        serviceId: event.serviceId,
-        features: event.features,
-        status,
-        hasNoDuration: event.hasNoDuration,
-        durationInMin: event.durationInMin,
-        startTime: event.startTime,
-        endTime: event.endTime,
-        endTimeExpected: event.endTimeExpected,
-        priceExpected: event.priceExpected,
-        priceFinal: _finalPrice,
-        canceled,
-        isGroupEvent,
-        repeat: event.repeat,
-        payment: event.payment,
-        notes: event.notes,
-        labels: event.labels,
-        urls: event.urls,
-        deleted,
-        location: event.location,
-        attendeeLimit: event.attendeeLimit,
-        registrationDeadline: event.registrationDeadline,
-        registrationFee: event.registrationFee,
-      };
-
-      console.log(JSON.stringify(_newEvent, null, 2));
+      const _newEvent = getFilteredNewEvent(event, userId);
+      console.log("New Event >>>", JSON.stringify(_newEvent, null, 2));
 
       const newEvent = await this.eventsModel.create(_newEvent);
 
-      await businessRecord
-        .updateOne({ $push: { events: newEvent._id } })
-        .exec();
+      await businessRecord.updateOne({ $push: { events: newEvent._id } }).exec();
 
       return newEvent;
     } catch (error) {
@@ -112,11 +64,7 @@ export class EventsService {
     }
   }
 
-  async updateEvent(
-    event: EventDtoType,
-    businessId: string,
-    updatedBy: string
-  ) {
+  async updateEvent(event: EventDtoType, businessId: string, updatedBy: string) {
     try {
       const updatedEvent = await this.eventsModel.findOneAndUpdate(
         { _id: event._id, deleted: false },
@@ -154,17 +102,10 @@ export class EventsService {
         )
         .exec();
 
-      // Check if the event was found and deleted
       if (!deleteResult) {
         throw new NotFoundException("Event not found");
       }
-
-      // Update the business record to remove the deleted event
-      await this.businessModel
-        .updateOne({ events: eventId }, { $pull: { events: eventId } })
-        .exec();
-
-      // Return the deleted event
+      await this.businessModel.updateOne({ events: eventId }, { $pull: { events: eventId } }).exec();
       return deleteResult;
     } catch (error) {
       console.error(error);
@@ -198,19 +139,8 @@ export class EventsService {
           modifiedClientCount: null, //pending
         };
       }
-
-      // const updatedClient =  await this.businessModel
-      // .updateOne(
-      //   { events: { $in: _eventIds } },
-      //   { $pullAll: { events: _eventIds } }
-      // )
-      // .exec();
-
       const updatedBusiness = await this.businessModel
-        .updateOne(
-          { events: { $in: _eventIds } },
-          { $pullAll: { events: _eventIds } }
-        )
+        .updateOne({ events: { $in: _eventIds } }, { $pullAll: { events: _eventIds } })
         .exec();
 
       return {
@@ -230,10 +160,7 @@ export class EventsService {
         businessId: string;
       } = { businessId };
 
-      const events = await this.eventsModel
-        .find(filter)
-        .select("payment")
-        .exec();
+      const events = await this.eventsModel.find(filter).select("payment").exec();
 
       const totalAmountPerDayHour = {};
       const totalAmountPerWeekDay = {
@@ -259,11 +186,7 @@ export class EventsService {
           const date = new Date(item.payment.paymentProcessedOn);
 
           const today = new Date(Date.now());
-          const daysInCurrentMonth = new Date(
-            today.getFullYear(),
-            today.getMonth() + 1,
-            0
-          ).getDate();
+          const daysInCurrentMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
 
           for (let day = 1; day <= daysInCurrentMonth; day++) {
             totalAmountPerMonthDay[day] = 0;
@@ -275,16 +198,8 @@ export class EventsService {
           }
 
           // Subtract 7 from the start and end to get the dates for last week
-          const lastWeekStart = new Date(
-            today.getFullYear(),
-            today.getMonth(),
-            today.getDate() - today.getDay() - 7
-          );
-          const lastWeekEnd = new Date(
-            today.getFullYear(),
-            today.getMonth(),
-            today.getDate() - today.getDay() + 6 - 7
-          );
+          const lastWeekStart = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() - 7);
+          const lastWeekEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() + 6 - 7);
 
           if (
             date.getFullYear() >= lastWeekStart.getFullYear() &&
@@ -299,10 +214,7 @@ export class EventsService {
 
             totalAmountPerWeekDay[weekDayFullName] += item.payment.amount || 0;
           }
-          if (
-            date.getFullYear() === today.getFullYear() &&
-            date.getMonth() === today.getMonth()
-          ) {
+          if (date.getFullYear() === today.getFullYear() && date.getMonth() === today.getMonth()) {
             const monthDayKey = date.getDate();
 
             totalAmountPerMonthDay[monthDayKey] += item.payment.amount || 0;
@@ -374,15 +286,71 @@ export class EventsService {
           $lte: endDate,
         };
       }
-      const events = await this.eventsModel
-        .find(filter)
-        .skip(skip)
-        .limit(limit)
-        .exec();
+      const events = await this.eventsModel.find(filter).skip(skip).limit(limit).exec();
       return events;
     } catch (error) {
       console.error(error);
       throw new InternalServerErrorException("Failed to get events");
+    }
+  }
+
+  async findClientUsers(userIds: string[] | ObjectId[]) {
+    if (!userIds || !userIds.length) {
+      return [];
+    }
+    try {
+      const clientUsers = await this.clientUserModel.find({ _id: { $in: userIds } }).exec();
+      return clientUsers;
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
+  }
+
+  async findBusinessUsers(userIds: string[] | ObjectId[]) {
+    if (!userIds || !userIds.length) {
+      return [];
+    }
+    try {
+      const clientUsers = await this.businessUserModel.find({ _id: { $in: userIds } }).exec();
+      return clientUsers;
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
+  }
+
+  // todo: allow business admin to have visibility to all events people
+  async getPeopleByEvent(eventId: string, requestedBy: string) {
+    try {
+      const filter = { _id: eventId };
+
+      const event = await this.eventsModel.findOne(filter).exec();
+
+      if (!event) {
+        throw new NotFoundException("Event not found");
+      }
+
+      // check if event.clientIds or event.staffIds is not empty and is a valid array else return empty arrays
+      if ((!event.clientsIds || !event.clientsIds.length) && (!event.staffIds || !event.staffIds.length)) {
+        return { clientUsers: [], businessUsers: [] };
+      }
+      // turn all ids to string and push only unique ids
+      const eligibleUsers = [
+        ...new Set([...event.clientsIds.map(id => id.toString()), ...event.staffIds.map(id => id.toString())]),
+      ];
+
+      if (!eligibleUsers.includes(requestedBy)) {
+        throw new ForbiddenException("You are not allowed to view this event");
+      }
+
+      const [clientUsers, businessUsers] = await Promise.all([
+        this.findClientUsers(event?.clientsIds as ObjectId[]),
+        this.findBusinessUsers(event?.staffIds as ObjectId[]),
+      ]);
+
+      return { clientUsers, businessUsers };
+    } catch (error) {
+      console.error(error);
+      throw error;
     }
   }
 }
