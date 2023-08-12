@@ -7,9 +7,18 @@ export type BusinessDocType = DocType<BusinessType>;
 
 export type BusinessResponseType = CommonResponseType<BusinessDtoType>;
 
-export type BusinessSuccessFnType = (payload: BusinessDocType, message: string) => BusinessResponseType;
-
-export type BusinessEndpointsMethods = "POST" | "GET" | "PUT" | "DELETE";
+export type UpdateBusinessDtoType = Omit<
+  BusinessDtoType,
+  | "admins"
+  | "superAdmins"
+  | "backgroundAdmins"
+  | "deleted"
+  | "createdBy"
+  | "createdAt"
+  | "isRegistrationCompleted"
+  | "accountType"
+  | "_id"
+>;
 
 export interface BusinessEndpointsTypes extends GeneralSpecShape {
   "/business": {

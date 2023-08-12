@@ -2,12 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "absolute:ShortwaitsAdmin.xcodeproj">
+      location = "group:SwMobileAdmin.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Pods/Pods.xcodeproj">
-   </FileRef>
-   <FileRef
-      location = "group:ShortwaitsAdmin.xcodeproj">
    </FileRef>
 </Workspace>

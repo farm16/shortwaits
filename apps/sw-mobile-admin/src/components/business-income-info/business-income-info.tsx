@@ -9,7 +9,6 @@ import {
   GraphIdentifier,
   getGraphCoordinates,
 } from "../graph/graph-utils";
-import { Placeholder, PlaceholderLine, Fade } from "rn-placeholder";
 
 export type BusinessIncomeInfoProps = {
   data: GraphData;
@@ -37,9 +36,7 @@ function BusinessIncomeInfoComponent({
   return (
     <View style={styles.root}>
       {isLoading ? (
-        <Placeholder Animation={Fade}>
-          <PlaceholderLine width={80} />
-        </Placeholder>
+        <Text>...</Text>
       ) : (
         <View
           style={[

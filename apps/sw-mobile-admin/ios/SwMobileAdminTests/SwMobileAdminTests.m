@@ -7,11 +7,11 @@
 #define TIMEOUT_SECONDS 600
 #define TEXT_TO_LOOK_FOR @"Welcome to React"
 
-@interface ShortwaitsAdminTests : XCTestCase
+@interface SwMobileAdminTests : XCTestCase
 
 @end
 
-@implementation ShortwaitsAdminTests
+@implementation SwMobileAdminTests
 
 - (BOOL)findSubviewInView:(UIView *)view matching:(BOOL (^)(UIView *view))test
 {

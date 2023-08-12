@@ -7,6 +7,8 @@ import {
   BusinessDocType,
   ClientUserType,
   BusinessUserType,
+  UpdateBusinessDtoType,
+  BusinessDtoType,
 } from "@shortwaits/shared-lib";
 
 import { Business } from "./entities/business.entity";
@@ -40,7 +42,7 @@ export class BusinessService {
     }
   }
 
-  filterBusiness(business: Partial<BusinessDocType>) {
+  filterBusiness(business: Partial<BusinessDtoType>) {
     delete business.admins;
     delete business.backgroundAdmins;
     delete business.superAdmins;
@@ -74,7 +76,7 @@ export class BusinessService {
     }
   }
 
-  async updateBusiness(userId: string, business: Partial<UpdateBusinessDto>, isRegistrationCompleted: boolean) {
+  async updateBusiness(userId: string, business: Partial<BusinessDtoType>, isRegistrationCompleted: boolean) {
     const filteredBusiness = {
       ...this.filterBusiness(business),
       isRegistrationCompleted: isRegistrationCompleted ? true : undefined,

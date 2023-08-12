@@ -101,7 +101,7 @@ export const Calendar: FC<CalendarProps> = memo(props => {
       <AgendaList
         sectionStyle={{
           backgroundColor: Colors.background,
-          color: Colors.brandPrimary5,
+          color: Colors.brandPrimary4,
           fontWeight: "400",
           fontSize: 16,
         }}

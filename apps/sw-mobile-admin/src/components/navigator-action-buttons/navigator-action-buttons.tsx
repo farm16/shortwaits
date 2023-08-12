@@ -10,11 +10,7 @@ const disabledStates = ["loading", "disabled", "enable"];
 
 export const BackButton: FC<ButtonProps> = props => (
   <Button {...props} preset="icon">
-    <Icon
-      name="chevron-left"
-      color={useTheme().Colors.brandSecondary}
-      size={30}
-    />
+    <Icon name="chevron-left" color={useTheme().Colors.brandSecondary} size={30} />
   </Button>
 );
 
@@ -44,9 +40,7 @@ export const TextHeaderButton: FC<ButtonProps> = props => {
     },
     textStyle,
   ];
-  return (
-    <Button {...rest} text={text} textStyle={textStyleOverride} preset="link" />
-  );
+  return <Button {...rest} text={text} textStyle={textStyleOverride} preset="link" />;
 };
 
 export const RightArrowButton: FC<ButtonProps> = props => {
@@ -58,9 +52,7 @@ export const RightArrowButton: FC<ButtonProps> = props => {
     <Button {...rest} preset="headerLink">
       <Icon
         name="arrow-right-bold"
-        color={
-          disabledStates.includes(state) ? inputBackground : brandSecondary
-        }
+        color={disabledStates.includes(state) ? inputBackground : brandSecondary}
         size={22}
       />
     </Button>
@@ -78,11 +70,7 @@ export const LeftArrowButton: FC<ButtonProps> = props => {
   if (state === "loading") return <Spinner />;
   return (
     <Button {...rest} preset="headerLink">
-      <Icon
-        name={stateIcons[state].name}
-        color={Colors[stateIcons[state].color]}
-        size={22}
-      />
+      <Icon name={stateIcons[state].name} color={Colors[stateIcons[state].color]} size={22} />
     </Button>
   );
 };
@@ -97,11 +85,7 @@ export const RightChevronButton: FC<ButtonProps> = props => {
   if (state === "loading") return <Spinner />;
   return (
     <Button {...rest} state={state} preset="icon">
-      <Icon
-        name={stateIcons[state].name}
-        color={Colors[stateIcons[state].color]}
-        size={stateIcons[state].size}
-      />
+      <Icon name={stateIcons[state].name} color={Colors[stateIcons[state].color]} size={stateIcons[state].size} />
     </Button>
   );
 };
@@ -112,13 +96,7 @@ export const LeftChevronButton: FC<ButtonProps> = props => {
   const { state = "enabled", ...rest } = props;
   return (
     <Button {...rest} state={state} preset="icon">
-      <Icon
-        name="chevron-left"
-        color={
-          disabledStates.includes(state) ? backgroundOverlay : brandSecondary
-        }
-        size={35}
-      />
+      <Icon name="chevron-left" color={disabledStates.includes(state) ? backgroundOverlay : brandSecondary} size={35} />
     </Button>
   );
 };
@@ -288,10 +266,7 @@ type CircleIconsValues = {
   backgroundColor: ThemeColorName;
   size: number;
 };
-const circleIcons = _circleIcons as unknown as Record<
-  CircleIconsKeys,
-  CircleIconsValues
->;
+const circleIcons = _circleIcons as unknown as Record<CircleIconsKeys, CircleIconsValues>;
 
 export const IconButton: FC<
   ButtonProps & {
@@ -327,33 +302,13 @@ export const IconButton: FC<
   };
 
   return (
-    <Button
-      preset="none"
-      {...rest}
-      style={[style, styleOverride]}
-      state={state}
-    >
+    <Button preset="none" {...rest} style={[style, styleOverride]} state={state}>
       {text ? (
-        <Text
-          preset="none"
-          style={[
-            { color: Colors.brandSecondary7, fontWeight: "600" },
-            textStyle,
-          ]}
-          text={text}
-        />
+        <Text preset="none" style={[{ color: Colors.brandSecondary7, fontWeight: "600" }, textStyle]} text={text} />
       ) : (
         <Icon
-          name={
-            circleIcons[iconType]
-              ? circleIcons[iconType].name
-              : circleIcons.default.name
-          }
-          color={
-            disabledStates.includes(state)
-              ? Colors.gray
-              : Colors[circleIcons[iconType]["color"]]
-          }
+          name={circleIcons[iconType] ? circleIcons[iconType].name : circleIcons.default.name}
+          color={disabledStates.includes(state) ? Colors.gray : Colors[circleIcons[iconType]["color"]]}
           size={circleIcons[iconType].size || iconSize}
         />
       )}
@@ -366,11 +321,7 @@ export const SubmitHeaderIconButton: FC<ButtonProps> = props => {
   } = useTheme();
   return (
     <Button preset="headerLink" {...props}>
-      <Icon
-        name="send"
-        color={props.disabled ? gray : brandSecondary}
-        size={20}
-      />
+      <Icon name="send" color={props.disabled ? gray : brandSecondary} size={20} />
     </Button>
   );
 };
@@ -380,11 +331,7 @@ export const CancelAndLogOutHeaderButton: FC<ButtonProps> = props => {
   } = useTheme();
   return (
     <Button {...props} preset="headerLink">
-      <Icon
-        name="account-cancel"
-        color={props.disabled ? gray : brandSecondary}
-        size={22}
-      />
+      <Icon name="account-cancel" color={props.disabled ? gray : brandSecondary} size={22} />
     </Button>
   );
 };

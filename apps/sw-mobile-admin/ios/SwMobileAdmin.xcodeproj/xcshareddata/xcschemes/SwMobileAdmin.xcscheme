@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "ShortwaitsAdmin.app"
-               BlueprintName = "ShortwaitsAdmin"
-               ReferencedContainer = "container:ShortwaitsAdmin.xcodeproj">
+               BuildableName = "SwMobileAdmin.app"
+               BlueprintName = "SwMobileAdmin"
+               ReferencedContainer = "container:SwMobileAdmin.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "ShortwaitsAdminTests.xctest"
-               BlueprintName = "ShortwaitsAdminTests"
-               ReferencedContainer = "container:ShortwaitsAdmin.xcodeproj">
+               BuildableName = "SwMobileAdminTests.xctest"
+               BlueprintName = "SwMobileAdminTests"
+               ReferencedContainer = "container:SwMobileAdmin.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "ShortwaitsAdmin.app"
-            BlueprintName = "ShortwaitsAdmin"
-            ReferencedContainer = "container:ShortwaitsAdmin.xcodeproj">
+            BuildableName = "SwMobileAdmin.app"
+            BlueprintName = "SwMobileAdmin"
+            ReferencedContainer = "container:SwMobileAdmin.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "ShortwaitsAdmin.app"
-            BlueprintName = "ShortwaitsAdmin"
-            ReferencedContainer = "container:ShortwaitsAdmin.xcodeproj">
+            BuildableName = "SwMobileAdmin.app"
+            BlueprintName = "SwMobileAdmin"
+            ReferencedContainer = "container:SwMobileAdmin.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

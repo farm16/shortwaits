@@ -4,34 +4,22 @@ import { useDispatch } from "react-redux";
 import { Divider, List, Switch } from "react-native-paper";
 import { skipToken } from "@reduxjs/toolkit/dist/query/react";
 
-import {
-  Button,
-  IconButton,
-  Container,
-  Screen,
-  Space,
-  Text,
-} from "../../../components";
+import { Button, IconButton, Container, Screen, Space, Text } from "../../../components";
 import { useTheme } from "../../../theme";
 import { useUser, useBusiness, useSignOut } from "../../../store";
-import { UserAccountSettings } from "./options/user-account";
-import { SupportSettings } from "./options/support";
+import { ManageAdminUsers } from "./options/user-account";
+import { ShortwaitsCustomerSupport } from "./options/support";
 import { BusinessInfoSettings } from "./options/business-info";
 import { IntegrationsSettings } from "./options/integrations";
 import { ContactsSettings } from "./options/contacts";
-import {
-  useGetBusinessQuery,
-  useLocalSignOutMutation,
-} from "../../../services";
+import { useGetBusinessQuery, useLocalSignOutMutation, useUpdateBusinessMutation } from "../../../services";
 import { AuthorizedScreenProps } from "../../../navigation";
 
-export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({
-  navigation,
-}) => {
+export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ navigation }) => {
   const { Colors } = useTheme();
   const dispatch = useDispatch();
   const user = useUser();
-  const business = useBusiness();
+  const currentBusiness = useBusiness();
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -39,14 +27,10 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({
     });
   }, [navigation]);
 
-  const {
-    data: currentBusiness,
-    isLoading,
-    isSuccess,
-    isError,
-  } = useGetBusinessQuery(business ? business._id : skipToken);
+  console.log("currentBusiness", JSON.stringify(currentBusiness, null, 2));
 
-  // const signOut = useSignOut();
+  const [updateBusiness] = useUpdateBusinessMutation();
+
   const [expanded, setExpanded] = React.useState(true);
   const [signOut] = useLocalSignOutMutation();
   const handlePress = () => setExpanded(!expanded);
@@ -54,90 +38,196 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({
     await signOut(undefined);
   }, [signOut]);
 
-  if (isError) return null;
-  if (isLoading) return <Text>Loading ...</Text>;
-  if (isSuccess) {
-    return (
-      <Screen preset="scroll" backgroundColor="backgroundOverlay">
-        <Space direction="horizontal" />
-        <List.Section
-          style={{
-            backgroundColor: Colors.backgroundOverlay,
+  // if (isError) return null;
+
+  // if (isLoading) return <Text>Loading ...</Text>;
+
+  const itemStyle = {
+    borderColor: Colors.gray,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+  };
+
+  return (
+    <Screen preset="scroll" backgroundColor="backgroundOverlay" unsafeBottom>
+      <List.Section
+        style={{
+          borderTopWidth: StyleSheet.hairlineWidth,
+          borderColor: Colors.gray,
+        }}
+      >
+        <List.Item
+          title={`Business Plan ${currentBusiness?.accountType === "free" ? "(Basic)" : ""}`}
+          style={itemStyle}
+          // style={{ backgroundColor: Colors.lightGray }}
+          titleStyle={{ color: Colors.text }}
+          descriptionStyle={{ color: Colors.orange5, fontWeight: "700", textTransform: "uppercase" }}
+          description={`${
+            currentBusiness?.accountType === "free" ? "Upgrade to Premium !!!" : currentBusiness?.accountType
+          }`}
+          right={props => <List.Icon {...props} color={Colors.text} icon="chevron-right" />}
+        />
+        <List.Item
+          titleStyle={{ color: Colors.text }}
+          style={itemStyle}
+          title="Web booking"
+          description="Enable customers to book online"
+          right={() => (
+            <Switch
+              value={currentBusiness?.isWebBookingEnabled ?? false}
+              onChange={() => {
+                const isWebBookingEnabled = !(currentBusiness?.isWebBookingEnabled ?? false);
+                console.log("isWebBookingEnabled", isWebBookingEnabled);
+                updateBusiness({
+                  ...currentBusiness,
+                  isWebBookingEnabled,
+                });
+              }}
+            />
+          )}
+        />
+        <List.Item
+          titleStyle={{ color: Colors.text }}
+          title="App notifications"
+          description="Allow app notifications"
+          style={itemStyle}
+          right={() => (
+            <Switch
+              value={currentBusiness.isAppNotificationEnabled ?? false}
+              onChange={() => {
+                const isAppNotificationEnabled = !(currentBusiness.isAppNotificationEnabled ?? false);
+                console.log("isAppNotificationEnabled", isAppNotificationEnabled);
+                updateBusiness({
+                  ...currentBusiness,
+                  isAppNotificationEnabled,
+                });
+              }}
+            />
+          )}
+        />
+        <List.Item
+          titleStyle={{ color: Colors.text }}
+          title="SMS notifications"
+          description="Receive updates via SMS"
+          style={itemStyle}
+          right={() => (
+            <Switch
+              value={currentBusiness.isSmsNotificationEnabled ?? false}
+              onChange={() => {
+                const isSmsNotificationEnabled = !(currentBusiness.isSmsNotificationEnabled ?? false);
+                console.log("isSmsNotificationEnabled", isSmsNotificationEnabled);
+                updateBusiness({
+                  ...currentBusiness,
+                  isSmsNotificationEnabled,
+                });
+              }}
+            />
+          )}
+        />
+        <List.Item
+          titleStyle={{
+            color: Colors.text,
           }}
-        >
-          <List.Item
-            titleStyle={{ color: Colors.text }}
-            style={{
-              borderColor: Colors.gray,
-              borderBottomWidth: StyleSheet.hairlineWidth,
-              borderTopWidth: StyleSheet.hairlineWidth,
-            }}
-            title="Activate web booking"
-            right={() => <Switch />}
-          />
-          <List.Item
-            titleStyle={{ color: Colors.text }}
-            title="App notifications"
-            style={{
-              borderBottomColor: Colors.gray,
-              borderBottomWidth: StyleSheet.hairlineWidth,
-            }}
-            right={() => <Switch />}
-          />
-          <List.Item
-            titleStyle={{ color: Colors.text }}
-            title="SMS notifications"
-            style={{
-              borderBottomColor: Colors.gray,
-              borderBottomWidth: StyleSheet.hairlineWidth,
-            }}
-            right={() => <Switch />}
-          />
-          <ContactsSettings business={business} />
-          <IntegrationsSettings business={business} />
-          <UserAccountSettings user={user} />
-          <BusinessInfoSettings business={business} />
-          <SupportSettings />
-          <List.Item
-            titleStyle={{
-              color: Colors.text,
-            }}
-            style={{
-              borderBottomColor: Colors.gray,
-              borderBottomWidth: StyleSheet.hairlineWidth,
-            }}
-            title="Disable Store"
-            right={() => <Switch />}
-          />
-          <Space direction="horizontal" />
-          <Button
-            style={{
-              flex: undefined,
-              width: "50%",
-              height: 45,
-              backgroundColor: Colors.white,
-              borderColor: Colors.red3,
-              borderWidth: 2,
-              alignSelf: "center",
-              marginVertical: 20,
-            }}
-            textStyle={{
-              // textTransform: "uppercase",
-              color: Colors.red5,
-            }}
-            text="Sign Out"
-            onPress={() => {
-              handleSignOut();
-            }}
-          />
-        </List.Section>
-      </Screen>
-    );
-  }
+          style={itemStyle}
+          title="Video conference"
+          description="Allow video conference link in booking"
+          right={() => (
+            <Switch
+              value={currentBusiness.isVideoConferenceEnabled ?? false}
+              onChange={() => {
+                const isVideoConferenceEnabled = !(currentBusiness.isVideoConferenceEnabled ?? false);
+                console.log("isVideoConferenceEnabled", isVideoConferenceEnabled);
+                updateBusiness({
+                  ...currentBusiness,
+                  isVideoConferenceEnabled,
+                });
+              }}
+            />
+          )}
+        />
+        <ManageAdminUsers user={user} />
+
+        <List.Item
+          titleStyle={{
+            color: Colors.text,
+          }}
+          style={itemStyle}
+          title="Rate us"
+          description="Rate us on the app store"
+          left={props => (
+            <List.Icon
+              {...props}
+              style={{
+                marginRight: 0,
+                paddingRight: 0,
+              }}
+              color={Colors.red4}
+              icon="heart"
+            />
+          )}
+          right={props => <List.Icon {...props} color={Colors.text} icon="chevron-right" />}
+        />
+        <List.Item
+          title="Currency"
+          disabled
+          style={{ backgroundColor: Colors.lightGray }}
+          titleStyle={{ color: Colors.text }}
+          descriptionStyle={{ color: Colors.subText }}
+          description={"USD - United States Dollar"}
+          right={props => <List.Icon {...props} color={Colors.gray} icon="chevron-right" />}
+        />
+
+        <ShortwaitsCustomerSupport />
+        <List.Item
+          titleStyle={{
+            color: Colors.text,
+          }}
+          style={itemStyle}
+          title="Disable Store"
+          description="Disable your store temporarily"
+          right={() => (
+            <Switch
+              value={currentBusiness.isDisabled ?? false}
+              onChange={() => {
+                const isDisabled = !(currentBusiness.isDisabled ?? false);
+                console.log("isDisabled", isDisabled);
+                updateBusiness({
+                  ...currentBusiness,
+                  isDisabled,
+                });
+              }}
+            />
+          )}
+        />
+        <Space direction="horizontal" />
+        <Button
+          style={styles.signOutButton}
+          textStyle={styles.signOutButtonText}
+          text="Sign Out"
+          onPress={() => {
+            handleSignOut();
+          }}
+        />
+      </List.Section>
+    </Screen>
+  );
 };
 const styles = StyleSheet.create({
-  itemText: {
+  signOutButton: {
+    flex: undefined,
+    width: "50%",
+    height: 45,
+    backgroundColor: "white",
+    borderColor: "red",
+    borderWidth: 2,
+    alignSelf: "center",
+    marginVertical: 20,
+    paddingTop: 0,
+    paddingBottom: 0,
+  },
+  signOutButtonText: {
     color: "red",
+    padding: 0,
+    margin: 0,
   },
   container: {},
 });

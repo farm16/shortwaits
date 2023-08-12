@@ -14,6 +14,38 @@ import { ApiProperty } from "@nestjs/swagger";
 @Schema()
 export class Business extends Document implements BusinessType {
   @ApiProperty()
+  @Prop()
+  isDisabled: boolean;
+
+  @ApiProperty()
+  @Prop()
+  isWebBookingEnabled: boolean;
+
+  @ApiProperty()
+  @Prop()
+  isSmsNotificationEnabled: boolean;
+
+  @ApiProperty()
+  @Prop()
+  isAppNotificationEnabled: boolean;
+
+  @ApiProperty()
+  @Prop()
+  videoConference: { isActive: boolean; url: string }[];
+
+  @ApiProperty()
+  @Prop()
+  isVideoConferenceEnabled: boolean;
+
+  @ApiProperty()
+  @Prop()
+  supportEmail?: string;
+
+  @ApiProperty()
+  @Prop()
+  supportPhone?: string;
+
+  @ApiProperty()
   @Prop(
     raw({
       name: String,
@@ -142,7 +174,7 @@ export class Business extends Document implements BusinessType {
 
   @ApiProperty()
   @Prop()
-  deliveryInfo: MongooseSchema.Types.Mixed;
+  deliveryInfo: string;
 
   @ApiProperty()
   @Prop()
@@ -150,7 +182,7 @@ export class Business extends Document implements BusinessType {
 
   @ApiProperty()
   @Prop()
-  paymentMethods: MongooseSchema.Types.Mixed;
+  paymentMethods: string[];
 
   @ApiProperty()
   @Prop(

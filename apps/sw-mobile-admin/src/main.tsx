@@ -7,4 +7,5 @@ LogBox.ignoreLogs([
   "Non-serializable values were found in the navigation state",
   "Require cycle: ../../node_modules/victory",
 ]);
-AppRegistry.registerComponent("ShortwaitsAdmin", () => App);
+
+AppRegistry.registerComponent("SwMobileAdmin", () => App);

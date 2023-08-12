@@ -12,7 +12,7 @@ import {
   ValidationPipe,
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
-import { BusinessUserType, ClientUserType } from "@shortwaits/shared-lib";
+import { BusinessDtoType, BusinessUserType, ClientUserType } from "@shortwaits/shared-lib";
 
 import { BusinessService } from "./business.service";
 import { AtGuard } from "../../common/guards";
@@ -37,11 +37,7 @@ export class BusinessController {
     @Req() request,
     @Body(new ValidationPipe()) business: UpdateBusinessDto
   ) {
-    return this.businessService.updateBusiness(
-      request.user.sub,
-      business,
-      false
-    );
+    return this.businessService.updateBusiness(request.user.sub, business as BusinessDtoType, false);
   }
 
   /**
@@ -113,15 +109,8 @@ export class BusinessController {
     status: HttpStatus.OK,
     description: "Returns business clients",
   })
-  async getBusinessClients(
-    @Param("businessId") businessId: string,
-    @Req() request
-  ) {
-    return this.businessService.getUsers(
-      "client",
-      businessId,
-      request.user.sub
-    );
+  async getBusinessClients(@Param("businessId") businessId: string, @Req() request) {
+    return this.businessService.getUsers("client", businessId, request.user.sub);
   }
 
   @Post(":businessId/clients")
@@ -130,16 +119,8 @@ export class BusinessController {
     status: HttpStatus.CREATED,
     description: "Returns created",
   })
-  async createBusinessClients(
-    @Param("businessId") businessId: string,
-    @Req() request,
-    @Body() dto: ClientUserType[]
-  ) {
-    return this.businessService.createBusinessClients(
-      request.user.sub,
-      businessId,
-      dto
-    );
+  async createBusinessClients(@Param("businessId") businessId: string, @Req() request, @Body() dto: ClientUserType[]) {
+    return this.businessService.createBusinessClients(request.user.sub, businessId, dto);
   }
 
   @Get(":businessId/staff")
@@ -148,10 +129,7 @@ export class BusinessController {
     status: HttpStatus.OK,
     description: "Returns business staff",
   })
-  async getBusinessStaffByIds(
-    @Param("businessId") businessId: string,
-    @Req() request
-  ) {
+  async getBusinessStaffByIds(@Param("businessId") businessId: string, @Req() request) {
     return this.businessService.getUsers("staff", businessId, request.user.sub);
   }
 
@@ -161,10 +139,7 @@ export class BusinessController {
     status: HttpStatus.OK,
     description: "Register Business",
   })
-  async registerBusiness(
-    @Req() request,
-    @Body(new ValidationPipe()) business: RegisterBusinessDto
-  ) {
+  async registerBusiness(@Req() request, @Body(new ValidationPipe()) business: RegisterBusinessDto) {
     return this.businessService.registerBusiness(request.user.sub, business);
   }
 
@@ -174,15 +149,7 @@ export class BusinessController {
     status: HttpStatus.OK,
     description: "Returns business staff",
   })
-  async createBusinessStaff(
-    @Param("businessId") businessId: string,
-    @Req() request,
-    @Body() dto: BusinessUserType[]
-  ) {
-    return this.businessService.createBusinessStaff(
-      request.user.sub,
-      businessId,
-      dto
-    );
+  async createBusinessStaff(@Param("businessId") businessId: string, @Req() request, @Body() dto: BusinessUserType[]) {
+    return this.businessService.createBusinessStaff(request.user.sub, businessId, dto);
   }
 }

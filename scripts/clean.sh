@@ -3,7 +3,7 @@ find . -name "yarn.lock" -type f -prune -exec rm -rf '{}' + &&
 watchman watch-del-all &&
 rm -rf apps/sw-mobile-admin/ios/Pods && 
 rm -rf apps/sw-mobile-admin/ios/Podfile.lock && 
-yarn 
+npm install 
 # &&
 # cd apps/sw-mobile-admin/android &&
 # ./gradlew clean && 

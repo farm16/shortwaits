@@ -2,12 +2,7 @@ import { Document } from "mongoose";
 
 import { EmojiType, ObjectId } from "../common-types";
 
-import {
-  BusinessHoursType,
-  BusinessLocationType,
-  CurrencyType,
-  PaginatedModel,
-} from "./helpers";
+import { BusinessHoursType, BusinessLocationType, CurrencyType, PaginatedModel } from "./helpers";
 
 export type BusinessLabelType = {
   name: string;
@@ -59,12 +54,23 @@ export type BusinessType = {
     }
   ];
   accountType: AccountType;
+  isWebBookingEnabled: boolean;
+  isSmsNotificationEnabled: boolean;
+  isAppNotificationEnabled: boolean;
+  videoConference: {
+    isActive: boolean;
+    url: string;
+  }[];
+  isVideoConferenceEnabled: boolean;
+  supportEmail?: string;
+  supportPhone?: string;
+  isDisabled: boolean;
   /**
    * @todo !!!
    * */
-  deliveryInfo?: any;
+  deliveryInfo?: string;
   reservations?: ObjectId[];
-  paymentMethods?: any;
+  paymentMethods?: string[];
   web?: {
     isActive: boolean;
   };

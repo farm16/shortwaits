@@ -5,7 +5,7 @@ import { useTheme } from "../../theme";
 export function useCalendarTheme() {
   const { Colors } = useTheme();
   const theme = useRef<Theme>({
-    arrowColor: Colors.brandSecondary,
+    arrowColor: Colors.brandPrimary,
     selectedDayBackgroundColor: Colors.brandSecondary3,
     todayBackgroundColor: Colors.brandSecondary,
 

@@ -1,10 +1,8 @@
-import { BusinessEndpointsMethods } from "@shortwaits/shared-lib";
-
 const BUSINESS_BASE_PATH = "/business";
 
 type BusinessProps = {
   getPath(id?: string): string;
-  METHOD: BusinessEndpointsMethods;
+  METHOD: "POST" | "GET" | "PUT" | "DELETE";
 };
 
 export const BUSINESS = {
