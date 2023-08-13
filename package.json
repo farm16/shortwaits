@@ -6,6 +6,7 @@
   "scripts": {
     "postinstall": "patch-package",
     "start": "nx serve sw-api",
+    "start:prod": "node dist/apps/sw-api/main.js",
     "admin:react": "nx start sw-mobile-admin",
     "admin:pods": "nx run-pods sw-mobile-admin",
     "admin:ios": "nx run-ios sw-mobile-admin --install",
@@ -20,7 +21,8 @@
     "build:shared-lib": "nx build shared-lib --verbose",
     "test": "nx test",
     "clean": "sh ./scripts/clean.sh",
-    "deploy:dev": "npm install && npm run build:api && npm run start"
+    "deploy:dev": "npm install && npm run build:api && npm run start",
+    "deploy:prod": "npm install && npm run build:api:prod && npm run start:prod"
   },
   "dependencies": {
     "react-native": "0.72.3",
