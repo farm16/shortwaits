@@ -80,6 +80,8 @@
     "@testing-library/jest-native": "*",
     "react-native-get-random-values": "*",
     "react-test-renderer": "*",
-    "react-native-share": "*"
+    "react-native-share": "*",
+    "readable-stream": "*",
+    "@react-native/metro-config": "*"
   }
 }

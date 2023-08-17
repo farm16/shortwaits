@@ -92,9 +92,9 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
           style={itemStyle}
           right={() => (
             <Switch
-              value={currentBusiness.isAppNotificationEnabled ?? false}
+              value={currentBusiness?.isAppNotificationEnabled ?? false}
               onChange={() => {
-                const isAppNotificationEnabled = !(currentBusiness.isAppNotificationEnabled ?? false);
+                const isAppNotificationEnabled = !(currentBusiness?.isAppNotificationEnabled ?? false);
                 console.log("isAppNotificationEnabled", isAppNotificationEnabled);
                 updateBusiness({
                   ...currentBusiness,
@@ -111,9 +111,9 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
           style={itemStyle}
           right={() => (
             <Switch
-              value={currentBusiness.isSmsNotificationEnabled ?? false}
+              value={currentBusiness?.isSmsNotificationEnabled ?? false}
               onChange={() => {
-                const isSmsNotificationEnabled = !(currentBusiness.isSmsNotificationEnabled ?? false);
+                const isSmsNotificationEnabled = !(currentBusiness?.isSmsNotificationEnabled ?? false);
                 console.log("isSmsNotificationEnabled", isSmsNotificationEnabled);
                 updateBusiness({
                   ...currentBusiness,
@@ -132,9 +132,9 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
           description="Allow video conference link in booking"
           right={() => (
             <Switch
-              value={currentBusiness.isVideoConferenceEnabled ?? false}
+              value={currentBusiness?.isVideoConferenceEnabled ?? false}
               onChange={() => {
-                const isVideoConferenceEnabled = !(currentBusiness.isVideoConferenceEnabled ?? false);
+                const isVideoConferenceEnabled = !(currentBusiness?.isVideoConferenceEnabled ?? false);
                 console.log("isVideoConferenceEnabled", isVideoConferenceEnabled);
                 updateBusiness({
                   ...currentBusiness,
@@ -186,9 +186,9 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
           description="Disable your store temporarily"
           right={() => (
             <Switch
-              value={currentBusiness.isDisabled ?? false}
+              value={currentBusiness?.isDisabled ?? false}
               onChange={() => {
-                const isDisabled = !(currentBusiness.isDisabled ?? false);
+                const isDisabled = !(currentBusiness?.isDisabled ?? false);
                 console.log("isDisabled", isDisabled);
                 updateBusiness({
                   ...currentBusiness,

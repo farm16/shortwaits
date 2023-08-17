@@ -6,20 +6,25 @@
   "targets": {
     "start": {
       "executor": "@nx/react-native:start",
+      "dependsOn": ["ensure-symlink", "sync-deps", "pod-install"],
       "options": {
         "port": 8081,
         "reset-cache": true
       }
     },
-    "run-pods": {
-      "executor": "@nx/react-native:pod-install",
-      "options": {}
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "nx start sw-mobile-admin"
+      }
     },
     "run-ios": {
       "executor": "@nx/react-native:run-ios",
-      "options": {
-        "install": true
-      }
+      "options": {}
+    },
+    "run-pods": {
+      "executor": "@nx/react-native:pod-install",
+      "options": {}
     },
     "bundle-ios": {
       "executor": "@nx/react-native:bundle",
@@ -32,23 +37,30 @@
     },
     "run-android": {
       "executor": "@nx/react-native:run-android",
+      "dependsOn": ["ensure-symlink", "sync-deps"],
       "options": {}
     },
     "build-android": {
       "executor": "@nx/react-native:build-android",
-      "outputs": [
-        "{projectRoot}/android/app/build/outputs/bundle",
-        "{projectRoot}/android/app/build/outputs/apk"
-      ],
+      "outputs": ["{projectRoot}/android/app/build/outputs/bundle", "{projectRoot}/android/app/build/outputs/apk"],
+      "dependsOn": ["ensure-symlink", "sync-deps"],
       "options": {}
     },
     "bundle-android": {
       "executor": "@nx/react-native:bundle",
+      "dependsOn": ["ensure-symlink"],
+      "outputs": ["{options.bundleOutput}"],
       "options": {
         "entryFile": "src/main.tsx",
         "platform": "android",
         "bundleOutput": "dist/apps/sw-mobile-admin/android/main.jsbundle"
       }
+    },
+    "build-ios": {
+      "executor": "@nx/react-native:build-ios",
+      "outputs": ["{projectRoot}/ios/build/Build"],
+      "dependsOn": ["ensure-symlink", "sync-deps", "pod-install"],
+      "options": {}
     },
     "sync-deps": {
       "executor": "@nx/react-native:sync-deps",
@@ -72,11 +84,6 @@
         "jestConfig": "apps/sw-mobile-admin/jest.config.ts",
         "passWithNoTests": true
       }
-    },
-    "build-ios": {
-      "executor": "@nx/react-native:build-ios",
-      "outputs": ["{projectRoot}/ios/build/Build"],
-      "options": {}
     },
     "pod-install": {
       "executor": "@nx/react-native:pod-install",
