@@ -100,10 +100,12 @@ export const buttonPresets = ({
       width: 27,
     },
     card: {
+      marginBottom: 10,
+      height: 70,
+      paddingHorizontal: 8,
       width: "100%",
-      paddingLeft: 10,
+
       flexDirection: "row",
-      justifyContent: "center",
       alignItems: "center",
       borderBottomWidth: 1,
       borderBottomColor: "#E5E5E5",

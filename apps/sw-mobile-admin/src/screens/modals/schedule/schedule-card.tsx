@@ -1,16 +1,16 @@
 import React from "react";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { Switch, View, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { useDispatch } from "react-redux";
 
 import { getDimensions, useTheme } from "../../../theme";
-import { Button, Container, Text, TimeRangeText } from "../../../components";
+import { Switch, Button, Container, Text, TimeRangeText } from "../../../components";
 import { setBusinessDayActivity } from "../../../store";
-import { ScheduleModalType } from "../../../navigation";
+import { ScheduleModalModeType } from "../../../navigation";
 import { DayType } from "./schedule";
 
 interface DayCardProps {
-  type: ScheduleModalType;
+  type: ScheduleModalModeType;
   day: DayType;
   handlePress: (day: DayType["name"]) => void;
 }
@@ -51,17 +51,9 @@ export const ScheduleCard = ({ day, handlePress, type }: DayCardProps) => {
               }}
               text={name}
             />
-            <Icon
-              name="pencil"
-              color={isActive ? Colors.brandSecondary : Colors.disabledText}
-              size={20}
-            />
+            <Icon name="pencil" color={isActive ? Colors.brandSecondary : Colors.disabledText} size={20} />
           </Container>
-          <TimeRangeText
-            disabled={!isActive}
-            startTime={startTime}
-            endTime={endTime}
-          />
+          <TimeRangeText disabled={!isActive} startTime={startTime} endTime={endTime} />
         </Button>
       </View>
       <View style={styles.subContainer2}>

@@ -56,7 +56,7 @@ export const businessSlice = createSlice({
         };
       })
       .addMatcher(shortwaitsApi.endpoints.updateBusiness.matchFulfilled, function (state, action) {
-        console.log(">>> updateBusiness - BUSINESS ", action.payload.data);
+        // console.log(">>> updateBusiness - BUSINESS ", action.payload.data);
         return {
           ...state,
           ...action.payload.data,

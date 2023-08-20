@@ -1,35 +1,33 @@
 import React, { useRef } from "react";
-import { StyleSheet, Pressable, TouchableOpacity } from "react-native";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { StyleSheet, Pressable, TextInputProps, TextInput as RnTextInput, Platform } from "react-native";
 
-import { TextField, TextFieldProps, Card, Text, CardProps, Space } from "../common";
+import { TextField, Card, Text, CardProps, Space } from "../common";
 import { getDimensions, useTheme } from "../../theme";
 
-type TextFieldCard = {
+type TextFieldCardType = Omit<CardProps, "mode"> & {
   title: string;
+  subTitle?: string;
+  errors?: string | undefined;
   isTouched?: boolean;
-  rightIconName?: string;
-  rightIconColor?: string;
-  rightIconSize?: number;
-  rightIconOnPress?: () => void;
-  disabled?: boolean;
-} & TextFieldProps &
-  Partial<CardProps>;
+  withTopBorder?: boolean;
+  placeholder?: string;
+} & TextInputProps;
 
-export function TextFieldCard(props: TextFieldCard) {
+export function TextFieldCard(props: TextFieldCardType) {
   const {
     placeholder,
     errors = "",
     isTouched,
     rightIconColor,
     rightIconName,
-    rightIconSize = 23,
+    rightIconSize = "large",
     rightIconOnPress,
     title,
+    withTopBorder,
     ...rest
   } = props;
 
-  const textInputRef = useRef(null);
+  const textInputRef = useRef<RnTextInput>(null);
   const { Colors } = useTheme();
   const { width } = getDimensions();
 
@@ -41,26 +39,30 @@ export function TextFieldCard(props: TextFieldCard) {
 
   return (
     <>
-      <Card mode="text-field">
+      <Card
+        mode="text-field"
+        rightIconSize={rightIconSize}
+        rightIconName={rightIconName}
+        style={
+          withTopBorder
+            ? {
+                borderTopWidth: 1.5,
+                borderTopColor: Colors.inputBackground,
+              }
+            : undefined
+        }
+      >
         <Pressable onPress={handleSetFocus}>
           <Text preset="cardTitle" text={title} />
-          <Space size="tiny" />
+          {Platform.OS === "ios" && <Space size="tiny" />}
         </Pressable>
-        <TextField preset="cardSubtitle" ref={textInputRef} placeholder={placeholder} {...rest} />
-        {rightIconName ? (
-          <TouchableOpacity
-            style={{
-              right: 0,
-              bottom: 0,
-              paddingHorizontal: 16,
-              paddingVertical: 8,
-              position: "absolute",
-            }}
-            onPress={rightIconOnPress}
-          >
-            <Icon size={rightIconSize} color={rightIconColor} name={rightIconName} />
-          </TouchableOpacity>
-        ) : null}
+        <TextField
+          {...rest}
+          // style={{ backgroundColor: "red" }}
+          preset="cardSubtitle"
+          ref={textInputRef}
+          placeholder={placeholder}
+        />
       </Card>
       {errors && isTouched ? (
         <Text
@@ -81,10 +83,5 @@ const styles = StyleSheet.create({
   errorField: {
     alignSelf: "center",
     textAlign: "right",
-  },
-  cardTitle: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    margin: 0,
   },
 });

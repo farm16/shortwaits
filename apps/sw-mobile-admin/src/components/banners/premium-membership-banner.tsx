@@ -1,6 +1,6 @@
 import React from "react";
-import { View, StyleSheet, ImageBackground, StatusBar } from "react-native";
-import { Button, Text } from "../common";
+import { View, StyleSheet, ImageBackground, StatusBar, Platform } from "react-native";
+import { Button, Container, Text } from "../common";
 import image from "./background_1.png";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useDispatch } from "react-redux";
@@ -18,26 +18,55 @@ export function PremiumMembershipBanner() {
     <ImageBackground
       source={image}
       resizeMode="cover"
-      style={styles.container}
+      style={[
+        styles.container,
+        {
+          ...Platform.select({
+            ios: {
+              alignItems: "center",
+              // minHeight: 200,
+              justifyContent: "flex-end",
+              paddingBottom: 8,
+            },
+            android: {
+              justifyContent: "center",
+              minHeight: 170,
+            },
+          }),
+        },
+      ]}
       imageStyle={styles.image}
     >
-      <View
+      {/* <View
         style={{
           position: "absolute",
-          right: 16,
-          top: insets.top,
-          backgroundColor: "rgba(0,0,0,0.5)",
+
+          backgroundColor: "rgba(0,0,0,0.8)",
           width: 30,
           height: 30,
           borderRadius: 15,
           justifyContent: "center",
           alignItems: "center",
+          ...Platform.select({
+            ios: {
+              top: 46,
+              right: 36,
+            },
+            android: {
+              top: 26,
+              right: 26,
+            },
+          }),
         }}
       >
-        <Icon name="close" color="white" size={24} onPress={handleClose} />
-      </View>
-      <StatusBar barStyle="light-content" />
-      <View style={{ paddingTop: insets.top }}>
+        <Icon name="close" color="white" size={24}  />
+      </View> */}
+      <StatusBar barStyle="light-content" hidden backgroundColor={"rgba(0,0,0,0.8)"} />
+      <View
+        style={{
+          marginTop: insets.top,
+        }}
+      >
         <Text preset="text" style={styles.title}>
           <Text preset="text" style={[styles.title, { color: "white" }]}>
             {"love "}
@@ -47,12 +76,27 @@ export function PremiumMembershipBanner() {
         <Text preset="text" style={styles.subTitle}>
           {"3 months for only $0.99!"}
         </Text>
-        <Button
-          preset="none"
-          style={styles.button}
-          textStyle={styles.buttonText}
-          text="JOIN NOW"
-        />
+        <Container
+          direction="row"
+          style={{
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <Button preset="none" style={styles.button} textStyle={styles.buttonText} text="JOIN NOW" />
+          <Button
+            preset="link"
+            textStyle={{
+              fontSize: 14,
+              color: "#3B2C09",
+              fontWeight: "700",
+              textTransform: "uppercase",
+              marginLeft: 16,
+            }}
+            text="cancel"
+            onPress={handleClose}
+          />
+        </Container>
       </View>
     </ImageBackground>
   );
@@ -70,6 +114,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 23,
     fontWeight: "800",
+    color: "#170F02",
   },
   subTitle: {
     marginTop: 4,
@@ -78,14 +123,11 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   button: {
-    marginTop: 8,
-    marginBottom: 16,
     backgroundColor: "pink",
     height: 32,
     borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
-    alignSelf: "flex-start",
   },
   buttonText: {
     color: "rgba(0,0,0,0.87)",

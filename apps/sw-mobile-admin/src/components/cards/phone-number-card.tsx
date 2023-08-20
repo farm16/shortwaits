@@ -2,22 +2,45 @@ import React, { useRef } from "react";
 import { Pressable, StyleSheet } from "react-native";
 
 import { getDimensions, useTheme } from "../../theme";
-import { Card, CardProps, Space, Text, TextFieldProps } from "../common";
-import PhoneInput from "react-native-phone-input";
+import { Card, CardProps, Space, Text } from "../common";
+import PhoneInput, { ReactNativePhoneInputProps } from "react-native-phone-input";
 
-type PhoneNumberProps = {
+type PhoneNumberProps = Omit<CardProps, "mode"> & {
   title: string;
+  subTitle?: string;
+  errors?: string | undefined;
   isTouched?: boolean;
+  withTopBorder?: boolean;
+  placeholder?: string;
   rightIconName?: string;
   disabled?: boolean;
   initialValue?: string;
   isValid?: (isValid: boolean) => void;
-} & TextFieldProps &
-  Partial<CardProps>;
+  onChangeText: (text: string) => void;
+} & ReactNativePhoneInputProps;
 
 export const PhoneNumberCard = (props: PhoneNumberProps) => {
-  const { initialValue, errors, isTouched, title, isValid, disabled = false, onChangeText } = props;
-  const { Colors } = useTheme();
+  const {
+    initialValue,
+    rightIconColor,
+    rightIconName,
+    rightIconSize = "large",
+    errors,
+    isTouched,
+    isValid,
+    rightIconOnPress,
+    title,
+    withTopBorder,
+    disabled = false,
+    onChangeText,
+    ...rest
+  } = props;
+
+  const {
+    Colors,
+    Common: { textFieldPresets },
+  } = useTheme();
+
   const { width } = getDimensions();
 
   const phoneNumber = useRef<PhoneInput>(null);
@@ -30,9 +53,23 @@ export const PhoneNumberCard = (props: PhoneNumberProps) => {
 
   return (
     <>
-      <Card mode="text-field">
+      <Card
+        {...rest}
+        mode="text-field"
+        rightIconSize={rightIconSize}
+        rightIconName={rightIconName}
+        style={
+          withTopBorder
+            ? {
+                borderTopWidth: 1.5,
+                borderTopColor: Colors.inputBackground,
+              }
+            : undefined
+        }
+      >
         <Pressable onPress={handleSetFocus}>
           <Text preset="cardTitle" text={title} />
+          <Space size="tiny" />
         </Pressable>
         <PhoneInput
           disabled={disabled}
@@ -41,8 +78,7 @@ export const PhoneNumberCard = (props: PhoneNumberProps) => {
             isValid && isValid(phoneNumber.current?.isValidNumber());
             onChangeText(phoneNumber.current?.getValue());
           }}
-          style={{ marginTop: 8 }}
-          textStyle={{ height: 16 }}
+          textStyle={textFieldPresets.cardSubtitle}
           initialCountry={"us"}
           //   initialValue={initialValue}
           textProps={{

@@ -1,19 +1,17 @@
 import React, { FC, useCallback, useLayoutEffect } from "react";
 import { StyleSheet } from "react-native";
 import { useDispatch } from "react-redux";
-import { Divider, List, Switch } from "react-native-paper";
+import { ActivityIndicator, Divider, List } from "react-native-paper";
 import { skipToken } from "@reduxjs/toolkit/dist/query/react";
 
-import { Button, IconButton, Container, Screen, Space, Text } from "../../../components";
+import { Button, Screen, Space, Switch } from "../../../components";
 import { useTheme } from "../../../theme";
 import { useUser, useBusiness, useSignOut } from "../../../store";
 import { ManageAdminUsers } from "./options/user-account";
 import { ShortwaitsCustomerSupport } from "./options/support";
-import { BusinessInfoSettings } from "./options/business-info";
-import { IntegrationsSettings } from "./options/integrations";
-import { ContactsSettings } from "./options/contacts";
 import { useGetBusinessQuery, useLocalSignOutMutation, useUpdateBusinessMutation } from "../../../services";
 import { AuthorizedScreenProps } from "../../../navigation";
+import { noop } from "lodash";
 
 export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ navigation }) => {
   const { Colors } = useTheme();
@@ -27,9 +25,9 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
     });
   }, [navigation]);
 
-  console.log("currentBusiness", JSON.stringify(currentBusiness, null, 2));
+  // console.log("currentBusiness", JSON.stringify(currentBusiness, null, 2));
 
-  const [updateBusiness] = useUpdateBusinessMutation();
+  const [updateBusiness, state] = useUpdateBusinessMutation();
 
   const [expanded, setExpanded] = React.useState(true);
   const [signOut] = useLocalSignOutMutation();
@@ -38,14 +36,14 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
     await signOut(undefined);
   }, [signOut]);
 
-  // if (isError) return null;
-
-  // if (isLoading) return <Text>Loading ...</Text>;
-
   const itemStyle = {
     borderColor: Colors.gray,
     borderBottomWidth: StyleSheet.hairlineWidth,
   };
+
+  // if (isError) return null;
+
+  // if (state.isLoading) return <ActivityIndicator />;
 
   return (
     <Screen preset="scroll" backgroundColor="backgroundOverlay" unsafeBottom>
@@ -65,14 +63,18 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
             currentBusiness?.accountType === "free" ? "Upgrade to Premium !!!" : currentBusiness?.accountType
           }`}
           right={props => <List.Icon {...props} color={Colors.text} icon="chevron-right" />}
+          onPress={() => navigation.navigate("authorized-stack", { screen: "plans-screen" })}
         />
         <List.Item
           titleStyle={{ color: Colors.text }}
           style={itemStyle}
+          descriptionStyle={{ color: Colors.subText }}
           title="Web booking"
           description="Enable customers to book online"
           right={() => (
             <Switch
+              disabled
+              isLoading={state.isLoading}
               value={currentBusiness?.isWebBookingEnabled ?? false}
               onChange={() => {
                 const isWebBookingEnabled = !(currentBusiness?.isWebBookingEnabled ?? false);
@@ -86,12 +88,14 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
           )}
         />
         <List.Item
+          descriptionStyle={{ color: Colors.subText }}
           titleStyle={{ color: Colors.text }}
           title="App notifications"
           description="Allow app notifications"
           style={itemStyle}
           right={() => (
             <Switch
+              isLoading={state.isLoading}
               value={currentBusiness?.isAppNotificationEnabled ?? false}
               onChange={() => {
                 const isAppNotificationEnabled = !(currentBusiness?.isAppNotificationEnabled ?? false);
@@ -105,12 +109,14 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
           )}
         />
         <List.Item
+          descriptionStyle={{ color: Colors.subText }}
           titleStyle={{ color: Colors.text }}
           title="SMS notifications"
           description="Receive updates via SMS"
           style={itemStyle}
           right={() => (
             <Switch
+              isLoading={state.isLoading}
               value={currentBusiness?.isSmsNotificationEnabled ?? false}
               onChange={() => {
                 const isSmsNotificationEnabled = !(currentBusiness?.isSmsNotificationEnabled ?? false);
@@ -124,6 +130,7 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
           )}
         />
         <List.Item
+          descriptionStyle={{ color: Colors.subText }}
           titleStyle={{
             color: Colors.text,
           }}
@@ -132,6 +139,7 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
           description="Allow video conference link in booking"
           right={() => (
             <Switch
+              isLoading={state.isLoading}
               value={currentBusiness?.isVideoConferenceEnabled ?? false}
               onChange={() => {
                 const isVideoConferenceEnabled = !(currentBusiness?.isVideoConferenceEnabled ?? false);
@@ -147,6 +155,7 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
         <ManageAdminUsers user={user} />
 
         <List.Item
+          descriptionStyle={{ color: Colors.subText }}
           titleStyle={{
             color: Colors.text,
           }}
@@ -167,6 +176,7 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
           right={props => <List.Icon {...props} color={Colors.text} icon="chevron-right" />}
         />
         <List.Item
+          descriptionStyle={{ color: Colors.subText }}
           title="Currency"
           disabled
           style={{ backgroundColor: Colors.lightGray }}
@@ -178,6 +188,7 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
 
         <ShortwaitsCustomerSupport />
         <List.Item
+          descriptionStyle={{ color: Colors.subText }}
           titleStyle={{
             color: Colors.text,
           }}
@@ -186,6 +197,7 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
           description="Disable your store temporarily"
           right={() => (
             <Switch
+              isLoading={state.isLoading}
               value={currentBusiness?.isDisabled ?? false}
               onChange={() => {
                 const isDisabled = !(currentBusiness?.isDisabled ?? false);

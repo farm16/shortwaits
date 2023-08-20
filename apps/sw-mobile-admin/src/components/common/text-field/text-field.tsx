@@ -6,32 +6,24 @@ import { useTheme } from "../../../theme";
 
 export * from "./text-field-types";
 
-export const TextField = forwardRef(
-  (props: TextFieldProps, ref: ForwardedRef<null>) => {
-    const {
-      placeholder,
-      preset = "default",
-      style: styleOverride,
-      errors,
-      ...rest
-    } = props;
+export const TextField = forwardRef((props: TextFieldProps, ref: ForwardedRef<TextInput>) => {
+  const { placeholder, preset = "default", style: styleOverride, errors, ...rest } = props;
 
-    const {
-      Colors,
-      Common: { textFieldPresets },
-    } = useTheme();
+  const {
+    Colors,
+    Common: { textFieldPresets },
+  } = useTheme();
 
-    const style = textFieldPresets[preset] || textFieldPresets.default;
-    const textInputStyle = [style, styleOverride];
+  const style = textFieldPresets[preset] || textFieldPresets.default;
+  const textInputStyle = [style, styleOverride];
 
-    return (
-      <TextInput
-        ref={ref}
-        placeholderTextColor={Colors.subText}
-        style={textInputStyle}
-        placeholder={placeholder}
-        {...rest}
-      />
-    );
-  }
-);
+  return (
+    <TextInput
+      ref={ref}
+      placeholderTextColor={Colors.subText}
+      style={textInputStyle}
+      placeholder={placeholder}
+      {...rest}
+    />
+  );
+});

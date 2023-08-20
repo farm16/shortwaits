@@ -12,12 +12,6 @@
         "reset-cache": true
       }
     },
-    "serve": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "nx start sw-mobile-admin"
-      }
-    },
     "run-ios": {
       "executor": "@nx/react-native:run-ios",
       "options": {}

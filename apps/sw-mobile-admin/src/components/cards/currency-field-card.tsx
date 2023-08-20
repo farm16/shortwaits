@@ -1,34 +1,39 @@
-import React from "react";
-import { StyleSheet, View } from "react-native";
-import { TextFieldProps, Card, Text, CardIconsProps, Space } from "../common";
+import React, { useRef } from "react";
+import { Platform, Pressable, StyleSheet } from "react-native";
 import CurrencyInput, { CurrencyInputProps } from "react-native-currency-input";
 import { BusinessAvailableCurrenciesType } from "@shortwaits/shared-lib";
 
+import { Card, Text, CardProps, Space } from "../common";
 import { getDimensions, useTheme } from "../../theme";
 import { getCurrencySymbolFromCurrencyType } from "../../utils/currency";
 
-type TextFieldCard = CurrencyInputProps & {
+type TextFieldCardType = Omit<CardProps, "mode"> & {
   title: string;
+  subTitle?: string;
+  errors?: string | undefined;
   isTouched?: boolean;
-  rightIconName?: string;
-  disabled?: boolean;
-  currencyType: BusinessAvailableCurrenciesType;
-  errors: string;
-};
+  withTopBorder?: boolean;
+  placeholder?: string;
+  currencyType?: BusinessAvailableCurrenciesType;
+} & CurrencyInputProps;
 
 const MAX = 10000;
 
-export function CurrencyFieldCard(props: TextFieldCard) {
+export function CurrencyFieldCard(props: TextFieldCardType) {
   const {
     value,
     style,
     errors,
     isTouched,
-    title,
-    rightIconName,
     onChangeValue,
     currencyType,
-    disabled = false,
+    rightIconColor,
+    rightIconName,
+    rightIconSize = "large",
+    rightIconOnPress,
+    title,
+    withTopBorder,
+    editable,
     ...rest
   } = props;
 
@@ -36,16 +41,38 @@ export function CurrencyFieldCard(props: TextFieldCard) {
     Colors,
     Common: { textFieldPresets },
   } = useTheme();
-  const { width } = getDimensions();
 
+  const textInputRef = useRef<CurrencyInput>(null);
+  const { width } = getDimensions();
+  const handleSetFocus = () => {
+    if (textInputRef.current) {
+      textInputRef.current.focus();
+    }
+  };
   return (
     <>
-      <Card mode="text-field">
-        <Text preset="cardTitle" text={title} />
-        <Space size="tiny" />
+      <Card
+        {...rest}
+        mode="text-field"
+        rightIconSize={rightIconSize}
+        rightIconName={rightIconName}
+        style={
+          withTopBorder
+            ? {
+                borderTopWidth: 1.5,
+                borderTopColor: Colors.inputBackground,
+              }
+            : undefined
+        }
+      >
+        <Pressable onPress={handleSetFocus}>
+          <Text preset="cardTitle" text={title} />
+          {Platform.OS === "ios" && <Space size="tiny" />}
+        </Pressable>
         <CurrencyInput
           style={textFieldPresets.cardSubtitle}
           placeholderTextColor={Colors.subText}
+          placeholder="0.00"
           prefix={getCurrencySymbolFromCurrencyType(currencyType)}
           signPosition="beforePrefix"
           delimiter=","
@@ -54,8 +81,7 @@ export function CurrencyFieldCard(props: TextFieldCard) {
           onChangeValue={onChangeValue}
           value={value}
           maxValue={MAX}
-          editable={!disabled}
-          {...rest}
+          editable={editable}
         />
       </Card>
       {errors && isTouched ? (

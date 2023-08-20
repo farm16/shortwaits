@@ -81,6 +81,7 @@ export type AuthorizedStackParamList = {
   [AUTHORIZED_STACK_SCREENS.EVENT_SCREEN]: {
     event: EventDtoType;
   };
+  [AUTHORIZED_STACK_SCREENS.PLANS_SCREEN]: undefined;
 };
 
 export type UnauthorizedStackParamList = {

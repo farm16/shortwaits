@@ -5,6 +5,7 @@ import { StyleSheet, View } from "react-native";
 import { Button, ButtonProps } from "../button/button";
 import { useTheme } from "../../../theme";
 import { IconSizes } from "../../../theme/Variables";
+import { Space } from "../space/space";
 
 export type CardProps = ButtonProps & {
   leftIconName?: string;
@@ -62,13 +63,7 @@ export const Card = (props: CardProps) => {
   };
 
   return (
-    <Button
-      preset="card"
-      {...cardModes[mode]}
-      disabled={getIsDisabled()}
-      {...rest}
-      style={[styles.cardHeight, styleOverride]}
-    >
+    <Button preset="card" {...cardModes[mode]} disabled={getIsDisabled()} {...rest}>
       {leftIconName &&
         (mode === "static" || leftIconName === "none" ? null : (
           <Button disabled={!getIsDisabled()} onPress={leftIconOnPress} preset="none" style={styles.iconContainer}>
@@ -87,15 +82,12 @@ export const Card = (props: CardProps) => {
             />
           </Button>
         ))}
+      {/* <Space direction="vertical" size="tiny" /> */}
     </Button>
   );
 };
 
 const styles = StyleSheet.create({
-  cardHeight: {
-    minHeight: CARD_HEIGHT,
-    maxHeight: CARD_HEIGHT,
-  },
   childrenContainer: {
     flex: 1,
     justifyContent: "center",

@@ -18,9 +18,7 @@ export const FormContainer = ({ children, footer }: FormContainerProps) => {
     <Screen preset="fixed" unsafe>
       <Space size="tiny" />
       <ScrollView style={styles.scrollView}>{children}</ScrollView>
-      {clonedFooter ? (
-        <View style={[styles.footer, { backgroundColor }]}>{clonedFooter}</View>
-      ) : null}
+      {clonedFooter ? <View style={[styles.footer, { backgroundColor }]}>{clonedFooter}</View> : null}
     </Screen>
   );
 };
@@ -36,13 +34,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     ...Platform.select({
       ios: {
-        shadowColor: "rgba(0, 0, 0, 0.8)", //"#000
+        shadowColor: "rgba(0, 0, 0, 0.8)",
         shadowOffset: { width: 0, height: -4 },
         shadowOpacity: 0.1,
         shadowRadius: 2,
       },
       android: {
-        elevation: 2,
+        paddingBottom: 24,
+        borderTopWidth: 1,
+        borderTopColor: "rgba(0, 0, 0, 0.1)",
       },
     }),
   },

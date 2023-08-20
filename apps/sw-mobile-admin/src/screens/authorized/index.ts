@@ -4,3 +4,4 @@ export * from "./clients/clients-screen";
 export * from "./activity/activity-screen";
 export * from "./my-business/my-business-screen";
 export * from "./event/event-screen";
+export * from "./plans/plans-screen";

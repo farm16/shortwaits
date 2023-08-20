@@ -3,14 +3,7 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
-import {
-  SettingsScreen,
-  EventsScreen,
-  MyBusinessScreen,
-  ActivityScreen,
-  ClientsScreen,
-  EventScreen,
-} from "../../screens";
+import { SettingsScreen, EventsScreen, MyBusinessScreen, ActivityScreen, ClientsScreen } from "../../screens";
 import { useTheme } from "../../theme";
 import { AUTHORIZED_TAB_SCREENS } from "../navigation-constants";
 import { Platform } from "react-native";
@@ -31,6 +24,7 @@ export const AuthorizedTabNavigator = () => {
         unmountOnBlur: true,
         headerShown: true,
         headerStatusBarHeight: banner?.isVisible ? 0 : undefined,
+        headerTitleAlign: "center",
         headerStyle: {
           borderTopWidth: 0,
           backgroundColor: Colors.backgroundOverlay,
@@ -48,7 +42,12 @@ export const AuthorizedTabNavigator = () => {
         },
         // tabBarIconStyle: { color: Colors.brandSecondary },
         tabBarActiveTintColor: Colors.brandAccent,
-        tabBarInactiveTintColor: Colors.brandAccent2,
+        tabBarInactiveTintColor: Colors.brandAccent4,
+
+        tabBarAllowFontScaling: true,
+        tabBarLabelStyle: {
+          marginBottom: 4,
+        },
         tabBarStyle: {
           shadowColor: "#858F96",
           backgroundColor: Colors.backgroundOverlay,
@@ -69,11 +68,11 @@ export const AuthorizedTabNavigator = () => {
           ),
         }}
       />
-
       <Tab.Screen
         name={AUTHORIZED_TAB_SCREENS.CLIENTS_SCREEN}
         component={ClientsScreen}
         options={{
+          headerTitleAlign: "center",
           tabBarLabel: "Clients",
           tabBarIcon: ({ focused, color }) => (
             <MaterialCommunityIcons
@@ -90,11 +89,7 @@ export const AuthorizedTabNavigator = () => {
         options={{
           tabBarLabel: "My Business",
           tabBarIcon: ({ color, focused }) => (
-            <MaterialCommunityIcons
-              name={focused ? "store" : "store-outline"}
-              color={color}
-              size={25}
-            />
+            <MaterialCommunityIcons name={focused ? "store" : "store-outline"} color={color} size={25} />
           ),
         }}
       />
@@ -118,11 +113,7 @@ export const AuthorizedTabNavigator = () => {
         options={{
           tabBarLabel: "Settings",
           tabBarIcon: ({ color, focused }) => (
-            <MaterialCommunityIcons
-              name={focused ? "account-cog" : "account-cog-outline"}
-              color={color}
-              size={25}
-            />
+            <MaterialCommunityIcons name={focused ? "account-cog" : "account-cog-outline"} color={color} size={25} />
           ),
         }}
       />

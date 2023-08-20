@@ -18,6 +18,7 @@ export const AUTHORIZED_TAB_SCREENS = {
 
 export const AUTHORIZED_STACK_SCREENS = {
   EVENT_SCREEN: "event-screen",
+  PLANS_SCREEN: "plans-screen",
 } as const;
 
 export const AUTHORIZED_SCREENS = {

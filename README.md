@@ -21,3 +21,7 @@
 ## Resources
 
 https://blog.alesanchez.es/building-authentication-for-microservices-using-nestjs/
+
+## Troubleshooting
+
+➜ adb -s R38M9045JXT reverse tcp:8081 tcp:8081

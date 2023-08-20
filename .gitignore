@@ -107,4 +107,5 @@ yarn-error.log
 # testing
 /coverage
 
-apps/sw-mobile-admin/android/gradle
+apps/sw-mobile-admin/android/gradle/wrapper
+apps/sw-mobile-admin/ios/Pods
