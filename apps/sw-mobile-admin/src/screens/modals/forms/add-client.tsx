@@ -15,9 +15,9 @@ import {
   PhoneNumberCard,
   Space,
   ExpandableSection,
+  FormContainer,
 } from "../../../components";
 import { ModalsScreenProps } from "../../../navigation";
-import { FormContainer } from "./commons/form-container";
 import { getCapitalizedString } from "../../../utils";
 
 export const AddClientModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navigation, route }) => {

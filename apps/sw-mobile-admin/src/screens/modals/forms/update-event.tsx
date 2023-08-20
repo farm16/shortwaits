@@ -14,32 +14,18 @@ import {
   CurrencyFieldCard,
   IconButton,
   Space,
+  FormContainer,
 } from "../../../components";
 import { ModalsScreenProps } from "../../../navigation";
-import { FormContainer } from "./commons/form-container";
-import {
-  EventDtoType,
-  ServiceDtoType,
-  UpdateEventDtoType,
-} from "@shortwaits/shared-lib";
+import { EventDtoType, ServiceDtoType, UpdateEventDtoType } from "@shortwaits/shared-lib";
 import { useCreateEventMutation } from "../../../services";
 import { FormikErrors } from "formik";
 
-export const UpdateEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({
-  navigation,
-  route,
-}) => {
-  const {
-    onSubmit,
-    onDone,
-    closeOnSubmit = true,
-    initialValues,
-  } = route.params;
+export const UpdateEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navigation, route }) => {
+  const { onSubmit, onDone, closeOnSubmit = true, initialValues } = route.params;
   const services = useServices();
   const [selectedService, setSelectedService] = useState<ServiceDtoType | null>(
-    services.find(
-      service => service._id === (initialValues as EventDtoType).serviceId
-    ) || null
+    services.find(service => service._id === (initialValues as EventDtoType).serviceId) || null
   );
   const [isFree, setIsFree] = useState<boolean>(false);
 
@@ -49,9 +35,7 @@ export const UpdateEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({
 
   const [createEvent, createEventStatus] = useCreateEventMutation();
 
-  const validateDates = (
-    formData: UpdateEventDtoType
-  ): FormikErrors<UpdateEventDtoType> => {
+  const validateDates = (formData: UpdateEventDtoType): FormikErrors<UpdateEventDtoType> => {
     const errors: FormikErrors<UpdateEventDtoType> = {};
     const startTime = new Date(formData.startTime);
     const expectedEndTime = new Date(formData.expectedEndTime);
@@ -66,21 +50,20 @@ export const UpdateEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({
     return errors;
   };
 
-  const { touched, errors, values, handleChange, handleSubmit, setFieldValue } =
-    useForm(
-      {
-        initialValues: initialValues as UpdateEventDtoType,
-        validate: validateDates,
-        onSubmit: formData => {
-          if (onSubmit) {
-            onSubmit<"updateEvent">(formData);
-          } else {
-            createEvent({ businessId: business._id, body: formData });
-          }
-        },
+  const { touched, errors, values, handleChange, handleSubmit, setFieldValue } = useForm(
+    {
+      initialValues: initialValues as UpdateEventDtoType,
+      validate: validateDates,
+      onSubmit: formData => {
+        if (onSubmit) {
+          onSubmit<"updateEvent">(formData);
+        } else {
+          createEvent({ businessId: business._id, body: formData });
+        }
       },
-      "updateEvent"
-    );
+    },
+    "updateEvent"
+  );
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -88,22 +71,18 @@ export const UpdateEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({
       headerRight: () => (
         <IconButton
           onPress={() =>
-            Alert.alert(
-              "Delete Event",
-              "Are you sure you want to delete this event?",
-              [
-                {
-                  text: "Cancel",
-                  style: "cancel",
+            Alert.alert("Delete Event", "Are you sure you want to delete this event?", [
+              {
+                text: "Cancel",
+                style: "cancel",
+              },
+              {
+                text: "Delete",
+                onPress: () => {
+                  navigation.goBack();
                 },
-                {
-                  text: "Delete",
-                  onPress: () => {
-                    navigation.goBack();
-                  },
-                },
-              ]
-            )
+              },
+            ])
           }
           withMarginRight
           iconType="delete"
@@ -160,11 +139,7 @@ export const UpdateEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({
         isTouched={touched.name}
         errors={errors.name}
       />
-      <ButtonCard
-        title="Labels"
-        isTouched={touched.description}
-        errors={errors.description}
-      />
+      <ButtonCard title="Labels" isTouched={touched.description} errors={errors.description} />
       <TextFieldCard
         title="Description"
         value={values?.description}
@@ -191,9 +166,7 @@ export const UpdateEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({
         }
       />
       <ButtonCard
-        rightIconName={
-          values?.hasNoDuration ? "checkbox-outline" : "checkbox-blank-outline"
-        }
+        rightIconName={values?.hasNoDuration ? "checkbox-outline" : "checkbox-blank-outline"}
         title={"Limited time"}
         onPress={() => {
           setFieldValue("hasNoDuration", !values?.hasNoDuration);
@@ -216,9 +189,7 @@ export const UpdateEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({
         />
       )}
       <ButtonCard
-        rightIconName={
-          values?.repeat ? "checkbox-outline" : "checkbox-blank-outline"
-        }
+        rightIconName={values?.repeat ? "checkbox-outline" : "checkbox-blank-outline"}
         title={"Recurring"}
         onPress={() => {
           setFieldValue("repeat", !values?.repeat);

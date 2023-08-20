@@ -1,7 +1,7 @@
 import React, { ReactNode, ReactElement } from "react";
 import { Platform, StyleSheet, View } from "react-native";
-import { Screen, ScrollView, Space } from "../../../../components";
-import { useTheme } from "../../../../theme";
+import { Screen, ScrollView, Space } from "../..";
+import { useTheme } from "../../../theme";
 
 interface FormContainerProps {
   children: ReactNode;

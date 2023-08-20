@@ -13,9 +13,9 @@ import {
   ButtonCard,
   CurrencyFieldCard,
   Space,
+  FormContainer,
 } from "../../../components";
 import { ModalsScreenProps } from "../../../navigation";
-import { FormContainer } from "./commons/form-container";
 import {
   BusinessLabelType,
   BusinessLabelsType,

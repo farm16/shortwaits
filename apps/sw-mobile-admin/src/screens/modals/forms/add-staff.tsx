@@ -16,9 +16,9 @@ import {
   Space,
   ExpandableSection,
   TimePickerFieldCard,
+  FormContainer,
 } from "../../../components";
 import { ModalsScreenProps } from "../../../navigation";
-import { FormContainer } from "./commons/form-container";
 import { getCapitalizedString } from "../../../utils";
 
 export const AddStaffModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navigation, route }) => {
