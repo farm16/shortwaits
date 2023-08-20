@@ -1,21 +1,22 @@
 import React, { ReactNode, ReactElement } from "react";
 import { Platform, StyleSheet, View } from "react-native";
 import { Screen, ScrollView, Space } from "../..";
+import { ScreenProps } from "../../common/screen/screen.props";
 import { useTheme } from "../../../theme";
 
-interface FormContainerProps {
+type FormContainerProps = {
   children: ReactNode;
   footer?: ReactElement;
-}
+} & ScreenProps;
 
-export const FormContainer = ({ children, footer }: FormContainerProps) => {
+export const FormContainer = ({ children, footer, ...rest }: FormContainerProps) => {
   const clonedFooter = footer ? React.cloneElement(footer) : null;
 
   const { Colors } = useTheme();
   const backgroundColor = Colors.backgroundOverlay;
 
   return (
-    <Screen preset="fixed" unsafe>
+    <Screen preset="fixed" unsafe {...rest}>
       <Space size="tiny" />
       <ScrollView style={styles.scrollView}>{children}</ScrollView>
       {clonedFooter ? <View style={[styles.footer, { backgroundColor }]}>{clonedFooter}</View> : null}
