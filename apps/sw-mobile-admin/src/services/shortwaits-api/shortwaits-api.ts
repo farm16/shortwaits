@@ -1,5 +1,4 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
-//modules
 import {
   GetEventsByBusiness,
   GetAdminMobile,
@@ -27,15 +26,9 @@ import {
   GetPeopleInEvent,
 } from "./modules";
 import { baseQueryWithInterceptor } from "./interceptor";
-import { REHYDRATE } from "redux-persist";
 
 export const shortwaitsApi = createApi({
   reducerPath: "shortwaitsApi",
-  // extractRehydrationInfo(action, { reducerPath }) {
-  //   if (action.type === REHYDRATE) {
-  //     return action.payload[reducerPath];
-  //   }
-  // },
   baseQuery: baseQueryWithInterceptor,
   endpoints: builder => ({
     //default mobile data
@@ -44,23 +37,25 @@ export const shortwaitsApi = createApi({
     localSignUp: PostLocalSignUp(builder),
     localSignIn: PostLocalSignIn(builder),
     localSignOut: PostLocalSignOut(builder),
-    //business (queries)
+
+    // >>>>> business
     getBusiness: GetBusiness(builder),
     getBusinessCategory: GetBusinessCategory(builder),
     getBusinessHours: GetBusinessHours(builder),
     getBusinessServices: GetBusinessServices(builder),
     getBusinessClients: GetBusinessClients(builder),
     getBusinessStaff: GetBusinessStaff(builder),
-    //business (mutation)
     updateBusiness: UpdateBusiness(builder),
     updateBusinessHours: UpdateBusinessHours(builder),
     registerBusiness: RegisterBusiness(builder),
-    //business Users (mutation) STAFF !!!
+    // A business User === Staff
+    // A client User === Client also known as a customer
     createBusinessStaff: CreateBusinessStaff(builder),
-    //client Users (mutation) CLIENT !!!
     createBusinessClients: CreateBusinessClients(builder),
-    // todo: pending
-    getUsers: GetUsers(builder),
+    updateBusinessStaff: CreateBusinessStaff(builder),
+    updateBusinessClient: CreateBusinessClients(builder),
+    // <<<<< business
+
     //categories
     getCategory: GetCategory(builder),
     getCategories: GetCategories(builder),
@@ -72,5 +67,7 @@ export const shortwaitsApi = createApi({
     getEventsByBusiness: GetEventsByBusiness(builder),
     getEventsSummaryByBusiness: GetEventsSummaryByBusiness(builder),
     getPeopleInEvent: GetPeopleInEvent(builder),
+    // todo: Users
+    getUsers: GetUsers(builder),
   }),
 });

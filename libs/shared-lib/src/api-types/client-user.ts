@@ -23,5 +23,6 @@ export type CreateClientUserDtoType = Omit<
   | "registration"
   | "currentMembership"
 >;
+export type CreateClientUsersDtoType = CreateClientUserDtoType[];
 
 export type ClientUserUpdateDtoType = Partial<ClientUserDtoType>;

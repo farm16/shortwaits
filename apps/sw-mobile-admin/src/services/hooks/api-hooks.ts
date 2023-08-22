@@ -11,6 +11,8 @@ export const {
   useUpdateBusinessHoursMutation,
   useCreateBusinessClientsMutation,
   useCreateBusinessStaffMutation,
+  useUpdateBusinessClientMutation,
+  useUpdateBusinessStaffMutation,
   //Query hooks
   useGetAdminMobileQuery,
   useGetBusinessClientsQuery,

@@ -67,6 +67,10 @@ export const endpoints = {
   getBusinessClients: createEndpoint(`business/:businessId/clients`, "GET"),
   getBusinessStaff: createEndpoint(`business/:businessId/staff`, "GET"),
   registerBusiness: createEndpoint("business/register", "POST"),
+  //business User === Staff
+  //client User === Client
+  createBusinessStaff: createEndpoint(`business/:businessId/staff`, "POST"),
+  updateBusinessStaff: createEndpoint(`business/:businessId/staff`, "PUT"),
   createBusinessClient: createEndpoint(`business/:businessId/clients`, "POST"),
   updateBusinessClient: createEndpoint(`business/:businessId/clients`, "PUT"),
 

@@ -7,12 +7,17 @@ import UpdateBusinessHours from "./update-hours";
 import UpdateBusiness from "./update-business";
 import RegisterBusiness from "./register-business";
 import GetBusinessClients from "./get-clients";
-import CreateBusinessStaff from "./create-business-user";
-import CreateBusinessClients from "./create-client-user";
+// users
+import CreateBusinessStaff from "./create-business-staff-user";
+import CreateBusinessClients from "./create-business-client-users";
+import UpdateBusinessStaff from "./update-business-staff-user";
+import UpdateBusinessClient from "./update-business-client-user";
 
 export {
-  CreateBusinessClients,
   CreateBusinessStaff,
+  CreateBusinessClients,
+  UpdateBusinessStaff,
+  UpdateBusinessClient,
   GetBusiness,
   GetBusinessCategory,
   GetBusinessServices,

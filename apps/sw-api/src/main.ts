@@ -27,6 +27,7 @@ async function bootstrap() {
     .setTitle("Shortwaits Admin - API")
     .setDescription(html)
     .addServer("http://127.0.0.1:8080", "Dev server")
+    .addServer("http://sw-api.us-east-1.elasticbeanstalk.com", "Staging server")
     .addServer("https://api.shortwaits.com", "Production server")
     .addBearerAuth()
     .setVersion("1.0")
