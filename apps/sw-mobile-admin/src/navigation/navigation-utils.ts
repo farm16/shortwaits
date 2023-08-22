@@ -7,11 +7,7 @@ import {
   NavigationAction,
   createNavigationContainerRef,
 } from "@react-navigation/native";
-import {
-  ALL_SCREENS_TYPE,
-  ScreenProps,
-  STACKS_TYPES,
-} from "./navigation-types";
+import { ALL_SCREENS_TYPE, ScreenProps, STACKS_TYPES } from "./navigation-types";
 
 export const RootNavigation = {
   navigate(_name: string, _params?: any) {},
@@ -28,9 +24,7 @@ export const navigationRef = createNavigationContainerRef();
 /**
  * Gets the current screen from any navigation state.
  */
-export function getActiveRouteName(
-  state: NavigationState | PartialState<NavigationState>
-) {
+export function getActiveRouteName(state: NavigationState | PartialState<NavigationState>) {
   const route = state.routes[state.index];
 
   // Found the active route -- return the name
@@ -81,8 +75,7 @@ export function useBackButtonHandler(canExit: (routeName: string) => boolean) {
     BackHandler.addEventListener("hardwareBackPress", onBackPress);
 
     // Unsubscribe when we're done
-    return () =>
-      BackHandler.removeEventListener("hardwareBackPress", onBackPress);
+    return () => BackHandler.removeEventListener("hardwareBackPress", onBackPress);
   }, []);
 }
 

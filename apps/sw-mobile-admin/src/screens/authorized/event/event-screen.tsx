@@ -12,12 +12,15 @@ import {
   BottomSheetType,
   BottomSheet,
   ButtonCard,
+  Button,
 } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { EventScreenTabs } from "./event-tabs";
-import { Alert, FlatList, View } from "react-native";
+import { Alert, View, StyleSheet } from "react-native";
+import { FlatList } from "react-native-gesture-handler";
 import { useTheme } from "../../../theme";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 // TODO: test this with real device ios and android
 // TODO: add config for android (missing)
@@ -30,6 +33,7 @@ export const EventScreen: FC<AuthorizedScreenProps<"event-screen">> = ({ navigat
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
+      headerTitleAlign: "center",
       headerTitle: () => {
         return (
           <Container direction="row" justifyContent="center">
@@ -129,6 +133,74 @@ export const EventScreen: FC<AuthorizedScreenProps<"event-screen">> = ({ navigat
 
   return (
     <Screen preset="fixed" unsafe unsafeBottom backgroundColor="backgroundOverlay">
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          backgroundColor: Colors.brandPrimary,
+          marginHorizontal: 16,
+          paddingVertical: 16,
+          // paddingHorizontal: 24,
+          borderRadius: 10,
+          marginBottom: 16,
+          marginTop: 8,
+        }}
+      >
+        <Button preset="none" style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+          <Icon name="thumb-up-outline" size={24} color={Colors.white} />
+          <Text
+            text="Accept"
+            preset="none"
+            style={{
+              color: Colors.white,
+              marginTop: 8,
+            }}
+          />
+        </Button>
+        <View
+          style={{
+            borderRightWidth: StyleSheet.hairlineWidth,
+            borderLeftWidth: StyleSheet.hairlineWidth,
+            borderColor: Colors.gray,
+          }}
+        />
+        <Button
+          preset="none"
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Icon name="thumb-down-outline" size={24} color={Colors.white} />
+          <Text
+            text="Reject"
+            preset="none"
+            style={{
+              color: Colors.white,
+              marginTop: 8,
+            }}
+          />
+        </Button>
+        <View
+          style={{
+            borderRightWidth: StyleSheet.hairlineWidth,
+            borderLeftWidth: StyleSheet.hairlineWidth,
+            borderColor: Colors.gray,
+          }}
+        />
+        <Button preset="none" style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+          <Icon name="checkbox-marked-circle-outline" size={24} color={Colors.white} />
+          <Text
+            text="Complete"
+            preset="none"
+            style={{
+              color: Colors.white,
+              marginTop: 8,
+            }}
+          />
+        </Button>
+      </View>
       <EventScreenTabs event={event} />
       <BottomSheet ref={bottomSheetRef}>
         <View style={{ flex: 1 }}>
@@ -151,7 +223,6 @@ export const EventScreen: FC<AuthorizedScreenProps<"event-screen">> = ({ navigat
               Share Event
             </Text>
           </View>
-
           <FlatList
             data={[
               // "Facebook",

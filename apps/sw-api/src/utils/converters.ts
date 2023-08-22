@@ -4,6 +4,10 @@ export function convertArrayToObjectId(ids: string[]): Types.ObjectId[] {
   return ids.map(id => new Types.ObjectId(id));
 }
 
+export function convertStringToObjectId(id: string): Types.ObjectId {
+  return new Types.ObjectId(id);
+}
+
 export function convertDomainToLowercase(email: string) {
   const atIndex = email.indexOf("@");
   if (atIndex !== -1) {

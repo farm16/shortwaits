@@ -52,7 +52,8 @@ export const UpdateEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ n
 
   const { touched, errors, values, handleChange, handleSubmit, setFieldValue } = useForm(
     {
-      initialValues: initialValues as UpdateEventDtoType,
+      // todo remove this hardcoded paymentMethod value
+      initialValues: { ...initialValues, paymentMethod: "CASH" } as UpdateEventDtoType,
       validate: validateDates,
       onSubmit: formData => {
         if (onSubmit) {
@@ -143,6 +144,7 @@ export const UpdateEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ n
       <TextFieldCard
         title="Description"
         value={values?.description}
+        multiline
         onChangeText={handleChange("description")}
         isTouched={touched.description}
         errors={errors.description}

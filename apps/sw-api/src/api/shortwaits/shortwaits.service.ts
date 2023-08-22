@@ -16,9 +16,7 @@ export class ShortwaitsService {
   public async getMobileDefaultData(): Promise<ShortwaitsAdminDefaultDataPayloadType> {
     const defaultAdminMobileDataArr = await this.shortwaitsModel.find(DEFAULT);
     /**will be distributed based on location (can be filtered by other means ???)*/
-    const defaultAdminMobileData = defaultAdminMobileDataArr.find(
-      elem => elem.short_id === "0000001"
-    );
+    const defaultAdminMobileData = defaultAdminMobileDataArr.find(elem => elem.short_id === "0000001");
     return defaultAdminMobileData;
   }
 }

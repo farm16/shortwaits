@@ -1,20 +1,14 @@
 import React, { useState, useEffect } from "react";
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-} from "react-native-reanimated";
+import Animated, { useSharedValue, useAnimatedStyle, withTiming } from "react-native-reanimated";
 import { SearchBar } from "../search-bar/search-bar";
+import { Platform } from "react-native";
 
 type AnimatedSearchBarProps = {
   onChangeText: (text: string) => void;
   isVisible?: boolean;
 };
 
-export const AnimatedSearchBar: React.FC<AnimatedSearchBarProps> = ({
-  onChangeText,
-  isVisible = false,
-}) => {
+export const AnimatedSearchBar: React.FC<AnimatedSearchBarProps> = ({ onChangeText, isVisible = false }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isTextInputVisible, setIsTextInputVisible] = useState(isVisible);
 
@@ -43,9 +37,7 @@ export const AnimatedSearchBar: React.FC<AnimatedSearchBarProps> = ({
 
   return (
     <Animated.View style={textInputStyle}>
-      {isVisible ? (
-        <SearchBar onChangeText={handleSearch} value={searchQuery} />
-      ) : null}
+      {isVisible ? <SearchBar isAnimated onChangeText={handleSearch} value={searchQuery} /> : null}
     </Animated.View>
   );
 };

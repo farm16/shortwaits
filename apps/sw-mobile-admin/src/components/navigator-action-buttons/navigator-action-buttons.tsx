@@ -140,9 +140,9 @@ const _circleIcons = {
   },
   close: {
     name: "close",
-    color: "white",
-    backgroundColor: "red3",
-    size: 26,
+    color: "brandSecondary",
+    backgroundColor: undefined,
+    size: 30,
   },
   "business-header": {
     name: "store",
@@ -248,6 +248,12 @@ const _circleIcons = {
   },
   magnify: {
     name: "magnify",
+    backgroundColor: undefined,
+    color: "brandSecondary",
+    size: 21,
+  },
+  qr: {
+    name: "qrcode",
     backgroundColor: undefined,
     color: "brandSecondary",
     size: 21,

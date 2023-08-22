@@ -67,6 +67,8 @@ export const endpoints = {
   getBusinessClients: createEndpoint(`business/:businessId/clients`, "GET"),
   getBusinessStaff: createEndpoint(`business/:businessId/staff`, "GET"),
   registerBusiness: createEndpoint("business/register", "POST"),
+  createBusinessClient: createEndpoint(`business/:businessId/clients`, "POST"),
+  updateBusinessClient: createEndpoint(`business/:businessId/clients`, "PUT"),
 
   // shortwaits
   getShortwaitsAdminMobile: createEndpoint("shortwaits/admin/mobile", "GET"),

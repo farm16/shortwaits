@@ -46,25 +46,27 @@ export const shortwaitsApi = createApi({
     localSignOut: PostLocalSignOut(builder),
     //business (queries)
     getBusiness: GetBusiness(builder),
-    getBusinessClients: GetBusinessClients(builder),
     getBusinessCategory: GetBusinessCategory(builder),
     getBusinessHours: GetBusinessHours(builder),
     getBusinessServices: GetBusinessServices(builder),
+    getBusinessClients: GetBusinessClients(builder),
     getBusinessStaff: GetBusinessStaff(builder),
     //business (mutation)
     updateBusiness: UpdateBusiness(builder),
     updateBusinessHours: UpdateBusinessHours(builder),
     registerBusiness: RegisterBusiness(builder),
+    //business Users (mutation) STAFF !!!
     createBusinessStaff: CreateBusinessStaff(builder),
+    //client Users (mutation) CLIENT !!!
     createBusinessClients: CreateBusinessClients(builder),
+    // todo: pending
+    getUsers: GetUsers(builder),
     //categories
     getCategory: GetCategory(builder),
     getCategories: GetCategories(builder),
     //services
     getService: GetService(builder),
     getServicesByBusiness: GetServicesByBusiness(builder),
-    //user
-    getUsers: GetUsers(builder),
     //events
     createEvent: CreateEvent(builder),
     getEventsByBusiness: GetEventsByBusiness(builder),

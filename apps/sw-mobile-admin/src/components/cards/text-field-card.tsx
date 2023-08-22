@@ -24,6 +24,7 @@ export function TextFieldCard(props: TextFieldCardType) {
     rightIconOnPress,
     title,
     withTopBorder,
+    multiline,
     ...rest
   } = props;
 
@@ -43,26 +44,27 @@ export function TextFieldCard(props: TextFieldCardType) {
         mode="text-field"
         rightIconSize={rightIconSize}
         rightIconName={rightIconName}
-        style={
+        rightIconOnPress={rightIconOnPress}
+        rightIconColor={rightIconColor}
+        style={[
           withTopBorder
             ? {
                 borderTopWidth: 1.5,
                 borderTopColor: Colors.inputBackground,
               }
-            : undefined
-        }
+            : {},
+          {
+            height: multiline ? "auto" : 70,
+            paddingBottom: multiline ? 16 : 0,
+            // alignItems: multiline ? "flex-start" : "center",
+          },
+        ]}
       >
         <Pressable onPress={handleSetFocus}>
           <Text preset="cardTitle" text={title} />
           {Platform.OS === "ios" && <Space size="tiny" />}
         </Pressable>
-        <TextField
-          {...rest}
-          // style={{ backgroundColor: "red" }}
-          preset="cardSubtitle"
-          ref={textInputRef}
-          placeholder={placeholder}
-        />
+        <TextField {...rest} multiline={multiline} preset="cardSubtitle" ref={textInputRef} placeholder={placeholder} />
       </Card>
       {errors && isTouched ? (
         <Text

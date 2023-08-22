@@ -1,5 +1,5 @@
 import React from "react";
-import { View } from "react-native";
+import { View, ViewStyle } from "react-native";
 
 import { MetricsSizes } from "../../../theme/Variables";
 
@@ -16,14 +16,10 @@ export const Space = ({
   const horizontalStyle = {
     width: "100%",
     height: metricSize + extra,
-  };
+  } as ViewStyle;
   const verticalStyle = {
     height: "100%",
     width: metricSize,
-  };
-  return (
-    <View
-      style={direction === "horizontal" ? horizontalStyle : verticalStyle}
-    />
-  );
+  } as ViewStyle;
+  return <View style={direction === "horizontal" ? horizontalStyle : verticalStyle} />;
 };

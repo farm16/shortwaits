@@ -8,6 +8,6 @@ const banners = {
 
 export function Banner() {
   const { components } = useMobileAdmin();
-  const BannerComponent = banners[components?.banner?.name] || null;
+  const BannerComponent = banners[components?.banner?.name as string] || null;
   return BannerComponent ? <BannerComponent /> : null;
 }

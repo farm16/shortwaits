@@ -134,6 +134,7 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
                 fontSize: 14,
                 fontWeight: "500",
                 textTransform: "uppercase",
+                color: Colors.text,
               }}
             >
               {`${title} (${_data.find(({ title: _title }) => _title === title).data.length})`}

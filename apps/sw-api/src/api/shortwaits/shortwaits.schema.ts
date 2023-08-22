@@ -12,10 +12,10 @@ import {
 } from "@shortwaits/shared-lib";
 
 @Schema()
-export class Shortwaits
-  extends Document
-  implements ShortwaitsAdminDefaultDataType
-{
+export class Shortwaits extends Document implements ShortwaitsAdminDefaultDataType {
+  @ApiProperty()
+  @Prop()
+  subscriptionPlans: [];
   @ApiProperty()
   @Prop()
   banners: ShortwaitsAdminBannersType[];

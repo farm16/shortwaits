@@ -15,57 +15,44 @@ export const defaultSnapPointsLevels = {
   6: ["85%"],
 };
 
-export const BottomSheet = forwardRef(
-  (props: BottomSheetProps, ref: ForwardedRef<GBottomSheet | null>) => {
-    const {
-      onChange,
-      snapPointsLevel = 1,
-      snapPoints: snapPointsOverride,
-      children,
-      ...rest
-    } = props;
+export const BottomSheet = forwardRef((props: BottomSheetProps, ref: ForwardedRef<GBottomSheet | null>) => {
+  const { onChange, snapPointsLevel = 1, snapPoints: snapPointsOverride, children, ...rest } = props;
 
-    const { Colors } = useTheme();
-    const sheetStyle = useMemo(
-      () => ({
-        ...styles.sheetContainer,
-        shadowColor: Colors.text,
-      }),
-      [Colors.text]
-    );
+  const { Colors } = useTheme();
+  const sheetStyle = useMemo(
+    () => ({
+      ...styles.sheetContainer,
+      shadowColor: Colors.text,
+    }),
+    [Colors.text]
+  );
 
-    const renderBackdrop = useCallback(
-      (bottomSheetBackdropProps) => (
-        <BottomSheetBackdrop
-          {...bottomSheetBackdropProps}
-          opacity={0.5}
-          disappearsOnIndex={-1}
-          appearsOnIndex={0}
-        />
-      ),
-      []
-    );
+  const renderBackdrop = useCallback(
+    bottomSheetBackdropProps => (
+      <BottomSheetBackdrop {...bottomSheetBackdropProps} opacity={0.5} disappearsOnIndex={-1} appearsOnIndex={0} />
+    ),
+    []
+  );
 
-    return (
-      <Portal>
-        <GBottomSheet
-          backdropComponent={renderBackdrop}
-          style={sheetStyle}
-          enablePanDownToClose
-          index={-1}
-          onChange={onChange}
-          backgroundStyle={{ backgroundColor: Colors.background }}
-          snapPoints={defaultSnapPointsLevels[snapPointsLevel]}
-          ref={ref}
-          keyboardBlurBehavior="restore"
-          {...rest}
-        >
-          {children}
-        </GBottomSheet>
-      </Portal>
-    );
-  }
-);
+  return (
+    <Portal>
+      <GBottomSheet
+        backdropComponent={renderBackdrop}
+        style={sheetStyle}
+        enablePanDownToClose
+        index={-1}
+        onChange={onChange}
+        backgroundStyle={{ backgroundColor: Colors.background }}
+        snapPoints={defaultSnapPointsLevels[snapPointsLevel]}
+        ref={ref}
+        keyboardBlurBehavior="restore"
+        {...rest}
+      >
+        {children}
+      </GBottomSheet>
+    </Portal>
+  );
+});
 
 const styles = StyleSheet.create({
   sheetContainer: {

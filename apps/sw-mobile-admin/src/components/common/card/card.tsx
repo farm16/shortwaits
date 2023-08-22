@@ -45,7 +45,6 @@ export const Card = (props: CardProps) => {
     children,
     leftIconOnPress,
     rightIconOnPress,
-    style: styleOverride,
     ...rest
   } = props;
 

@@ -100,8 +100,8 @@ export const AddClientModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ nav
       "addClient"
     );
 
-  console.log("errors", errors);
-  console.log("touched", touched);
+  console.log("errors", JSON.stringify(errors, null, 3));
+  // console.log("touched", touched);
 
   useLayoutEffect(() => {
     navigation.setOptions({

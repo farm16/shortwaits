@@ -1,17 +1,8 @@
 import React from "react";
 import { Provider as ReduxProvider } from "react-redux";
-import {
-  Portal as PaperPortalProvider,
-  Provider as PaperProvider,
-} from "react-native-paper";
-import {
-  SafeAreaProvider,
-  initialWindowMetrics,
-} from "react-native-safe-area-context";
-import {
-  PortalProvider as GPortalProvider,
-  enableLogging,
-} from "@gorhom/portal";
+import { Provider as PaperProvider } from "react-native-paper";
+import { SafeAreaProvider, initialWindowMetrics } from "react-native-safe-area-context";
+import { PortalProvider as GPortalProvider, enableLogging } from "@gorhom/portal";
 
 import { AppNavigator } from "./navigation";
 import { persistor, store } from "./store";

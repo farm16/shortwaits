@@ -97,7 +97,6 @@ export const EventScreenTabs = props => {
 const styles = StyleSheet.create({
   tabBar: {
     flexDirection: "row",
-    paddingTop: StatusBar.currentHeight,
   },
   tabContainer: {
     flex: 1,

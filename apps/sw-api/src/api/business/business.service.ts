@@ -1,21 +1,22 @@
-import mongoose, { Model } from "mongoose";
+import { Model } from "mongoose";
 import { InjectModel } from "@nestjs/mongoose";
 import { ForbiddenException, Injectable, NotFoundException, PreconditionFailedException } from "@nestjs/common";
 import {
   BusinessType,
   BusinessHoursType,
-  BusinessDocType,
-  ClientUserType,
   BusinessUserType,
-  UpdateBusinessDtoType,
   BusinessDtoType,
+  ClientUsersDtoType,
+  ClientUserDtoType,
+  ClientUserUpdateDtoType,
+  CreateClientUserDtoType,
 } from "@shortwaits/shared-lib";
 
 import { Business } from "./entities/business.entity";
 import { BusinessUser } from "../business-user/entities/business-user.entity";
 import { ClientUser } from "../client-user/entities/client-user.entity";
-import { UpdateBusinessDto } from "./dto/updateBusiness.dto";
 import { RegisterBusinessDto } from "./dto/registerBusiness.dto";
+import { convertStringToObjectId } from "../../utils/converters";
 
 @Injectable()
 export class BusinessService {
@@ -28,10 +29,8 @@ export class BusinessService {
     private clientUserModel: Model<ClientUser> // @InjectModel(Service.name) // private serviceModel: Model<Service>, // private config: ConfigService
   ) {}
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   isUserAdminType(business: Business, userId: any) {
-    const id = new mongoose.mongo.ObjectId(userId);
-    // console.log(id, userId);
+    const id = convertStringToObjectId(userId);
     const isAdmin = business.admins.includes(id);
     const isSuperAdmin = business.superAdmins.includes(id);
 
@@ -189,7 +188,7 @@ export class BusinessService {
     }
   }
 
-  async createBusinessClients(businessUserId: string, businessId: string, clients: ClientUserType[]) {
+  async createBusinessClients(businessUserId: string, businessId: string, clients: CreateClientUserDtoType) {
     const businessData = await this.findBusinessById(businessId);
 
     const { isAdmin, isSuperAdmin } = this.isUserAdminType(businessData, businessUserId);
@@ -206,6 +205,26 @@ export class BusinessService {
       await updatedBusiness.save();
 
       return insertedClients;
+    }
+  }
+
+  async updateBusinessClient(businessUserId: string, businessId: string, client: ClientUserUpdateDtoType) {
+    const businessData = await this.findBusinessById(businessId);
+    const { isAdmin, isSuperAdmin } = this.isUserAdminType(businessData, businessUserId);
+
+    const clientId = convertStringToObjectId(client._id);
+    const isClient = businessData.clients.includes(clientId);
+
+    if (!isClient) {
+      throw new ForbiddenException("Unrecognized client");
+    }
+
+    if (isAdmin || isSuperAdmin) {
+      const updatedClient = await this.clientUserModel.findOneAndUpdate({ _id: client._id }, client, {
+        new: true,
+      });
+
+      return updatedClient;
     }
   }
 }

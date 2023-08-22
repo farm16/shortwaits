@@ -1,235 +1,147 @@
 import React, { useLayoutEffect, useState } from "react";
-import { View, Platform, ViewStyle } from "react-native";
-import {
-  Screen,
-  Text,
-  Container,
-  IconButton,
-  BackButton,
-  useBottomSheet,
-  BottomSheetType,
-  BottomSheet,
-  ButtonCard,
-  Space,
-  Button,
-  FormContainer,
-} from "../../../components";
+import { Text, BackButton, Button, FormContainer, Container, Space } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTheme } from "../../../theme";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { SubscriptionPlans } from "@shortwaits/shared-lib";
+import PlanCard from "./planCard";
+import { Platform, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { responsiveFontSize } from "../../../utils";
 
 export function PlansScreen({ navigation }: AuthorizedScreenProps<"plans-screen">) {
   const { Colors } = useTheme();
-  const insets = useSafeAreaInsets();
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
-      headerTitle: "",
-      headerStyle: {
-        backgroundColor: Colors.staticLightBackground,
-      },
-      headerShadowVisible: false,
+      headerShown: false,
     });
   }, [Colors.staticLightBackground, navigation]);
 
-  const plansData = [
+  const defaultPlanId = "plan_H1J2X2Z2Y2";
+  const plansData: SubscriptionPlans = [
     {
       title: "1 Month",
-      backgroundColor: "#ebabda",
-      price: 1,
-      description: "per month",
-      description2: "Billed every month\n14-day money back guarantee",
+      planColor: "#ebabda",
+      tags: [],
+      hasOffer: false,
+      offerDescription: "",
+      offerCode: "",
+      finalPrice: 1.5,
+      price: 1.5,
+      priceDescription: "per month",
+      planDescription: "Billed every month\n14-day money back guarantee",
       planId: "plan_H1J2X2Z2Y1",
     },
     {
       title: "12 Month",
-      backgroundColor: "#f1cd6a",
-      price: 10,
-      description: "per month",
-      description2: "Billed every month\n14-day money back guarantee",
+      planColor: "#f1cd6a",
+      tags: ["popular"],
+      hasOffer: true,
+      offerDescription: "Save 20%",
+      offerCode: "SAVE20", // saves 3.6
+      finalPrice: 14.4, // ~ 1.2 * 12,
+      price: 18, // ~ 1.5 * 12,
+      priceDescription: "per one time",
+      planDescription: "Billed every 12 month\n14-day money back guarantee",
       planId: "plan_H1J2X2Z2Y2",
     },
     {
       title: "6 Month",
-      backgroundColor: "#a98ffc",
-      price: 5,
-      description: "per month",
-      description2: "Billed every month\n14-day money back guarantee",
+      planColor: "#a98ffc",
+      tags: [],
+      hasOffer: true,
+      offerDescription: "One month free",
+      offerCode: "1MONTHFREE", // saves 1.5
+      finalPrice: 7.5,
+      price: 9, // ~ 1.5 * 6,
+      priceDescription: "per one time",
+      planDescription: "Billed every 6 month\n14-day money back guarantee",
       planId: "plan_H1J2X2Z2Y3",
     },
   ];
 
   const [plans, setPlans] = useState(plansData);
-  const [selectedPlan, setSelectedPlan] = useState("plan_H1J2X2Z2Y1");
+  const [selectedPlan, setSelectedPlan] = useState(defaultPlanId);
 
-  const PlanCard = ({ title, backgroundColor, planId, price, description, description2, isSelected, onPress }) => {
-    const selectedCardStyle = isSelected
-      ? ({
-          borderLeftWidth: 2,
-          borderTopWidth: 2,
-          borderRightWidth: 9,
-          borderBottomWidth: 9,
-          borderColor: "black",
-        } as ViewStyle)
-      : {};
-
-    return (
-      <TouchableOpacity
-        onPress={() => onPress(planId)}
-        style={[
-          {
-            backgroundColor: Colors.white,
-            borderWidth: 3,
-            width: "85%",
-            borderRadius: 10,
-            maxWidth: 700,
-            borderColor: backgroundColor,
-            marginBottom: 28,
-            alignSelf: "center",
-          },
-          selectedCardStyle,
-        ]}
-      >
-        {isSelected ? (
-          <View
-            style={{
-              position: "absolute",
-              top: -15,
-              right: -15,
-              width: 50,
-              height: 50,
-              zIndex: 10,
-              backgroundColor: "black",
-              borderRadius: 25,
-              borderColor: Colors.brandSecondary,
-              borderWidth: 3,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Icon name="check" color={"white"} size={40} />
-          </View>
-        ) : null}
-        <View
-          style={{
-            backgroundColor,
-            padding: 20,
-          }}
-        >
-          <Text
-            preset="none"
-            style={{
-              fontWeight: "600",
-              fontSize: 18,
-            }}
-            text={title}
-          />
-        </View>
-        <View
-          style={{
-            padding: 20,
-          }}
-        >
-          <Text
-            preset="none"
-            style={{
-              fontWeight: "600",
-              fontSize: 42,
-            }}
-          >
-            <Text
-              preset="none"
-              style={{
-                fontWeight: "600",
-                fontSize: 22,
-              }}
-              text="$"
-            />
-            {price}
-          </Text>
-          <Text
-            style={{
-              fontWeight: "400",
-              fontSize: 14,
-              paddingTop: 10,
-              paddingBottom: 16,
-            }}
-            text={description}
-          />
-          <Text
-            style={{
-              fontWeight: "400",
-              fontSize: 16,
-            }}
-          >
-            {description2}
-          </Text>
-        </View>
-      </TouchableOpacity>
-    );
-  };
-
+  const insets = useSafeAreaInsets();
   return (
-    <FormContainer
-      backgroundColor="staticLightBackground"
-      footer={
-        <Button
-          // preset="none"
-          rightIconName="chevron-right"
-          rightIconSize={30}
-          rightIconColor="white"
-          style={{
-            backgroundColor: "black",
-            // borderRadius: 2,
-            paddingVertical: 10,
-            // paddingHorizontal: 16,
-            marginRight: 20,
-            borderRightColor: Colors.brandSecondary,
-            borderBottomColor: Colors.brandSecondary,
-            borderBottomWidth: 3,
-            borderRightWidth: 3,
-          }}
-          textStyle={{
-            color: "white",
-          }}
-          onPress={() => navigation.goBack()}
-          text="Proceed to payment"
-        />
-      }
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: Colors.staticLightBackground,
+        paddingTop: insets.top,
+      }}
     >
-      <Text
+      <View
         style={{
-          fontWeight: "700",
-          fontSize: 26,
-          marginBottom: 20,
-          fontStyle: "normal",
-          alignSelf: "center",
-          textAlign: "center",
-          fontFamily: "Helvetica Neue",
+          justifyContent: "center",
+          marginBottom: 8,
+          flexDirection: "row",
+          marginHorizontal: 0,
+          paddingHorizontal: 0,
+          marginTop: Platform.OS === "ios" ? 0 : 8,
         }}
       >
-        {"Choose your\nmembership plan"}
-      </Text>
-      {plans.map(plan => {
-        const isSelected = plan.planId === selectedPlan;
-        return (
-          <PlanCard
-            onPress={planId => {
-              setSelectedPlan(planId);
+        <BackButton
+          style={{
+            position: "absolute",
+            alignSelf: "center",
+            left: 5,
+          }}
+          onPress={() => navigation.goBack()}
+        />
+        <Text
+          style={{
+            fontWeight: "700",
+            fontSize: responsiveFontSize(26),
+            fontStyle: "normal",
+            textAlign: "center",
+            fontFamily: "Helvetica Neue",
+          }}
+        >
+          {"Choose your\nmembership plan"}
+        </Text>
+      </View>
+      <FormContainer
+        backgroundColor="staticLightBackground"
+        footer={
+          <Button
+            // preset="none"
+            rightIconName="chevron-right"
+            rightIconSize={30}
+            rightIconColor="white"
+            style={{
+              backgroundColor: "black",
+              // borderRadius: 2,
+              paddingVertical: 10,
+              // paddingHorizontal: 16,
+              marginRight: 20,
+              borderRightColor: Colors.brandSecondary,
+              borderBottomColor: Colors.brandSecondary,
+              borderBottomWidth: 3,
+              borderRightWidth: 3,
             }}
-            isSelected={isSelected}
-            key={plan.planId}
-            title={plan.title}
-            backgroundColor={plan.backgroundColor}
-            price={plan.price}
-            description={plan.description}
-            description2={plan.description2}
-            planId={plan.planId}
+            textStyle={{
+              color: "white",
+            }}
+            onPress={() => navigation.goBack()}
+            text="Proceed to payment"
           />
-        );
-      })}
-    </FormContainer>
+        }
+      >
+        {plans.map(plan => {
+          const isSelected = plan.planId === selectedPlan;
+          return (
+            <PlanCard
+              onPress={planId => {
+                setSelectedPlan(planId);
+              }}
+              isSelected={isSelected}
+              key={plan.planId}
+              planData={plan}
+            />
+          );
+        })}
+      </FormContainer>
+    </View>
   );
 }

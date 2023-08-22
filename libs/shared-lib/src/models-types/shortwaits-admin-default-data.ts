@@ -14,12 +14,27 @@ export type ShortwaitsAdminBannersType = {
   name: string;
 };
 
+export type SubscriptionPlans = SubscriptionPlan[];
+export type SubscriptionPlan = {
+  title: string;
+  planColor: string;
+  tags: string[];
+  hasOffer: boolean;
+  offerDescription: string;
+  offerCode: string;
+  finalPrice: number;
+  price: number;
+  priceDescription: string;
+  planDescription: string;
+  planId: string;
+};
 export type ShortwaitsAdminDefaultDataType = {
   short_id: string;
   banners: ShortwaitsAdminBannersType[];
   name: string;
   description: string;
   links: string[];
+  subscriptionPlans: SubscriptionPlans;
   suggestedLang: string;
   blackList: string[];
   timeZones: string[];

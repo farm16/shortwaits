@@ -12,7 +12,6 @@ import {
   Screen,
   Text,
   useBottomSheet,
-  FloatingActionButton,
   AnimatedSearchBar,
 } from "../../../components";
 import { useTheme } from "../../../theme";
@@ -46,6 +45,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({ navi
 
   useLayoutEffect(() => {
     navigation.setOptions({
+      headerShadowVisible: !isListSearchable,
       headerTitle: () => {
         return (
           <Container direction="row" justifyContent="center">
@@ -70,6 +70,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({ navi
         return (
           <Container direction="row" alignItems="center">
             <IconButton
+              disabled={isLoading}
               iconType={isListSearchable ? "search-close" : "search"}
               withMarginRight
               onPress={() => {
@@ -152,68 +153,58 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({ navi
     }
   }, [clientsData?.data, isBusinessClientsQuerySuccess, isLoading]);
 
-  return (
-    <Screen preset="fixed" unsafe withHorizontalPadding>
-      {isLoading ? (
-        <ActivityIndicator />
-      ) : (
-        <>
-          <AnimatedSearchBar
-            onChangeText={text => {
-              const trimmedText = text.trim();
-              setSearchText(trimmedText);
-              if (trimmedText !== "") {
-                const filteredItems = clientsData?.data.filter(item => {
-                  // Adjust the filtering logic based on your data structure
-                  const phoneNumberMatch = item.phoneNumbers.some(phone =>
-                    phone.number.toLowerCase().includes(trimmedText.toLowerCase())
-                  );
-                  return (
-                    item.givenName?.toLowerCase().includes(trimmedText.toLowerCase()) ||
-                    item.email?.toLowerCase().includes(trimmedText.toLowerCase()) ||
-                    phoneNumberMatch
-                  );
-                });
-                setFilteredClientsData(filteredItems);
-              } else {
-                setFilteredClientsData(clientsData?.data);
-              }
-            }}
-            isVisible={isListSearchable}
-          />
-          <List
-            refreshControl={
-              <RefreshControl refreshing={isBusinessClientsQueryLoading} onRefresh={refetchBusinessClientsQuery} />
-            }
-            ListEmptyComponent={
-              <View
-                style={{
-                  marginTop: 16,
-                  padding: 16,
-                }}
-              >
-                {isEmpty(clientsData?.data) ? (
-                  <NonIdealState
-                    image={"noClients"}
-                    buttons={[<Button text="Sync contacts" onPress={() => handleSyncContacts()} />]}
-                  />
-                ) : null}
-              </View>
-            }
-            // style={{ backgroundColor: "red" }}
-            renderItem={_renderItem}
-            data={filteredClientsData}
-          />
-        </>
-      )}
-      <BottomSheet snapPointsLevel={6} ref={bottomSheetRef}></BottomSheet>
-    </Screen>
+  const handleOnChangeText = (text: string) => {
+    const trimmedText = text.trim();
+    setSearchText(trimmedText);
+    if (trimmedText !== "") {
+      const filteredItems = clientsData?.data.filter(item => {
+        // Adjust the filtering logic based on your data structure
+        const phoneNumberMatch = item.phoneNumbers.some(phone =>
+          phone.number.toLowerCase().includes(trimmedText.toLowerCase())
+        );
+        return (
+          item.givenName?.toLowerCase().includes(trimmedText.toLowerCase()) ||
+          item.email?.toLowerCase().includes(trimmedText.toLowerCase()) ||
+          phoneNumberMatch
+        );
+      });
+      setFilteredClientsData(filteredItems);
+    } else {
+      setFilteredClientsData(clientsData?.data);
+    }
+  };
+
+  return isLoading ? (
+    <ActivityIndicator />
+  ) : (
+    <>
+      <AnimatedSearchBar onChangeText={handleOnChangeText} isVisible={isListSearchable} />
+      <Screen preset="fixed" unsafe withHorizontalPadding>
+        <List
+          refreshControl={
+            <RefreshControl refreshing={isBusinessClientsQueryLoading} onRefresh={refetchBusinessClientsQuery} />
+          }
+          ListEmptyComponent={
+            <View
+              style={{
+                marginTop: 16,
+                padding: 16,
+              }}
+            >
+              {isEmpty(clientsData?.data) ? (
+                <NonIdealState
+                  image={"noClients"}
+                  buttons={[<Button text="Sync contacts" onPress={() => handleSyncContacts()} />]}
+                />
+              ) : null}
+            </View>
+          }
+          // style={{ backgroundColor: "red" }}
+          renderItem={_renderItem}
+          data={filteredClientsData}
+        />
+        <BottomSheet snapPointsLevel={6} ref={bottomSheetRef}></BottomSheet>
+      </Screen>
+    </>
   );
 };
-
-const styles = StyleSheet.create({
-  root: {
-    alignItems: "center",
-    alignSelf: "stretch",
-  },
-});

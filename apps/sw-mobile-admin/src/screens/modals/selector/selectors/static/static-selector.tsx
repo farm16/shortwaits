@@ -1,27 +1,12 @@
 import React, { FC, useLayoutEffect, useState } from "react";
 import { FlatList, StyleSheet } from "react-native";
 
-import {
-  Space,
-  LeftChevronButton,
-  AnimatedSearchBar,
-  IconButton,
-  Container,
-} from "../../../../../components";
+import { Space, LeftChevronButton, AnimatedSearchBar, IconButton, Container } from "../../../../../components";
 import { StaticSelectorItem } from "./static-selector-item";
 import { ModalsScreenProps } from "../../../../../navigation";
 
-export const StaticSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({
-  navigation,
-  route,
-}) => {
-  const {
-    headerTitle,
-    data,
-    onSelect,
-    closeOnSubmit = true,
-    multiple = false,
-  } = route.params;
+export const StaticSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ navigation, route }) => {
+  const { headerTitle, data, onSelect, closeOnSubmit = true, multiple = false } = route.params;
 
   const [searchText, setSearchText] = useState("");
   const [filteredData, setFilteredData] = useState(data);
@@ -30,9 +15,7 @@ export const StaticSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: headerTitle,
-      headerLeft: () => (
-        <LeftChevronButton onPress={() => navigation.goBack()} />
-      ),
+      headerLeft: () => <LeftChevronButton onPress={() => navigation.goBack()} />,
       headerRight: () => (
         <Container direction="row" alignItems="center">
           <IconButton
@@ -47,9 +30,7 @@ export const StaticSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({
     });
   }, [navigation, headerTitle, isListSearchable]);
 
-  const handleOnSelect = (
-    item: string | { title: string; subTitle: string }
-  ) => {
+  const handleOnSelect = (item: string | { title: string; subTitle: string }) => {
     if (closeOnSubmit) {
       onSelect(item);
       navigation.goBack();
@@ -58,28 +39,24 @@ export const StaticSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({
     }
   };
 
+  const handleOnChangeText = (text: string) => {
+    setSearchText(text);
+    const filteredItems = data.filter((item: string | { title: string; subTitle: string }) => {
+      // Adjust the filtering logic based on your data structure
+      if (typeof item === "string") {
+        return item.toLowerCase().includes(text.toLowerCase());
+      } else {
+        return (
+          item.title.toLowerCase().includes(text.toLowerCase()) ||
+          item.subTitle.toLowerCase().includes(text.toLowerCase())
+        );
+      }
+    });
+    setFilteredData(filteredItems);
+  };
   return (
     <>
-      <AnimatedSearchBar
-        onChangeText={text => {
-          setSearchText(text);
-          const filteredItems = data.filter(
-            (item: string | { title: string; subTitle: string }) => {
-              // Adjust the filtering logic based on your data structure
-              if (typeof item === "string") {
-                return item.toLowerCase().includes(text.toLowerCase());
-              } else {
-                return (
-                  item.title.toLowerCase().includes(text.toLowerCase()) ||
-                  item.subTitle.toLowerCase().includes(text.toLowerCase())
-                );
-              }
-            }
-          );
-          setFilteredData(filteredItems);
-        }}
-        isVisible={isListSearchable}
-      />
+      <AnimatedSearchBar onChangeText={handleOnChangeText} isVisible={isListSearchable} />
       <FlatList
         style={styles.container}
         showsVerticalScrollIndicator={false}
@@ -87,13 +64,7 @@ export const StaticSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({
         data={filteredData}
         ItemSeparatorComponent={() => <Space size="small" />}
         renderItem={({ item }) => {
-          return (
-            <StaticSelectorItem
-              multiple={multiple}
-              item={item}
-              onSelectItem={handleOnSelect}
-            />
-          );
+          return <StaticSelectorItem multiple={multiple} item={item} onSelectItem={handleOnSelect} />;
         }}
       />
     </>

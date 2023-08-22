@@ -3,21 +3,11 @@ import { Alert, AlertButton, StyleSheet, View } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { CompositeNavigationProp } from "@react-navigation/native";
 
-import { getDimensions, useTheme } from "../../../theme";
-import {
-  RootStackParamList,
-  UnauthorizedStackParamList,
-} from "../../../navigation";
+import { useTheme } from "../../../theme";
+import { RootStackParamList, UnauthorizedStackParamList } from "../../../navigation";
 import { useForm } from "../../../hooks";
 import { useLocalSignInMutation } from "../../../services";
-import {
-  Container,
-  Button,
-  Text,
-  Space,
-  TextFieldCard,
-  Screen,
-} from "../../../components";
+import { Container, Button, Text, Space, TextFieldCard, Screen } from "../../../components";
 import Facebook from "../../../assets/icons/facebook.svg";
 import Google from "../../../assets/icons/google.svg";
 
@@ -28,9 +18,7 @@ export interface RegisterWithEmailScreenProps {
   >;
 }
 
-export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({
-  navigation,
-}) => {
+export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) => {
   const { Colors } = useTheme();
   const [isVisible, setIsVisible] = useState(false);
 
@@ -40,27 +28,25 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({
     email: "",
     password: "",
   };
-  const { touched, errors, values, handleChange, handleSubmit, dirty } =
-    useForm(
-      {
-        initialValues,
-        onSubmit: formData => {
-          localSignIn({
-            email: formData.email,
-            password: formData.password,
-          });
-        },
+  const { touched, errors, values, handleChange, handleSubmit, dirty } = useForm(
+    {
+      initialValues,
+      onSubmit: formData => {
+        localSignIn({
+          email: formData.email,
+          password: formData.password,
+        });
       },
-      "userLocalSignIn"
-    );
+    },
+    "userLocalSignIn"
+  );
   const handlePasswordVisibility = useCallback(() => {
     setIsVisible(visibility => !visibility);
   }, []);
 
   useEffect(() => {
     if (response.isError) {
-      const canRegister =
-        response?.error?.data?.message === "User not registered";
+      const canRegister = response?.error?.data?.message === "User not registered";
       const buttons: AlertButton[] = [{ text: "Back", style: "cancel" }];
       if (canRegister) {
         buttons.push({
@@ -73,14 +59,9 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({
           style: "default",
         });
       }
-      Alert.alert(
-        "Oops",
-        response?.error?.data?.message ?? "unknown error",
-        buttons,
-        {
-          cancelable: true,
-        }
-      );
+      Alert.alert("Oops", response?.error?.data?.message ?? "unknown error", buttons, {
+        cancelable: true,
+      });
     } else return;
   }, [navigation, response?.error?.data?.message, response.isError]);
 
@@ -134,28 +115,16 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({
           flexDirection: "row",
         }}
       >
-        <Button
-          style={{ marginLeft: "auto" }}
-          preset="subLink"
-          text="Forgot password?"
-        />
+        <Button style={{ marginLeft: "auto" }} preset="subLink" text="Forgot password?" />
       </View>
-      <Button
-        preset="primary"
-        style={{ backgroundColor: Colors.brandSecondary }}
-        onPress={() => handleSubmit()}
-      >
+      <Button preset="primary" style={{ backgroundColor: Colors.brandSecondary }} onPress={() => handleSubmit()}>
         <Text style={{ color: "white" }} preset="social">
           Log in
         </Text>
       </Button>
       <Space size="large" />
       <Button preset="social">
-        <Facebook
-          width={30}
-          height={30}
-          style={{ position: "absolute", left: 0, margin: 16 }}
-        />
+        <Facebook width={30} height={30} style={{ position: "absolute", left: 0, margin: 16 }} />
         <Container style={styles.buttonContainer}>
           <Text preset="social">with Facebook</Text>
         </Container>
@@ -163,21 +132,13 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({
       <Space size="small" />
       <Button preset="social">
         <Container style={styles.buttonContainer}>
-          <Google
-            width={30}
-            height={30}
-            style={{ position: "absolute", left: 0, margin: 16 }}
-          />
+          <Google width={30} height={30} style={{ position: "absolute", left: 0, margin: 16 }} />
           <Text preset="social">with Gmail</Text>
         </Container>
       </Button>
       <Space size="tiny" />
       <View style={styles.footer}>
-        <Text
-          preset="subLink"
-          style={{ color: Colors.text }}
-          text="Don't have an account?   "
-        />
+        <Text preset="subLink" style={{ color: Colors.text }} text="Don't have an account?   " />
         <Button
           preset="subLink"
           textStyle={{ color: Colors.brandSecondary6 }}

@@ -12,7 +12,14 @@ import {
   ValidationPipe,
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
-import { BusinessDtoType, BusinessUserType, ClientUserType } from "@shortwaits/shared-lib";
+import {
+  BusinessDtoType,
+  BusinessUserType,
+  ClientUserType,
+  ClientUserUpdateDtoType,
+  ClientUsersDtoType,
+  CreateClientUserDtoType,
+} from "@shortwaits/shared-lib";
 
 import { BusinessService } from "./business.service";
 import { AtGuard } from "../../common/guards";
@@ -119,8 +126,26 @@ export class BusinessController {
     status: HttpStatus.CREATED,
     description: "Returns created",
   })
-  async createBusinessClients(@Param("businessId") businessId: string, @Req() request, @Body() dto: ClientUserType[]) {
+  async createBusinessClients(
+    @Param("businessId") businessId: string,
+    @Req() request,
+    @Body() dto: CreateClientUserDtoType
+  ) {
     return this.businessService.createBusinessClients(request.user.sub, businessId, dto);
+  }
+
+  @Put(":businessId/clients")
+  @HttpCode(HttpStatus.OK)
+  @ApiCreatedResponse({
+    status: HttpStatus.CREATED,
+    description: "Returns created",
+  })
+  async updateBusinessClients(
+    @Param("businessId") businessId: string,
+    @Req() request,
+    @Body() dto: ClientUserUpdateDtoType
+  ) {
+    return this.businessService.updateBusinessClient(request.user.sub, businessId, dto);
   }
 
   @Get(":businessId/staff")

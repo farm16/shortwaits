@@ -20,4 +20,5 @@ export * from "./common";
 export * from "./modals";
 export * from "./cards";
 export * from "./emoji";
+export * from "./qr/qr-modal";
 export * from "./form";

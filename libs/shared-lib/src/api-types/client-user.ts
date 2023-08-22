@@ -24,4 +24,4 @@ export type CreateClientUserDtoType = Omit<
   | "currentMembership"
 >;
 
-export type ClientUserUpdateDtoType = Partial<CreateClientUserDtoType>;
+export type ClientUserUpdateDtoType = Partial<ClientUserDtoType>;
