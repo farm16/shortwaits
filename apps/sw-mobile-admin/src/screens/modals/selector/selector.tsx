@@ -7,6 +7,7 @@ import { StaffSelector } from "./selectors/staff/staff-selector";
 import { ServicesSelector } from "./selectors/services/services-selector";
 import { StaticSelector } from "./selectors/static/static-selector";
 import { LabelsSelector } from "./selectors/labels/labels-selector";
+import { EventLabelsSelector } from "./selectors/labels/event-labels-selector";
 
 const selectorsComponents: Record<SelectorModalModeType, FC<ModalsScreenProps<"selector-modal-screen">>> = {
   staff: StaffSelector,
@@ -15,6 +16,7 @@ const selectorsComponents: Record<SelectorModalModeType, FC<ModalsScreenProps<"s
   services: ServicesSelector,
   static: StaticSelector,
   labels: LabelsSelector,
+  eventLabels: EventLabelsSelector,
 };
 
 export const SelectorScreenModal: FC<ModalsScreenProps<"selector-modal-screen">> = props => {

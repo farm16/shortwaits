@@ -92,7 +92,7 @@ export const AddClientModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ nav
           } else {
             createBusinessClients({
               businessId: business._id,
-              businessClients: formData,
+              body: [formData],
             });
           }
         },

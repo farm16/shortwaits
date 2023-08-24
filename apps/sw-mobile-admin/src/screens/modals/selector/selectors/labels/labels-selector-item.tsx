@@ -6,22 +6,25 @@ import { SelectorItemProps } from "../../selector-types";
 import { View } from "react-native";
 
 export function LabelSelectorItem(props: SelectorItemProps<BusinessLabelType>) {
-  const { item, onSelectItem } = props;
+  const { item, onSelectItem, isSelected } = props;
+
+  const getCheckIcon = () => (isSelected ? "checkbox-outline" : "checkbox-blank-outline");
 
   return (
     <Card
       mode="button"
+      leftIconName={getCheckIcon()}
       onPress={() => {
         onSelectItem(item);
       }}
     >
       <View style={{ flexDirection: "row" }}>
         <View style={{ flex: 1 }}>
-          <Text preset="cardTitle" text={item.name} />
-          {item.description && (
+          <Text preset="cardTitle" text={item?.name} />
+          {item?.description && (
             <>
               <Space size="tiny" />
-              <Text preset="cardSubtitle" text={item.description} />
+              <Text preset="cardSubtitle" text={item?.description} />
             </>
           )}
         </View>
@@ -31,7 +34,7 @@ export function LabelSelectorItem(props: SelectorItemProps<BusinessLabelType>) {
             justifyContent: "center",
           }}
         >
-          <Emoji name={item.emojiShortName} size={30} />
+          <Emoji name={item?.emojiShortName} size={30} />
         </View>
       </View>
     </Card>

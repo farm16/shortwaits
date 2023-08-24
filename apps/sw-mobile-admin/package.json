@@ -82,6 +82,8 @@
     "react-test-renderer": "*",
     "react-native-share": "*",
     "readable-stream": "*",
-    "@react-native/metro-config": "*"
+    "@react-native/metro-config": "*",
+    "react-native-qrcode-svg": "*",
+    "react-native-device-info": "*"
   }
 }

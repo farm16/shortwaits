@@ -4,11 +4,7 @@ import { Menu, IconButton } from "react-native-paper";
 import { useTheme } from "../../theme";
 import { Text } from "../common";
 import { Graph } from "../graph/graph";
-import {
-  GraphData,
-  GraphIdentifier,
-  getGraphCoordinates,
-} from "../graph/graph-utils";
+import { GraphData, GraphIdentifier, getGraphCoordinates } from "../graph/graph-utils";
 
 export type BusinessIncomeInfoProps = {
   data: GraphData;
@@ -16,11 +12,7 @@ export type BusinessIncomeInfoProps = {
   error?: any;
 };
 
-function BusinessIncomeInfoComponent({
-  data,
-  isLoading,
-  error,
-}: BusinessIncomeInfoProps) {
+function BusinessIncomeInfoComponent({ data, isLoading, error }: BusinessIncomeInfoProps) {
   const { Colors } = useTheme();
   const [visible, setVisible] = useState<boolean>(false);
   const [graphMode, setGraphMode] = useState<GraphIdentifier>("Week");
@@ -42,17 +34,14 @@ function BusinessIncomeInfoComponent({
           style={[
             styles.graphTopBar,
             {
-              backgroundColor: Colors.staticLightBackground,
+              backgroundColor: Colors.brandSecondary2,
             },
           ]}
         >
           <Text
             preset="textSmall"
             style={{ fontWeight: "500" }}
-            text={`${graphMode}'s total income: $${getGraphCoordinates(
-              data,
-              graphMode
-            )
+            text={`${graphMode}'s total income: $${getGraphCoordinates(data, graphMode)
               .reduce((pre, cur) => pre + cur.y, 0)
               .toLocaleString("en-US", {
                 maximumFractionDigits: 2,
@@ -62,12 +51,7 @@ function BusinessIncomeInfoComponent({
           <Menu
             visible={visible}
             onDismiss={() => setVisible(false)}
-            anchor={
-              <IconButton
-                onPress={() => setVisible(true)}
-                icon={"dots-vertical"}
-              />
-            }
+            anchor={<IconButton onPress={() => setVisible(true)} icon={"dots-vertical"} />}
           >
             {Object.keys(data).map((name: GraphIdentifier) => {
               return (

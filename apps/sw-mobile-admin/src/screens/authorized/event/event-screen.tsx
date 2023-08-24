@@ -137,7 +137,7 @@ export const EventScreen: FC<AuthorizedScreenProps<"event-screen">> = ({ navigat
         style={{
           flexDirection: "row",
           justifyContent: "space-between",
-          backgroundColor: Colors.brandPrimary,
+          backgroundColor: Colors.brandAccent,
           marginHorizontal: 16,
           paddingVertical: 16,
           // paddingHorizontal: 24,
@@ -147,12 +147,12 @@ export const EventScreen: FC<AuthorizedScreenProps<"event-screen">> = ({ navigat
         }}
       >
         <Button preset="none" style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-          <Icon name="thumb-up-outline" size={24} color={Colors.white} />
+          <Icon name="thumb-up-outline" size={24} color={Colors.brandSecondary1} />
           <Text
             text="Accept"
             preset="none"
             style={{
-              color: Colors.white,
+              color: Colors.brandSecondary1,
               marginTop: 8,
             }}
           />
@@ -172,12 +172,12 @@ export const EventScreen: FC<AuthorizedScreenProps<"event-screen">> = ({ navigat
             alignItems: "center",
           }}
         >
-          <Icon name="thumb-down-outline" size={24} color={Colors.white} />
+          <Icon name="thumb-down-outline" size={24} color={Colors.brandSecondary1} />
           <Text
             text="Reject"
             preset="none"
             style={{
-              color: Colors.white,
+              color: Colors.brandSecondary1,
               marginTop: 8,
             }}
           />
@@ -190,12 +190,12 @@ export const EventScreen: FC<AuthorizedScreenProps<"event-screen">> = ({ navigat
           }}
         />
         <Button preset="none" style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-          <Icon name="checkbox-marked-circle-outline" size={24} color={Colors.white} />
+          <Icon name="checkbox-marked-circle-outline" size={24} color={Colors.brandSecondary1} />
           <Text
             text="Complete"
             preset="none"
             style={{
-              color: Colors.white,
+              color: Colors.brandSecondary1,
               marginTop: 8,
             }}
           />

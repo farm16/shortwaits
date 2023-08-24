@@ -14,7 +14,7 @@ import {
   GetCategories,
   GetService,
   GetServicesByBusiness,
-  GetUsers,
+  GetBusinessUsers,
   UpdateBusinessHours,
   RegisterBusiness,
   UpdateBusiness,
@@ -68,6 +68,6 @@ export const shortwaitsApi = createApi({
     getEventsSummaryByBusiness: GetEventsSummaryByBusiness(builder),
     getPeopleInEvent: GetPeopleInEvent(builder),
     // todo: Users
-    getUsers: GetUsers(builder),
+    getBusinessUsers: GetBusinessUsers(builder),
   }),
 });

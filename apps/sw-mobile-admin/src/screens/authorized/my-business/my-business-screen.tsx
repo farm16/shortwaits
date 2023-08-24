@@ -67,7 +67,7 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
         <BusinessIncomeInfo data={eventSummary?.data} isLoading={isEventSummaryLoading} error={errorEventSummary} />
         <ButtonCard
           leftIconName="account-tie"
-          leftIconColor={Colors.brandSecondary6}
+          leftIconColor={Colors.brandSecondary}
           title={"Staff"}
           onPress={() =>
             navigation.navigate("modals", {
@@ -83,7 +83,7 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
         />
         <ButtonCard
           leftIconName="layers-triple"
-          leftIconColor={Colors.brandSecondary6}
+          leftIconColor={Colors.brandSecondary}
           title={"Services"}
           onPress={() =>
             navigation.navigate("modals", {
@@ -97,9 +97,9 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
             })
           }
         />
-        <ButtonCard leftIconName="cash-fast" leftIconColor={Colors.brandSecondary6} title={"Payments"} />
-        <ButtonCard leftIconName="puzzle" leftIconColor={Colors.brandSecondary6} title={"Integrations"} />
-        <ButtonCard leftIconName="message-star" leftIconColor={Colors.brandSecondary6} title={"Reviews"} />
+        <ButtonCard leftIconName="cash-fast" leftIconColor={Colors.brandSecondary} title={"Payments"} />
+        <ButtonCard leftIconName="puzzle" leftIconColor={Colors.brandSecondary} title={"Integrations"} />
+        <ButtonCard leftIconName="message-star" leftIconColor={Colors.brandSecondary} title={"Reviews"} />
       </ScrollView>
     </Screen>
   );

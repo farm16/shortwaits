@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useLayoutEffect } from "react";
+import React, { FC, useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { useDispatch } from "react-redux";
 import { ActivityIndicator, Divider, List } from "react-native-paper";
@@ -9,23 +9,49 @@ import { useTheme } from "../../../theme";
 import { useUser, useBusiness, useSignOut } from "../../../store";
 import { ManageAdminUsers } from "./options/user-account";
 import { ShortwaitsCustomerSupport } from "./options/support";
-import { useGetBusinessQuery, useLocalSignOutMutation, useUpdateBusinessMutation } from "../../../services";
+import {
+  useGetBusinessQuery,
+  useGetBusinessUsersMutation,
+  useLocalSignOutMutation,
+  useUpdateBusinessMutation,
+} from "../../../services";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { noop } from "lodash";
+import { AppInfoSettings } from "./options/app-info";
 
 export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ navigation }) => {
   const { Colors } = useTheme();
   const dispatch = useDispatch();
   const user = useUser();
   const currentBusiness = useBusiness();
+  const [admins, setAdmins] = useState([]);
+
+  const [getAdmins] = useGetBusinessUsersMutation();
+
+  useEffect(() => {
+    async function getCurrentAdmins() {
+      const admins = (await getAdmins({ body: [...currentBusiness.admins, ...currentBusiness.superAdmins] }).unwrap())
+        .data;
+      return admins;
+    }
+    if (currentBusiness) {
+      getCurrentAdmins().then(admins => {
+        const _admin = admins.map(admin => {
+          return {
+            ...admin,
+            isSuperAdmin: currentBusiness.superAdmins.includes(admin._id),
+          };
+        });
+        setAdmins(_admin);
+      });
+    }
+  }, [currentBusiness, getAdmins]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
     });
   }, [navigation]);
-
-  // console.log("currentBusiness", JSON.stringify(currentBusiness, null, 2));
 
   const [updateBusiness, state] = useUpdateBusinessMutation();
 
@@ -62,7 +88,7 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
           description={`${
             currentBusiness?.accountType === "free" ? "Upgrade to Premium !!!" : currentBusiness?.accountType
           }`}
-          right={props => <List.Icon {...props} color={Colors.text} icon="chevron-right" />}
+          right={props => <List.Icon {...props} color={Colors.brandSecondary} icon="chevron-right" />}
           onPress={() => navigation.navigate("authorized-stack", { screen: "plans-screen" })}
         />
         <List.Item
@@ -152,8 +178,7 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
             />
           )}
         />
-        <ManageAdminUsers user={user} />
-
+        <ManageAdminUsers admins={admins} />
         <List.Item
           descriptionStyle={{ color: Colors.subText }}
           titleStyle={{
@@ -173,7 +198,7 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
               icon="heart"
             />
           )}
-          right={props => <List.Icon {...props} color={Colors.text} icon="chevron-right" />}
+          right={props => <List.Icon {...props} color={Colors.brandSecondary} icon="chevron-right" />}
         />
         <List.Item
           descriptionStyle={{ color: Colors.subText }}
@@ -181,11 +206,9 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
           disabled
           style={{ backgroundColor: Colors.lightGray }}
           titleStyle={{ color: Colors.text }}
-          descriptionStyle={{ color: Colors.subText }}
           description={"USD - United States Dollar"}
           right={props => <List.Icon {...props} color={Colors.gray} icon="chevron-right" />}
         />
-
         <ShortwaitsCustomerSupport />
         <List.Item
           descriptionStyle={{ color: Colors.subText }}
@@ -210,6 +233,7 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
             />
           )}
         />
+        <AppInfoSettings />
         <Space direction="horizontal" />
         <Button
           style={styles.signOutButton}

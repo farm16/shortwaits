@@ -1,6 +1,6 @@
 import { SelectorConfig } from "./selector-types";
 
-export type SelectorConfigsKeys = "staff" | "categories" | "services" | "labels" | "static" | "clients";
+export type SelectorConfigsKeys = "staff" | "categories" | "services" | "labels" | "static" | "clients" | "eventLabels";
 
 export const selectorConfigs: Record<SelectorConfigsKeys, SelectorConfig> = {
   categories: {
@@ -25,6 +25,11 @@ export const selectorConfigs: Record<SelectorConfigsKeys, SelectorConfig> = {
   },
   labels: {
     headerTitle: "My Labels",
+    isReadOnly: false,
+    searchPlaceholder: "search",
+  },
+  eventLabels: {
+    headerTitle: "Event Labels",
     isReadOnly: false,
     searchPlaceholder: "search",
   },

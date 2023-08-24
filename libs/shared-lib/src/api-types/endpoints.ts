@@ -24,7 +24,8 @@ type Endpoint =
   | `events/delete/${string}`
   | "events/delete"
   | "services"
-  | `services/${string}`;
+  | `services/${string}`
+  | "business-user/multiple";
 
 export const createEndpoint = <T = any>(endpoint: Endpoint, method: HttpMethod) => {
   return {
@@ -73,6 +74,9 @@ export const endpoints = {
   updateBusinessStaff: createEndpoint(`business/:businessId/staff`, "PUT"),
   createBusinessClient: createEndpoint(`business/:businessId/clients`, "POST"),
   updateBusinessClient: createEndpoint(`business/:businessId/clients`, "PUT"),
+
+  // Users this includes both staff and client users
+  getBusinessUsers: createEndpoint("business-user/multiple", "POST"),
 
   // shortwaits
   getShortwaitsAdminMobile: createEndpoint("shortwaits/admin/mobile", "GET"),

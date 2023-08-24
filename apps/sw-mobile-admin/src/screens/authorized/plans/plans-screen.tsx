@@ -6,7 +6,7 @@ import { SubscriptionPlans } from "@shortwaits/shared-lib";
 import PlanCard from "./planCard";
 import { Platform, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { responsiveFontSize } from "../../../utils";
+import { getResponsiveFontSize } from "../../../utils";
 
 export function PlansScreen({ navigation }: AuthorizedScreenProps<"plans-screen">) {
   const { Colors } = useTheme();
@@ -92,7 +92,7 @@ export function PlansScreen({ navigation }: AuthorizedScreenProps<"plans-screen"
         <Text
           style={{
             fontWeight: "700",
-            fontSize: responsiveFontSize(26),
+            fontSize: getResponsiveFontSize(26),
             fontStyle: "normal",
             textAlign: "center",
             fontFamily: "Helvetica Neue",

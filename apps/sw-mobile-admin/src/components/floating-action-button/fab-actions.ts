@@ -1,5 +1,6 @@
 import { navigate } from "../../navigation";
 import { FloatingActions } from "..";
+import { brandColors } from "../../theme/Colors";
 
 export const actions: FloatingActions = [
   {
@@ -15,10 +16,10 @@ export const actions: FloatingActions = [
     color: "#ffffff",
     labelTextColor: "#ffffff",
     style: {
-      backgroundColor: "#63AE9D",
+      backgroundColor: brandColors.secondary.brandSecondary,
     },
     labelStyle: {
-      backgroundColor: "#63AE9D",
+      backgroundColor: brandColors.secondary.brandSecondary,
       borderRadius: 20,
     },
   },
@@ -35,10 +36,10 @@ export const actions: FloatingActions = [
     color: "#ffffff",
     labelTextColor: "#ffffff",
     style: {
-      backgroundColor: "#63AE9D",
+      backgroundColor: brandColors.secondary.brandSecondary,
     },
     labelStyle: {
-      backgroundColor: "#63AE9D",
+      backgroundColor: brandColors.secondary.brandSecondary,
       borderRadius: 20,
     },
   },
@@ -55,10 +56,10 @@ export const actions: FloatingActions = [
       }),
     icon: "account-tie",
     style: {
-      backgroundColor: "#63AE9D",
+      backgroundColor: brandColors.secondary.brandSecondary,
     },
     labelStyle: {
-      backgroundColor: "#63AE9D",
+      backgroundColor: brandColors.secondary.brandSecondary,
       borderRadius: 20,
     },
   },
@@ -70,10 +71,10 @@ export const actions: FloatingActions = [
   //   color: "#ffffff",
   //   labelTextColor: "#ffffff",
   //   style: {
-  //     backgroundColor: "#63AE9D",
+  //     backgroundColor: brandColors.secondary.brandSecondary,
   //   },
   //   labelStyle: {
-  //     backgroundColor: "#63AE9D",
+  //     backgroundColor: brandColors.secondary.brandSecondary,
   //     borderRadius: 20,
   //   },
   // },

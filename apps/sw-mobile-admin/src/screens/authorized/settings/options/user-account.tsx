@@ -1,24 +1,29 @@
-import { BusinessUserDtoType } from "@shortwaits/shared-lib";
-import React, { useState } from "react";
-import { Divider, List } from "react-native-paper";
-import { StyleSheet } from "react-native";
+import { BusinessUserDtoType, BusinessUsersDtoType } from "@shortwaits/shared-lib";
+import React from "react";
 import { useTheme } from "../../../../theme";
+import { Accordion, AccordionDataItemType } from "../../../../components";
 
-export const ManageAdminUsers = ({ user }: { user: BusinessUserDtoType }) => {
-  const [expanded, setExpanded] = useState(false);
-  const handlePress = () => setExpanded(state => !state);
+type ManageAdminUsersProps = {
+  admins: BusinessUsersDtoType;
+};
+export const ManageAdminUsers = ({ admins }: ManageAdminUsersProps) => {
   const { Colors } = useTheme();
 
-  if (!user) return null;
-
-  return (
-    <List.Item
-      titleStyle={{ color: Colors.text }}
-      descriptionStyle={{ color: Colors.subText }}
-      title="Administrators"
-      description="Manage your business administrators"
-      style={{ borderBottomColor: Colors.gray, borderBottomWidth: StyleSheet.hairlineWidth }}
-      right={props => <List.Icon {...props} color={Colors.text} icon="chevron-right" />}
-    />
-  );
+  const accordionData: AccordionDataItemType[] = [
+    ...admins.map(
+      (
+        admin: BusinessUserDtoType & {
+          isSuperAdmin: boolean;
+        }
+      ) => ({
+        title: `${admin.givenName || admin.displayName || admin.familyName || ""}${
+          admin.isSuperAdmin ? "(Super admin)" : ""
+        }`,
+        description: admin.email,
+        iconName: admin.isSuperAdmin ? "shield-account" : "account",
+        iconColor: admin.isSuperAdmin ? Colors.orange4 : Colors.text,
+      })
+    ),
+  ];
+  return <Accordion accordionTitle="Administrators" accordionData={accordionData} />;
 };

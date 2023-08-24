@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { hidePremiumMembershipModal, useGhostComponent } from "../../store";
 import { useTheme } from "../../theme";
 import { Button, Container, Space, Text } from "../common";
+import { getResponsiveFontSize, navigate } from "../../utils";
 
 const premiumAccountFeatures = [
   { name: "", description: "Text(SMS) Reminders" },
@@ -17,12 +18,21 @@ const premiumAccountFeatures = [
   { name: "", description: "Multiple users support" },
 ];
 const CheckedList = ({ text }) => {
+  const { Colors } = useTheme();
+
   return (
     <>
       <View style={{ flexDirection: "row" }}>
-        <Icon size={27} name="check" />
+        <Icon size={27} name="check" color={Colors.brandSecondary} />
         <Space direction="vertical" />
-        <Text>{text}</Text>
+        <Text
+          style={{
+            fontSize: getResponsiveFontSize(16),
+            color: Colors.text,
+          }}
+        >
+          {text}
+        </Text>
       </View>
       <Space size="tiny" />
     </>
@@ -40,21 +50,19 @@ export const PremiumMembershipModal = props => {
         <View
           style={{
             backgroundColor: Colors.backgroundOverlay,
-            width: "90%",
-            alignSelf: "center",
-            // minHeight: "60%",
-            justifyContent: "flex-start",
+            marginHorizontal: 16,
             alignItems: "center",
-            borderRadius: 15,
+            paddingHorizontal: 16,
+            borderRadius: 16,
           }}
         >
           <Space />
-          <Text preset="title2" style={{ fontWeight: "bold" }}>
-            Shortwaits Premium
+          <Text preset="title2" style={{ fontWeight: "bold", textAlign: "center" }}>
+            {"Shortwaits\nPremium"}
           </Text>
           <Space size="small" />
-          <Container direction="row">
-            <Text preset="title2">{"$4.99/"}</Text>
+          <Container direction="row" justifyContent="center" alignItems="flex-end">
+            <Text preset="title2">{"$1.50/"}</Text>
             <Text preset="title3">{"month"}</Text>
           </Container>
           <Space size="small" />
@@ -65,11 +73,9 @@ export const PremiumMembershipModal = props => {
           </View>
           <Space />
           <Button
-            style={{ backgroundColor: Colors.brandPrimary, marginTop: "auto" }}
-            textStyle={{
-              fontSize: 20,
-              color: Colors.white,
-              fontWeight: "bold",
+            onPress={() => {
+              dispatch(hidePremiumMembershipModal());
+              navigate("authorized-stack", { screen: "plans-screen" });
             }}
             text="GET PREMIUM"
           />
@@ -82,7 +88,14 @@ export const PremiumMembershipModal = props => {
             preset="subLink"
             text="CONTINUE FREE"
           />
-          <Text preset="link">Terms and Conditions</Text>
+          <Text
+            preset="link"
+            style={{
+              color: Colors.brandSecondary,
+            }}
+          >
+            Terms and Conditions
+          </Text>
         </View>
       </Modal>
     </Portal>

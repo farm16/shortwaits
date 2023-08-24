@@ -1,12 +1,12 @@
 import React from "react";
 // import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createBottomTabNavigator, useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 import { SettingsScreen, EventsScreen, MyBusinessScreen, ActivityScreen, ClientsScreen } from "../../screens";
 import { useTheme } from "../../theme";
 import { AUTHORIZED_TAB_SCREENS } from "../navigation-constants";
-import { Platform } from "react-native";
+import { Dimensions, Platform } from "react-native";
 import { useMobileAdmin } from "../../store";
 
 const Tab = createBottomTabNavigator();
@@ -16,6 +16,8 @@ export const AuthorizedTabNavigator = () => {
   const {
     components: { banner },
   } = useMobileAdmin();
+
+  const tabBarHeight = Dimensions.get("window").height > 800 ? 80 : 60;
 
   return (
     <Tab.Navigator
@@ -42,14 +44,15 @@ export const AuthorizedTabNavigator = () => {
         },
         // tabBarIconStyle: { color: Colors.brandSecondary },
         tabBarActiveTintColor: Colors.brandAccent,
-        tabBarInactiveTintColor: Colors.brandAccent4,
-
+        tabBarInactiveTintColor: Colors.brandAccent3,
         tabBarAllowFontScaling: true,
         tabBarLabelStyle: {
           marginBottom: 4,
         },
         tabBarStyle: {
           shadowColor: "#858F96",
+          paddingTop: 5,
+          height: tabBarHeight,
           backgroundColor: Colors.backgroundOverlay,
         },
       }}

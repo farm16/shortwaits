@@ -11,6 +11,10 @@ export function useCalendarTheme() {
 
     todayButtonTextColor: Colors.white,
     calendarBackground: Colors.backgroundOverlay,
+    backgroundColor: Colors.backgroundOverlay,
+
+    textSectionTitleColor: "rgb(77, 77, 77)", //Colors.text,
+    agendaDayTextColor: Colors.text,
 
     todayTextColor: Colors.white,
     dayTextColor: Colors.subText,

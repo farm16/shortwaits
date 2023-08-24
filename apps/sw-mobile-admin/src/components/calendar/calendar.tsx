@@ -86,7 +86,7 @@ export const Calendar: FC<CalendarProps> = memo(props => {
       date={formattedDate}
       showTodayButton={true}
       todayButtonStyle={{
-        backgroundColor: Colors.brandPrimary,
+        backgroundColor: Colors.brandSecondary,
       }}
       theme={theme}
     >
@@ -100,10 +100,13 @@ export const Calendar: FC<CalendarProps> = memo(props => {
       />
       <AgendaList
         sectionStyle={{
-          backgroundColor: Colors.background,
-          color: Colors.brandPrimary4,
+          backgroundColor: "rgb(245, 245, 245)",
+          color: Colors.text,
           fontWeight: "400",
           fontSize: 16,
+        }}
+        contentContainerStyle={{
+          backgroundColor: "rgb(245, 245, 245)",
         }}
         ListEmptyComponent={() => (
           <NonIdealState
@@ -139,7 +142,7 @@ export const Calendar: FC<CalendarProps> = memo(props => {
         stickySectionHeadersEnabled={false}
         refreshControl={<RefreshControl refreshing={isEventsLoading} onRefresh={handleRefresh} />}
         ItemSeparatorComponent={renderSeparatorItem}
-        style={{ backgroundColor: Colors.background }}
+        style={{ backgroundColor: Colors.backgroundOverlay }}
         onEndReached={() => {
           if (limit < eventsPayload?.data.length) {
             setLimit(limit + 100);

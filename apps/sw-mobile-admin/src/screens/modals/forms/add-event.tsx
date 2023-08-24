@@ -25,6 +25,7 @@ import {
 } from "@shortwaits/shared-lib";
 import { useCreateEventMutation } from "../../../services";
 import { FormikErrors } from "formik";
+import { getEmojiString } from "../../../utils";
 
 export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navigation, route }) => {
   const { onSubmit, onDone, closeOnSubmit = true } = route.params;
@@ -159,6 +160,10 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
     });
   };
 
+  console.log("values.labels", values.labels);
+
+  const emojis = values.labels.map(label => getEmojiString(label.emojiShortName)).join(" ");
+
   return createEventStatus.isLoading ? (
     <ActivityIndicator />
   ) : (
@@ -173,18 +178,17 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
       />
       <ButtonCard
         title="Labels"
-        subTitle={`${values.labels.length} selected`}
+        subTitle={values.labels.length > 0 ? `${emojis}` : "Select labels"}
         onPress={() =>
           navigation.navigate("modals", {
             screen: "selector-modal-screen",
             params: {
-              type: "labels",
-              data: business.labels,
-              closeOnSubmit: true,
-              onSelect: label => {
-                const isLabelInArray = getIsLabelInArray(values.labels, label);
-                if (!isLabelInArray) {
-                  setFieldValue("labels", [...values.labels, label]);
+              type: "eventLabels",
+              data: values.labels,
+              multiple: true,
+              onGoBack: labels => {
+                if (labels.length > 0) {
+                  setFieldValue("labels", labels);
                 }
               },
             },

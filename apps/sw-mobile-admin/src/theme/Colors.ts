@@ -10,10 +10,14 @@ import { getPaletteWithContrast, getReversePalette } from "./utils";
  *
  */
 
-const brandColors = {
+// #e5e5e5
+// hair color rgb(178, 178, 178)
+// rgb(240, 240, 239)
+
+export const brandColors = {
   primary: getPaletteWithContrast("brandPrimary", "#384259"),
   secondary: getPaletteWithContrast("brandSecondary", "#5cbdae"),
-  accent: getPaletteWithContrast("brandAccent", "#2f2e41"),
+  accent: getPaletteWithContrast("brandAccent", "#272727"),
 };
 
 // console.log(getPaletteWithContrast("brandAccent", "#E24939"))
@@ -42,7 +46,7 @@ export const customDarkColors = {
 
   transparent: "rgba(0,0,0,0)",
   background: "#ffffff",
-  backgroundOverlay: "#FBFBFB",
+  backgroundOverlay: "#e5e5e5",
   white: "#ffffff",
   black: "#26242b",
 
@@ -70,7 +74,7 @@ export const customColors = {
 
   transparent: "rgba(0,0,0,0)",
   background: "#ffffff",
-  backgroundOverlay: "#FBFBFB",
+  backgroundOverlay: "#F8FAFC", //rgb(245, 245, 245) #e5e5e5
   white: "#ffffff",
   black: "#26242b",
 
@@ -79,9 +83,9 @@ export const customColors = {
   gray: "rgb(200,200,200)",
   darkGray: "rgb(50,50,50)",
 
-  text: "rgba(0,0,0,0.87)",
-  subText: "rgba(0,0,0,0.60)",
-  disabledText: "rgba(0,0,0,0.38)",
+  text: "rgb(77, 77, 77)",
+  subText: "rgba(77, 77, 77,0.60)",
+  disabledText: "rgba(77, 77, 77,0.38)",
 
   success: "#28a745",
   pending: "#e0c01f",

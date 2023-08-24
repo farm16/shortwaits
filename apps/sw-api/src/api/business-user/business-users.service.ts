@@ -12,12 +12,13 @@ export class BusinessUserService {
     private readonly businessUserModel: Model<BusinessUser>
   ) {}
 
-  async findMultiple(userIds: string[] | ObjectId[]) {
+  async findMultiple(userIds: (string | ObjectId)[]) {
     if (!userIds || userIds.length === 0) {
       return [];
     }
     try {
-      const businessUsers = await this.businessUserModel.find({ _id: { $in: userIds } }).exec();
+      const uniqueUserIds = [...new Set(userIds)];
+      const businessUsers = await this.businessUserModel.find({ _id: { $in: uniqueUserIds } }).exec();
       return businessUsers;
     } catch (error) {
       throw new InternalServerErrorException(error.message);

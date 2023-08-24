@@ -1,12 +1,5 @@
 import React, { useCallback } from "react";
-import {
-  Alert,
-  View,
-  Image,
-  Animated,
-  StyleSheet,
-  Pressable,
-} from "react-native";
+import { Alert, View, Image, Animated, StyleSheet, Pressable } from "react-native";
 import { EmojiType, EventDtoType } from "@shortwaits/shared-lib";
 import { isEmpty, truncate } from "lodash";
 import { Container, Emoji, Text } from "..";
@@ -17,10 +10,7 @@ import { useService } from "../../store";
 import { RectButton } from "react-native-gesture-handler";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import { navigate } from "../../navigation";
-import {
-  statusDisplayMessages,
-  statusDisplayMessagesColor,
-} from "../../utils/status-color";
+import { statusDisplayMessages, statusDisplayMessagesColor } from "../../utils/status-color";
 
 type AgendaItemProps = {
   item: EventDtoType;
@@ -56,8 +46,7 @@ export const AgendaItem = (props: AgendaItemProps) => {
         style={[
           styles.eventServiceColor,
           {
-            backgroundColor:
-              service?.serviceColor?.hexCode ?? Colors.brandAccent1,
+            backgroundColor: service?.serviceColor?.hexCode ?? Colors.brandAccent1,
           },
         ]}
       />
@@ -75,15 +64,8 @@ export const AgendaItem = (props: AgendaItemProps) => {
     });
 
     return (
-      <RectButton
-        style={styles.rightAction}
-        onPress={() => console.log("Swiped right")}
-      >
-        <Animated.Text
-          style={[styles.actionText, { transform: [{ translateX: trans }] }]}
-        >
-          Cancel
-        </Animated.Text>
+      <RectButton style={styles.rightAction} onPress={() => console.log("Swiped right")}>
+        <Animated.Text style={[styles.actionText, { transform: [{ translateX: trans }] }]}>Cancel</Animated.Text>
       </RectButton>
     );
   };
@@ -106,13 +88,7 @@ export const AgendaItem = (props: AgendaItemProps) => {
         />
       </View>
     ),
-    [
-      Colors.lightGray,
-      Colors.subText,
-      Colors.text,
-      item.durationInMin,
-      item.startTime,
-    ]
+    [Colors.lightGray, Colors.subText, Colors.text, item.durationInMin, item.startTime]
   );
 
   const eventName = useCallback(
@@ -131,11 +107,7 @@ export const AgendaItem = (props: AgendaItemProps) => {
           text={truncate(item?.name ?? "", { length: 21, separator: "." })}
         />
         <Container direction="row">
-          <Text
-            style={[styles.eventNameRow2, { color: Colors.subText }]}
-            preset="none"
-            text={"status: "}
-          />
+          <Text style={[styles.eventNameRow2, { color: Colors.subText }]} preset="none" text={"status: "} />
           <Text
             style={[
               styles.eventNameRow2,
@@ -146,22 +118,12 @@ export const AgendaItem = (props: AgendaItemProps) => {
               },
             ]}
             preset={"none"}
-            text={
-              item.status?.statusName
-                ? statusDisplayMessages[item.status.statusName]
-                : ""
-            }
+            text={item.status?.statusName ? statusDisplayMessages[item.status.statusName] : ""}
           />
         </Container>
       </View>
     ),
-    [
-      Colors.darkGray,
-      Colors.subText,
-      item.labels,
-      item?.name,
-      item.status.statusName,
-    ]
+    [Colors.darkGray, Colors.subText, item.labels, item?.name, item.status.statusName]
   );
 
   const eventClientImage = useCallback(() => {
@@ -169,13 +131,8 @@ export const AgendaItem = (props: AgendaItemProps) => {
     const client = isGroupEvent ? "" : item.leadClientId ?? "";
     return (
       <View style={styles.eventClientImage}>
-        <Image
-          source={defaultUserImage}
-          style={styles.eventClientImageColumn}
-        />
-        {client && (
-          <Text style={styles.eventClientName} preset={"none"} text={client} />
-        )}
+        <Image source={defaultUserImage} style={styles.eventClientImageColumn} />
+        {client && <Text style={styles.eventClientName} preset={"none"} text={client} />}
       </View>
     );
   }, [item.isGroupEvent, item.leadClientId]);
@@ -187,9 +144,10 @@ export const AgendaItem = (props: AgendaItemProps) => {
         onLongPress={handleOnLongPress}
         style={[
           styles.calendarItem,
+
           {
-            backgroundColor: Colors.backgroundOverlay,
-            borderBottomColor: Colors.lightGray,
+            zIndex: 10,
+            backgroundColor: "#FFFFFF",
           },
         ]}
       >
@@ -272,7 +230,7 @@ const styles = StyleSheet.create({
   },
   calendarItem: {
     height: 75,
-    borderBottomWidth: 1,
+    // borderBottomWidth: 1,
     alignItems: "center",
     flexDirection: "row",
     marginHorizontal: 5,
