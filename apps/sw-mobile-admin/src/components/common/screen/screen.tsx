@@ -1,10 +1,11 @@
 import React from "react";
-import { KeyboardAvoidingView, Platform, ScrollView, StatusBar, View } from "react-native";
+import { KeyboardAvoidingView, Platform, StatusBar, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { useTheme } from "../../../theme";
 import { ScreenProps } from "./screen.props";
 import { isNonScrolling, offsets, presets } from "./screen.presets";
+import { ScrollView } from "react-native-gesture-handler";
 
 const isIos = Platform.OS === "ios";
 
@@ -61,6 +62,7 @@ function ScreenWithScrolling(props: ScreenProps) {
     unsafeBottom,
     stickyHeaderIndices,
     showsVerticalScrollIndicator = false,
+    withHorizontalPadding,
   } = props;
   const insets = useSafeAreaInsets();
   const preset = presets.scroll;
@@ -88,9 +90,20 @@ function ScreenWithScrolling(props: ScreenProps) {
       <View style={[preset.outer, { backgroundColor }, insetStyle]}>
         <ScrollView
           stickyHeaderIndices={stickyHeaderIndices}
-          style={[preset.outer, { backgroundColor }]}
+          style={[
+            preset.outer,
+            {
+              backgroundColor,
+            },
+          ]}
           showsVerticalScrollIndicator={showsVerticalScrollIndicator}
-          contentContainerStyle={[preset.inner, style]}
+          contentContainerStyle={[
+            preset.inner,
+            style,
+            {
+              paddingHorizontal: withHorizontalPadding ? 16 : 0,
+            },
+          ]}
           keyboardShouldPersistTaps={keyboardShouldPersistTaps || "handled"}
         >
           {children}

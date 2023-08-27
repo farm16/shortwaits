@@ -13,6 +13,7 @@ export type CreateClientUserDtoType = Omit<
   | "_id"
   | "__v"
   | "billing"
+  | "password"
   | "businesses"
   | "deleted"
   | "createdAt"

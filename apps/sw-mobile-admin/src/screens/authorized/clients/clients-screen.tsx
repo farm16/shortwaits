@@ -1,8 +1,6 @@
-import React, { FC, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { ListRenderItem, PermissionsAndroid, Platform, RefreshControl, StyleSheet, View } from "react-native";
+import React, { FC, useCallback, useEffect, useLayoutEffect, useState } from "react";
+import { Alert, ListRenderItem, RefreshControl, View } from "react-native";
 import {
-  BottomSheet,
-  BottomSheetType,
   Button,
   ButtonCard,
   IconButton,
@@ -11,37 +9,61 @@ import {
   NonIdealState,
   Screen,
   Text,
-  useBottomSheet,
   AnimatedSearchBar,
 } from "../../../components";
 import { useTheme } from "../../../theme";
-import { useBusiness, useShowGhostComponent } from "../../../store";
+import { useBusiness, useClients, useShowGhostComponent } from "../../../store";
 import { useCreateBusinessClientsMutation, useGetBusinessClientsQuery } from "../../../services";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { ActivityIndicator } from "react-native-paper";
-import Contacts from "react-native-contacts";
 import { ClientUserDtoType } from "@shortwaits/shared-lib";
-import { getUsersFromOsContacts } from "../../../utils/getUsersFromOsContacts";
 import { isEmpty } from "lodash";
+import { useOsContacts } from "../../../hooks";
 
 export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({ navigation }) => {
+  useShowGhostComponent("floatingActionButton");
+  const { Colors } = useTheme();
+  const currentClients = useClients();
+  console.log("currentClients", currentClients.length);
+  const { error: osContactsError, isLoading: isOsContactsLoading, getContacts: getOsContacts } = useOsContacts();
   const business = useBusiness();
   const {
-    data: clientsData,
     isLoading: isBusinessClientsQueryLoading,
     isSuccess: isBusinessClientsQuerySuccess,
     refetch: refetchBusinessClientsQuery,
   } = useGetBusinessClientsQuery(business._id, {});
   const [createClients, createClientsResult] = useCreateBusinessClientsMutation();
-  const bottomSheetRef = useRef<BottomSheetType>(null);
-  const handleBottomSheet = useBottomSheet(bottomSheetRef);
   const [isListSearchable, setIsListSearchable] = useState(false);
   const [, setSearchText] = useState("");
   const [filteredClientsData, setFilteredClientsData] = useState([]);
 
-  const { Colors } = useTheme();
+  const isClientsDataLoading = isBusinessClientsQueryLoading && !isBusinessClientsQuerySuccess;
+  const isCreateClientsLoading = createClientsResult.isLoading && !createClientsResult.isSuccess;
 
-  useShowGhostComponent("floatingActionButton");
+  const isLoading = isClientsDataLoading || isCreateClientsLoading || isOsContactsLoading;
+
+  const handleAddClient = useCallback(() => {
+    navigation.navigate("modals", {
+      screen: "form-modal-screen",
+      params: {
+        form: "addClient",
+      },
+    });
+  }, [navigation]);
+
+  const handleSyncContacts = useCallback(
+    async function () {
+      if (osContactsError) {
+        Alert.alert("Error", osContactsError.message);
+      }
+      const contacts = await getOsContacts();
+      createClients({
+        businessId: business._id,
+        body: contacts.data,
+      });
+    },
+    [business._id, createClients, getOsContacts, osContactsError]
+  );
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -60,7 +82,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({ navi
               iconType="contactSync"
               withMarginLeft
               onPress={() => {
-                handleBottomSheet.expand();
+                handleSyncContacts();
               }}
             />
           </Container>
@@ -77,87 +99,30 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({ navi
                 setIsListSearchable(s => !s);
               }}
             />
-            <IconButton
-              iconType="add"
-              withMarginRight
-              onPress={() =>
-                navigation.navigate("modals", {
-                  screen: "form-modal-screen",
-                  params: {
-                    form: "addClient",
-                    onSubmit: () => refetchBusinessClientsQuery(),
-                  },
-                })
-              }
-            />
+            <IconButton iconType="add" withMarginRight onPress={() => handleAddClient()} />
           </Container>
         );
       },
     });
-  }, [handleBottomSheet, isListSearchable, navigation, refetchBusinessClientsQuery]);
-
-  const loadContacts = async () => {
-    try {
-      const contacts = await Contacts.getAll();
-      const payload = getUsersFromOsContacts(contacts);
-      const clientsResults = await createClients({
-        businessId: business._id,
-        businessClients: payload,
-      }).unwrap();
-      if (clientsResults) {
-        console.log("clientsResults >>>", clientsResults);
-        refetchBusinessClientsQuery();
-      }
-      // console.log(JSON.stringify(userPayload[0], null, 2));
-      // this is because the server at one point might need to know how many we will
-      // be uploading
-      const contactsCount = await Contacts.getCount();
-      const permission = await Contacts.checkPermission();
-
-      // console.log("contactsCount >>>", contactsCount);
-      // console.log("permission >>>", permission);
-      // console.log("contacts >>>", contacts);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const handleSyncContacts = () => {
-    if (Platform.OS === "android") {
-      PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_CONTACTS, {
-        title: "Contacts",
-        message: "This app would like to access your contacts.",
-        buttonPositive: "",
-      }).then(() => {
-        loadContacts();
-      });
-    } else {
-      loadContacts();
-    }
-  };
+  }, [handleAddClient, handleSyncContacts, isListSearchable, isLoading, navigation]);
 
   const _renderItem: ListRenderItem<ClientUserDtoType> = ({ item }) => (
     <ButtonCard title={item[item.alias ?? "displayName"]} subTitle={item.email} />
   );
 
-  const isClientsDataLoading = isBusinessClientsQueryLoading && !isBusinessClientsQuerySuccess;
-  const isCreateClientsLoading = createClientsResult.isLoading && !createClientsResult.isSuccess;
-
-  const isLoading = isClientsDataLoading || isCreateClientsLoading;
-
   useEffect(() => {
-    if (!isLoading && isBusinessClientsQuerySuccess) {
-      setFilteredClientsData(clientsData?.data);
+    if (currentClients) {
+      setFilteredClientsData(currentClients);
     } else {
       return;
     }
-  }, [clientsData?.data, isBusinessClientsQuerySuccess, isLoading]);
+  }, [currentClients]);
 
   const handleOnChangeText = (text: string) => {
     const trimmedText = text.trim();
     setSearchText(trimmedText);
     if (trimmedText !== "") {
-      const filteredItems = clientsData?.data.filter(item => {
+      const filteredItems = currentClients.filter(item => {
         // Adjust the filtering logic based on your data structure
         const phoneNumberMatch = item.phoneNumbers.some(phone =>
           phone.number.toLowerCase().includes(trimmedText.toLowerCase())
@@ -170,7 +135,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({ navi
       });
       setFilteredClientsData(filteredItems);
     } else {
-      setFilteredClientsData(clientsData?.data);
+      setFilteredClientsData(currentClients);
     }
   };
 
@@ -191,10 +156,10 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({ navi
                 padding: 16,
               }}
             >
-              {isEmpty(clientsData?.data) ? (
+              {isEmpty(currentClients) ? (
                 <NonIdealState
                   image={"noClients"}
-                  buttons={[<Button text="Sync contacts" onPress={() => handleSyncContacts()} />]}
+                  buttons={[<Button text="Add Client" onPress={() => handleAddClient()} />]}
                 />
               ) : null}
             </View>
@@ -203,7 +168,6 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({ navi
           renderItem={_renderItem}
           data={filteredClientsData}
         />
-        <BottomSheet snapPointsLevel={6} ref={bottomSheetRef}></BottomSheet>
       </Screen>
     </>
   );

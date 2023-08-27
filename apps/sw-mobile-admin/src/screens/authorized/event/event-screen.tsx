@@ -12,20 +12,24 @@ import {
   BottomSheetType,
   BottomSheet,
   ButtonCard,
-  Button,
+  EventStatusButtons,
+  Space,
 } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { EventScreenTabs } from "./event-tabs";
-import { Alert, View, StyleSheet } from "react-native";
+import { Alert, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { useTheme } from "../../../theme";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { useEvent } from "../../../store";
 
 // TODO: test this with real device ios and android
 // TODO: add config for android (missing)
 export const EventScreen: FC<AuthorizedScreenProps<"event-screen">> = ({ navigation, route }) => {
-  const { event } = route.params;
+  const { event: _event } = route.params;
+
+  const event = useEvent(_event._id);
+  console.log(">>> event", event);
 
   const bottomSheetRef = useRef<BottomSheetType>(null);
   const handleBottomSheet = useBottomSheet(bottomSheetRef);
@@ -77,16 +81,7 @@ export const EventScreen: FC<AuthorizedScreenProps<"event-screen">> = ({ navigat
   const singleShare = async (customOptions: ShareSingleOptions) => {
     try {
       const { isInstalled } = await Share.isPackageInstalled("com.whatsapp.android");
-
-      // if (isInstalled) {
       await Share.shareSingle(customOptions);
-      // } else {
-      //   Alert.alert(
-      //     "Whatsapp not installed",
-      //     "Whatsapp not installed, please install.",
-      //     [{ text: "OK", onPress: () => console.log("OK Pressed") }]
-      //   );
-      // }
     } catch (err) {
       console.log(">>> ", err);
     }
@@ -96,111 +91,11 @@ export const EventScreen: FC<AuthorizedScreenProps<"event-screen">> = ({ navigat
   const message = "Please check this out.";
   const icon = "data:<data_type>/<file_extension>;base64,<base64_data>";
 
-  // const options = Platform.select<ShareOptions>({
-  //   ios: {
-  //     activityItemSources: [
-  //       {
-  //         // For sharing url with custom title.
-  //         placeholderItem: { type: "url", content: url },
-  //         item: {
-  //           default: { type: "url", content: url },
-  //         },
-  //         subject: {
-  //           default: title,
-  //         },
-  //         linkMetadata: { originalUrl: url, url, title },
-  //       },
-  //       {
-  //         // For sharing text.
-  //         placeholderItem: { type: "text", content: message },
-  //         item: {
-  //           default: { type: "text", content: message },
-  //           message: null, // Specify no text to share via Messages app.
-  //         },
-  //         linkMetadata: {
-  //           // For showing app icon on share preview.
-  //           title: message,
-  //         },
-  //       },
-  //     ],
-  //   },
-  //   default: {
-  //     title,
-  //     subject: title,
-  //     message: `${message} ${url}`,
-  //   },
-  // });
-
   return (
     <Screen preset="fixed" unsafe unsafeBottom backgroundColor="backgroundOverlay">
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          backgroundColor: Colors.brandAccent,
-          marginHorizontal: 16,
-          paddingVertical: 16,
-          // paddingHorizontal: 24,
-          borderRadius: 10,
-          marginBottom: 16,
-          marginTop: 8,
-        }}
-      >
-        <Button preset="none" style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-          <Icon name="thumb-up-outline" size={24} color={Colors.brandSecondary1} />
-          <Text
-            text="Accept"
-            preset="none"
-            style={{
-              color: Colors.brandSecondary1,
-              marginTop: 8,
-            }}
-          />
-        </Button>
-        <View
-          style={{
-            borderRightWidth: StyleSheet.hairlineWidth,
-            borderLeftWidth: StyleSheet.hairlineWidth,
-            borderColor: Colors.gray,
-          }}
-        />
-        <Button
-          preset="none"
-          style={{
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Icon name="thumb-down-outline" size={24} color={Colors.brandSecondary1} />
-          <Text
-            text="Reject"
-            preset="none"
-            style={{
-              color: Colors.brandSecondary1,
-              marginTop: 8,
-            }}
-          />
-        </Button>
-        <View
-          style={{
-            borderRightWidth: StyleSheet.hairlineWidth,
-            borderLeftWidth: StyleSheet.hairlineWidth,
-            borderColor: Colors.gray,
-          }}
-        />
-        <Button preset="none" style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-          <Icon name="checkbox-marked-circle-outline" size={24} color={Colors.brandSecondary1} />
-          <Text
-            text="Complete"
-            preset="none"
-            style={{
-              color: Colors.brandSecondary1,
-              marginTop: 8,
-            }}
-          />
-        </Button>
-      </View>
+      <Space size="tiny" />
+      <EventStatusButtons event={event} />
+      <Space size="small" />
       <EventScreenTabs event={event} />
       <BottomSheet ref={bottomSheetRef}>
         <View style={{ flex: 1 }}>

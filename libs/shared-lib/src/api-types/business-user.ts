@@ -19,7 +19,9 @@ export type CreateBusinessUserDtoType = Omit<
   | "updatedAt"
   | "lastSignInAt"
   | "roleId"
+  | "password"
   | "hashedRt"
 >;
+export type CreateBusinessUsersDtoType = CreateBusinessUserDtoType[];
 
-export type BusinessUserUpdateDtoType = Partial<CreateBusinessUserDtoType>;
+export type BusinessUserUpdateDtoType = Partial<BusinessUserDtoType>; // update is only done for each business user (staff)

@@ -5,3 +5,5 @@ export * from "./mobile-admin-hooks";
 export * from "./useUser";
 export * from "./useSignOut";
 export * from "./useServices";
+export * from "./useEvents";
+export * from "./useClients";

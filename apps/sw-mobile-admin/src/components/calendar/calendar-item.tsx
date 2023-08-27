@@ -1,8 +1,8 @@
 import React, { useCallback } from "react";
 import { Alert, View, Image, Animated, StyleSheet, Pressable } from "react-native";
-import { EmojiType, EventDtoType } from "@shortwaits/shared-lib";
+import { EventDtoType } from "@shortwaits/shared-lib";
 import { isEmpty, truncate } from "lodash";
-import { Container, Emoji, Text } from "..";
+import { Container, Emoji, EventStatusButtons, Text } from "..";
 import { useTheme } from "../../theme";
 import { getEventTime } from "./calendar-utils";
 import defaultUserImage from "../../assets/images/user.png";
@@ -11,23 +11,24 @@ import { RectButton } from "react-native-gesture-handler";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import { navigate } from "../../navigation";
 import { statusDisplayMessages, statusDisplayMessagesColor } from "../../utils/status-color";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import {
+  CALENDAR_EVENT_HEIGHT,
+  EVENT_ITEM_BORDER_RADIUS,
+  eventStatusColors,
+  eventStatusIconNames,
+  nextEventStatuses,
+} from "../../utils";
 
 type AgendaItemProps = {
   item: EventDtoType;
 };
 
-const BORDER_RADIUS = 6;
-
 export const AgendaItem = (props: AgendaItemProps) => {
   const { item } = props;
-  // const { navigate } = useNavigation();
-  // console.log("AgendaItem >>>", JSON.stringify(item, null, 2));
-
   const { Colors } = useTheme();
   const service = useService(item?.serviceId ?? "");
-
-  // console.log("serviceId >>> ", index, item?.serviceId, section.index);
-  // console.log("service >>>", JSON.stringify(service, null, 2));
+  const eventState = item?.status?.statusName ?? "";
 
   const handleOnPress = useCallback(() => {
     navigate("authorized-stack", {
@@ -57,17 +58,7 @@ export const AgendaItem = (props: AgendaItemProps) => {
     _progress: Animated.AnimatedInterpolation<any>,
     dragX: Animated.AnimatedInterpolation<any>
   ) => {
-    const trans = dragX.interpolate({
-      inputRange: [-150, 0],
-      outputRange: [1, 0],
-      extrapolate: "clamp",
-    });
-
-    return (
-      <RectButton style={styles.rightAction} onPress={() => console.log("Swiped right")}>
-        <Animated.Text style={[styles.actionText, { transform: [{ translateX: trans }] }]}>Cancel</Animated.Text>
-      </RectButton>
-    );
+    return <EventStatusButtons event={item} size="small" />;
   };
 
   const eventTime = useCallback(
@@ -97,13 +88,13 @@ export const AgendaItem = (props: AgendaItemProps) => {
         <View style={styles.eventNameFloatingLabels}>
           {isEmpty(item.labels)
             ? null
-            : item.labels.map(label => {
-                return <Emoji name={label.emojiShortName} />;
+            : item.labels.map((label, index) => {
+                return <Emoji key={index} name={label.emojiShortName} />;
               })}
         </View>
         <Text
           preset="none"
-          style={[styles.eventNameRow1, { color: Colors.darkGray }]}
+          style={[styles.eventNameRow1, { color: Colors.text }]}
           text={truncate(item?.name ?? "", { length: 21, separator: "." })}
         />
         <Container direction="row">
@@ -123,7 +114,7 @@ export const AgendaItem = (props: AgendaItemProps) => {
         </Container>
       </View>
     ),
-    [Colors.darkGray, Colors.subText, item.labels, item?.name, item.status.statusName]
+    [Colors.subText, Colors.text, item.labels, item?.name, item.status.statusName]
   );
 
   const eventClientImage = useCallback(() => {
@@ -144,7 +135,6 @@ export const AgendaItem = (props: AgendaItemProps) => {
         onLongPress={handleOnLongPress}
         style={[
           styles.calendarItem,
-
           {
             zIndex: 10,
             backgroundColor: "#FFFFFF",
@@ -168,8 +158,8 @@ const styles = StyleSheet.create({
   eventServiceColor: {
     height: "100%",
     width: 10,
-    borderTopStartRadius: BORDER_RADIUS,
-    borderBottomStartRadius: BORDER_RADIUS,
+    borderTopStartRadius: EVENT_ITEM_BORDER_RADIUS,
+    borderBottomStartRadius: EVENT_ITEM_BORDER_RADIUS,
   },
   eventTime: {
     paddingHorizontal: 5,
@@ -229,20 +219,18 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   calendarItem: {
-    height: 75,
+    height: CALENDAR_EVENT_HEIGHT,
     // borderBottomWidth: 1,
     alignItems: "center",
     flexDirection: "row",
     marginHorizontal: 5,
-    borderRadius: BORDER_RADIUS,
+    borderRadius: EVENT_ITEM_BORDER_RADIUS,
   },
   rightAction: {
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#ff6347",
   },
   actionText: {
-    color: "#fff",
     fontWeight: "600",
     padding: 20,
   },

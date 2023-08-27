@@ -1,16 +1,26 @@
 import React, { FC, useLayoutEffect, useState } from "react";
-import { FlatList, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 
 import { Space, LeftChevronButton, AnimatedSearchBar, IconButton, Container } from "../../../../../components";
 import { StaticSelectorItem } from "./static-selector-item";
 import { ModalsScreenProps } from "../../../../../navigation";
+import { FlatList } from "react-native-gesture-handler";
 
 export const StaticSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ navigation, route }) => {
-  const { headerTitle, data, onSelect, closeOnSubmit = true, multiple = false } = route.params;
+  const {
+    headerTitle,
+    data,
+    onSelect,
+    closeOnSubmit = true,
+    multiple = false,
+    searchable,
+    itemRightIconName,
+    itemRightIconColor,
+  } = route.params;
 
   const [searchText, setSearchText] = useState("");
   const [filteredData, setFilteredData] = useState(data);
-  const [isListSearchable, setIsListSearchable] = useState(false);
+  const [isListSearchable, setIsListSearchable] = useState(searchable ?? false);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -18,19 +28,21 @@ export const StaticSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({
       headerLeft: () => <LeftChevronButton onPress={() => navigation.goBack()} />,
       headerRight: () => (
         <Container direction="row" alignItems="center">
-          <IconButton
-            withMarginRight
-            iconType={isListSearchable ? "search-close" : "search"}
-            onPress={() => {
-              setIsListSearchable(s => !s);
-            }}
-          />
+          {searchable ? null : (
+            <IconButton
+              withMarginRight
+              iconType={isListSearchable ? "search-close" : "search"}
+              onPress={() => {
+                setIsListSearchable(s => !s);
+              }}
+            />
+          )}
         </Container>
       ),
     });
-  }, [navigation, headerTitle, isListSearchable]);
+  }, [navigation, headerTitle, isListSearchable, searchable]);
 
-  const handleOnSelect = (item: string | { title: string; subTitle: string }) => {
+  const handleOnSelect = item => {
     if (closeOnSubmit) {
       onSelect(item);
       navigation.goBack();
@@ -41,14 +53,14 @@ export const StaticSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({
 
   const handleOnChangeText = (text: string) => {
     setSearchText(text);
-    const filteredItems = data.filter((item: string | { title: string; subTitle: string }) => {
+    const filteredItems = data.filter(item => {
       // Adjust the filtering logic based on your data structure
       if (typeof item === "string") {
         return item.toLowerCase().includes(text.toLowerCase());
       } else {
         return (
-          item.title.toLowerCase().includes(text.toLowerCase()) ||
-          item.subTitle.toLowerCase().includes(text.toLowerCase())
+          item?.title?.toLowerCase().includes(text.toLowerCase()) ||
+          item?.subTitle?.toLowerCase().includes(text.toLowerCase())
         );
       }
     });
@@ -62,9 +74,18 @@ export const StaticSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.listContainer}
         data={filteredData}
-        ItemSeparatorComponent={() => <Space size="small" />}
         renderItem={({ item }) => {
-          return <StaticSelectorItem multiple={multiple} item={item} onSelectItem={handleOnSelect} />;
+          return (
+            <StaticSelectorItem
+              itemRightIconName={itemRightIconName}
+              itemRightIconColor={itemRightIconColor}
+              multiple={multiple}
+              item={item}
+              onSelectItem={() => {
+                handleOnSelect(item);
+              }}
+            />
+          );
         }}
       />
     </>

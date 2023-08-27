@@ -35,7 +35,7 @@ export const createEventSchema: Yup.SchemaOf<CreateEventDtoType> = Yup.object().
   hasNoDuration: Yup.boolean(),
   eventImage: Yup.string().url(),
   name: Yup.string().required(),
-  description: Yup.string().required(),
+  description: Yup.string().optional(),
   features: Yup.array().of(Yup.string()),
   durationInMin: Yup.number(),
   priceExpected: Yup.number().optional(),

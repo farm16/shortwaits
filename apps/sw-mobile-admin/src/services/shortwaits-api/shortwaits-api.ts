@@ -24,6 +24,9 @@ import {
   GetEventsSummaryByBusiness,
   PostLocalSignOut,
   GetPeopleInEvent,
+  UpdateEvent,
+  UpdateBusinessStaff,
+  UpdateBusinessClient,
 } from "./modules";
 import { baseQueryWithInterceptor } from "./interceptor";
 
@@ -52,8 +55,8 @@ export const shortwaitsApi = createApi({
     // A client User === Client also known as a customer
     createBusinessStaff: CreateBusinessStaff(builder),
     createBusinessClients: CreateBusinessClients(builder),
-    updateBusinessStaff: CreateBusinessStaff(builder),
-    updateBusinessClient: CreateBusinessClients(builder),
+    updateBusinessStaff: UpdateBusinessStaff(builder), // updates single business staff
+    updateBusinessClient: UpdateBusinessClient(builder), // updates single business client
     // <<<<< business
 
     //categories
@@ -64,6 +67,7 @@ export const shortwaitsApi = createApi({
     getServicesByBusiness: GetServicesByBusiness(builder),
     //events
     createEvent: CreateEvent(builder),
+    updateEvent: UpdateEvent(builder),
     getEventsByBusiness: GetEventsByBusiness(builder),
     getEventsSummaryByBusiness: GetEventsSummaryByBusiness(builder),
     getPeopleInEvent: GetPeopleInEvent(builder),

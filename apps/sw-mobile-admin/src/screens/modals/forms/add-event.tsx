@@ -14,6 +14,7 @@ import {
   CurrencyFieldCard,
   Space,
   FormContainer,
+  ExpandableSection,
 } from "../../../components";
 import { ModalsScreenProps } from "../../../navigation";
 import {
@@ -176,36 +177,12 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
         isTouched={touched.name}
         errors={errors.name}
       />
-      <ButtonCard
-        title="Labels"
-        subTitle={values.labels.length > 0 ? `${emojis}` : "Select labels"}
-        onPress={() =>
-          navigation.navigate("modals", {
-            screen: "selector-modal-screen",
-            params: {
-              type: "eventLabels",
-              data: values.labels,
-              multiple: true,
-              onGoBack: labels => {
-                if (labels.length > 0) {
-                  setFieldValue("labels", labels);
-                }
-              },
-            },
-          })
-        }
-      />
-      <TextFieldCard
-        title="Description"
-        placeholder="15 minutes hot Yoga"
-        value={values.description}
-        onChangeText={handleChange("description")}
-        isTouched={touched.description}
-        errors={errors.description}
-      />
+
       <ButtonCard
         title="Services"
         subTitle={selectedService ? selectedService.name : "Select a service"}
+        leftIconName={selectedService ? "circle" : "circle-outline"}
+        leftIconColor={selectedService?.serviceColor?.hexCode ?? "grey"}
         onPress={() =>
           navigation.navigate("modals", {
             screen: "selector-modal-screen",
@@ -224,8 +201,8 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
         errors={errors.serviceId}
       />
       <ButtonCard
-        rightIconName={values?.hasNoDuration ? "checkbox-blank-outline" : "checkbox-outline"}
-        title={"Limited time"}
+        rightIconName={values?.hasNoDuration ? "checkbox-outline" : "checkbox-blank-outline"}
+        title={"No duration"}
         onPress={() => {
           setFieldValue("hasNoDuration", !values?.hasNoDuration);
         }}
@@ -241,7 +218,7 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
         <TimePickerFieldCard
           title={"Ends"}
           date={new Date(values.expectedEndTime)}
-          onChange={handleChange("startTime")}
+          onChange={handleChange("expectedEndTime")}
           isTouched={touched.expectedEndTime}
           errors={errors.expectedEndTime}
         />
@@ -258,48 +235,83 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
           });
         }}
       />
-      <ButtonCard
-        title="Payment method"
-        subTitle={values.paymentMethod ? eventPaymentMethods[values.paymentMethod] : "Select a payment method"}
-        onPress={() =>
-          navigation.navigate("modals", {
-            screen: "selector-modal-screen",
-            params: {
-              type: "static",
-              headerTitle: "Payment method",
-              data: Object.keys(eventPaymentMethods).map(key => {
-                return {
-                  key,
-                  title: eventPaymentMethods[key],
-                };
-              }),
-              onSelect: paymentMethod => {
-                setFieldValue("paymentMethod", paymentMethod.key);
+      {isFree ? null : (
+        <>
+          <ButtonCard
+            title="Payment method"
+            subTitle={values.paymentMethod ? eventPaymentMethods[values.paymentMethod] : "Select a payment method"}
+            onPress={() =>
+              navigation.navigate("modals", {
+                screen: "selector-modal-screen",
+                params: {
+                  type: "static",
+                  headerTitle: "Payment method",
+                  data: Object.keys(eventPaymentMethods).map(key => {
+                    return {
+                      key,
+                      title: eventPaymentMethods[key],
+                    };
+                  }),
+                  onSelect: paymentMethod => {
+                    setFieldValue("paymentMethod", paymentMethod.key);
+                  },
+                },
+              })
+            }
+          />
+          <CurrencyFieldCard
+            title="Price"
+            disabled={isFree}
+            keyboardType="number-pad"
+            placeholder="Give a price"
+            value={values.priceExpected}
+            onChangeValue={price => setFieldValue("priceExpected", price)}
+            isTouched={touched.notes}
+            errors={errors.notes}
+            currencyType={"USD"}
+          />
+        </>
+      )}
+      <ExpandableSection>
+        <ButtonCard
+          title="Labels"
+          subTitle={values.labels.length > 0 ? `${emojis}` : "Select labels"}
+          onPress={() =>
+            navigation.navigate("modals", {
+              screen: "selector-modal-screen",
+              params: {
+                type: "eventLabels",
+                data: values.labels,
+                multiple: true,
+                onGoBack: labels => {
+                  if (labels.length > 0) {
+                    setFieldValue("labels", labels);
+                  }
+                },
               },
-            },
-          })
-        }
-      />
-      <CurrencyFieldCard
-        title="Price"
-        disabled={isFree}
-        keyboardType="number-pad"
-        placeholder="Give a price"
-        value={values.priceExpected}
-        onChangeValue={price => setFieldValue("priceExpected", price)}
-        isTouched={touched.notes}
-        errors={errors.notes}
-        currencyType={"USD"}
-      />
-      <TextFieldCard
-        title="Notes"
-        multiline
-        placeholder="Include notes here"
-        value={values.notes}
-        onChangeText={handleChange("notes")}
-        isTouched={touched.notes}
-        errors={errors.notes}
-      />
+            })
+          }
+        />
+
+        <TextFieldCard
+          title="Description"
+          placeholder="15 minutes hot Yoga"
+          value={values.description}
+          onChangeText={handleChange("description")}
+          isTouched={touched.description}
+          errors={errors.description}
+        />
+
+        <TextFieldCard
+          title="Notes"
+          multiline
+          placeholder="Include notes here"
+          value={values.notes}
+          onChangeText={handleChange("notes")}
+          isTouched={touched.notes}
+          errors={errors.notes}
+        />
+      </ExpandableSection>
       <Space size="large" />
     </FormContainer>
   );

@@ -65,7 +65,17 @@ export const Card = (props: CardProps) => {
     <Button preset="card" {...cardModes[mode]} disabled={getIsDisabled()} {...rest}>
       {leftIconName &&
         (mode === "static" || leftIconName === "none" ? null : (
-          <Button disabled={!getIsDisabled()} onPress={leftIconOnPress} preset="none" style={styles.iconContainer}>
+          <Button
+            disabled={!getIsDisabled()}
+            onPress={leftIconOnPress}
+            preset="none"
+            style={[
+              styles.iconContainer,
+              {
+                marginRight: 10,
+              },
+            ]}
+          >
             <Icon style={styles.leftIcon} name={leftIconName} size={IconSizes[leftIconSize]} color={leftIconColor} />
           </Button>
         ))}

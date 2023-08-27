@@ -79,7 +79,7 @@ export const PremiumMembershipModal = props => {
             }}
             text="GET PREMIUM"
           />
-          <Space />
+          <Space size="small" />
           <Button
             onPress={() => {
               dispatch(hidePremiumMembershipModal());
@@ -88,14 +88,15 @@ export const PremiumMembershipModal = props => {
             preset="subLink"
             text="CONTINUE FREE"
           />
-          <Text
+          <Button
             preset="link"
-            style={{
+            textStyle={{
+              fontSize: getResponsiveFontSize(14),
               color: Colors.brandSecondary,
             }}
-          >
-            Terms and Conditions
-          </Text>
+            text="Terms and Conditions"
+          />
+          <Space />
         </View>
       </Modal>
     </Portal>

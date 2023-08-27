@@ -6,10 +6,9 @@ import {
   BusinessHoursType,
   BusinessUserType,
   BusinessDtoType,
-  ClientUsersDtoType,
-  ClientUserDtoType,
   ClientUserUpdateDtoType,
   CreateClientUserDtoType,
+  BusinessUserUpdateDtoType,
 } from "@shortwaits/shared-lib";
 
 import { Business } from "./entities/business.entity";
@@ -150,7 +149,7 @@ export class BusinessService {
     const { isAdmin, isSuperAdmin } = this.isUserAdminType(businessData, userId);
     if (isAdmin || isSuperAdmin) {
       if (userType === "staff") {
-        const staff = this.businessUserModel
+        const staff = await this.businessUserModel
           .find({
             _id: {
               $in: businessData.staff,
@@ -159,7 +158,7 @@ export class BusinessService {
           .select("-__v -hashedRt");
         return staff;
       } else if (userType === "client") {
-        const clients = this.clientUserModel
+        const clients = await this.clientUserModel
           .find({
             _id: {
               $in: businessData.clients,
@@ -184,7 +183,12 @@ export class BusinessService {
       await this.businessModel.findByIdAndUpdate(businessId, {
         $push: { staff: staffIds },
       });
-      return insertedStaff;
+      const newStaff = await this.businessUserModel.find({
+        businesses: {
+          $in: [businessId],
+        },
+      });
+      return newStaff;
     }
   }
 
@@ -199,12 +203,25 @@ export class BusinessService {
         return client._id;
       });
       const businessClients = businessData.clients.concat(clientsIds);
-      const updatedBusiness = await this.businessModel.findByIdAndUpdate(businessId, {
-        clients: businessClients,
-      });
-      await updatedBusiness.save();
+      console.log("businessClients", businessClients.length);
+      const business = await this.businessModel.findByIdAndUpdate(
+        businessId,
+        {
+          clients: businessClients,
+        },
+        { new: true }
+      );
 
-      return insertedClients;
+      const updatedBusiness = await business.save();
+
+      console.log("updatedBusiness.clients", updatedBusiness.clients.length);
+
+      const newClients = await this.clientUserModel.find({
+        _id: {
+          $in: updatedBusiness.clients,
+        },
+      });
+      return newClients;
     }
   }
 
@@ -221,6 +238,26 @@ export class BusinessService {
 
     if (isAdmin || isSuperAdmin) {
       const updatedClient = await this.clientUserModel.findOneAndUpdate({ _id: client._id }, client, {
+        new: true,
+      });
+
+      return updatedClient;
+    }
+  }
+
+  async updateBusinessStaff(businessUserId: string, businessId: string, staff: BusinessUserUpdateDtoType) {
+    const businessData = await this.findBusinessById(businessId);
+    const { isAdmin, isSuperAdmin } = this.isUserAdminType(businessData, businessUserId);
+
+    const staffId = convertStringToObjectId(staff._id);
+    const isStaff = businessData.staff.includes(staffId);
+
+    if (!isStaff) {
+      throw new ForbiddenException("Unrecognized staff");
+    }
+
+    if (isAdmin || isSuperAdmin) {
+      const updatedClient = await this.businessUserModel.findOneAndUpdate({ _id: staff._id }, staff, {
         new: true,
       });
 

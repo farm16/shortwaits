@@ -1,12 +1,5 @@
 {
-  "cSpell.words": [
-    "datasource",
-    "mmkv",
-    "persistor",
-    "Pressable",
-    "reduxjs",
-    "ZELLE"
-  ],
+  "cSpell.words": ["datasource", "mmkv", "persistor", "Pressable", "reduxjs", "Swipeable", "ZELLE"],
   "typescript.tsdk": "node_modules/typescript/lib",
   "svg.preview.background": "dark-transparent"
 }

@@ -1,17 +1,20 @@
 import React, { FC, useLayoutEffect, useState } from "react";
 import { truncate } from "lodash";
 
-import { Calendar, FloatingActionButton, Screen, Text, Container, IconButton, QrModal } from "../../../components";
+import { Calendar, Screen, Text, Container, IconButton, QrModal } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
-import { useBusiness, useShowGhostComponent } from "../../../store";
+import { useBusiness, useEvents, useShowGhostComponent } from "../../../store";
 import { useGetServicesByBusinessQuery } from "../../../services";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
+import { convertStaticSelectorModalData } from "../../../utils/static-selector-modal-utils";
 
 export const EventsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({ navigation }) => {
   const [isQrVisible, setIsQrVisible] = useState(false);
-  const business = useBusiness();
-  useGetServicesByBusinessQuery(business._id ?? skipToken);
 
+  const currentBusiness = useBusiness();
+  const currentsEvents = useEvents();
+
+  useGetServicesByBusinessQuery(currentBusiness._id ?? skipToken);
   useShowGhostComponent("floatingActionButton");
 
   useLayoutEffect(() => {
@@ -19,7 +22,7 @@ export const EventsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({ navig
       headerTitle: () => {
         return (
           <Container direction="row" justifyContent="center">
-            <Text preset="headerTitle" text={truncate(business.shortName, { length: 16 })} />
+            <Text preset="headerTitle" text={truncate(currentBusiness.shortName, { length: 16 })} />
           </Container>
         );
       },
@@ -39,14 +42,37 @@ export const EventsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({ navig
       headerRight: () => {
         return (
           <Container direction="row" alignItems="center">
-            <IconButton withMarginRight iconType="magnify" />
-            <IconButton withMarginRight iconType="calendar" />
+            <IconButton
+              withMarginRight
+              iconType="magnify"
+              onPress={() =>
+                navigation.navigate("modals", {
+                  screen: "selector-modal-screen",
+                  params: {
+                    type: "static",
+                    closeOnSubmit: false,
+                    searchable: true,
+                    headerTitle: "Search events",
+                    itemRightIconColor: "brandSecondary",
+                    itemRightIconName: "dots-vertical",
+                    data: convertStaticSelectorModalData(currentsEvents ?? [], "events"),
+                    onSelect: item => {
+                      navigation.navigate("authorized-stack", {
+                        screen: "event-screen",
+                        params: { event: item.itemData },
+                      });
+                    },
+                  },
+                })
+              }
+            />
+            {/* <IconButton withMarginRight iconType="calendar"  /> */}
           </Container>
         );
       },
       headerShadowVisible: false,
     });
-  }, [business.shortName, navigation]);
+  }, [currentBusiness.shortName, currentsEvents, navigation]);
 
   return (
     <Screen preset="fixed" unsafe unsafeBottom backgroundColor="backgroundOverlay">
@@ -55,7 +81,7 @@ export const EventsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({ navig
         setIsVisible={setIsQrVisible}
         value={"https://sample.com"}
         title="Book an appointment"
-        description={`Scan this QR code to book an appointment with ${business.shortName}`}
+        description={`Scan this QR code to book an appointment with ${currentBusiness.shortName}`}
         description2={"Note: The client will see all available services."}
       />
       <Calendar />

@@ -44,7 +44,7 @@ export class BusinessController {
     @Req() request,
     @Body(new ValidationPipe()) business: UpdateBusinessDto
   ) {
-    return this.businessService.updateBusiness(request.user.sub, business as BusinessDtoType, false);
+    return this.businessService.updateBusiness(request.user.sub, business, false);
   }
 
   /**

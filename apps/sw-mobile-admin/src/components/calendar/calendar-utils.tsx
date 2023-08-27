@@ -1,6 +1,8 @@
 import { isEmpty } from "lodash";
 import { intervalToDuration, formatDuration } from "date-fns";
 import { EventsDtoType } from "@shortwaits/shared-lib";
+import { useMemo } from "react";
+import { today } from "xdate";
 
 export function milliSecondsToDuration(milliSeconds: number): Duration {
   const epoch = new Date(0);
@@ -19,9 +21,7 @@ export const getEventTime = (milliSeconds: number) => {
 
   const shortEnLocale = {
     formatDistance: (token, count) =>
-      formatDistanceLocale[token]
-        .replace("{{count}}", count)
-        .replace("{{plural}}", count > 1 ? "s" : ""),
+      formatDistanceLocale[token].replace("{{count}}", count).replace("{{plural}}", count > 1 ? "s" : ""),
   };
 
   return formatDuration(milliSecondsToDuration(milliSeconds), {
@@ -46,15 +46,10 @@ export function getUniqueDatesFromEvents(events: EventsDtoType) {
   return Array.from(uniqueDates);
 }
 
-export const getAgendaData = (events: EventsDtoType) => {
-  if (events.length === 0) {
-    return [];
-  }
-
-  const uniqueDatesSet = new Set(
-    events.map(item => item.startTime.split("T")[0] + "T00:00:00.000Z")
-  );
+export const useAgendaData = (events: EventsDtoType): agendaItems => {
+  const uniqueDatesSet = new Set(events.map(item => item.startTime.split("T")[0]));
   const uniqueDates = Array.from(uniqueDatesSet);
+
   const eventsByDate = {};
 
   for (const event of events) {
@@ -70,32 +65,45 @@ export const getAgendaData = (events: EventsDtoType) => {
     data: eventsByDate[date.split("T")[0]],
   }));
 
-  return agendaData;
+  return useMemo(() => agendaData, [agendaData]);
 };
 
-export function getMarkedDates(agendaItems) {
-  const marked = {};
+type agendaItems = {
+  title: string;
+  data: EventsDtoType;
+}[];
 
-  agendaItems.forEach(item => {
-    // NOTE: only mark dates with data
-    if (item.data && item.data.length > 0 && !isEmpty(item.data[0])) {
-      marked[item.title] = { marked: true };
-    } else {
-      marked[item.title] = { disabled: true };
+export function useClosestDateFromAgendaData(data: agendaItems) {
+  // Get today's date
+
+  // Find the title closest to today's date
+  const closestTitle = useMemo(() => {
+    const today = new Date();
+    let closestTitle = null;
+    let closestDifference = Infinity;
+
+    for (const entry of data) {
+      const entryDate = new Date(entry.title);
+      const difference = Math.abs(today.getTime() - entryDate.getTime()); // Calculate time difference in milliseconds
+
+      if (difference < closestDifference) {
+        closestDifference = difference;
+        closestTitle = entry.title;
+      }
     }
-  });
-  return marked;
-}
 
-// export type ContextProp = {
-//   context?: CalendarContextProps;
-// };
-// export type MarkingTypes =
-//   | "dot"
-//   | "multi-dot"
-//   | "period"
-//   | "multi-period"
-//   | "custom";
-// export type MarkedDates = {
-//   [key: string]: MarkingProps;
-// };
+    // If no upcoming event found, return today's date
+    if (!closestTitle) {
+      const titleFormat = new Intl.DateTimeFormat("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+      closestTitle = titleFormat.format(today);
+    }
+
+    return closestTitle;
+  }, [data]);
+
+  return closestTitle;
+}

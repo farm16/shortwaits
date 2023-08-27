@@ -4,6 +4,7 @@ import { BusinessLabelType } from "@shortwaits/shared-lib";
 import { Text, Card, Space, Emoji } from "../../../../../components";
 import { SelectorItemProps } from "../../selector-types";
 import { View } from "react-native";
+import { truncate } from "lodash";
 
 export function LabelSelectorItem(props: SelectorItemProps<BusinessLabelType>) {
   const { item, onSelectItem, isSelected } = props;
@@ -24,7 +25,12 @@ export function LabelSelectorItem(props: SelectorItemProps<BusinessLabelType>) {
           {item?.description && (
             <>
               <Space size="tiny" />
-              <Text preset="cardSubtitle" text={item?.description} />
+              <Text
+                preset="cardSubtitle"
+                text={truncate(item?.description, {
+                  length: 35,
+                })}
+              />
             </>
           )}
         </View>

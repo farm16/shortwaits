@@ -23,10 +23,7 @@ export const SearchBar = (props: SearchBarProps) => {
   const { Colors } = useTheme();
 
   const style: StyleProp<TextStyle> & StyleProp<ViewStyle> = {
-    width: Dimensions.get("window").width,
-    paddingLeft: 0,
-    marginLeft: 0,
-    backgroundColor: isAnimated ? "transparent" : Colors.white,
+    marginVertical: 16,
   };
 
   const searchBarStyle = [style, styleOverride];
@@ -36,7 +33,7 @@ export const SearchBar = (props: SearchBarProps) => {
       accent: Colors.brandAccent,
       text: Colors.darkGray,
     },
-    roundness: 0,
+    roundness: 12,
   };
   return (
     <SearchBarPaper

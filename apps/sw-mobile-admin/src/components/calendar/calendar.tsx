@@ -1,15 +1,16 @@
-import React, { FC, memo, useCallback, useMemo } from "react";
+import React, { FC, memo, useCallback } from "react";
 import { RefreshControl, SectionListData } from "react-native";
 import { EventType } from "@shortwaits/shared-lib";
-import { CalendarProvider, ExpandableCalendar, AgendaList } from "@shortwaits/calendar";
+import { CalendarProvider, ExpandableCalendar, AgendaList } from "react-native-calendars";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 import { Colors } from "../../theme";
 import { useCalendarTheme } from "./calendar-hooks";
 import { AgendaItem } from "./calendar-item";
 import { Button, Space } from "../common";
-import { getAgendaData } from "./calendar-utils";
+import { useClosestDateFromAgendaData, useAgendaData } from "./calendar-utils";
 import { useGetEventsByBusinessQuery } from "../../services";
-import { useBusiness } from "../../store";
+import { useBusiness, useEvents } from "../../store";
 import { ActivityIndicator } from "react-native-paper";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { NonIdealState } from "../non-ideal-state/non-ideal-state";
@@ -29,26 +30,24 @@ export const Calendar: FC<CalendarProps> = memo(props => {
   const { isWeekView } = props;
 
   const theme = useCalendarTheme();
-  const business = useBusiness();
+  const currentBusiness = useBusiness();
+  const currentEvents = useEvents();
+  const agendaData = useAgendaData(currentEvents ?? []);
+
   const [limit, setLimit] = React.useState(100);
 
   const {
-    data: eventsPayload,
     isLoading: isEventsLoading,
     isError: isEventsError,
     refetch: refetchEvents,
   } = useGetEventsByBusinessQuery(
     {
-      businessId: business._id,
+      businessId: currentBusiness._id,
       query: {
         limit,
       },
     } ?? skipToken
   );
-
-  // console.log(eventsPayload?.data.length);
-
-  const agendaData = useMemo(() => getAgendaData(eventsPayload?.data ?? []), [eventsPayload?.data]);
 
   const renderItem = useCallback(({ item }) => {
     return <AgendaItem item={item} />;
@@ -58,32 +57,16 @@ export const Calendar: FC<CalendarProps> = memo(props => {
     if (!isEventsLoading) refetchEvents();
   }, [isEventsLoading, refetchEvents]);
 
-  // console.log("rendering calendar");
-  // console.log("agendaData >>>", JSON.stringify(agendaData, null, 2));
-  // console.log("eventsPayload?.data", eventsPayload?.data);
-  // console.log("agendaData");
-
-  const formattedDate = useMemo(() => {
-    // const date = isEmpty(agendaData)
-    //   ? new Date()
-    //   : new Date(agendaData[0].title);
-    const date = new Date();
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    const currentDate = `${year}-${month}-${day}`;
-    return currentDate;
-  }, []);
-
-  // console.log("formattedDate", agendaData[agendaData.length - 1]?.title);
-  // console.log("formattedDate", formattedDate);
+  const initialData = useClosestDateFromAgendaData(agendaData);
+  console.log(">>>>", initialData);
 
   if (isEventsLoading) {
     return <ActivityIndicator />;
   }
+
   return (
     <CalendarProvider
-      date={formattedDate}
+      date={new Date().toISOString().split("T")[0]}
       showTodayButton={true}
       todayButtonStyle={{
         backgroundColor: Colors.brandSecondary,
@@ -91,12 +74,13 @@ export const Calendar: FC<CalendarProps> = memo(props => {
       theme={theme}
     >
       <ExpandableCalendar
-        keyExtractor={item => {
-          // console.log("item", item);
-          return item;
-        }}
         theme={theme}
         firstDay={1}
+        hideArrows={false}
+        allowShadow={true}
+        renderArrow={direction => {
+          return <Icon name={`chevron-${direction}`} size={24} color={Colors.text} />;
+        }}
       />
       <AgendaList
         sectionStyle={{
@@ -106,7 +90,8 @@ export const Calendar: FC<CalendarProps> = memo(props => {
           fontSize: 16,
         }}
         contentContainerStyle={{
-          backgroundColor: "rgb(245, 245, 245)",
+          backgroundColor: Colors.backgroundOverlay,
+          flex: 1,
         }}
         ListEmptyComponent={() => (
           <NonIdealState
@@ -132,19 +117,14 @@ export const Calendar: FC<CalendarProps> = memo(props => {
             }
           />
         )}
-        keyExtractor={item => {
-          // console.log("item._id", item._id);
-          return item._id;
-        }}
-        theme={theme}
         sections={agendaData}
         renderItem={renderItem}
-        stickySectionHeadersEnabled={false}
+        stickySectionHeadersEnabled={true}
         refreshControl={<RefreshControl refreshing={isEventsLoading} onRefresh={handleRefresh} />}
         ItemSeparatorComponent={renderSeparatorItem}
         style={{ backgroundColor: Colors.backgroundOverlay }}
         onEndReached={() => {
-          if (limit < eventsPayload?.data.length) {
+          if (limit < currentEvents.length) {
             setLimit(limit + 100);
           }
         }}

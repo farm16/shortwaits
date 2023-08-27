@@ -29,7 +29,7 @@ export const selectorConfigs: Record<SelectorConfigsKeys, SelectorConfig> = {
     searchPlaceholder: "search",
   },
   eventLabels: {
-    headerTitle: "Event Labels",
+    headerTitle: "Business Labels",
     isReadOnly: false,
     searchPlaceholder: "search",
   },

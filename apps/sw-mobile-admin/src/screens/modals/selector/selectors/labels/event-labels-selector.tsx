@@ -36,7 +36,7 @@ export const EventLabelsSelector: FC<ModalsScreenProps<"selector-modal-screen">>
           }}
         />
       ),
-      headerRight: () => <IconButton onPress={() => handleAddLabels()} withMarginRight iconType="add" />,
+      headerRight: () => <IconButton onPress={() => handleAddLabels()} withMarginRight iconType="edit" />,
     });
   }, [navigation, headerTitle, handleAddLabels, onGoBack, selectedItems]);
 

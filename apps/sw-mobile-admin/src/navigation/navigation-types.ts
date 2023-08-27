@@ -19,6 +19,7 @@ import {
   CreateBusinessUserDtoType,
   CreateClientUserDtoType,
 } from "@shortwaits/shared-lib";
+import { ThemeColorName } from "../theme/Colors";
 
 export type FormData = {
   addEvent: CreateEventDtoType;
@@ -34,7 +35,7 @@ export type SelectorModalData =
   | CategoryDtoType
   | ServiceDtoType
   | BusinessLabelType
-  | { key: string; title: string; subTitle?: string };
+  | { key: string; title: string; subTitle?: string; itemData?: any };
 
 export type SelectorModalModeType = keyof typeof selectorConfigs;
 
@@ -46,11 +47,13 @@ export type ModalStackParamList = {
     headerTitle?: string;
     multiple?: boolean;
     data?: SelectorModalData[];
-    mode?: "update" | "create";
     onGoBack?(arg0): void;
-    searchable?: boolean;
     onSelect?(arg0): void;
+    searchable?: boolean;
     closeOnSubmit?: boolean;
+    itemRightIconName?: string;
+    itemRightIconColor?: ThemeColorName;
+    mode?: "update" | "create";
   };
   [MODAL_SCREENS.SCHEDULE_MODAL_SCREEN]: {
     type: ScheduleModalModeType;

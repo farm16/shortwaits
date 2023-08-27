@@ -20,6 +20,7 @@ import { ModalsScreenProps } from "../../../navigation";
 import { EventDtoType, ServiceDtoType, UpdateEventDtoType } from "@shortwaits/shared-lib";
 import { useCreateEventMutation } from "../../../services";
 import { FormikErrors } from "formik";
+import { getEmojiString } from "../../../utils";
 
 export const UpdateEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navigation, route }) => {
   const { onSubmit, onDone, closeOnSubmit = true, initialValues } = route.params;
@@ -128,6 +129,7 @@ export const UpdateEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ n
   );
 
   console.log("errors:", JSON.stringify(errors, null, 2));
+  const emojis = values.labels.map(label => getEmojiString(label.emojiShortName)).join(" ");
 
   return createEventStatus.isLoading ? (
     <ActivityIndicator />
@@ -140,7 +142,26 @@ export const UpdateEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ n
         isTouched={touched.name}
         errors={errors.name}
       />
-      <ButtonCard title="Labels" isTouched={touched.description} errors={errors.description} />
+      <ButtonCard
+        title="Labels"
+        subTitle={values.labels.length > 0 ? `${emojis}` : "Select labels"}
+        onPress={() =>
+          navigation.navigate("modals", {
+            screen: "selector-modal-screen",
+            params: {
+              type: "eventLabels",
+              data: values.labels,
+              multiple: true,
+              onGoBack: labels => {
+                if (labels.length > 0) {
+                  setFieldValue("labels", labels);
+                }
+              },
+            },
+          })
+        }
+      />
+
       <TextFieldCard
         title="Description"
         value={values?.description}
@@ -151,6 +172,8 @@ export const UpdateEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ n
       />
       <ButtonCard
         title="Services"
+        leftIconName={selectedService ? "circle" : "circle-outline"}
+        leftIconColor={selectedService?.serviceColor?.hexCode ?? "grey"}
         subTitle={selectedService ? selectedService.name : "Select a service"}
         onPress={() =>
           navigation.navigate("modals", {

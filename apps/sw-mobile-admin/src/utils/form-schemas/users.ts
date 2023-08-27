@@ -3,15 +3,15 @@ import * as Yup from "yup";
 
 export const createClientUserSchema: Yup.SchemaOf<CreateClientUserDtoType> = Yup.object().shape({
   clientType: Yup.mixed().required().oneOf(["local", "external"]),
-  username: Yup.string().min(3, "a longer name is required").required("this field is required"),
+  username: Yup.string().min(3, "a longer name is required").optional(),
   alias: Yup.mixed().required().oneOf(["username", "familyName", "givenName", "middleName", "displayName"]),
   displayName: Yup.string().min(3, "a longer name is required").required("this field is required"),
-  familyName: Yup.string().min(3, "a longer name is required").required("this field is required"),
-  givenName: Yup.string().min(3, "a longer name is required").required("this field is required"),
-  middleName: Yup.string().min(3, "a longer name is required").required("this field is required"),
+  familyName: Yup.string().min(3, "need to add more characters").optional(),
+  givenName: Yup.string().min(3, "need to add more characters").optional(),
+  middleName: Yup.string().min(3, "need to add more characters").optional(),
   accountImageUrl: Yup.string(),
   email: Yup.string().email("email is not valid").required("this field is required"),
-  password: Yup.string().min(8, "password must be at least 8 characters").required("this field is required"),
+  password: Yup.string().min(8, "password must be at least 8 characters").optional(), // this is not required for clientType: "local"
   locale: Yup.object().shape({
     countryCode: Yup.string().required("this field is required"),
     isRTL: Yup.boolean().required("this field is required"),

@@ -26,16 +26,13 @@ export const eventStatusNames = {
 export type EventStatusName = keyof typeof eventStatusNames;
 
 export const eventPaymentMethods = {
+  CASH: "Cash",
   CREDIT_CARD: "Credit Card",
-  DEBIT_CARD: "Debit Card",
-  BANK_TRANSFER: "Bank Transfer",
+  ZELLE: "Zelle",
   PAYPAL: "Paypal",
   APPLE_PAY: "Apple Pay",
   GOOGLE_PAY: "Google Pay",
   BITCOIN: "Bitcoin",
-  // AMAZON_PAY: "AMAZON PAY",
-  CASH: "Cash",
-  ZELLE: "Zelle",
   CASH_APP: "Cash App",
 };
 export const eventPaymentMethodsKeys = Object.keys(eventPaymentMethods);

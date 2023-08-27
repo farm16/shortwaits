@@ -4,7 +4,7 @@ import { Alert } from "react-native";
 import { FormikErrors } from "formik";
 import { ClientUserType, CreateBusinessUserDtoType } from "@shortwaits/shared-lib";
 
-import { useCreateBusinessClientsMutation } from "../../../services";
+import { useCreateBusinessStaffMutation } from "../../../services";
 import { useForm } from "../../../hooks";
 import { useBusiness } from "../../../store";
 import {
@@ -17,16 +17,18 @@ import {
   ExpandableSection,
   TimePickerFieldCard,
   FormContainer,
+  ButtonCard,
 } from "../../../components";
 import { ModalsScreenProps } from "../../../navigation";
 import { getCapitalizedString } from "../../../utils";
+import { getPrettyStringFromHours } from "../../../utils/time";
 
 export const AddStaffModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navigation, route }) => {
   const { onSubmit, onDone, closeOnSubmit = true } = route.params;
 
   const business = useBusiness();
 
-  const [createBusinessClients, createBusinessClientsStatus] = useCreateBusinessClientsMutation();
+  const [createBusinessClients, createBusinessClientsStatus] = useCreateBusinessStaffMutation();
 
   const initialValues = useMemo(() => {
     const _initialValues: CreateBusinessUserDtoType = {
@@ -76,7 +78,6 @@ export const AddStaffModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
           country: "",
         },
       ],
-      password: "",
       birthday: new Date().toISOString(),
     };
     return _initialValues;
@@ -93,7 +94,7 @@ export const AddStaffModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
           } else {
             createBusinessClients({
               businessId: business._id,
-              businessClients: formData,
+              body: formData,
             });
           }
         },
@@ -181,6 +182,18 @@ export const AddStaffModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
           errors.phoneNumbers
             ? (errors.phoneNumbers[0] as FormikErrors<{ label: string; number: string }>)?.number ?? ""
             : ""
+        }
+      />
+      <ButtonCard
+        title="Schedule"
+        subTitle={getPrettyStringFromHours(business?.hours)}
+        onPress={() =>
+          navigation.navigate("modals", {
+            screen: "schedule-modal-screen",
+            params: {
+              type: "My-Business-Hours",
+            },
+          })
         }
       />
       <ExpandableSection>

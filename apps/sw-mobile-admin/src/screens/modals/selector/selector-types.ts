@@ -1,3 +1,5 @@
+import { ThemeColorName } from "../../../theme/Colors";
+
 /**
  * - WRITE: Enable add/update capability.
  * - READ: Enable visibility capability.
@@ -25,4 +27,6 @@ export interface SelectorItemProps<T> {
   item: T;
   onSelectItem?(item: T): void;
   multiple?: boolean;
+  itemRightIconName?: string;
+  itemRightIconColor?: ThemeColorName;
 }

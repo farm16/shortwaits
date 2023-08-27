@@ -29,12 +29,18 @@ export const AddClientModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ nav
 
   const initialValues = useMemo(() => {
     const _initialValues: CreateClientUserDtoType = {
-      // constant values for now
       clientType: "local",
+      username: "",
+      alias: "displayName",
+      displayName: "",
+      familyName: "",
+      givenName: "",
+      middleName: "",
+      accountImageUrl: "",
+      email: "",
       imAddresses: [],
       socialAccounts: [],
       desiredCurrencies: ["USD"],
-      alias: "displayName",
       // set to US for now
       locale: {
         countryCode: "US",
@@ -43,13 +49,6 @@ export const AddClientModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ nav
         languageTag: "en-US",
       },
       //
-      displayName: "",
-      username: "",
-      accountImageUrl: "",
-      email: "",
-      givenName: "",
-      familyName: "",
-      middleName: "",
       phoneNumbers: [
         {
           label: "mobile",

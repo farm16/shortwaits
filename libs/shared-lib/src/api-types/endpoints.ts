@@ -92,7 +92,7 @@ export const endpoints = {
   createEventForBusiness: createEndpoint(`events/business/:businessId`, "POST"),
   getEvents: createEndpoint("events", "GET"),
   getEvent: createEndpoint(`events/:eventId`, "GET"),
-  updateEvents: createEndpoint(`events/:eventId`, "PUT"),
+  updateEvents: createEndpoint(`events/business/:businessId`, "PUT"),
   deleteEvent: createEndpoint(`events/delete/:eventId`, "PUT"),
   deleteEvents: createEndpoint("events/delete", "PUT"),
   getPeopleInEvent: createEndpoint<{

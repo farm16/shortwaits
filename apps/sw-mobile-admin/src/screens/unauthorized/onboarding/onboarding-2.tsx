@@ -5,24 +5,11 @@ import { CompositeNavigationProp } from "@react-navigation/native";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { ActivityIndicator } from "react-native-paper";
 
-import {
-  ServiceItem,
-  Screen,
-  LeftChevronButton,
-  Space,
-  Button,
-  IconButton,
-} from "../../../components";
+import { ServiceItem, Screen, LeftChevronButton, Space, Button, IconButton, FormContainer } from "../../../components";
 import { useTheme } from "../../../theme";
-import {
-  RootStackParamList,
-  UnauthorizedStackParamList,
-} from "../../../navigation";
+import { RootStackParamList, UnauthorizedStackParamList } from "../../../navigation";
 import { useBusiness } from "../../../store";
-import {
-  useGetServicesByBusinessQuery,
-  useRegisterBusinessMutation,
-} from "../../../services";
+import { useGetServicesByBusinessQuery, useRegisterBusinessMutation } from "../../../services";
 import LinearGradient from "react-native-linear-gradient";
 
 export interface OnboardingScreenProps {
@@ -58,8 +45,7 @@ export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
     },
     [navigation]
   );
-  const [registerBusiness, registerBusinessStatus] =
-    useRegisterBusinessMutation();
+  const [registerBusiness, registerBusinessStatus] = useRegisterBusinessMutation();
 
   const handleBusinessRegistration = useCallback(() => {
     registerBusiness(business);
@@ -68,9 +54,7 @@ export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "Services",
-      headerLeft: () => (
-        <LeftChevronButton onPress={() => navigation.goBack()} />
-      ),
+      headerLeft: () => <LeftChevronButton onPress={() => navigation.goBack()} />,
       headerRight: () => (
         <IconButton
           onPress={() =>
@@ -93,45 +77,19 @@ export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
   }
   if (isSuccess) {
     return (
-      <>
-        <Screen unsafe preset="fixed" style={styles.container}>
-          <Space />
-          <FlatList
-            ItemSeparatorComponent={() => <Space size="tiny" />}
-            contentContainerStyle={styles.contentContainer}
-            data={services.data}
-            renderItem={({ item }) => {
-              return (
-                <ServiceItem
-                  service={item}
-                  onPress={() => handleCardOnPress(item)}
-                />
-              );
-            }}
-            keyExtractor={item => String(item._id)}
-          />
-        </Screen>
-        <LinearGradient
-          colors={[
-            Colors.backgroundOverlay,
-            Colors.backgroundOverlay,
-            Colors.backgroundOverlay,
-            Colors.brandAccent2,
-          ]}
-          style={{
-            alignItems: "center",
-            alignSelf: "stretch",
-            paddingTop: 30,
-            paddingBottom: 65,
+      <FormContainer
+        footer={<Button preset={"secondary"} text="COMPLETE" onPress={e => handleBusinessRegistration()} />}
+      >
+        <FlatList
+          ItemSeparatorComponent={() => <Space size="tiny" />}
+          contentContainerStyle={styles.contentContainer}
+          data={services.data}
+          renderItem={({ item }) => {
+            return <ServiceItem service={item} onPress={() => handleCardOnPress(item)} />;
           }}
-        >
-          <Button
-            preset={"secondary"}
-            text="COMPLETE"
-            onPress={e => handleBusinessRegistration()}
-          />
-        </LinearGradient>
-      </>
+          keyExtractor={item => String(item._id)}
+        />
+      </FormContainer>
     );
   }
 };

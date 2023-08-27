@@ -11,6 +11,8 @@ import {
   mobileAdminSlice,
   servicesSlice,
   eventsSlice,
+  staffSlice,
+  clientsSlice,
 } from "./slices";
 import { persistRootConfig } from "./redux-persist";
 
@@ -23,9 +25,8 @@ const _combineReducers = combineReducers({
   [eventsSlice.name]: eventsSlice.reducer,
   [themeSlice.name]: themeSlice.reducer,
   [mobileAdminSlice.name]: mobileAdminSlice.reducer,
+  [staffSlice.name]: staffSlice.reducer,
+  [clientsSlice.name]: clientsSlice.reducer,
 });
 
-export const persistedReducer = persistReducer(
-  persistRootConfig,
-  _combineReducers
-);
+export const persistedReducer = persistReducer(persistRootConfig, _combineReducers);

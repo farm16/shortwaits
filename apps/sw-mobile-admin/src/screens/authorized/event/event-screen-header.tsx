@@ -84,7 +84,7 @@ function InfoItem({ title, value, onPress, iconName }: InfoItemProps) {
 
 export function EventScreenHeader({ event }: { event: EventDtoType }) {
   // console.log("event", JSON.stringify(event, null, 2));
-  const { name: serviceName } = useService(event?.serviceId);
+  const currentService = useService(event?.serviceId);
 
   const handlePress = () => {
     navigate("modals", {
@@ -97,20 +97,23 @@ export function EventScreenHeader({ event }: { event: EventDtoType }) {
   };
   return (
     <View style={styles.root}>
-      {event?.description ? (
-        <Container direction="row">
+      <Container direction="row">
+        {event?.description ? (
           <InfoItem onPress={handlePress} title="Description" iconName="description" value={event.description} />
-          <InfoItem onPress={handlePress} title="Service" iconName="service" value={serviceName} />
-        </Container>
-      ) : null}
+        ) : null}
+        {currentService?.name ? (
+          <InfoItem onPress={handlePress} title="Service" iconName="service" value={currentService?.name ?? ""} />
+        ) : null}
+      </Container>
+
       <Space direction="horizontal" size="tiny" extra={8} />
       <Container direction="row">
-        <InfoItem onPress={handlePress} title="Status" iconName="status" value={event.status.statusName} />
+        <InfoItem onPress={handlePress} title="Status" iconName="status" value={event.status.statusName ?? ""} />
         <InfoItem
           onPress={handlePress}
           title="Cost"
           iconName="price"
-          value={getPrettyStringFromPriceWithSymbol("USD", event?.priceExpected)}
+          value={getPrettyStringFromPriceWithSymbol("USD", event?.priceExpected ?? 0)}
         />
       </Container>
       <Space direction="horizontal" size="small" />
@@ -126,7 +129,9 @@ export function EventScreenHeader({ event }: { event: EventDtoType }) {
       <Space direction="horizontal" size="small" />
       <Container direction="row">
         <InfoItem onPress={handlePress} title="Notes" iconName="notes" value={truncate(event?.notes, { length: 30 })} />
-        <InfoItem onPress={handlePress} title="Labels" iconName="labels" value={event?.labels} />
+        {event?.labels ? (
+          <InfoItem onPress={handlePress} title="Labels" iconName="labels" value={event?.labels} />
+        ) : null}
       </Container>
     </View>
   );

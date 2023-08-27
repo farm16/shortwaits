@@ -14,6 +14,8 @@ export type ConvertToDtoType<T> = {
     ? string // Convert ObjectId to string
     : T[K] extends Date
     ? string // Convert Date to string
+    : T[K] extends Record<string, any>
+    ? ConvertToDtoType<T[K]> // Handle nested objects
     : T[K]; // Keep other property types unchanged
 };
 

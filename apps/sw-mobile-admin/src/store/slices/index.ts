@@ -5,3 +5,5 @@ export * from "./events";
 export * from "./mobile-admin";
 export * from "./theme";
 export * from "./user";
+export * from "./staff";
+export * from "./clients";

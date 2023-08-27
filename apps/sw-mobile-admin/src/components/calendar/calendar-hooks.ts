@@ -6,6 +6,8 @@ export function useCalendarTheme() {
   const { Colors } = useTheme();
   const theme = useRef<Theme>({
     arrowColor: Colors.brandPrimary,
+    disabledArrowColor: Colors.disabledText,
+
     selectedDayBackgroundColor: Colors.brandSecondary3,
     todayBackgroundColor: Colors.brandSecondary,
 

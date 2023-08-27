@@ -2,6 +2,7 @@ export * from "./navigator-action-buttons/navigator-action-buttons";
 export * from "./floating-action-button/floating-action-button";
 export * from "./upload-profile-image/upload-profile-image";
 export * from "./business-income-info/business-income-info";
+export * from "./event-status-buttons/event-status-buttons";
 export * from "./expandable-section/expandable-section";
 export * from "./non-ideal-state/non-ideal-state";
 export * from "./time-range-text/time-range-text";
