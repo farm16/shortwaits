@@ -1,22 +1,20 @@
-import React, {
-  FC,
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { FC, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import {
-  BusinessDayTimeRangeType,
+  WeekDayTimeRangeType,
   BusinessWeekDaysType,
   WEEKDAYS,
+  WEEKDAYS_ARR,
+  WeekHoursType,
+  WeekDayType,
 } from "@shortwaits/shared-lib";
 import { Alert, View } from "react-native";
 
 import {
   BottomSheet,
   BottomSheetType,
+  Button,
+  FormContainer,
   IconButton,
   LeftChevronButton,
   Screen,
@@ -27,40 +25,37 @@ import {
 import { ModalsScreenProps } from "../../../navigation";
 import { useTheme } from "../../../theme";
 import { ScheduleCard } from "./schedule-card";
-import { SelectTimeRange } from "./select-time-range";
+import { SelectTimeRange, SelectTimeRangeProps } from "./select-time-range";
 import { scheduleConfigs } from "./schedule-config";
 import { setBusinessAllHours, useBusiness } from "../../../store";
-import { useUpdateBusinessHoursMutation } from "../../../services";
 
-export type DayType = BusinessDayTimeRangeType & {
+export type DayType = WeekDayTimeRangeType & {
   name: BusinessWeekDaysType;
 };
 
-export const ScheduleModal: FC<ModalsScreenProps<"schedule-modal-screen">> = ({
-  navigation,
-  route,
-}) => {
-  const { type: modalType } = route.params;
-  const [selectedDay, setSelectedDay] = useState<BusinessWeekDaysType>(null);
+export const ScheduleModal: FC<ModalsScreenProps<"schedule-modal-screen">> = ({ navigation, route }) => {
+  const {
+    disabledDays = [],
+    allowCloseAll = true,
+    hours,
+    days = WEEKDAYS_ARR,
+    allowHours = true,
+    headerTitle = "Schedule",
+    closeOnSubmit = true,
+    onSubmit,
+  } = route.params;
+  const [currentDays, setCurrentDays] = useState<BusinessWeekDaysType[]>(days);
+  const [currentWeekHours, setCurrentWeekHours] = useState<WeekHoursType>(hours);
+  const [selectedWeekDay, setSelectedWeekDay] = useState<BusinessWeekDaysType>(null);
   const dispatch = useDispatch();
   const [isBusinessClosed, setIsBusinessClosed] = useState(true);
-  const { Colors } = useTheme();
-  const business = useBusiness();
   const bottomSheetRef = useRef<BottomSheetType>(null);
   const handleBottomSheet = useBottomSheet(bottomSheetRef);
-  const [postBusinessHours, postBusinessHoursStatus] =
-    useUpdateBusinessHoursMutation();
-  useEffect(() => {
-    if (postBusinessHoursStatus.isSuccess) {
-      Alert.alert("Business hours updated");
-    }
-  }, [postBusinessHoursStatus.isSuccess]);
+
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: scheduleConfigs[modalType].headerTitle,
-      headerLeft: () => (
-        <LeftChevronButton onPress={() => navigation.goBack()} />
-      ),
+      headerTitle: headerTitle,
+      headerLeft: () => <LeftChevronButton onPress={() => navigation.goBack()} />,
       headerRight: () => (
         <View
           style={{
@@ -69,89 +64,123 @@ export const ScheduleModal: FC<ModalsScreenProps<"schedule-modal-screen">> = ({
             alignItems: "flex-end",
           }}
         >
-          <IconButton
-            withMarginRight
-            onPress={() => {
-              setIsBusinessClosed(_isBusinessClosed => {
-                dispatch(setBusinessAllHours(!_isBusinessClosed));
-                return !_isBusinessClosed;
-              });
-            }}
-            iconType={isBusinessClosed ? "closed-business" : "open-business"}
-          />
+          {allowCloseAll ? (
+            <IconButton
+              withMarginRight
+              onPress={() => {
+                Alert.alert(
+                  `${isBusinessClosed ? "Enable" : "Disable"} all hours`,
+                  "This will affect all your working hours, Are you sure you want to proceed?",
+                  [
+                    {
+                      text: "Cancel",
+                      style: "cancel",
+                    },
+                    {
+                      text: "Yes",
+                      onPress: () => {
+                        setCurrentWeekHours(_weekHours => {
+                          const _hours = { ..._weekHours };
+                          Object.keys(_hours).forEach(day => {
+                            _hours[day][0].isActive = isBusinessClosed;
+                          });
+                          return _hours;
+                        });
+                        setIsBusinessClosed(isClosed => !isClosed);
+                      },
+                    },
+                  ]
+                );
+              }}
+              iconType={isBusinessClosed ? "open-business" : "closed-business"}
+            />
+          ) : null}
         </View>
       ),
     });
     return () => console.log(" bye bye schedule modal");
-  }, [
-    Colors.brandPrimary,
-    dispatch,
-    isBusinessClosed,
-    navigation,
-    modalType,
-    business._id,
-    business.hours,
-    postBusinessHours,
-  ]);
+  }, [allowCloseAll, dispatch, headerTitle, isBusinessClosed, navigation]);
 
-  const handlePress = useCallback(
-    (day: BusinessWeekDaysType) => {
-      setSelectedDay(day);
+  const handleDayHoursPress = useCallback(
+    (weekDay: BusinessWeekDaysType) => {
+      setSelectedWeekDay(weekDay);
       handleBottomSheet.expand();
     },
     [handleBottomSheet]
   );
 
-  useEffect(() => {
-    console.log(selectedDay);
-  }, [selectedDay]);
-
   const handleSheetChanges = useCallback((index: number) => {
     console.log("handleSheetChanges", index);
   }, []);
 
-  const days = Object.keys(WEEKDAYS);
-  // console.log(JSON.stringify(business?.hours, null, 2));
-
-  if (postBusinessHoursStatus.isLoading) {
-    return <Text>Loading ...</Text>;
-  }
+  const renderCurrentDays = useCallback(() => {
+    return currentDays.map((day, _index) => {
+      return (
+        <ScheduleCard
+          key={day}
+          /**
+           * ...business?.hours[day][0]
+           * => we set hours as an arr,
+           * we will support multiple hours
+           * in a day ex. 8am-10am & 1pm-4pm.
+           * for now we only use 1 parameter
+           * which is why we default to [0].
+           */
+          day={day}
+          allowHours={allowHours}
+          startTime={currentWeekHours[day][0]?.startTime}
+          endTime={currentWeekHours[day][0]?.endTime}
+          isActive={currentWeekHours[day][0]?.isActive}
+          onHourChange={dayHours => {
+            handleDayHoursPress(Object.keys(dayHours)[0] as BusinessWeekDaysType);
+          }}
+          onDayChange={dayHours => {
+            console.log(dayHours);
+            setCurrentWeekHours(_weekHours => {
+              return { ..._weekHours, ...dayHours };
+            });
+          }}
+        />
+      );
+    });
+  }, [allowHours, currentDays, currentWeekHours, handleDayHoursPress]);
 
   return (
-    <Screen
-      unsafe
-      preset="scroll"
-      withInset={false}
-      style={{ flex: 1, alignItems: "center", paddingTop: 15 }}
-    >
-      {days.map((day: string, _index) => {
-        return (
-          <ScheduleCard
-            key={day}
-            type={modalType}
-            /**
-             * ...business?.hours[day][0]
-             * => we set hours as an arr,
-             * we will support multiple hours
-             * in a day ex. 8am-10am & 1pm-4pm.
-             * for now we only use 1 parameter
-             * which is why we default to [0].
-             */
-            day={{ ...business?.hours[day][0], name: day }}
-            handlePress={_day => handlePress(_day)}
+    <React.Fragment>
+      <FormContainer
+        footer={
+          <Button
+            text="save"
+            onPress={() => {
+              onSubmit(currentWeekHours);
+              if (closeOnSubmit) navigation.goBack();
+            }}
           />
-        );
-      })}
-      <Space />
+        }
+      >
+        {renderCurrentDays()}
+      </FormContainer>
       <BottomSheet
         onClose={() => {
-          setSelectedDay(null);
+          setSelectedWeekDay(null);
         }}
+        snapPointsLevel={7}
         onChange={handleSheetChanges}
         ref={bottomSheetRef}
       >
-        {selectedDay ? <SelectTimeRange day={selectedDay} /> : null}
+        {selectedWeekDay ? (
+          <SelectTimeRange
+            day={selectedWeekDay}
+            weekHours={currentWeekHours}
+            onDone={dayHours => {
+              setCurrentWeekHours(_weekHours => {
+                return { ..._weekHours, ...dayHours };
+              });
+              handleBottomSheet.close();
+            }}
+          />
+        ) : null}
       </BottomSheet>
-    </Screen>
+    </React.Fragment>
   );
 };

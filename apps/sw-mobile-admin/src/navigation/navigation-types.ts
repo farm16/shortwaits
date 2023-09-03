@@ -21,6 +21,8 @@ import {
   BusinessUserDtoType,
   ClientUserDtoType,
   BusinessDtoType,
+  BusinessWeekDaysType,
+  WeekHoursType,
 } from "@shortwaits/shared-lib";
 import { ThemeColorName } from "../theme/Colors";
 
@@ -42,7 +44,7 @@ export type SelectorModalData =
 
 export type SelectorModalModeType = keyof typeof selectorConfigs;
 
-export type ScheduleModalModeType = "My-Business-Hours" | "User-Hours";
+export type ScheduleModalModeType = "My-Business-Hours" | "Business-User-Hours" | "Client-User-Hours";
 
 export type ModalStackParamList = {
   [MODAL_SCREENS.SELECTOR_MODAL_SCREEN]: {
@@ -59,8 +61,14 @@ export type ModalStackParamList = {
     mode?: "update" | "create";
   };
   [MODAL_SCREENS.SCHEDULE_MODAL_SCREEN]: {
-    type: ScheduleModalModeType;
-    mode?: "update" | "create";
+    hours: WeekHoursType;
+    headerTitle?: string;
+    allowHours?: boolean;
+    allowCloseAll?: boolean;
+    days?: BusinessWeekDaysType[];
+    disabledDays?: BusinessWeekDaysType[];
+    onSubmit(hours: WeekHoursType): void;
+    closeOnSubmit?: boolean;
   };
   [MODAL_SCREENS.SERVICE_MODAL_SCREEN]: {
     mode: "update" | "create";

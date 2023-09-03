@@ -19,8 +19,11 @@ export type CreateBusinessUserDtoType = Omit<
   | "updatedAt"
   | "lastSignInAt"
   | "roleId"
-  | "password"
   | "hashedRt"
+  | "isDisabled"
+  | "isStaff"
+  | "createdByBusinessId"
+  | "isEmailVerified"
 >;
 export type CreateBusinessUsersDtoType = CreateBusinessUserDtoType[];
 

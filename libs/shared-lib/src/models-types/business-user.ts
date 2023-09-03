@@ -6,6 +6,7 @@ import * as paginate from "mongoose-paginate-v2";
 // end of warning //
 
 import { ObjectId } from "../common-types";
+import { WeekHoursType } from "./helpers";
 
 /**
  *
@@ -23,20 +24,43 @@ export type UserMethodsType = {
 };
 
 export type BusinessUserType = {
-  alias: "familyName" | "givenName" | "middleName" | "displayName";
+  roleId: ObjectId;
+  password: string;
+  isPasswordProtected: boolean;
+  businesses: ObjectId[];
+  isDisabled: boolean; // if this is set to true, the user will not be able to login but user will be visible in the list of users
+
+  isStaff: boolean; // all users created by a business are staff, only superAdmins are not staff
+  createdByBusinessId: ObjectId; // if this is set and user "A" is superAdmin, user "A" can delete or update this user
+  // Also we need to let the user know that this user is created by a business (super admin) and belongs to that business
+  deleted: boolean; // will not be shown in the list of users, but the data will be kept
+
+  preferredAlias: "username" | "displayName";
+
+  username: string; // this should be unique for each user (business)
+
+  email: string; // no longer unique for each user (business)
+  isEmailVerified: boolean; // once email is verified, this should be set to true
+  hours: WeekHoursType;
+
   displayName: string;
   familyName: string;
   givenName: string;
   middleName: string;
+
   accountImageUrl: string;
+
+  primaryPhoneNumberLabel: string; // this should be unique for each user (business)' should be mobile
   phoneNumbers: {
     label: string;
     number: string;
   }[];
+
   imAddresses: {
     username: string;
     service: string;
   }[];
+
   addresses: {
     label: string;
     address1: string;
@@ -53,7 +77,7 @@ export type BusinessUserType = {
     username?: string;
   }[];
   birthday: string;
-  email: string;
+
   desiredCurrencies: string[];
   locale: {
     countryCode: string;
@@ -67,13 +91,10 @@ export type BusinessUserType = {
     state: number;
     isCompleted: boolean;
   };
-  password: string;
-  businesses: ObjectId[];
-  deleted: boolean;
+
   createdAt: string;
   updatedAt: string;
   lastSignInAt: Date;
-  roleId: ObjectId;
   hashedRt: string;
 };
 

@@ -33,6 +33,8 @@ export const WEEKDAYS = {
   sun: "Sunday",
 } as const;
 
+export const WEEKDAYS_ARR = Object.keys(WEEKDAYS) as BusinessWeekDaysType[];
+
 // My business helpers
 
 export type BusinessLocationType = {
@@ -54,17 +56,21 @@ export type CurrencyType = {
   codeNumber: number;
   decimalSeparator: number;
 };
-export type BusinessHoursType = {
-  mon: BusinessDayTimeRangeType[];
-  tue: BusinessDayTimeRangeType[];
-  wed: BusinessDayTimeRangeType[];
-  thu: BusinessDayTimeRangeType[];
-  fri: BusinessDayTimeRangeType[];
-  sat: BusinessDayTimeRangeType[];
-  sun: BusinessDayTimeRangeType[];
+export type BusinessHoursType = WeekHoursType;
+
+export type WeekHoursType = {
+  mon: WeekDayTimeRangeType[];
+  tue: WeekDayTimeRangeType[];
+  wed: WeekDayTimeRangeType[];
+  thu: WeekDayTimeRangeType[];
+  fri: WeekDayTimeRangeType[];
+  sat: WeekDayTimeRangeType[];
+  sun: WeekDayTimeRangeType[];
 };
 
-export type BusinessDayTimeRangeType = {
+export type WeekDayType = Partial<WeekHoursType>;
+
+export type WeekDayTimeRangeType = {
   startTime: number;
   endTime: number;
   isActive: boolean;

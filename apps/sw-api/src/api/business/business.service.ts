@@ -9,6 +9,7 @@ import {
   ClientUserUpdateDtoType,
   CreateClientUserDtoType,
   BusinessUserUpdateDtoType,
+  CreateBusinessUsersDtoType,
 } from "@shortwaits/shared-lib";
 
 import { Business } from "./entities/business.entity";
@@ -170,7 +171,7 @@ export class BusinessService {
     }
   }
 
-  async createBusinessStaff(businessUserId: string, businessId: string, staff: BusinessUserType[]) {
+  async createBusinessStaff(businessUserId: string, businessId: string, staff: CreateBusinessUsersDtoType) {
     const businessData = await this.findBusinessById(businessId);
 
     const { isAdmin, isSuperAdmin } = this.isUserAdminType(businessData, businessUserId);

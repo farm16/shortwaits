@@ -1,6 +1,6 @@
 import { PayloadAction } from "@reduxjs/toolkit";
 import {
-  BusinessDayTimeRangeType,
+  WeekDayTimeRangeType,
   BusinessHoursType,
   BusinessLocationType,
   BusinessWeekDaysType,
@@ -14,22 +14,13 @@ import {
 import { cloneDeep } from "lodash";
 
 export const businessReducers = {
-  setBusinessShortName(
-    state: BusinessDtoType,
-    action: PayloadAction<{ shortName: string }>
-  ) {
+  setBusinessShortName(state: BusinessDtoType, action: PayloadAction<{ shortName: string }>) {
     return { ...state, ...action.payload };
   },
-  setBusinessDescription(
-    state,
-    action: PayloadAction<{ description: string }>
-  ) {
+  setBusinessDescription(state, action: PayloadAction<{ description: string }>) {
     return { ...state, ...action.payload };
   },
-  setBusinessCurrency(
-    state,
-    action: PayloadAction<{ currency: CurrencyType }>
-  ) {
+  setBusinessCurrency(state, action: PayloadAction<{ currency: CurrencyType }>) {
     return { ...state, ...action.payload };
   },
   setBusinessCountry(state, action: PayloadAction<{ country: string }>) {
@@ -40,19 +31,14 @@ export const businessReducers = {
   },
   setBusinessCategory(state, action: PayloadAction<string>) {
     const newCategory = action.payload;
-    const updatedCategories = state.categories.filter(
-      category => category !== newCategory
-    ); // Remove the new category if it already exists in the state
+    const updatedCategories = state.categories.filter(category => category !== newCategory); // Remove the new category if it already exists in the state
 
     const categories = [...updatedCategories, newCategory]; // Add the new category to the existing unique categories
 
     console.log("categories >>>", categories);
     return { ...state, categories };
   },
-  setBusinessCategories(
-    state: BusinessDtoType,
-    action: PayloadAction<string[]>
-  ) {
+  setBusinessCategories(state: BusinessDtoType, action: PayloadAction<string[]>) {
     console.log("action.payload >>>", action.payload);
     const uniquePayloadCategories = [...new Set(action.payload)]; // Remove duplicates from the incoming array
     const categories = [...uniquePayloadCategories]; // Combine the updated and unique categories
@@ -76,7 +62,7 @@ export const businessReducers = {
   setBusinessDaySchedule(
     state,
     action: PayloadAction<{
-      data: BusinessDayTimeRangeType;
+      data: WeekDayTimeRangeType;
       day: BusinessWeekDaysType;
     }>
   ) {
@@ -128,16 +114,10 @@ export const businessReducers = {
       hours: { ...state.hours, [action.payload.name]: [newHours] },
     };
   },
-  setBusinessLocation(
-    state,
-    action: PayloadAction<{ location: BusinessLocationType }>
-  ) {
+  setBusinessLocation(state, action: PayloadAction<{ location: BusinessLocationType }>) {
     return { ...state, ...action.payload };
   },
-  setBusinessIsRegistrationCompleted(
-    state,
-    action: PayloadAction<{ isRegistrationCompleted: boolean }>
-  ) {
+  setBusinessIsRegistrationCompleted(state, action: PayloadAction<{ isRegistrationCompleted: boolean }>) {
     return { ...state, ...action.payload };
   },
   setBusinessDeleted(state, action: PayloadAction<{ deleted: boolean }>) {

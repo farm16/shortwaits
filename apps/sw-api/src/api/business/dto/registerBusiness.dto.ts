@@ -1,11 +1,4 @@
-import {
-  IsArray,
-  IsBoolean,
-  IsNotEmpty,
-  IsString,
-  MaxLength,
-  IsOptional,
-} from "class-validator";
+import { IsArray, IsBoolean, IsNotEmpty, IsString, MaxLength, IsOptional } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 import { Trim } from "class-sanitizer";
 

@@ -1,69 +1,82 @@
 import React from "react";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { View, StyleSheet } from "react-native";
-import { useDispatch } from "react-redux";
 
-import { getDimensions, useTheme } from "../../../theme";
+import { useTheme } from "../../../theme";
 import { Switch, Button, Container, Text, TimeRangeText } from "../../../components";
-import { setBusinessDayActivity } from "../../../store";
-import { ScheduleModalModeType } from "../../../navigation";
-import { DayType } from "./schedule";
+import { BusinessWeekDaysType, WeekDayTimeRangeType, WeekDayType } from "@shortwaits/shared-lib";
 
 interface DayCardProps {
-  type: ScheduleModalModeType;
-  day: DayType;
-  handlePress: (day: DayType["name"]) => void;
+  day: BusinessWeekDaysType;
+  startTime: number;
+  endTime: number;
+  isActive: boolean;
+  allowHours: boolean;
+  onHourChange: (dayRecord: WeekDayType) => void;
+  onDayChange: (dayRecord: WeekDayType) => void;
 }
+
 /**
  * @todo
  * We are only supporting 1 set of time range in a day ** **FOR NOW
  */
-export const ScheduleCard = ({ day, handlePress, type }: DayCardProps) => {
-  const { width } = getDimensions();
+const ScheduleCardComponent: React.FC<DayCardProps> = props => {
+  const { day, startTime, endTime, isActive, allowHours, onDayChange, onHourChange } = props;
   const { Colors } = useTheme();
 
-  const { startTime, endTime, isActive, name } = day;
-  const dispatch = useDispatch();
+  const handleOnDayChange = ({ day, startTime, endTime, isActive }) => {
+    const dayRecord = {
+      [day]: [{ startTime, endTime, isActive }],
+    };
+    onDayChange(dayRecord);
+  };
+
+  const handleOnHourChange = ({ day, startTime, endTime, isActive }) => {
+    const dayRecord = {
+      [day]: [{ startTime, endTime, isActive }],
+    };
+    onHourChange(dayRecord);
+  };
 
   return (
     <View
       style={{
         ...styles.container,
-        width: width * 0.87,
         borderBottomColor: Colors.backgroundOverlay,
       }}
     >
-      <View style={styles.subContainer1}>
-        <Button
-          preset="none"
-          style={{
-            alignItems: "flex-start",
-          }}
-          disabled={!isActive}
-          onPress={() => handlePress(name)}
-        >
-          <Container direction="row" style={{ alignItems: "center" }}>
-            <Text
-              preset="none"
-              style={{
-                ...styles.weekDay,
-                color: isActive ? Colors.text : Colors.disabledText,
-              }}
-              text={name}
-            />
-            <Icon name="pencil" color={isActive ? Colors.brandSecondary : Colors.disabledText} size={20} />
-          </Container>
-          <TimeRangeText disabled={!isActive} startTime={startTime} endTime={endTime} />
-        </Button>
-      </View>
+      {allowHours ? (
+        <View style={styles.subContainer1}>
+          <Button
+            preset="none"
+            style={{
+              alignItems: "flex-start",
+            }}
+            disabled={!isActive}
+            onPress={() => handleOnHourChange({ day: day, startTime, endTime, isActive })}
+          >
+            <Container direction="row" style={{ alignItems: "center" }}>
+              <Text
+                preset="none"
+                style={{
+                  ...styles.weekDay,
+                  color: isActive ? Colors.text : Colors.disabledText,
+                }}
+                text={day}
+              />
+              <Icon name="pencil" color={isActive ? Colors.brandSecondary : Colors.disabledText} size={20} />
+            </Container>
+            <TimeRangeText disabled={!isActive} startTime={startTime} endTime={endTime} />
+          </Button>
+        </View>
+      ) : null}
       <View style={styles.subContainer2}>
         <Switch
-          style={{ marginLeft: "auto" }}
           trackColor={{ false: Colors.red1, true: Colors.brandSecondary1 }}
           thumbColor={isActive ? Colors.brandSecondary2 : Colors.gray}
           ios_backgroundColor={Colors.backgroundOverlay}
           onChange={() => {
-            dispatch(setBusinessDayActivity(day.name));
+            handleOnDayChange({ day: day, startTime, endTime, isActive: !isActive });
           }}
           value={isActive}
         />
@@ -71,6 +84,8 @@ export const ScheduleCard = ({ day, handlePress, type }: DayCardProps) => {
     </View>
   );
 };
+
+export const ScheduleCard = React.memo(ScheduleCardComponent);
 
 const styles = StyleSheet.create({
   container: {

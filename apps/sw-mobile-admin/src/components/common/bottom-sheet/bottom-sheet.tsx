@@ -2,6 +2,7 @@ import React, { ForwardedRef, forwardRef, useCallback, useMemo } from "react";
 import { StyleSheet } from "react-native";
 import GBottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { Portal } from "@gorhom/portal";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { useTheme } from "../../../theme";
 import { BottomSheetProps } from "./bottom-sheet-types";
@@ -13,10 +14,18 @@ export const defaultSnapPointsLevels = {
   4: ["85%", "60%", "35%"],
   5: ["85%", "60%"],
   6: ["85%"],
+  7: ["45%"],
 };
 
 export const BottomSheet = forwardRef((props: BottomSheetProps, ref: ForwardedRef<GBottomSheet | null>) => {
-  const { onChange, snapPointsLevel = 1, snapPoints: snapPointsOverride, children, ...rest } = props;
+  const {
+    unsafeBottom = false,
+    onChange,
+    snapPointsLevel = 1,
+    snapPoints: snapPointsOverride,
+    children,
+    ...rest
+  } = props;
 
   const { Colors } = useTheme();
   const sheetStyle = useMemo(
@@ -42,7 +51,6 @@ export const BottomSheet = forwardRef((props: BottomSheetProps, ref: ForwardedRe
         enablePanDownToClose
         index={-1}
         onChange={onChange}
-        backgroundStyle={{ backgroundColor: Colors.background }}
         snapPoints={defaultSnapPointsLevels[snapPointsLevel]}
         ref={ref}
         keyboardBlurBehavior="restore"

@@ -1,27 +1,23 @@
 import { IsNotEmpty, IsOptional } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
-import { CreateBusinessUserDtoType } from "@shortwaits/shared-lib";
+import { ConvertToDtoType, CreateBusinessUserDtoType, WeekHoursType } from "@shortwaits/shared-lib";
 
 export class CreateBusinessUserDto implements CreateBusinessUserDtoType {
   @ApiProperty()
-  @IsNotEmpty()
-  birthday: string;
+  @IsOptional()
+  password: string;
+
+  @ApiProperty()
+  @IsOptional()
+  email: string;
 
   @ApiProperty()
   @IsNotEmpty()
-  registrationState: {
-    screenName: string;
-    state: number;
-    isCompleted: boolean;
-  };
+  isPasswordProtected: boolean;
 
   @ApiProperty()
   @IsNotEmpty()
-  roleId: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  clientType: "local" | "external";
+  preferredAlias: "username" | "displayName";
 
   @ApiProperty()
   @IsNotEmpty()
@@ -29,22 +25,22 @@ export class CreateBusinessUserDto implements CreateBusinessUserDtoType {
 
   @ApiProperty()
   @IsNotEmpty()
-  alias: "displayName" | "familyName" | "givenName" | "middleName";
+  hours: ConvertToDtoType<WeekHoursType>;
 
   @ApiProperty()
-  @IsNotEmpty()
-  givenName: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  familyName: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   displayName: string;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
+  familyName: string;
+
+  @ApiProperty()
+  @IsOptional()
+  givenName: string;
+
+  @ApiProperty()
+  @IsOptional()
   middleName: string;
 
   @ApiProperty()
@@ -53,33 +49,15 @@ export class CreateBusinessUserDto implements CreateBusinessUserDtoType {
 
   @ApiProperty()
   @IsNotEmpty()
-  email: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  password: string;
+  primaryPhoneNumberLabel: string;
 
   @ApiProperty()
   @IsOptional()
-  locale: {
-    countryCode: string;
-    isRTL: boolean;
-    languageCode: string;
-    languageTag: string;
-  };
-  @ApiProperty()
-  @IsOptional()
-  phoneNumbers: {
-    label: string;
-    number: string;
-  }[];
+  phoneNumbers: { label: string; number: string }[];
 
   @ApiProperty()
   @IsOptional()
-  imAddresses: {
-    username: string;
-    service: string;
-  }[];
+  imAddresses: { username: string; service: string }[];
 
   @ApiProperty()
   @IsOptional()
@@ -93,15 +71,20 @@ export class CreateBusinessUserDto implements CreateBusinessUserDtoType {
     postCode: string;
     country: string;
   }[];
+
   @ApiProperty()
   @IsOptional()
-  socialAccounts: {
-    kind: string;
-    uid?: string;
-    username?: string;
-  }[];
+  socialAccounts: { kind: string; uid?: string; username?: string }[];
+
+  @ApiProperty()
+  @IsOptional()
+  birthday: string;
 
   @ApiProperty()
   @IsOptional()
   desiredCurrencies: string[];
+
+  @ApiProperty()
+  @IsOptional()
+  locale: ConvertToDtoType<{ countryCode: string; isRTL: boolean; languageCode: string; languageTag: string }>;
 }

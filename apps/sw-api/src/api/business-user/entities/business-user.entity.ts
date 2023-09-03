@@ -1,7 +1,7 @@
 import { Schema, Prop, SchemaFactory, raw } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
 import { Document, Types } from "mongoose";
-import { BusinessUserType } from "@shortwaits/shared-lib";
+import { BusinessUserType, WeekHoursType } from "@shortwaits/shared-lib";
 
 @Schema({ collection: "business-users" })
 export class BusinessUser extends Document implements BusinessUserType {
@@ -11,34 +11,75 @@ export class BusinessUser extends Document implements BusinessUserType {
 
   @ApiProperty()
   @Prop()
+  password: string;
+
+  @ApiProperty()
+  @Prop()
+  isPasswordProtected: boolean;
+
+  @ApiProperty()
+  @Prop()
+  businesses: Types.ObjectId[];
+
+  @ApiProperty()
+  @Prop()
+  isDisabled: boolean;
+
+  @ApiProperty()
+  @Prop()
+  isStaff: boolean;
+
+  @ApiProperty()
+  @Prop()
+  createdByBusinessId: Types.ObjectId;
+
+  @ApiProperty()
+  @Prop({ default: false })
+  deleted: boolean;
+
+  @ApiProperty()
+  @Prop()
+  preferredAlias: "username" | "displayName";
+
+  @ApiProperty()
+  @Prop()
+  username: string;
+
+  @ApiProperty()
+  @Prop()
+  email: string;
+
+  @ApiProperty()
+  @Prop()
+  isEmailVerified: boolean;
+
+  @ApiProperty()
+  @Prop(
+    raw({
+      mon: [],
+      tue: [],
+      wed: [],
+      thu: [],
+      fri: [],
+      sat: [],
+      sun: [],
+    })
+  )
+  hours: WeekHoursType;
+
+  @ApiProperty()
+  @Prop()
   displayName: string;
 
   @ApiProperty()
   @Prop()
   familyName: string;
-
-  @ApiProperty()
-  @Prop()
   givenName: string;
-
-  @ApiProperty()
-  @Prop()
   middleName: string;
-
-  @ApiProperty()
-  @Prop()
-  phoneNumbers: {
-    label: string;
-    number: string;
-  }[];
-
-  @ApiProperty()
-  @Prop()
-  imAddresses: {
-    username: string;
-    service: string;
-  }[];
-
+  accountImageUrl: string;
+  primaryPhoneNumberLabel: string;
+  phoneNumbers: { label: string; number: string }[];
+  imAddresses: { username: string; service: string }[];
   @ApiProperty()
   @Prop()
   addresses: {
@@ -51,90 +92,11 @@ export class BusinessUser extends Document implements BusinessUserType {
     postCode: string;
     country: string;
   }[];
+  socialAccounts: { kind: string; uid?: string; username?: string }[];
 
   @ApiProperty()
-  @Prop(
-    raw({
-      year: { type: Number },
-      month: { type: Number },
-      day: { type: Number },
-    })
-  )
+  @Prop()
   birthday: string;
-
-  @ApiProperty()
-  @Prop()
-  businesses: Types.ObjectId[];
-
-  @ApiProperty()
-  @Prop()
-  alias: "familyName" | "givenName" | "middleName" | "displayName";
-
-  @ApiProperty()
-  @Prop()
-  customAlias: string;
-
-  @ApiProperty()
-  @Prop({ unique: true, trim: true, required: true })
-  username: string;
-
-  @ApiProperty()
-  @Prop()
-  firstName: string;
-
-  @ApiProperty()
-  @Prop()
-  lastName: string;
-
-  @ApiProperty()
-  @Prop()
-  accountImageUrl: string;
-
-  @ApiProperty()
-  @Prop(
-    raw({
-      address1: { type: String, default: "" },
-      address2: { type: String, default: "" },
-      city: { type: String, default: "" },
-      state: { type: String, default: "" },
-      zip: { type: Number, default: 0 },
-      countryCode: { type: String, default: "" },
-    })
-  )
-  address: {
-    address1: string;
-    address2: string;
-    city: string;
-    state: string;
-    zip: number;
-    countryCode: string;
-  };
-
-  @ApiProperty()
-  @Prop()
-  socialAccounts: [];
-
-  @ApiProperty()
-  @Prop(
-    raw({
-      screenName: { type: String, default: "" },
-      state: { type: Number, trim: true, default: 0 },
-      isCompleted: { type: Boolean, default: false },
-    })
-  )
-  registrationState: {
-    screenName: string;
-    state: number;
-    isCompleted: boolean;
-  };
-
-  @ApiProperty()
-  @Prop({ unique: true, trim: true, required: true })
-  email: string;
-
-  @ApiProperty()
-  @Prop()
-  password: string;
 
   @ApiProperty()
   @Prop()
@@ -149,16 +111,16 @@ export class BusinessUser extends Document implements BusinessUserType {
       languageTag: { type: String, default: "" },
     })
   )
-  locale: {
-    countryCode: string;
-    isRTL: boolean;
-    languageCode: string;
-    languageTag: string;
-  };
+  locale: { countryCode: string; isRTL: boolean; languageCode: string; languageTag: string };
 
-  @ApiProperty()
-  @Prop({ default: false })
-  deleted: boolean;
+  @Prop(
+    raw({
+      screenName: { type: String, default: "" },
+      state: { type: Number, trim: true, default: 0 },
+      isCompleted: { type: Boolean, default: false },
+    })
+  )
+  registrationState: { screenName: string; state: number; isCompleted: boolean };
 
   @ApiProperty()
   @Prop()

@@ -1,32 +1,64 @@
-import React, { FC, useMemo } from "react";
+import React, { FC, useMemo, useState } from "react";
 import { View, StyleSheet } from "react-native";
-import { BusinessWeekDaysType, WEEKDAYS } from "@shortwaits/shared-lib";
+import { BusinessWeekDaysType, WEEKDAYS, WeekDayType, WeekHoursType } from "@shortwaits/shared-lib";
 import { useDispatch } from "react-redux";
 
-import { Text, MultiSlider, Space, TimeRangeText } from "../../../components";
+import { Text, MultiSlider, Space, TimeRangeText, Button } from "../../../components";
 import { getDimensions } from "../../../theme";
 import { setBusinessDayHours, useBusiness } from "../../../store";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-interface SelectTimeRangeProps {
+export interface SelectTimeRangeProps {
   day: BusinessWeekDaysType;
+  weekHours: WeekHoursType;
+  onHourChange?: (weekHours: WeekHoursType) => void;
+  onDone?: (weekHours: WeekHoursType) => void;
 }
 const getFullDayString = (day?: string): string => {
   return day ? WEEKDAYS[day] : "";
 };
 
-export const SelectTimeRange: FC<SelectTimeRangeProps> = ({ day }) => {
-  const business = useBusiness();
-  const dispatch = useDispatch();
-  const dayHours = useMemo(
-    () => business?.hours[day][0] ?? null,
-    [business?.hours, day]
-  );
+export const SelectTimeRange: FC<SelectTimeRangeProps> = props => {
+  const { day, weekHours, onHourChange, onDone } = props;
+  const [timeRange, setTimeRange] = useState<[number, number]>([0, 0]);
 
+  const handleOnValuesChange = (values: [number, number]) => {
+    if (onHourChange) {
+      onHourChange({
+        ...weekHours,
+        [day]: [
+          {
+            isActive: weekHours[day][0]?.isActive ?? false,
+            startTime: values[0],
+            endTime: values[1],
+          },
+        ],
+      });
+    }
+    setTimeRange(values);
+  };
+
+  const handleOnDone = () => {
+    if (onDone) {
+      onDone({
+        ...weekHours,
+        [day]: [
+          {
+            isActive: weekHours[day][0]?.isActive ?? false,
+            startTime: timeRange[0],
+            endTime: timeRange[1],
+          },
+        ],
+      });
+    }
+  };
+
+  const insets = useSafeAreaInsets();
   return (
     <View
       style={{
         ...styles.container,
-        width: getDimensions(90).width,
+        paddingBottom: insets.bottom + 16,
       }}
     >
       <Space />
@@ -34,14 +66,25 @@ export const SelectTimeRange: FC<SelectTimeRangeProps> = ({ day }) => {
       <Space />
       <TimeRangeText
         preset="title"
-        startTime={dayHours?.startTime ?? 0}
-        endTime={dayHours?.endTime ?? 0}
+        startTime={weekHours[day][0]?.startTime ?? 0}
+        endTime={weekHours[day][0]?.endTime ?? 0}
+      />
+      <Space size="large" />
+      <MultiSlider
+        values={[weekHours[day][0]?.startTime ?? 0, weekHours[day][0]?.endTime ?? 0]}
+        onValuesChange={(values: [number, number]) => {
+          handleOnValuesChange(values);
+        }}
       />
       <Space size="small" />
-      <MultiSlider
-        values={[dayHours?.startTime ?? 0, dayHours?.endTime ?? 0]}
-        onValuesChange={(values: [number, number]) => {
-          dispatch(setBusinessDayHours({ values, name: day }));
+      <Button
+        preset="primary"
+        style={{
+          marginTop: "auto",
+        }}
+        text="Save"
+        onPress={() => {
+          handleOnDone();
         }}
       />
     </View>
@@ -50,8 +93,9 @@ export const SelectTimeRange: FC<SelectTimeRangeProps> = ({ day }) => {
 
 const styles = StyleSheet.create({
   container: {
-    alignSelf: "center",
+    flex: 1,
+    paddingHorizontal: 16,
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-start",
   },
 });

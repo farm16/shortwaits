@@ -12,7 +12,7 @@
     "admin:ios": "nx run-ios sw-mobile-admin --install",
     "admin:android": "nx run-android sw-mobile-admin",
     "api": "nx serve sw-api",
-    "api:seed": "npm run nx run sw-api:seed --configuration=default-data",
+    "api:seed": "nx run sw-api:seed --configuration=default-data",
     "generate-keypair": "ts-node ./src/scripts/create-key-pair",
     "all": "nx run-many --target=serve --projects=sw-mobile-admin,sw-api --parallel=2",
     "build:api": "npm run build:shared-lib && npm run build:api:prod",

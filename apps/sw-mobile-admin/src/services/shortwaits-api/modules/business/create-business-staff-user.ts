@@ -1,9 +1,9 @@
-import { CreateBusinessUserDtoType, BusinessUserResponseType, endpoints } from "@shortwaits/shared-lib";
+import { BusinessUserResponseType, endpoints, CreateBusinessUsersDtoType } from "@shortwaits/shared-lib";
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
 
 type RequestType = {
   businessId: string;
-  body: CreateBusinessUserDtoType;
+  body: CreateBusinessUsersDtoType;
 };
 
 //business User === Staff

@@ -26,9 +26,8 @@ export const getFilteredClientUser = (createCustomerDto: CreateClientUserDto) =>
 
 export const getFilteredBusinessUser = (createCustomerDto: CreateBusinessUserDto) => {
   const filteredBusinessUser = {
-    clientType: createCustomerDto?.clientType,
     username: createCustomerDto?.username,
-    alias: createCustomerDto?.alias,
+    preferredAlias: createCustomerDto?.preferredAlias,
     displayName: createCustomerDto?.displayName,
     familyName: createCustomerDto?.familyName,
     givenName: createCustomerDto?.givenName,

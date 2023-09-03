@@ -28,7 +28,7 @@ export const AddStaffModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
 
   const business = useBusiness();
 
-  const [createBusinessClients, createBusinessClientsStatus] = useCreateBusinessStaffMutation();
+  const [createBusinessStaff, createBusinessStaffStatus] = useCreateBusinessStaffMutation();
 
   const initialValues = useMemo(() => {
     const _initialValues: CreateBusinessUserDtoType = {
@@ -79,9 +79,10 @@ export const AddStaffModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
         },
       ],
       birthday: new Date().toISOString(),
+      hours: business?.hours,
     };
     return _initialValues;
-  }, []);
+  }, [business?.hours]);
 
   const {
     touched,
@@ -101,9 +102,9 @@ export const AddStaffModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
         if (onSubmit) {
           onSubmit<"addStaff">(formData);
         } else {
-          createBusinessClients({
+          createBusinessStaff({
             businessId: business._id,
-            body: formData,
+            body: [formData],
           });
         }
       },
@@ -122,10 +123,10 @@ export const AddStaffModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
   }, [closeOnSubmit, handleSubmit, navigation]);
 
   useEffect(() => {
-    if (createBusinessClientsStatus.isSuccess && closeOnSubmit) {
+    if (createBusinessStaffStatus.isSuccess && closeOnSubmit) {
       navigation.goBack();
     }
-  }, [closeOnSubmit, createBusinessClientsStatus.isSuccess, navigation]);
+  }, [closeOnSubmit, createBusinessStaffStatus.isSuccess, navigation]);
 
   useEffect(() => {
     const cleanup = async () => {
@@ -142,8 +143,8 @@ export const AddStaffModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
     };
   }, []);
 
-  if (createBusinessClientsStatus.isError) {
-    Alert.alert("Error", createBusinessClientsStatus.error.message);
+  if (createBusinessStaffStatus.isError) {
+    Alert.alert("Error", createBusinessStaffStatus.error.message);
   }
 
   const _renderSubmitButton = (
@@ -155,7 +156,7 @@ export const AddStaffModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
     />
   );
 
-  return createBusinessClientsStatus.isLoading ? (
+  return createBusinessStaffStatus.isLoading ? (
     <ActivityIndicator />
   ) : (
     <FormContainer footer={_renderSubmitButton}>
@@ -195,12 +196,16 @@ export const AddStaffModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
       />
       <ButtonCard
         title="Schedule"
-        subTitle={getPrettyStringFromHours(business?.hours)}
+        subTitle={getPrettyStringFromHours(values.hours)}
         onPress={() =>
           navigation.navigate("modals", {
             screen: "schedule-modal-screen",
             params: {
-              type: "My-Business-Hours",
+              hours: values.hours,
+              onSubmit: (hours: CreateBusinessUserDtoType["hours"]) => {
+                console.log("hours", hours);
+                setFieldValue("hours", hours);
+              },
             },
           })
         }

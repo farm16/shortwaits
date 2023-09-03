@@ -170,14 +170,14 @@ const _circleIcons = {
   },
   "open-business": {
     name: "door-open",
-    color: "brandSecondary",
+    color: "green",
     backgroundColor: undefined,
     size: 25,
   },
   "closed-business": {
     name: "door-closed-lock",
     backgroundColor: undefined,
-    color: "brandPrimary",
+    color: "red",
     size: 25,
   },
   "account-cancel": {

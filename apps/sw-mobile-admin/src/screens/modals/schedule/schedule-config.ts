@@ -1,10 +1,18 @@
-import { ScheduleConfigs } from "./schedule-types";
+import { ScheduleModalModeType } from "../../../navigation";
 
-export const scheduleConfigs: ScheduleConfigs = {
+export const scheduleConfigs: Record<
+  ScheduleModalModeType,
+  {
+    headerTitle: string;
+  }
+> = {
   "My-Business-Hours": {
     headerTitle: "Business Hours",
   },
-  "User-Hours": {
+  "Business-User-Hours": {
+    headerTitle: "User Schedule",
+  },
+  "Client-User-Hours": {
     headerTitle: "User Schedule",
   },
 };
