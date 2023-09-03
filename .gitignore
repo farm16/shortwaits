@@ -109,3 +109,5 @@ yarn-error.log
 
 apps/sw-mobile-admin/android/gradle/wrapper
 apps/sw-mobile-admin/ios/Pods
+
+swagger.json
