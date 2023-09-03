@@ -23,7 +23,8 @@
     "clean": "sh ./scripts/clean.sh",
     "deploy:dev": "npm install && npm run build:api && npm run start",
     "deploy:prod": "npm install && npm run build:api:prod && npm run start:prod",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "push:main": "git push --follow-tags origin main"
   },
   "dependencies": {
     "@gorhom/bottom-sheet": "4.4.7",
