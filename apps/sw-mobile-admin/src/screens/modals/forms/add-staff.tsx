@@ -20,7 +20,7 @@ import {
   ButtonCard,
 } from "../../../components";
 import { ModalsScreenProps } from "../../../navigation";
-import { getCapitalizedString } from "../../../utils";
+import { STATIC_FORM_USA_STATES, getCapitalizedString } from "../../../utils";
 import { getPrettyStringFromHours } from "../../../utils/time";
 
 export const AddStaffModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navigation, route }) => {
@@ -83,24 +83,33 @@ export const AddStaffModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
     return _initialValues;
   }, []);
 
-  const { touched, errors, values, validateField, setFieldTouched, handleChange, handleSubmit, setFieldError } =
-    useForm(
-      {
-        initialValues,
-        onSubmit: formData => {
-          console.log("formData", formData);
-          if (onSubmit) {
-            onSubmit<"addStaff">(formData);
-          } else {
-            createBusinessClients({
-              businessId: business._id,
-              body: formData,
-            });
-          }
-        },
+  const {
+    touched,
+    errors,
+    values,
+    setFieldValue,
+    validateField,
+    setFieldTouched,
+    handleChange,
+    handleSubmit,
+    setFieldError,
+  } = useForm(
+    {
+      initialValues,
+      onSubmit: formData => {
+        console.log("formData", formData);
+        if (onSubmit) {
+          onSubmit<"addStaff">(formData);
+        } else {
+          createBusinessClients({
+            businessId: business._id,
+            body: formData,
+          });
+        }
       },
-      "addStaff"
-    );
+    },
+    "addStaff"
+  );
 
   console.log("errors", errors);
   console.log("touched", touched);
@@ -290,15 +299,29 @@ export const AddStaffModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
               : ""
           }
         />
-        <TextFieldCard
-          title={"State"}
-          value={values.addresses[0].state}
-          onChangeText={handleChange("addresses[0].state")}
+        <ButtonCard
+          title="State"
+          subTitle={
+            STATIC_FORM_USA_STATES.find(state => state.key === values.addresses[0].state)?.title ?? "Select State"
+          }
           isTouched={touched?.addresses ? touched.addresses[0]?.state ?? false : false}
           errors={
             errors.addresses
               ? (errors.addresses[0] as FormikErrors<ClientUserType["addresses"][number]>)?.state ?? ""
               : ""
+          }
+          onPress={() =>
+            navigation.navigate("modals", {
+              screen: "selector-modal-screen",
+              params: {
+                type: "static",
+                data: STATIC_FORM_USA_STATES,
+                closeOnSubmit: true,
+                onSelect: state => {
+                  setFieldValue("addresses[0].state", state.key);
+                },
+              },
+            })
           }
         />
         <TextFieldCard

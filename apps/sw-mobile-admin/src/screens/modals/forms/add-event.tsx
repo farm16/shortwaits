@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { ActivityIndicator } from "react-native-paper";
 import { Alert } from "react-native";
+import { FormikErrors } from "formik";
 
 import { useForm } from "../../../hooks";
 import { useBusiness, useServices, useUser } from "../../../store";
@@ -17,15 +18,8 @@ import {
   ExpandableSection,
 } from "../../../components";
 import { ModalsScreenProps } from "../../../navigation";
-import {
-  BusinessLabelType,
-  BusinessLabelsType,
-  CreateEventDtoType,
-  ServiceDtoType,
-  eventPaymentMethods,
-} from "@shortwaits/shared-lib";
+import { CreateEventDtoType, ServiceDtoType, eventPaymentMethods } from "@shortwaits/shared-lib";
 import { useCreateEventMutation } from "../../../services";
-import { FormikErrors } from "formik";
 import { getEmojiString } from "../../../utils";
 
 export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navigation, route }) => {
@@ -43,10 +37,10 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
     const startTime = new Date(formData.startTime);
     const expectedEndTime = new Date(formData.expectedEndTime);
 
-    if (startTime && expectedEndTime) {
+    if (startTime && expectedEndTime && !formData?.hasNoDuration) {
       if (startTime > expectedEndTime) {
-        errors.startTime = "Start date must not be after the end date.";
-        errors.expectedEndTime = "End date must not be before the start date.";
+        errors.startTime = "Start date should not exceed the end date.";
+        errors.expectedEndTime = "End date should not precede the start date.";
       }
     }
 
@@ -107,8 +101,6 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
     "createEvent"
   );
 
-  console.log(errors);
-
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
@@ -149,19 +141,6 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
       }}
     />
   );
-
-  const getIsLabelInArray = (arrayOfLabels: BusinessLabelsType, labelToCheck: BusinessLabelType): boolean => {
-    return arrayOfLabels.some(_label => {
-      return (
-        _label.name === labelToCheck.name &&
-        _label.description === labelToCheck.description &&
-        _label.isFavorite === labelToCheck.isFavorite &&
-        _label.emojiShortName === labelToCheck.emojiShortName
-      );
-    });
-  };
-
-  console.log("values.labels", values.labels);
 
   const emojis = values.labels.map(label => getEmojiString(label.emojiShortName)).join(" ");
 
@@ -284,9 +263,7 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
                 data: values.labels,
                 multiple: true,
                 onGoBack: labels => {
-                  if (labels.length > 0) {
-                    setFieldValue("labels", labels);
-                  }
+                  setFieldValue("labels", labels);
                 },
               },
             })

@@ -1,21 +1,15 @@
-import {
-  Injectable,
-  NestInterceptor,
-  ExecutionContext,
-  CallHandler,
-} from "@nestjs/common";
+import { Injectable, NestInterceptor, ExecutionContext, CallHandler } from "@nestjs/common";
 import { CommonResponseType } from "@shortwaits/shared-lib";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
+import { ConfigService } from "@nestjs/config";
+import { version as appVersion } from "package.json";
 
 @Injectable()
-export class TransformInterceptor<T>
-  implements NestInterceptor<T, CommonResponseType<T>>
-{
-  intercept(
-    context: ExecutionContext,
-    next: CallHandler
-  ): Observable<CommonResponseType<T>> {
+export class TransformInterceptor<T> implements NestInterceptor<T, CommonResponseType<T>> {
+  constructor(private configService: ConfigService) {}
+
+  intercept(context: ExecutionContext, next: CallHandler): Observable<CommonResponseType<T>> {
     return next.handle().pipe(
       map(payload => {
         let meta = null;
@@ -45,6 +39,10 @@ export class TransformInterceptor<T>
             message,
             errorCode,
           };
+        }
+
+        if (appVersion) {
+          context.switchToHttp().getResponse().header("X-App-Version", appVersion);
         }
 
         return {

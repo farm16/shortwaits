@@ -79,6 +79,7 @@ export const PhoneNumberCard = (props: PhoneNumberProps) => {
             onChangeText(phoneNumber.current?.getValue());
           }}
           textStyle={textFieldPresets.cardSubtitle}
+          autoFormat={true}
           initialCountry={"us"}
           //   initialValue={initialValue}
           textProps={{
