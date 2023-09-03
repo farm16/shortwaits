@@ -18,6 +18,9 @@ import {
   UpdateEventDtoType,
   CreateBusinessUserDtoType,
   CreateClientUserDtoType,
+  BusinessUserDtoType,
+  ClientUserDtoType,
+  BusinessDtoType,
 } from "@shortwaits/shared-lib";
 import { ThemeColorName } from "../theme/Colors";
 
@@ -85,7 +88,15 @@ export type AuthorizedStackParamList = {
   [AUTHORIZED_STACK_SCREENS.EVENT_SCREEN]: {
     event: EventDtoType;
   };
-  [AUTHORIZED_STACK_SCREENS.PLANS_SCREEN]: undefined;
+  [AUTHORIZED_STACK_SCREENS.PLANS_SCREEN]: {
+    business?: BusinessDtoType;
+  };
+  [AUTHORIZED_STACK_SCREENS.BUSINESS_CLIENT_SCREEN]: {
+    client: ClientUserDtoType;
+  };
+  [AUTHORIZED_STACK_SCREENS.BUSINESS_STAFF_SCREEN]: {
+    staff: BusinessUserDtoType;
+  };
 };
 
 export type UnauthorizedStackParamList = {

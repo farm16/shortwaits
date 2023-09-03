@@ -76,12 +76,12 @@ export const customColors = {
   background: "#ffffff",
   backgroundOverlay: "#F8FAFC", //rgb(245, 245, 245) #e5e5e5
   white: "#ffffff",
-  black: "#26242b",
+  black: "#202020",
 
   //grays
-  lightGray: "rgb(239,239,239)",
-  gray: "rgb(200,200,200)",
-  darkGray: "rgb(50,50,50)",
+  lightGray: "rgb(241,241,241)",
+  gray: "rgb(226,226,226)",
+  darkGray: "rgb(141,141,141)",
 
   text: "rgb(77, 77, 77)",
   subText: "rgba(77, 77, 77,0.60)",

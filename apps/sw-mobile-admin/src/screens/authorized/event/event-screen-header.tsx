@@ -4,7 +4,11 @@ import { Container, Emoji, Space, Text } from "../../../components";
 import { BusinessLabelsType, EventDtoType } from "@shortwaits/shared-lib";
 import { useTheme } from "../../../theme";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { statusDisplayMessages, statusDisplayMessagesColor } from "../../../utils/status-color";
+import {
+  statusDisplayMessages,
+  statusDisplayMessagesBackgroundColor,
+  statusDisplayMessagesColor,
+} from "../../../utils/status-color";
 import {
   getPrettyStringFromPriceWithSymbol,
   getPrettyDateFromISO,
@@ -49,7 +53,7 @@ function InfoItem({ title, value, onPress, iconName }: InfoItemProps) {
           style={{
             color: Colors.disabledText,
             fontWeight: "500",
-            fontSize: 16,
+            fontSize: 14,
             marginLeft: 6,
           }}
         >
@@ -64,19 +68,33 @@ function InfoItem({ title, value, onPress, iconName }: InfoItemProps) {
             : (value as BusinessLabelsType).map(label => <Emoji size={14} name={label.emojiShortName} />)}
         </Container>
       ) : (
-        <Text
-          preset="text"
-          style={[
-            {
-              fontWeight: title === "Status" ? "700" : "500",
-              fontSize: 16,
-              textTransform: title === "Status" ? "uppercase" : undefined,
-              color: title === "Status" ? statusDisplayMessagesColor[value as string] : Colors.text,
-            },
-          ]}
+        <View
+          style={
+            title === "Status"
+              ? {
+                  backgroundColor: statusDisplayMessagesBackgroundColor[value as string],
+                  paddingHorizontal: 10,
+                  paddingVertical: 5,
+                  borderRadius: 5,
+                  alignSelf: "flex-start",
+                }
+              : undefined
+          }
         >
-          {title === "Status" ? statusDisplayMessages[value as string] : truncated(value as string, 20)}
-        </Text>
+          <Text
+            preset="text"
+            style={[
+              {
+                fontWeight: "500",
+                fontSize: 14,
+                textTransform: title === "Status" ? "capitalize" : undefined,
+                color: title === "Status" ? statusDisplayMessagesColor[value as string] : Colors.text,
+              },
+            ]}
+          >
+            {title === "Status" ? statusDisplayMessages[value as string] : truncated(value as string, 20)}
+          </Text>
+        </View>
       )}
     </Pressable>
   );
@@ -98,15 +116,16 @@ export function EventScreenHeader({ event }: { event: EventDtoType }) {
   return (
     <View style={styles.root}>
       <Container direction="row">
-        {event?.description ? (
-          <InfoItem onPress={handlePress} title="Description" iconName="description" value={event.description} />
-        ) : null}
         {currentService?.name ? (
           <InfoItem onPress={handlePress} title="Service" iconName="service" value={currentService?.name ?? ""} />
+        ) : null}
+        {event?.description ? (
+          <InfoItem onPress={handlePress} title="Description" iconName="description" value={event.description} />
         ) : null}
       </Container>
 
       <Space direction="horizontal" size="tiny" extra={8} />
+
       <Container direction="row">
         <InfoItem onPress={handlePress} title="Status" iconName="status" value={event.status.statusName ?? ""} />
         <InfoItem
@@ -116,7 +135,7 @@ export function EventScreenHeader({ event }: { event: EventDtoType }) {
           value={getPrettyStringFromPriceWithSymbol("USD", event?.priceExpected ?? 0)}
         />
       </Container>
-      <Space direction="horizontal" size="small" />
+      <Space direction="horizontal" size="tiny" />
       <Container direction="row">
         <InfoItem onPress={handlePress} title="Date" iconName="date" value={getPrettyDateFromISO(event?.startTime)} />
         <InfoItem
@@ -126,10 +145,17 @@ export function EventScreenHeader({ event }: { event: EventDtoType }) {
           value={getPrettyTimeRangeFromISO(event?.startTime, event?.expectedEndTime)}
         />
       </Container>
-      <Space direction="horizontal" size="small" />
+      {event?.notes && event?.labels && event?.labels.length > 0 ? <Space direction="horizontal" size="tiny" /> : null}
       <Container direction="row">
-        <InfoItem onPress={handlePress} title="Notes" iconName="notes" value={truncate(event?.notes, { length: 30 })} />
-        {event?.labels ? (
+        {event?.notes ? (
+          <InfoItem
+            onPress={handlePress}
+            title="Notes"
+            iconName="notes"
+            value={truncate(event?.notes, { length: 30 })}
+          />
+        ) : null}
+        {event?.labels && event?.labels.length > 0 ? (
           <InfoItem onPress={handlePress} title="Labels" iconName="labels" value={event?.labels} />
         ) : null}
       </Container>

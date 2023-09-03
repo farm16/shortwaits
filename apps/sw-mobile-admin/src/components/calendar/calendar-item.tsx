@@ -10,15 +10,12 @@ import { useService } from "../../store";
 import { RectButton } from "react-native-gesture-handler";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import { navigate } from "../../navigation";
-import { statusDisplayMessages, statusDisplayMessagesColor } from "../../utils/status-color";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import {
-  CALENDAR_EVENT_HEIGHT,
-  EVENT_ITEM_BORDER_RADIUS,
-  eventStatusColors,
-  eventStatusIconNames,
-  nextEventStatuses,
-} from "../../utils";
+  statusDisplayMessages,
+  statusDisplayMessagesBackgroundColor,
+  statusDisplayMessagesColor,
+} from "../../utils/status-color";
+import { CALENDAR_EVENT_HEIGHT, EVENT_ITEM_BORDER_RADIUS } from "../../utils";
 
 type AgendaItemProps = {
   item: EventDtoType;
@@ -28,7 +25,6 @@ export const AgendaItem = (props: AgendaItemProps) => {
   const { item } = props;
   const { Colors } = useTheme();
   const service = useService(item?.serviceId ?? "");
-  const eventState = item?.status?.statusName ?? "";
 
   const handleOnPress = useCallback(() => {
     navigate("authorized-stack", {
@@ -98,23 +94,30 @@ export const AgendaItem = (props: AgendaItemProps) => {
           text={truncate(item?.name ?? "", { length: 21, separator: "." })}
         />
         <Container direction="row">
-          <Text style={[styles.eventNameRow2, { color: Colors.subText }]} preset="none" text={"status: "} />
-          <Text
-            style={[
-              styles.eventNameRow2,
-              {
-                color: statusDisplayMessagesColor[item.status.statusName],
-                textTransform: "uppercase",
-                fontWeight: "600",
-              },
-            ]}
-            preset={"none"}
-            text={item.status?.statusName ? statusDisplayMessages[item.status.statusName] : ""}
-          />
+          {/* <Text style={[styles.eventNameRow2, { color: Colors.subText }]} preset="none" text={"status: "} /> */}
+          <View
+            style={{
+              backgroundColor: statusDisplayMessagesBackgroundColor[item.status.statusName],
+              paddingHorizontal: 8,
+              paddingVertical: 3,
+              borderRadius: 5,
+            }}
+          >
+            <Text
+              style={[
+                styles.eventNameRow2,
+                {
+                  color: statusDisplayMessagesColor[item.status.statusName],
+                },
+              ]}
+              preset={"none"}
+              text={item.status?.statusName ? statusDisplayMessages[item.status.statusName] : ""}
+            />
+          </View>
         </Container>
       </View>
     ),
-    [Colors.subText, Colors.text, item.labels, item?.name, item.status.statusName]
+    [Colors.text, item?.labels, item?.name, item.status?.statusName]
   );
 
   const eventClientImage = useCallback(() => {
@@ -197,8 +200,9 @@ const styles = StyleSheet.create({
     textTransform: "capitalize",
   },
   eventNameRow2: {
-    fontSize: 13.5,
-    fontWeight: "400",
+    fontSize: 14,
+    fontWeight: "500",
+    textTransform: "capitalize",
   },
   eventClientImage: {
     height: "100%",

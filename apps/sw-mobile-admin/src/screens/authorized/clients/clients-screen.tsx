@@ -1,5 +1,8 @@
 import React, { FC, useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { Alert, ListRenderItem, RefreshControl, View } from "react-native";
+import { isEmpty } from "lodash";
+import { ActivityIndicator } from "react-native-paper";
+import { ClientUserDtoType } from "@shortwaits/shared-lib";
 import {
   Button,
   ButtonCard,
@@ -11,20 +14,14 @@ import {
   Text,
   AnimatedSearchBar,
 } from "../../../components";
-import { useTheme } from "../../../theme";
 import { useBusiness, useClients, useShowGhostComponent } from "../../../store";
 import { useCreateBusinessClientsMutation, useGetBusinessClientsQuery } from "../../../services";
 import { AuthorizedScreenProps } from "../../../navigation";
-import { ActivityIndicator } from "react-native-paper";
-import { ClientUserDtoType } from "@shortwaits/shared-lib";
-import { isEmpty } from "lodash";
 import { useOsContacts } from "../../../hooks";
 
 export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({ navigation }) => {
   useShowGhostComponent("floatingActionButton");
-  const { Colors } = useTheme();
   const currentClients = useClients();
-  console.log("currentClients", currentClients.length);
   const { error: osContactsError, isLoading: isOsContactsLoading, getContacts: getOsContacts } = useOsContacts();
   const business = useBusiness();
   const {
@@ -99,7 +96,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({ navi
                 setIsListSearchable(s => !s);
               }}
             />
-            <IconButton iconType="add" withMarginRight onPress={() => handleAddClient()} />
+            {/* <IconButton iconType="add" withMarginRight onPress={() => handleAddClient()} /> */}
           </Container>
         );
       },
@@ -107,7 +104,15 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({ navi
   }, [handleAddClient, handleSyncContacts, isListSearchable, isLoading, navigation]);
 
   const _renderItem: ListRenderItem<ClientUserDtoType> = ({ item }) => (
-    <ButtonCard title={item[item.alias ?? "displayName"]} subTitle={item.email} />
+    <ButtonCard
+      title={item[item.alias ?? "displayName"]}
+      subTitle={item.email}
+      onPress={() => {
+        navigation.navigate("authorized-stack", {
+          screen: "business-client-screen",
+        });
+      }}
+    />
   );
 
   useEffect(() => {
@@ -142,33 +147,30 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({ navi
   return isLoading ? (
     <ActivityIndicator />
   ) : (
-    <>
+    <Screen preset="fixed" unsafe withHorizontalPadding backgroundColor="backgroundOverlay">
       <AnimatedSearchBar onChangeText={handleOnChangeText} isVisible={isListSearchable} />
-      <Screen preset="fixed" unsafe withHorizontalPadding>
-        <List
-          refreshControl={
-            <RefreshControl refreshing={isBusinessClientsQueryLoading} onRefresh={refetchBusinessClientsQuery} />
-          }
-          ListEmptyComponent={
-            <View
-              style={{
-                marginTop: 16,
-                padding: 16,
-              }}
-            >
-              {isEmpty(currentClients) ? (
-                <NonIdealState
-                  image={"noClients"}
-                  buttons={[<Button text="Add Client" onPress={() => handleAddClient()} />]}
-                />
-              ) : null}
-            </View>
-          }
-          // style={{ backgroundColor: "red" }}
-          renderItem={_renderItem}
-          data={filteredClientsData}
-        />
-      </Screen>
-    </>
+      <List
+        refreshControl={
+          <RefreshControl refreshing={isBusinessClientsQueryLoading} onRefresh={refetchBusinessClientsQuery} />
+        }
+        ListEmptyComponent={
+          <View
+            style={{
+              marginTop: 16,
+              padding: 16,
+            }}
+          >
+            {isEmpty(currentClients) ? (
+              <NonIdealState
+                image={"noClients"}
+                buttons={[<Button text="Add Client" onPress={() => handleAddClient()} />]}
+              />
+            ) : null}
+          </View>
+        }
+        renderItem={_renderItem}
+        data={filteredClientsData}
+      />
+    </Screen>
   );
 };

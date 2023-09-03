@@ -19,11 +19,11 @@ export const eventStatusIconNames: Record<EventStatusName, string> = {
 };
 
 export const eventStatusColors: Record<EventStatusName, { color: ThemeColorName; backgroundColor: ThemeColorName }> = {
-  PENDING: { color: "text", backgroundColor: "brandAccent" },
-  APPROVED: { color: "green3", backgroundColor: "brandAccent" },
-  REJECTED: { color: "red3", backgroundColor: "brandAccent" },
+  PENDING: { color: "text", backgroundColor: "black" },
+  APPROVED: { color: "green3", backgroundColor: "black" },
+  REJECTED: { color: "red3", backgroundColor: "black" },
   CANCELED: { color: "white", backgroundColor: "red3" },
-  COMPLETED: { color: "green3", backgroundColor: "brandAccent" },
+  COMPLETED: { color: "green3", backgroundColor: "black" },
 };
 
 export const eventStatusNames: Record<EventStatusName, string> = {

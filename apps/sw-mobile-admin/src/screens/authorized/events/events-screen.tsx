@@ -8,7 +8,7 @@ import { useGetServicesByBusinessQuery } from "../../../services";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { convertStaticSelectorModalData } from "../../../utils/static-selector-modal-utils";
 
-export const EventsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({ navigation }) => {
+export function EventsScreen({ navigation }: AuthorizedScreenProps<"events-screen">) {
   const [isQrVisible, setIsQrVisible] = useState(false);
 
   const currentBusiness = useBusiness();
@@ -87,4 +87,4 @@ export const EventsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({ navig
       <Calendar />
     </Screen>
   );
-};
+}

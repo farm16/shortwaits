@@ -58,7 +58,6 @@ export const Calendar: FC<CalendarProps> = memo(props => {
   }, [isEventsLoading, refetchEvents]);
 
   const initialData = useClosestDateFromAgendaData(agendaData);
-  console.log(">>>>", initialData);
 
   if (isEventsLoading) {
     return <ActivityIndicator />;
@@ -66,7 +65,7 @@ export const Calendar: FC<CalendarProps> = memo(props => {
 
   return (
     <CalendarProvider
-      date={new Date().toISOString().split("T")[0]}
+      date={initialData}
       showTodayButton={true}
       todayButtonStyle={{
         backgroundColor: Colors.brandSecondary,
@@ -91,7 +90,6 @@ export const Calendar: FC<CalendarProps> = memo(props => {
         }}
         contentContainerStyle={{
           backgroundColor: Colors.backgroundOverlay,
-          flex: 1,
         }}
         ListEmptyComponent={() => (
           <NonIdealState
