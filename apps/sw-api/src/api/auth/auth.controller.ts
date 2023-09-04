@@ -17,7 +17,7 @@ export class AuthController {
   @HttpCode(HttpStatus.CREATED)
   @ApiCreatedResponse({
     status: HttpStatus.CREATED,
-    description: "Returns new user & business record",
+    description: "Returns new business user (super Admin) & business record",
     type: AuthSuccessResponse,
   })
   async signUpLocal(@Body(new ValidationPipe()) dto: SignUpWithEmailDto) {

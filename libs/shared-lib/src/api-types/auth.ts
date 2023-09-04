@@ -1,6 +1,6 @@
 import { CommonResponseType } from "./helpers";
 
-import { BusinessDocType, BusinessDtoType, BusinessUserDtoType } from ".";
+import { BusinessDtoType, BusinessUserDtoType } from ".";
 
 export type TokenPayloadType = {
   token: string | null;
@@ -9,7 +9,7 @@ export type TokenPayloadType = {
 export type AuthPayloadType = {
   auth: TokenPayloadType;
   attributes?: {
-    currentBusinessAccounts: BusinessDocType[];
+    currentBusinessAccounts: BusinessDtoType[];
     currentUser: BusinessUserDtoType;
   };
 };

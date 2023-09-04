@@ -161,7 +161,12 @@ export const Onboarding1Screen: FC<UnauthorizedScreenProps<"onboarding-1-screen"
           navigation.navigate("modals", {
             screen: "schedule-modal-screen",
             params: {
-              type: "My-Business-Hours",
+              hours: business.hours,
+              headerTitle: "Business Hours",
+              onSubmit: hours => {
+                console.log("hours", hours);
+                dispatch(setBusiness({ hours }));
+              },
             },
           })
         }
@@ -174,7 +179,8 @@ export const Onboarding1Screen: FC<UnauthorizedScreenProps<"onboarding-1-screen"
             screen: "selector-modal-screen",
             params: {
               type: "staff",
-              onSelect: (staff: any) => {
+              closeOnSelect: false,
+              onSelect: staff => {
                 console.log("staff", staff);
               },
             },

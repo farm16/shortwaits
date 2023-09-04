@@ -63,6 +63,9 @@ export const Calendar: FC<CalendarProps> = memo(props => {
     return <ActivityIndicator />;
   }
 
+  console.log("initialData", initialData);
+  console.log("agendaData", agendaData);
+
   return (
     <CalendarProvider
       date={initialData}

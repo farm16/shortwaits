@@ -2,7 +2,6 @@ import { isEmpty } from "lodash";
 import { intervalToDuration, formatDuration } from "date-fns";
 import { EventsDtoType } from "@shortwaits/shared-lib";
 import { useMemo } from "react";
-import { today } from "xdate";
 
 export function milliSecondsToDuration(milliSeconds: number): Duration {
   const epoch = new Date(0);
@@ -74,8 +73,6 @@ type agendaItems = {
 }[];
 
 export function useClosestDateFromAgendaData(data: agendaItems) {
-  // Get today's date
-
   // Find the title closest to today's date
   const closestTitle = useMemo(() => {
     const today = new Date();
@@ -94,12 +91,9 @@ export function useClosestDateFromAgendaData(data: agendaItems) {
 
     // If no upcoming event found, return today's date
     if (!closestTitle) {
-      const titleFormat = new Intl.DateTimeFormat("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      });
-      closestTitle = titleFormat.format(today);
+      const todayTitle = today.toISOString().split("T")[0];
+
+      return todayTitle;
     }
 
     return closestTitle;

@@ -66,6 +66,7 @@ export const StaticSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({
     });
     setFilteredData(filteredItems);
   };
+
   return (
     <>
       <AnimatedSearchBar onChangeText={handleOnChangeText} isVisible={isListSearchable} />

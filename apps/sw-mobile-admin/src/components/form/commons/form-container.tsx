@@ -9,11 +9,22 @@ type FormContainerProps = {
   footer?: ReactElement;
 } & ScreenProps;
 
-export const FormContainer = ({ children, footer, ...rest }: FormContainerProps) => {
+export const FormContainer = (props: FormContainerProps) => {
+  const { children, footer, preset = "scroll", ...rest } = props;
   const clonedFooter = footer ? React.cloneElement(footer) : null;
 
   const { Colors } = useTheme();
   const backgroundColor = Colors.backgroundOverlay;
+
+  if (preset === "fixed") {
+    return (
+      <Screen preset="fixed" unsafe {...rest}>
+        <Space size="tiny" />
+        <View style={styles.fixedView}>{children}</View>
+        {clonedFooter ? <View style={[styles.footer, { backgroundColor }]}>{clonedFooter}</View> : null}
+      </Screen>
+    );
+  }
 
   return (
     <Screen preset="fixed" unsafe {...rest}>
@@ -26,6 +37,10 @@ export const FormContainer = ({ children, footer, ...rest }: FormContainerProps)
 
 const styles = StyleSheet.create({
   root: {},
+  fixedView: {
+    flex: 1,
+    paddingHorizontal: 16,
+  },
   scrollView: {
     paddingHorizontal: 16,
   },

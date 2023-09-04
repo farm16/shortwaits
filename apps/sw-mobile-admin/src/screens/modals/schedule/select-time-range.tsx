@@ -1,11 +1,8 @@
-import React, { FC, useMemo, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { View, StyleSheet } from "react-native";
-import { BusinessWeekDaysType, WEEKDAYS, WeekDayType, WeekHoursType } from "@shortwaits/shared-lib";
-import { useDispatch } from "react-redux";
+import { BusinessWeekDaysType, WEEKDAYS, WeekHoursType } from "@shortwaits/shared-lib";
 
 import { Text, MultiSlider, Space, TimeRangeText, Button } from "../../../components";
-import { getDimensions } from "../../../theme";
-import { setBusinessDayHours, useBusiness } from "../../../store";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export interface SelectTimeRangeProps {
@@ -13,14 +10,19 @@ export interface SelectTimeRangeProps {
   weekHours: WeekHoursType;
   onHourChange?: (weekHours: WeekHoursType) => void;
   onDone?: (weekHours: WeekHoursType) => void;
+  onCancel?: () => void;
 }
 const getFullDayString = (day?: string): string => {
   return day ? WEEKDAYS[day] : "";
 };
 
 export const SelectTimeRange: FC<SelectTimeRangeProps> = props => {
-  const { day, weekHours, onHourChange, onDone } = props;
+  const { day, weekHours, onHourChange, onDone, onCancel } = props;
   const [timeRange, setTimeRange] = useState<[number, number]>([0, 0]);
+
+  useEffect(() => {
+    setTimeRange([weekHours[day][0]?.startTime ?? 0, weekHours[day][0]?.endTime ?? 0]);
+  }, [weekHours, day]);
 
   const handleOnValuesChange = (values: [number, number]) => {
     if (onHourChange) {
@@ -64,14 +66,10 @@ export const SelectTimeRange: FC<SelectTimeRangeProps> = props => {
       <Space />
       <Text text={getFullDayString(day)} preset="title2" />
       <Space />
-      <TimeRangeText
-        preset="title"
-        startTime={weekHours[day][0]?.startTime ?? 0}
-        endTime={weekHours[day][0]?.endTime ?? 0}
-      />
+      <TimeRangeText preset="title" startTime={timeRange[0]} endTime={timeRange[1]} />
       <Space size="large" />
       <MultiSlider
-        values={[weekHours[day][0]?.startTime ?? 0, weekHours[day][0]?.endTime ?? 0]}
+        values={timeRange}
         onValuesChange={(values: [number, number]) => {
           handleOnValuesChange(values);
         }}

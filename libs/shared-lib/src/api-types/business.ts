@@ -1,9 +1,7 @@
-import { BusinessType, ClientUserType, ConvertToDtoType, MethodType } from "..";
-import { CommonResponseType, DocType, GeneralSpecShape, BusinessUserDtoType, BusinessUsersDtoType } from ".";
+import { BusinessType, ClientUserType, ConvertToDtoType, MethodType, WithDbProps } from "..";
+import { CommonResponseType, GeneralSpecShape, BusinessUserDtoType, BusinessUsersDtoType } from ".";
 
-export type BusinessDtoType = ConvertToDtoType<BusinessDocType>;
-
-export type BusinessDocType = DocType<BusinessType>;
+export type BusinessDtoType = ConvertToDtoType<WithDbProps<BusinessType>>;
 
 export type BusinessResponseType = CommonResponseType<BusinessDtoType>;
 
@@ -17,6 +15,7 @@ export type UpdateBusinessDtoType = Omit<
   | "createdAt"
   | "isRegistrationCompleted"
   | "accountType"
+  | "shortId"
   | "_id"
 >;
 

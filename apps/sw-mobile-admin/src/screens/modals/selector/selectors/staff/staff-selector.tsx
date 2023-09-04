@@ -1,31 +1,29 @@
-import React, { FC, useCallback, useLayoutEffect, useMemo } from "react";
+import React, { FC, useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { FlatList, StyleSheet } from "react-native";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
+import { BusinessUsersDtoType } from "@shortwaits/shared-lib";
+import { useDispatch } from "react-redux";
 
-import { showPremiumMembershipModal, useUser } from "../../../../../store";
-import {
-  SearchBar,
-  Space,
-  IconButton,
-  LeftChevronButton,
-  Text,
-} from "../../../../../components";
+import { AnimatedSearchBar, Container, LeftChevronButton, IconButton, Text } from "../../../../../components";
 import { selectorConfigs } from "../../selector-config";
 import { StaffSelectorItem } from "./staff-selector-item";
 import { useGetBusinessStaffQuery } from "../../../../../services";
-import { useDispatch } from "react-redux";
 import { ModalsScreenProps } from "../../../../../navigation";
+import { showPremiumMembershipModal, useUser } from "../../../../../store";
 
-export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({
-  navigation,
-  route,
-}) => {
-  const type = route.params.type;
-
-  const { headerTitle, searchPlaceholder, isReadOnly } = useMemo(
-    () => selectorConfigs[type],
-    [type]
+// Utility function to filter users based on search text
+function filterBusinessUsers(searchText: string, users: BusinessUsersDtoType) {
+  return users.filter(item =>
+    ["username", "email", "displayName", "familyName", "givenName", "middleName"].some(prop =>
+      item[prop].toLowerCase().includes(searchText.toLowerCase())
+    )
   );
+}
+
+export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ navigation, route }) => {
+  const { type, searchable = true, onSelect, closeOnSelect = true } = route.params;
+
+  const { headerTitle, searchPlaceholder } = useMemo(() => selectorConfigs[type], [type]);
 
   const dispatch = useDispatch();
 
@@ -33,25 +31,7 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({
     dispatch(showPremiumMembershipModal());
   }, [dispatch]);
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerTitle: headerTitle,
-      headerLeft: () => (
-        <LeftChevronButton onPress={() => navigation.goBack()} />
-      ),
-      headerRight: () =>
-        !isReadOnly && (
-          <IconButton
-            onPress={() => handleAddStaffPress()}
-            withMarginRight
-            iconType="add-staff"
-          />
-        ),
-    });
-  }, [navigation, headerTitle, isReadOnly, handleAddStaffPress]);
-
   const user = useUser();
-
   const {
     data: payload,
     isError,
@@ -59,51 +39,87 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({
     isSuccess,
   } = useGetBusinessStaffQuery(user ? user.businesses[0] : skipToken);
 
+  const [searchText, setSearchText] = useState("");
+  const [filteredData, setFilteredData] = useState<BusinessUsersDtoType>([]);
+  const [isListSearchable, setIsListSearchable] = useState(false);
+
+  useEffect(() => {
+    if (payload.data) {
+      const initialFilteredData = filterBusinessUsers(searchText, payload.data);
+      setFilteredData(initialFilteredData);
+    }
+  }, [payload, searchText]);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: headerTitle,
+      headerLeft: () => <LeftChevronButton onPress={() => navigation.goBack()} />,
+      headerRight: () => (
+        <Container direction="row" alignItems="center">
+          {searchable ? (
+            <IconButton
+              withMarginRight
+              iconType={isListSearchable ? "search-close" : "search"}
+              onPress={() => {
+                setIsListSearchable(s => !s);
+              }}
+            />
+          ) : null}
+          <IconButton onPress={() => handleAddStaffPress()} withMarginRight iconType="add-staff" />
+        </Container>
+      ),
+    });
+  }, [handleAddStaffPress, headerTitle, isListSearchable, navigation, searchable]);
+
+  const handleOnChangeText = (text: string) => {
+    setSearchText(text);
+    const filteredItems = filterBusinessUsers(text, payload.data);
+    setFilteredData(filteredItems);
+  };
+
+  const handleOnSelect = useCallback(
+    item => {
+      if (closeOnSelect) {
+        onSelect(item);
+        navigation.goBack();
+      } else {
+        onSelect(item);
+      }
+    },
+    [closeOnSelect, navigation, onSelect]
+  );
+
   if (isError) {
     return <Text>Error</Text>;
   }
   if (isLoading) {
     return <Text>Loading...</Text>;
   }
-  if (isSuccess) {
+  if (isSuccess && payload.data) {
     return (
-      <FlatList
-        ListHeaderComponent={
-          <SearchBar
-            value={""}
-            style={styles.searchBar}
-            autoCapitalize="none"
-            placeholder={searchPlaceholder}
-            autoComplete={"off"}
-            autoCorrect={false}
-          />
-        }
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={[styles.listContainer]}
-        data={payload.data}
-        ItemSeparatorComponent={() => <Space size="small" />}
-        renderItem={({ item }) => {
-          return (
+      <>
+        <AnimatedSearchBar onChangeText={handleOnChangeText} isVisible={isListSearchable} />
+        <FlatList
+          style={styles.container}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.flatList}
+          data={filteredData}
+          renderItem={({ item }) => (
             <StaffSelectorItem
-              isSelected={false}
-              disabled={false}
               item={item}
+              onSelectItem={() => {
+                handleOnSelect(item);
+              }}
             />
-          );
-        }}
-        // keyExtractor={(item, index) => `${item.name || ""}${index}`}
-      />
+          )}
+        />
+      </>
     );
   }
 };
+
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingVertical: 15,
-    alignItems: "center",
-  },
+  container: {},
   searchBar: {},
-  listContainer: {
-    alignItems: "center",
-  },
+  flatList: {},
 });

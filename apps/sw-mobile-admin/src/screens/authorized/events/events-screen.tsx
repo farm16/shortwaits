@@ -1,4 +1,4 @@
-import React, { FC, useLayoutEffect, useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { truncate } from "lodash";
 
 import { Calendar, Screen, Text, Container, IconButton, QrModal } from "../../../components";

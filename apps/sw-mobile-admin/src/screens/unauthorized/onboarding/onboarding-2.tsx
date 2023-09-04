@@ -78,7 +78,8 @@ export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
   if (isSuccess) {
     return (
       <FormContainer
-        footer={<Button preset={"secondary"} text="COMPLETE" onPress={e => handleBusinessRegistration()} />}
+        preset="fixed"
+        footer={<Button preset={"secondary"} text="Register" onPress={e => handleBusinessRegistration()} />}
       >
         <FlatList
           ItemSeparatorComponent={() => <Space size="tiny" />}

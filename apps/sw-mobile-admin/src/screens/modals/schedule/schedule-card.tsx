@@ -4,7 +4,7 @@ import { View, StyleSheet } from "react-native";
 
 import { useTheme } from "../../../theme";
 import { Switch, Button, Container, Text, TimeRangeText } from "../../../components";
-import { BusinessWeekDaysType, WeekDayTimeRangeType, WeekDayType } from "@shortwaits/shared-lib";
+import { BusinessWeekDaysType, WeekDayType } from "@shortwaits/shared-lib";
 
 interface DayCardProps {
   day: BusinessWeekDaysType;

@@ -3,35 +3,20 @@ import { StyleSheet, View } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { CompositeNavigationProp } from "@react-navigation/native";
 
-import {
-  Button,
-  Space,
-  Text,
-  TextFieldCard,
-  ScrollView,
-  Screen,
-} from "../../../components";
+import { Button, Space, Text, TextFieldCard, ScrollView, Screen } from "../../../components";
 import { useForm } from "../../../hooks";
 import { useTheme } from "../../../theme";
-import {
-  RootStackParamList,
-  UnauthorizedStackParamList,
-} from "../../../navigation";
+import { RootStackParamList, UnauthorizedStackParamList } from "../../../navigation";
 import { useLocalSignUpMutation } from "../../../services";
 
 interface SignUpWithEmailScreenProps {
   navigation: CompositeNavigationProp<
-    StackNavigationProp<
-      UnauthorizedStackParamList,
-      "sign-up-with-email-screen"
-    >,
+    StackNavigationProp<UnauthorizedStackParamList, "sign-up-with-email-screen">,
     StackNavigationProp<RootStackParamList>
   >;
 }
 
-export const SignUpWithEmail: FC<SignUpWithEmailScreenProps> = ({
-  navigation,
-}) => {
+export const SignUpWithEmail: FC<SignUpWithEmailScreenProps> = ({ navigation }) => {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "Create new account",
@@ -43,23 +28,23 @@ export const SignUpWithEmail: FC<SignUpWithEmailScreenProps> = ({
   const [localSignUp, { isLoading }] = useLocalSignUpMutation();
   const initialValues = {
     email: "",
+    username: "",
     password: "",
     passwordConfirmation: "",
   };
-  const { touched, errors, values, handleChange, handleSubmit, dirty } =
-    useForm(
-      {
-        initialValues,
-        onSubmit: formData => {
-          localSignUp({
-            username: formData.email,
-            email: formData.email,
-            password: formData.passwordConfirmation,
-          });
-        },
+  const { touched, errors, values, handleChange, handleSubmit, dirty } = useForm(
+    {
+      initialValues,
+      onSubmit: formData => {
+        localSignUp({
+          username: formData.username,
+          email: formData.email,
+          password: formData.passwordConfirmation,
+        });
       },
-      "userLocalSignUp"
-    );
+    },
+    "userLocalSignUp"
+  );
 
   const handlePasswordVisibility = useCallback(() => {
     setIsVisible(visibility => !visibility);
@@ -70,14 +55,14 @@ export const SignUpWithEmail: FC<SignUpWithEmailScreenProps> = ({
       <Space />
       <ScrollView>
         <TextFieldCard
-          keyboardType="email-address"
+          keyboardType="default"
           autoCapitalize="none"
-          title="Email"
-          placeholder="bod_ross@shortwaits.com"
-          value={values.email}
-          onChangeText={handleChange("email")}
-          isTouched={touched.email}
-          errors={errors.email}
+          title="Email or username"
+          placeholder="bod_ross123"
+          value={values.username}
+          onChangeText={handleChange("username")}
+          isTouched={touched.username}
+          errors={errors.username}
         />
         <Space size="small" />
         <TextFieldCard
@@ -87,9 +72,7 @@ export const SignUpWithEmail: FC<SignUpWithEmailScreenProps> = ({
           value={values.password}
           rightIconOnPress={handlePasswordVisibility}
           rightIconName={isVisible ? "eye" : "eye-off"}
-          rightIconColor={
-            isVisible ? Colors.disabledText : Colors.brandSecondary
-          }
+          rightIconColor={isVisible ? Colors.disabledText : Colors.brandSecondary}
           onChangeText={handleChange("password")}
           isTouched={touched.password}
           errors={errors.password}
@@ -114,11 +97,7 @@ export const SignUpWithEmail: FC<SignUpWithEmailScreenProps> = ({
       />
       <Space />
       <View style={styles.signInRow}>
-        <Text
-          preset="subLink"
-          style={{ color: Colors.text }}
-          text="Already have an account?    "
-        />
+        <Text preset="subLink" style={{ color: Colors.text }} text="Already have an account?    " />
         <Button
           preset="subLink"
           text="Sign in"

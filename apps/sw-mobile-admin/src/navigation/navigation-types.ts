@@ -55,7 +55,9 @@ export type ModalStackParamList = {
     onGoBack?(arg0): void;
     onSelect?(arg0): void;
     searchable?: boolean;
-    closeOnSubmit?: boolean;
+    closeOnSelect?: boolean;
+    closeOnSubmit?: boolean; //use closeOnSelect instead
+    disableSelect?: boolean;
     itemRightIconName?: string;
     itemRightIconColor?: ThemeColorName;
     mode?: "update" | "create";

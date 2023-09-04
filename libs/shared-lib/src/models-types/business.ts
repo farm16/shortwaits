@@ -26,6 +26,7 @@ export enum AccountType {
 }
 
 export type BusinessType = {
+  shortId: string;
   admins: ObjectId[] /** @todo this might not always be received via the API why should it ? */;
   superAdmins: ObjectId[] /** @todo this might not always be received via the API why should it ? */;
   backgroundAdmins: ObjectId[] /** @todo this might not always be received via the API why should it ? */;

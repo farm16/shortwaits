@@ -5,7 +5,7 @@ import { ButtonCard } from "../../../../../components";
 import { SelectorItemProps } from "../../selector-types";
 
 export function StaffSelectorItem(props: SelectorItemProps<BusinessUserDtoType>) {
-  const { item } = props;
+  const { item, onSelectItem } = props;
 
-  return <ButtonCard title={item.familyName} subTitle={item.email} />;
+  return <ButtonCard onPress={() => onSelectItem(item)} title={item.username} subTitle={item.email} />;
 }

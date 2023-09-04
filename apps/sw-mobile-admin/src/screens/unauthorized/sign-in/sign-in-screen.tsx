@@ -25,7 +25,7 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
   const [localSignIn, response] = useLocalSignInMutation();
 
   const initialValues = {
-    email: "",
+    username: "",
     password: "",
   };
   const { touched, errors, values, handleChange, handleSubmit, dirty } = useForm(
@@ -33,8 +33,8 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
       initialValues,
       onSubmit: formData => {
         localSignIn({
-          email: formData.email,
           password: formData.password,
+          username: formData.username,
         });
       },
     },
@@ -89,13 +89,13 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
       </View>
       <TextFieldCard
         autoCapitalize="none"
-        keyboardType="email-address"
-        title="Email"
-        placeholder="bod_ross@shortwaits.com"
-        value={values.email}
-        onChangeText={handleChange("email")}
-        isTouched={touched.email}
-        errors={errors.email}
+        keyboardType="default"
+        title="Username"
+        placeholder="bod_ross123"
+        value={values.username}
+        onChangeText={handleChange("username")}
+        isTouched={touched.username}
+        errors={errors.username}
       />
       <Space size="small" />
       <TextFieldCard

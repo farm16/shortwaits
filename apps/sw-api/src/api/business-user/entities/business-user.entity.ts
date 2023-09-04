@@ -42,7 +42,9 @@ export class BusinessUser extends Document implements BusinessUserType {
   preferredAlias: "username" | "displayName";
 
   @ApiProperty()
-  @Prop()
+  @Prop({
+    unique: true,
+  })
   username: string;
 
   @ApiProperty()

@@ -15,6 +15,10 @@ import { ApiProperty } from "@nestjs/swagger";
 export class Business extends Document implements BusinessType {
   @ApiProperty()
   @Prop()
+  shortId: string;
+
+  @ApiProperty()
+  @Prop()
   isDisabled: boolean;
 
   @ApiProperty()
