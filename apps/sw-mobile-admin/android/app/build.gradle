@@ -1,5 +1,4 @@
 apply plugin: "com.android.application"
-apply plugin: "com.google.gms.google-services"
 apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 project.ext.vectoricons = [
   iconFontNames: [ 'MaterialIcons.ttf', 'MaterialCommunityIcons.ttf' ] // Name of the font files you want to copy
@@ -107,10 +106,14 @@ android {
           keyPassword 'android'
         }
         release {
-          storeFile file(SHORTWAITS_STORE_FILE)
-          storePassword SHORTWAITS_STORE_PASSWORD
-          keyAlias SHORTWAITS_KEY_ALIAS
-          keyPassword SHORTWAITS_KEY_PASSWORD
+          storeFile file('debug.keystore')
+          storePassword 'android'
+          keyAlias 'androiddebugkey'
+          keyPassword 'android'
+//          storeFile file(project.property("SHORTWAITS_STORE_FILE"))
+//          storePassword project.property("SHORTWAITS_STORE_PASSWORD")
+//          keyAlias project.property("SHORTWAITS_KEY_ALIAS")
+//          keyPassword project.property("SHORTWAITS_KEY_PASSWORD")
         }
     }
     buildTypes {
@@ -120,11 +123,10 @@ android {
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             proguardFile "${rootProject.projectDir}/../node_modules/detox/android/detox/proguard-rules-app.pro"
-
         }
         rc {
             initWith(buildTypes.release)
@@ -158,3 +160,4 @@ dependencies {
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
+apply plugin: "com.google.gms.google-services"

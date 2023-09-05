@@ -2,6 +2,7 @@ import { Body, Controller, HttpCode, HttpStatus, Post, Req, UseGuards, Validatio
 import { AuthService } from "./auth.service";
 import { SignUpWithEmailDto } from "./dto/sign-up-with-email.dto";
 import { SignInWithEmailDto } from "./dto/sign-in-with-email.dto";
+import { SignUpWithSocialDto } from "./dto/sign-up-with-social.dto";
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
 import { GetCurrentUser, GetCurrentUserId, Public } from "../../common/decorators/auth.decorator";
 import { AtGuard, RtGuard } from "../../common/guards";
@@ -11,6 +12,18 @@ import { AuthSuccessResponse, AuthRefreshSuccessResponse } from "./auth.interfac
 @Controller("auth")
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
+
+  @Public()
+  @Post("admin/social/sign-up")
+  @HttpCode(HttpStatus.CREATED)
+  @ApiCreatedResponse({
+    status: HttpStatus.CREATED,
+    description: "Returns new business user (super Admin) & business record",
+    type: AuthSuccessResponse,
+  })
+  async signUpSocial(@Body(new ValidationPipe()) dto: SignUpWithSocialDto) {
+    return this.authService.signUpSocial(dto);
+  }
 
   @Public()
   @Post("admin/local/sign-up")

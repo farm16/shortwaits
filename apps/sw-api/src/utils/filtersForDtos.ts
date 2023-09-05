@@ -139,3 +139,52 @@ export const getFilteredNewBusinessOwner = (ownerSignupDto: SignUpWithEmailDto):
   };
   return filteredBusinessUser;
 };
+
+export const getFilteredNewBusinessOwnerForGoogleUser = (
+  ownerSignupDto: SignUpWithEmailDto
+): ConvertToDtoType<BusinessUserType> => {
+  const filteredBusinessUser: ConvertToDtoType<BusinessUserType> = {
+    preferredAlias: "username",
+    displayName: null,
+    familyName: null,
+    givenName: null,
+    middleName: null,
+    accountImageUrl: null,
+    locale: null,
+    phoneNumbers: null,
+    imAddresses: null,
+    addresses: null,
+    socialAccounts: null,
+    desiredCurrencies: null,
+    primaryPhoneNumberLabel: null,
+    birthday: null,
+    hours: null,
+
+    // require
+    username: ownerSignupDto?.username,
+    email: ownerSignupDto?.email,
+    isEmailVerified: false,
+    password: ownerSignupDto?.password,
+    isPasswordProtected: true,
+    isDisabled: false,
+    isStaff: false,
+    createdByBusinessId: null,
+    deleted: false,
+
+    roleId: null,
+    registrationState: {
+      screenName: null,
+      state: 0,
+      isCompleted: false,
+    },
+
+    // below will get overridden by the Auth service
+    businesses: null,
+    hashedRt: null,
+    lastSignInAt: null,
+    // `createdAt` and `updatedAt` will get overridden by the Mongoose schema
+    createdAt: null,
+    updatedAt: null,
+  };
+  return filteredBusinessUser;
+};

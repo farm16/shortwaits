@@ -7,9 +7,9 @@ export async function onGoogleButtonPress() {
     await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
 
     // Sign in with Google
-    const { idToken } = await GoogleSignin.signIn();
+    const { serverAuthCode } = await GoogleSignin.signIn();
 
-    console.log("Successfully signed in with Google. ID Token:", idToken);
+    console.log("serverAuthCode >>>", serverAuthCode);
   } catch (error) {
     console.log("Google sign-in error:", error);
     Alert.alert("Oops", "An error occurred during Google sign-in.");

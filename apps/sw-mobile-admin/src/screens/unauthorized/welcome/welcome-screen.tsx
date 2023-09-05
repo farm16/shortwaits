@@ -14,8 +14,10 @@ import { skipToken } from "@reduxjs/toolkit/dist/query/react";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
 GoogleSignin.configure({
-  webClientId: "805426205047-o81n6uffuvge4es4pvemt1k4hl22p4ub.apps.googleusercontent.com",
+  webClientId: "805426205047-fcegaam9bmap1dagccindjh0ko7oro68.apps.googleusercontent.com",
+  offlineAccess: true,
 });
+
 export interface WelcomeScreenProps {
   navigation: CompositeNavigationProp<
     StackNavigationProp<UnauthorizedStackParamList, "welcome-screen">,
