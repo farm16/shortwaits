@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "805426205047",
+    "project_id": "shortwaits-300506",
+    "storage_bucket": "shortwaits-300506.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:805426205047:android:aa30010e8473d186275172",
+        "android_client_info": {
+          "package_name": "com.swmobileadmin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "805426205047-1qgtm9fg2796bt48a148hj89r9fqq7rv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.swmobileadmin",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "805426205047-o81n6uffuvge4es4pvemt1k4hl22p4ub.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAax0YsTyYVpDQTdEVVeJALPy-SkHorfJE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "805426205047-o81n6uffuvge4es4pvemt1k4hl22p4ub.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
