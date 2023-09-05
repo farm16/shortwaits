@@ -10,6 +10,7 @@ import { useLocalSignInMutation } from "../../../services";
 import { Container, Button, Text, Space, TextFieldCard, Screen } from "../../../components";
 import Facebook from "../../../assets/icons/facebook.svg";
 import Google from "../../../assets/icons/google.svg";
+import { onGoogleButtonPress } from "../../../utils";
 
 export interface RegisterWithEmailScreenProps {
   navigation: CompositeNavigationProp<
@@ -130,7 +131,12 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
         </Container>
       </Button>
       <Space size="small" />
-      <Button preset="social">
+      <Button
+        preset="social"
+        onPress={async () => {
+          await onGoogleButtonPress();
+        }}
+      >
         <Container style={styles.buttonContainer}>
           <Google width={30} height={30} style={{ position: "absolute", left: 0, margin: 16 }} />
           <Text preset="social">with Gmail</Text>

@@ -26,11 +26,9 @@ export const Onboarding1Screen: FC<UnauthorizedScreenProps<"onboarding-1-screen"
   const [isCategoriesTouched, setIsCategoriesTouched] = useState(false);
   const signOut = useSignOut();
   const business = useBusiness();
-  const mobileData = useMobileAdmin();
   const user = useUser();
   const auth = useAuth();
-  const { Colors } = useTheme();
-  const { data: categories, isError, isLoading, isSuccess } = useGetCategoriesQuery(undefined);
+  const { data: categories } = useGetCategoriesQuery(undefined);
 
   const getSelectedCategoryNames = (availableCategories: any[], selectedCategories: any[]): string => {
     const _selectedCategories = availableCategories
@@ -69,7 +67,7 @@ export const Onboarding1Screen: FC<UnauthorizedScreenProps<"onboarding-1-screen"
     },
     "onboarding1"
   );
-  const isCategorySelected = business.categories.length > 0;
+  const isCategorySelected = business?.categories?.length > 0;
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: `Welcome ${user?.familyName || ""}`,
@@ -93,7 +91,7 @@ export const Onboarding1Screen: FC<UnauthorizedScreenProps<"onboarding-1-screen"
           text="CONTINUE"
           onPress={e => {
             setIsCategoriesTouched(true);
-            if (!(!Array.isArray(business.categories) || !business.categories.length)) {
+            if (!(!Array.isArray(business?.categories) || !business?.categories.length)) {
               handleSubmit();
             }
           }}
@@ -128,12 +126,12 @@ export const Onboarding1Screen: FC<UnauthorizedScreenProps<"onboarding-1-screen"
       <ButtonCard
         title="Business Categories"
         subTitle={
-          !Array.isArray(business.categories) || !business.categories.length
+          !Array.isArray(business?.categories) || !business?.categories?.length
             ? "Select a business category"
-            : getSelectedCategoryNames(categories?.data || [], business.categories)
+            : getSelectedCategoryNames(categories?.data || [], business?.categories)
         }
         errors={
-          !Array.isArray(business.categories) || !business.categories.length ? "this field is required" : undefined
+          !Array.isArray(business?.categories) || !business?.categories.length ? "this field is required" : undefined
         }
         isTouched={isCategoriesTouched}
         onPress={() => {
@@ -173,7 +171,7 @@ export const Onboarding1Screen: FC<UnauthorizedScreenProps<"onboarding-1-screen"
       />
       <ButtonCard
         title="Staff"
-        subTitle={getStaffCount(business.staff)}
+        subTitle={getStaffCount(business?.staff ?? [])}
         onPress={() =>
           navigation.navigate("modals", {
             screen: "selector-modal-screen",

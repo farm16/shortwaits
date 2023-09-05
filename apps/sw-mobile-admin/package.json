@@ -84,6 +84,7 @@
     "readable-stream": "*",
     "@react-native/metro-config": "*",
     "react-native-qrcode-svg": "*",
-    "react-native-device-info": "*"
+    "react-native-device-info": "*",
+    "@react-native-google-signin/google-signin": "*"
   }
 }

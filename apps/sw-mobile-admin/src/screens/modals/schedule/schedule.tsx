@@ -39,7 +39,7 @@ export const ScheduleModal: FC<ModalsScreenProps<"schedule-modal-screen">> = ({ 
 
   const [currentWeekHours, setCurrentWeekHours] = useState<WeekHoursType>(hours);
   const [selectedWeekDay, setSelectedWeekDay] = useState<BusinessWeekDaysType>(null);
-  const [isBusinessClosed, setIsBusinessClosed] = useState(true);
+  const [isBusinessClosed, setIsBusinessClosed] = useState(false);
 
   const bottomSheetRef = useRef<BottomSheetType>(null);
   const handleBottomSheet = useBottomSheet(bottomSheetRef);

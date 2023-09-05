@@ -44,11 +44,11 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
   const [isListSearchable, setIsListSearchable] = useState(false);
 
   useEffect(() => {
-    if (payload.data) {
-      const initialFilteredData = filterBusinessUsers(searchText, payload.data);
+    if (payload?.data && isSuccess) {
+      const initialFilteredData = filterBusinessUsers(searchText, payload.data ?? []);
       setFilteredData(initialFilteredData);
     }
-  }, [payload, searchText]);
+  }, [isSuccess, payload, searchText]);
 
   useLayoutEffect(() => {
     navigation.setOptions({

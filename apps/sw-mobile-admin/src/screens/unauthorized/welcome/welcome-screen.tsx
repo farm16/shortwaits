@@ -7,14 +7,15 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { Button, Screen, Space, Text } from "../../../components";
 import { useTheme } from "../../../theme";
-import {
-  RootStackParamList,
-  UnauthorizedStackParamList,
-} from "../../../navigation";
+import { RootStackParamList, UnauthorizedStackParamList } from "../../../navigation";
 import { useBusiness, useMobileAdmin } from "../../../store";
 import { useGetAdminMobileQuery } from "../../../services";
 import { skipToken } from "@reduxjs/toolkit/dist/query/react";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
+GoogleSignin.configure({
+  webClientId: "805426205047-o81n6uffuvge4es4pvemt1k4hl22p4ub.apps.googleusercontent.com",
+});
 export interface WelcomeScreenProps {
   navigation: CompositeNavigationProp<
     StackNavigationProp<UnauthorizedStackParamList, "welcome-screen">,
@@ -27,9 +28,7 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation }) => {
   const business = useBusiness();
   const mobileAdminData = useMobileAdmin();
 
-  const { isLoading: isAdminMobileLoading } = useGetAdminMobileQuery(
-    mobileAdminData.defaultData && skipToken
-  );
+  const { isLoading: isAdminMobileLoading } = useGetAdminMobileQuery(mobileAdminData.defaultData && skipToken);
 
   useEffect(() => {
     SplashScreen.hide();
@@ -44,11 +43,7 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation }) => {
   if (isAdminMobileLoading) return <Text>Loading ...</Text>;
 
   return (
-    <Screen
-      style={{ backgroundColor: Colors.brandSecondary3 }}
-      withHorizontalPadding
-      statusBar="light-content"
-    >
+    <Screen style={{ backgroundColor: Colors.brandSecondary3 }} withHorizontalPadding statusBar="light-content">
       <View
         style={{
           justifyContent: "center",

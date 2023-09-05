@@ -1,4 +1,5 @@
 apply plugin: "com.android.application"
+apply plugin: "com.google.gms.google-services"
 apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 project.ext.vectoricons = [
   iconFontNames: [ 'MaterialIcons.ttf', 'MaterialCommunityIcons.ttf' ] // Name of the font files you want to copy
@@ -93,24 +94,23 @@ android {
         resValue "string", "shortwaitsApiBaseUrl_1", project.env.get("API_BASE_URL")
     }
     signingConfigs {
+        debug {
+            storeFile file('debug.keystore')
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
         rc {
           storeFile file('debug.keystore')
           storePassword 'android'
           keyAlias 'androiddebugkey'
           keyPassword 'android'
         }
-      // todo update key before production
         release {
-          storeFile file('debug.keystore')
-          storePassword 'android'
-          keyAlias 'androiddebugkey'
-          keyPassword 'android'
-        }
-        debug {
-            storeFile file('debug.keystore')
-            storePassword 'android'
-            keyAlias 'androiddebugkey'
-            keyPassword 'android'
+          storeFile file(SHORTWAITS_STORE_FILE)
+          storePassword SHORTWAITS_STORE_PASSWORD
+          keyAlias SHORTWAITS_KEY_ALIAS
+          keyPassword SHORTWAITS_KEY_PASSWORD
         }
     }
     buildTypes {
@@ -137,9 +137,9 @@ android {
 }
 
 dependencies {
-
     androidTestImplementation('com.wix:detox:+')
     implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0' // <-- add this; newer versions should work too
 
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
