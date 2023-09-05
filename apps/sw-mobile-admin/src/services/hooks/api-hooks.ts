@@ -4,6 +4,8 @@ export const {
   //Mutations hooks
   useCreateEventMutation,
   useRegisterBusinessMutation,
+  useSocialSignInMutation,
+  useSocialSignUpMutation,
   useLocalSignUpMutation,
   useLocalSignInMutation,
   useLocalSignOutMutation,

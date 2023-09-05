@@ -24,43 +24,38 @@ export const authSlice = createSlice({
   },
   extraReducers: builder => {
     builder
-      .addMatcher(
-        shortwaitsApi.endpoints.localSignOut.matchRejected,
-        function () {
-          console.log(">>> resetting USER state  ");
-          return initialState;
-        }
-      )
-      .addMatcher(
-        shortwaitsApi.endpoints.localSignOut.matchFulfilled,
-        function () {
-          console.log(">>> resetting AUTH state  ");
-          return initialState;
-        }
-      )
-      .addMatcher(
-        shortwaitsApi.endpoints.localSignIn.matchFulfilled,
-        function (state, action) {
-          console.log(">>> localSignIn - AUTH ");
-          return {
-            ...state,
-            ...action.payload.data.auth,
-          };
-        }
-      )
-      .addMatcher(
-        shortwaitsApi.endpoints.localSignUp.matchFulfilled,
-        function (state, action) {
-          console.log(">>> localSignUp - AUTH ", {
-            ...state,
-            ...action.payload.data.auth,
-          });
-          return {
-            ...state,
-            ...action.payload.data.auth,
-          };
-        }
-      );
+      .addMatcher(shortwaitsApi.endpoints.localSignOut.matchRejected, function () {
+        console.log(">>> resetting USER state  ");
+        return initialState;
+      })
+      .addMatcher(shortwaitsApi.endpoints.localSignOut.matchFulfilled, function () {
+        console.log(">>> resetting AUTH state  ");
+        return initialState;
+      })
+      .addMatcher(shortwaitsApi.endpoints.socialSignIn.matchFulfilled, function (state, action) {
+        return {
+          ...state,
+          ...action.payload.data.auth,
+        };
+      })
+      .addMatcher(shortwaitsApi.endpoints.socialSignUp.matchFulfilled, function (state, action) {
+        return {
+          ...state,
+          ...action.payload.data.auth,
+        };
+      })
+      .addMatcher(shortwaitsApi.endpoints.localSignIn.matchFulfilled, function (state, action) {
+        return {
+          ...state,
+          ...action.payload.data.auth,
+        };
+      })
+      .addMatcher(shortwaitsApi.endpoints.localSignUp.matchFulfilled, function (state, action) {
+        return {
+          ...state,
+          ...action.payload.data.auth,
+        };
+      });
   },
 });
 

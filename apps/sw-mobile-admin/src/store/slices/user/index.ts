@@ -38,6 +38,18 @@ export const userSlice = createSlice({
           ...state,
           ...action.payload.data.attributes.currentUser,
         };
+      })
+      .addMatcher(shortwaitsApi.endpoints.socialSignUp.matchFulfilled, function (state, action) {
+        return {
+          ...state,
+          ...action.payload.data.attributes.currentUser,
+        };
+      })
+      .addMatcher(shortwaitsApi.endpoints.socialSignIn.matchFulfilled, function (state, action) {
+        return {
+          ...state,
+          ...action.payload.data.attributes.currentUser,
+        };
       });
   },
 });

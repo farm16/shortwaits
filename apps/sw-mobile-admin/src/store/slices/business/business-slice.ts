@@ -171,20 +171,24 @@ export const businessSlice = createSlice({
         ...action.payload.data,
       }))
       .addMatcher(shortwaitsApi.endpoints.localSignUp.matchFulfilled, function (state, action) {
-        console.log(">>> localSignUp - BUSINESS ", {
-          ...state,
-          ...action.payload.data.attributes.currentBusinessAccounts,
-        });
         return {
           ...state,
           ...action.payload.data.attributes.currentBusinessAccounts[0],
         };
       })
       .addMatcher(shortwaitsApi.endpoints.localSignIn.matchFulfilled, function (state, action) {
-        console.log(">>> localSignIn - BUSINESS ", {
+        return {
           ...state,
-          ...action.payload.data.attributes.currentBusinessAccounts,
-        });
+          ...action.payload.data.attributes.currentBusinessAccounts[0],
+        };
+      })
+      .addMatcher(shortwaitsApi.endpoints.socialSignUp.matchFulfilled, function (state, action) {
+        return {
+          ...state,
+          ...action.payload.data.attributes.currentBusinessAccounts[0],
+        };
+      })
+      .addMatcher(shortwaitsApi.endpoints.socialSignIn.matchFulfilled, function (state, action) {
         return {
           ...state,
           ...action.payload.data.attributes.currentBusinessAccounts[0],

@@ -6,6 +6,8 @@ type Endpoint =
   | "auth/admin/local/sign-up"
   | "auth/admin/local/forgot-password"
   | "auth/admin/local/refresh"
+  | "auth/admin/social/sign-up"
+  | "auth/admin/social/sign-in"
   | `business/${string}`
   | `business/${string}/admins`
   | `business/${string}/services`
@@ -54,6 +56,8 @@ export const endpoints = {
   signInLocal: createEndpoint("auth/admin/local/sign-in", "POST"),
   signOutLocal: createEndpoint("auth/admin/local/sign-out", "POST"),
   signUpLocal: createEndpoint("auth/admin/local/sign-up", "POST"),
+  signUpSocial: createEndpoint("auth/admin/social/sign-up", "POST"),
+  signInSocial: createEndpoint("auth/admin/social/sign-in", "POST"),
   forgotPasswordLocal: createEndpoint("auth/admin/local/forgot-password", "POST"),
   refreshLocal: createEndpoint("auth/admin/local/refresh", "PUT"),
 

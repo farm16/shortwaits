@@ -7,11 +7,10 @@ import { Screen, Button, Text, Space, Container } from "../../../components";
 import Facebook from "../../../assets/icons/facebook.svg";
 import Google from "../../../assets/icons/google.svg";
 import EMail from "../../../assets/icons/email.svg";
-import {
-  RootStackParamList,
-  UnauthorizedStackParamList,
-} from "../../../navigation";
+import { RootStackParamList, UnauthorizedStackParamList } from "../../../navigation";
 import { useTheme } from "../../../theme";
+import { useSocialSignUpMutation } from "../../../services";
+import { onGoogleButtonPress } from "../../../utils";
 
 export interface SignUpScreenProps {
   navigation: CompositeNavigationProp<
@@ -22,6 +21,7 @@ export interface SignUpScreenProps {
 
 export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
   const { Colors } = useTheme();
+  const [socialSignUp, { isLoading }] = useSocialSignUpMutation();
 
   return (
     <Screen preset="fixed" withHorizontalPadding>
@@ -53,22 +53,23 @@ export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
 
       <View style={styles.formContainer}>
         <Button preset="social">
-          <Facebook
-            width={30}
-            height={30}
-            style={{ position: "absolute", left: 0, margin: 16 }}
-          />
+          <Facebook width={30} height={30} style={{ position: "absolute", left: 0, margin: 16 }} />
           <Container style={styles.buttonContainer}>
             <Text preset="social">with Facebook</Text>
           </Container>
         </Button>
         <Space size="small" />
-        <Button preset="social">
-          <Google
-            width={30}
-            height={30}
-            style={{ position: "absolute", left: 0, margin: 16 }}
-          />
+        <Button
+          preset="social"
+          onPress={async () => {
+            const authCode = await onGoogleButtonPress();
+            socialSignUp({
+              provider: "google",
+              authCode,
+            });
+          }}
+        >
+          <Google width={30} height={30} style={{ position: "absolute", left: 0, margin: 16 }} />
           <Container style={styles.buttonContainer}>
             <Text preset="social">with Gmail</Text>
           </Container>
@@ -86,11 +87,7 @@ export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
             })
           }
         >
-          <EMail
-            width={30}
-            height={30}
-            style={{ position: "absolute", left: 0, margin: 16 }}
-          />
+          <EMail width={30} height={30} style={{ position: "absolute", left: 0, margin: 16 }} />
           <Container style={styles.buttonContainer}>
             <Text style={{ color: "white" }} preset="social">
               with Email

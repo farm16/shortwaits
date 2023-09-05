@@ -9,7 +9,7 @@ export async function onGoogleButtonPress() {
     // Sign in with Google
     const { serverAuthCode } = await GoogleSignin.signIn();
 
-    console.log("serverAuthCode >>>", serverAuthCode);
+    return serverAuthCode;
   } catch (error) {
     console.log("Google sign-in error:", error);
     Alert.alert("Oops", "An error occurred during Google sign-in.");

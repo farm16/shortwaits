@@ -1,3 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const shortwaitsAdmin = require("../../assets/default-data/2-shortwaits/shortwaits.js");
+
 import {
   ForbiddenException,
   Injectable,
@@ -18,14 +21,13 @@ import { SignInWithEmailDto } from "./dto/sign-in-with-email.dto";
 import { Business } from "../business/entities/business.entity";
 import { Service } from "../services/entities/service.entity";
 import { convertDomainToLowercase } from "../../utils/converters";
-import { getFilteredNewBusinessOwner, getFilteredNewBusinessOwnerForGoogleUser } from "../../utils/filtersForDtos";
+import { getFilteredNewBusinessOwner, getNewUserFromSocialAccount } from "../../utils/filtersForDtos";
 import { OAuth2Client } from "google-auth-library";
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const shortwaitsAdmin = require("../../assets/default-data/2-shortwaits/shortwaits.js");
+import { noop } from "rxjs";
+import { BusinessUserType, ConvertToDtoType } from "@shortwaits/shared-lib";
 
 const providers = ["google", "facebook"];
-
+const googleApiOauthUrl = "https://www.googleapis.com/oauth2/v3";
 @Injectable()
 export class AuthService {
   private readonly generateShortId = customAlphabet("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 10);
@@ -54,101 +56,43 @@ export class AuthService {
       let userInfo;
 
       if (dto.provider === "google") {
-        const { tokens } = await this.oAuth2Client.getToken(dto.authCode);
-
-        // Get user info using access token
-        const userInfoResponse = await fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
-          headers: {
-            Authorization: `Bearer ${tokens.access_token}`,
-          },
-        });
-
-        if (!userInfoResponse.ok) {
-          throw new InternalServerErrorException("Failed to fetch user information from Google.");
-        }
-
-        userInfo = await userInfoResponse.json();
-        // eslint-disable-next-line no-empty
+        userInfo = await this.googleAuth(dto.authCode);
+        // check if email is verified for google
       } else if (dto.provider === "facebook") {
+        noop();
+        // check if email is verified for facebook
       }
 
-      const existingUser = await this.businessUserModel.findOne({
+      const user = await this.businessUserModel.findOne({
         email: userInfo.email,
         isEmailVerified: true,
       });
 
-      if (existingUser) {
-        throw new UnprocessableEntityException("Invalid username");
+      if (user) {
+        return await this.successfulExistingUser(user);
       }
 
-      const saltRounds = Number(this.configService.get("SALT_ROUNDS"));
-      const salt = await bcrypt.genSalt(saltRounds);
-
-      const filteredBusinessUser = getFilteredNewBusinessOwnerForGoogleUser(userInfo);
-
-      const currentUser = new this.businessUserModel(filteredBusinessUser);
-      const businessShortId = await this.generateUnique();
-      if (!businessShortId) {
-        throw new UnprocessableEntityException("Unable to create business account for user");
-      }
-      const newBusinessAccount = new this.businessModel({
-        shortId: businessShortId,
-        isRegistrationCompleted: false,
-        clients: [],
-        taggedClients: [],
-        admins: [currentUser._id],
-        superAdmins: [currentUser._id],
-        createdBy: [currentUser._id],
-        updatedBy: [currentUser._id],
-        staff: [currentUser._id],
-        hours: shortwaitsAdmin[0].sampleBusinessData.hours,
-      });
-
-      const services = shortwaitsAdmin[0].sampleBusinessData.services.map(service => {
-        return { ...service, businessId: newBusinessAccount._id };
-      });
-
-      // create default labels (3) for the business from shortwaitsAdmin template
-      const labels = shortwaitsAdmin[0].sampleBusinessData.labels;
-
-      const newBusinessServices = await this.serviceModel.insertMany(services);
-      const servicesIds = newBusinessServices.map(service => service._id);
-
-      const tokens = await this.signTokens(currentUser);
-      const hashedRefreshToken = await bcrypt.hash(tokens.refreshToken, salt);
-
-      newBusinessAccount.services = servicesIds;
-      newBusinessAccount.labels = labels;
-
-      currentUser.businesses = [newBusinessAccount._id];
-      currentUser.hashedRt = hashedRefreshToken;
-      currentUser.lastSignInAt = new Date();
-
-      const [newUserDoc, newBusinessAccDoc] = await Promise.all([currentUser.save(), newBusinessAccount.save()]);
-
-      newUserDoc.password = null;
-
-      return {
-        auth: tokens,
-        attributes: {
-          currentBusinessAccounts: [newBusinessAccDoc],
-          currentUser: newUserDoc,
-        },
-      };
+      const newUser = getNewUserFromSocialAccount(userInfo);
+      return await this.createNewBusinessAndBusinessOwner(newUser);
     } catch (error) {
-      // Handle any errors here
       console.error("Error in signUpSocial:", error);
       throw new InternalServerErrorException("An error occurred while processing your request.");
     }
   }
 
+  async signInSocial(dto: { authCode: string; provider: string }) {
+    if (!providers.includes(dto.provider)) {
+      throw new UnprocessableEntityException("Invalid provider");
+    }
+  }
+
   async signUpLocal(newBusinessUserDto: SignUpWithEmailDto) {
-    const existingUser = await this.businessUserModel.findOne({
+    const user = await this.businessUserModel.findOne({
       username: newBusinessUserDto.username,
     });
 
-    if (existingUser) {
-      throw new UnprocessableEntityException("Invalid username");
+    if (user) {
+      return await this.successfulExistingUser(user);
     }
 
     const saltRounds = Number(this.configService.get("SALT_ROUNDS"));
@@ -157,99 +101,28 @@ export class AuthService {
 
     const filteredBusinessUser = getFilteredNewBusinessOwner(newBusinessUserDto);
 
-    const currentUser = new this.businessUserModel({
+    return await this.createNewBusinessAndBusinessOwner({
       ...filteredBusinessUser,
       password: encodedPassword,
     });
-
-    const businessShortId = await this.generateUnique();
-
-    if (!businessShortId) {
-      throw new UnprocessableEntityException("Unable to create business account for user");
-    }
-
-    const newBusinessAccount = new this.businessModel({
-      shortId: businessShortId,
-      isRegistrationCompleted: false,
-      clients: [],
-      taggedClients: [],
-      admins: [currentUser._id],
-      superAdmins: [currentUser._id],
-      createdBy: [currentUser._id],
-      updatedBy: [currentUser._id],
-      staff: [currentUser._id],
-      hours: shortwaitsAdmin[0].sampleBusinessData.hours,
-    });
-
-    // create default services (3) for the business from shortwaitsAdmin template
-    const services = shortwaitsAdmin[0].sampleBusinessData.services.map(service => {
-      return { ...service, businessId: newBusinessAccount._id };
-    });
-
-    // create default labels (3) for the business from shortwaitsAdmin template
-    const labels = shortwaitsAdmin[0].sampleBusinessData.labels;
-
-    const newBusinessServices = await this.serviceModel.insertMany(services);
-    const servicesIds = newBusinessServices.map(service => service._id);
-
-    const tokens = await this.signTokens(currentUser);
-    const hashedRefreshToken = await bcrypt.hash(tokens.refreshToken, salt);
-
-    newBusinessAccount.services = servicesIds;
-    newBusinessAccount.labels = labels;
-
-    currentUser.businesses = [newBusinessAccount._id];
-    currentUser.hashedRt = hashedRefreshToken;
-    currentUser.lastSignInAt = new Date();
-
-    const [newUserDoc, newBusinessAccDoc] = await Promise.all([currentUser.save(), newBusinessAccount.save()]);
-
-    newUserDoc.password = null;
-
-    return {
-      auth: tokens,
-      attributes: {
-        currentBusinessAccounts: [newBusinessAccDoc],
-        currentUser: newUserDoc,
-      },
-    };
   }
 
   async signInLocal(dto: SignInWithEmailDto) {
-    const currentUser = await this.businessUserModel.findOne({
-      username: convertDomainToLowercase(dto.username),
+    const user = await this.businessUserModel.findOne({
+      username: convertDomainToLowercase(dto.username), // todo: this might be a problem
     });
 
-    if (!currentUser) {
+    if (!user) {
       throw new NotFoundException("User not registered");
     }
 
-    const isPasswordValid = await bcrypt.compare(dto.password, currentUser.password);
+    const isPasswordValid = await bcrypt.compare(dto.password, user.password);
 
     if (!isPasswordValid) {
       throw new ForbiddenException("Invalid password or username");
     }
 
-    const signedTokens = await this.signTokens(currentUser);
-    await this.updateRtHash(currentUser, signedTokens.refreshToken);
-
-    delete currentUser.password;
-
-    const currentBusinessAccounts = await this.businessModel
-      .find({
-        _id: {
-          $in: currentUser.businesses,
-        },
-      })
-      .select("-__v -hashedRt");
-
-    return {
-      auth: signedTokens,
-      attributes: {
-        currentBusinessAccounts,
-        currentUser,
-      },
-    };
+    return await this.successfulExistingUser(user);
   }
 
   async logout(userId: number) {
@@ -280,12 +153,12 @@ export class AuthService {
     }
 
     const signedTokens = await this.signTokens(user);
-    await this.updateRtHash(user, signedTokens.refreshToken);
+    await this.updateUserRt(user, signedTokens.refreshToken);
 
     return { auth: signedTokens };
   }
 
-  private async updateRtHash(user: BusinessUser, rt: string): Promise<void> {
+  private async updateUserRt(user: BusinessUser, rt: string): Promise<void> {
     const saltRounds = Number(this.configService.get("SALT_ROUNDS"));
     const salt = await bcrypt.genSalt(saltRounds);
     const hash = await bcrypt.hash(rt, salt);
@@ -330,5 +203,93 @@ export class AuthService {
     }
 
     return null; // Return null when the maximum attempts are reached
+  }
+
+  async googleAuth(authCode: string) {
+    const { tokens } = await this.oAuth2Client.getToken(authCode);
+    const userInfoResponse = await fetch(`${googleApiOauthUrl}/userinfo`, {
+      headers: {
+        Authorization: `Bearer ${tokens.access_token}`,
+      },
+    });
+    if (!userInfoResponse.ok) {
+      throw new InternalServerErrorException("Failed to fetch user information from Google.");
+    }
+    return await userInfoResponse.json();
+  }
+
+  async successfulExistingUser(existingUser) {
+    const signedTokens = await this.signTokens(existingUser);
+    await this.updateUserRt(existingUser, signedTokens.refreshToken);
+
+    delete existingUser.password;
+
+    const currentBusinessAccounts = await this.businessModel
+      .find({
+        _id: {
+          $in: existingUser.businesses,
+        },
+      })
+      .select("-__v");
+
+    return {
+      auth: signedTokens,
+      attributes: {
+        currentBusinessAccounts,
+        currentUser: existingUser,
+      },
+    };
+  }
+
+  async createNewBusinessAndBusinessOwner(newUser: ConvertToDtoType<BusinessUserType>) {
+    const saltRounds = Number(this.configService.get("SALT_ROUNDS"));
+    const salt = await bcrypt.genSalt(saltRounds);
+    const currentUser = new this.businessUserModel(newUser);
+    const businessShortId = await this.generateUnique();
+    if (!businessShortId) {
+      throw new UnprocessableEntityException("Unable to create business account for user");
+    }
+    const newBusinessAccount = new this.businessModel({
+      shortId: businessShortId,
+      isRegistrationCompleted: false,
+      clients: [],
+      taggedClients: [],
+      admins: [currentUser._id],
+      superAdmins: [currentUser._id],
+      createdBy: [currentUser._id],
+      updatedBy: [currentUser._id],
+      staff: [currentUser._id],
+      hours: shortwaitsAdmin[0].sampleBusinessData.hours,
+    });
+    const services = shortwaitsAdmin[0].sampleBusinessData.services.map(service => {
+      return { ...service, businessId: newBusinessAccount._id };
+    });
+    // create default labels (3) for the business from shortwaitsAdmin template
+    const labels = shortwaitsAdmin[0].sampleBusinessData.labels;
+
+    const newBusinessServices = await this.serviceModel.insertMany(services);
+    const servicesIds = newBusinessServices.map(service => service._id);
+
+    const tokens = await this.signTokens(currentUser);
+    const hashedRefreshToken = await bcrypt.hash(tokens.refreshToken, salt);
+
+    newBusinessAccount.services = servicesIds;
+    newBusinessAccount.labels = labels;
+
+    currentUser.businesses = [newBusinessAccount._id];
+    currentUser.hashedRt = hashedRefreshToken;
+    currentUser.lastSignInAt = new Date();
+
+    const [newUserDoc, newBusinessAccDoc] = await Promise.all([currentUser.save(), newBusinessAccount.save()]);
+
+    newUserDoc.password = null;
+
+    return {
+      auth: tokens,
+      attributes: {
+        currentBusinessAccounts: [newBusinessAccDoc],
+        currentUser: newUserDoc,
+      },
+    };
   }
 }

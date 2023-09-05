@@ -140,9 +140,7 @@ export const getFilteredNewBusinessOwner = (ownerSignupDto: SignUpWithEmailDto):
   return filteredBusinessUser;
 };
 
-export const getFilteredNewBusinessOwnerForGoogleUser = (
-  ownerSignupDto: SignUpWithEmailDto
-): ConvertToDtoType<BusinessUserType> => {
+export const getNewUserFromSocialAccount = (ownerSignupDto: SignUpWithEmailDto): ConvertToDtoType<BusinessUserType> => {
   const filteredBusinessUser: ConvertToDtoType<BusinessUserType> = {
     preferredAlias: "username",
     displayName: null,
@@ -161,9 +159,9 @@ export const getFilteredNewBusinessOwnerForGoogleUser = (
     hours: null,
 
     // require
-    username: ownerSignupDto?.username,
+    username: ownerSignupDto?.email,
     email: ownerSignupDto?.email,
-    isEmailVerified: false,
+    isEmailVerified: true,
     password: ownerSignupDto?.password,
     isPasswordProtected: true,
     isDisabled: false,
