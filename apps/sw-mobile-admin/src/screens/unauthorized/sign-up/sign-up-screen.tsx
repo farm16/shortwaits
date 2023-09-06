@@ -1,5 +1,5 @@
-import React, { FC } from "react";
-import { View, StyleSheet } from "react-native";
+import React, { FC, useCallback } from "react";
+import { View, StyleSheet, Alert } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { CompositeNavigationProp } from "@react-navigation/native";
 
@@ -11,6 +11,7 @@ import { RootStackParamList, UnauthorizedStackParamList } from "../../../navigat
 import { useTheme } from "../../../theme";
 import { useSocialSignUpMutation } from "../../../services";
 import { onGoogleButtonPress } from "../../../utils";
+import { ActivityIndicator } from "react-native-paper";
 
 export interface SignUpScreenProps {
   navigation: CompositeNavigationProp<
@@ -22,6 +23,34 @@ export interface SignUpScreenProps {
 export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
   const { Colors } = useTheme();
   const [socialSignUp, { isLoading }] = useSocialSignUpMutation();
+
+  const handleGoogleSignUp = useCallback(async () => {
+    try {
+      const authCode = await onGoogleButtonPress();
+      await socialSignUp({
+        provider: "google",
+        authCode,
+      });
+    } catch (error) {
+      Alert.alert("Oops", "Something went wrong. Please try again.");
+      console.log("Error during Google sign-up:", error);
+    }
+  }, [socialSignUp]);
+
+  const handleFacebookSignUp = useCallback(async () => {
+    try {
+      const authCode = await onGoogleButtonPress();
+      await socialSignUp({
+        provider: "google",
+        authCode,
+      });
+    } catch (error) {
+      Alert.alert("Oops", "Something went wrong. Please try again.");
+      console.log("Error during Google sign-up:", error);
+    }
+  }, [socialSignUp]);
+
+  if (isLoading) return <ActivityIndicator />;
 
   return (
     <Screen preset="fixed" withHorizontalPadding>
@@ -59,16 +88,7 @@ export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
           </Container>
         </Button>
         <Space size="small" />
-        <Button
-          preset="social"
-          onPress={async () => {
-            const authCode = await onGoogleButtonPress();
-            socialSignUp({
-              provider: "google",
-              authCode,
-            });
-          }}
-        >
+        <Button preset="social" onPress={handleGoogleSignUp}>
           <Google width={30} height={30} style={{ position: "absolute", left: 0, margin: 16 }} />
           <Container style={styles.buttonContainer}>
             <Text preset="social">with Gmail</Text>

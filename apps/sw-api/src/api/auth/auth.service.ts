@@ -84,6 +84,32 @@ export class AuthService {
     if (!providers.includes(dto.provider)) {
       throw new UnprocessableEntityException("Invalid provider");
     }
+
+    try {
+      let userInfo;
+
+      if (dto.provider === "google") {
+        userInfo = await this.googleAuth(dto.authCode);
+        // check if email is verified for google
+      } else if (dto.provider === "facebook") {
+        noop();
+        // check if email is verified for facebook
+      }
+
+      const user = await this.businessUserModel.findOne({
+        email: userInfo.email,
+        isEmailVerified: true,
+      });
+
+      if (!user) {
+        throw new NotFoundException("User not registered");
+      }
+
+      return await this.successfulExistingUser(user);
+    } catch (error) {
+      console.error("Error in signInSocial:", error);
+      throw new InternalServerErrorException("An error occurred while processing your request.");
+    }
   }
 
   async signUpLocal(newBusinessUserDto: SignUpWithEmailDto) {
@@ -192,7 +218,7 @@ export class AuthService {
     };
   }
 
-  async generateUnique(): Promise<string | null> {
+  private async generateUniqueId(): Promise<string | null> {
     for (let attempt = 0; attempt < this.maxAttempts; attempt++) {
       const generatedId = this.generateShortId();
       const existingEntity = await this.businessModel.findOne({ shortId: generatedId });
@@ -245,7 +271,7 @@ export class AuthService {
     const saltRounds = Number(this.configService.get("SALT_ROUNDS"));
     const salt = await bcrypt.genSalt(saltRounds);
     const currentUser = new this.businessUserModel(newUser);
-    const businessShortId = await this.generateUnique();
+    const businessShortId = await this.generateUniqueId();
     if (!businessShortId) {
       throw new UnprocessableEntityException("Unable to create business account for user");
     }

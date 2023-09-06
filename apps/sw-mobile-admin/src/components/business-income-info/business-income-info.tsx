@@ -34,7 +34,7 @@ function BusinessIncomeInfoComponent({ data, isLoading, error }: BusinessIncomeI
           style={[
             styles.graphTopBar,
             {
-              backgroundColor: Colors.brandSecondary2,
+              backgroundColor: Colors.brandAccent1,
             },
           ]}
         >
@@ -51,7 +51,7 @@ function BusinessIncomeInfoComponent({ data, isLoading, error }: BusinessIncomeI
           <Menu
             visible={visible}
             onDismiss={() => setVisible(false)}
-            anchor={<IconButton onPress={() => setVisible(true)} icon={"dots-vertical"} />}
+            anchor={<IconButton onPress={() => setVisible(true)} icon={"dots-vertical"} color={Colors.text} />}
           >
             {Object.keys(data).map((name: GraphIdentifier) => {
               return (
@@ -85,9 +85,9 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   graphTopBar: {
-    height: 49,
+    paddingVertical: 16,
     justifyContent: "space-between",
-    paddingLeft: 21,
+    paddingLeft: 16,
     alignItems: "center",
     flexDirection: "row",
   },

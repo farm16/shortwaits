@@ -1,12 +1,12 @@
 import React, { FC, useCallback, useEffect, useState } from "react";
-import { Alert, AlertButton, StyleSheet, View } from "react-native";
+import { ActivityIndicator, Alert, AlertButton, StyleSheet, View } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { CompositeNavigationProp } from "@react-navigation/native";
 
 import { useTheme } from "../../../theme";
 import { RootStackParamList, UnauthorizedStackParamList } from "../../../navigation";
 import { useForm } from "../../../hooks";
-import { useLocalSignInMutation } from "../../../services";
+import { useLocalSignInMutation, useSocialSignInMutation } from "../../../services";
 import { Container, Button, Text, Space, TextFieldCard, Screen } from "../../../components";
 import Facebook from "../../../assets/icons/facebook.svg";
 import Google from "../../../assets/icons/google.svg";
@@ -23,7 +23,8 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
   const { Colors } = useTheme();
   const [isVisible, setIsVisible] = useState(false);
 
-  const [localSignIn, response] = useLocalSignInMutation();
+  const [localSignIn, localSignInResponse] = useLocalSignInMutation();
+  const [socialSignUp, socialSignUpResponse] = useSocialSignInMutation();
 
   const initialValues = {
     username: "",
@@ -44,10 +45,35 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
   const handlePasswordVisibility = useCallback(() => {
     setIsVisible(visibility => !visibility);
   }, []);
+  const handleGoogleSignIn = useCallback(async () => {
+    try {
+      const authCode = await onGoogleButtonPress();
+      await socialSignUp({
+        provider: "google",
+        authCode,
+      });
+    } catch (error) {
+      Alert.alert("Oops", "Something went wrong. Please try again.");
+      console.log("Error during Google sign-up:", error);
+    }
+  }, [socialSignUp]);
+
+  const handleFacebookSignIn = useCallback(async () => {
+    try {
+      const authCode = await onGoogleButtonPress();
+      await socialSignUp({
+        provider: "facebook",
+        authCode,
+      });
+    } catch (error) {
+      Alert.alert("Oops", "Something went wrong. Please try again.");
+      console.log("Error during Facebook sign-up:", error);
+    }
+  }, [socialSignUp]);
 
   useEffect(() => {
-    if (response.isError) {
-      const canRegister = response?.error?.data?.message === "User not registered";
+    if (localSignInResponse.isError) {
+      const canRegister = localSignInResponse?.error?.data?.message === "User not registered";
       const buttons: AlertButton[] = [{ text: "Back", style: "cancel" }];
       if (canRegister) {
         buttons.push({
@@ -60,11 +86,13 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
           style: "default",
         });
       }
-      Alert.alert("Oops", response?.error?.data?.message ?? "unknown error", buttons, {
+      Alert.alert("Oops", localSignInResponse?.error?.data?.message ?? "unknown error", buttons, {
         cancelable: true,
       });
     } else return;
-  }, [navigation, response?.error?.data?.message, response.isError]);
+  }, [navigation, localSignInResponse?.error?.data?.message, localSignInResponse.isError]);
+
+  if (localSignInResponse.isLoading || socialSignUpResponse.isLoading) return <ActivityIndicator />;
 
   return (
     <Screen preset="fixed" unsafe unsafeBottom withHorizontalPadding>
@@ -124,19 +152,14 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
         </Text>
       </Button>
       <Space size="large" />
-      <Button preset="social">
+      <Button preset="social" onPress={handleFacebookSignIn}>
         <Facebook width={30} height={30} style={{ position: "absolute", left: 0, margin: 16 }} />
         <Container style={styles.buttonContainer}>
           <Text preset="social">with Facebook</Text>
         </Container>
       </Button>
       <Space size="small" />
-      <Button
-        preset="social"
-        onPress={async () => {
-          await onGoogleButtonPress();
-        }}
-      >
+      <Button preset="social" onPress={handleGoogleSignIn}>
         <Container style={styles.buttonContainer}>
           <Google width={30} height={30} style={{ position: "absolute", left: 0, margin: 16 }} />
           <Text preset="social">with Gmail</Text>

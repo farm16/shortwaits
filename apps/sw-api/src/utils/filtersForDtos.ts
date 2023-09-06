@@ -1,9 +1,4 @@
-import {
-  BusinessUserDtoType,
-  BusinessUserType,
-  ConvertToDtoType,
-  CreateBusinessUserDtoType,
-} from "@shortwaits/shared-lib";
+import { BusinessUserType, ConvertToDtoType } from "@shortwaits/shared-lib";
 import { CreateBusinessUserDto } from "../api/business-user/dto";
 import { CreateClientUserDto } from "../api/client-user/dto";
 import { CreateEventsDto } from "../api/events/dto/create-event.dto";

@@ -2,7 +2,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { Trim } from "class-sanitizer";
 import { IsEmail, IsNotEmpty, IsOptional, IsString, MaxLength, MinLength } from "class-validator";
 
-export class SignUpWithSocialDto {
+export class WithSocialAuthDto {
   @Trim()
   @IsString()
   @IsNotEmpty()
