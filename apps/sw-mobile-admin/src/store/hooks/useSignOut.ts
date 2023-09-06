@@ -1,4 +1,4 @@
-import { resetAuth, resetBusiness, resetUser } from "../slices";
+import { resetAuth, resetBusiness, resetMobileAdmin, resetUser } from "../slices";
 import { useAppDispatch } from "./useDispatch";
 
 export const useSignOut = () => {
@@ -8,5 +8,6 @@ export const useSignOut = () => {
     dispatch(resetAuth());
     dispatch(resetBusiness());
     dispatch(resetUser());
+    dispatch(resetMobileAdmin());
   };
 };

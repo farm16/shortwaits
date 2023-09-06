@@ -1,28 +1,19 @@
 import React, { FC, useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { StyleSheet } from "react-native";
-import { useDispatch } from "react-redux";
-import { ActivityIndicator, Divider, List } from "react-native-paper";
-import { skipToken } from "@reduxjs/toolkit/dist/query/react";
+import { List } from "react-native-paper";
 
 import { Button, Screen, Space, Switch } from "../../../components";
 import { useTheme } from "../../../theme";
-import { useUser, useBusiness, useSignOut } from "../../../store";
+import { useBusiness } from "../../../store";
+import { useGetBusinessUsersMutation, useLocalSignOutMutation, useUpdateBusinessMutation } from "../../../services";
+import { AuthorizedScreenProps } from "../../../navigation";
 import { ManageAdminUsers } from "./options/user-account";
 import { ShortwaitsCustomerSupport } from "./options/support";
-import {
-  useGetBusinessQuery,
-  useGetBusinessUsersMutation,
-  useLocalSignOutMutation,
-  useUpdateBusinessMutation,
-} from "../../../services";
-import { AuthorizedScreenProps } from "../../../navigation";
-import { noop } from "lodash";
 import { AppInfoSettings } from "./options/app-info";
+import { AppLanguage } from "./options/select-language";
 
 export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ navigation }) => {
   const { Colors } = useTheme();
-  const dispatch = useDispatch();
-  const user = useUser();
   const currentBusiness = useBusiness();
   const [admins, setAdmins] = useState([]);
 
@@ -55,9 +46,7 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
 
   const [updateBusiness, state] = useUpdateBusinessMutation();
 
-  const [expanded, setExpanded] = React.useState(true);
   const [signOut] = useLocalSignOutMutation();
-  const handlePress = () => setExpanded(!expanded);
   const handleSignOut = useCallback(async () => {
     await signOut(undefined);
   }, [signOut]);
@@ -66,10 +55,6 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
     borderColor: Colors.gray,
     borderBottomWidth: StyleSheet.hairlineWidth,
   };
-
-  // if (isError) return null;
-
-  // if (state.isLoading) return <ActivityIndicator />;
 
   return (
     <Screen preset="scroll" backgroundColor="backgroundOverlay" unsafeBottom>
@@ -82,7 +67,6 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
         <List.Item
           title={`Business Plan ${currentBusiness?.accountType === "free" ? "(Basic)" : ""}`}
           style={itemStyle}
-          // style={{ backgroundColor: Colors.lightGray }}
           titleStyle={{ color: Colors.text }}
           descriptionStyle={{ color: Colors.orange5, fontWeight: "700", textTransform: "uppercase" }}
           description={`${
@@ -200,6 +184,7 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
           )}
           right={props => <List.Icon {...props} color={Colors.brandSecondary} icon="chevron-right" />}
         />
+        <AppLanguage />
         <List.Item
           descriptionStyle={{ color: Colors.subText }}
           title="Currency"

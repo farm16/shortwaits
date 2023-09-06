@@ -2,7 +2,6 @@ import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { changeFloatingActionButtonVisibility, mobileAdminInitialState, selectCurrentMobileAdminState } from "..";
 import { useIsFocused } from "@react-navigation/native";
-import { el, is } from "date-fns/locale";
 
 /**
  *
@@ -86,4 +85,18 @@ export const useShowGhostComponent = (componentName = "floatingActionButton") =>
       dispatch(componentActions[componentName](false));
     };
   }, []);
+};
+
+export const usePreferredLanguageFromStore = () => {
+  const mobileAdmin = useSelector(selectCurrentMobileAdminState);
+  return useMemo(() => {
+    return mobileAdmin ? mobileAdmin.preferredLanguage : null;
+  }, [mobileAdmin]);
+};
+
+export const useSuggestedLanguageFromStore = () => {
+  const mobileAdmin = useSelector(selectCurrentMobileAdminState);
+  return useMemo(() => {
+    return mobileAdmin ? mobileAdmin.suggestedLanguage : null;
+  }, [mobileAdmin]);
 };

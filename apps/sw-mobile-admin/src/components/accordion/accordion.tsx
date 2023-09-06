@@ -13,12 +13,12 @@ export interface AccordionDataItemType {
   onPress?: () => void;
 }
 
-interface AccordionProps {
+interface AccordionProps extends Partial<React.ComponentProps<typeof List.Accordion>> {
   accordionTitle: string;
   accordionData: AccordionDataItemType[];
 }
 
-export const Accordion: React.FC<AccordionProps> = ({ accordionTitle, accordionData }) => {
+export const Accordion: React.FC<AccordionProps> = ({ accordionTitle, accordionData, ...rest }) => {
   const [expanded, setExpanded] = useState(false);
   const handlePress = () => setExpanded(state => !state);
   const { Colors } = useTheme();
@@ -37,6 +37,7 @@ export const Accordion: React.FC<AccordionProps> = ({ accordionTitle, accordionD
       right={props => (
         <List.Icon {...props} color={Colors.brandSecondary} icon={props.isExpanded ? "chevron-up" : "chevron-down"} />
       )}
+      {...rest}
     >
       {accordionData?.map((data, index) => (
         <AccordionItem

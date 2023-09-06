@@ -8,3 +8,4 @@ export * from "./constants";
 export * from "./currency";
 export * from "./strings";
 export * from "./social-auth";
+export * from "./locales";

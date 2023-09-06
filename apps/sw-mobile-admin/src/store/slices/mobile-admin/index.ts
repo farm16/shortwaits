@@ -1,6 +1,10 @@
 import { cloneDeep } from "lodash";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { CategoriesDtoType, ShortwaitsAdminDefaultDataPayloadType } from "@shortwaits/shared-lib";
+import {
+  AvailableLanguagesType,
+  CategoriesDtoType,
+  ShortwaitsAdminDefaultDataPayloadType,
+} from "@shortwaits/shared-lib";
 
 import { shortwaitsApi } from "../../../services";
 import type { RootState } from "../..";
@@ -9,7 +13,10 @@ type GhostComponentProps = {
   [key: string]: string | boolean;
   isVisible: boolean;
 };
+
 export interface MobileAdminStateType {
+  preferredLanguage: AvailableLanguagesType;
+  suggestedLanguage: AvailableLanguagesType;
   defaultData: ShortwaitsAdminDefaultDataPayloadType;
   categories: CategoriesDtoType;
   components: {
@@ -19,6 +26,8 @@ export interface MobileAdminStateType {
   };
 }
 export const mobileAdminInitialState: MobileAdminStateType = {
+  preferredLanguage: null,
+  suggestedLanguage: "en",
   defaultData: null,
   categories: null,
   components: {
@@ -38,11 +47,24 @@ export const mobileAdminSlice = createSlice({
   name: "mobileAdmin",
   initialState: mobileAdminInitialState,
   reducers: {
-    /**
-     * @param action.payload: ServicesType and
-     * updates by index since_id is not defined
-     * on sample services.
-     */
+    updatePreferredLanguage(state, action: PayloadAction<AvailableLanguagesType>) {
+      const { payload } = action;
+      const currentState = cloneDeep(state);
+      console.log("updatePreferredLanguage Action >>>", payload);
+      return {
+        ...currentState,
+        preferredLanguage: payload,
+      };
+    },
+    updateSuggestedLanguage(state, action: PayloadAction<AvailableLanguagesType>) {
+      const { payload } = action;
+      const currentState = cloneDeep(state);
+      console.log("updateSuggestedLanguage Action >>>", payload);
+      return {
+        ...currentState,
+        suggestedLanguage: payload,
+      };
+    },
     changeFloatingActionButtonVisibility(state, action: PayloadAction<boolean>) {
       const { payload } = action;
       const currentState = cloneDeep(state);
@@ -103,6 +125,9 @@ export const mobileAdminSlice = createSlice({
         },
       };
     },
+    resetMobileAdmin() {
+      return mobileAdminInitialState;
+    },
   },
   extraReducers: builder => {
     builder
@@ -121,6 +146,9 @@ export const {
   hidePremiumMembershipModal,
   showPremiumMembershipModal,
   changeFloatingActionButtonVisibility,
+  updatePreferredLanguage,
+  updateSuggestedLanguage,
+  resetMobileAdmin,
 } = mobileAdminSlice.actions;
 
 export const selectCurrentMobileAdminState = (state: RootState) => state.mobileAdmin;
