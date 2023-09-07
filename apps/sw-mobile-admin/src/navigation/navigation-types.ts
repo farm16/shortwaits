@@ -52,7 +52,9 @@ export type ModalStackParamList = {
     headerTitle?: string;
     multiple?: boolean;
     data?: SelectorModalData[];
+    selectedData?: SelectorModalData[];
     onGoBack?(arg0): void;
+    onSubmit?(arg0): void;
     onSelect?(arg0): void;
     searchable?: boolean;
     closeOnSelect?: boolean;
@@ -61,6 +63,8 @@ export type ModalStackParamList = {
     itemRightIconName?: string;
     itemRightIconColor?: ThemeColorName;
     mode?: "update" | "create";
+    minSelectedItems?: number;
+    maxSelectedItems?: number;
   };
   [MODAL_SCREENS.SCHEDULE_MODAL_SCREEN]: {
     hours: WeekHoursType;

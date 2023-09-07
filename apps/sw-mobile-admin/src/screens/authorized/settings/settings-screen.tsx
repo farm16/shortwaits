@@ -1,6 +1,7 @@
 import React, { FC, useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { List } from "react-native-paper";
+import { FormattedMessage, useIntl } from "react-intl"; // Import FormattedMessage and useIntl
 
 import { Button, Screen, Space, Switch } from "../../../components";
 import { useTheme } from "../../../theme";
@@ -14,10 +15,12 @@ import { AppLanguage } from "./options/select-language";
 
 export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ navigation }) => {
   const { Colors } = useTheme();
+
   const currentBusiness = useBusiness();
   const [admins, setAdmins] = useState([]);
 
   const [getAdmins] = useGetBusinessUsersMutation();
+  const intl = useIntl(); // Initialize the Intl instance
 
   useEffect(() => {
     async function getCurrentAdmins() {
@@ -65,13 +68,21 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
         }}
       >
         <List.Item
-          title={`Business Plan ${currentBusiness?.accountType === "free" ? "(Basic)" : ""}`}
+          title={
+            <FormattedMessage
+              id="Settings_Screen.business_plan.title"
+              values={{ accountType: currentBusiness?.accountType }}
+            />
+          }
           style={itemStyle}
           titleStyle={{ color: Colors.text }}
           descriptionStyle={{ color: Colors.orange5, fontWeight: "700", textTransform: "uppercase" }}
-          description={`${
-            currentBusiness?.accountType === "free" ? "Upgrade to Premium !!!" : currentBusiness?.accountType
-          }`}
+          description={
+            <FormattedMessage
+              id="Settings_Screen.business_plan.description"
+              values={{ accountType: currentBusiness?.accountType }}
+            />
+          }
           right={props => <List.Icon {...props} color={Colors.brandSecondary} icon="chevron-right" />}
           onPress={() => navigation.navigate("authorized-stack", { screen: "plans-screen" })}
         />
@@ -79,8 +90,8 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
           titleStyle={{ color: Colors.text }}
           style={itemStyle}
           descriptionStyle={{ color: Colors.subText }}
-          title="Web booking"
-          description="Enable customers to book online"
+          title={<FormattedMessage id="Settings_Screen.web_booking_title" />}
+          description={<FormattedMessage id="Settings_Screen.web_booking_description" />}
           right={() => (
             <Switch
               disabled
@@ -100,8 +111,8 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
         <List.Item
           descriptionStyle={{ color: Colors.subText }}
           titleStyle={{ color: Colors.text }}
-          title="App notifications"
-          description="Allow app notifications"
+          title={<FormattedMessage id="Settings_Screen.app_notifications_title" />}
+          description={<FormattedMessage id="Settings_Screen.app_notifications_description" />}
           style={itemStyle}
           right={() => (
             <Switch
@@ -109,7 +120,6 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
               value={currentBusiness?.isAppNotificationEnabled ?? false}
               onChange={() => {
                 const isAppNotificationEnabled = !(currentBusiness?.isAppNotificationEnabled ?? false);
-                console.log("isAppNotificationEnabled", isAppNotificationEnabled);
                 updateBusiness({
                   ...currentBusiness,
                   isAppNotificationEnabled,
@@ -121,8 +131,8 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
         <List.Item
           descriptionStyle={{ color: Colors.subText }}
           titleStyle={{ color: Colors.text }}
-          title="SMS notifications"
-          description="Receive updates via SMS"
+          title={<FormattedMessage id="Settings_Screen.sms_notifications_title" />}
+          description={<FormattedMessage id="Settings_Screen.sms_notifications_description" />}
           style={itemStyle}
           right={() => (
             <Switch
@@ -145,8 +155,8 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
             color: Colors.text,
           }}
           style={itemStyle}
-          title="Video conference"
-          description="Allow video conference link in booking"
+          title={<FormattedMessage id="Settings_Screen.video_conference_title" />}
+          description={<FormattedMessage id="Settings_Screen.video_conference_description" />}
           right={() => (
             <Switch
               isLoading={state.isLoading}
@@ -169,8 +179,8 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
             color: Colors.text,
           }}
           style={itemStyle}
-          title="Rate us"
-          description="Rate us on the app store"
+          title={<FormattedMessage id="Settings_Screen.rate_us_title" />}
+          description={<FormattedMessage id="Settings_Screen.rate_us_description" />}
           left={props => (
             <List.Icon
               {...props}
@@ -187,11 +197,11 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
         <AppLanguage />
         <List.Item
           descriptionStyle={{ color: Colors.subText }}
-          title="Currency"
+          title={<FormattedMessage id="Settings_Screen.currency_title" />}
           disabled
           style={{ backgroundColor: Colors.lightGray }}
           titleStyle={{ color: Colors.text }}
-          description={"USD - United States Dollar"}
+          description={<FormattedMessage id="Settings_Screen.currency_description" />}
           right={props => <List.Icon {...props} color={Colors.gray} icon="chevron-right" />}
         />
         <ShortwaitsCustomerSupport />
@@ -201,15 +211,14 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
             color: Colors.text,
           }}
           style={itemStyle}
-          title="Disable Store"
-          description="Disable your store temporarily"
+          title={<FormattedMessage id="Settings_Screen.disable_store_title" />}
+          description={<FormattedMessage id="Settings_Screen.disable_store_description" />}
           right={() => (
             <Switch
               isLoading={state.isLoading}
               value={currentBusiness?.isDisabled ?? false}
               onChange={() => {
                 const isDisabled = !(currentBusiness?.isDisabled ?? false);
-                console.log("isDisabled", isDisabled);
                 updateBusiness({
                   ...currentBusiness,
                   isDisabled,
@@ -223,7 +232,7 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
         <Button
           style={styles.signOutButton}
           textStyle={styles.signOutButtonText}
-          text="Sign Out"
+          text={intl.formatMessage({ id: "Settings_Screen.sign_out_button_text" })}
           onPress={() => {
             handleSignOut();
           }}
@@ -232,6 +241,7 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
     </Screen>
   );
 };
+
 const styles = StyleSheet.create({
   signOutButton: {
     flex: undefined,

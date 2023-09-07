@@ -2,6 +2,8 @@ import React, { FC, useEffect, useLayoutEffect, useMemo, useState } from "react"
 import { ActivityIndicator } from "react-native-paper";
 import { Alert } from "react-native";
 import { FormikErrors } from "formik";
+import { useIntl } from "react-intl";
+import { CreateEventDtoType, ServiceDtoType, eventPaymentMethods } from "@shortwaits/shared-lib";
 
 import { useForm } from "../../../hooks";
 import { useBusiness, useServices, useUser } from "../../../store";
@@ -18,12 +20,12 @@ import {
   ExpandableSection,
 } from "../../../components";
 import { ModalsScreenProps } from "../../../navigation";
-import { CreateEventDtoType, ServiceDtoType, eventPaymentMethods } from "@shortwaits/shared-lib";
 import { useCreateEventMutation } from "../../../services";
 import { getEmojiString } from "../../../utils";
 
 export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navigation, route }) => {
   const { onSubmit, onDone, closeOnSubmit = true } = route.params;
+  const intl = useIntl(); // Access the intl object
 
   const [selectedService, setSelectedService] = useState<ServiceDtoType | null>(null);
   const [isFree, setIsFree] = useState<boolean>(true);
@@ -39,8 +41,8 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
 
     if (startTime && expectedEndTime && !formData?.hasNoDuration) {
       if (startTime > expectedEndTime) {
-        errors.startTime = "Start date should not exceed the end date.";
-        errors.expectedEndTime = "End date should not precede the start date.";
+        errors.startTime = intl.formatMessage({ id: "AddEventModal.errorStartTime" });
+        errors.expectedEndTime = intl.formatMessage({ id: "AddEventModal.errorExpectedEndTime" });
       }
     }
 
@@ -104,9 +106,9 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
-      headerTitle: () => <Text preset="text" text="Create Event" />,
+      headerTitle: () => <Text preset="text" text={intl.formatMessage({ id: "AddEventModal.title" })} />,
     });
-  }, [handleSubmit, navigation]);
+  }, [handleSubmit, navigation, intl]);
 
   useEffect(() => {
     if (createEventStatus.isSuccess && closeOnSubmit) {
@@ -130,12 +132,12 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
   }, [onDone]);
 
   if (createEventStatus.isError) {
-    Alert.alert("Error", createEventStatus.error.message);
+    Alert.alert(intl.formatMessage({ id: "AddEventModal.errorTitle" }), createEventStatus.error.message);
   }
 
   const renderSubmitButton = (
     <Button
-      text="Create Event"
+      text={intl.formatMessage({ id: "AddEventModal.createEventButton" })}
       onPress={() => {
         handleSubmit();
       }}
@@ -149,8 +151,8 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
   ) : (
     <FormContainer footer={renderSubmitButton}>
       <TextFieldCard
-        title="Name"
-        placeholder="Yoga class"
+        title={intl.formatMessage({ id: "AddEventModal.name" })}
+        placeholder={intl.formatMessage({ id: "AddEventModal.name" })}
         value={values.name}
         onChangeText={handleChange("name")}
         isTouched={touched.name}
@@ -158,8 +160,10 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
       />
 
       <ButtonCard
-        title="Services"
-        subTitle={selectedService ? selectedService.name : "Select a service"}
+        title={intl.formatMessage({ id: "AddEventModal.service.title" })}
+        subTitle={
+          selectedService ? selectedService.name : intl.formatMessage({ id: "AddEventModal.service.description" })
+        }
         leftIconName={selectedService ? "circle" : "circle-outline"}
         leftIconColor={selectedService?.serviceColor?.hexCode ?? "grey"}
         onPress={() =>
@@ -181,13 +185,13 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
       />
       <ButtonCard
         rightIconName={values?.hasNoDuration ? "checkbox-outline" : "checkbox-blank-outline"}
-        title={"No duration"}
+        title={intl.formatMessage({ id: "AddEventModal.noDuration" })}
         onPress={() => {
           setFieldValue("hasNoDuration", !values?.hasNoDuration);
         }}
       />
       <TimePickerFieldCard
-        title={"Starts"}
+        title={intl.formatMessage({ id: "AddEventModal.startTime" })}
         date={new Date(values.startTime)}
         onChange={handleChange("startTime")}
         isTouched={touched.startTime}
@@ -195,7 +199,7 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
       />
       {values?.hasNoDuration ? null : (
         <TimePickerFieldCard
-          title={"Ends"}
+          title={intl.formatMessage({ id: "AddEventModal.endTime" })}
           date={new Date(values.expectedEndTime)}
           onChange={handleChange("expectedEndTime")}
           isTouched={touched.expectedEndTime}
@@ -204,7 +208,7 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
       )}
       <ButtonCard
         rightIconName={isFree ? "checkbox-outline" : "checkbox-blank-outline"}
-        title={"Free"}
+        title={intl.formatMessage({ id: "AddEventModal.free" })}
         onPress={() => {
           setIsFree(isFree => {
             if (!isFree) {
@@ -217,14 +221,18 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
       {isFree ? null : (
         <>
           <ButtonCard
-            title="Payment method"
-            subTitle={values.paymentMethod ? eventPaymentMethods[values.paymentMethod] : "Select a payment method"}
+            title={intl.formatMessage({ id: "AddEventModal.paymentMethod" })}
+            subTitle={
+              values.paymentMethod
+                ? eventPaymentMethods[values.paymentMethod]
+                : intl.formatMessage({ id: "AddEventModal.selectPaymentMethod" })
+            }
             onPress={() =>
               navigation.navigate("modals", {
                 screen: "selector-modal-screen",
                 params: {
                   type: "static",
-                  headerTitle: "Payment method",
+                  headerTitle: intl.formatMessage({ id: "AddEventModal.paymentMethod" }),
                   data: Object.keys(eventPaymentMethods).map(key => {
                     return {
                       key,
@@ -239,10 +247,10 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
             }
           />
           <CurrencyFieldCard
-            title="Price"
+            title={intl.formatMessage({ id: "AddEventModal.price" })}
             disabled={isFree}
             keyboardType="number-pad"
-            placeholder="Give a price"
+            placeholder={intl.formatMessage({ id: "AddEventModal.enterPrice" })}
             value={values.priceExpected}
             onChangeValue={price => setFieldValue("priceExpected", price)}
             isTouched={touched.notes}
@@ -253,8 +261,34 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
       )}
       <ExpandableSection>
         <ButtonCard
-          title="Labels"
-          subTitle={values.labels.length > 0 ? `${emojis}` : "Select labels"}
+          title={intl.formatMessage({ id: "AddEventModal.staff.title" })}
+          subTitle={
+            values.staffIds.length > 0
+              ? `${intl.formatMessage({ id: "AddEventModal.staff.description" })}: ${values.staffIds.length}`
+              : intl.formatMessage({ id: "AddEventModal.staff.emptyDescription" })
+          }
+          onPress={() =>
+            navigation.navigate("modals", {
+              screen: "selector-modal-screen",
+              params: {
+                type: "staff",
+                headerTitle: intl.formatMessage({ id: "AddEventModal.staff.selector.headerTitle" }),
+                selectedData: values.staffIds,
+                multiple: true,
+                minSelectedItems: 1,
+                onGoBack: staff => {
+                  console.log("selected staff:", staff);
+                  // const staffIds = staff.map(s => s._id);
+                  // setFieldValue("staffIds", staffIds);
+                },
+              },
+            })
+          }
+        />
+
+        <ButtonCard
+          title={intl.formatMessage({ id: "AddEventModal.labels" })}
+          subTitle={values.labels.length > 0 ? `${emojis}` : intl.formatMessage({ id: "AddEventModal.selectLabels" })}
           onPress={() =>
             navigation.navigate("modals", {
               screen: "selector-modal-screen",
@@ -271,8 +305,8 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
         />
 
         <TextFieldCard
-          title="Description"
-          placeholder="15 minutes hot Yoga"
+          title={intl.formatMessage({ id: "AddEventModal.description" })}
+          placeholder={intl.formatMessage({ id: "AddEventModal.enterDescription" })}
           value={values.description}
           onChangeText={handleChange("description")}
           isTouched={touched.description}
@@ -280,9 +314,9 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
         />
 
         <TextFieldCard
-          title="Notes"
+          title={intl.formatMessage({ id: "AddEventModal.notes" })}
           multiline
-          placeholder="Include notes here"
+          placeholder={intl.formatMessage({ id: "AddEventModal.enterNotes" })}
           value={values.notes}
           onChangeText={handleChange("notes")}
           isTouched={touched.notes}

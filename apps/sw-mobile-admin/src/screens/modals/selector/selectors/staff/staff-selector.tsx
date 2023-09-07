@@ -1,15 +1,15 @@
 import React, { FC, useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
-import { FlatList, StyleSheet } from "react-native";
+import { Alert, FlatList, StyleSheet } from "react-native";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { BusinessUsersDtoType } from "@shortwaits/shared-lib";
 import { useDispatch } from "react-redux";
 
 import { AnimatedSearchBar, Container, LeftChevronButton, IconButton, Text } from "../../../../../components";
-import { selectorConfigs } from "../../selector-config";
 import { StaffSelectorItem } from "./staff-selector-item";
 import { useGetBusinessStaffQuery } from "../../../../../services";
 import { ModalsScreenProps } from "../../../../../navigation";
 import { showPremiumMembershipModal, useUser } from "../../../../../store";
+import { ActivityIndicator } from "react-native-paper";
 
 // Utility function to filter users based on search text
 function filterBusinessUsers(searchText: string, users: BusinessUsersDtoType) {
@@ -21,9 +21,18 @@ function filterBusinessUsers(searchText: string, users: BusinessUsersDtoType) {
 }
 
 export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ navigation, route }) => {
-  const { type, searchable = true, onSelect, closeOnSelect = true } = route.params;
-
-  const { headerTitle, searchPlaceholder } = useMemo(() => selectorConfigs[type], [type]);
+  const {
+    searchable = true,
+    onSelect,
+    closeOnSelect = true,
+    headerTitle = "Staff",
+    selectedData,
+    multiple,
+    onGoBack,
+    onSubmit,
+    minSelectedItems,
+    maxSelectedItems,
+  } = route.params;
 
   const dispatch = useDispatch();
 
@@ -42,6 +51,7 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
   const [searchText, setSearchText] = useState("");
   const [filteredData, setFilteredData] = useState<BusinessUsersDtoType>([]);
   const [isListSearchable, setIsListSearchable] = useState(false);
+  const [selectedItems, setSelectedItems] = useState(selectedData);
 
   useEffect(() => {
     if (payload?.data && isSuccess) {
@@ -51,9 +61,23 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
   }, [isSuccess, payload, searchText]);
 
   useLayoutEffect(() => {
+    const handleOnGoBack = () => {
+      if (multiple) {
+        if (onSubmit) {
+          onSubmit(selectedItems);
+        }
+        if (onGoBack) {
+          onGoBack(selectedItems);
+        }
+        navigation.goBack();
+      } else {
+        navigation.goBack();
+      }
+    };
+
     navigation.setOptions({
       headerTitle: headerTitle,
-      headerLeft: () => <LeftChevronButton onPress={() => navigation.goBack()} />,
+      headerLeft: () => <LeftChevronButton onPress={() => handleOnGoBack()} />,
       headerRight: () => (
         <Container direction="row" alignItems="center">
           {searchable ? (
@@ -69,7 +93,17 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
         </Container>
       ),
     });
-  }, [handleAddStaffPress, headerTitle, isListSearchable, navigation, searchable]);
+  }, [
+    handleAddStaffPress,
+    headerTitle,
+    isListSearchable,
+    multiple,
+    navigation,
+    onGoBack,
+    onSubmit,
+    searchable,
+    selectedItems,
+  ]);
 
   const handleOnChangeText = (text: string) => {
     setSearchText(text);
@@ -79,22 +113,48 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
 
   const handleOnSelect = useCallback(
     item => {
-      if (closeOnSelect) {
+      if (multiple) {
+        if (selectedItems?.includes(item._id)) {
+          if (minSelectedItems) {
+            if (selectedItems.length <= minSelectedItems) {
+              Alert.alert("Warning", `You must select at least ${minSelectedItems} staff member`);
+            } else {
+              setSelectedItems(selectedItems.filter(i => i !== item._id));
+            }
+          }
+        } else {
+          if (maxSelectedItems) {
+            if (selectedItems.length >= maxSelectedItems) {
+              Alert.alert("Warning", `You can only select ${maxSelectedItems} staff members`);
+            } else {
+              setSelectedItems([...selectedItems, item._id]);
+            }
+          }
+        }
+      } else if (closeOnSelect) {
         onSelect(item);
         navigation.goBack();
       } else {
         onSelect(item);
       }
     },
-    [closeOnSelect, navigation, onSelect]
+    [closeOnSelect, maxSelectedItems, minSelectedItems, multiple, navigation, onSelect, selectedItems]
   );
+
+  const getItemIconName = item => {
+    if (multiple) {
+      return selectedItems?.includes(item._id) ? "check" : "none";
+    }
+    return undefined;
+  };
 
   if (isError) {
     return <Text>Error</Text>;
   }
   if (isLoading) {
-    return <Text>Loading...</Text>;
+    return <ActivityIndicator />;
   }
+
   if (isSuccess && payload.data) {
     return (
       <>
@@ -106,6 +166,7 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
           data={filteredData}
           renderItem={({ item }) => (
             <StaffSelectorItem
+              iconName={getItemIconName(item)}
               item={item}
               onSelectItem={() => {
                 handleOnSelect(item);

@@ -7,9 +7,12 @@ import PlanCard from "./planCard";
 import { Platform, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { getResponsiveFontSize } from "../../../utils";
+import { useIntl } from "react-intl"; // Import the useIntl hook
 
 export function PlansScreen({ navigation }: AuthorizedScreenProps<"plans-screen">) {
   const { Colors } = useTheme();
+  const intl = useIntl(); // Access the intl object
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
@@ -19,7 +22,7 @@ export function PlansScreen({ navigation }: AuthorizedScreenProps<"plans-screen"
   const defaultPlanId = "plan_H1J2X2Z2Y2";
   const plansData: SubscriptionPlans = [
     {
-      title: "1 Month",
+      title: intl.formatMessage({ id: "PlansScreen.plan.1month.title" }),
       planColor: "#ebabda",
       tags: [],
       hasOffer: false,
@@ -27,34 +30,34 @@ export function PlansScreen({ navigation }: AuthorizedScreenProps<"plans-screen"
       offerCode: "",
       finalPrice: 1.5,
       price: 1.5,
-      priceDescription: "per month",
-      planDescription: "Billed every month\n14-day money back guarantee",
+      priceDescription: intl.formatMessage({ id: "PlansScreen.plan.1month.priceDescription" }),
+      planDescription: intl.formatMessage({ id: "PlansScreen.plan.1month.description" }),
       planId: "plan_H1J2X2Z2Y1",
     },
     {
-      title: "12 Month",
+      title: intl.formatMessage({ id: "PlansScreen.plan.12months.title" }),
       planColor: "#f1cd6a",
       tags: ["popular"],
       hasOffer: true,
-      offerDescription: "Save 20%",
+      offerDescription: intl.formatMessage({ id: "PlansScreen.plan.12months.offerDescription" }),
       offerCode: "SAVE20", // saves 3.6
       finalPrice: 14.4, // ~ 1.2 * 12,
       price: 18, // ~ 1.5 * 12,
-      priceDescription: "per one time",
-      planDescription: "Billed every 12 month\n14-day money back guarantee",
+      priceDescription: intl.formatMessage({ id: "PlansScreen.plan.12months.priceDescription" }),
+      planDescription: intl.formatMessage({ id: "PlansScreen.plan.12months.description" }),
       planId: "plan_H1J2X2Z2Y2",
     },
     {
-      title: "6 Month",
+      title: intl.formatMessage({ id: "PlansScreen.plan.6months.title" }),
       planColor: "#a98ffc",
       tags: [],
       hasOffer: true,
-      offerDescription: "One month free",
+      offerDescription: intl.formatMessage({ id: "PlansScreen.plan.6months.offerDescription" }),
       offerCode: "1MONTHFREE", // saves 1.5
       finalPrice: 7.5,
       price: 9, // ~ 1.5 * 6,
-      priceDescription: "per one time",
-      planDescription: "Billed every 6 month\n14-day money back guarantee",
+      priceDescription: intl.formatMessage({ id: "PlansScreen.plan.6months.priceDescription" }),
+      planDescription: intl.formatMessage({ id: "PlansScreen.plan.6months.description" }),
       planId: "plan_H1J2X2Z2Y3",
     },
   ];
@@ -98,22 +101,19 @@ export function PlansScreen({ navigation }: AuthorizedScreenProps<"plans-screen"
             fontFamily: "Helvetica Neue",
           }}
         >
-          {"Choose your\nmembership plan"}
+          {intl.formatMessage({ id: "PlansScreen.choosePlan" })}
         </Text>
       </View>
       <FormContainer
         backgroundColor="staticLightBackground"
         footer={
           <Button
-            // preset="none"
             rightIconName="chevron-right"
             rightIconSize={30}
             rightIconColor="white"
             style={{
               backgroundColor: "black",
-              // borderRadius: 2,
               paddingVertical: 10,
-              // paddingHorizontal: 16,
               marginRight: 20,
               borderRightColor: Colors.brandSecondary,
               borderBottomColor: Colors.brandSecondary,
@@ -124,7 +124,7 @@ export function PlansScreen({ navigation }: AuthorizedScreenProps<"plans-screen"
               color: "white",
             }}
             onPress={() => navigation.goBack()}
-            text="Proceed to payment"
+            text={intl.formatMessage({ id: "PlansScreen.proceedToPayment" })}
           />
         }
       >

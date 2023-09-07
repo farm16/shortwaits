@@ -2,6 +2,7 @@ import { Platform } from "react-native";
 import React, { useEffect, useState } from "react";
 import DeviceInfo from "react-native-device-info";
 import { Accordion, AccordionDataItemType } from "../../../../components"; // Import the Accordion component
+import { useIntl } from "react-intl";
 
 const appName = DeviceInfo.getApplicationName();
 const appVersion = DeviceInfo.getVersion();
@@ -11,6 +12,7 @@ const deviceType = DeviceInfo.getDeviceType();
 
 export const AppInfoSettings = () => {
   const [apiLevel, setApiLevel] = useState(0);
+  const intl = useIntl(); // Access the intl object
 
   useEffect(() => {
     if (Platform.OS === "android") {
@@ -24,26 +26,48 @@ export const AppInfoSettings = () => {
 
   const accordionData: AccordionDataItemType[] = [
     {
-      title: "App Name",
-      description: appName,
+      title: intl.formatMessage({ id: "Settings_Screen.appInfo.appName" }),
+      description: intl.formatMessage({ id: "Settings_Screen.appInfo.appName" }),
     },
     {
-      title: "App Version",
-      description: `v.${appVersion}-${appBuildNumber}${__DEV__ ? "  _dev_" : "  _prod_"}`,
+      title: intl.formatMessage({ id: "Settings_Screen.appInfo.appVersion" }),
+      description: intl.formatMessage(
+        {
+          id: "Settings_Screen.appInfo.appVersionDescription",
+        },
+        {
+          appVersion: DeviceInfo.getVersion(),
+          appBuildNumber: DeviceInfo.getBuildNumber(),
+          devProdLabel: __DEV__ ? " _dev_" : " _prod_",
+        }
+      ),
     },
     {
-      title: "App Bundle Id",
-      description: appBundleId,
+      title: intl.formatMessage({ id: "Settings_Screen.appInfo.appBundleId" }),
+      description: DeviceInfo.getBundleId(),
     },
     {
-      title: "Codepush Version",
-      description: "v.1.0.0", // Replace with your actual codepush version
+      title: intl.formatMessage({ id: "Settings_Screen.appInfo.codepushVersion" }),
+      description: intl.formatMessage({ id: "Settings_Screen.appInfo.codepushVersionDescription" }),
     },
     {
-      title: "Target Device",
-      description: `${deviceType} ${Platform.OS === "android" ? "| " + apiLevel : ""}`,
+      title: intl.formatMessage({ id: "Settings_Screen.appInfo.targetDevice" }),
+      description: intl.formatMessage(
+        {
+          id: "Settings_Screen.appInfo.targetDeviceDescription",
+        },
+        {
+          deviceType: DeviceInfo.getDeviceType(),
+          apiLevel: Platform.OS === "android" ? `| ${apiLevel}` : "",
+        }
+      ),
     },
   ];
 
-  return <Accordion accordionTitle="App Information" accordionData={accordionData} />;
+  return (
+    <Accordion
+      accordionTitle={intl.formatMessage({ id: "Settings_Screen.appInfo.title" })}
+      accordionData={accordionData}
+    />
+  );
 };
