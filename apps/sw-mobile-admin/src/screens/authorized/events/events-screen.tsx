@@ -59,7 +59,7 @@ export function EventsScreen({ navigation }: AuthorizedScreenProps<"events-scree
                     onSelect: item => {
                       navigation.navigate("authorized-stack", {
                         screen: "event-screen",
-                        params: { event: item.itemData },
+                        params: { eventId: item.key },
                       });
                     },
                   },

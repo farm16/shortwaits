@@ -15,7 +15,11 @@ import {
   AnimatedSearchBar,
 } from "../../../components";
 import { useBusiness, useClients, useShowGhostComponent } from "../../../store";
-import { useCreateBusinessClientsMutation, useGetBusinessClientsQuery } from "../../../services";
+import {
+  useCreateBusinessClientsMutation,
+  useGetBusinessClientsQuery,
+  useUpdateEventMutation,
+} from "../../../services";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useOsContacts } from "../../../hooks";
 
@@ -54,12 +58,19 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({ navi
         Alert.alert("Error", osContactsError.message);
       }
       const contacts = await getOsContacts();
+      const clientKeySet = new Set(
+        currentClients.map(client => `${client.middleName}-${client.familyName}-${client.givenName}`)
+      );
+      const filteredContacts = contacts.data.filter(
+        contact => !clientKeySet.has(`${contact.middleName}-${contact.familyName}-${contact.givenName}`)
+      );
+
       createClients({
         businessId: business._id,
-        body: contacts.data,
+        body: filteredContacts,
       });
     },
-    [business._id, createClients, getOsContacts, osContactsError]
+    [business._id, createClients, currentClients, getOsContacts, osContactsError]
   );
 
   useLayoutEffect(() => {
@@ -96,7 +107,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({ navi
                 setIsListSearchable(s => !s);
               }}
             />
-            {/* <IconButton iconType="add" withMarginRight onPress={() => handleAddClient()} /> */}
+            <IconButton iconType="add-staff" withMarginRight onPress={() => handleAddClient()} />
           </Container>
         );
       },
@@ -110,6 +121,9 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({ navi
       onPress={() => {
         navigation.navigate("authorized-stack", {
           screen: "business-client-screen",
+          params: {
+            client: item,
+          },
         });
       }}
     />

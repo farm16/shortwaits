@@ -1,13 +1,13 @@
 import React, { FC } from "react";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet, Pressable as PressableRN } from "react-native";
 import Spinner from "react-native-spinkit";
 
 import { Text } from "../text/text";
 import { useTheme } from "../../../theme";
-import { ButtonProps } from "./button-types";
+import { PressableProps } from "./pressable-types";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
-export const Button: FC<ButtonProps> = props => {
+export const Pressable: FC<PressableProps> = props => {
   const {
     preset = "primary",
     withShadow = false,
@@ -42,7 +42,7 @@ export const Button: FC<ButtonProps> = props => {
   const content = children || <Text iText={iText} text={text} style={textStyles} />;
 
   return (
-    <TouchableOpacity {...rest} style={[defaultStyle, styleOverride]} disabled={disabled || state === "disabled"}>
+    <PressableRN {...rest} style={[defaultStyle, styleOverride]} disabled={disabled || state === "disabled"}>
       {leftIconName &&
         (leftIconName === "none" ? null : <Icon name={leftIconName} size={leftIconSize} color={leftIconColor} />)}
       {content}
@@ -50,7 +50,7 @@ export const Button: FC<ButtonProps> = props => {
         (rightIconName === "none" ? null : (
           <Icon name={rightIconName} size={rightIconSize as number} color={rightIconColor} />
         ))}
-    </TouchableOpacity>
+    </PressableRN>
   );
 };
 
@@ -60,4 +60,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export * from "./button-types";
+export * from "./pressable-types";

@@ -29,7 +29,7 @@ export const AgendaItem = (props: AgendaItemProps) => {
   const handleOnPress = useCallback(() => {
     navigate("authorized-stack", {
       screen: "event-screen",
-      params: { event: item },
+      params: { eventId: item._id },
     });
   }, [item]);
 

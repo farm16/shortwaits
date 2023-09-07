@@ -8,10 +8,11 @@ import { ServicesSelector } from "./selectors/services/services-selector";
 import { StaticSelector } from "./selectors/static/static-selector";
 import { LabelsSelector } from "./selectors/labels/labels-selector";
 import { EventLabelsSelector } from "./selectors/labels/event-labels-selector";
+import { ClientsSelector } from "./selectors/clients/clients-selector";
 
 const selectorsComponents: Record<SelectorModalModeType, FC<ModalsScreenProps<"selector-modal-screen">>> = {
   staff: StaffSelector,
-  clients: StaffSelector,
+  clients: ClientsSelector,
   categories: CategoriesSelector,
   services: ServicesSelector,
   static: StaticSelector,

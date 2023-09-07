@@ -40,6 +40,9 @@ export type SelectorModalData =
   | CategoryDtoType
   | ServiceDtoType
   | BusinessLabelType
+  | EventDtoType
+  | BusinessUserDtoType
+  | ClientUserDtoType
   | { key: string; title: string; subTitle?: string; itemData?: any };
 
 export type SelectorModalModeType = keyof typeof selectorConfigs;
@@ -52,7 +55,7 @@ export type ModalStackParamList = {
     headerTitle?: string;
     multiple?: boolean;
     data?: SelectorModalData[];
-    selectedData?: SelectorModalData[];
+    selectedData?: string[];
     onGoBack?(arg0): void;
     onSubmit?(arg0): void;
     onSelect?(arg0): void;
@@ -100,7 +103,7 @@ export type AuthorizedTabsParamList = {
 
 export type AuthorizedStackParamList = {
   [AUTHORIZED_STACK_SCREENS.EVENT_SCREEN]: {
-    event: EventDtoType;
+    eventId: string;
   };
   [AUTHORIZED_STACK_SCREENS.PLANS_SCREEN]: {
     business?: BusinessDtoType;

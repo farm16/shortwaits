@@ -335,7 +335,7 @@ export class EventsService {
       }
       // turn all ids to string and push only unique ids
       const eligibleUsers = [
-        ...new Set([...event.clientsIds.map(id => id.toString()), ...event.staffIds.map(id => id.toString())]),
+        ...new Set([...event.clientsIds.map(id => id?.toString()), ...event.staffIds.map(id => id?.toString())]),
       ];
 
       if (!eligibleUsers.includes(requestedBy)) {
@@ -347,7 +347,7 @@ export class EventsService {
         this.findBusinessUsers(event?.staffIds as ObjectId[]),
       ]);
 
-      return { clientUsers, businessUsers };
+      return { clientUsers, businessUsers, event };
     } catch (error) {
       console.error(error);
       throw error;

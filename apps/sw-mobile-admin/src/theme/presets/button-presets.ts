@@ -20,12 +20,11 @@ export const buttonPresets = ({
   const VIEW_BASE = StyleSheet.flatten([
     {
       ...Layout.center,
-      // height: 50,
+      height: 50,
       width: "100%",
       backgroundColor: Colors.brandPrimary,
       flexDirection: "row",
       borderRadius: 25,
-      paddingVertical: 16,
     },
   ]) as ViewStyle;
 
@@ -34,7 +33,12 @@ export const buttonPresets = ({
     primary: {
       ...VIEW_BASE,
       backgroundColor: Colors.brandSecondary1,
-      //backgroundColor: "#C4EDDE",
+    },
+    primary2: {
+      ...VIEW_BASE,
+      backgroundColor: Colors.brandSecondary1,
+      width: undefined,
+      flex: 1,
     },
     secondary: {
       ...VIEW_BASE,
@@ -127,6 +131,11 @@ export const buttonPresets = ({
   const textPresets = StyleSheet.create({
     none: {},
     primary: {
+      ...TEXT_BASE,
+      color: Colors.brandSecondary7,
+      fontWeight: "600",
+    },
+    primary2: {
       ...TEXT_BASE,
       color: Colors.brandSecondary7,
       fontWeight: "600",

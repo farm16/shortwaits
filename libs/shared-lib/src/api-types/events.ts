@@ -43,6 +43,7 @@ export type EventsResponseType = CommonResponseType<EventsDtoType>;
 export type PeopleInEventResponseType = CommonResponseType<{
   clientUsers: ClientUsersDtoType;
   businessUsers: BusinessUsersDtoType;
+  event: EventDtoType;
 }>;
 
 export type EventSummaryType = {

@@ -13,3 +13,4 @@ export * from "./card/card";
 export * from "./text/text";
 export * from "./sliders";
 export * from "./switch/switch";
+export * from "./pressable/pressable";

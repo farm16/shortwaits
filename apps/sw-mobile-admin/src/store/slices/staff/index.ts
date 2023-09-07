@@ -17,6 +17,9 @@ export const staffSlice = createSlice({
     builder.addMatcher(shortwaitsApi.endpoints.getBusinessStaff.matchFulfilled, (state, action) => {
       return [...action.payload.data];
     });
+    // .addMatcher(shortwaitsApi.endpoints.getPeopleInEvent.matchFulfilled, (state, action) => {
+    //   return [...state, ...action.payload.data.businessUsers];
+    // });
   },
 });
 

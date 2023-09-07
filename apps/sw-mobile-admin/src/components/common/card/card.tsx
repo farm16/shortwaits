@@ -1,6 +1,6 @@
 import React from "react";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { StyleSheet, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 
 import { Button, ButtonProps } from "../button/button";
 import { useTheme } from "../../../theme";
@@ -31,6 +31,7 @@ const cardModes = {
     disabled: true,
   },
 } as const;
+
 export const Card = (props: CardProps) => {
   const { Colors } = useTheme();
 
@@ -65,10 +66,9 @@ export const Card = (props: CardProps) => {
     <Button preset="card" {...cardModes[mode]} disabled={getIsDisabled()} {...rest}>
       {leftIconName &&
         (mode === "static" || leftIconName === "none" ? null : (
-          <Button
+          <Pressable
             disabled={!getIsDisabled()}
             onPress={leftIconOnPress}
-            preset="none"
             style={[
               styles.iconContainer,
               {
@@ -77,19 +77,19 @@ export const Card = (props: CardProps) => {
             ]}
           >
             <Icon style={styles.leftIcon} name={leftIconName} size={IconSizes[leftIconSize]} color={leftIconColor} />
-          </Button>
+          </Pressable>
         ))}
       <View style={styles.childrenContainer}>{children}</View>
       {rightIconName &&
         (mode === "static" || rightIconName === "none" ? null : (
-          <Button disabled={!getIsDisabled()} onPress={rightIconOnPress} preset="none" style={styles.iconContainer}>
+          <Pressable disabled={!getIsDisabled()} onPress={rightIconOnPress} style={styles.iconContainer}>
             <Icon
               style={styles.rightIcon}
               name={rightIconName}
               size={IconSizes[rightIconSize]}
               color={rightIconColor}
             />
-          </Button>
+          </Pressable>
         ))}
       {/* <Space direction="vertical" size="tiny" /> */}
     </Button>

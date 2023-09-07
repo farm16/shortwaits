@@ -26,9 +26,9 @@ import { useEvent } from "../../../store";
 // TODO: test this with real device ios and android
 // TODO: add config for android (missing)
 export const EventScreen: FC<AuthorizedScreenProps<"event-screen">> = ({ navigation, route }) => {
-  const { event: _event } = route.params;
+  const { eventId } = route.params;
 
-  const event = useEvent(_event._id);
+  const event = useEvent(eventId);
   console.log(">>> event", event);
 
   const bottomSheetRef = useRef<BottomSheetType>(null);

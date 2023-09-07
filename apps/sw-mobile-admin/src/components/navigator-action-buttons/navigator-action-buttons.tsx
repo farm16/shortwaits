@@ -204,6 +204,12 @@ const _circleIcons = {
     color: "brandSecondary",
     size: 21,
   },
+  "add-client": {
+    name: "account-plus",
+    backgroundColor: undefined,
+    color: "brandSecondary",
+    size: 21,
+  },
   "add-services": {
     name: "text-box-plus",
     backgroundColor: undefined,
