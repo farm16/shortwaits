@@ -1,13 +1,28 @@
-import React from "react";
+import React, { FC } from "react";
 import { BusinessUserDtoType } from "@shortwaits/shared-lib";
+import { SelectorListItem } from "../../../../../components";
 
-import { ButtonCard } from "../../../../../components";
-import { SelectorItemProps } from "../../selector-types";
+type StaffSelectorItemProps = {
+  disabled?: boolean;
+  item: BusinessUserDtoType;
+  onSelect: () => void;
+  rightIconName?: string;
+  leftIconName?: string;
+};
 
-export function StaffSelectorItem(props: SelectorItemProps<BusinessUserDtoType> & { iconName: string }) {
-  const { item, onSelectItem, iconName } = props;
-
+export const StaffSelectorItem: FC<StaffSelectorItemProps> = props => {
+  const { item, onSelect, rightIconName, disabled = false } = props;
   const title = item.givenName || item.familyName || item.displayName || item.username;
+  const subTitle = item.email || item.phoneNumbers?.[0]?.number;
 
-  return <ButtonCard onPress={() => onSelectItem(item)} title={title} subTitle={item.email} rightIconName={iconName} />;
-}
+  return (
+    <SelectorListItem
+      imageUrl={item.accountImageUrl}
+      disabled={disabled}
+      onPress={onSelect}
+      rightIconName={rightIconName}
+      title={title}
+      subTitle={subTitle}
+    />
+  );
+};

@@ -159,7 +159,6 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
   const _renderSectionHeader = useCallback(
     ({ section }) => {
       const { title } = section as SectionListData<PeopleDtoType>;
-      console.log("section", section);
       return (
         <Fragment>
           <Container
@@ -193,7 +192,6 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
                   params: {
                     type: userType,
                     multiple: true,
-
                     selectedData: event[`${userType}Ids`],
                     onSubmit: users => {
                       handleUpdateEvent(userType, users);
@@ -240,7 +238,7 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
         refreshControl={<RefreshControl refreshing={isPeopleInEventQueryLoading} onRefresh={handleRefresh} />}
         showsVerticalScrollIndicator={false}
         keyExtractor={item => item._id}
-        style={{ width: "100%" }}
+        style={{ flex: 1 }}
         ListEmptyComponent={_renderListEmptyComponent}
         renderSectionHeader={_renderSectionHeader}
         renderItem={_renderItem}

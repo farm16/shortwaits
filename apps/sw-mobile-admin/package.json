@@ -86,6 +86,8 @@
     "react-native-qrcode-svg": "*",
     "react-native-device-info": "*",
     "@react-native-google-signin/google-signin": "*",
-    "react-intl": "*"
+    "react-intl": "*",
+    "@shopify/flash-list": "*",
+    "react-native-fast-image": "*"
   }
 }

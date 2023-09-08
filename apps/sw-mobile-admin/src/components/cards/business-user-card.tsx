@@ -5,12 +5,11 @@ import { StyleSheet, View, Image, Pressable, TouchableOpacity } from "react-nati
 import { Button, ButtonProps, Text } from "../common";
 import { useTheme } from "../../theme";
 import { BusinessUserDtoType } from "@shortwaits/shared-lib";
+import { CARD_HEIGHT } from "../../theme/presets";
 
 export type BusinessUserCardProps = ButtonProps & {
   user: BusinessUserDtoType;
 };
-
-const CARD_HEIGHT = 70;
 
 export const BusinessUserCard = (props: BusinessUserCardProps) => {
   const { Colors } = useTheme();

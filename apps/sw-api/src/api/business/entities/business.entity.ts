@@ -192,9 +192,51 @@ export class Business extends Document implements BusinessType {
   @Prop(
     raw({
       isActive: { type: Boolean, default: false },
+      url: String,
+      bannerImageUrl: String,
+      logoImageUrl: String,
+      faviconImageUrl: String,
+      primaryColor: String,
+      secondaryColor: String,
+      accentColor: String,
+      notificationMessage: String,
     })
   )
-  web: { isActive: boolean };
+  web: {
+    isActive: boolean;
+    url: string;
+    bannerImageUrl: string;
+    logoImageUrl: string;
+    faviconImageUrl: string;
+    primaryColor: string;
+    secondaryColor: string;
+    accentColor: string;
+    notificationMessage: string;
+  };
+
+  @ApiProperty()
+  @Prop(
+    raw({
+      allowBooking: { type: Boolean, default: true },
+      allowRescheduling: { type: Boolean, default: true },
+      allowCancellation: { type: Boolean, default: true },
+      allowPayment: { type: Boolean, default: true },
+      allowCheckIn: { type: Boolean, default: true },
+      allowCheckOut: { type: Boolean, default: true },
+      allowNoShow: { type: Boolean, default: true },
+      allowWaitlist: { type: Boolean, default: true },
+    })
+  )
+  booking: {
+    allowBooking: boolean;
+    allowRescheduling: boolean;
+    allowCancellation: boolean;
+    allowPayment: boolean;
+    allowCheckIn: boolean;
+    allowCheckOut: boolean;
+    allowNoShow: boolean;
+    allowWaitlist: boolean;
+  };
 
   @ApiProperty()
   @Prop()

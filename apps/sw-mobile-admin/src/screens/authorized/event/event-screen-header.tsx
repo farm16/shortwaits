@@ -1,9 +1,11 @@
 import React from "react";
 import { View, StyleSheet, Pressable } from "react-native";
-import { Container, Emoji, Space, Text } from "../../../components";
 import { BusinessLabelsType, EventDtoType } from "@shortwaits/shared-lib";
-import { useTheme } from "../../../theme";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { isEmpty, truncate } from "lodash";
+
+import { Container, Emoji, Space, Text } from "../../../components";
+import { useTheme } from "../../../theme";
 import {
   statusDisplayMessages,
   statusDisplayMessagesBackgroundColor,
@@ -14,9 +16,7 @@ import {
   getPrettyDateFromISO,
   getPrettyTimeRangeFromISO,
   truncated,
-  navigate,
 } from "../../../utils";
-import { isEmpty, truncate } from "lodash";
 import { useService } from "../../../store";
 
 const IconNames = {
@@ -34,7 +34,7 @@ type InfoItemProps = {
   title: string;
   value: string | BusinessLabelsType;
   iconName: keyof typeof IconNames;
-  onPress: () => void;
+  onPress?: () => void;
 };
 
 function InfoItem({ title, value, onPress, iconName }: InfoItemProps) {
@@ -101,35 +101,19 @@ function InfoItem({ title, value, onPress, iconName }: InfoItemProps) {
 }
 
 export function EventScreenHeader({ event }: { event: EventDtoType }) {
-  // console.log("event", JSON.stringify(event, null, 2));
   const currentService = useService(event?.serviceId);
-
-  const handlePress = () => {
-    navigate("modals", {
-      screen: "form-modal-screen",
-      params: {
-        form: "updateEvent",
-        initialValues: event,
-      },
-    });
-  };
   return (
     <View style={styles.root}>
       <Container direction="row">
         {currentService?.name ? (
-          <InfoItem onPress={handlePress} title="Service" iconName="service" value={currentService?.name ?? ""} />
+          <InfoItem title="Service" iconName="service" value={currentService?.name ?? ""} />
         ) : null}
-        {event?.description ? (
-          <InfoItem onPress={handlePress} title="Description" iconName="description" value={event.description} />
-        ) : null}
+        {event?.description ? <InfoItem title="Description" iconName="description" value={event.description} /> : null}
       </Container>
-
       <Space direction="horizontal" size="tiny" extra={8} />
-
       <Container direction="row">
-        <InfoItem onPress={handlePress} title="Status" iconName="status" value={event.status.statusName ?? ""} />
+        <InfoItem title="Status" iconName="status" value={event.status.statusName ?? ""} />
         <InfoItem
-          onPress={handlePress}
           title="Cost"
           iconName="price"
           value={getPrettyStringFromPriceWithSymbol("USD", event?.priceExpected ?? 0)}
@@ -137,9 +121,8 @@ export function EventScreenHeader({ event }: { event: EventDtoType }) {
       </Container>
       <Space direction="horizontal" size="tiny" />
       <Container direction="row">
-        <InfoItem onPress={handlePress} title="Date" iconName="date" value={getPrettyDateFromISO(event?.startTime)} />
+        <InfoItem title="Date" iconName="date" value={getPrettyDateFromISO(event?.startTime)} />
         <InfoItem
-          onPress={handlePress}
           title="Time"
           iconName="time"
           value={getPrettyTimeRangeFromISO(event?.startTime, event?.expectedEndTime)}
@@ -148,15 +131,10 @@ export function EventScreenHeader({ event }: { event: EventDtoType }) {
       {event?.notes && event?.labels && event?.labels.length > 0 ? <Space direction="horizontal" size="tiny" /> : null}
       <Container direction="row">
         {event?.notes ? (
-          <InfoItem
-            onPress={handlePress}
-            title="Notes"
-            iconName="notes"
-            value={truncate(event?.notes, { length: 30 })}
-          />
+          <InfoItem title="Notes" iconName="notes" value={truncate(event?.notes, { length: 30 })} />
         ) : null}
         {event?.labels && event?.labels.length > 0 ? (
-          <InfoItem onPress={handlePress} title="Labels" iconName="labels" value={event?.labels} />
+          <InfoItem title="Labels" iconName="labels" value={event?.labels} />
         ) : null}
       </Container>
     </View>

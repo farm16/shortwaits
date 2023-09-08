@@ -8,6 +8,7 @@ type PresetType<TObj, TProp extends keyof TObj> = TObj[TProp];
 export type ButtonPresets = ReturnType<typeof buttonPresets>;
 
 export type ButtonViewType = PresetType<ButtonPresets, "viewPresets">;
+export const CARD_HEIGHT = 70;
 
 export const buttonPresets = ({
   Colors,
@@ -105,7 +106,7 @@ export const buttonPresets = ({
     },
     card: {
       marginBottom: 10,
-      height: 70,
+      height: CARD_HEIGHT,
       paddingHorizontal: 8,
       width: "100%",
 

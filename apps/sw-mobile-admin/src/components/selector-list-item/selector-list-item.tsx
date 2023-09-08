@@ -1,8 +1,9 @@
 import React, { FC } from "react";
-import { StyleSheet, TextStyle, View } from "react-native";
+import { StyleSheet, TextStyle, View, Image } from "react-native";
 
-import { Text, Pressable, Space, PressableProps } from "../";
+import { Text, Space, ButtonProps, Button } from "../";
 import { IconSizes, useTheme } from "../../theme";
+import FastImage from "react-native-fast-image";
 
 type SelectorListItemProps = {
   onPress: () => void;
@@ -15,7 +16,8 @@ type SelectorListItemProps = {
   title: string;
   subTitle?: string;
   textStyle?: TextStyle;
-} & PressableProps;
+  imageUrl?: string;
+} & ButtonProps;
 
 export const SelectorListItem: FC<SelectorListItemProps> = props => {
   const { Colors } = useTheme();
@@ -31,6 +33,7 @@ export const SelectorListItem: FC<SelectorListItemProps> = props => {
     title,
     subTitle,
     textStyle,
+    imageUrl,
     ...rest
   } = props;
 
@@ -39,7 +42,7 @@ export const SelectorListItem: FC<SelectorListItemProps> = props => {
   };
 
   return (
-    <Pressable
+    <Button
       preset="card"
       onPress={handlePress}
       leftIconName={leftIconName}
@@ -50,6 +53,13 @@ export const SelectorListItem: FC<SelectorListItemProps> = props => {
       rightIconSize={IconSizes[rightIconSize]}
       {...rest}
     >
+      <FastImage
+        source={{
+          uri: imageUrl || "https://picsum.photos/60/60",
+        }}
+        resizeMode={FastImage.resizeMode.cover}
+        style={styles.backgroundImage}
+      />
       <View style={styles.content}>
         <Text preset="cardTitle" style={textStyle} text={title} />
         {subTitle && (
@@ -59,7 +69,7 @@ export const SelectorListItem: FC<SelectorListItemProps> = props => {
           </>
         )}
       </View>
-    </Pressable>
+    </Button>
   );
 };
 
@@ -67,6 +77,13 @@ const styles = StyleSheet.create({
   childrenContainer: {
     flex: 1,
     justifyContent: "center",
+  },
+  backgroundImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 50,
+    resizeMode: "cover",
+    marginRight: 10,
   },
   content: {
     flex: 1,

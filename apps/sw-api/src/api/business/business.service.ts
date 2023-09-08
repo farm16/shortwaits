@@ -4,7 +4,6 @@ import { ForbiddenException, Injectable, NotFoundException, PreconditionFailedEx
 import {
   BusinessType,
   BusinessHoursType,
-  BusinessUserType,
   BusinessDtoType,
   ClientUserUpdateDtoType,
   CreateClientUserDtoType,
@@ -241,7 +240,6 @@ export class BusinessService {
       const updatedClient = await this.clientUserModel.findOneAndUpdate({ _id: client._id }, client, {
         new: true,
       });
-
       return updatedClient;
     }
   }

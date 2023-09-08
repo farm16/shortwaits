@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
+import React, { FC, useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { Alert, FlatList, StyleSheet } from "react-native";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { BusinessUsersDtoType } from "@shortwaits/shared-lib";
@@ -11,14 +11,8 @@ import { ModalsScreenProps } from "../../../../../navigation";
 import { showPremiumMembershipModal, useUser } from "../../../../../store";
 import { ActivityIndicator } from "react-native-paper";
 
-// Utility function to filter users based on search text
-function filterBusinessUsers(searchText: string, users: BusinessUsersDtoType) {
-  return users.filter(item =>
-    ["username", "email", "displayName", "familyName", "givenName", "middleName"].some(prop =>
-      item[prop].toLowerCase().includes(searchText.toLowerCase())
-    )
-  );
-}
+const MIN_SELECTED_ITEMS_DEFAULT = 0; // Define your minimum selected items here
+const MAX_SELECTED_ITEMS_DEFAULT = 10000; // Define your maximum selected items here
 
 export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ navigation, route }) => {
   const {
@@ -26,12 +20,12 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
     onSelect,
     closeOnSelect = true,
     headerTitle = "Staff",
-    selectedData,
+    selectedData = [],
     multiple,
     onGoBack,
     onSubmit,
-    minSelectedItems,
-    maxSelectedItems,
+    minSelectedItems = MIN_SELECTED_ITEMS_DEFAULT,
+    maxSelectedItems = MAX_SELECTED_ITEMS_DEFAULT,
   } = route.params;
 
   const dispatch = useDispatch();
@@ -53,6 +47,14 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
   const [isListSearchable, setIsListSearchable] = useState(false);
   const [selectedItems, setSelectedItems] = useState(selectedData);
 
+  function filterBusinessUsers(searchText: string, users: BusinessUsersDtoType) {
+    return users.filter(item =>
+      ["username", "email", "displayName", "familyName", "givenName", "middleName"].some(
+        prop => item[prop] ?? "".toLowerCase().includes(searchText.toLowerCase())
+      )
+    );
+  }
+
   useEffect(() => {
     if (payload?.data && isSuccess) {
       const initialFilteredData = filterBusinessUsers(searchText, payload.data ?? []);
@@ -63,11 +65,12 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
   useLayoutEffect(() => {
     const handleOnGoBack = () => {
       if (multiple) {
+        const items = payload?.data?.filter(item => selectedItems.includes(item._id));
         if (onSubmit) {
-          onSubmit(selectedItems);
+          onSubmit(items);
         }
         if (onGoBack) {
-          onGoBack(selectedItems);
+          onGoBack(items);
         }
         navigation.goBack();
       } else {
@@ -101,6 +104,7 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
     navigation,
     onGoBack,
     onSubmit,
+    payload?.data,
     searchable,
     selectedItems,
   ]);
@@ -115,20 +119,16 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
     item => {
       if (multiple) {
         if (selectedItems?.includes(item._id)) {
-          if (minSelectedItems) {
-            if (selectedItems.length <= minSelectedItems) {
-              Alert.alert("Warning", `You must select at least ${minSelectedItems} staff member`);
-            } else {
-              setSelectedItems(selectedItems.filter(i => i !== item._id));
-            }
+          if (minSelectedItems && selectedItems.length <= minSelectedItems) {
+            Alert.alert("Warning", `You must select at least ${minSelectedItems}`);
+          } else {
+            setSelectedItems(selectedItems.filter(i => i !== item._id));
           }
         } else {
-          if (maxSelectedItems) {
-            if (selectedItems.length >= maxSelectedItems) {
-              Alert.alert("Warning", `You can only select ${maxSelectedItems} staff members`);
-            } else {
-              setSelectedItems([...selectedItems, item._id]);
-            }
+          if (maxSelectedItems && selectedItems.length >= maxSelectedItems) {
+            Alert.alert("Warning", `You can only select ${maxSelectedItems}`);
+          } else {
+            setSelectedItems(selectedItems => [...selectedItems, item._id]);
           }
         }
       } else if (closeOnSelect) {
@@ -141,12 +141,22 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
     [closeOnSelect, maxSelectedItems, minSelectedItems, multiple, navigation, onSelect, selectedItems]
   );
 
-  const getItemIconName = item => {
-    if (multiple) {
-      return selectedItems?.includes(item._id) ? "check" : "none";
-    }
-    return undefined;
-  };
+  const renderItem = useCallback(
+    ({ item }) => {
+      return (
+        <StaffSelectorItem
+          rightIconName={multiple && selectedItems?.includes(item._id) ? "check" : "none"}
+          item={item}
+          onSelect={() => {
+            handleOnSelect(item);
+          }}
+        />
+      );
+    },
+    [handleOnSelect, multiple, selectedItems]
+  );
+
+  const keyExtractor = useCallback(item => item._id, []);
 
   if (isError) {
     return <Text>Error</Text>;
@@ -164,15 +174,8 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.flatList}
           data={filteredData}
-          renderItem={({ item }) => (
-            <StaffSelectorItem
-              iconName={getItemIconName(item)}
-              item={item}
-              onSelectItem={() => {
-                handleOnSelect(item);
-              }}
-            />
-          )}
+          renderItem={renderItem}
+          keyExtractor={keyExtractor}
         />
       </>
     );

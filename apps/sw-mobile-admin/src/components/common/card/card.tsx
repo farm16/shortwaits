@@ -19,8 +19,6 @@ export type CardProps = ButtonProps & {
   mode: keyof typeof cardModes;
 };
 
-export const CARD_HEIGHT = 70;
-
 const cardModes = {
   "text-field": {
     disabled: true,

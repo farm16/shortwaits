@@ -1,20 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
-import {
-  createStackNavigator,
-  TransitionPresets,
-} from "@react-navigation/stack";
+import { createStackNavigator, TransitionPresets } from "@react-navigation/stack";
 import { useFlipper } from "@react-navigation/devtools";
 
 import { RootStackParamList } from "./navigation-types";
 import { NAVIGATION_STACKS } from "./navigation-constants";
 import { navigationRef, useBackButtonHandler } from "./navigation-utils";
-import {
-  ModalsNavigator,
-  UnauthorizedNavigator,
-  AuthorizedTabNavigator,
-  AuthorizedStackNavigator,
-} from "./stacks";
+import { ModalsNavigator, UnauthorizedNavigator, AuthorizedTabNavigator, AuthorizedStackNavigator } from "./stacks";
 import { useAuth, useBusiness } from "../store";
 import { FloatingActionButton, PremiumMembershipModal } from "../components";
 import { Banner } from "../components/banners/banner";
@@ -55,21 +47,15 @@ const AppStack = () => {
               animationEnabled: false,
             }}
           />
-          <RootStack.Screen
-            name={NAVIGATION_STACKS.AUTHORIZED_STACK}
-            component={AuthorizedStackNavigator}
-          />
+          <RootStack.Screen name={NAVIGATION_STACKS.AUTHORIZED_STACK} component={AuthorizedStackNavigator} />
         </>
       ) : (
-        <RootStack.Screen
-          name={NAVIGATION_STACKS.UNAUTHORIZED}
-          component={UnauthorizedNavigator}
-        />
+        <RootStack.Screen name={NAVIGATION_STACKS.UNAUTHORIZED} component={UnauthorizedNavigator} />
       )}
       <RootStack.Screen
         options={{
-          gestureEnabled: true,
-          cardOverlayEnabled: true,
+          gestureEnabled: false,
+          cardOverlayEnabled: false,
           ...TransitionPresets.ModalPresentationIOS,
         }}
         name={NAVIGATION_STACKS.MODALS}
@@ -79,9 +65,7 @@ const AppStack = () => {
   );
 };
 
-type NavigationProps = Partial<
-  React.ComponentProps<typeof NavigationContainer>
->;
+type NavigationProps = Partial<React.ComponentProps<typeof NavigationContainer>>;
 
 export const AppNavigator = (props: NavigationProps): React.ReactElement => {
   useFlipper(navigationRef);
@@ -109,5 +93,4 @@ AppNavigator.displayName = "AppNavigator";
  * `canExit` is used in ./app/app.tsx in the `useBackButtonHandler` hook.
  */
 const exitRoutes = ["welcome"];
-export const canExit = (routeName: string): boolean =>
-  exitRoutes.includes(routeName);
+export const canExit = (routeName: string): boolean => exitRoutes.includes(routeName);

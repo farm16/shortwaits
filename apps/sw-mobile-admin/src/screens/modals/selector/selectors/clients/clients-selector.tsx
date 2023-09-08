@@ -1,24 +1,17 @@
-import React, { FC, useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
-import { Alert, StyleSheet } from "react-native";
+import React, { FC, useCallback, useEffect, useLayoutEffect, useState } from "react";
+import { Alert, StyleSheet, ActivityIndicator } from "react-native";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { ClientUsersDtoType } from "@shortwaits/shared-lib";
 import { useDispatch } from "react-redux";
-
+import { FlatList } from "react-native-gesture-handler";
 import { AnimatedSearchBar, Container, LeftChevronButton, IconButton, Text } from "../../../../../components";
 import { ClientsSelectorItem } from "./clients-selector-item";
 import { useGetBusinessClientsQuery } from "../../../../../services";
 import { ModalsScreenProps } from "../../../../../navigation";
 import { showPremiumMembershipModal, useUser } from "../../../../../store";
-import { ActivityIndicator } from "react-native-paper";
-import { FlatList } from "react-native-gesture-handler";
 
-function filterClientUsers(searchText: string, users: ClientUsersDtoType) {
-  return users.filter(item =>
-    ["username", "email", "displayName", "familyName", "givenName", "middleName"].some(
-      prop => item[prop] ?? "".toLowerCase().includes(searchText.toLowerCase())
-    )
-  );
-}
+const MIN_SELECTED_ITEMS_DEFAULT = 0; // Define your minimum selected items here
+const MAX_SELECTED_ITEMS_DEFAULT = 10000; // Define your maximum selected items here
 
 export const ClientsSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ navigation, route }) => {
   const {
@@ -30,8 +23,8 @@ export const ClientsSelector: FC<ModalsScreenProps<"selector-modal-screen">> = (
     multiple,
     onGoBack,
     onSubmit,
-    minSelectedItems,
-    maxSelectedItems,
+    minSelectedItems = MIN_SELECTED_ITEMS_DEFAULT,
+    maxSelectedItems = MAX_SELECTED_ITEMS_DEFAULT,
   } = route.params;
 
   const dispatch = useDispatch();
@@ -52,6 +45,14 @@ export const ClientsSelector: FC<ModalsScreenProps<"selector-modal-screen">> = (
   const [filteredData, setFilteredData] = useState<ClientUsersDtoType>([]);
   const [isListSearchable, setIsListSearchable] = useState(false);
   const [selectedItems, setSelectedItems] = useState(selectedData);
+
+  function filterClientUsers(searchText: string, users: ClientUsersDtoType) {
+    return users.filter(item =>
+      ["username", "email", "displayName", "familyName", "givenName", "middleName"].some(
+        prop => item[prop] ?? "".toLowerCase().includes(searchText.toLowerCase())
+      )
+    );
+  }
 
   useEffect(() => {
     if (payload?.data && isSuccess) {
@@ -112,28 +113,19 @@ export const ClientsSelector: FC<ModalsScreenProps<"selector-modal-screen">> = (
     const filteredItems = filterClientUsers(text, payload.data);
     setFilteredData(filteredItems);
   };
-  console.log(">>> selectedData", selectedItems.length);
 
   const handleOnSelect = useCallback(
     item => {
       if (multiple) {
         if (selectedItems?.includes(item._id)) {
-          if (minSelectedItems) {
-            if (selectedItems.length <= minSelectedItems) {
-              Alert.alert("Warning", `You must select at least ${minSelectedItems} Clients member`);
-            } else {
-              setSelectedItems(selectedItems.filter(i => i !== item._id));
-            }
+          if (minSelectedItems && selectedItems.length <= minSelectedItems) {
+            Alert.alert("Warning", `You must select at least ${minSelectedItems}`);
           } else {
             setSelectedItems(selectedItems.filter(i => i !== item._id));
           }
         } else {
-          if (maxSelectedItems) {
-            if (selectedItems.length >= maxSelectedItems) {
-              Alert.alert("Warning", `You can only select ${maxSelectedItems} Clients members`);
-            } else {
-              setSelectedItems(selectedItems => [...selectedItems, item._id]);
-            }
+          if (maxSelectedItems && selectedItems.length >= maxSelectedItems) {
+            Alert.alert("Warning", `You can only select ${maxSelectedItems}`);
           } else {
             setSelectedItems(selectedItems => [...selectedItems, item._id]);
           }
@@ -163,6 +155,8 @@ export const ClientsSelector: FC<ModalsScreenProps<"selector-modal-screen">> = (
     [handleOnSelect, multiple, selectedItems]
   );
 
+  const keyExtractor = useCallback(item => item._id, []);
+
   if (isError) {
     return <Text>Error</Text>;
   }
@@ -180,7 +174,7 @@ export const ClientsSelector: FC<ModalsScreenProps<"selector-modal-screen">> = (
           contentContainerStyle={styles.flatList}
           data={filteredData}
           renderItem={renderItem}
-          keyExtractor={item => item._id}
+          keyExtractor={keyExtractor}
         />
       </>
     );

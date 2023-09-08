@@ -27,6 +27,8 @@ export enum AccountType {
 
 export type BusinessType = {
   shortId: string;
+  email: string;
+  labels: BusinessLabelsType;
   admins: ObjectId[] /** @todo this might not always be received via the API why should it ? */;
   superAdmins: ObjectId[] /** @todo this might not always be received via the API why should it ? */;
   backgroundAdmins: ObjectId[] /** @todo this might not always be received via the API why should it ? */;
@@ -74,9 +76,25 @@ export type BusinessType = {
   paymentMethods?: string[];
   web?: {
     isActive: boolean;
+    url: string;
+    bannerImageUrl: string;
+    logoImageUrl: string;
+    faviconImageUrl: string;
+    primaryColor: string;
+    secondaryColor: string;
+    accentColor: string;
+    notificationMessage: string;
   };
-  email: string;
-  labels: BusinessLabelsType;
+  booking?: {
+    allowBooking: boolean;
+    allowRescheduling: boolean;
+    allowCancellation: boolean;
+    allowPayment: boolean;
+    allowCheckIn: boolean;
+    allowCheckOut: boolean;
+    allowNoShow: boolean;
+    allowWaitlist: boolean;
+  };
 };
 
 type BusinessDocType = BusinessType & Document;

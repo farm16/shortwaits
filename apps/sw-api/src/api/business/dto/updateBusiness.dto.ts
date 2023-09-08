@@ -39,7 +39,27 @@ export class UpdateBusinessDto implements UpdateBusinessDtoType {
   deliveryInfo?: string;
   reservations?: string[];
   paymentMethods?: string[];
-  web?: { isActive: boolean };
+  web?: {
+    isActive: boolean;
+    url: string;
+    bannerImageUrl: string;
+    logoImageUrl: string;
+    faviconImageUrl: string;
+    primaryColor: string;
+    secondaryColor: string;
+    accentColor: string;
+    notificationMessage: string;
+  };
+  booking?: {
+    allowBooking: boolean;
+    allowRescheduling: boolean;
+    allowCancellation: boolean;
+    allowPayment: boolean;
+    allowCheckIn: boolean;
+    allowCheckOut: boolean;
+    allowNoShow: boolean;
+    allowWaitlist: boolean;
+  };
   email: string;
   labels: BusinessLabelType[];
 }

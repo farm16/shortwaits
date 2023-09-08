@@ -12,18 +12,12 @@ import {
   ValidationPipe,
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
-import {
-  BusinessUserType,
-  ClientUserUpdateDtoType,
-  CreateBusinessUsersDtoType,
-  CreateClientUserDtoType,
-} from "@shortwaits/shared-lib";
+import { ClientUserUpdateDtoType, CreateBusinessUsersDtoType, CreateClientUserDtoType } from "@shortwaits/shared-lib";
 
 import { BusinessService } from "./business.service";
 import { AtGuard } from "../../common/guards";
 import { UpdateBusinessDto } from "./dto/updateBusiness.dto";
 import { RegisterBusinessDto } from "./dto/registerBusiness.dto";
-import { CreateBusinessUserDto } from "../business-user/dto";
 
 @UseGuards(AtGuard)
 @ApiTags("business")

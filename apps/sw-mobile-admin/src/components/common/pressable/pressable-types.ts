@@ -1,9 +1,9 @@
-import { StyleProp, TextStyle, PressableProps, ViewStyle } from "react-native";
+import { StyleProp, TextStyle, PressableProps as PressablePropsRN, ViewStyle } from "react-native";
 
 import { ButtonViewType } from "../../../theme/presets";
 // import { TxKeyPath } from "../../i18n";
 
-export interface PressableProps extends PressableProps {
+export interface PressableProps extends PressablePropsRN {
   isLoading?: boolean;
 
   withShadow?: boolean;

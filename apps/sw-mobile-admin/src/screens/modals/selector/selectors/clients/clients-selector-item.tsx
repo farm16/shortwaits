@@ -11,12 +11,13 @@ type ClientsSelectorItemProps = {
 };
 
 export const ClientsSelectorItem: FC<ClientsSelectorItemProps> = props => {
-  const { item, onSelect, rightIconName, disabled } = props;
+  const { item, onSelect, rightIconName, disabled = false } = props;
   const title = item.givenName || item.familyName || item.displayName || item.username;
   const subTitle = item.email || item.phoneNumbers?.[0]?.number;
 
   return (
     <SelectorListItem
+      imageUrl={item.accountImageUrl}
       disabled={disabled}
       onPress={onSelect}
       rightIconName={rightIconName}
