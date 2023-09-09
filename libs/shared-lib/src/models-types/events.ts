@@ -66,7 +66,7 @@ export type EventType = {
   canceled: boolean; // Indicates if the event is canceled
   cancellationReason: string; // Reason for event cancellation
 
-  isGroupEvent: boolean; // Indicates if the event is a group event
+  isPublicEvent: boolean; // Indicates if the event is a group event
   repeat: boolean; // Indicates if the event is repeated
 
   paymentMethod: EventPaymentMethodType;

@@ -15,11 +15,7 @@ import {
   AnimatedSearchBar,
 } from "../../../components";
 import { useBusiness, useClients, useShowGhostComponent } from "../../../store";
-import {
-  useCreateBusinessClientsMutation,
-  useGetBusinessClientsQuery,
-  useUpdateEventMutation,
-} from "../../../services";
+import { useCreateBusinessClientsMutation, useGetBusinessClientsQuery } from "../../../services";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useOsContacts } from "../../../hooks";
 
@@ -54,21 +50,33 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({ navi
 
   const handleSyncContacts = useCallback(
     async function () {
-      if (osContactsError) {
-        Alert.alert("Error", osContactsError.message);
-      }
-      const contacts = await getOsContacts();
-      const clientKeySet = new Set(
-        currentClients.map(client => `${client.middleName}-${client.familyName}-${client.givenName}`)
-      );
-      const filteredContacts = contacts.data.filter(
-        contact => !clientKeySet.has(`${contact.middleName}-${contact.familyName}-${contact.givenName}`)
-      );
+      const run = async () => {
+        if (osContactsError) {
+          Alert.alert("Error", osContactsError.message);
+        }
+        const contacts = await getOsContacts();
+        const clientKeySet = new Set(
+          currentClients.map(client => `${client.middleName}-${client.familyName}-${client.givenName}`)
+        );
+        const filteredContacts = contacts.data.filter(
+          contact => !clientKeySet.has(`${contact.middleName}-${contact.familyName}-${contact.givenName}`)
+        );
 
-      createClients({
-        businessId: business._id,
-        body: filteredContacts,
-      });
+        createClients({
+          businessId: business._id,
+          body: filteredContacts,
+        });
+      };
+      Alert.alert("Sync Contacts", "Are you sure you want to sync your contacts?", [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "OK",
+          onPress: run,
+        },
+      ]);
     },
     [business._id, createClients, currentClients, getOsContacts, osContactsError]
   );
@@ -79,7 +87,10 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({ navi
       headerTitle: () => {
         return (
           <Container direction="row" justifyContent="center">
-            <Text preset="headerTitle" text={"Clients"} />
+            <Text
+              preset="headerTitle"
+              text={currentClients.length === 0 ? "Clients" : `Clients (${currentClients.length})`}
+            />
           </Container>
         );
       },
@@ -112,7 +123,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({ navi
         );
       },
     });
-  }, [handleAddClient, handleSyncContacts, isListSearchable, isLoading, navigation]);
+  }, [handleAddClient, handleSyncContacts, isListSearchable, isLoading, navigation, currentClients]);
 
   const _renderItem: ListRenderItem<ClientUserDtoType> = ({ item }) => (
     <ButtonCard
@@ -164,6 +175,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({ navi
     <Screen preset="fixed" unsafe withHorizontalPadding backgroundColor="backgroundOverlay">
       <AnimatedSearchBar onChangeText={handleOnChangeText} isVisible={isListSearchable} />
       <List
+        refreshing={isLoading}
         refreshControl={
           <RefreshControl refreshing={isBusinessClientsQueryLoading} onRefresh={refetchBusinessClientsQuery} />
         }

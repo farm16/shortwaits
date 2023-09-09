@@ -8,6 +8,10 @@ export function convertStringToObjectId(id: string): Types.ObjectId {
   return new Types.ObjectId(id);
 }
 
+export function validateId(id: string): boolean {
+  return Types.ObjectId.isValid(id);
+}
+
 export function convertDomainToLowercase(email: string) {
   const atIndex = email.indexOf("@");
   if (atIndex !== -1) {

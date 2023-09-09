@@ -72,7 +72,7 @@ export const getFilteredNewEvent = (event: CreateEventsDto, userId: string) => {
     endTimeExpected: event.endTimeExpected,
     priceExpected: event.priceExpected,
     priceFinal: event.priceExpected,
-    isGroupEvent: event.clientsIds.length > 1,
+    isPublicEvent: event.clientsIds.length > 1,
     repeat: event.repeat,
     payment: event.payment,
     notes: event.notes,

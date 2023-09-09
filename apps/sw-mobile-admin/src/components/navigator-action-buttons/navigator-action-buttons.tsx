@@ -95,7 +95,14 @@ export const LeftChevronButton: FC<ButtonProps> = props => {
   } = useTheme();
   const { state = "enabled", ...rest } = props;
   return (
-    <Button {...rest} state={state} preset="icon">
+    <Button
+      {...rest}
+      state={state}
+      preset="none"
+      style={{
+        marginLeft: 16,
+      }}
+    >
       <Icon name="chevron-left" color={disabledStates.includes(state) ? backgroundOverlay : brandSecondary} size={35} />
     </Button>
   );

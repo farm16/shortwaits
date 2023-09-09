@@ -121,15 +121,15 @@ export const AgendaItem = (props: AgendaItemProps) => {
   );
 
   const eventClientImage = useCallback(() => {
-    const isGroupEvent = item.isGroupEvent;
-    const client = isGroupEvent ? "" : item.leadClientId ?? "";
+    const isPublicEvent = item.isPublicEvent;
+    const client = isPublicEvent ? "" : item.leadClientId ?? "";
     return (
       <View style={styles.eventClientImage}>
         <Image source={defaultUserImage} style={styles.eventClientImageColumn} />
         {client && <Text style={styles.eventClientName} preset={"none"} text={client} />}
       </View>
     );
-  }, [item.isGroupEvent, item.leadClientId]);
+  }, [item.isPublicEvent, item.leadClientId]);
 
   return (
     <Swipeable renderRightActions={renderRightActions}>

@@ -158,7 +158,7 @@ export class Events extends Document implements EventType {
 
   @ApiProperty()
   @Prop({ default: false })
-  isGroupEvent: boolean;
+  isPublicEvent: boolean;
 
   @ApiProperty()
   @Prop({ default: false })

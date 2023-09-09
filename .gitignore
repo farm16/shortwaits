@@ -112,3 +112,6 @@ apps/sw-mobile-admin/ios/Pods
 
 debug.keystore
 release.keystore
+
+# Next.js
+.next

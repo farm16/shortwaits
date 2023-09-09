@@ -55,6 +55,8 @@
     "AddEventModal.service.title": "Service",
     "AddEventModal.service.description": "Select a Service",
     "AddEventModal.noDuration": "No duration",
+    "AddEventModal.isPublicEvent": "Public Event",
+    "AddEventModal.isPublicEvent.description": "{isPublicEvent, select, true {Allow all user to book this event} other {This event is private}}",
     "AddEventModal.starts": "Starts",
     "AddEventModal.ends": "Ends",
     "AddEventModal.free": "Free",
@@ -75,7 +77,11 @@
     "AddEventModal.staff.title": "Staff",
     "AddEventModal.staff.description": "count",
     "AddEventModal.staff.emptyDescription": "Select a Staff",
-    "AddEventModal.staff.selector.headerTitle": "Select Staff"
+    "AddEventModal.staff.selector.headerTitle": "Select Staff",
+    "AddEventModal.client.title": "Client",
+    "AddEventModal.client.description": "count",
+    "AddEventModal.client.emptyDescription": "Select a client",
+    "AddEventModal.client.selector.headerTitle": "Clients"
   },
   "es": {
     "Settings_Screen.App_Language.Title": "Idioma",
@@ -132,6 +138,8 @@
     "AddEventModal.name": "Nombre",
     "AddEventModal.service.title": "Servicio",
     "AddEventModal.service.description": "Seleccionar un Servicio",
+    "AddEventModal.isPublicEvent": "Abierto al público",
+    "AddEventModal.isPublicEvent.description": "{isPublicEvent, select, true {Permite a usuarios que reserven este evento} other {Este evento es privado}}",
     "AddEventModal.noDuration": "Sin duración",
     "AddEventModal.starts": "Comienza",
     "AddEventModal.ends": "Termina",
@@ -153,6 +161,10 @@
     "AddEventModal.staff.title": "Personal",
     "AddEventModal.staff.description": "Numero de personal",
     "AddEventModal.staff.emptyDescription": "seleciona un personal",
-    "AddEventModal.staff.selector.headerTitle": "Personal"
+    "AddEventModal.staff.selector.headerTitle": "Personal",
+    "AddEventModal.client.title": "Cliente",
+    "AddEventModal.client.description": "Numero de clientes",
+    "AddEventModal.client.emptyDescription": "seleciona un cliente",
+    "AddEventModal.client.selector.headerTitle": "Clientes"
   }
 }

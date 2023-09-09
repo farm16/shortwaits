@@ -79,7 +79,7 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
       startTime: currentDate.toISOString(),
       expectedEndTime: futureDate.toISOString(),
       priceExpected: 0,
-      isGroupEvent: true,
+      isPublicEvent: true,
       repeat: true,
       paymentMethod: "CASH",
       notes: "",
@@ -261,6 +261,44 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
       )}
       <ExpandableSection>
         <ButtonCard
+          rightIconName={values?.isPublicEvent ? "checkbox-outline" : "checkbox-blank-outline"}
+          title={intl.formatMessage({ id: "AddEventModal.isPublicEvent" })}
+          subTitle={intl.formatMessage(
+            { id: "AddEventModal.isPublicEvent.description" },
+            { isPublicEvent: values?.isPublicEvent }
+          )}
+          onPress={() => {
+            setFieldValue("isPublicEvent", !values?.isPublicEvent);
+          }}
+        />
+        {values?.isPublicEvent ? null : (
+          <ButtonCard
+            title={intl.formatMessage({ id: "AddEventModal.client.title" })}
+            subTitle={
+              values.clientsIds.length > 0
+                ? `${intl.formatMessage({ id: "AddEventModal.client.description" })}: ${values.clientsIds.length}`
+                : intl.formatMessage({ id: "AddEventModal.client.emptyDescription" })
+            }
+            onPress={() =>
+              navigation.navigate("modals", {
+                screen: "selector-modal-screen",
+                params: {
+                  type: "clients",
+                  headerTitle: intl.formatMessage({ id: "AddEventModal.client.selector.headerTitle" }),
+                  selectedData: values.clientsIds,
+                  multiple: true,
+                  minSelectedItems: 1,
+                  onGoBack: clients => {
+                    console.log("selected clients:", clients);
+                    const clientsIds = clients.map(s => s._id);
+                    setFieldValue("clientsIds", clientsIds);
+                  },
+                },
+              })
+            }
+          />
+        )}
+        <ButtonCard
           title={intl.formatMessage({ id: "AddEventModal.staff.title" })}
           subTitle={
             values.staffIds.length > 0
@@ -278,14 +316,13 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
                 minSelectedItems: 1,
                 onGoBack: staff => {
                   console.log("selected staff:", staff);
-                  // const staffIds = staff.map(s => s._id);
-                  // setFieldValue("staffIds", staffIds);
+                  const staffIds = staff.map(s => s._id);
+                  setFieldValue("staffIds", staffIds);
                 },
               },
             })
           }
         />
-
         <ButtonCard
           title={intl.formatMessage({ id: "AddEventModal.labels" })}
           subTitle={values.labels.length > 0 ? `${emojis}` : intl.formatMessage({ id: "AddEventModal.selectLabels" })}

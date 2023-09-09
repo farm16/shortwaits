@@ -48,7 +48,7 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
   };
 
   const EventRepeat = () => {
-    let isActive = event.isGroupEvent;
+    let isActive = event.isPublicEvent;
     if (event.clientsIds?.length > 0) isActive = false;
 
     const handleSwitch = () => {
@@ -78,7 +78,7 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
     );
   };
   const EventGroup = () => {
-    const isActive = event.isGroupEvent;
+    const isActive = event.isPublicEvent;
     return (
       <View
         style={{
@@ -100,7 +100,7 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
     );
   };
   const EventFullDay = () => {
-    const isActive = event.isGroupEvent;
+    const isActive = event.isPublicEvent;
     return (
       <View
         style={{

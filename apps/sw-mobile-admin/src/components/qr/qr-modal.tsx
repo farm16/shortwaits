@@ -13,7 +13,7 @@ type QrModalProps = {
   isVisible: boolean;
   value: string;
   title: string;
-  description?: string;
+  description?: JSX.Element | string;
   description2?: string;
   setIsVisible: (isVisible: boolean) => void;
 };

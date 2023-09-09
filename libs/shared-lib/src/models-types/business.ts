@@ -68,15 +68,12 @@ export type BusinessType = {
   supportEmail?: string;
   supportPhone?: string;
   isDisabled: boolean;
-  /**
-   * @todo !!!
-   * */
   deliveryInfo?: string;
   reservations?: ObjectId[];
   paymentMethods?: string[];
   web?: {
     isActive: boolean;
-    url: string;
+    baseUrl: string;
     bannerImageUrl: string;
     logoImageUrl: string;
     faviconImageUrl: string;

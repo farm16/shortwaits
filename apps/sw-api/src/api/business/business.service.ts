@@ -25,7 +25,7 @@ export class BusinessService {
     @InjectModel(BusinessUser.name)
     private businessUserModel: Model<BusinessUser>,
     @InjectModel(ClientUser.name)
-    private clientUserModel: Model<ClientUser> // @InjectModel(Service.name) // private serviceModel: Model<Service>, // private config: ConfigService
+    private clientUserModel: Model<ClientUser>
   ) {}
 
   isUserAdminType(business: Business, userId: any) {
@@ -202,7 +202,7 @@ export class BusinessService {
       const clientsIds = insertedClients.map(client => {
         return client._id;
       });
-      const businessClients = businessData.clients.concat(clientsIds);
+      const businessClients = businessData.clients ? businessData.clients.concat(clientsIds) : clientsIds;
       console.log("businessClients", businessClients.length);
       const business = await this.businessModel.findByIdAndUpdate(
         businessId,

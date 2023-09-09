@@ -16,7 +16,7 @@ export type FilteredEvent = Pick<
   | "features"
   | "durationInMin"
   | "priceExpected"
-  | "isGroupEvent"
+  | "isPublicEvent"
   | "repeat"
   // | "payment" // TODO: add when payment model is ready
   | "notes"

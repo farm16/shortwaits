@@ -24,13 +24,13 @@ import { convertDomainToLowercase } from "../../utils/converters";
 import { getFilteredNewBusinessOwner, getNewUserFromSocialAccount } from "../../utils/filtersForDtos";
 import { OAuth2Client } from "google-auth-library";
 import { noop } from "rxjs";
-import { BusinessUserType, ConvertToDtoType } from "@shortwaits/shared-lib";
+import { BusinessType, BusinessUserType, ConvertToDtoType } from "@shortwaits/shared-lib";
 
 const providers = ["google", "facebook"];
 const googleApiOauthUrl = "https://www.googleapis.com/oauth2/v3";
 @Injectable()
 export class AuthService {
-  private readonly generateShortId = customAlphabet("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 10);
+  private readonly generateShortId = customAlphabet("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 16);
   private readonly maxAttempts = 10;
   private readonly oAuth2Client: OAuth2Client;
 
@@ -102,7 +102,8 @@ export class AuthService {
       });
 
       if (!user) {
-        throw new NotFoundException("User not registered");
+        const newUser = getNewUserFromSocialAccount(userInfo);
+        return await this.createNewBusinessAndBusinessOwner(newUser);
       }
 
       return await this.successfulExistingUser(user);
@@ -220,7 +221,7 @@ export class AuthService {
 
   private async generateUniqueId(): Promise<string | null> {
     for (let attempt = 0; attempt < this.maxAttempts; attempt++) {
-      const generatedId = this.generateShortId();
+      const generatedId = this.generateShortId().toLowerCase();
       const existingEntity = await this.businessModel.findOne({ shortId: generatedId });
 
       if (!existingEntity) {
@@ -250,6 +251,13 @@ export class AuthService {
 
     delete existingUser.password;
 
+    // todo:
+    // this is a problem if
+    // the user has multiple businesses or 0 businesses
+    // the app will not sign in the user with out a business
+    // app grabs the first business in the array if
+    // there are multiple businesses
+
     const currentBusinessAccounts = await this.businessModel
       .find({
         _id: {
@@ -270,23 +278,38 @@ export class AuthService {
   async createNewBusinessAndBusinessOwner(newUser: ConvertToDtoType<BusinessUserType>) {
     const saltRounds = Number(this.configService.get("SALT_ROUNDS"));
     const salt = await bcrypt.genSalt(saltRounds);
+
     const currentUser = new this.businessUserModel(newUser);
+
     const businessShortId = await this.generateUniqueId();
     if (!businessShortId) {
       throw new UnprocessableEntityException("Unable to create business account for user");
     }
+    const baseUrl = `https://${businessShortId}.shortwaits.com`;
+
     const newBusinessAccount = new this.businessModel({
       shortId: businessShortId,
       isRegistrationCompleted: false,
-      clients: [],
-      taggedClients: [],
+      web: {
+        isActive: true,
+        baseUrl,
+        bannerImageUrl: "",
+        logoImageUrl: "",
+        faviconImageUrl: "",
+        primaryColor: "",
+        secondaryColor: "",
+        accentColor: "",
+        notificationMessage: "",
+      },
+      clients: null,
+      taggedClients: null,
       admins: [currentUser._id],
       superAdmins: [currentUser._id],
-      createdBy: [currentUser._id],
-      updatedBy: [currentUser._id],
+      createdBy: currentUser._id,
+      updatedBy: currentUser._id,
       staff: [currentUser._id],
       hours: shortwaitsAdmin[0].sampleBusinessData.hours,
-    });
+    } as Partial<BusinessType>);
     const services = shortwaitsAdmin[0].sampleBusinessData.services.map(service => {
       return { ...service, businessId: newBusinessAccount._id };
     });

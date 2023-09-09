@@ -192,7 +192,7 @@ export class Business extends Document implements BusinessType {
   @Prop(
     raw({
       isActive: { type: Boolean, default: false },
-      url: String,
+      baseUrl: String,
       bannerImageUrl: String,
       logoImageUrl: String,
       faviconImageUrl: String,
@@ -204,7 +204,7 @@ export class Business extends Document implements BusinessType {
   )
   web: {
     isActive: boolean;
-    url: string;
+    baseUrl: string;
     bannerImageUrl: string;
     logoImageUrl: string;
     faviconImageUrl: string;

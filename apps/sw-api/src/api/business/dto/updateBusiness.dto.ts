@@ -41,7 +41,7 @@ export class UpdateBusinessDto implements UpdateBusinessDtoType {
   paymentMethods?: string[];
   web?: {
     isActive: boolean;
-    url: string;
+    baseUrl: string;
     bannerImageUrl: string;
     logoImageUrl: string;
     faviconImageUrl: string;

@@ -79,9 +79,14 @@ export function EventsScreen({ navigation }: AuthorizedScreenProps<"events-scree
       <QrModal
         isVisible={isQrVisible}
         setIsVisible={setIsQrVisible}
-        value={"https://sample.com"}
+        value={currentBusiness.web.baseUrl + "/booking"}
         title="Book an appointment"
-        description={`Scan this QR code to book an appointment with ${currentBusiness.shortName}`}
+        description={
+          <Text>
+            Scan this QR code to book an appointment with{" "}
+            <Text style={{ fontWeight: "700" }}>{currentBusiness.shortName}</Text>
+          </Text>
+        }
         description2={"Note: The client will see all available services."}
       />
       <Calendar />

@@ -5,16 +5,7 @@ import {
   EventPaymentMethodType,
   eventPaymentMethodsKeys,
 } from "@shortwaits/shared-lib";
-import {
-  IsArray,
-  IsBoolean,
-  IsDateString,
-  IsIn,
-  IsNumber,
-  IsObject,
-  IsString,
-  ValidateNested,
-} from "class-validator";
+import { IsArray, IsBoolean, IsDateString, IsIn, IsNumber, IsObject, IsString, ValidateNested } from "class-validator";
 import { Type } from "class-transformer";
 
 class UrlDto {
@@ -144,7 +135,7 @@ export class CreateEventsDto implements CreateEventDtoType {
 
   @ApiProperty({ required: false })
   @IsBoolean()
-  isGroupEvent: boolean;
+  isPublicEvent: boolean;
 
   @IsBoolean()
   @ApiProperty({ required: false })
