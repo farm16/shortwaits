@@ -15,7 +15,6 @@
     "sw-api:build": "npm run shared-lib:build && npm run sw-api:build:prod",
     "sw-api:build:dev": "nx build sw-api --verbose",
     "sw-api:build:prod": "nx build sw-api --verbose",
-    "sw-api:deploy:dev": "npm install && npm run sw-api:build && npm run start",
     "sw-api:deploy:prod": "npm install && npm run sw-api:build:prod && npm run sw-api:run:prod",
     "sw-web": "nx serve sw-web",
     "shared-lib:build": "nx build shared-lib --verbose",
