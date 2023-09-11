@@ -56,19 +56,45 @@ export const Calendar: FC<CalendarProps> = memo(props => {
   const handleRefresh = useCallback(() => {
     if (!isEventsLoading) refetchEvents();
   }, [isEventsLoading, refetchEvents]);
+  const renderNonIdealState = useCallback(() => {
+    return (
+      <NonIdealState
+        image={"noEvents"}
+        buttons={
+          <Button
+            text="Add Event"
+            preset="accent"
+            onPress={() => {
+              navigate("modals", {
+                screen: "form-modal-screen",
+                params: {
+                  form: "addEvent",
+                  onDone: () => {
+                    if (!isEventsLoading) {
+                      refetchEvents();
+                    }
+                  },
+                },
+              });
+            }}
+          />
+        }
+      />
+    );
+  }, [isEventsLoading, refetchEvents]);
 
-  const initialData = useClosestDateFromAgendaData(agendaData);
+  const initialDate = useClosestDateFromAgendaData(agendaData);
 
   if (isEventsLoading) {
     return <ActivityIndicator />;
   }
 
-  console.log("initialData", initialData);
+  console.log("initialDate", initialDate);
   console.log("agendaData", agendaData);
 
   return (
     <CalendarProvider
-      date={initialData}
+      date={initialDate}
       showTodayButton={true}
       todayButtonStyle={{
         backgroundColor: Colors.brandSecondary,
@@ -94,30 +120,7 @@ export const Calendar: FC<CalendarProps> = memo(props => {
         contentContainerStyle={{
           backgroundColor: Colors.backgroundOverlay,
         }}
-        ListEmptyComponent={() => (
-          <NonIdealState
-            image={"noEvents"}
-            buttons={
-              <Button
-                text="Add Event"
-                preset="accent"
-                onPress={() => {
-                  navigate("modals", {
-                    screen: "form-modal-screen",
-                    params: {
-                      form: "addEvent",
-                      onDone: () => {
-                        if (!isEventsLoading) {
-                          refetchEvents();
-                        }
-                      },
-                    },
-                  });
-                }}
-              />
-            }
-          />
-        )}
+        ListEmptyComponent={renderNonIdealState}
         sections={agendaData}
         renderItem={renderItem}
         stickySectionHeadersEnabled={true}

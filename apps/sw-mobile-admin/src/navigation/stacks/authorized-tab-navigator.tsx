@@ -2,22 +2,16 @@ import React from "react";
 // import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import { Platform } from "react-native";
 
 import { SettingsScreen, EventsScreen, MyBusinessScreen, ActivityScreen, ClientsScreen } from "../../screens";
 import { useTheme } from "../../theme";
 import { AUTHORIZED_TAB_SCREENS } from "../navigation-constants";
-import { Dimensions, Platform } from "react-native";
-import { useMobileAdmin } from "../../store";
 
 const Tab = createBottomTabNavigator();
 
 export const AuthorizedTabNavigator = () => {
   const { Colors } = useTheme();
-  const {
-    components: { banner },
-  } = useMobileAdmin();
-
-  const tabBarHeight = Platform.OS === "android" ? 60 : undefined;
 
   return (
     <Tab.Navigator
@@ -25,7 +19,6 @@ export const AuthorizedTabNavigator = () => {
       screenOptions={{
         unmountOnBlur: true,
         headerShown: true,
-        headerStatusBarHeight: banner?.isVisible ? 0 : undefined,
         headerTitleAlign: "center",
         headerStyle: {
           borderTopWidth: 0,
@@ -42,7 +35,6 @@ export const AuthorizedTabNavigator = () => {
             },
           }),
         },
-        // tabBarIconStyle: { color: Colors.brandSecondary },
         tabBarActiveTintColor: Colors.brandAccent,
         tabBarInactiveTintColor: Colors.brandAccent3,
         tabBarAllowFontScaling: true,

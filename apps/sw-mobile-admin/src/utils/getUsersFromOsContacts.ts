@@ -14,6 +14,7 @@ function getUserFromOsContact({
   phoneNumbers,
   postalAddresses,
   imAddresses,
+  emailAddresses,
 }: Contact): CreateClientUserDtoType {
   const addresses = postalAddresses.map(postalAddress => {
     return {
@@ -28,7 +29,9 @@ function getUserFromOsContact({
     };
   });
   if (Platform.OS === "android") {
-    const email = phoneNumbers.length > 0 ? phoneNumbers[0].number : null;
+    const phoneNumber = phoneNumbers.length > 0 ? phoneNumbers[0].number : null;
+    const email = emailAddresses.length > 0 ? emailAddresses[0].email : null;
+
     const accountImageUrl = "";
     return {
       givenName,
@@ -38,7 +41,7 @@ function getUserFromOsContact({
       phoneNumbers,
       imAddresses,
       email: email,
-      username: email,
+      username: phoneNumber,
       alias: "givenName",
       accountImageUrl,
       clientType: "local",

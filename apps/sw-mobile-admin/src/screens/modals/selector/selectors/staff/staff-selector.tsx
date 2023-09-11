@@ -10,6 +10,7 @@ import { useGetBusinessStaffQuery } from "../../../../../services";
 import { ModalsScreenProps } from "../../../../../navigation";
 import { showPremiumMembershipModal, useUser } from "../../../../../store";
 import { ActivityIndicator } from "react-native-paper";
+import { useTheme } from "../../../../../theme";
 
 const MIN_SELECTED_ITEMS_DEFAULT = 0; // Define your minimum selected items here
 const MAX_SELECTED_ITEMS_DEFAULT = 10000; // Define your maximum selected items here
@@ -29,7 +30,7 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
   } = route.params;
 
   const dispatch = useDispatch();
-
+  const { Colors } = useTheme();
   const handleAddStaffPress = useCallback(() => {
     dispatch(showPremiumMembershipModal());
   }, [dispatch]);
@@ -65,7 +66,7 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
   useLayoutEffect(() => {
     const handleOnGoBack = () => {
       if (multiple) {
-        const items = payload?.data?.filter(item => selectedItems.includes(item._id));
+        const items = payload?.data?.filter(item => selectedItems.includes(item._id)) || null;
         if (onSubmit) {
           onSubmit(items);
         }
@@ -80,7 +81,14 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
 
     navigation.setOptions({
       headerTitle: headerTitle,
-      headerLeft: () => <LeftChevronButton onPress={() => handleOnGoBack()} />,
+      headerLeft: () => (
+        <Container direction="row" alignItems="center">
+          <LeftChevronButton
+            onPress={() => handleOnGoBack()}
+            counter={multiple && selectedItems?.length > 0 ? `(${selectedItems.length})` : ""}
+          />
+        </Container>
+      ),
       headerRight: () => (
         <Container direction="row" alignItems="center">
           {searchable ? (

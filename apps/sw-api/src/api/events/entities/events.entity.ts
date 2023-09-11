@@ -31,7 +31,7 @@ export class Events extends Document implements EventType {
 
   @ApiProperty()
   @Prop()
-  registrationDeadlineTime: Date;
+  registrationDeadlineTime: string;
 
   @ApiProperty()
   @Prop({ type: Array })
@@ -138,7 +138,7 @@ export class Events extends Document implements EventType {
 
   @ApiProperty()
   @Prop()
-  endTimeExpected: Date;
+  endTimeExpected: string;
 
   @ApiProperty()
   @Prop()

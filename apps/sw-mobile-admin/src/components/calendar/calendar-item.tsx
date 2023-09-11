@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import { Alert, View, Image, Animated, StyleSheet, Pressable } from "react-native";
 import { EventDtoType } from "@shortwaits/shared-lib";
 import { isEmpty, truncate } from "lodash";
-import { Container, Emoji, EventStatusButtons, Text } from "..";
+import { Container, Emoji, EventStatusButtons, Space, Text } from "..";
 import { useTheme } from "../../theme";
 import { getEventTime } from "./calendar-utils";
 import defaultUserImage from "../../assets/images/user.png";
@@ -78,58 +78,83 @@ export const AgendaItem = (props: AgendaItemProps) => {
     [Colors.lightGray, Colors.subText, Colors.text, item.durationInMin, item.startTime]
   );
 
-  const eventName = useCallback(
-    () => (
-      <View style={styles.eventName}>
-        <View style={styles.eventNameFloatingLabels}>
-          {isEmpty(item.labels)
-            ? null
-            : item.labels.map((label, index) => {
+  const eventDescription = useCallback(() => {
+    const hasLabels = !isEmpty(item.labels);
+    return (
+      <View style={styles.eventDescription}>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignSelf: "stretch",
+          }}
+        >
+          <Text
+            preset="none"
+            style={[styles.eventNameRow1, { color: Colors.text, flex: 1 }]}
+            text={truncate(item?.name ?? "", {
+              separator: " ",
+              length: hasLabels ? 14 : 23,
+            })}
+          />
+          {hasLabels ? (
+            <View style={styles.eventNameFloatingLabels}>
+              {item.labels.map((label, index) => {
                 return <Emoji key={index} name={label.emojiShortName} />;
               })}
+            </View>
+          ) : null}
         </View>
-        <Text
-          preset="none"
-          style={[styles.eventNameRow1, { color: Colors.text }]}
-          text={truncate(item?.name ?? "", { length: 21, separator: "." })}
-        />
-        <Container direction="row">
-          {/* <Text style={[styles.eventNameRow2, { color: Colors.subText }]} preset="none" text={"status: "} /> */}
-          <View
-            style={{
-              backgroundColor: statusDisplayMessagesBackgroundColor[item.status.statusName],
-              paddingHorizontal: 8,
-              paddingVertical: 3,
-              borderRadius: 5,
-            }}
-          >
-            <Text
-              style={[
-                styles.eventNameRow2,
-                {
-                  color: statusDisplayMessagesColor[item.status.statusName],
-                },
-              ]}
-              preset={"none"}
-              text={item.status?.statusName ? statusDisplayMessages[item.status.statusName] : ""}
-            />
-          </View>
-        </Container>
-      </View>
-    ),
-    [Colors.text, item?.labels, item?.name, item.status?.statusName]
-  );
-
-  const eventClientImage = useCallback(() => {
-    const isPublicEvent = item.isPublicEvent;
-    const client = isPublicEvent ? "" : item.leadClientId ?? "";
-    return (
-      <View style={styles.eventClientImage}>
-        <Image source={defaultUserImage} style={styles.eventClientImageColumn} />
-        {client && <Text style={styles.eventClientName} preset={"none"} text={client} />}
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignSelf: "stretch",
+          }}
+        >
+          <Text style={{ color: Colors.subText, fontSize: 12, textAlign: "center" }}>
+            {`clients: ${item?.clientsIds?.length ?? 0}`}
+          </Text>
+          <Text style={{ color: Colors.subText, fontSize: 12, textAlign: "center" }}>
+            {`staff: ${item?.staffIds?.length ?? 0}`}
+          </Text>
+        </View>
       </View>
     );
-  }, [item.isPublicEvent, item.leadClientId]);
+  }, [Colors.subText, Colors.text, item?.clientsIds?.length, item.labels, item?.name, item?.staffIds?.length]);
+
+  const eventStatus = useCallback(() => {
+    const isPublicEvent = item.isPublicEvent;
+    return (
+      <View style={[styles.statusContainer, { borderLeftColor: Colors.lightGray }]}>
+        <View
+          style={{
+            backgroundColor: statusDisplayMessagesBackgroundColor[item.status.statusName],
+            paddingHorizontal: 8,
+            paddingVertical: 3,
+            borderRadius: 5,
+          }}
+        >
+          <Text
+            style={[
+              styles.eventNameRow2,
+              {
+                color: statusDisplayMessagesColor[item.status.statusName],
+              },
+            ]}
+            preset={"none"}
+            text={item.status?.statusName ? statusDisplayMessages[item.status.statusName] : ""}
+          />
+        </View>
+        <Space size="tiny" />
+        <Text
+          style={[styles.eventTimeRow2, { color: Colors.subText }]}
+          preset="none"
+          text={isPublicEvent ? "Public event" : "Private event"}
+        />
+      </View>
+    );
+  }, [Colors.lightGray, Colors.subText, item.isPublicEvent, item.status.statusName]);
 
   return (
     <Swipeable renderRightActions={renderRightActions}>
@@ -145,8 +170,8 @@ export const AgendaItem = (props: AgendaItemProps) => {
         ]}
       >
         {eventServiceColor()}
-        {eventClientImage()}
-        {eventName()}
+        {eventDescription()}
+        {eventStatus()}
         {eventTime()}
       </Pressable>
     </Swipeable>
@@ -164,11 +189,19 @@ const styles = StyleSheet.create({
     borderTopStartRadius: EVENT_ITEM_BORDER_RADIUS,
     borderBottomStartRadius: EVENT_ITEM_BORDER_RADIUS,
   },
+  statusContainer: {
+    height: "100%",
+    width: 110,
+    paddingHorizontal: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    borderLeftWidth: 1,
+  },
   eventTime: {
     paddingHorizontal: 5,
     justifyContent: "center",
     alignItems: "center",
-    width: 100,
+    width: 90,
     borderLeftWidth: 1,
     height: "100%",
   },
@@ -183,19 +216,22 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   eventNameFloatingLabels: {
-    right: 5,
-    top: 0,
-    position: "absolute",
+    // right: 5,
+    // top: 0,
+    // position: "absolute",
     flexDirection: "row",
   },
-  eventName: {
-    justifyContent: "space-evenly",
+  eventDescription: {
+    // backgroundColor: "red",
     flexGrow: 1,
-    marginVertical: 6,
-    alignSelf: "stretch",
+    height: "100%",
+    alignItems: "flex-start",
+    justifyContent: "space-between",
+    paddingHorizontal: 10,
+    paddingVertical: 10,
   },
   eventNameRow1: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: "500",
     textTransform: "capitalize",
   },
@@ -203,24 +239,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "500",
     textTransform: "capitalize",
-  },
-  eventClientImage: {
-    height: "100%",
-    paddingHorizontal: 10,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  eventClientImageColumn: {
-    borderRadius: 27.5,
-    height: 55,
-    width: 55,
-    resizeMode: "contain",
-    borderWidth: 0.2,
-    borderColor: "lightgrey",
-  },
-  eventClientName: {
-    fontSize: 14.5,
-    fontWeight: "500",
   },
   calendarItem: {
     height: CALENDAR_EVENT_HEIGHT,

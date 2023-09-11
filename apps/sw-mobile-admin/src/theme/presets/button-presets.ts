@@ -109,7 +109,6 @@ export const buttonPresets = ({
       height: CARD_HEIGHT,
       paddingHorizontal: 8,
       width: "100%",
-
       flexDirection: "row",
       alignItems: "center",
       borderBottomWidth: 1,

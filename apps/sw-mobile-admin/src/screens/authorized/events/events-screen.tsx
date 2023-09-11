@@ -1,11 +1,10 @@
 import React, { useLayoutEffect, useState } from "react";
-import { truncate } from "lodash";
+import { skipToken } from "@reduxjs/toolkit/dist/query";
 
 import { Calendar, Screen, Text, Container, IconButton, QrModal } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useBusiness, useEvents, useShowGhostComponent } from "../../../store";
 import { useGetServicesByBusinessQuery } from "../../../services";
-import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { convertStaticSelectorModalData } from "../../../utils/static-selector-modal-utils";
 
 export function EventsScreen({ navigation }: AuthorizedScreenProps<"events-screen">) {
@@ -22,7 +21,7 @@ export function EventsScreen({ navigation }: AuthorizedScreenProps<"events-scree
       headerTitle: () => {
         return (
           <Container direction="row" justifyContent="center">
-            <Text preset="headerTitle" text={truncate(currentBusiness.shortName, { length: 16 })} />
+            <Text preset="headerTitle" text={"Events"} />
           </Container>
         );
       },

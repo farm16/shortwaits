@@ -5,7 +5,7 @@ import { Pressable, StyleSheet, View } from "react-native";
 import { Button, ButtonProps } from "../button/button";
 import { useTheme } from "../../../theme";
 import { IconSizes } from "../../../theme/Variables";
-import { Space } from "../space/space";
+import { Text } from "../text/text";
 
 export type CardProps = ButtonProps & {
   leftIconName?: string;
@@ -16,23 +16,14 @@ export type CardProps = ButtonProps & {
   leftIconSize?: keyof typeof IconSizes;
   rightIconColor?: string;
   leftIconColor?: string;
-  mode: keyof typeof cardModes;
+  mode: "text-field" | "listItem" | "button" | "static";
 };
 
-const cardModes = {
-  "text-field": {
-    disabled: true,
-  },
-  listItem: {},
-  button: {},
-  static: {
-    disabled: true,
-  },
-} as const;
-
 export const Card = (props: CardProps) => {
-  const { Colors } = useTheme();
-
+  const {
+    Colors,
+    Common: { buttonTextPresets, buttonViewPresets },
+  } = useTheme();
   const {
     mode,
     rightIconName,
@@ -42,54 +33,66 @@ export const Card = (props: CardProps) => {
     rightIconSize = "regular",
     leftIconSize = "regular",
     children,
+    text,
     leftIconOnPress,
     rightIconOnPress,
+    textStyle: textStyleOverride,
+    style: styleOverride,
     ...rest
   } = props;
 
-  const getIsDisabled = () => {
-    if (leftIconOnPress || rightIconOnPress) {
-      return true;
-    }
-    if (mode === "text-field") {
-      return true;
-    }
-    if (mode === "static") {
-      return true;
-    }
-    return false;
-  };
+  const disabledCardModes: Partial<CardProps["mode"]>[] = ["text-field", "static"];
+
+  if (disabledCardModes.includes(mode)) {
+    const defaultStyle = buttonViewPresets["card"] || buttonViewPresets.primary;
+    const defaultTextStyle = buttonTextPresets["card"] || buttonTextPresets.primary;
+    const textStyles = [defaultTextStyle, textStyleOverride];
+    const style = [defaultStyle, styleOverride];
+
+    const content = children || <Text text={text} style={textStyles} />;
+    return (
+      <View style={style}>
+        {leftIconName &&
+          (mode === "static" || leftIconName === "none" ? null : (
+            <Pressable
+              onPress={leftIconOnPress}
+              style={[
+                styles.iconContainer,
+                {
+                  marginRight: 10,
+                },
+              ]}
+            >
+              <Icon style={styles.leftIcon} name={leftIconName} size={IconSizes[leftIconSize]} color={leftIconColor} />
+            </Pressable>
+          ))}
+        <View style={styles.childrenContainer}>{content}</View>
+        {rightIconName &&
+          (mode === "static" || rightIconName === "none" ? null : (
+            <Pressable onPress={rightIconOnPress} style={styles.iconContainer}>
+              <Icon
+                style={styles.rightIcon}
+                name={rightIconName}
+                size={IconSizes[rightIconSize]}
+                color={rightIconColor}
+              />
+            </Pressable>
+          ))}
+      </View>
+    );
+  }
 
   return (
-    <Button preset="card" {...cardModes[mode]} disabled={getIsDisabled()} {...rest}>
+    <Button preset="card" {...rest}>
       {leftIconName &&
-        (mode === "static" || leftIconName === "none" ? null : (
-          <Pressable
-            disabled={!getIsDisabled()}
-            onPress={leftIconOnPress}
-            style={[
-              styles.iconContainer,
-              {
-                marginRight: 10,
-              },
-            ]}
-          >
-            <Icon style={styles.leftIcon} name={leftIconName} size={IconSizes[leftIconSize]} color={leftIconColor} />
-          </Pressable>
+        (leftIconName === "none" ? null : (
+          <Icon style={styles.leftIcon} name={leftIconName} size={IconSizes[leftIconSize]} color={leftIconColor} />
         ))}
       <View style={styles.childrenContainer}>{children}</View>
       {rightIconName &&
-        (mode === "static" || rightIconName === "none" ? null : (
-          <Pressable disabled={!getIsDisabled()} onPress={rightIconOnPress} style={styles.iconContainer}>
-            <Icon
-              style={styles.rightIcon}
-              name={rightIconName}
-              size={IconSizes[rightIconSize]}
-              color={rightIconColor}
-            />
-          </Pressable>
+        (rightIconName === "none" ? null : (
+          <Icon style={styles.rightIcon} name={rightIconName} size={IconSizes[rightIconSize]} color={rightIconColor} />
         ))}
-      {/* <Space direction="vertical" size="tiny" /> */}
     </Button>
   );
 };
@@ -105,5 +108,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   rightIcon: {},
-  leftIcon: {},
+  leftIcon: {
+    marginRight: 10,
+  },
 });

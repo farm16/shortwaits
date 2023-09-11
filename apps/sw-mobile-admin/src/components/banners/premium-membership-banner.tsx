@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { View, StyleSheet, ImageBackground, StatusBar, Platform } from "react-native";
 import { Button, Container, Text } from "../common";
 import image from "./background_1.png";
@@ -11,9 +11,10 @@ export function PremiumMembershipBanner() {
   const insets = useSafeAreaInsets();
 
   const dispatch = useDispatch();
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     dispatch(hidePremiumMembershipBanner());
-  };
+  }, [dispatch]);
+
   return (
     <ImageBackground
       source={image}
@@ -37,31 +38,7 @@ export function PremiumMembershipBanner() {
       ]}
       imageStyle={styles.image}
     >
-      {/* <View
-        style={{
-          position: "absolute",
-
-          backgroundColor: "rgba(0,0,0,0.8)",
-          width: 30,
-          height: 30,
-          borderRadius: 15,
-          justifyContent: "center",
-          alignItems: "center",
-          ...Platform.select({
-            ios: {
-              top: 46,
-              right: 36,
-            },
-            android: {
-              top: 26,
-              right: 26,
-            },
-          }),
-        }}
-      >
-        <Icon name="close" color="white" size={24}  />
-      </View> */}
-      <StatusBar barStyle="light-content" hidden backgroundColor={"rgba(0,0,0,0.8)"} />
+      {/* <StatusBar barStyle="light-content" hidden backgroundColor={"rgba(0,0,0,0.8)"} /> */}
       <View
         style={{
           marginTop: insets.top,

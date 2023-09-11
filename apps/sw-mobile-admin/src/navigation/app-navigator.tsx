@@ -30,7 +30,6 @@ const AppStack = () => {
     }
   }, [isAuthenticated, auth]);
 
-  console.log("isAuthenticated>>>", isAuthenticated);
   return (
     <RootStack.Navigator
       screenOptions={{
@@ -72,11 +71,10 @@ export const AppNavigator = (props: NavigationProps): React.ReactElement => {
   useBackButtonHandler(canExit);
 
   return (
-    <NavigationContainer ref={navigationRef} theme={DefaultTheme} {...props}>
-      <Banner />
+    <NavigationContainer ref={navigationRef} theme={DefaultTheme}
+    
+    {...props}>
       <AppStack />
-      <FloatingActionButton />
-      <PremiumMembershipModal />
     </NavigationContainer>
   );
 };

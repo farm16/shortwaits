@@ -65,7 +65,7 @@ export const ClientsSelector: FC<ModalsScreenProps<"selector-modal-screen">> = (
   useLayoutEffect(() => {
     const handleOnGoBack = () => {
       if (multiple) {
-        const items = payload?.data?.filter(item => selectedItems.includes(item._id));
+        const items = payload?.data?.filter(item => selectedItems.includes(item._id)) || null;
         if (onSubmit) {
           onSubmit(items);
         }
@@ -82,18 +82,9 @@ export const ClientsSelector: FC<ModalsScreenProps<"selector-modal-screen">> = (
       headerTitle: headerTitle,
       headerLeft: () => (
         <Container direction="row" alignItems="center">
-          <LeftChevronButton onPress={() => handleOnGoBack()} />
-          <Text
-            preset="none"
-            style={{
-              color: Colors.brandSecondary,
-              fontWeight: "600",
-              padding: 0,
-              marginTop: -2,
-              marginLeft: -4,
-              fontSize: 18,
-            }}
-            text={multiple && selectedItems.length > 0 ? `(${selectedItems.length})` : ""}
+          <LeftChevronButton
+            onPress={() => handleOnGoBack()}
+            counter={multiple && selectedItems?.length > 0 ? `(${selectedItems.length})` : ""}
           />
         </Container>
       ),
@@ -193,6 +184,7 @@ export const ClientsSelector: FC<ModalsScreenProps<"selector-modal-screen">> = (
           data={filteredData}
           renderItem={renderItem}
           keyExtractor={keyExtractor}
+          maxToRenderPerBatch={10}
         />
       </>
     );

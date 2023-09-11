@@ -1,9 +1,10 @@
-import React, { FC } from "react";
+import React, { FC, useCallback, useMemo } from "react";
 import { StyleSheet, TextStyle, View, Image } from "react-native";
 
 import { Text, Space, ButtonProps, Button } from "../";
 import { IconSizes, useTheme } from "../../theme";
 import FastImage from "react-native-fast-image";
+import { generateAvatarUrl } from "../../utils/generateAvatarUrl";
 
 type SelectorListItemProps = {
   onPress: () => void;
@@ -41,6 +42,10 @@ export const SelectorListItem: FC<SelectorListItemProps> = props => {
     onPress();
   };
 
+  const avatarUrl = useMemo(() => {
+    return generateAvatarUrl(title);
+  }, [title]);
+
   return (
     <Button
       preset="card"
@@ -55,7 +60,7 @@ export const SelectorListItem: FC<SelectorListItemProps> = props => {
     >
       <FastImage
         source={{
-          uri: imageUrl || "https://picsum.photos/60/60",
+          uri: imageUrl || avatarUrl,
         }}
         resizeMode={FastImage.resizeMode.cover}
         style={styles.backgroundImage}

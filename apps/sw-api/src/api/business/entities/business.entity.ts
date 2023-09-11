@@ -8,6 +8,7 @@ import {
   CurrencyType,
   ObjectId,
   BusinessLabelsType,
+  EmojiType,
 } from "@shortwaits/shared-lib";
 import { ApiProperty } from "@nestjs/swagger";
 
@@ -50,15 +51,13 @@ export class Business extends Document implements BusinessType {
   supportPhone?: string;
 
   @ApiProperty()
-  @Prop(
-    raw({
-      name: String,
-      description: String,
-      isFavorite: Boolean,
-      emojiShortName: String,
-    })
-  )
-  labels: BusinessLabelsType;
+  @Prop()
+  labels: {
+    name: string;
+    description: string;
+    isFavorite: boolean;
+    emojiShortName: EmojiType;
+  }[];
 
   @ApiProperty()
   @Prop()
@@ -81,7 +80,7 @@ export class Business extends Document implements BusinessType {
   backgroundAdmins: ObjectId[];
 
   @ApiProperty()
-  @Prop({ type: String, enum: AccountType, default: AccountType.FREE })
+  @Prop({ type: String, default: "free" })
   accountType: AccountType;
 
   @ApiProperty()

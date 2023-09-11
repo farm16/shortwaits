@@ -13,17 +13,7 @@ export type BusinessLabelType = {
 
 export type BusinessLabelsType = BusinessLabelType[];
 
-export enum AccountType {
-  FREE = "free",
-  STUDENT = "student",
-  BASIC = "basic",
-
-  TRIAL = "trial",
-  BUSINESS = "business",
-  PREMIUM = "premium",
-  ENTERPRISE = "enterprise",
-  PARTNER = "partner",
-}
+export type AccountType = "free" | "student" | "basic" | "trial" | "business" | "premium" | "enterprise" | "partner";
 
 export type BusinessType = {
   shortId: string;

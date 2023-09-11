@@ -17,6 +17,7 @@ export const eventsSlice = createSlice({
   extraReducers: builder => {
     builder
       .addMatcher(shortwaitsApi.endpoints.getEventsByBusiness.matchFulfilled, (_state, action) => {
+        console.log("getEventsByBusiness hook", action.payload.data);
         return [...action.payload.data];
       })
       .addMatcher(shortwaitsApi.endpoints.createEvent.matchFulfilled, (state, action) => {

@@ -40,6 +40,8 @@ export const LabelsSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({
 
   const [selectedItems, setSelectedItems] = useState(payload?.data?.labels ?? []);
 
+  console.log("payload >>>", JSON.stringify(payload?.data));
+
   const handleOnSelect = item => {
     if (multiple) {
       if (selectedItems.includes(item._id)) {

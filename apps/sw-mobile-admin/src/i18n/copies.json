@@ -78,7 +78,7 @@
     "AddEventModal.staff.description": "count",
     "AddEventModal.staff.emptyDescription": "Select a Staff",
     "AddEventModal.staff.selector.headerTitle": "Select Staff",
-    "AddEventModal.client.title": "Client",
+    "AddEventModal.client.title": "Clients",
     "AddEventModal.client.description": "count",
     "AddEventModal.client.emptyDescription": "Select a client",
     "AddEventModal.client.selector.headerTitle": "Clients"

@@ -59,7 +59,7 @@ export const EventLabelsSelector: FC<ModalsScreenProps<"selector-modal-screen">>
     return <Text>Loading...</Text>;
   }
 
-  console.log("selectedItems", selectedItems);
+  console.log("payload.data.labels", payload?.data?.labels);
 
   if (isSuccess) {
     return (

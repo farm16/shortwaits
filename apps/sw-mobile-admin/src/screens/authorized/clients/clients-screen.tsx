@@ -5,7 +5,6 @@ import { ActivityIndicator } from "react-native-paper";
 import { ClientUserDtoType } from "@shortwaits/shared-lib";
 import {
   Button,
-  ButtonCard,
   IconButton,
   Container,
   List,
@@ -13,6 +12,7 @@ import {
   Screen,
   Text,
   AnimatedSearchBar,
+  SelectorListItem,
 } from "../../../components";
 import { useBusiness, useClients, useShowGhostComponent } from "../../../store";
 import { useCreateBusinessClientsMutation, useGetBusinessClientsQuery } from "../../../services";
@@ -89,7 +89,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({ navi
           <Container direction="row" justifyContent="center">
             <Text
               preset="headerTitle"
-              text={currentClients.length === 0 ? "Clients" : `Clients (${currentClients.length})`}
+              text={currentClients?.length === 0 ? "Clients" : `Clients (${currentClients.length})`}
             />
           </Container>
         );
@@ -125,19 +125,28 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({ navi
     });
   }, [handleAddClient, handleSyncContacts, isListSearchable, isLoading, navigation, currentClients]);
 
-  const _renderItem: ListRenderItem<ClientUserDtoType> = ({ item }) => (
-    <ButtonCard
-      title={item[item.alias ?? "displayName"]}
-      subTitle={item.email}
-      onPress={() => {
-        navigation.navigate("authorized-stack", {
-          screen: "business-client-screen",
-          params: {
-            client: item,
-          },
-        });
-      }}
-    />
+  const _renderItem: ListRenderItem<ClientUserDtoType> = useCallback(
+    ({ item }) => {
+      const title = item.givenName || item.familyName || item.displayName || item.username;
+      const subTitle = item.email || item.phoneNumbers?.[0]?.number;
+      return (
+        <SelectorListItem
+          imageUrl={item.accountImageUrl}
+          onPress={() => {
+            navigation.navigate("authorized-stack", {
+              screen: "business-client-screen",
+              params: {
+                client: item,
+              },
+            });
+          }}
+          rightIconName={"chevron-right"}
+          title={title}
+          subTitle={subTitle}
+        />
+      );
+    },
+    [navigation]
   );
 
   useEffect(() => {

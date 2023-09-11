@@ -9,6 +9,7 @@ import {
   CreateClientUserDtoType,
   BusinessUserUpdateDtoType,
   CreateBusinessUsersDtoType,
+  CreateClientUsersDtoType,
 } from "@shortwaits/shared-lib";
 
 import { Business } from "./entities/business.entity";
@@ -16,6 +17,7 @@ import { BusinessUser } from "../business-user/entities/business-user.entity";
 import { ClientUser } from "../client-user/entities/client-user.entity";
 import { RegisterBusinessDto } from "./dto/registerBusiness.dto";
 import { convertStringToObjectId } from "../../utils/converters";
+import { generateBusinessUsers, generateClientUsers } from "../../utils/generateUserPayload";
 
 @Injectable()
 export class BusinessService {
@@ -176,7 +178,8 @@ export class BusinessService {
     const { isAdmin, isSuperAdmin } = this.isUserAdminType(businessData, businessUserId);
 
     if (isAdmin || isSuperAdmin) {
-      const insertedStaff = await this.businessUserModel.insertMany(staff);
+      const staffPayload = generateBusinessUsers(staff);
+      const insertedStaff = await this.businessUserModel.insertMany(staffPayload);
       const staffIds = insertedStaff.map(client => {
         return client._id;
       });
@@ -192,18 +195,18 @@ export class BusinessService {
     }
   }
 
-  async createBusinessClients(businessUserId: string, businessId: string, clients: CreateClientUserDtoType) {
+  async createBusinessClients(businessUserId: string, businessId: string, clients: CreateClientUsersDtoType) {
     const businessData = await this.findBusinessById(businessId);
 
     const { isAdmin, isSuperAdmin } = this.isUserAdminType(businessData, businessUserId);
 
     if (isAdmin || isSuperAdmin) {
-      const insertedClients = await this.clientUserModel.insertMany(clients);
+      const clientsPayload = generateClientUsers(clients);
+      const insertedClients = await this.clientUserModel.insertMany(clientsPayload);
       const clientsIds = insertedClients.map(client => {
         return client._id;
       });
       const businessClients = businessData.clients ? businessData.clients.concat(clientsIds) : clientsIds;
-      console.log("businessClients", businessClients.length);
       const business = await this.businessModel.findByIdAndUpdate(
         businessId,
         {
@@ -213,9 +216,6 @@ export class BusinessService {
       );
 
       const updatedBusiness = await business.save();
-
-      console.log("updatedBusiness.clients", updatedBusiness.clients.length);
-
       const newClients = await this.clientUserModel.find({
         _id: {
           $in: updatedBusiness.clients,

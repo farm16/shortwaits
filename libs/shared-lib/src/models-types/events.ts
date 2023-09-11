@@ -60,9 +60,12 @@ export type EventType = {
 
   hasNoDuration: boolean; // Indicates if the event has no duration
   durationInMin: number; // Duration of the event in minutes
+
+  //these need to be Date objects for db queries
   startTime: Date; // Start time of the event
   endTime: Date; // End time of the event
   expectedEndTime: Date; // Expected end time of the event
+
   canceled: boolean; // Indicates if the event is canceled
   cancellationReason: string; // Reason for event cancellation
 
@@ -99,7 +102,7 @@ export type EventType = {
   location: EventLocationType;
 
   attendeeLimit: number; // Maximum participant limit for the event (added field)
-  registrationDeadlineTime: Date; // Deadline for event registration (added field)
+  registrationDeadlineTime: string; // Deadline for event registration (added field)
   registrationFee: number; // Registration fee for the event (added field)
   // Additional metadata fields can be added here as needed
 };

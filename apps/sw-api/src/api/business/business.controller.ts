@@ -12,7 +12,7 @@ import {
   ValidationPipe,
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
-import { ClientUserUpdateDtoType, CreateBusinessUsersDtoType, CreateClientUserDtoType } from "@shortwaits/shared-lib";
+import { ClientUserUpdateDtoType, CreateBusinessUsersDtoType, CreateClientUsersDtoType } from "@shortwaits/shared-lib";
 
 import { BusinessService } from "./business.service";
 import { AtGuard } from "../../common/guards";
@@ -122,18 +122,18 @@ export class BusinessController {
   async createBusinessClients(
     @Param("businessId") businessId: string,
     @Req() request,
-    @Body() dto: CreateClientUserDtoType
+    @Body() dto: CreateClientUsersDtoType
   ) {
     return this.businessService.createBusinessClients(request.user.sub, businessId, dto);
   }
 
-  @Put(":businessId/clients")
+  @Put(":businessId/client")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.CREATED,
     description: "Returns created",
   })
-  async updateBusinessClients(
+  async updateBusinessClient(
     @Param("businessId") businessId: string,
     @Req() request,
     @Body() dto: ClientUserUpdateDtoType
@@ -163,6 +163,20 @@ export class BusinessController {
     @Body() dto: CreateBusinessUsersDtoType
   ) {
     return this.businessService.createBusinessStaff(request.user.sub, businessId, dto);
+  }
+
+  @Put(":businessId/staff")
+  @HttpCode(HttpStatus.OK)
+  @ApiCreatedResponse({
+    status: HttpStatus.CREATED,
+    description: "Returns created",
+  })
+  async updateBusinessStaff(
+    @Param("businessId") businessId: string,
+    @Req() request,
+    @Body() dto: ClientUserUpdateDtoType
+  ) {
+    return this.businessService.updateBusinessStaff(request.user.sub, businessId, dto);
   }
 
   @Put("registration/complete")

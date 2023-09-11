@@ -89,7 +89,11 @@ export const RightChevronButton: FC<ButtonProps> = props => {
     </Button>
   );
 };
-export const LeftChevronButton: FC<ButtonProps> = props => {
+export const LeftChevronButton: FC<
+  ButtonProps & {
+    counter?: string;
+  }
+> = props => {
   const {
     Colors: { brandSecondary, backgroundOverlay },
   } = useTheme();
@@ -101,9 +105,25 @@ export const LeftChevronButton: FC<ButtonProps> = props => {
       preset="none"
       style={{
         marginLeft: 16,
+        flexDirection: "row",
+        alignItems: "center", 
       }}
     >
       <Icon name="chevron-left" color={disabledStates.includes(state) ? backgroundOverlay : brandSecondary} size={35} />
+      {props.counter ? (
+        <Text
+          preset="none"
+          style={{
+            color: brandSecondary,
+            fontWeight: "600",
+            padding: 0,
+            marginTop: -2,
+            marginLeft: -4,
+            fontSize: 18,
+          }}
+          text={props.counter}
+        />
+      ) : null}
     </Button>
   );
 };

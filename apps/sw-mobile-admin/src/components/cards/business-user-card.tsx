@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useCallback, useMemo } from "react";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { StyleSheet, View, Image, Pressable, TouchableOpacity } from "react-native";
-
-import { Button, ButtonProps, Text } from "../common";
-import { useTheme } from "../../theme";
+import { StyleSheet, View, Pressable, TouchableOpacity } from "react-native";
+import { truncate } from "lodash";
+import FastImage from "react-native-fast-image";
 import { BusinessUserDtoType } from "@shortwaits/shared-lib";
-import { CARD_HEIGHT } from "../../theme/presets";
+
+import { ButtonProps, Card, Text } from "../common";
+import { useTheme } from "../../theme";
+import { handleEmail, handlePhoneCall, handleSms } from "../../utils";
+import { generateAvatarUrl } from "../../utils/generateAvatarUrl";
 
 export type BusinessUserCardProps = ButtonProps & {
   user: BusinessUserDtoType;
@@ -16,45 +19,95 @@ export const BusinessUserCard = (props: BusinessUserCardProps) => {
 
   const { user } = props;
 
+  const handlePhoneCallPress = useCallback(phoneNumber => {
+    handlePhoneCall(phoneNumber);
+  }, []);
+  const handleSmsCallPress = useCallback(phoneNumber => {
+    handleSms(phoneNumber);
+  }, []);
+  const handleEmailPress = useCallback(email => {
+    handleEmail(email);
+  }, []);
+
+  const title = useMemo(() => {
+    const fullName = user.givenName || user.familyName || user.middleName || null;
+    return fullName || user.username || user.email;
+  }, [user.email, user.familyName, user.givenName, user.middleName, user.username]);
+
+  const avatarUrl = useMemo(() => {
+    return generateAvatarUrl(title);
+  }, [title]);
+
   return (
-    <Button preset="card" disabled={true} style={[styles.cardHeight]}>
-      <Pressable
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          flex: 1,
-        }}
-        onPress={() => {
-          alert("pressed");
-        }}
-      >
-        <Image
-          resizeMode="cover"
-          source={{
-            uri: "https://www.gravatar.com/avatar/2c7d99fe281ecd3bcd65ab915bac6dd5?s=250",
+    <Card
+      mode="static"
+      style={{
+        paddingRight: -16,
+      }}
+    >
+      <View style={styles.container}>
+        <Pressable
+          style={styles.title}
+          onPress={() => {
+            alert("pressed");
           }}
-          style={{ width: 45, height: 45, borderRadius: 22.5, marginRight: 16 }}
-        />
-        <Text preset="cardTitle" text={user.familyName ?? ""} />
-      </Pressable>
-      <TouchableOpacity style={styles.icons} onPress={() => {}}>
-        <Icon name="phone" color={Colors.darkGray} size={23} />
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.icons} onPress={() => {}}>
-        <Icon name="message-text-outline" color={Colors.darkGray} size={23} />
-      </TouchableOpacity>
-    </Button>
+        >
+          <FastImage
+            source={{
+              uri: user.accountImageUrl || avatarUrl,
+            }}
+            resizeMode={FastImage.resizeMode.cover}
+            style={styles.image}
+          />
+          <Text
+            preset="cardTitle"
+            text={truncate(title, {
+              length: 20,
+            })}
+          />
+        </Pressable>
+        {user.email && (
+          <TouchableOpacity style={styles.icons} onPress={() => handleEmailPress(user.email)}>
+            <Icon name="email-outline" color={Colors.darkGray} size={23} />
+          </TouchableOpacity>
+        )}
+        {user.phoneNumbers && user.phoneNumbers.length > 0 && (
+          <>
+            <TouchableOpacity style={styles.icons} onPress={() => handlePhoneCallPress(user.phoneNumbers[0].number)}>
+              <Icon name="phone" color={Colors.darkGray} size={23} />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.icons} onPress={() => handleSmsCallPress(user.phoneNumbers[0].number)}>
+              <Icon name="message-text-outline" color={Colors.darkGray} size={23} />
+            </TouchableOpacity>
+          </>
+        )}
+      </View>
+    </Card>
   );
 };
 
 const styles = StyleSheet.create({
-  cardHeight: {
-    minHeight: CARD_HEIGHT,
-    maxHeight: CARD_HEIGHT,
+  container: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  image: {
+    width: 50,
+    height: 50,
+    borderRadius: 50,
+    resizeMode: "cover",
+    marginRight: 10,
+  },
+  title: {
+    flexDirection: "row",
+    alignItems: "center",
+    flex: 1,
   },
   icons: {
     alignSelf: "stretch",
     justifyContent: "center",
-    paddingHorizontal: 10,
+    paddingHorizontal: 16,
+    borderLeftColor: "#eee",
+    borderLeftWidth: 1,
   },
 });

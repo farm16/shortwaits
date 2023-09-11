@@ -33,12 +33,12 @@ class LocationDto {
 
 export class CreateEventsDto implements CreateEventDtoType {
   @IsString()
-  @ApiProperty({ required: true })
-  expectedEndTime: string;
-
-  @IsString()
   @ApiProperty({ required: false })
   registrationDeadlineTime: string;
+
+  @IsString()
+  @ApiProperty({ required: true })
+  expectedEndTime: string;
 
   @IsString()
   @ApiProperty({ required: true })
@@ -69,7 +69,7 @@ export class CreateEventsDto implements CreateEventDtoType {
 
   @IsDateString()
   @ApiProperty({ required: false })
-  registrationDeadline: Date;
+  registrationDeadline: string;
 
   @IsNumber()
   @ApiProperty({ required: false })
@@ -124,10 +124,6 @@ export class CreateEventsDto implements CreateEventDtoType {
   @ApiProperty({ required: false })
   @IsDateString()
   endTime: string;
-
-  @ApiProperty({ required: false })
-  @IsDateString()
-  endTimeExpected: string;
 
   @ApiProperty({ required: true })
   @IsNumber()

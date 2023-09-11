@@ -25,6 +25,7 @@ import { getFilteredNewBusinessOwner, getNewUserFromSocialAccount } from "../../
 import { OAuth2Client } from "google-auth-library";
 import { noop } from "rxjs";
 import { BusinessType, BusinessUserType, ConvertToDtoType } from "@shortwaits/shared-lib";
+import { generateBusinessUser } from "../../utils/generateUserPayload";
 
 const providers = ["google", "facebook"];
 const googleApiOauthUrl = "https://www.googleapis.com/oauth2/v3";
@@ -279,22 +280,24 @@ export class AuthService {
     const saltRounds = Number(this.configService.get("SALT_ROUNDS"));
     const salt = await bcrypt.genSalt(saltRounds);
 
-    const currentUser = new this.businessUserModel(newUser);
+    const userPayload = generateBusinessUser(newUser);
+    const currentUser = new this.businessUserModel(userPayload);
 
     const businessShortId = await this.generateUniqueId();
     if (!businessShortId) {
       throw new UnprocessableEntityException("Unable to create business account for user");
     }
     const baseUrl = `https://${businessShortId}.shortwaits.com`;
+    const webLogoImageUrl = "https://img.icons8.com/bubbles/50/shop.png";
 
-    const newBusinessAccount = new this.businessModel({
+    const newBusinessPayload: BusinessType = {
       shortId: businessShortId,
       isRegistrationCompleted: false,
       web: {
         isActive: true,
         baseUrl,
         bannerImageUrl: "",
-        logoImageUrl: "",
+        logoImageUrl: webLogoImageUrl,
         faviconImageUrl: "",
         primaryColor: "",
         secondaryColor: "",
@@ -305,11 +308,48 @@ export class AuthService {
       taggedClients: null,
       admins: [currentUser._id],
       superAdmins: [currentUser._id],
+      backgroundAdmins: [currentUser._id],
       createdBy: currentUser._id,
       updatedBy: currentUser._id,
       staff: [currentUser._id],
       hours: shortwaitsAdmin[0].sampleBusinessData.hours,
-    } as Partial<BusinessType>);
+      labels: shortwaitsAdmin[0].sampleBusinessData.labels,
+      email: "",
+      categories: [],
+      services: [],
+      events: [],
+      description: "",
+      currency: {
+        name: "",
+        code: "",
+        symbol: "",
+        codeNumber: 0,
+        decimalSeparator: 0,
+      },
+      country: "",
+      phone1: "",
+      shortName: "",
+      longName: "",
+      location: {
+        formattedAddress: "",
+        streetAddress: "",
+        city: "",
+        state: "",
+        postalCode: "",
+        country: "",
+        coordinates: [0, 0],
+      },
+      deleted: false,
+      accountType: "free",
+      isWebBookingEnabled: true,
+      isSmsNotificationEnabled: false,
+      isAppNotificationEnabled: true,
+      videoConference: [],
+      isVideoConferenceEnabled: false,
+      isDisabled: false,
+    };
+
+    const newBusinessAccount = new this.businessModel(newBusinessPayload);
     const services = shortwaitsAdmin[0].sampleBusinessData.services.map(service => {
       return { ...service, businessId: newBusinessAccount._id };
     });

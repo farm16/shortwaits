@@ -289,9 +289,11 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
                   multiple: true,
                   minSelectedItems: 1,
                   onGoBack: clients => {
-                    console.log("selected clients:", clients);
-                    const clientsIds = clients.map(s => s._id);
-                    setFieldValue("clientsIds", clientsIds);
+                    if (clients) {
+                      console.log("selected clients:", clients);
+                      const clientsIds = clients.map(s => s._id);
+                      setFieldValue("clientsIds", clientsIds);
+                    }
                   },
                 },
               })

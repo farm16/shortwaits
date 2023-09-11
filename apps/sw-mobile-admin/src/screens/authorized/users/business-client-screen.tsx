@@ -15,7 +15,7 @@ export function BusinessClientScreen({ navigation, route }: AuthorizedScreenProp
       headerTitle: () => {
         return (
           <Container direction="row" justifyContent="center">
-            <Text preset="headerTitle" text={"Profile"} />
+            <Text preset="headerTitle" text={"Client Profile"} />
           </Container>
         );
       },
