@@ -6,6 +6,8 @@ tmp
 
 # dependencies
 node_modules
+dist
+swagger.json
 
 # IDEs and editors
 /.idea
