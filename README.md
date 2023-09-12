@@ -25,3 +25,17 @@ https://blog.alesanchez.es/building-authentication-for-microservices-using-nestj
 ## Troubleshooting
 
 ➜ adb -s R38M9045JXT reverse tcp:8081 tcp:8081
+
+## PM2
+
+When our application is up and running, we have to save the process list we want to respawn for when the system reboots unexpectedly:
+`pm2 save`
+
+We can check our running applications with:
+`pm2 status`
+
+Monitor our apps:
+`pm2 monit`
+
+View logs:
+`pm2 logs`
