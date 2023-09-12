@@ -28,6 +28,8 @@ https://blog.alesanchez.es/building-authentication-for-microservices-using-nestj
 
 ## PM2
 
+https://pm2.keymetrics.io/docs/usage/quick-start/
+
 When our application is up and running, we have to save the process list we want to respawn for when the system reboots unexpectedly:
 `pm2 save`
 
@@ -39,3 +41,22 @@ Monitor our apps:
 
 View logs:
 `pm2 logs`
+
+#### with Config file
+
+https://pm2.keymetrics.io/docs/usage/application-declaration/
+
+Start all applications
+`pm2 start ecosystem.config.js`
+
+Stop all
+`pm2 stop ecosystem.config.js`
+
+Restart all
+`pm2 restart ecosystem.config.js`
+
+Reload all
+`pm2 reload ecosystem.config.js`
+
+Delete all
+`pm2 delete ecosystem.config.js`
