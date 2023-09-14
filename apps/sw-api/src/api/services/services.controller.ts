@@ -20,6 +20,7 @@ import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { AtGuard } from "../../common/guards";
 
 import { GetServicesDto, GetServicesQuery } from "./dto/getServiceQuery";
+import { ServiceDtoType } from "@shortwaits/shared-lib";
 
 @ApiTags("services")
 @Controller("services")
@@ -38,11 +39,6 @@ export class ServicesController {
   //   return this.servicesService.findAll();
   // }
 
-  @Post()
-  create(@Body() createServiceDto: CreateServiceDto) {
-    return this.servicesService.create(createServiceDto);
-  }
-
   //returns multiple services search by ids[]
   @Get()
   getServices(@Query() query: GetServicesQuery, @Body() dto: GetServicesDto) {
@@ -52,11 +48,7 @@ export class ServicesController {
     if (query.serviceId) {
       return this.servicesService.findOne(query.serviceId);
     }
-    if (
-      dto.services &&
-      Array.isArray(dto.services) &&
-      dto.services.length > 0
-    ) {
+    if (dto.services && Array.isArray(dto.services) && dto.services.length > 0) {
       return this.servicesService.findByIds(dto.services);
     }
     throw new NotAcceptableException("incorrect service value");
@@ -72,21 +64,20 @@ export class ServicesController {
   //   return this.servicesService.findOne(id);
   // }
 
-  @Put(":serviceId")
-  update(
-    @Param("serviceId") serviceId: string,
-    @Body() updateServiceDto: UpdateServiceDto
-  ) {
-    return this.servicesService.update(serviceId, updateServiceDto);
+  @Put(":businessId")
+  update(@Param("businessId") businessId: string, @Body() updateServiceDto: ServiceDtoType) {
+    return this.servicesService.update(businessId, updateServiceDto);
   }
 
-  @Patch(":serviceId")
-  updateSome(
-    @Param("serviceId") serviceId: string,
-    @Body() updateServiceDto: UpdateServiceDto
-  ) {
-    return this.servicesService.update(serviceId, updateServiceDto);
+  @Post(":businessId")
+  create(@Param("businessId") businessId: string, @Body() createServiceDto: CreateServiceDto) {
+    return this.servicesService.create(businessId, createServiceDto);
   }
+
+  // @Patch(":serviceId")
+  // updateSome(@Param("serviceId") serviceId: string, @Body() updateServiceDto: UpdateServiceDto) {
+  //   return this.servicesService.update(serviceId, updateServiceDto);
+  // }
 
   @Delete(":serviceId")
   remove(@Param("id") serviceId: string) {

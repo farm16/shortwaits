@@ -5,8 +5,8 @@ import { FormikErrors } from "formik";
 import { useIntl } from "react-intl";
 import { CreateEventDtoType, ServiceDtoType, eventPaymentMethods } from "@shortwaits/shared-lib";
 
-import { useForm } from "../../../hooks";
-import { useBusiness, useServices, useUser } from "../../../store";
+import { useForm } from "../../../../hooks";
+import { useBusiness, useServices, useUser } from "../../../../store";
 import {
   Text,
   TextFieldCard,
@@ -18,10 +18,10 @@ import {
   Space,
   FormContainer,
   ExpandableSection,
-} from "../../../components";
-import { ModalsScreenProps } from "../../../navigation";
-import { useCreateEventMutation } from "../../../services";
-import { getEmojiString } from "../../../utils";
+} from "../../../../components";
+import { ModalsScreenProps } from "../../../../navigation";
+import { useCreateEventMutation } from "../../../../services";
+import { getEmojiString } from "../../../../utils";
 
 export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navigation, route }) => {
   const { onSubmit, onDone, closeOnSubmit = true } = route.params;
@@ -253,8 +253,8 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
             placeholder={intl.formatMessage({ id: "AddEventModal.enterPrice" })}
             value={values.priceExpected}
             onChangeValue={price => setFieldValue("priceExpected", price)}
-            isTouched={touched.notes}
-            errors={errors.notes}
+            isTouched={touched.priceExpected}
+            errors={errors.priceExpected}
             currencyType={"USD"}
           />
         </>

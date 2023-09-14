@@ -89,7 +89,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({ navi
           <Container direction="row" justifyContent="center">
             <Text
               preset="headerTitle"
-              text={currentClients?.length === 0 ? "Clients" : `Clients (${currentClients.length})`}
+              text={currentClients?.length > 0 ? `Clients (${currentClients.length})` : "Clients"}
             />
           </Container>
         );

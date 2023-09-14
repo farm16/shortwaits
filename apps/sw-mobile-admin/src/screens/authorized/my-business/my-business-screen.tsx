@@ -1,5 +1,5 @@
-import React, { FC, useLayoutEffect } from "react";
-import { Alert, Image } from "react-native";
+import React, { FC, useCallback, useLayoutEffect } from "react";
+import { Alert } from "react-native";
 import { truncate } from "lodash";
 import { useDispatch } from "react-redux";
 import { useIsFocused } from "@react-navigation/native";
@@ -14,8 +14,9 @@ import {
   useShowGhostComponent,
 } from "../../../store";
 import { AuthorizedScreenProps } from "../../../navigation";
-import { useGetEventsSummaryByBusinessQuery } from "../../../services";
+import { useGetEventsSummaryByBusinessQuery, useUpdateBusinessMutation } from "../../../services";
 import FastImage from "react-native-fast-image";
+import { ActivityIndicator } from "react-native-paper";
 
 export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> = ({ navigation }) => {
   useShowGhostComponent("floatingActionButton");
@@ -23,11 +24,24 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
   const { Colors } = useTheme();
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
+  const [updateBusiness, updateBusinessStatus] = useUpdateBusinessMutation();
   const {
     data: eventSummary,
     isLoading: isEventSummaryLoading,
     error: errorEventSummary,
   } = useGetEventsSummaryByBusinessQuery(business?._id ?? skipToken);
+
+  const isLoading = updateBusinessStatus.isLoading || isEventSummaryLoading;
+
+  const handleUpdateBusinessHours = useCallback(
+    hours => {
+      updateBusiness({
+        ...business,
+        hours,
+      });
+    },
+    [business, updateBusiness]
+  );
 
   const checkAccountType = accountType => ["free", "basic", "student"].some(type => type === accountType);
 
@@ -104,6 +118,8 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
     });
   }, [business.shortName, business.web.logoImageUrl, navigation]);
 
+  if (isLoading) return <ActivityIndicator />;
+
   return (
     <>
       <BusinessIncomeInfo data={eventSummary?.data} isLoading={isEventSummaryLoading} error={errorEventSummary} />
@@ -114,11 +130,11 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
           title={"Schedule"}
           onPress={() =>
             navigation.navigate("modals", {
-              screen: "selector-modal-screen",
+              screen: "schedule-modal-screen",
               params: {
-                type: "services",
-                onSelect: services => {
-                  console.log(">>>", services);
+                hours: business.hours,
+                onSubmit: hours => {
+                  handleUpdateBusinessHours(hours);
                 },
               },
             })
@@ -130,13 +146,7 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
           title={"Services"}
           onPress={() =>
             navigation.navigate("modals", {
-              screen: "selector-modal-screen",
-              params: {
-                type: "services",
-                onSelect: services => {
-                  console.log(">>>", services);
-                },
-              },
+              screen: "service-modal-screen",
             })
           }
         />

@@ -1,15 +1,8 @@
 import { Document } from "mongoose";
-
 import { ObjectId } from "../common-types";
+import { BusinessAvailableCurrenciesType, BusinessHoursType, PaginatedModel, ServiceColorType } from "./helpers";
 
-import {
-  BusinessAvailableCurrenciesType,
-  BusinessHoursType,
-  PaginatedModel,
-  ServiceColorType,
-} from "./helpers";
-
-export type ServicesType = {
+export type ServiceType = {
   businessId: ObjectId;
   name: string;
   description: string;
@@ -33,6 +26,7 @@ export type ServicesType = {
   updatedBy: ObjectId;
 };
 
-type ServicesDocType = ServicesType & Document;
+export type ServiceDocType = ServiceType & Document;
+export type ServicesDocType = ServiceDocType[];
 
-export type ServicesModelType = PaginatedModel<ServicesDocType>;
+export type ServicesModelType = PaginatedModel<ServiceDocType>;

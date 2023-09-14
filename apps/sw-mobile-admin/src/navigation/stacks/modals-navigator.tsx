@@ -4,7 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { SelectorScreenModal, ScheduleModal, ServicesModal } from "../../screens";
 import { MODAL_SCREENS } from "../navigation-constants";
 import { ModalStackParamList } from "../navigation-types";
-import { FormModalScreen } from "../../screens/modals/forms";
+import { FormModalScreen } from "../../screens/modals/form";
 import { useTheme } from "../../theme";
 
 const { SELECTOR_MODAL_SCREEN, SCHEDULE_MODAL_SCREEN, FORM_MODAL_SCREEN, SERVICE_MODAL_SCREEN } = MODAL_SCREENS;

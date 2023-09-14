@@ -1,3 +1,3 @@
-export * from "./selector/selector";
-export * from "./schedule/schedule";
-export * from "./services/services";
+export * from "./selector/selector-modal";
+export * from "./schedule/schedule-modal";
+export * from "./services/services-modal";

@@ -5,11 +5,11 @@ import {
   BusinessHoursType,
   ObjectId,
   ServiceColorType,
-  ServicesType,
+  ServiceType,
 } from "@shortwaits/shared-lib";
 
 @Schema()
-export class Service extends Document implements ServicesType {
+export class Service extends Document implements ServiceType {
   @Prop(
     raw({
       staff: Array,

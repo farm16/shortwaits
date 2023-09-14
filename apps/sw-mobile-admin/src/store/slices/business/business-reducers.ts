@@ -5,7 +5,7 @@ import {
   BusinessLocationType,
   BusinessWeekDaysType,
   DocType,
-  ServicesType,
+  ServiceType,
   ServicesDocType,
   CurrencyType,
   BusinessDtoType,
@@ -124,7 +124,7 @@ export const businessReducers = {
     return { ...state, ...action.payload };
   },
 
-  setBusinessServicesFromDefault(state, action: PayloadAction<ServicesType[]>) {
+  setBusinessServicesFromDefault(state, action: PayloadAction<ServiceType[]>) {
     if (state?.services.length === 0 && !state.isRegistrationCompleted) {
       const defaultServices = action.payload.map((defaultService, index) => {
         return { ...defaultService, _id: `__DEFAULT__SERVICE__${index}__` };
@@ -138,7 +138,7 @@ export const businessReducers = {
     if (!state) return state;
     return { ...state, services: action.payload };
   },
-  setBusinessService(state, action: PayloadAction<DocType<ServicesType>>) {
+  setBusinessService(state, action: PayloadAction<DocType<ServiceType>>) {
     const newBusinessService = [...state.services, action.payload];
 
     return { ...state, service: newBusinessService };

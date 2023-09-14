@@ -5,7 +5,7 @@ import {
   BusinessHoursType,
   CurrencyType,
   ServiceColorsType,
-  ServicesType,
+  ServiceType,
   ShortwaitsAdminDefaultDataType,
   ObjectId,
   ShortwaitsAdminBannersType,
@@ -52,7 +52,7 @@ export class Shortwaits extends Document implements ShortwaitsAdminDefaultDataTy
     })
   )
   sampleBusinessData: {
-    services: ServicesType[];
+    services: ServiceType[];
     currencies: CurrencyType[];
     hours: BusinessHoursType;
   };

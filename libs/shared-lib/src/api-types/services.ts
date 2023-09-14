@@ -1,17 +1,14 @@
-import { ConvertToDtoType, ServicesType } from "..";
+import { ConvertToDtoType, ServiceType, WithDbProps } from "..";
 
-import { DocType, CommonResponseType } from ".";
+import { CommonResponseType } from ".";
 
-export type ServiceDocType = DocType<ServicesType>;
-export type ServicesDocType = ServiceDocType[];
-
-export type ServiceDtoType = ConvertToDtoType<ServiceDocType>;
+export type ServiceDtoType = ConvertToDtoType<WithDbProps<ServiceType>>;
 export type ServicesDtoType = ServiceDtoType[];
+
+export type CreateServiceDtoType = Omit<
+  ServiceDtoType,
+  "_id" | "createdAt" | "updatedAt" | "__v" | "updatedBy" | "createdBy" | "deleted"
+>;
 
 export type ServiceResponseType = CommonResponseType<ServiceDtoType>;
 export type ServicesResponseType = CommonResponseType<ServicesDtoType>;
-
-export type ServicesSuccessFnType = (
-  payload: ServicesDocType,
-  message: string
-) => ServicesResponseType;

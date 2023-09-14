@@ -61,7 +61,7 @@ export const customDarkColors = {
 
   success: "#28a745",
   pending: "#e0c01f",
-  failed: "#dc3545",
+  failed: "#E24939",
 
   inputBackground: "rgb(218,226,226)",
 
@@ -89,7 +89,7 @@ export const customColors = {
 
   success: "#28a745",
   pending: "#e0c01f",
-  failed: "#dc3545",
+  failed: "#E24939",
 
   inputBackground: "rgb(218,226,226)",
 

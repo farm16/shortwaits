@@ -146,6 +146,7 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
       >
         <Button style={{ marginLeft: "auto" }} preset="subLink" text="Forgot password?" />
       </View>
+      <Space size="large" />
       <Button preset="primary" style={{ backgroundColor: Colors.brandSecondary }} onPress={() => handleSubmit()}>
         <Text style={{ color: "white" }} preset="social">
           Log in

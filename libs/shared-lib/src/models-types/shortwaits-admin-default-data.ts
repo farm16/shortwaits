@@ -2,7 +2,7 @@ import { Document } from "mongoose";
 
 import { ObjectId } from "../common-types";
 import { BusinessHoursType, CurrencyType, ServiceColorsType } from "./helpers";
-import { ServicesType } from "./services";
+import { ServiceType } from "./services";
 
 /**
  * externalizing this will be a future task/feature
@@ -41,7 +41,7 @@ export type ShortwaitsAdminDefaultDataType = {
   serviceColors: ServiceColorsType;
   categories: ObjectId[];
   sampleBusinessData: {
-    services: Partial<ServicesType>[];
+    services: Partial<ServiceType>[];
     currencies: CurrencyType[];
     hours: BusinessHoursType;
   };

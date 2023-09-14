@@ -106,4 +106,6 @@ export const endpoints = {
   //services
   getServices: createEndpoint("services", "GET"),
   getService: createEndpoint(`services/:serviceId`, "GET"),
+  updateService: createEndpoint(`services/:businessId`, "PUT"),
+  createService: createEndpoint(`services/:businessId`, "POST"),
 };

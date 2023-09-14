@@ -3,7 +3,6 @@ import GetBusinessCategory from "./get-categories";
 import GetBusinessServices from "./get-services";
 import GetBusinessHours from "./get-hours";
 import GetBusinessStaff from "./get-staff";
-import UpdateBusinessHours from "./update-hours";
 import UpdateBusiness from "./update-business";
 import RegisterBusiness from "./register-business";
 import GetBusinessClients from "./get-clients";
@@ -24,7 +23,6 @@ export {
   GetBusinessHours,
   GetBusinessStaff,
   UpdateBusiness,
-  UpdateBusinessHours,
   RegisterBusiness,
   GetBusinessClients,
 };

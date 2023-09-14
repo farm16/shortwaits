@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useMemo } from "react";
 import { StyleSheet, View, ViewStyle } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { ServiceColorType } from "@shortwaits/shared-lib";
@@ -8,7 +8,7 @@ import { Button, ButtonProps } from "../common";
 import { useMobileAdmin } from "../../store";
 
 interface ServiceColorsProps {
-  color?: ServiceColorType;
+  selectedColor?: ServiceColorType;
   onSelect(arg: ServiceColorType): void;
 }
 interface CircleProps extends ButtonProps {
@@ -19,13 +19,7 @@ interface CircleProps extends ButtonProps {
   onSelect(): void;
 }
 
-function Circle({
-  width: circleDiameter,
-  color,
-  isSelected,
-  isDefault = false,
-  onSelect,
-}: CircleProps) {
+function Circle({ width: circleDiameter, color, isSelected, isDefault = false, onSelect }: CircleProps) {
   const style: ViewStyle = {
     backgroundColor: color,
     width: circleDiameter,
@@ -36,53 +30,47 @@ function Circle({
   };
   return (
     <Button preset="none" style={style} onPress={onSelect}>
-      {isSelected && (
-        <Icon name="check-bold" size={circleDiameter - 5} color="white" />
-      )}
+      {isSelected && <Icon name="check-bold" size={circleDiameter - 5} color="white" />}
     </Button>
   );
 }
 
-export function ServiceColors({ color, onSelect }: ServiceColorsProps) {
+export function ServiceColors({ selectedColor, onSelect }: ServiceColorsProps) {
   const mobileAdminData = useMobileAdmin();
 
-  const { width } = getDimensions(87);
+  const handleOnSelect = useCallback(
+    color => {
+      onSelect(color);
+    },
+    [onSelect]
+  );
 
-  const colorsNumber: number = mobileAdminData
-    ? Object.keys(mobileAdminData?.defaultData?.serviceColors).length
-    : 0;
+  console.log("default", mobileAdminData.defaultData?.serviceColors);
 
-  const circleWidth = width / (colorsNumber * 1.9);
+  const circles = useMemo(() => {
+    const { width } = getDimensions(87);
+    const colorsCount = mobileAdminData ? Object.keys(mobileAdminData?.defaultData?.serviceColors).length : 0;
+    const circleWidth = width / (colorsCount * 1.9);
+
+    return Object.keys(mobileAdminData.defaultData?.serviceColors).map(elem => (
+      <Circle
+        key={mobileAdminData.defaultData?.serviceColors[elem].colorId}
+        onSelect={() => handleOnSelect(mobileAdminData.defaultData?.serviceColors[elem])}
+        width={circleWidth}
+        color={mobileAdminData.defaultData?.serviceColors[elem].hexCode ?? "#ffffff"}
+        isSelected={mobileAdminData.defaultData?.serviceColors[elem].colorId == selectedColor?.colorId}
+        isDefault={false}
+      />
+    ));
+  }, [mobileAdminData, handleOnSelect, selectedColor]);
 
   if (!mobileAdminData) return null;
-  if (!color) return null;
 
-  return (
-    <View style={[styles.container, { width }]}>
-      {Object.keys(mobileAdminData.defaultData?.serviceColors).map(elem => (
-        <Circle
-          key={mobileAdminData.defaultData?.serviceColors[elem].colorId}
-          onSelect={() =>
-            onSelect(mobileAdminData.defaultData?.serviceColors[elem])
-          }
-          width={circleWidth}
-          color={
-            mobileAdminData.defaultData?.serviceColors[elem].hexCode ??
-            "#ffffff"
-          }
-          isSelected={
-            mobileAdminData.defaultData?.serviceColors[elem].colorId ===
-            color?.colorId
-          }
-          isDefault={false}
-        />
-      ))}
-    </View>
-  );
+  return <View style={[styles.root]}>{circles}</View>;
 }
 
 const styles = StyleSheet.create({
-  container: {
+  root: {
     flexDirection: "row",
     justifyContent: "space-between",
   },

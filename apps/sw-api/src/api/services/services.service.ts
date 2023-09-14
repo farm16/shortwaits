@@ -6,6 +6,7 @@ import { UpdateServiceDto } from "./dto/update-service.dto";
 import { ConfigService } from "@nestjs/config";
 import { Service } from "./entities/service.entity";
 import { Business } from "../business/entities/business.entity";
+import { ServiceDtoType } from "@shortwaits/shared-lib";
 
 /**
  * docs
@@ -20,9 +21,16 @@ export class ServicesService {
     private config: ConfigService
   ) {}
 
-  async create(createServiceDto: CreateServiceDto) {
+  async create(businessId: string, createServiceDto: CreateServiceDto) {
+    // todo validate with businessId
     const newService = await this.serviceModel.create(createServiceDto);
     return newService;
+  }
+
+  async update(businessId: string, updateServiceDto: ServiceDtoType) {
+    // todo validate with businessId
+    const updatedService = await this.serviceModel.findByIdAndUpdate(updateServiceDto._id, updateServiceDto);
+    return updatedService;
   }
 
   async findAll() {
@@ -41,14 +49,6 @@ export class ServicesService {
     return service;
   }
 
-  async update(id: string, updateServiceDto: UpdateServiceDto) {
-    const updatedService = await this.serviceModel.findByIdAndUpdate(
-      id,
-      updateServiceDto
-    );
-    return updatedService;
-  }
-
   async remove(id: string) {
     const deletedService = await this.serviceModel.findByIdAndDelete({
       _id: id,
@@ -63,10 +63,7 @@ export class ServicesService {
 
     console.log("businessServices >>>", businessServices.services);
     // const businessServicesIds = businessServices.map((e) => e.toString());
-    const services = await this.serviceModel
-      .find()
-      .where("_id")
-      .in(businessServices.services);
+    const services = await this.serviceModel.find().where("_id").in(businessServices.services);
     console.log("services >>>", services);
 
     return services;

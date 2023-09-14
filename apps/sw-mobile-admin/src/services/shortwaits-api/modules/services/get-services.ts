@@ -1,8 +1,4 @@
-import {
-  ServicesType,
-  DocType,
-  CommonResponseType,
-} from "@shortwaits/shared-lib";
+import { ServiceType, DocType, CommonResponseType } from "@shortwaits/shared-lib";
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
 
 import { shortwaitsApiEndpoints } from "../../../../configs";
@@ -10,7 +6,7 @@ import { shortwaitsApiEndpoints } from "../../../../configs";
 const { getServices } = shortwaitsApiEndpoints.SERVICES;
 
 export default (builder: EndpointBuilder<any, any, any>) =>
-  builder.query<CommonResponseType<DocType<ServicesType[]>>, string[]>({
+  builder.query<CommonResponseType<DocType<ServiceType[]>>, string[]>({
     query: servicesIds => ({
       url: getServices.getPath(),
       body: {

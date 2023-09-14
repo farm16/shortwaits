@@ -4,12 +4,7 @@ import { ThemeCommonParams } from "../theme.type";
 
 export type TextPresets = keyof ReturnType<typeof textPresets>;
 
-export const textPresets = ({
-  FontSize,
-  Fonts,
-  Gutters,
-  Colors,
-}: ThemeCommonParams) => {
+export const textPresets = ({ FontSize, Fonts, Gutters, Colors }: ThemeCommonParams) => {
   const BASE = StyleSheet.flatten([
     {
       ...Fonts.textRegular,
@@ -138,12 +133,12 @@ export const textPresets = ({
       ...Fonts.textSmall,
       color: Colors.text,
       fontWeight: "500" as const,
-      letterSpacing: 0.65,
+      // letterSpacing: 0.65,
     },
     cardSubtitle: {
       ...Fonts.textSmall,
       fontWeight: "400" as const,
-      letterSpacing: 0.65,
+      // letterSpacing: 0.65,
       color: Colors.subText,
     },
   });

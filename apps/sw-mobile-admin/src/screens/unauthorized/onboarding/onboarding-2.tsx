@@ -5,12 +5,11 @@ import { CompositeNavigationProp } from "@react-navigation/native";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { ActivityIndicator } from "react-native-paper";
 
-import { ServiceItem, Screen, LeftChevronButton, Space, Button, IconButton, FormContainer } from "../../../components";
+import { ServiceItem, LeftChevronButton, Space, Button, IconButton, FormContainer } from "../../../components";
 import { useTheme } from "../../../theme";
 import { RootStackParamList, UnauthorizedStackParamList } from "../../../navigation";
 import { useBusiness } from "../../../store";
 import { useGetServicesByBusinessQuery, useRegisterBusinessMutation } from "../../../services";
-import LinearGradient from "react-native-linear-gradient";
 
 export interface OnboardingScreenProps {
   navigation: CompositeNavigationProp<
@@ -22,7 +21,6 @@ export interface OnboardingScreenProps {
 export type SampleBusinessServices = number;
 
 export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
-  const { Colors } = useTheme();
   const business = useBusiness();
 
   const {
@@ -38,8 +36,7 @@ export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
       navigation.navigate("modals", {
         screen: "service-modal-screen",
         params: {
-          initialValues: item,
-          mode: "update",
+          service: item,
         },
       });
     },
@@ -60,9 +57,6 @@ export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
           onPress={() =>
             navigation.navigate("modals", {
               screen: "service-modal-screen",
-              params: {
-                mode: "create",
-              },
             })
           }
           iconType="add"

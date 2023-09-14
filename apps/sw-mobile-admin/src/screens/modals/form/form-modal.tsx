@@ -1,15 +1,19 @@
-import React, { FC, useEffect } from "react";
+import React, { FC } from "react";
 
 import { ModalsScreenProps, FormType } from "../../../navigation";
-import { AddClientModal } from "./add-client";
-import { AddEventModal } from "./add-event";
-import { AddStaffModal } from "./add-staff";
-import { UpdateEventModal } from "./update-event";
+import { AddClientModal } from "./forms/add-client";
+import { AddEventModal } from "./forms/add-event";
+import { AddStaffModal } from "./forms/add-staff";
+import { UpdateEventModal } from "./forms/update-event";
+import { AddServicesModal } from "./forms/add-service";
+import { UpdateServicesModal } from "./forms/update-service";
 
 const forms: Record<FormType, FC<ModalsScreenProps<"form-modal-screen">>> = {
   addClient: AddClientModal,
   addEvent: AddEventModal,
   addStaff: AddStaffModal,
+  addService: AddServicesModal,
+  updateService: UpdateServicesModal,
   updateEvent: UpdateEventModal,
 };
 

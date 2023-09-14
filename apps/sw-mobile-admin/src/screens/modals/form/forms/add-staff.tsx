@@ -4,9 +4,9 @@ import { Alert } from "react-native";
 import { FormikErrors } from "formik";
 import { ClientUserType, CreateBusinessUserDtoType } from "@shortwaits/shared-lib";
 
-import { useCreateBusinessStaffMutation } from "../../../services";
-import { useForm } from "../../../hooks";
-import { useBusiness } from "../../../store";
+import { useCreateBusinessStaffMutation } from "../../../../services";
+import { useForm } from "../../../../hooks";
+import { useBusiness } from "../../../../store";
 import {
   Text,
   TextFieldCard,
@@ -18,10 +18,10 @@ import {
   TimePickerFieldCard,
   FormContainer,
   ButtonCard,
-} from "../../../components";
-import { ModalsScreenProps } from "../../../navigation";
-import { STATIC_FORM_USA_STATES, getCapitalizedString } from "../../../utils";
-import { getPrettyStringFromHours } from "../../../utils/time";
+} from "../../../../components";
+import { ModalsScreenProps } from "../../../../navigation";
+import { STATIC_FORM_USA_STATES, getCapitalizedString } from "../../../../utils";
+import { getPrettyStringFromHours } from "../../../../utils/time";
 
 export const AddStaffModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navigation, route }) => {
   const { onSubmit, onDone, closeOnSubmit = true } = route.params;

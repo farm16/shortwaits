@@ -2,8 +2,8 @@ import React, { FC, useEffect, useLayoutEffect, useState } from "react";
 import { ActivityIndicator } from "react-native-paper";
 import { Alert } from "react-native";
 
-import { useForm } from "../../../hooks";
-import { useBusiness, useServices, useUser } from "../../../store";
+import { useForm } from "../../../../hooks";
+import { useBusiness, useServices, useUser } from "../../../../store";
 import {
   Text,
   TextFieldCard,
@@ -15,12 +15,12 @@ import {
   IconButton,
   Space,
   FormContainer,
-} from "../../../components";
-import { ModalsScreenProps } from "../../../navigation";
+} from "../../../../components";
+import { ModalsScreenProps } from "../../../../navigation";
 import { EventDtoType, ServiceDtoType, UpdateEventDtoType } from "@shortwaits/shared-lib";
-import { useCreateEventMutation } from "../../../services";
+import { useCreateEventMutation } from "../../../../services";
 import { FormikErrors } from "formik";
-import { getEmojiString } from "../../../utils";
+import { getEmojiString } from "../../../../utils";
 
 export const UpdateEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navigation, route }) => {
   const { onSubmit, onDone, closeOnSubmit = true, initialValues } = route.params;

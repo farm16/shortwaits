@@ -106,7 +106,7 @@ export const LeftChevronButton: FC<
       style={{
         marginLeft: 16,
         flexDirection: "row",
-        alignItems: "center", 
+        alignItems: "center",
       }}
     >
       <Icon name="chevron-left" color={disabledStates.includes(state) ? backgroundOverlay : brandSecondary} size={35} />
@@ -204,7 +204,7 @@ const _circleIcons = {
   "closed-business": {
     name: "door-closed-lock",
     backgroundColor: undefined,
-    color: "red",
+    color: "failed",
     size: 25,
   },
   "account-cancel": {

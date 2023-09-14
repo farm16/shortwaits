@@ -4,9 +4,9 @@ import { Alert } from "react-native";
 import { FormikErrors } from "formik";
 import { ClientUserType, CreateClientUserDtoType } from "@shortwaits/shared-lib";
 
-import { useCreateBusinessClientsMutation } from "../../../services";
-import { useForm } from "../../../hooks";
-import { useBusiness } from "../../../store";
+import { useCreateBusinessClientsMutation } from "../../../../services";
+import { useForm } from "../../../../hooks";
+import { useBusiness } from "../../../../store";
 import {
   Text,
   TextFieldCard,
@@ -17,9 +17,9 @@ import {
   Space,
   ExpandableSection,
   FormContainer,
-} from "../../../components";
-import { ModalsScreenProps } from "../../../navigation";
-import { STATIC_FORM_USA_STATES, getCapitalizedString } from "../../../utils";
+} from "../../../../components";
+import { ModalsScreenProps } from "../../../../navigation";
+import { STATIC_FORM_USA_STATES, getCapitalizedString } from "../../../../utils";
 
 export const AddClientModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navigation, route }) => {
   const { onSubmit, onDone, closeOnSubmit = true } = route.params;

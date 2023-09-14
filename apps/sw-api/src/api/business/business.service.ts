@@ -77,14 +77,17 @@ export class BusinessService {
   }
 
   async updateBusiness(userId: string, business: Partial<BusinessDtoType>, isRegistrationCompleted: boolean) {
-    const filteredBusiness = {
-      ...this.filterBusiness(business),
-      isRegistrationCompleted: isRegistrationCompleted ? true : undefined,
-    }; // we need prevent certain fields from being updated by the user [security]
+    let filteredPayload = this.filterBusiness(business);
 
-    console.log("isRegistrationCompleted", isRegistrationCompleted);
+    if (isRegistrationCompleted) {
+      console.log("isRegistrationCompleted", isRegistrationCompleted);
+      filteredPayload = {
+        ...filteredPayload,
+        isRegistrationCompleted: true,
+      };
+    }
 
-    const updatedBusiness = await this.businessModel.findByIdAndUpdate(filteredBusiness._id, filteredBusiness, {
+    const updatedBusiness = await this.businessModel.findByIdAndUpdate(filteredPayload._id, filteredPayload, {
       new: true,
     });
 

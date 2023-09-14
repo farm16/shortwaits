@@ -30,8 +30,11 @@ export type FormData = {
   addEvent: CreateEventDtoType;
   addClient: CreateClientUserDtoType;
   addStaff: CreateBusinessUserDtoType;
+  addService: ServiceDtoType;
+  updateService: ServiceDtoType;
   updateEvent: UpdateEventDtoType;
 };
+
 export type FormType = keyof FormData;
 export type FormDataType = FormData[FormType];
 
@@ -80,8 +83,7 @@ export type ModalStackParamList = {
     closeOnSubmit?: boolean;
   };
   [MODAL_SCREENS.SERVICE_MODAL_SCREEN]: {
-    mode: "update" | "create";
-    initialValues?: any;
+    service?: ServiceDtoType;
   };
   // multiple forms in one modal ex. addClient, addEvent, addStaff, etc.
   [MODAL_SCREENS.FORM_MODAL_SCREEN]: {

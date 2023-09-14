@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { StyleSheet } from "react-native";
 import { noop } from "lodash";
 
-import { Card, MultiSlider, Space, Text } from "../common";
-import { useTheme } from "../../theme";
+import { Card, Container, MultiSlider, Space, Text } from "../common";
 import { getPrettyStringFromDurationInMin } from "../../utils/time";
 
 export interface TimeDurationCardProps {
@@ -13,42 +12,21 @@ export interface TimeDurationCardProps {
 }
 export const DurationFieldCard = (props: TimeDurationCardProps) => {
   const { title, values, onValuesChange = noop } = props;
-  const {
-    Common: { textFieldPresets },
-  } = useTheme();
 
   return (
-    <Card mode="static" style={styles.container}>
+    <Card mode="static">
       <Space size="small" />
-      <Text preset="cardTitle" text={title} />
-      <MultiSlider
-        style={styles.multiSlider}
-        values={values}
-        step={15}
-        min={0}
-        max={1440}
-        onValuesChange={onValuesChange}
-      />
-      <Text
-        preset="none"
-        style={[textFieldPresets.cardSubtitle, styles.cardSubtile]}
-        text={getPrettyStringFromDurationInMin(values ? values[0] : 0)}
-      />
+      <Container direction="row" justifyContent="space-between">
+        <Text preset="cardTitle" text={title} />
+        <Text preset="cardTitle" text={getPrettyStringFromDurationInMin(values ? values[0] : 0)} />
+      </Container>
+      <MultiSlider style={styles.multiSlider} values={values} type="day" onValuesChange={onValuesChange} />
       <Space size="tiny" />
     </Card>
   );
 };
 const styles = StyleSheet.create({
-  container: {
-    minHeight: undefined,
-    maxHeight: undefined,
-  },
   multiSlider: {
-    marginLeft: -10, // this is because there is a margin of 15 for any childrem inside a card
-    alignSelf: "center",
-  },
-  cardSubtile: {
-    marginLeft: -10, // this is because there is a margin of 15 for any childrem inside a card
     alignSelf: "center",
   },
 });

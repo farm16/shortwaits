@@ -71,9 +71,7 @@ export const AppNavigator = (props: NavigationProps): React.ReactElement => {
   useBackButtonHandler(canExit);
 
   return (
-    <NavigationContainer ref={navigationRef} theme={DefaultTheme}
-    
-    {...props}>
+    <NavigationContainer ref={navigationRef} theme={DefaultTheme} {...props}>
       <AppStack />
     </NavigationContainer>
   );

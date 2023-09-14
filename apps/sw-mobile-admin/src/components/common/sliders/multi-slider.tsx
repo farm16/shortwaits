@@ -1,11 +1,9 @@
-import React, { useMemo } from "react";
-import { StyleSheet, ViewStyle } from "react-native";
-import PMultiSlider, {
-  MultiSliderProps as PMultiSliderProps,
-} from "@ptomasroos/react-native-multi-slider";
-
-import { getDimensions, useTheme } from "../../../theme";
-
+import React, { useMemo, useState } from "react";
+import { StyleSheet, View, ViewStyle } from "react-native";
+import PMultiSlider, { MultiSliderProps as PMultiSliderProps } from "@ptomasroos/react-native-multi-slider";
+import { useTheme } from "../../../theme";
+import { getPrettyStringFromDurationInMin } from "../../../utils/time";
+import { Text } from "../text/text";
 interface MultiSliderProps extends PMultiSliderProps {
   style?: ViewStyle;
   type?: keyof typeof multiSliderTypes;
@@ -25,45 +23,58 @@ const multiSliderTypes = {
 } as const;
 
 export const MultiSlider = (props: MultiSliderProps) => {
-  const {
-    onValuesChange,
-    style: styleOverride,
-    step,
-    min,
-    max,
-    allowOverlap = false,
-    values,
-    type = "day",
-    ...rest
-  } = props;
-  const { width } = getDimensions(80);
+  const { onValuesChange, style: styleOverride, step, min, max, allowOverlap = false, values, type = "day" } = props;
   const { Colors } = useTheme();
 
-  const containerStyle = StyleSheet.flatten([
-    styles.container,
-    { width: width },
-    styleOverride,
-  ]);
-  const markerStyle = StyleSheet.flatten([
-    styles.marker,
-    { backgroundColor: Colors.brandSecondary },
-  ]);
-
+  const containerStyle = StyleSheet.flatten([styles.container, styleOverride]);
+  const markerStyle = StyleSheet.flatten([styles.marker, { backgroundColor: Colors.brandSecondary }]);
+  const [isLabelEnabled, setIsLabelEnabled] = useState(false);
   return (
     <PMultiSlider
+      enableLabel={isLabelEnabled}
       containerStyle={containerStyle}
+      onValuesChangeStart={() => setIsLabelEnabled(true)}
       markerStyle={markerStyle}
       trackStyle={styles.track}
+      customLabel={e => {
+        return (
+          <View
+            style={{
+              backgroundColor: Colors.brandSecondary,
+              borderRadius: 5,
+              minWidth: 150,
+              paddingHorizontal: 10,
+              paddingVertical: 5,
+              alignItems: "center",
+              justifyContent: "center",
+              alignSelf: "center",
+              position: "absolute",
+              top: -40,
+            }}
+          >
+            <Text
+              preset="none"
+              text={getPrettyStringFromDurationInMin(Number(e.oneMarkerValue))}
+              style={{
+                color: Colors.white,
+                fontSize: 18,
+              }}
+            />
+          </View>
+        );
+      }}
       pressedMarkerStyle={styles.pressedMarker}
       selectedStyle={{ backgroundColor: Colors.brandSecondary3 }}
       unselectedStyle={{ backgroundColor: Colors.lightGray }}
-      onValuesChange={onValuesChange}
+      onValuesChangeFinish={values => {
+        setIsLabelEnabled(false);
+        onValuesChange && onValuesChange(values);
+      }}
       allowOverlap={allowOverlap}
       values={values}
       min={multiSliderTypes[type]["min"]}
       max={multiSliderTypes[type]["max"]}
       step={multiSliderTypes[type]["step"]}
-      {...rest}
     />
   );
 };
@@ -75,6 +86,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 0,
     marginVertical: 5,
     paddingHorizontal: 0,
+    width: "100%",
   },
   track: {
     height: 3.5,
