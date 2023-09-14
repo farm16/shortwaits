@@ -1,5 +1,5 @@
 import { Schema, Prop, SchemaFactory, raw } from "@nestjs/mongoose";
-import Mongoose, { Document } from "mongoose";
+import { Document, Types } from "mongoose";
 import {
   BusinessAvailableCurrenciesType,
   BusinessHoursType,
@@ -7,29 +7,24 @@ import {
   ServiceColorType,
   ServiceType,
 } from "@shortwaits/shared-lib";
+import { ApiProperty } from "@nestjs/swagger";
 
 @Schema()
 export class Service extends Document implements ServiceType {
-  @Prop(
-    raw({
-      staff: Array,
-    })
-  )
+  @ApiProperty()
+  @Prop({ type: Array })
   staff: ObjectId[];
 
-  @Prop(
-    raw({
-      businessId: {
-        type: Mongoose.Schema.Types.ObjectId,
-        require: true,
-      },
-    })
-  )
+  @Prop({
+    type: Types.ObjectId,
+  })
   businessId: ObjectId;
 
+  @ApiProperty()
   @Prop()
   name: string;
 
+  @ApiProperty()
   @Prop()
   description: string;
 
@@ -46,18 +41,22 @@ export class Service extends Document implements ServiceType {
   )
   hours: BusinessHoursType;
 
-  @Prop()
-  applicableCategories: [];
+  @ApiProperty()
+  @Prop({ type: Array })
+  applicableCategories: ObjectId[];
 
+  @ApiProperty()
   @Prop()
   durationInMin: number;
 
+  @ApiProperty()
   @Prop()
   price: number;
 
   @Prop({ type: String })
   currency: BusinessAvailableCurrenciesType;
 
+  @ApiProperty()
   @Prop()
   isPrivate: boolean;
 
@@ -68,11 +67,17 @@ export class Service extends Document implements ServiceType {
       other2: { type: String },
     })
   )
-  urls: Record<string, string>;
+  urls: {
+    zoom?: string;
+    other1?: string;
+    other2?: string;
+  };
 
+  @ApiProperty()
   @Prop()
   isVideoConference: boolean;
 
+  @ApiProperty()
   @Prop()
   deleted: boolean;
 
@@ -87,25 +92,16 @@ export class Service extends Document implements ServiceType {
   )
   serviceColor: ServiceColorType;
 
+  @ApiProperty()
   @Prop()
   imageUrl: string;
 
-  @Prop(
-    raw({
-      businessId: {
-        type: Mongoose.Schema.Types.ObjectId,
-      },
-    })
-  )
+  @ApiProperty()
+  @Prop({ type: Types.ObjectId })
   createdBy: ObjectId;
 
-  @Prop(
-    raw({
-      businessId: {
-        type: Mongoose.Schema.Types.ObjectId,
-      },
-    })
-  )
+  @ApiProperty()
+  @Prop({ type: Types.ObjectId })
   updatedBy: ObjectId;
 }
 

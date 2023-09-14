@@ -24,7 +24,7 @@ export const AddServicesModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ n
   const business = useBusiness();
   const [createService, createServiceStatus] = useCreateServiceMutation();
 
-  const defaultService: CreateServiceDtoType = useMemo(() => {
+  const defaultService = useMemo(() => {
     const defaultServiceColor = Object.keys(mobileAdminData.defaultData.serviceColors)[0];
     return {
       businessId: business._id,
@@ -40,14 +40,13 @@ export const AddServicesModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ n
       isVideoConference: false,
       serviceColor: mobileAdminData.defaultData.serviceColors[defaultServiceColor] ?? null,
       imageUrl: "",
-    };
-  }, [business, mobileAdminData.defaultData.serviceColors]);
+    } as CreateServiceDtoType;
+  }, [business._id, business.categories, business.hours, mobileAdminData.defaultData.serviceColors]);
 
   const { touched, errors, values, handleChange, setFieldValue, handleSubmit } = useForm(
     {
       initialValues: defaultService,
       onSubmit: formData => {
-        console.log("formData", JSON.stringify(formData, null, 2));
         createService({
           businessId: business._id,
           body: formData,
@@ -98,7 +97,7 @@ export const AddServicesModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ n
     <Button
       preset="primary"
       onPress={() => {
-        console.log("values", values);
+        console.log(">>>>>", values);
         handleSubmit();
       }}
       text="Submit"

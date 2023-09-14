@@ -20,7 +20,6 @@ import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { AtGuard } from "../../common/guards";
 
 import { GetServicesDto, GetServicesQuery } from "./dto/getServiceQuery";
-import { ServiceDtoType } from "@shortwaits/shared-lib";
 
 @ApiTags("services")
 @Controller("services")
@@ -65,7 +64,7 @@ export class ServicesController {
   // }
 
   @Put(":businessId")
-  update(@Param("businessId") businessId: string, @Body() updateServiceDto: ServiceDtoType) {
+  update(@Param("businessId") businessId: string, @Body() updateServiceDto: UpdateServiceDto) {
     return this.servicesService.update(businessId, updateServiceDto);
   }
 

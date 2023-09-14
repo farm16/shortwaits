@@ -6,12 +6,7 @@ import { UpdateServiceDto } from "./dto/update-service.dto";
 import { ConfigService } from "@nestjs/config";
 import { Service } from "./entities/service.entity";
 import { Business } from "../business/entities/business.entity";
-import { ServiceDtoType } from "@shortwaits/shared-lib";
-
-/**
- * docs
- * @url https://mongoosejs.com/docs/queries.html#queries-are-not-promises
- */
+import { convertStringToObjectId } from "../../utils/converters";
 
 @Injectable()
 export class ServicesService {
@@ -23,11 +18,22 @@ export class ServicesService {
 
   async create(businessId: string, createServiceDto: CreateServiceDto) {
     // todo validate with businessId
-    const newService = await this.serviceModel.create(createServiceDto);
-    return newService;
+    try {
+      const _businessId = convertStringToObjectId(businessId);
+      const servicePayload = {
+        ...createServiceDto,
+        businessId: _businessId,
+      };
+
+      console.log("servicePayload >>>", JSON.stringify(servicePayload));
+      const newService = await this.serviceModel.create(servicePayload);
+      return newService;
+    } catch (e) {
+      console.log("error >>>", e);
+    }
   }
 
-  async update(businessId: string, updateServiceDto: ServiceDtoType) {
+  async update(businessId: string, updateServiceDto: UpdateServiceDto) {
     // todo validate with businessId
     const updatedService = await this.serviceModel.findByIdAndUpdate(updateServiceDto._id, updateServiceDto);
     return updatedService;
