@@ -21,7 +21,6 @@ export class UpdateServiceDto implements ServiceDtoType {
   @IsString()
   @ApiProperty({ required: true })
   _id: string;
-
   @IsString()
   @ApiProperty({ required: true })
   businessId: string;

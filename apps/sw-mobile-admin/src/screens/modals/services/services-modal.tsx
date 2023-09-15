@@ -1,5 +1,5 @@
 import React, { FC, useLayoutEffect } from "react";
-import { StyleSheet } from "react-native";
+import { RefreshControl, StyleSheet } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { ActivityIndicator } from "react-native-paper";
@@ -13,12 +13,10 @@ export const ServicesModal: FC<ModalsScreenProps<"service-modal-screen">> = ({ n
   const business = useBusiness();
   const {
     data: services,
-    isLoading,
-    isSuccess,
-    isUninitialized,
+    isLoading: isServicesLoading,
+    isSuccess: isServicesSuccess,
+    refetch: refetchServices,
   } = useGetServicesByBusinessQuery(business?._id ?? skipToken);
-
-  console.log("services >>>>");
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -41,12 +39,23 @@ export const ServicesModal: FC<ModalsScreenProps<"service-modal-screen">> = ({ n
     });
   }, [navigation]);
 
-  if (isLoading || isUninitialized) return <ActivityIndicator />;
+  const isLoading = isServicesLoading;
+
+  if (isLoading) return <ActivityIndicator />;
 
   return (
     <Screen unsafe preset="fixed">
       <Space size="small" />
       <FlatList
+        refreshControl={
+          <RefreshControl
+            refreshing={isLoading}
+            onRefresh={async () => {
+              await refetchServices();
+            }}
+          />
+        }
+        refreshing={isLoading}
         ItemSeparatorComponent={() => <Space size="tiny" />}
         contentContainerStyle={styles.contentContainer}
         data={services.data}

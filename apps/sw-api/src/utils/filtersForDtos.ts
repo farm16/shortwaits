@@ -183,3 +183,18 @@ export const getNewUserFromSocialAccount = (ownerSignupDto: SignUpWithEmailDto):
   };
   return filteredBusinessUser;
 };
+
+/**
+ * @description
+ * This function is used to filter out unwanted keys from the payload
+ */
+export const getFilteredRecord = payload => {
+  const unwantedKeys = ["_id", "createdAt", "updatedAt", "__v"];
+  const filteredPayload = Object.keys(payload).reduce((acc, key) => {
+    if (!unwantedKeys.includes(key)) {
+      acc[key] = payload[key];
+    }
+    return acc;
+  }, {});
+  return filteredPayload;
+};

@@ -40,15 +40,12 @@ export class ServicesController {
 
   //returns multiple services search by ids[]
   @Get()
-  getServices(@Query() query: GetServicesQuery, @Body() dto: GetServicesDto) {
+  getServices(@Query() query: GetServicesQuery) {
     if (query.businessId) {
       return this.servicesService.findAllByBusiness(query.businessId);
     }
     if (query.serviceId) {
       return this.servicesService.findOne(query.serviceId);
-    }
-    if (dto.services && Array.isArray(dto.services) && dto.services.length > 0) {
-      return this.servicesService.findByIds(dto.services);
     }
     throw new NotAcceptableException("incorrect service value");
   }

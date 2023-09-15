@@ -1,5 +1,5 @@
 import { Model } from "mongoose";
-import { Injectable } from "@nestjs/common";
+import { Injectable, InternalServerErrorException, UnauthorizedException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { CreateServiceDto } from "./dto/create-service.dto";
 import { UpdateServiceDto } from "./dto/update-service.dto";
@@ -7,7 +7,7 @@ import { ConfigService } from "@nestjs/config";
 import { Service } from "./entities/service.entity";
 import { Business } from "../business/entities/business.entity";
 import { convertStringToObjectId } from "../../utils/converters";
-
+import { getFilteredRecord } from "../../utils/filtersForDtos";
 @Injectable()
 export class ServicesService {
   constructor(
@@ -19,17 +19,24 @@ export class ServicesService {
   async create(businessId: string, createServiceDto: CreateServiceDto) {
     // todo validate with businessId
     try {
-      const _businessId = convertStringToObjectId(businessId);
-      const servicePayload = {
+      const business = await this.businessModel.findById(businessId);
+      if (!business) {
+        throw new UnauthorizedException("Business not found");
+      }
+      const servicePayload = getFilteredRecord({
         ...createServiceDto,
-        businessId: _businessId,
-      };
+        businessId: business._id,
+      });
 
-      console.log("servicePayload >>>", JSON.stringify(servicePayload));
       const newService = await this.serviceModel.create(servicePayload);
+      await this.businessModel.findByIdAndUpdate(businessId, {
+        $push: { services: convertStringToObjectId(newService._id) },
+      });
+
       return newService;
-    } catch (e) {
-      console.log("error >>>", e);
+    } catch (error) {
+      console.error(error);
+      throw new InternalServerErrorException("Failed to create service");
     }
   }
 
