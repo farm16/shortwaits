@@ -16,12 +16,6 @@ export class ServicesService {
     private config: ConfigService
   ) {}
 
-  async update(businessId: string, updateServiceDto: UpdateServiceDto) {
-    // todo validate with businessId
-    const updatedService = await this.serviceModel.findByIdAndUpdate(updateServiceDto._id, updateServiceDto);
-    return updatedService;
-  }
-
   async findAll() {
     const services = await this.serviceModel.find({});
     return services;
@@ -51,6 +45,29 @@ export class ServicesService {
     return services;
   }
 
+  async update(businessId: string, updateServiceDto: UpdateServiceDto) {
+    // todo validate with businessId
+    try {
+      const business = await this.businessModel.findById(businessId);
+      if (!business) {
+        throw new UnauthorizedException("Business not found");
+      }
+      const servicePayload = getFilteredRecord({
+        ...updateServiceDto,
+        businessId: business._id,
+      });
+
+      const newService = await this.serviceModel.findByIdAndUpdate(updateServiceDto._id, servicePayload, {
+        new: true,
+      });
+
+      return newService;
+    } catch (error) {
+      console.error(error);
+      throw new InternalServerErrorException("Failed to create service");
+    }
+  }
+
   async create(businessId: string, createServiceDto: CreateServiceDto) {
     // todo validate with businessId
     try {
@@ -64,9 +81,12 @@ export class ServicesService {
       });
 
       const newService = await this.serviceModel.create(servicePayload);
-      await this.businessModel.findByIdAndUpdate(businessId, {
-        $push: { services: convertStringToObjectId(newService._id) },
-      });
+
+      if (newService) {
+        await this.businessModel.findByIdAndUpdate(businessId, {
+          $push: { services: convertStringToObjectId(newService._id) },
+        });
+      }
 
       return newService;
     } catch (error) {
