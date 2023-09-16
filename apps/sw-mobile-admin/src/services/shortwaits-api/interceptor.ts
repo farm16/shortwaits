@@ -5,7 +5,7 @@ import { Mutex } from "async-mutex";
 import { TokenPayloadType } from "@shortwaits/shared-lib";
 import { Alert } from "react-native";
 
-const mutex = new Mutex();
+// const mutex = new Mutex();
 
 export const baseQueryWithInterceptor: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (
   args,
@@ -32,6 +32,13 @@ export const baseQueryWithInterceptor: BaseQueryFn<string | FetchArgs, unknown, 
 
   // await mutex.waitForUnlock();
   const result = await baseQuery(args, api, extraOptions);
+
+  console.log();
+  console.log("------------ REQUEST ------------");
+  console.log("METHOD: ", result.meta.request.method);
+  console.log("URL: ", result.meta.request.url);
+  console.log("---------------------------------");
+  console.log();
 
   // if (result.error) {
   //   console.log("...cannot handle 400 error ");

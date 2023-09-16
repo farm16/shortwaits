@@ -16,6 +16,41 @@ export class ServicesService {
     private config: ConfigService
   ) {}
 
+  async update(businessId: string, updateServiceDto: UpdateServiceDto) {
+    // todo validate with businessId
+    const updatedService = await this.serviceModel.findByIdAndUpdate(updateServiceDto._id, updateServiceDto);
+    return updatedService;
+  }
+
+  async findAll() {
+    const services = await this.serviceModel.find({});
+    return services;
+  }
+
+  async findByIds(servicesId: string[]) {
+    const services = await this.serviceModel.find().where("_id").in(servicesId);
+    console.log(services);
+    return services;
+  }
+
+  async findOne(id: string) {
+    const service = await this.serviceModel.findById(id);
+    return service;
+  }
+
+  async findAllByBusiness(id: string) {
+    console.log("businessID >>>", id);
+
+    const businessServices = await this.businessModel.findById(id);
+
+    console.log("businessServices >>>", businessServices.services);
+    // const businessServicesIds = businessServices.map((e) => e.toString());
+    const services = await this.serviceModel.find().where("_id").in(businessServices.services);
+    console.log("services >>>", services);
+
+    return services;
+  }
+
   async create(businessId: string, createServiceDto: CreateServiceDto) {
     // todo validate with businessId
     try {
@@ -40,45 +75,37 @@ export class ServicesService {
     }
   }
 
-  async update(businessId: string, updateServiceDto: UpdateServiceDto) {
-    // todo validate with businessId
-    const updatedService = await this.serviceModel.findByIdAndUpdate(updateServiceDto._id, updateServiceDto);
-    return updatedService;
-  }
+  async remove(serviceId: string, businessId: string) {
+    try {
+      const business = await this.businessModel.findById(businessId);
+      if (!business) {
+        throw new UnauthorizedException("Business not found");
+      }
+      const deletedService = await this.serviceModel.findByIdAndDelete({
+        _id: serviceId,
+      });
 
-  async findAll() {
-    const services = await this.serviceModel.find({});
-    return services;
-  }
+      if (!deletedService) {
+        throw new UnauthorizedException("Service not found");
+      }
 
-  async findByIds(servicesId: string[]) {
-    const services = await this.serviceModel.find().where("_id").in(servicesId);
-    console.log(services);
-    return services;
-  }
+      if (deletedService) {
+        await this.businessModel.findByIdAndUpdate(businessId, {
+          $pull: { services: deletedService._id },
+        });
+      }
 
-  async findOne(id: string) {
-    const service = await this.serviceModel.findById(id);
-    return service;
-  }
-
-  async remove(id: string) {
-    const deletedService = await this.serviceModel.findByIdAndDelete({
-      _id: id,
-    });
-    return deletedService;
-  }
-
-  async findAllByBusiness(id: string) {
-    console.log("businessID >>>", id);
-
-    const businessServices = await this.businessModel.findById(id);
-
-    console.log("businessServices >>>", businessServices.services);
-    // const businessServicesIds = businessServices.map((e) => e.toString());
-    const services = await this.serviceModel.find().where("_id").in(businessServices.services);
-    console.log("services >>>", services);
-
-    return services;
+      return {
+        isDeleted: true,
+        service: deletedService,
+        headerMessage: {
+          type: "success",
+          message: "Service deleted successfully",
+        },
+      };
+    } catch (error) {
+      console.error(error);
+      throw new InternalServerErrorException("Failed to delete service");
+    }
   }
 }

@@ -1,8 +1,9 @@
-import React, { FC, useLayoutEffect } from "react";
-import { RefreshControl, StyleSheet } from "react-native";
-import { FlatList } from "react-native-gesture-handler";
+import React, { FC, useCallback, useLayoutEffect } from "react";
+import { StyleSheet } from "react-native";
+import { FlatList, RefreshControl } from "react-native-gesture-handler";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { ActivityIndicator } from "react-native-paper";
+import { useFocusEffect } from "@react-navigation/native";
 
 import { Space, Screen, Text, BackButton, ServiceItem, IconButton } from "../../../components";
 import { ModalsScreenProps } from "../../../navigation";
@@ -11,6 +12,7 @@ import { useGetServicesByBusinessQuery } from "../../../services";
 
 export const ServicesModal: FC<ModalsScreenProps<"service-modal-screen">> = ({ navigation, route }) => {
   const business = useBusiness();
+
   const {
     data: services,
     isLoading: isServicesLoading,
@@ -30,6 +32,9 @@ export const ServicesModal: FC<ModalsScreenProps<"service-modal-screen">> = ({ n
               screen: "form-modal-screen",
               params: {
                 form: "addService",
+                onSubmit: () => {
+                  refetchServices();
+                },
               },
             });
           }}
@@ -37,14 +42,20 @@ export const ServicesModal: FC<ModalsScreenProps<"service-modal-screen">> = ({ n
       ),
       headerTitle: () => <Text preset="text" text={"Service"} />,
     });
-  }, [navigation]);
+  }, [navigation, refetchServices]);
+
+  useFocusEffect(
+    useCallback(() => {
+      refetchServices();
+    }, [refetchServices])
+  );
 
   const isLoading = isServicesLoading;
 
   if (isLoading) return <ActivityIndicator />;
 
   return (
-    <Screen unsafe preset="fixed">
+    <Screen unsafe preset="fixed" withHorizontalPadding>
       <Space size="small" />
       <FlatList
         refreshControl={
@@ -55,6 +66,7 @@ export const ServicesModal: FC<ModalsScreenProps<"service-modal-screen">> = ({ n
             }}
           />
         }
+        showsVerticalScrollIndicator={false}
         refreshing={isLoading}
         ItemSeparatorComponent={() => <Space size="tiny" />}
         contentContainerStyle={styles.contentContainer}
@@ -69,6 +81,9 @@ export const ServicesModal: FC<ModalsScreenProps<"service-modal-screen">> = ({ n
                   params: {
                     form: "updateService",
                     initialValues: _service,
+                    onSubmit: () => {
+                      refetchServices();
+                    },
                   },
                 });
               }}
@@ -83,6 +98,6 @@ export const ServicesModal: FC<ModalsScreenProps<"service-modal-screen">> = ({ n
 
 const styles = StyleSheet.create({
   contentContainer: {
-    alignItems: "center",
+    paddingBottom: 24,
   },
 });

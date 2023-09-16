@@ -45,8 +45,6 @@ export function ServiceColors({ selectedColor, onSelect }: ServiceColorsProps) {
     [onSelect]
   );
 
-  console.log("default", mobileAdminData.defaultData?.serviceColors);
-
   const circles = useMemo(() => {
     const { width } = getDimensions(87);
     const colorsCount = mobileAdminData ? Object.keys(mobileAdminData?.defaultData?.serviceColors).length : 0;

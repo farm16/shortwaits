@@ -1,28 +1,30 @@
 import React, { FC, useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
-import { View, StyleSheet } from "react-native";
+import { ServiceDtoType } from "@shortwaits/shared-lib";
+import { Alert } from "react-native";
 
 import {
   Space,
-  Screen,
   ServiceColors,
   CurrencyFieldCard,
   TextFieldCard,
   Text,
   DurationFieldCard,
-  LeftChevronButton,
   Card,
   FormContainer,
   Button,
   BackButton,
+  IconButton,
 } from "../../../../components";
-import { useTheme } from "../../../../theme";
 import { ModalsScreenProps } from "../../../../navigation";
-import { useBusiness, useMobileAdmin } from "../../../../store";
 import { useForm } from "../../../../hooks";
-import { CreateServiceDtoType, ServiceDtoType } from "@shortwaits/shared-lib";
+import { useDeleteServiceMutation } from "../../../../services";
+import { useBusiness } from "../../../../store";
 
 export const UpdateServicesModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navigation, route }) => {
   const service = route?.params?.initialValues as ServiceDtoType;
+
+  const business = useBusiness();
+  const [deleteService, deleteServiceStatus] = useDeleteServiceMutation();
 
   const { touched, errors, values, handleChange, setFieldValue, handleSubmit } = useForm(
     {
@@ -34,12 +36,41 @@ export const UpdateServicesModal: FC<ModalsScreenProps<"form-modal-screen">> = (
     "addService"
   );
 
+  useEffect(() => {
+    if (deleteServiceStatus.isSuccess) {
+      navigation.goBack();
+    }
+  }, [deleteServiceStatus.isSuccess, navigation]);
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
       headerTitle: () => <Text preset="text" text={service.name} />,
+      headerRight: () => (
+        <IconButton
+          iconType="delete"
+          withMarginRight
+          onPress={() => {
+            Alert.alert("Delete Service", "Are you sure you want to delete this service?", [
+              {
+                text: "Cancel",
+                style: "cancel",
+              },
+              {
+                text: "Delete",
+                onPress: () => {
+                  deleteService({
+                    businessId: business._id,
+                    serviceId: service._id,
+                  });
+                },
+              },
+            ]);
+          }}
+        />
+      ),
     });
-  }, [navigation, service.name]);
+  }, [business._id, deleteService, navigation, service._id, service.name]);
 
   const handleServiceColorChange = useCallback(
     serviceColor => {

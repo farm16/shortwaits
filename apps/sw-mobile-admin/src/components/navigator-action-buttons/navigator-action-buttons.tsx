@@ -291,6 +291,7 @@ const _circleIcons = {
     color: "brandSecondary",
     size: 21,
   },
+
   default: {
     name: "plus",
     backgroundColor: undefined,

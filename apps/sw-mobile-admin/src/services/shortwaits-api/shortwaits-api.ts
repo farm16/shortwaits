@@ -30,6 +30,7 @@ import {
   UpdateEvent,
   UpdateBusinessStaff,
   UpdateBusinessClient,
+  DeleteService,
 } from "./modules";
 import { baseQueryWithInterceptor } from "./interceptor";
 
@@ -56,6 +57,7 @@ export const shortwaitsApi = createApi({
     updateBusiness: UpdateBusiness(builder),
     registerBusiness: RegisterBusiness(builder),
     // A business User === Staff
+
     // A client User === Client also known as a customer
     createBusinessStaff: CreateBusinessStaff(builder),
     createBusinessClients: CreateBusinessClients(builder),
@@ -71,6 +73,7 @@ export const shortwaitsApi = createApi({
     getServicesByBusiness: GetServicesByBusiness(builder),
     updateService: UpdateService(builder),
     createService: CreateService(builder),
+    deleteService: DeleteService(builder),
 
     //events
     createEvent: CreateEvent(builder),

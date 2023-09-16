@@ -21,6 +21,12 @@ import { AtGuard } from "../../common/guards";
 
 import { GetServicesDto, GetServicesQuery } from "./dto/getServiceQuery";
 
+/**
+ * TODO:
+ * - this endpoint needs to be protected and should require search query parameters
+ * TODO:
+ * - we should search by all available params and optimize
+ */
 @ApiTags("services")
 @Controller("services")
 @UseGuards(AtGuard)
@@ -28,17 +34,6 @@ import { GetServicesDto, GetServicesQuery } from "./dto/getServiceQuery";
 export class ServicesController {
   constructor(private readonly servicesService: ServicesService) {}
 
-  /**
-   * - this endpoint needs to be protected and should
-   *   require search query parameters
-   * - we should search by all available params and optimize
-   */
-  // @Get('all')
-  // findAll() {
-  //   return this.servicesService.findAll();
-  // }
-
-  //returns multiple services search by ids[]
   @Get()
   getServices(@Query() query: GetServicesQuery) {
     if (query.businessId) {
@@ -50,16 +45,6 @@ export class ServicesController {
     throw new NotAcceptableException("incorrect service value");
   }
 
-  // @Get('by-ids/:business_id')
-  // findByBusiness(@Param('business_id') businessId: string) {
-  //   return this.servicesService.findAllByBusiness(businessId);
-  // }
-
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.servicesService.findOne(id);
-  // }
-
   @Put(":businessId")
   update(@Param("businessId") businessId: string, @Body() updateServiceDto: UpdateServiceDto) {
     return this.servicesService.update(businessId, updateServiceDto);
@@ -70,13 +55,8 @@ export class ServicesController {
     return this.servicesService.create(businessId, createServiceDto);
   }
 
-  // @Patch(":serviceId")
-  // updateSome(@Param("serviceId") serviceId: string, @Body() updateServiceDto: UpdateServiceDto) {
-  //   return this.servicesService.update(serviceId, updateServiceDto);
-  // }
-
   @Delete(":serviceId")
-  remove(@Param("id") serviceId: string) {
-    return this.servicesService.remove(serviceId);
+  remove(@Param("serviceId") serviceId: string, @Query("businessId") businessId: string) {
+    return this.servicesService.remove(serviceId, businessId);
   }
 }

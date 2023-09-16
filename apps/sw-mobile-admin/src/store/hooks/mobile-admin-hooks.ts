@@ -51,13 +51,13 @@ export const useShowGhostComponent = (componentName = "floatingActionButton") =>
   const mobileAdmin = useSelector(selectCurrentMobileAdminState);
   const isFocused = useIsFocused();
 
-  console.log();
-  console.log("--- useShowGhostComponent ---");
-  console.log("component name: ", componentName);
-  console.log("isFocused: ", isFocused);
-  console.log(`${componentName} visibility: `, mobileAdmin.components[componentName].isVisible);
-  console.log("-----------------------------");
-  console.log();
+  // console.log();
+  // console.log("--- useShowGhostComponent ---");
+  // console.log("component name: ", componentName);
+  // console.log("isFocused: ", isFocused);
+  // console.log(`${componentName} visibility: `, mobileAdmin.components[componentName].isVisible);
+  // console.log("-----------------------------");
+  // console.log();
 
   useEffect(() => {
     const componentActions = {

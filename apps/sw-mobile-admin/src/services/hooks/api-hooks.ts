@@ -14,9 +14,12 @@ export const {
   useCreateBusinessStaffMutation,
   useUpdateBusinessClientMutation,
   useUpdateBusinessStaffMutation,
+  useGetBusinessUsersMutation,
   useUpdateEventMutation,
   useUpdateServiceMutation,
   useCreateServiceMutation,
+  useDeleteServiceMutation,
+
   //Query hooks
   useGetAdminMobileQuery,
   useGetBusinessClientsQuery,
@@ -29,10 +32,10 @@ export const {
   useGetCategoryQuery,
   useGetServiceQuery,
   useGetServicesByBusinessQuery,
-  useGetBusinessUsersMutation,
   useGetEventsByBusinessQuery,
   useGetEventsSummaryByBusinessQuery,
   useGetPeopleInEventQuery,
+
   //Lazy Query hooks
   useLazyGetPeopleInEventQuery,
   useLazyGetCategoryQuery,

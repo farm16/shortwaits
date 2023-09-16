@@ -18,8 +18,11 @@ import { useBusiness, useMobileAdmin } from "../../../../store";
 import { useForm } from "../../../../hooks";
 import { useCreateServiceMutation } from "../../../../services";
 import { Alert } from "react-native";
+import { noop } from "lodash";
 
 export const AddServicesModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navigation, route }) => {
+  const { onSubmit = noop } = route.params;
+
   const mobileAdminData = useMobileAdmin();
   const business = useBusiness();
   const [createService, createServiceStatus] = useCreateServiceMutation();
@@ -51,12 +54,11 @@ export const AddServicesModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ n
           businessId: business._id,
           body: formData,
         });
+        onSubmit(formData);
       },
     },
     "addService"
   );
-
-  console.log("errors", errors);
 
   useEffect(() => {
     if (createServiceStatus.isSuccess) {
@@ -97,7 +99,6 @@ export const AddServicesModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ n
     <Button
       preset="primary"
       onPress={() => {
-        console.log(">>>>>", values);
         handleSubmit();
       }}
       text="Submit"
