@@ -139,11 +139,18 @@ export const ClientsSelector: FC<ModalsScreenProps<"selector-modal-screen">> = (
             setSelectedItems(selectedItems => [...selectedItems, item._id]);
           }
         }
-      } else if (closeOnSelect) {
+      } else if (closeOnSelect && onSelect) {
         onSelect(item);
         navigation.goBack();
-      } else {
+      } else if (onSelect) {
         onSelect(item);
+      } else {
+        navigation.navigate("authorized-stack", {
+          screen: "business-client-screen",
+          params: {
+            client: item,
+          },
+        });
       }
     },
     [closeOnSelect, maxSelectedItems, minSelectedItems, multiple, navigation, onSelect, selectedItems]

@@ -89,7 +89,7 @@ export const AuthorizedTabNavigator = () => {
         name={AUTHORIZED_TAB_SCREENS.ACTIVITY_SCREEN}
         component={ActivityScreen}
         options={{
-          tabBarLabel: "Activity",
+          tabBarLabel: "Activities",
           tabBarIcon: ({ color, focused }) => (
             <MaterialCommunityIcons
               name={focused ? "timeline-text" : "timeline-text-outline"}

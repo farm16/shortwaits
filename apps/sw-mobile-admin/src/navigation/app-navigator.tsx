@@ -8,8 +8,6 @@ import { NAVIGATION_STACKS } from "./navigation-constants";
 import { navigationRef, useBackButtonHandler } from "./navigation-utils";
 import { ModalsNavigator, UnauthorizedNavigator, AuthorizedTabNavigator, AuthorizedStackNavigator } from "./stacks";
 import { useAuth, useBusiness } from "../store";
-import { FloatingActionButton, PremiumMembershipModal } from "../components";
-import { Banner } from "../components/banners/banner";
 
 const RootStack = createStackNavigator<RootStackParamList>();
 

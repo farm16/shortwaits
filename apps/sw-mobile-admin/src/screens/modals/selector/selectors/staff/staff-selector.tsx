@@ -2,6 +2,7 @@ import React, { FC, useCallback, useEffect, useLayoutEffect, useState } from "re
 import { Alert, FlatList, StyleSheet } from "react-native";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { BusinessUsersDtoType } from "@shortwaits/shared-lib";
+import { ActivityIndicator } from "react-native-paper";
 import { useDispatch } from "react-redux";
 
 import { AnimatedSearchBar, Container, LeftChevronButton, IconButton, Text } from "../../../../../components";
@@ -9,8 +10,6 @@ import { StaffSelectorItem } from "./staff-selector-item";
 import { useGetBusinessStaffQuery } from "../../../../../services";
 import { ModalsScreenProps } from "../../../../../navigation";
 import { showPremiumMembershipModal, useUser } from "../../../../../store";
-import { ActivityIndicator } from "react-native-paper";
-import { useTheme } from "../../../../../theme";
 
 const MIN_SELECTED_ITEMS_DEFAULT = 0; // Define your minimum selected items here
 const MAX_SELECTED_ITEMS_DEFAULT = 10000; // Define your maximum selected items here
@@ -30,7 +29,6 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
   } = route.params;
 
   const dispatch = useDispatch();
-  const { Colors } = useTheme();
   const handleAddStaffPress = useCallback(() => {
     dispatch(showPremiumMembershipModal());
   }, [dispatch]);
@@ -139,11 +137,18 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
             setSelectedItems(selectedItems => [...selectedItems, item._id]);
           }
         }
-      } else if (closeOnSelect) {
+      } else if (closeOnSelect && onSelect) {
         onSelect(item);
         navigation.goBack();
-      } else {
+      } else if (onSelect) {
         onSelect(item);
+      } else {
+        navigation.navigate("authorized-stack", {
+          screen: "business-staff-screen",
+          params: {
+            staff: item,
+          },
+        });
       }
     },
     [closeOnSelect, maxSelectedItems, minSelectedItems, multiple, navigation, onSelect, selectedItems]

@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
+import React, { FC, useCallback, useEffect, useLayoutEffect } from "react";
 import { ServiceDtoType } from "@shortwaits/shared-lib";
 import { Alert } from "react-native";
 
@@ -14,33 +14,41 @@ import {
   Button,
   BackButton,
   IconButton,
+  ExpandableSection,
+  ButtonCard,
 } from "../../../../components";
 import { ModalsScreenProps } from "../../../../navigation";
 import { useForm } from "../../../../hooks";
-import { useDeleteServiceMutation } from "../../../../services";
+import { useDeleteServiceMutation, useUpdateServiceMutation } from "../../../../services";
 import { useBusiness } from "../../../../store";
+import { FormikErrors } from "formik";
 
 export const UpdateServicesModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navigation, route }) => {
   const service = route?.params?.initialValues as ServiceDtoType;
 
   const business = useBusiness();
   const [deleteService, deleteServiceStatus] = useDeleteServiceMutation();
+  const [updateService, updateServiceStatus] = useUpdateServiceMutation();
 
   const { touched, errors, values, handleChange, setFieldValue, handleSubmit } = useForm(
     {
       initialValues: service,
       onSubmit: formData => {
         console.log("formData", JSON.stringify(formData, null, 2));
+        updateService({
+          businessId: business._id,
+          body: formData,
+        });
       },
     },
-    "addService"
+    "updateService"
   );
 
   useEffect(() => {
-    if (deleteServiceStatus.isSuccess) {
+    if (deleteServiceStatus.isSuccess || updateServiceStatus.isSuccess) {
       navigation.goBack();
     }
-  }, [deleteServiceStatus.isSuccess, navigation]);
+  }, [deleteServiceStatus.isSuccess, navigation, updateServiceStatus.isSuccess]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -79,7 +87,7 @@ export const UpdateServicesModal: FC<ModalsScreenProps<"form-modal-screen">> = (
     [setFieldValue]
   );
 
-  console.log("errors", errors);
+  console.log("errors >>>", errors);
   console.log("values", JSON.stringify(values, null, 2));
 
   const renderFooter = <Button preset="primary" onPress={() => handleSubmit()} text="Submit" />;
@@ -130,6 +138,35 @@ export const UpdateServicesModal: FC<ModalsScreenProps<"form-modal-screen">> = (
       />
       <Space size="small" />
       {renderDurationBar()}
+
+      <ExpandableSection>
+        <Space size="small" />
+        <ButtonCard
+          rightIconName={values?.isPrivate ? "checkbox-outline" : "checkbox-blank-outline"}
+          title={"Make Private"}
+          subTitle={"Clients will need to request access\nto this service."}
+          onPress={() => {
+            setFieldValue("isPrivate", !values?.isPrivate);
+          }}
+        />
+        <ButtonCard
+          rightIconName={values?.isVideoConference ? "checkbox-outline" : "checkbox-blank-outline"}
+          title={"Enable Video Conference"}
+          onPress={() => {
+            setFieldValue("isVideoConference", !values?.isVideoConference);
+          }}
+        />
+        {values?.isVideoConference ? (
+          <TextFieldCard
+            title="Video Conference Link"
+            value={values?.urls?.other1}
+            placeholder="Insert link here (Zoom, Google Meet, etc.)"
+            onChangeText={handleChange("urls.other1")}
+            isTouched={touched.urls?.other1 ? true : false}
+            errors={errors.urls?.other1 ? (errors.urls.other1 as FormikErrors<string>) ?? "" : ""}
+          />
+        ) : null}
+      </ExpandableSection>
     </FormContainer>
   );
 };

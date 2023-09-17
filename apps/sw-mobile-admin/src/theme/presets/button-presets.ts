@@ -41,6 +41,12 @@ export const buttonPresets = ({
       width: undefined,
       flex: 1,
     },
+    "primary2-disabled": {
+      ...VIEW_BASE,
+      backgroundColor: Colors.brandSecondary1,
+      width: undefined,
+      flex: 1,
+    },
     secondary: {
       ...VIEW_BASE,
       backgroundColor: Colors.brandSecondary4,
@@ -61,6 +67,22 @@ export const buttonPresets = ({
     icon: {
       height: 55,
       width: 52,
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    icon2: {
+      height: 45,
+      width: 45,
+      borderRadius: 22.5,
+      backgroundColor: Colors.lightGray,
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    "icon2-disabled": {
+      height: 45,
+      width: 45,
+      borderRadius: 22.5,
+      backgroundColor: Colors.lightGray,
       justifyContent: "center",
       alignItems: "center",
     },
@@ -140,6 +162,11 @@ export const buttonPresets = ({
       color: Colors.brandSecondary7,
       fontWeight: "600",
     },
+    "primary2-disabled": {
+      ...TEXT_BASE,
+      color: Colors.brandSecondary7,
+      fontWeight: "600",
+    },
     secondary: {
       ...TEXT_BASE,
       color: Colors.white,
@@ -190,6 +217,12 @@ export const buttonPresets = ({
       fontWeight: "700",
     },
     icon: {},
+    icon2: {
+      position: "absolute",
+    },
+    "icon2-disabled": {
+      position: "absolute",
+    },
     socialIcon: {},
     card: {},
     listItem: {},

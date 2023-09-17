@@ -128,7 +128,7 @@ export const UpdateEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ n
     />
   );
 
-  console.log("errors:", JSON.stringify(errors, null, 2));
+  console.log("errors >>>>>", JSON.stringify(errors, null, 2));
   const emojis = values.labels.map(label => getEmojiString(label.emojiShortName)).join(" ");
 
   return createEventStatus.isLoading ? (

@@ -159,9 +159,6 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
               screen: "selector-modal-screen",
               params: {
                 type: "staff",
-                onSelect: staff => {
-                  console.log(">>>", staff);
-                },
               },
             })
           }
@@ -174,10 +171,7 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
             navigation.navigate("modals", {
               screen: "selector-modal-screen",
               params: {
-                type: "staff",
-                onSelect: staff => {
-                  console.log(">>>", staff);
-                },
+                type: "clients",
               },
             })
           }
