@@ -9,7 +9,7 @@ import { AnimatedSearchBar, Container, LeftChevronButton, IconButton, Text } fro
 import { StaffSelectorItem } from "./staff-selector-item";
 import { useGetBusinessStaffQuery } from "../../../../../services";
 import { ModalsScreenProps } from "../../../../../navigation";
-import { showPremiumMembershipModal, useUser } from "../../../../../store";
+import { showPremiumMembershipModal, useBusiness } from "../../../../../store";
 
 const MIN_SELECTED_ITEMS_DEFAULT = 0; // Define your minimum selected items here
 const MAX_SELECTED_ITEMS_DEFAULT = 10000; // Define your maximum selected items here
@@ -33,14 +33,16 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
     dispatch(showPremiumMembershipModal());
   }, [dispatch]);
 
-  const user = useUser();
+  const business = useBusiness();
+
   const {
     data: payload,
     isError,
     isLoading,
     isSuccess,
-  } = useGetBusinessStaffQuery(user ? user.businesses[0] : skipToken);
-
+  } = useGetBusinessStaffQuery(business ? business._id : skipToken, {
+    refetchOnMountOrArgChange: true,
+  });
   const [searchText, setSearchText] = useState("");
   const [filteredData, setFilteredData] = useState<BusinessUsersDtoType>([]);
   const [isListSearchable, setIsListSearchable] = useState(false);

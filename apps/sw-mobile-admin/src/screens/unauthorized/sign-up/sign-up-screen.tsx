@@ -12,6 +12,7 @@ import { useTheme } from "../../../theme";
 import { useSocialSignUpMutation } from "../../../services";
 import { onGoogleButtonPress } from "../../../utils";
 import { ActivityIndicator } from "react-native-paper";
+import LogoSvgLetter from "../../../assets/images/svg-components/logo-letters";
 
 export interface SignUpScreenProps {
   navigation: CompositeNavigationProp<
@@ -54,20 +55,8 @@ export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
 
   return (
     <Screen preset="fixed" withHorizontalPadding>
-      <View style={{ justifyContent: "center", marginBottom: 100, flex: 1 }}>
-        <Text
-          style={{
-            textAlign: "center",
-            fontSize: 37,
-            lineHeight: 37,
-            fontStyle: "italic",
-            fontWeight: "bold",
-            alignSelf: "center",
-            color: Colors.brandSecondary,
-          }}
-        >
-          SHORT{"\n"}WAITS
-        </Text>
+      <View style={{ justifyContent: "center", alignItems: "center", marginBottom: 100, flex: 1 }}>
+        <LogoSvgLetter height="25%" />
         <Text
           style={{
             color: Colors.subText,
@@ -134,6 +123,7 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
     alignItems: "center",
     justifyContent: "center",
+    marginBottom: 20,
   },
   formContainer: {
     flex: 1,

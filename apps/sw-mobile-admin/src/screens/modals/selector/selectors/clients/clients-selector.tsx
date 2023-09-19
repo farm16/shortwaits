@@ -8,7 +8,7 @@ import { AnimatedSearchBar, Container, LeftChevronButton, IconButton, Text } fro
 import { ClientsSelectorItem } from "./clients-selector-item";
 import { useGetBusinessClientsQuery } from "../../../../../services";
 import { ModalsScreenProps } from "../../../../../navigation";
-import { showPremiumMembershipModal, useUser } from "../../../../../store";
+import { showPremiumMembershipModal, useBusiness } from "../../../../../store";
 import { useTheme } from "../../../../../theme";
 
 const MIN_SELECTED_ITEMS_DEFAULT = 0; // Define your minimum selected items here
@@ -34,13 +34,18 @@ export const ClientsSelector: FC<ModalsScreenProps<"selector-modal-screen">> = (
     dispatch(showPremiumMembershipModal());
   }, [dispatch]);
 
-  const user = useUser();
+  const business = useBusiness();
+
   const {
     data: payload,
     isError,
     isLoading,
     isSuccess,
-  } = useGetBusinessClientsQuery(user ? user.businesses[0] : skipToken);
+  } = useGetBusinessClientsQuery(business ? business._id : skipToken, {
+    refetchOnMountOrArgChange: true,
+  });
+
+  console.log("payload >>>", payload);
 
   const [searchText, setSearchText] = useState("");
   const [filteredData, setFilteredData] = useState<ClientUsersDtoType>([]);

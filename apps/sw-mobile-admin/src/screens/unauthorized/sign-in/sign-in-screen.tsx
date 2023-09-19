@@ -11,6 +11,7 @@ import { Container, Button, Text, Space, TextFieldCard, Screen } from "../../../
 import Facebook from "../../../assets/icons/facebook.svg";
 import Google from "../../../assets/icons/google.svg";
 import { onGoogleButtonPress } from "../../../utils";
+import LogoSvgLetter from "../../../assets/images/svg-components/logo-letters";
 
 export interface RegisterWithEmailScreenProps {
   navigation: CompositeNavigationProp<
@@ -99,22 +100,11 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
       <View
         style={{
           justifyContent: "center",
+          alignItems: "center",
           flex: 1,
         }}
       >
-        <Text
-          style={{
-            textAlign: "center",
-            fontSize: 37,
-            lineHeight: 37,
-            fontStyle: "italic",
-            fontWeight: "bold",
-            alignSelf: "center",
-            color: Colors.brandSecondary3,
-          }}
-        >
-          SHORT{"\n"}WAITS
-        </Text>
+        <LogoSvgLetter height="25%" />
       </View>
       <TextFieldCard
         autoCapitalize="none"
@@ -166,7 +156,7 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
           <Text preset="social">with Gmail</Text>
         </Container>
       </Button>
-      <Space size="tiny" />
+      <Space />
       <View style={styles.footer}>
         <Text preset="subLink" style={{ color: Colors.text }} text="Don't have an account?   " />
         <Button

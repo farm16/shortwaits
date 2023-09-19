@@ -6,7 +6,6 @@ import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { ActivityIndicator } from "react-native-paper";
 
 import { ServiceItem, LeftChevronButton, Space, Button, IconButton, FormContainer } from "../../../components";
-import { useTheme } from "../../../theme";
 import { RootStackParamList, UnauthorizedStackParamList } from "../../../navigation";
 import { useBusiness } from "../../../store";
 import { useGetServicesByBusinessQuery, useRegisterBusinessMutation } from "../../../services";
@@ -34,9 +33,10 @@ export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
   const handleCardOnPress = useCallback(
     item => {
       navigation.navigate("modals", {
-        screen: "service-modal-screen",
+        screen: "form-modal-screen",
         params: {
-          service: item,
+          form: "updateService",
+          initialValues: item,
         },
       });
     },
@@ -56,7 +56,10 @@ export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
         <IconButton
           onPress={() =>
             navigation.navigate("modals", {
-              screen: "service-modal-screen",
+              screen: "form-modal-screen",
+              params: {
+                form: "addService",
+              },
             })
           }
           iconType="add"

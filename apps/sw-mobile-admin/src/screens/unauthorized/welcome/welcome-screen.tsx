@@ -1,17 +1,18 @@
 import React, { FC, useEffect } from "react";
 import { View, StatusBar } from "react-native";
-import SafeAreaView from "react-native-safe-area-view";
 import SplashScreen from "react-native-splash-screen";
 import { CompositeNavigationProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { skipToken } from "@reduxjs/toolkit/dist/query/react";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
-import { Button, Screen, Space, Text } from "../../../components";
+import { Button, Container, Screen, Space, Text } from "../../../components";
 import { useTheme } from "../../../theme";
 import { RootStackParamList, UnauthorizedStackParamList } from "../../../navigation";
 import { useBusiness, useMobileAdmin } from "../../../store";
 import { useGetAdminMobileQuery } from "../../../services";
-import { skipToken } from "@reduxjs/toolkit/dist/query/react";
-import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import TwoLetterLogoSvg from "../../../assets/images/svg-components/logo-letter-short";
+import WelcomeImage from "../../../assets/images/svg-components/welcome-app";
 
 GoogleSignin.configure({
   webClientId: "805426205047-fcegaam9bmap1dagccindjh0ko7oro68.apps.googleusercontent.com",
@@ -45,27 +46,43 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation }) => {
   if (isAdminMobileLoading) return <Text>Loading ...</Text>;
 
   return (
-    <Screen style={{ backgroundColor: Colors.brandSecondary3 }} withHorizontalPadding statusBar="light-content">
+    <Screen backgroundColor="white" statusBar="light-content">
+      <Container direction="row" alignItems="center" justifyContent="center">
+        <TwoLetterLogoSvg height={75} width={75} />
+      </Container>
       <View
         style={{
-          justifyContent: "center",
+          // justifyContent: "center",
           flex: 1,
+          alignItems: "center",
+          justifyContent: "flex-start",
         }}
       >
-        <Text
+        <WelcomeImage height={"30%"} />
+        <Space size="large" />
+        <View
           style={{
-            textAlign: "center",
-            fontSize: 37,
-            lineHeight: 37,
-            fontStyle: "italic",
-            fontWeight: "bold",
-            color: "white",
+            width: "100%",
+            paddingHorizontal: 16,
           }}
         >
-          SHORT{"\n"}WAITS
-        </Text>
+          <Text
+            preset="cardSubtitle"
+            style={{
+              fontWeight: "500",
+            }}
+            text="Welcome to the Shortwaits Admin App"
+          />
+          <Space size="small" />
+          <Text
+            preset="title2"
+            text={
+              "Where you're the captain of your business!\nExplore our tools to take control and drive your success."
+            }
+          />
+        </View>
       </View>
-      <View style={{ width: "85%", alignSelf: "center" }}>
+      <View style={{ padding: 16 }}>
         <Button
           style={{
             backgroundColor: Colors.brandSecondary,
@@ -81,7 +98,7 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation }) => {
         />
         <Space />
         <Button
-          style={{ backgroundColor: Colors.static_welcomeButtonBackground }}
+          style={{ backgroundColor: Colors.brandSecondary1 }}
           textStyle={{
             fontWeight: "500",
             color: Colors.static_welcomeButtonText,
