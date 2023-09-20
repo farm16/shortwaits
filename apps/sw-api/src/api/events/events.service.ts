@@ -160,7 +160,7 @@ export class EventsService {
         businessId: string;
       } = { businessId };
 
-      const events = await this.eventsModel.find(filter).select("payment").exec();
+      const events = await this.eventsModel.find(filter).exec();
 
       const totalAmountPerDayHour = {};
       const totalAmountPerWeekDay = {
@@ -227,14 +227,19 @@ export class EventsService {
         }
       });
 
-      const response = {
+      const graphData = {
         Yesterday: totalAmountPerDayHour,
         Week: totalAmountPerWeekDay,
         Month: totalAmountPerMonthDay,
         Year: totalAmountPerYearMonth,
       };
 
-      return response;
+      const listData = events; // todo: add transaction format
+
+      return {
+        graphData,
+        listData: events,
+      };
     } catch (error) {
       console.error(error);
       throw new InternalServerErrorException("Failed to get events");

@@ -5,7 +5,14 @@ import { BusinessUsersDtoType } from "@shortwaits/shared-lib";
 import { ActivityIndicator } from "react-native-paper";
 import { useDispatch } from "react-redux";
 
-import { AnimatedSearchBar, Container, LeftChevronButton, IconButton, Text } from "../../../../../components";
+import {
+  AnimatedSearchBar,
+  Container,
+  LeftChevronButton,
+  IconButton,
+  NonIdealState,
+  Text,
+} from "../../../../../components";
 import { StaffSelectorItem } from "./staff-selector-item";
 import { useGetBusinessStaffQuery } from "../../../../../services";
 import { ModalsScreenProps } from "../../../../../navigation";
@@ -191,6 +198,7 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
           data={filteredData}
           renderItem={renderItem}
           keyExtractor={keyExtractor}
+          ListEmptyComponent={<NonIdealState image="noStaff" />}
         />
       </>
     );

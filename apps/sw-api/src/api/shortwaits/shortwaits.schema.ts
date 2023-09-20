@@ -9,10 +9,25 @@ import {
   ShortwaitsAdminDefaultDataType,
   ObjectId,
   ShortwaitsAdminBannersType,
+  AccountPermissions,
 } from "@shortwaits/shared-lib";
 
 @Schema()
 export class Shortwaits extends Document implements ShortwaitsAdminDefaultDataType {
+  @ApiProperty()
+  @Prop(
+    raw({
+      free: { type: Object },
+      premium: { type: Object },
+      student: { type: Object },
+      basic: { type: Object },
+      trial: { type: Object },
+      business: { type: Object },
+      enterprise: { type: Object },
+      partner: { type: Object },
+    })
+  )
+  accountPermissions: AccountPermissions;
   @ApiProperty()
   @Prop()
   subscriptionPlans: [];

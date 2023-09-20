@@ -52,5 +52,11 @@ export type EventSummaryType = {
   Month: Record<string, number>;
   Year: Record<string, number>;
 };
-export type EventsSummaryResponseType = CommonResponseType<EventSummaryType>;
+
+type EventSummary = {
+  graphData: EventSummaryType;
+  listData: [];
+};
+
+export type EventsSummaryResponseType = CommonResponseType<EventSummary>;
 type WeekDay = "Sun" | "Mon" | "Tue" | "Wed" | "Thu" | "Fri" | "Sat";

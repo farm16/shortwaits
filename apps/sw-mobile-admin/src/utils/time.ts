@@ -4,9 +4,7 @@ import { BusinessHoursType } from "@shortwaits/shared-lib";
  * @todo this will need translation
  * @returns "mo - tu - we - th - fr - sa - su"
  */
-export const getPrettyStringFromHours = (
-  hours: BusinessHoursType | null
-): string => {
+export const getPrettyStringFromHours = (hours: BusinessHoursType | null): string => {
   if (!hours) return "select your business hours";
   const hoursArr: string[] = [];
   for (const day in hours) {
@@ -22,9 +20,7 @@ export const getPrettyStringFromHours = (
 
 export const getTwoLetterDay = (day: string): string => day.slice(0, 2);
 
-export const getPrettyStringFromDurationInMin = (
-  durationInMin: number
-): string => {
+export const getPrettyStringFromDurationInMin = (durationInMin: number): string => {
   const minutes = Number(durationInMin);
   const d = Math.floor(minutes / (60 * 24));
   const h = Math.floor((minutes / 60) % 24);
@@ -34,6 +30,16 @@ export const getPrettyStringFromDurationInMin = (
   const mDisplay = m >= 0 ? m + (m <= 0 ? " min " : " mins ") : "";
 
   return dDisplay + hDisplay + mDisplay;
+};
+
+export const getPrettyStringFromDurationInMinToTime = (durationInMin: number): string => {
+  const minutes = Number(durationInMin);
+  const h = Math.floor((minutes / 60) % 24);
+  const hDisplay = h > 0 ? h + (h === 1 ? " hr " : " hrs ") : "";
+  const m = Math.floor(minutes % 60);
+  const mDisplay = m >= 0 ? m + (m <= 0 ? " min " : " mins ") : "";
+
+  return hDisplay + mDisplay;
 };
 
 /**

@@ -122,7 +122,11 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
 
   return (
     <>
-      <BusinessIncomeInfo data={eventSummary?.data} isLoading={isEventSummaryLoading} error={errorEventSummary} />
+      <BusinessIncomeInfo
+        data={eventSummary?.data?.graphData}
+        isLoading={isEventSummaryLoading}
+        error={errorEventSummary}
+      />
       <Screen preset="scroll" unsafe withHorizontalPadding>
         <ButtonCard
           leftIconName="calendar-month"
@@ -140,6 +144,7 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
             })
           }
         />
+        <ButtonCard leftIconName="cash-fast" leftIconColor={Colors.brandSecondary} title={"Transactions"} />
         <ButtonCard
           leftIconName="layers-triple"
           leftIconColor={Colors.brandSecondary}
@@ -176,7 +181,6 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
             })
           }
         />
-        <ButtonCard leftIconName="cash-fast" leftIconColor={Colors.brandSecondary} title={"Payments"} />
         <ButtonCard leftIconName="puzzle" leftIconColor={Colors.brandSecondary} title={"Integrations"} />
         <ButtonCard leftIconName="message-star" leftIconColor={Colors.brandSecondary} title={"My Reviews"} />
       </Screen>

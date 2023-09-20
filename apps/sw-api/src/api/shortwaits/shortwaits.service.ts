@@ -2,8 +2,6 @@ import { Injectable } from "@nestjs/common";
 import { Shortwaits } from "./shortwaits.schema";
 import { Model } from "mongoose";
 import { InjectModel } from "@nestjs/mongoose";
-import { ShortwaitsAdminDefaultDataPayloadType } from "@shortwaits/shared-lib";
-
 import { ClientUser } from "../client-user/entities/client-user.entity";
 import { Business } from "../business/entities/business.entity";
 import { getQuerySelect } from "../../utils/mongoDbUtils";
@@ -24,10 +22,11 @@ export class ShortwaitsService {
     private clientUserModel: Model<ClientUser>
   ) {}
 
-  public async getAdminMobileDefaultData(): Promise<ShortwaitsAdminDefaultDataPayloadType> {
+  public async getAdminMobileDefaultData() {
     const defaultAdminMobileDataArr = await this.shortwaitsModel.find(DEFAULT);
     /**will be distributed based on location (can be filtered by other means ???)*/
     const defaultAdminMobileData = defaultAdminMobileDataArr.find(elem => elem.short_id === "0000001");
+
     return defaultAdminMobileData;
   }
 

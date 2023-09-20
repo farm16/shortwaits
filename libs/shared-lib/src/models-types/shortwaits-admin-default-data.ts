@@ -28,6 +28,7 @@ export type SubscriptionPlan = {
   planDescription: string;
   planId: string;
 };
+
 export type ShortwaitsAdminDefaultDataType = {
   short_id: string;
   banners: ShortwaitsAdminBannersType[];
@@ -45,4 +46,23 @@ export type ShortwaitsAdminDefaultDataType = {
     currencies: CurrencyType[];
     hours: BusinessHoursType;
   };
+  accountPermissions: AccountPermissions;
+};
+
+export type AccountPermissions = {
+  free: Record<string, PermissionProps>;
+  premium: Record<string, PermissionProps>;
+  student: Record<string, PermissionProps>;
+  basic: Record<string, PermissionProps>;
+  trial: Record<string, PermissionProps>;
+  business: Record<string, PermissionProps>;
+  enterprise: Record<string, PermissionProps>;
+  partner: Record<string, PermissionProps>;
+};
+
+type PermissionProps = {
+  isAllowed: boolean;
+  hasLimit: boolean;
+  min: number;
+  max: number;
 };

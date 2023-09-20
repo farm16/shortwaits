@@ -1,5 +1,14 @@
 # Shortwaits
 
+## User permissions vs Account permissions
+
+Business User(staff) roles are:
+
+- `superAdmin`
+- `backgroundAdmin`
+- `admin`
+- `staff` (default) - everyone has this permission
+
 ## Scripts
 
 ```bash

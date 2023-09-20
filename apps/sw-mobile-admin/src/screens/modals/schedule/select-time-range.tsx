@@ -70,6 +70,8 @@ export const SelectTimeRange: FC<SelectTimeRangeProps> = props => {
       <Space size="large" />
       <MultiSlider
         values={timeRange}
+        timeRange="day"
+        rangeMode="time"
         onValuesChange={(values: [number, number]) => {
           handleOnValuesChange(values);
         }}

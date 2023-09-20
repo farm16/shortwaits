@@ -20,7 +20,13 @@ export const DurationFieldCard = (props: TimeDurationCardProps) => {
         <Text preset="cardTitle" text={title} />
         <Text preset="cardTitle" text={getPrettyStringFromDurationInMin(values ? values[0] : 0)} />
       </Container>
-      <MultiSlider style={styles.multiSlider} values={values} type="day" onValuesChange={onValuesChange} />
+      <MultiSlider
+        style={styles.multiSlider}
+        values={values}
+        timeRange="day"
+        rangeMode="duration"
+        onValuesChange={onValuesChange}
+      />
       <Space size="tiny" />
     </Card>
   );

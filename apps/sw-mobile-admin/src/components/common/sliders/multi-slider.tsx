@@ -2,14 +2,15 @@ import React, { useMemo, useState } from "react";
 import { StyleSheet, View, ViewStyle } from "react-native";
 import PMultiSlider, { MultiSliderProps as PMultiSliderProps } from "@ptomasroos/react-native-multi-slider";
 import { useTheme } from "../../../theme";
-import { getPrettyStringFromDurationInMin } from "../../../utils/time";
+import { getPrettyStringFromDurationInMin, get12hrTimeFromDecimal } from "../../../utils";
 import { Text } from "../text/text";
 interface MultiSliderProps extends PMultiSliderProps {
   style?: ViewStyle;
-  type?: keyof typeof multiSliderTypes;
+  timeRange?: keyof typeof timeRanges;
+  rangeMode?: keyof typeof rangeModes;
 }
 
-const multiSliderTypes = {
+const timeRanges = {
   day: {
     min: 0,
     max: 1440,
@@ -22,8 +23,27 @@ const multiSliderTypes = {
   },
 } as const;
 
+const rangeModes = {
+  duration: {
+    getString: getPrettyStringFromDurationInMin,
+  },
+  time: {
+    getString: get12hrTimeFromDecimal,
+  },
+} as const;
+
 export const MultiSlider = (props: MultiSliderProps) => {
-  const { onValuesChange, style: styleOverride, step, min, max, allowOverlap = false, values, type = "day" } = props;
+  const {
+    onValuesChange,
+    style: styleOverride,
+    step,
+    min,
+    max,
+    allowOverlap = false,
+    values,
+    timeRange = "day",
+    rangeMode = "duration",
+  } = props;
   const { Colors } = useTheme();
 
   const containerStyle = StyleSheet.flatten([styles.container, styleOverride]);
@@ -37,6 +57,12 @@ export const MultiSlider = (props: MultiSliderProps) => {
       markerStyle={markerStyle}
       trackStyle={styles.track}
       customLabel={e => {
+        let value;
+        if (e.oneMarkerPressed) {
+          value = Number(e.oneMarkerValue);
+        } else if (e.twoMarkerPressed) {
+          value = Number(e.twoMarkerValue);
+        }
         return (
           <View
             style={{
@@ -54,7 +80,7 @@ export const MultiSlider = (props: MultiSliderProps) => {
           >
             <Text
               preset="none"
-              text={getPrettyStringFromDurationInMin(Number(e.oneMarkerValue))}
+              text={rangeModes[rangeMode].getString(value)}
               style={{
                 color: Colors.white,
                 fontSize: 18,
@@ -72,9 +98,9 @@ export const MultiSlider = (props: MultiSliderProps) => {
       }}
       allowOverlap={allowOverlap}
       values={values}
-      min={multiSliderTypes[type]["min"]}
-      max={multiSliderTypes[type]["max"]}
-      step={multiSliderTypes[type]["step"]}
+      min={timeRanges[timeRange]["min"]}
+      max={timeRanges[timeRange]["max"]}
+      step={timeRanges[timeRange]["step"]}
     />
   );
 };

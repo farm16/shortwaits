@@ -1,5 +1,4 @@
 import { Document } from "mongoose";
-
 import { EmojiType, ObjectId } from "../common-types";
 
 import { BusinessHoursType, BusinessLocationType, CurrencyType, PaginatedModel } from "./helpers";

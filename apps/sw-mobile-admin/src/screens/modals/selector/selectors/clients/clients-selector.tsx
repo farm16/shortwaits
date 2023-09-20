@@ -4,7 +4,14 @@ import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { ClientUsersDtoType } from "@shortwaits/shared-lib";
 import { useDispatch } from "react-redux";
 import { FlatList } from "react-native-gesture-handler";
-import { AnimatedSearchBar, Container, LeftChevronButton, IconButton, Text } from "../../../../../components";
+import {
+  AnimatedSearchBar,
+  Container,
+  LeftChevronButton,
+  IconButton,
+  Text,
+  NonIdealState,
+} from "../../../../../components";
 import { ClientsSelectorItem } from "./clients-selector-item";
 import { useGetBusinessClientsQuery } from "../../../../../services";
 import { ModalsScreenProps } from "../../../../../navigation";
@@ -197,6 +204,7 @@ export const ClientsSelector: FC<ModalsScreenProps<"selector-modal-screen">> = (
           renderItem={renderItem}
           keyExtractor={keyExtractor}
           maxToRenderPerBatch={10}
+          ListEmptyComponent={<NonIdealState image="noClients" />}
         />
       </>
     );

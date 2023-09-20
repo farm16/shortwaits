@@ -51,43 +51,42 @@ export const SignUpWithEmail: FC<SignUpWithEmailScreenProps> = ({ navigation }) 
   }, []);
 
   return (
-    <Screen preset="fixed" withHorizontalPadding>
+    <Screen preset="scroll" withHorizontalPadding>
       <Space />
-      <ScrollView>
-        <TextFieldCard
-          keyboardType="default"
-          autoCapitalize="none"
-          title="Email or username"
-          placeholder="bod_ross123"
-          value={values.username}
-          onChangeText={handleChange("username")}
-          isTouched={touched.username}
-          errors={errors.username}
-        />
-        <Space size="small" />
-        <TextFieldCard
-          secureTextEntry={!isVisible}
-          title="Password"
-          placeholder=""
-          value={values.password}
-          rightIconOnPress={handlePasswordVisibility}
-          rightIconName={isVisible ? "eye" : "eye-off"}
-          rightIconColor={isVisible ? Colors.disabledText : Colors.brandSecondary}
-          onChangeText={handleChange("password")}
-          isTouched={touched.password}
-          errors={errors.password}
-        />
-        <Space size="small" />
-        <TextFieldCard
-          secureTextEntry={!isVisible}
-          title="Confirm password"
-          placeholder=""
-          value={values.passwordConfirmation}
-          onChangeText={handleChange("passwordConfirmation")}
-          isTouched={touched.passwordConfirmation}
-          errors={errors.passwordConfirmation}
-        />
-      </ScrollView>
+
+      <TextFieldCard
+        keyboardType="default"
+        autoCapitalize="none"
+        title="Email or username"
+        placeholder="bod_ross123"
+        value={values.username}
+        onChangeText={handleChange("username")}
+        isTouched={touched.username}
+        errors={errors.username}
+      />
+      <Space size="small" />
+      <TextFieldCard
+        secureTextEntry={!isVisible}
+        title="Password"
+        placeholder=""
+        value={values.password}
+        rightIconOnPress={handlePasswordVisibility}
+        rightIconName={isVisible ? "eye" : "eye-off"}
+        rightIconColor={isVisible ? Colors.disabledText : Colors.brandSecondary}
+        onChangeText={handleChange("password")}
+        isTouched={touched.password}
+        errors={errors.password}
+      />
+      <Space size="small" />
+      <TextFieldCard
+        secureTextEntry={!isVisible}
+        title="Confirm password"
+        placeholder=""
+        value={values.passwordConfirmation}
+        onChangeText={handleChange("passwordConfirmation")}
+        isTouched={touched.passwordConfirmation}
+        errors={errors.passwordConfirmation}
+      />
       <Space />
       <Button
         onPress={() => handleSubmit()}

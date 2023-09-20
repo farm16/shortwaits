@@ -36,7 +36,7 @@ export const AddStaffModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
       imAddresses: [],
       socialAccounts: [],
       desiredCurrencies: ["USD"],
-      alias: "displayName",
+      preferredAlias: "displayName",
       //
       // set to US for now
       locale: {
@@ -80,6 +80,10 @@ export const AddStaffModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
       ],
       birthday: new Date().toISOString(),
       hours: business?.hours,
+      password: "",
+      isPasswordProtected: false,
+      username: "",
+      primaryPhoneNumberLabel: "",
     };
     return _initialValues;
   }, [business?.hours]);
@@ -321,7 +325,8 @@ export const AddStaffModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
               params: {
                 type: "static",
                 data: STATIC_FORM_USA_STATES,
-                closeOnSubmit: true,
+                headerTitle: "Select State",
+                closeOnSelect: true,
                 onSelect: state => {
                   setFieldValue("addresses[0].state", state.key);
                 },

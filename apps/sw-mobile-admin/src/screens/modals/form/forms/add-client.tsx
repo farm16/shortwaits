@@ -292,8 +292,9 @@ export const AddClientModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ nav
               screen: "selector-modal-screen",
               params: {
                 type: "static",
+                headerTitle: "Select State",
                 data: STATIC_FORM_USA_STATES,
-                closeOnSubmit: true,
+                closeOnSelect: true,
                 onSelect: state => {
                   setFieldValue("addresses[0].state", state.key);
                 },
@@ -306,6 +307,7 @@ export const AddClientModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ nav
           value={values.addresses[0].postCode}
           keyboardType="number-pad"
           inputMode="numeric"
+          maxLength={7}
           onChangeText={handleChange("addresses[0].postCode")}
           isTouched={touched?.addresses ? touched.addresses[0]?.postCode ?? false : false}
           errors={

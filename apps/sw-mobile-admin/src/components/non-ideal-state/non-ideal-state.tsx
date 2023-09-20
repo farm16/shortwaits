@@ -16,12 +16,12 @@ interface NonIdealStateProps {
 const images = {
   noClients: {
     Image: props => <NoClients {...props} />,
-    message: "No clients",
+    message: "No clients found",
     messageColor: "brandAccent" as ThemeColorName,
   },
   noStaff: {
     Image: props => <NoClients {...props} />,
-    message: "No staff",
+    message: "No staff found",
     messageColor: "brandAccent" as ThemeColorName,
   },
   noClientsInEvent: {
@@ -36,7 +36,7 @@ const images = {
   },
   noEvents: {
     Image: props => <NoEvents {...props} />,
-    message: "No events",
+    message: "No events found",
     messageColor: "brandAccent" as ThemeColorName,
   },
 };
@@ -67,6 +67,8 @@ export const NonIdealState = (props: NonIdealStateProps) => {
         marginBottom: 20,
       }}
     >
+      <Image {...imageProps} />
+
       {images[image].message ? (
         <Text
           text={images[image].message}
@@ -80,7 +82,6 @@ export const NonIdealState = (props: NonIdealStateProps) => {
           ]}
         />
       ) : null}
-      <Image {...imageProps} />
       {Children.map(arrayChildren, (child, _index) => {
         return (
           <>

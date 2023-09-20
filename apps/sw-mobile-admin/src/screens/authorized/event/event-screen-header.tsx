@@ -65,7 +65,9 @@ function InfoItem({ title, value, onPress, iconName }: InfoItemProps) {
         <Container direction="row">
           {isEmpty(value)
             ? null
-            : (value as BusinessLabelsType).map(label => <Emoji size={14} name={label.emojiShortName} />)}
+            : (value as BusinessLabelsType).map(label => (
+                <Emoji key={label.emojiShortName} size={14} name={label.emojiShortName} />
+              ))}
         </Container>
       ) : (
         <View

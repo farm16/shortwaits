@@ -1,10 +1,10 @@
 import { Portal } from "@gorhom/portal";
-import React, { FC } from "react";
+import React, { FC, useCallback } from "react";
 import { View } from "react-native";
 import { Modal } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { useDispatch } from "react-redux";
-import { hidePremiumMembershipModal, useGhostComponent } from "../../store";
+import { useDispatch, useSelector } from "react-redux";
+import { hidePremiumMembershipModal, selectCurrentMobileAdminState, useGhostComponent } from "../../store";
 import { useTheme } from "../../theme";
 import { Button, Container, Space, Text } from "../common";
 import { getResponsiveFontSize, navigate } from "../../utils";
@@ -40,13 +40,24 @@ const CheckedList = ({ text }) => {
 };
 
 export const PremiumMembershipModal = props => {
-  const { isVisible } = useGhostComponent("premiumMembership");
-
-  const { Colors } = useTheme();
   const dispatch = useDispatch();
+  const mobileAdmin = useSelector(selectCurrentMobileAdminState);
+  const handleDismiss = useCallback(() => {
+    dispatch(hidePremiumMembershipModal());
+  }, [dispatch]);
+
+  const isVisible = mobileAdmin?.components.premiumMembership.isVisible ?? false;
+  const { Colors } = useTheme();
+
+  console.log("===== PremiumMembershipModal");
+
+  if (!isVisible) {
+    return null;
+  }
+
   return (
     <Portal>
-      <Modal visible={isVisible} dismissable={true}>
+      <Modal visible={true} dismissable={true} onDismiss={handleDismiss}>
         <View
           style={{
             backgroundColor: Colors.backgroundOverlay,
@@ -74,7 +85,7 @@ export const PremiumMembershipModal = props => {
           <Space />
           <Button
             onPress={() => {
-              dispatch(hidePremiumMembershipModal());
+              handleDismiss();
               navigate("authorized-stack", { screen: "plans-screen" });
             }}
             text="GET PREMIUM"
@@ -82,7 +93,7 @@ export const PremiumMembershipModal = props => {
           <Space size="small" />
           <Button
             onPress={() => {
-              dispatch(hidePremiumMembershipModal());
+              handleDismiss();
             }}
             textStyle={{ color: Colors.brandSecondary7 }}
             preset="subLink"

@@ -11,7 +11,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { PersistGate } from "redux-persist/integration/react";
 import copies from "./i18n/copies.json";
 import { usePreferredLanguage } from "./utils";
-import { Banner, FloatingActionButton } from "./components";
+import { Banner, FloatingActionButton, PremiumMembershipModal } from "./components";
 
 enableLogging();
 
@@ -20,6 +20,7 @@ export const App = () => {
     <WithProviders>
       <Banner />
       <FloatingActionButton />
+      <PremiumMembershipModal />
       <AppNavigator />
     </WithProviders>
   );

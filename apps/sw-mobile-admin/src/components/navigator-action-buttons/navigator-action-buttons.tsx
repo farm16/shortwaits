@@ -226,13 +226,13 @@ const _circleIcons = {
     size: 24,
   },
   "add-staff": {
-    name: "account-plus",
+    name: "account-plus-outline",
     backgroundColor: undefined,
     color: "brandSecondary",
     size: 21,
   },
   "add-client": {
-    name: "account-plus",
+    name: "account-plus-outline",
     backgroundColor: undefined,
     color: "brandSecondary",
     size: 21,
