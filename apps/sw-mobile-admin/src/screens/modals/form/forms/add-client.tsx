@@ -3,6 +3,7 @@ import { ActivityIndicator } from "react-native-paper";
 import { Alert } from "react-native";
 import { FormikErrors } from "formik";
 import { ClientUserType, CreateClientUserDtoType } from "@shortwaits/shared-lib";
+import { useIntl } from "react-intl";
 
 import { useCreateBusinessClientsMutation } from "../../../../services";
 import { useForm } from "../../../../hooks";
@@ -23,6 +24,7 @@ import { STATIC_FORM_USA_STATES, getCapitalizedString } from "../../../../utils"
 
 export const AddClientModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navigation, route }) => {
   const { onSubmit, onDone, closeOnSubmit = true } = route.params;
+  const intl = useIntl(); // Access the intl object
 
   const business = useBusiness();
 
@@ -143,9 +145,9 @@ export const AddClientModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ nav
     Alert.alert("Error", createBusinessClientsStatus.error.message);
   }
 
-  const _renderSubmitButton = (
+  const renderSubmitButton = (
     <Button
-      text="Save"
+      text={intl.formatMessage({ id: "Common.submit" })}
       onPress={() => {
         handleSubmit();
       }}
@@ -155,18 +157,18 @@ export const AddClientModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ nav
   return createBusinessClientsStatus.isLoading ? (
     <ActivityIndicator />
   ) : (
-    <FormContainer footer={_renderSubmitButton}>
+    <FormContainer footer={renderSubmitButton}>
       <TextFieldCard
-        title="Nickname"
-        placeholder="John from front desk"
+        title={intl.formatMessage({ id: "AddClientModal.nickname" })}
+        placeholder={intl.formatMessage({ id: "AddClientModal.nickname.placeholder" })}
         value={values.displayName}
         onChangeText={handleChange("displayName")}
         isTouched={touched.displayName}
         errors={errors.displayName}
       />
       <TextFieldCard
-        title="Email"
-        placeholder="jhon_smith@shortwaits.com"
+        title={intl.formatMessage({ id: "AddClientModal.email" })}
+        placeholder={intl.formatMessage({ id: "AddClientModal.email.placeholder" })}
         value={values.email}
         onChangeText={handleChange("email")}
         isTouched={touched.email}
@@ -192,16 +194,16 @@ export const AddClientModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ nav
       />
       <ExpandableSection>
         <TextFieldCard
-          title="First Name"
-          placeholder="John"
+          title={intl.formatMessage({ id: "AddClientModal.firstName" })}
+          placeholder={intl.formatMessage({ id: "AddClientModal.firstName.placeholder" })}
           value={values.givenName}
           onChangeText={handleChange("givenName")}
           isTouched={touched.givenName}
           errors={errors.givenName}
         />
         <TextFieldCard
-          title="Last Name"
-          placeholder="Smith"
+          title={intl.formatMessage({ id: "AddClientModal.lastName" })}
+          placeholder={intl.formatMessage({ id: "AddClientModal.lastName.placeholder" })}
           value={values.familyName}
           onChangeText={handleChange("familyName")}
           isTouched={touched.familyName}
@@ -244,7 +246,7 @@ export const AddClientModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ nav
           }
         />
         <TextFieldCard
-          title={"Address 1"}
+          title={intl.formatMessage({ id: "AddClientModal.address1" })}
           value={values.addresses[0].address1}
           onChangeText={handleChange("addresses[0].address1")}
           isTouched={touched?.addresses ? touched.addresses[0]?.address1 ?? false : false}
@@ -255,7 +257,7 @@ export const AddClientModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ nav
           }
         />
         <TextFieldCard
-          title={"Address 2 (optional)"}
+          title={intl.formatMessage({ id: "AddClientModal.address2" })}
           value={values.addresses[0].address2}
           onChangeText={handleChange("addresses[0].address2")}
           isTouched={touched?.addresses ? touched.addresses[0]?.address2 ?? false : false}
@@ -266,7 +268,7 @@ export const AddClientModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ nav
           }
         />
         <TextFieldCard
-          title={"City"}
+          title={intl.formatMessage({ id: "AddClientModal.city" })}
           value={values.addresses[0].city}
           onChangeText={handleChange("addresses[0].city")}
           isTouched={touched?.addresses ? touched.addresses[0]?.city ?? false : false}
@@ -277,7 +279,7 @@ export const AddClientModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ nav
           }
         />
         <ButtonCard
-          title="State"
+          title={intl.formatMessage({ id: "AddClientModal.state" })}
           subTitle={
             STATIC_FORM_USA_STATES.find(state => state.key === values.addresses[0].state)?.title ?? "Select State"
           }
@@ -303,7 +305,7 @@ export const AddClientModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ nav
           }
         />
         <TextFieldCard
-          title={"Zip Code"}
+          title={intl.formatMessage({ id: "AddClientModal.postCode" })}
           value={values.addresses[0].postCode}
           keyboardType="number-pad"
           inputMode="numeric"

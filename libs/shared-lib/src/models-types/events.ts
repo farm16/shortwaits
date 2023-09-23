@@ -58,7 +58,7 @@ export type EventType = {
     statusName: EventStatusName; // Status name for the event
   };
 
-  hasNoDuration: boolean; // Indicates if the event has no duration
+  hasDuration: boolean; // Indicates if the event has no duration
   durationInMin: number; // Duration of the event in minutes
 
   //these need to be Date objects for db queries

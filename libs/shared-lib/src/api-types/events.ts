@@ -9,7 +9,7 @@ export type FilteredEvent = Pick<
   | "location"
   | "attendeeLimit"
   | "registrationFee"
-  | "hasNoDuration"
+  | "hasDuration"
   | "eventImage"
   | "name"
   | "description"

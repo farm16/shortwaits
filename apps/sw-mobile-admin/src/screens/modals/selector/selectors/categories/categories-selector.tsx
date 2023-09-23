@@ -15,37 +15,24 @@ import { useGetCategoriesQuery } from "../../../../../services";
 import { ModalsScreenProps } from "../../../../../navigation";
 import { useTheme } from "../../../../../theme";
 
-export const CategoriesSelector: FC<
-  ModalsScreenProps<"selector-modal-screen">
-> = ({ navigation, route }) => {
-  const {
-    type,
-    onSelect,
-    // searchable,
-    closeOnSubmit,
-    multiple = false,
-  } = route.params;
+export const CategoriesSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ navigation, route }) => {
+  const { type, onSelect, searchable, closeOnSelect, multiple = false } = route.params;
 
   const business = useBusiness();
   const [selectedItems, setSelectedItems] = useState(business.categories ?? []);
 
-  const { headerTitle, searchPlaceholder, isReadOnly } = useMemo(
-    () => selectorConfigs[type],
-    [type]
-  );
+  const { headerTitle, searchPlaceholder, isReadOnly } = useMemo(() => selectorConfigs[type], [type]);
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: headerTitle,
-      headerLeft: () => (
-        <LeftChevronButton onPress={() => navigation.goBack()} />
-      ),
+      headerLeft: () => <LeftChevronButton onPress={() => navigation.goBack()} />,
       headerRight: () =>
         multiple ? (
           <Button
             text="Done"
             preset="headerLink"
             onPress={() => {
-              if (closeOnSubmit) {
+              if (closeOnSelect) {
                 onSelect(selectedItems);
                 navigation.goBack();
               } else {
@@ -55,14 +42,7 @@ export const CategoriesSelector: FC<
           />
         ) : null,
     });
-  }, [
-    navigation,
-    headerTitle,
-    multiple,
-    closeOnSubmit,
-    onSelect,
-    selectedItems,
-  ]);
+  }, [navigation, headerTitle, multiple, closeOnSelect, onSelect, selectedItems]);
 
   const { Colors } = useTheme();
 
@@ -74,7 +54,7 @@ export const CategoriesSelector: FC<
         setSelectedItems([...selectedItems, item._id]);
       }
     } else {
-      if (closeOnSubmit) {
+      if (closeOnSelect) {
         onSelect(item);
         navigation.goBack();
       } else {
@@ -83,12 +63,7 @@ export const CategoriesSelector: FC<
     }
   };
 
-  const {
-    data: categories,
-    isError,
-    isLoading,
-    isSuccess,
-  } = useGetCategoriesQuery(undefined);
+  const { data: categories, isError, isLoading, isSuccess } = useGetCategoriesQuery(undefined);
 
   // console.log(categories);
 

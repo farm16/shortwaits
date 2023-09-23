@@ -5,7 +5,7 @@ import { BusinessAvailableCurrenciesType } from "@shortwaits/shared-lib";
 
 import { Card, Text, CardProps, Space } from "../common";
 import { getDimensions, useTheme } from "../../theme";
-import { getCurrencySymbolFromCurrencyType } from "../../utils/currency";
+import { getCentsFromDollars, getCurrencySymbolFromCurrencyType, getDollarsFromCents } from "../../utils/currency";
 
 type TextFieldCardType = Omit<CardProps, "mode"> & {
   title: string;
@@ -15,6 +15,7 @@ type TextFieldCardType = Omit<CardProps, "mode"> & {
   withTopBorder?: boolean;
   placeholder?: string;
   currencyType?: BusinessAvailableCurrenciesType;
+  type?: "cents" | "dollars";
 } & CurrencyInputProps;
 
 const MAX = 10000;
@@ -33,7 +34,7 @@ export function CurrencyFieldCard(props: TextFieldCardType) {
     rightIconOnPress,
     title,
     withTopBorder,
-    editable,
+    disabled,
     ...rest
   } = props;
 
@@ -49,10 +50,16 @@ export function CurrencyFieldCard(props: TextFieldCardType) {
       textInputRef.current.focus();
     }
   };
+
+  const handleOnChangeValue = (value: number) => {
+    onChangeValue(getCentsFromDollars(value));
+  };
+
   return (
     <>
       <Card
         {...rest}
+        disabled={disabled}
         mode="text-field"
         rightIconSize={rightIconSize}
         rightIconName={rightIconName}
@@ -78,10 +85,10 @@ export function CurrencyFieldCard(props: TextFieldCardType) {
           delimiter=","
           precision={2}
           separator="."
-          onChangeValue={onChangeValue}
-          value={value}
+          onChangeValue={handleOnChangeValue}
+          value={getDollarsFromCents(value)}
           maxValue={MAX}
-          editable={editable}
+          editable={!disabled}
         />
       </Card>
       {errors && isTouched ? (

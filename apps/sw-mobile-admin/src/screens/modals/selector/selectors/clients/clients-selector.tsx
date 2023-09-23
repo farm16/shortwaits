@@ -30,7 +30,6 @@ export const ClientsSelector: FC<ModalsScreenProps<"selector-modal-screen">> = (
     selectedData = [],
     multiple,
     onGoBack,
-    onSubmit,
     minSelectedItems = MIN_SELECTED_ITEMS_DEFAULT,
     maxSelectedItems = MAX_SELECTED_ITEMS_DEFAULT,
   } = route.params;
@@ -78,9 +77,6 @@ export const ClientsSelector: FC<ModalsScreenProps<"selector-modal-screen">> = (
     const handleOnGoBack = () => {
       if (multiple) {
         const items = payload?.data?.filter(item => selectedItems.includes(item._id)) || null;
-        if (onSubmit) {
-          onSubmit(items);
-        }
         if (onGoBack) {
           onGoBack(items);
         }
@@ -123,7 +119,6 @@ export const ClientsSelector: FC<ModalsScreenProps<"selector-modal-screen">> = (
     multiple,
     navigation,
     onGoBack,
-    onSubmit,
     payload?.data,
     searchable,
     selectedItems,

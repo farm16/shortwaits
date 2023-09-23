@@ -28,8 +28,8 @@ export const Card = (props: CardProps) => {
     mode,
     rightIconName,
     leftIconName,
-    rightIconColor = Colors.brandSecondary,
-    leftIconColor = Colors.brandSecondary,
+    rightIconColor: rightIconColorOverride = Colors.brandSecondary,
+    leftIconColor: leftIconColorOverride = Colors.brandSecondary,
     rightIconSize = "regular",
     leftIconSize = "regular",
     children,
@@ -38,10 +38,22 @@ export const Card = (props: CardProps) => {
     rightIconOnPress,
     textStyle: textStyleOverride,
     style: styleOverride,
+    disabled = false,
     ...rest
   } = props;
 
   const disabledCardModes: Partial<CardProps["mode"]>[] = ["text-field", "static"];
+  const disabledStyles = disabled
+    ? {
+        backgroundColor: Colors.gray,
+        borderColor: Colors.disabledText,
+        borderWidth: 1,
+        borderRadius: 4,
+      }
+    : {};
+
+  const rightIconColor = disabled ? Colors.disabledText : rightIconColorOverride;
+  const leftIconColor = disabled ? Colors.disabledText : leftIconColorOverride;
 
   if (disabledCardModes.includes(mode)) {
     const defaultStyle = buttonViewPresets["card"] || buttonViewPresets.primary;
@@ -51,7 +63,7 @@ export const Card = (props: CardProps) => {
 
     const content = children || <Text text={text} style={textStyles} />;
     return (
-      <View style={style}>
+      <View style={[style, disabledStyles]}>
         {leftIconName &&
           (mode === "static" || leftIconName === "none" ? null : (
             <Pressable
@@ -83,7 +95,7 @@ export const Card = (props: CardProps) => {
   }
 
   return (
-    <Button preset="card" {...rest}>
+    <Button preset="card" {...rest} disabled={disabled} style={[disabledStyles]}>
       {leftIconName &&
         (leftIconName === "none" ? null : (
           <Icon style={styles.leftIcon} name={leftIconName} size={IconSizes[leftIconSize]} color={leftIconColor} />

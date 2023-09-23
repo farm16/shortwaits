@@ -39,7 +39,7 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
     const startTime = new Date(formData.startTime);
     const expectedEndTime = new Date(formData.expectedEndTime);
 
-    if (startTime && expectedEndTime && !formData?.hasNoDuration) {
+    if (startTime && expectedEndTime && !formData?.hasDuration) {
       if (startTime > expectedEndTime) {
         errors.startTime = intl.formatMessage({ id: "AddEventModal.errorStartTime" });
         errors.expectedEndTime = intl.formatMessage({ id: "AddEventModal.errorExpectedEndTime" });
@@ -64,12 +64,12 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
       attendeeLimit: 0,
       registrationDeadlineTime: "",
       registrationFee: 0,
-      serviceId: selectedService?._id ?? "",
+      serviceId: "",
       //TODO will be able to select multiple staff
       staffIds: [user?._id],
       //TODO will be able to select multiple clients
       clientsIds: [],
-      hasNoDuration: true,
+      hasDuration: true,
       eventImage: "",
       businessId: business._id as string,
       name: "",
@@ -86,7 +86,7 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
       labels: [],
     };
     return _initialValues;
-  }, [business._id, selectedService?._id, user?._id]);
+  }, [business._id, user?._id]);
 
   const { touched, errors, values, handleChange, handleSubmit, setFieldValue } = useForm(
     {
@@ -131,6 +131,48 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
     };
   }, [onDone]);
 
+  useEffect(() => {
+    if (!selectedService) {
+      setFieldValue("serviceId", initialValues.serviceId);
+      setFieldValue("isPublicEvent", initialValues.isPublicEvent);
+      setFieldValue("priceExpected", initialValues.priceExpected);
+      setFieldValue("durationInMin", initialValues.durationInMin);
+      setFieldValue("hasDuration", initialValues.hasDuration);
+      setFieldValue("expectedEndTime", initialValues.expectedEndTime);
+    }
+    if (selectedService) {
+      const hasDuration = selectedService.durationInMin > 0;
+
+      const startTime = new Date(values.startTime);
+      const expectedEndTime = new Date(startTime.getTime() + selectedService.durationInMin * 60000).toISOString();
+
+      if (selectedService.price === 0) {
+        setIsFree(true);
+        setFieldValue("priceExpected", 0);
+      } else {
+        setIsFree(false);
+        setFieldValue("priceExpected", selectedService.price);
+      }
+
+      setFieldValue("serviceId", selectedService._id);
+      setFieldValue("isPublicEvent", selectedService.isPrivate);
+      setFieldValue("durationInMin", selectedService.durationInMin);
+      setFieldValue("hasDuration", hasDuration);
+      setFieldValue("expectedEndTime", expectedEndTime);
+    }
+  }, [
+    initialValues.durationInMin,
+    initialValues.expectedEndTime,
+    initialValues.hasDuration,
+    initialValues.isPublicEvent,
+    initialValues.priceExpected,
+    initialValues.serviceId,
+    selectedService,
+    setFieldValue,
+    values.expectedEndTime,
+    values.startTime,
+  ]);
+
   if (createEventStatus.isError) {
     Alert.alert(intl.formatMessage({ id: "AddEventModal.errorTitle" }), createEventStatus.error.message);
   }
@@ -172,10 +214,16 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
             params: {
               type: "services",
               data: services,
+              searchable: true,
+              selectedData: selectedService ? [selectedService._id] : [],
               onSelect: (service: ServiceDtoType) => {
-                console.log("selected service:", service._id);
-                setSelectedService(service);
-                setFieldValue("serviceId", service._id);
+                if (service._id === values.serviceId) {
+                  setFieldValue("serviceId", "");
+                  setSelectedService(null);
+                } else {
+                  setSelectedService(service);
+                  setFieldValue("serviceId", service._id);
+                }
               },
             },
           })
@@ -184,10 +232,11 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
         errors={errors.serviceId}
       />
       <ButtonCard
-        rightIconName={values?.hasNoDuration ? "checkbox-outline" : "checkbox-blank-outline"}
+        isVisible={!selectedService}
+        rightIconName={values?.hasDuration ? "checkbox-blank-outline" : "checkbox-outline"}
         title={intl.formatMessage({ id: "AddEventModal.noDuration" })}
         onPress={() => {
-          setFieldValue("hasNoDuration", !values?.hasNoDuration);
+          setFieldValue("hasDuration", !values?.hasDuration);
         }}
       />
       <TimePickerFieldCard
@@ -197,27 +246,31 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
         isTouched={touched.startTime}
         errors={errors.startTime}
       />
-      {values?.hasNoDuration ? null : (
-        <TimePickerFieldCard
-          title={intl.formatMessage({ id: "AddEventModal.endTime" })}
-          date={new Date(values.expectedEndTime)}
-          onChange={handleChange("expectedEndTime")}
-          isTouched={touched.expectedEndTime}
-          errors={errors.expectedEndTime}
+
+      <TimePickerFieldCard
+        disabled={values?.hasDuration}
+        title={intl.formatMessage({ id: "AddEventModal.endTime" })}
+        date={new Date(values.expectedEndTime)}
+        onChange={handleChange("expectedEndTime")}
+        isTouched={touched.expectedEndTime}
+        errors={errors.expectedEndTime}
+      />
+      {selectedService?.price === 0 ? null : (
+        <ButtonCard
+          rightIconName={isFree ? "checkbox-outline" : "checkbox-blank-outline"}
+          title={intl.formatMessage({ id: "AddEventModal.free" })}
+          isVisible={!selectedService}
+          onPress={() => {
+            setIsFree(isFree => {
+              if (!isFree) {
+                setFieldValue("priceExpected", 0);
+              }
+              return !isFree;
+            });
+          }}
         />
       )}
-      <ButtonCard
-        rightIconName={isFree ? "checkbox-outline" : "checkbox-blank-outline"}
-        title={intl.formatMessage({ id: "AddEventModal.free" })}
-        onPress={() => {
-          setIsFree(isFree => {
-            if (!isFree) {
-              setFieldValue("priceExpected", 0);
-            }
-            return !isFree;
-          });
-        }}
-      />
+
       {isFree ? null : (
         <>
           <ButtonCard
@@ -247,8 +300,8 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
             }
           />
           <CurrencyFieldCard
+            disabled={!!selectedService}
             title={intl.formatMessage({ id: "AddEventModal.price" })}
-            disabled={isFree}
             keyboardType="number-pad"
             placeholder={intl.formatMessage({ id: "AddEventModal.enterPrice" })}
             value={values.priceExpected}
@@ -261,6 +314,7 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
       )}
       <ExpandableSection>
         <ButtonCard
+          isVisible={!selectedService}
           rightIconName={values?.isPublicEvent ? "checkbox-outline" : "checkbox-blank-outline"}
           title={intl.formatMessage({ id: "AddEventModal.isPublicEvent" })}
           subTitle={intl.formatMessage(
@@ -271,35 +325,34 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
             setFieldValue("isPublicEvent", !values?.isPublicEvent);
           }}
         />
-        {values?.isPublicEvent ? null : (
-          <ButtonCard
-            title={intl.formatMessage({ id: "AddEventModal.client.title" })}
-            subTitle={
-              values.clientsIds.length > 0
-                ? `${intl.formatMessage({ id: "AddEventModal.client.description" })}: ${values.clientsIds.length}`
-                : intl.formatMessage({ id: "AddEventModal.client.emptyDescription" })
-            }
-            onPress={() =>
-              navigation.navigate("modals", {
-                screen: "selector-modal-screen",
-                params: {
-                  type: "clients",
-                  headerTitle: intl.formatMessage({ id: "AddEventModal.client.selector.headerTitle" }),
-                  selectedData: values.clientsIds,
-                  multiple: true,
-                  minSelectedItems: 1,
-                  onGoBack: clients => {
-                    if (clients) {
-                      console.log("selected clients:", clients);
-                      const clientsIds = clients.map(s => s._id);
-                      setFieldValue("clientsIds", clientsIds);
-                    }
-                  },
+        <ButtonCard
+          disabled={values?.isPublicEvent ? true : false}
+          title={intl.formatMessage({ id: "AddEventModal.client.title" })}
+          subTitle={
+            values.clientsIds.length > 0
+              ? `${intl.formatMessage({ id: "AddEventModal.client.description" })}: ${values.clientsIds.length}`
+              : intl.formatMessage({ id: "AddEventModal.client.emptyDescription" })
+          }
+          onPress={() =>
+            navigation.navigate("modals", {
+              screen: "selector-modal-screen",
+              params: {
+                type: "clients",
+                headerTitle: intl.formatMessage({ id: "AddEventModal.client.selector.headerTitle" }),
+                selectedData: values.clientsIds,
+                multiple: true,
+                minSelectedItems: 1,
+                onGoBack: clients => {
+                  if (clients) {
+                    console.log("selected clients:", clients);
+                    const clientsIds = clients.map(s => s._id);
+                    setFieldValue("clientsIds", clientsIds);
+                  }
                 },
-              })
-            }
-          />
-        )}
+              },
+            })
+          }
+        />
         <ButtonCard
           title={intl.formatMessage({ id: "AddEventModal.staff.title" })}
           subTitle={
@@ -342,7 +395,6 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
             })
           }
         />
-
         <TextFieldCard
           title={intl.formatMessage({ id: "AddEventModal.description" })}
           placeholder={intl.formatMessage({ id: "AddEventModal.enterDescription" })}
@@ -351,7 +403,6 @@ export const AddEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
           isTouched={touched.description}
           errors={errors.description}
         />
-
         <TextFieldCard
           title={intl.formatMessage({ id: "AddEventModal.notes" })}
           multiline

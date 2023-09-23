@@ -191,10 +191,10 @@ export const UpdateEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ n
         }
       />
       <ButtonCard
-        rightIconName={values?.hasNoDuration ? "checkbox-outline" : "checkbox-blank-outline"}
+        rightIconName={values?.hasDuration ? "checkbox-outline" : "checkbox-blank-outline"}
         title={"Limited time"}
         onPress={() => {
-          setFieldValue("hasNoDuration", !values?.hasNoDuration);
+          setFieldValue("hasDuration", !values?.hasDuration);
         }}
       />
       <TimePickerFieldCard
@@ -204,7 +204,7 @@ export const UpdateEventModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ n
         isTouched={touched.startTime}
         errors={errors.startTime}
       />
-      {values?.hasNoDuration ? null : (
+      {values?.hasDuration ? null : (
         <TimePickerFieldCard
           title={"Ends"}
           date={new Date(values?.expectedEndTime || Date.now())}

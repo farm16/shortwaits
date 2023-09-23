@@ -1,7 +1,4 @@
-import {
-  BusinessAvailableCurrenciesType,
-  CurrencyType,
-} from "@shortwaits/shared-lib";
+import { BusinessAvailableCurrenciesType, CurrencyType } from "@shortwaits/shared-lib";
 
 /**
  * @todo this might need translation
@@ -24,9 +21,7 @@ const symbols = {
   PEN: "S/.",
 };
 
-export const getCurrencySymbolFromCurrencyType = (
-  currency: BusinessAvailableCurrenciesType
-) => {
+export const getCurrencySymbolFromCurrencyType = (currency: BusinessAvailableCurrenciesType) => {
   if (!currency) return "";
   if (symbols[currency]) {
     return symbols[currency];
@@ -35,10 +30,7 @@ export const getCurrencySymbolFromCurrencyType = (
   }
 };
 
-export const getPrettyStringFromPrice = (
-  currency: BusinessAvailableCurrenciesType,
-  price: number
-) => {
+export const getPrettyStringFromPrice = (currency: BusinessAvailableCurrenciesType, price: number) => {
   const localesWithOptions = {
     USD: {
       locales: "en-US",
@@ -57,10 +49,7 @@ export const getPrettyStringFromPrice = (
 /**
  * Todo: we are hardcoding the currency symbol here to be USD!!!
  */
-export const getPrettyStringFromPriceWithSymbol = (
-  currency: string,
-  priceInCents: number
-) => {
+export const getPrettyStringFromPriceWithSymbol = (currency: string, priceInCents: number) => {
   const dollars = priceInCents / 100;
   dollars.toString(10);
   const priceString = dollars.toLocaleString("en-US", {
@@ -68,4 +57,14 @@ export const getPrettyStringFromPriceWithSymbol = (
     currency: currency,
   });
   return priceString;
+};
+
+export const getDollarsFromCents = (priceInCents: number) => {
+  const dollars = priceInCents / 100;
+  return dollars;
+};
+
+export const getCentsFromDollars = (priceInDollars: number) => {
+  const cents = priceInDollars * 100;
+  return cents;
 };

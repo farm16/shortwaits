@@ -71,7 +71,7 @@ export const getFilteredNewEvent = (event: CreateEventsDto, userId: string) => {
     eventImage: event.eventImage,
     serviceId: event.serviceId,
     features: event.features,
-    hasNoDuration: event.hasNoDuration,
+    hasDuration: event.hasDuration,
     durationInMin: event.durationInMin,
     startTime: event.startTime,
     endTime: event.endTime,

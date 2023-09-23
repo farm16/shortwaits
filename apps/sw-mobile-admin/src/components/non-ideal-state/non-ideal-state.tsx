@@ -14,6 +14,11 @@ interface NonIdealStateProps {
 }
 
 const images = {
+  noServices: {
+    Image: props => <NoClients {...props} />,
+    message: "No clients found",
+    messageColor: "brandAccent" as ThemeColorName,
+  },
   noClients: {
     Image: props => <NoClients {...props} />,
     message: "No clients found",

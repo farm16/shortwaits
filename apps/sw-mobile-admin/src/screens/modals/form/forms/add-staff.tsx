@@ -3,6 +3,7 @@ import { ActivityIndicator } from "react-native-paper";
 import { Alert } from "react-native";
 import { FormikErrors } from "formik";
 import { ClientUserType, CreateBusinessUserDtoType } from "@shortwaits/shared-lib";
+import { useIntl } from "react-intl";
 
 import { useCreateBusinessStaffMutation } from "../../../../services";
 import { useForm } from "../../../../hooks";
@@ -25,6 +26,7 @@ import { getPrettyStringFromHours } from "../../../../utils/time";
 
 export const AddStaffModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navigation, route }) => {
   const { onSubmit, onDone, closeOnSubmit = true } = route.params;
+  const intl = useIntl(); // Access the intl object
 
   const business = useBusiness();
 
@@ -116,9 +118,6 @@ export const AddStaffModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
     "addStaff"
   );
 
-  console.log("errors", errors);
-  console.log("touched", touched);
-
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
@@ -153,7 +152,7 @@ export const AddStaffModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
 
   const _renderSubmitButton = (
     <Button
-      text="Save"
+      text={intl.formatMessage({ id: "Common.submit" })}
       onPress={() => {
         handleSubmit();
       }}
@@ -165,16 +164,16 @@ export const AddStaffModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
   ) : (
     <FormContainer footer={_renderSubmitButton}>
       <TextFieldCard
-        title="Nickname"
-        placeholder="John from front desk"
+        title={intl.formatMessage({ id: "AddStaffModal.nickname" })}
+        placeholder={intl.formatMessage({ id: "AddStaffModal.nickname.placeholder" })}
         value={values.displayName}
         onChangeText={handleChange("displayName")}
         isTouched={touched.displayName}
         errors={errors.displayName}
       />
       <TextFieldCard
-        title="Email"
-        placeholder="jhon_smith@shortwaits.com"
+        title={intl.formatMessage({ id: "AddStaffModal.email" })}
+        placeholder={intl.formatMessage({ id: "AddStaffModal.email.placeholder" })}
         value={values.email}
         onChangeText={handleChange("email")}
         isTouched={touched.email}
@@ -199,7 +198,7 @@ export const AddStaffModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
         }
       />
       <ButtonCard
-        title="Schedule"
+        title={intl.formatMessage({ id: "AddStaffModal.schedule" })}
         subTitle={getPrettyStringFromHours(values.hours)}
         onPress={() =>
           navigation.navigate("modals", {
@@ -216,23 +215,23 @@ export const AddStaffModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
       />
       <ExpandableSection>
         <TextFieldCard
-          title="First Name"
-          placeholder="John"
+          title={intl.formatMessage({ id: "AddStaffModal.firstName" })}
+          placeholder={intl.formatMessage({ id: "AddStaffModal.firstName.placeholder" })}
           value={values.givenName}
           onChangeText={handleChange("givenName")}
           isTouched={touched.givenName}
           errors={errors.givenName}
         />
         <TextFieldCard
-          title="Last Name"
-          placeholder="Smith"
+          title={intl.formatMessage({ id: "AddStaffModal.lastName" })}
+          placeholder={intl.formatMessage({ id: "AddStaffModal.lastName.placeholder" })}
           value={values.familyName}
           onChangeText={handleChange("familyName")}
           isTouched={touched.familyName}
           errors={errors.familyName}
         />
         <TimePickerFieldCard
-          title={"Date of Birth"}
+          title={intl.formatMessage({ id: "AddStaffModal.dob" })}
           date={new Date(values.birthday)}
           onChange={handleChange("birthday")}
           isTouched={touched.birthday}
@@ -276,7 +275,7 @@ export const AddStaffModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
           }
         />
         <TextFieldCard
-          title={"Address 1"}
+          title={intl.formatMessage({ id: "AddStaffModal.address1" })}
           value={values.addresses[0].address1}
           onChangeText={handleChange("addresses[0].address1")}
           isTouched={touched?.addresses ? touched.addresses[0]?.address1 ?? false : false}
@@ -287,7 +286,7 @@ export const AddStaffModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
           }
         />
         <TextFieldCard
-          title={"Address 2 (optional)"}
+          title={intl.formatMessage({ id: "AddStaffModal.address2" })}
           value={values.addresses[0].address2}
           onChangeText={handleChange("addresses[0].address2")}
           isTouched={touched?.addresses ? touched.addresses[0]?.address2 ?? false : false}
@@ -298,7 +297,7 @@ export const AddStaffModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
           }
         />
         <TextFieldCard
-          title={"City"}
+          title={intl.formatMessage({ id: "AddStaffModal.city" })}
           value={values.addresses[0].city}
           onChangeText={handleChange("addresses[0].city")}
           isTouched={touched?.addresses ? touched.addresses[0]?.city ?? false : false}
@@ -309,7 +308,7 @@ export const AddStaffModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
           }
         />
         <ButtonCard
-          title="State"
+          title={intl.formatMessage({ id: "AddStaffModal.state" })}
           subTitle={
             STATIC_FORM_USA_STATES.find(state => state.key === values.addresses[0].state)?.title ?? "Select State"
           }
@@ -335,7 +334,7 @@ export const AddStaffModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
           }
         />
         <TextFieldCard
-          title={"Zip Code"}
+          title={intl.formatMessage({ id: "AddStaffModal.postCode" })}
           value={values.addresses[0].postCode}
           keyboardType="number-pad"
           inputMode="numeric"

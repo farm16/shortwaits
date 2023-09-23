@@ -12,7 +12,7 @@ import { ModalsScreenProps } from "../../../../../navigation";
 import { BusinessLabelType } from "@shortwaits/shared-lib";
 
 export const EventLabelsSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ navigation, route }) => {
-  const { type, onGoBack, data, closeOnSubmit, multiple = false } = route.params;
+  const { type, onGoBack, data, multiple = false } = route.params;
 
   const { headerTitle } = useMemo(() => selectorConfigs[type], [type]);
 

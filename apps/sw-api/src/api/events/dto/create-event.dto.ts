@@ -76,7 +76,7 @@ export class CreateEventsDto implements CreateEventDtoType {
   registrationFee: number;
 
   @ApiProperty()
-  @ApiProperty({ required: true })
+  @ApiProperty({ required: false })
   serviceId: string;
 
   @IsArray()
@@ -91,7 +91,7 @@ export class CreateEventsDto implements CreateEventDtoType {
 
   @IsBoolean()
   @ApiProperty({ required: false })
-  hasNoDuration: boolean;
+  hasDuration: boolean;
 
   @IsString()
   @ApiProperty({ required: false })

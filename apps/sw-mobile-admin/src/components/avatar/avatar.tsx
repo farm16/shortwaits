@@ -1,7 +1,6 @@
 import React from "react";
 import { ImageBackground, StyleSheet, View } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { ServiceColorType } from "@shortwaits/shared-lib";
 
 import { useTheme } from "../../theme";
 import { IconButton } from "../navigator-action-buttons/navigator-action-buttons";
@@ -9,7 +8,7 @@ import { IconButton } from "../navigator-action-buttons/navigator-action-buttons
 interface AvatarProps {
   imageUrl?: string;
   size: keyof typeof imageSizes;
-  serviceColor?: ServiceColorType;
+  color?: string;
   mode?: "static" | "upload";
 }
 
@@ -20,12 +19,7 @@ const imageSizes = {
   default: 90,
 } as const;
 
-export function Avatar({
-  size = "default",
-  imageUrl,
-  serviceColor,
-  mode = "static",
-}: AvatarProps) {
+export function Avatar({ size = "default", imageUrl, color, mode = "static" }: AvatarProps) {
   const { Colors } = useTheme();
 
   const imageSize = mode === "upload" ? imageSizes.default : imageSizes[size];
@@ -34,7 +28,7 @@ export function Avatar({
     height: imageSize * 0.7,
     width: imageSize * 0.7,
     borderRadius: imageSize * 0.4,
-    backgroundColor: serviceColor?.hexCode ?? Colors.lightGray,
+    backgroundColor: color ?? Colors.gray,
   };
   const image = imageUrl ? (
     <View>
@@ -43,16 +37,12 @@ export function Avatar({
         imageStyle={styles.image}
         source={{ uri: imageUrl }}
       />
-      {mode === "upload" ? (
-        <IconButton style={styles.IconButton} iconType="add-image" />
-      ) : null}
+      {mode === "upload" ? <IconButton style={styles.IconButton} iconType="add-image" /> : null}
     </View>
   ) : (
     <View style={[styles.imageContainer, containerStyle]}>
       <Icon name="image" color={Colors.white} size={imageSize * 0.5} />
-      {mode === "upload" ? (
-        <IconButton style={styles.IconButton} iconType="add-image" />
-      ) : null}
+      {mode === "upload" ? <IconButton style={styles.IconButton} iconType="add-image" /> : null}
     </View>
   );
   return image;

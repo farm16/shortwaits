@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useState } from "react";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 
-import { Calendar, Screen, Text, Container, IconButton, QrModal } from "../../../components";
+import { Calendar, Screen, Text, Container, IconButton, QrModal, Space } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useBusiness, useEvents, useShowGhostComponent } from "../../../store";
 import { useGetServicesByBusinessQuery } from "../../../services";

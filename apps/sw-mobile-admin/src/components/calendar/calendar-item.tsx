@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
   },
   eventServiceColor: {
     height: "100%",
-    width: 10,
+    width: 6,
     borderTopStartRadius: EVENT_ITEM_BORDER_RADIUS,
     borderBottomStartRadius: EVENT_ITEM_BORDER_RADIUS,
   },

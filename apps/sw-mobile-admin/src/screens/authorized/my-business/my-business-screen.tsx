@@ -29,7 +29,9 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
     data: eventSummary,
     isLoading: isEventSummaryLoading,
     error: errorEventSummary,
-  } = useGetEventsSummaryByBusinessQuery(business?._id ?? skipToken);
+  } = useGetEventsSummaryByBusinessQuery(business?._id ?? skipToken, {
+    refetchOnMountOrArgChange: true,
+  });
 
   const isLoading = updateBusinessStatus.isLoading || isEventSummaryLoading;
 

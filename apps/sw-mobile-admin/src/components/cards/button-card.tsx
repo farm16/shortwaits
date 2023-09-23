@@ -10,6 +10,7 @@ export interface ButtonCardProps extends Omit<CardProps, "mode"> {
   errors?: string | undefined;
   isTouched?: boolean;
   withTopBorder?: boolean;
+  isVisible?: boolean;
 }
 export const ButtonCard = (props: ButtonCardProps) => {
   const {
@@ -21,26 +22,28 @@ export const ButtonCard = (props: ButtonCardProps) => {
     errors,
     isTouched,
     withTopBorder,
+    disabled,
+    isVisible = true,
     ...rest
   } = props;
   const { Colors } = useTheme();
   const { width } = getDimensions();
 
+  const withTopBorderStyle = withTopBorder ? { borderTopWidth: 1.5, borderTopColor: Colors.inputBackground } : {};
+
+  if (!isVisible) {
+    return null;
+  }
+
   return (
     <>
       <Card
         {...rest}
+        disabled={disabled}
         mode="button"
         rightIconSize={rightIconSize}
         rightIconName={rightIconName}
-        style={
-          withTopBorder
-            ? {
-                borderTopWidth: 1.5,
-                borderTopColor: Colors.inputBackground,
-              }
-            : undefined
-        }
+        style={[withTopBorderStyle]}
       >
         <Text preset="cardTitle" style={textStyle} text={title} />
         {subTitle && (

@@ -25,7 +25,8 @@ export const ExpandableSection: React.FC<ExpandableSectionProps> = ({ children }
           fontSize: 16,
         }}
         style={{
-          marginTop: 16,
+          marginTop: 8,
+          marginBottom: 16,
           height: undefined,
           width: "100%",
         }}

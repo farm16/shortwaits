@@ -17,7 +17,7 @@ function BusinessIncomeInfoComponent({ data, isLoading, error }: BusinessIncomeI
   const [visible, setVisible] = useState<boolean>(false);
   const [graphMode, setGraphMode] = useState<GraphIdentifier>("Week");
 
-  if (error) {
+  if (error || !data) {
     return (
       <View style={{ alignItems: "center" }}>
         <Text text="Error loading data" />
@@ -25,6 +25,7 @@ function BusinessIncomeInfoComponent({ data, isLoading, error }: BusinessIncomeI
     );
   }
 
+  console.log("data", data);
   return (
     <View style={styles.root}>
       {isLoading ? (

@@ -119,6 +119,7 @@ export const Calendar: FC<CalendarProps> = memo(props => {
         }}
         contentContainerStyle={{
           backgroundColor: Colors.backgroundOverlay,
+          paddingBottom: 100,
         }}
         ListEmptyComponent={renderNonIdealState}
         sections={agendaData}

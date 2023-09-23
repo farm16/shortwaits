@@ -13,6 +13,7 @@ interface TimePickerInputProps {
   date: Date;
   errors?: string | undefined;
   isTouched?: boolean;
+  disabled?: boolean;
   onChange?: (dateString: string) => void;
 }
 registerTranslation("en", {
@@ -33,7 +34,7 @@ registerTranslation("en", {
 });
 
 export function TimePickerFieldCard(props: TimePickerInputProps) {
-  const { onChange, errors, isTouched, date, title, withTime = true } = props;
+  const { onChange, errors, isTouched, date, title, withTime = true, disabled = false } = props;
   const { Colors } = useTheme();
   const { width } = getDimensions();
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
@@ -80,7 +81,7 @@ export function TimePickerFieldCard(props: TimePickerInputProps) {
 
   return (
     <>
-      <Card mode="text-field" disabled={withTime} onPress={handleSetFocus}>
+      <Card mode="text-field" onPress={handleSetFocus} disabled={disabled}>
         <Text preset="cardTitle" text={title} />
         <Space size="tiny" />
         <Container direction="row" justifyContent="space-between">

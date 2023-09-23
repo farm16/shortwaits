@@ -75,7 +75,7 @@ export class Events extends Document implements EventType {
 
   @ApiProperty()
   @Prop()
-  hasNoDuration: boolean;
+  hasDuration: boolean;
 
   @ApiProperty()
   @Prop()

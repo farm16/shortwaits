@@ -60,15 +60,12 @@ export type ModalStackParamList = {
     data?: SelectorModalData[];
     selectedData?: string[];
     onGoBack?(arg0): void;
-    onSubmit?(arg0): void;
     onSelect?(arg0): void;
     searchable?: boolean;
     closeOnSelect?: boolean;
-    closeOnSubmit?: boolean; //use closeOnSelect instead
     disableSelect?: boolean;
     itemRightIconName?: string;
     itemRightIconColor?: ThemeColorName;
-    mode?: "update" | "create";
     minSelectedItems?: number;
     maxSelectedItems?: number;
   };

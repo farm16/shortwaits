@@ -1,17 +1,17 @@
 import React, { FC, useLayoutEffect, useState } from "react";
 import { StyleSheet } from "react-native";
+import { FlatList } from "react-native-gesture-handler";
 
-import { Space, LeftChevronButton, AnimatedSearchBar, IconButton, Container } from "../../../../../components";
+import { LeftChevronButton, AnimatedSearchBar, IconButton, Container } from "../../../../../components";
 import { StaticSelectorItem } from "./static-selector-item";
 import { ModalsScreenProps } from "../../../../../navigation";
-import { FlatList } from "react-native-gesture-handler";
 
 export const StaticSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ navigation, route }) => {
   const {
     headerTitle,
     data,
     onSelect,
-    closeOnSubmit = true,
+    closeOnSelect = true,
     multiple = false,
     searchable,
     itemRightIconName,
@@ -43,7 +43,7 @@ export const StaticSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({
   }, [navigation, headerTitle, isListSearchable, searchable]);
 
   const handleOnSelect = item => {
-    if (closeOnSubmit) {
+    if (closeOnSelect) {
       onSelect(item);
       navigation.goBack();
     } else {
