@@ -1,17 +1,9 @@
 import * as React from "react";
-import Svg, { Path, Polygon, Circle } from "react-native-svg";
+import Svg, { Path, Polygon, Circle, SvgProps } from "react-native-svg";
 
-const WelcomeImage = props => {
+export const WelcomeImage = (props: SvgProps) => {
   return (
-    <Svg
-      xmlns="http://www.w3.org/2000/S"
-      data-name="Layer 1"
-      width="1058"
-      height="747.88979"
-      viewBox="0 0 1058 747.88979"
-      xlink="http://www.w3.org/1999/xlink"
-      {...props}
-    >
+    <Svg data-name="Layer 1" width="1058" height="747.88979" viewBox="0 0 1058 747.88979" {...props}>
       <Path
         d="M520.46547,394.96687a51.3281,51.3281,0,0,1-4.75-3.95606l2.05615-2.18457a48.40458,48.40458,0,0,0,4.47168,3.72461Z"
         transform="translate(-71 -76.05511)"

@@ -1,5 +1,5 @@
 export * from "../navigation/navigation-utils";
-export * from "./form-schemas/formSchemas";
+export * from "./form-schemas";
 export * from "./time";
 export * from "./time-conversion";
 export * from "./getEmojiString";

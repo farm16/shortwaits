@@ -62,7 +62,7 @@ export const SelectorListItem: FC<SelectorListItemProps> = props => {
         source={{
           uri: imageUrl || avatarUrl,
         }}
-        resizeMode={FastImage.resizeMode.cover}
+        resizeMode={FastImage.resizeMode.contain}
         style={styles.backgroundImage}
       />
       <View style={styles.content}>

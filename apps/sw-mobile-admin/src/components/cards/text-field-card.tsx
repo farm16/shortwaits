@@ -25,6 +25,7 @@ export function TextFieldCard(props: TextFieldCardType) {
     title,
     withTopBorder,
     multiline,
+    disabled,
     ...rest
   } = props;
 
@@ -46,6 +47,7 @@ export function TextFieldCard(props: TextFieldCardType) {
         rightIconName={rightIconName}
         rightIconOnPress={rightIconOnPress}
         rightIconColor={rightIconColor}
+        disabled={disabled}
         style={[
           withTopBorder
             ? {
@@ -64,7 +66,14 @@ export function TextFieldCard(props: TextFieldCardType) {
           <Text preset="cardTitle" text={title} />
           {Platform.OS === "ios" && <Space size="tiny" />}
         </Pressable>
-        <TextField {...rest} multiline={multiline} preset="cardSubtitle" ref={textInputRef} placeholder={placeholder} />
+        <TextField
+          {...rest}
+          editable={!disabled}
+          multiline={multiline}
+          preset="cardSubtitle"
+          ref={textInputRef}
+          placeholder={placeholder}
+        />
       </Card>
       {errors && isTouched ? (
         <Text

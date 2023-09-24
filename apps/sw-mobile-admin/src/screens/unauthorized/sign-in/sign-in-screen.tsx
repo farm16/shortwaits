@@ -11,7 +11,7 @@ import { Container, Button, Text, Space, TextFieldCard, Screen } from "../../../
 import Facebook from "../../../assets/icons/facebook.svg";
 import Google from "../../../assets/icons/google.svg";
 import { onGoogleButtonPress } from "../../../utils";
-import LogoSvgLetter from "../../../assets/images/svg-components/logo-letters";
+import { Logo1 } from "../../../assets";
 
 export interface RegisterWithEmailScreenProps {
   navigation: CompositeNavigationProp<
@@ -104,7 +104,7 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
           flex: 1,
         }}
       >
-        <LogoSvgLetter height="25%" />
+        <Logo1 height="25%" />
       </View>
       <TextFieldCard
         autoCapitalize="none"

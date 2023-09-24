@@ -112,13 +112,23 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
       headerRight: () => {
         return (
           <Container direction="row" alignItems="center">
-            <IconButton withMarginRight iconType="edit" />
+            <IconButton
+              withMarginRight
+              iconType="edit"
+              onPress={() => {
+                navigation.navigate("authorized-stack", {
+                  screen: "business-profile-screen",
+                });
+              }}
+            />
             <IconButton withMarginRight iconType="share" />
           </Container>
         );
       },
     });
   }, [business.shortName, business.web.logoImageUrl, navigation]);
+
+  console.log("eventSummary", eventSummary?.data?.listData);
 
   if (isLoading) return <ActivityIndicator />;
 
@@ -146,7 +156,24 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
             })
           }
         />
-        <ButtonCard leftIconName="cash-fast" leftIconColor={Colors.brandSecondary} title={"Transactions"} />
+        <ButtonCard
+          leftIconName="cash-fast"
+          leftIconColor={Colors.brandSecondary}
+          title={"Transactions"}
+          onPress={() =>
+            navigation.navigate("modals", {
+              screen: "selector-modal-screen",
+              params: {
+                type: "static",
+                onSelect: item => {
+                  console.log(item);
+                },
+                headerTitle: "Transactions",
+                data: [],
+              },
+            })
+          }
+        />
         <ButtonCard
           leftIconName="layers-triple"
           leftIconColor={Colors.brandSecondary}

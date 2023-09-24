@@ -11,8 +11,7 @@ import { useTheme } from "../../../theme";
 import { RootStackParamList, UnauthorizedStackParamList } from "../../../navigation";
 import { useBusiness, useMobileAdmin } from "../../../store";
 import { useGetAdminMobileQuery } from "../../../services";
-import TwoLetterLogoSvg from "../../../assets/images/svg-components/logo-letter-short";
-import WelcomeImage from "../../../assets/images/svg-components/welcome-app";
+import { Logo2, WelcomeImage } from "../../../assets";
 
 GoogleSignin.configure({
   webClientId: "805426205047-fcegaam9bmap1dagccindjh0ko7oro68.apps.googleusercontent.com",
@@ -48,7 +47,7 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation }) => {
   return (
     <Screen backgroundColor="white" statusBar="light-content">
       <Container direction="row" alignItems="center" justifyContent="center">
-        <TwoLetterLogoSvg height={75} width={75} />
+        <Logo2 height={75} width={75} />
       </Container>
       <View
         style={{

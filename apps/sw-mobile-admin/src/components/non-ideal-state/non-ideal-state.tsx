@@ -1,19 +1,25 @@
 import React, { Children } from "react";
 import { Image, Dimensions, View } from "react-native";
+import { SvgProps } from "react-native-svg";
 import { useTheme } from "../../theme";
 import { ThemeColorName } from "../../theme/Colors";
 import { Space, Text } from "../common";
-import { NoClients } from "../../assets/images/svg-components/no-clients";
-import { NoEvents } from "../../assets/images/svg-components/no-events";
-import { SvgProps } from "react-native-svg";
+import { NoClients, NoEvents, NoTransactions } from "../../assets";
+
+export type NonIdealStateTypes = keyof typeof images;
 
 interface NonIdealStateProps {
-  image: keyof typeof images;
+  image: NonIdealStateTypes;
   buttons?: React.ReactNode | React.ReactNode[];
   imageProps?: SvgProps;
 }
 
 const images = {
+  noTransactions: {
+    Image: props => <NoTransactions {...props} />,
+    message: "No transactions found",
+    messageColor: "brandAccent" as ThemeColorName,
+  },
   noServices: {
     Image: props => <NoClients {...props} />,
     message: "No clients found",

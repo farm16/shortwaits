@@ -56,7 +56,7 @@ export const ClientUserCard = (props: ClientUserCardProps) => {
             source={{
               uri: user.accountImageUrl || avatarUrl,
             }}
-            resizeMode={FastImage.resizeMode.cover}
+            resizeMode={FastImage.resizeMode.contain}
             style={styles.image}
           />
           <Text

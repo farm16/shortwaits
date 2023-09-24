@@ -1,50 +1,81 @@
 import React from "react";
-import { ImageBackground, StyleSheet, View } from "react-native";
+import { ImageBackground, StyleSheet, View, ViewStyle } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 import { useTheme } from "../../theme";
 import { IconButton } from "../navigator-action-buttons/navigator-action-buttons";
+import FastImage from "react-native-fast-image";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 interface AvatarProps {
-  imageUrl?: string;
-  size: keyof typeof imageSizes;
+  url?: string;
+  size?: keyof typeof imageSizes;
   color?: string;
   mode?: "static" | "upload";
+  style?: ViewStyle;
+  onPress?: () => void;
 }
 
 const imageSizes = {
-  small: 45,
-  medium: 60,
+  small: 60,
+  medium: 75,
   large: 100,
-  default: 90,
+  default: 75,
 } as const;
 
-export function Avatar({ size = "default", imageUrl, color, mode = "static" }: AvatarProps) {
+export function Avatar(props: AvatarProps) {
+  const { size = "default", url, color, mode = "static", style: styleOverride, onPress } = props;
   const { Colors } = useTheme();
 
-  const imageSize = mode === "upload" ? imageSizes.default : imageSizes[size];
+  const imageSize = imageSizes[size];
 
   const containerStyle = {
-    height: imageSize * 0.7,
-    width: imageSize * 0.7,
-    borderRadius: imageSize * 0.4,
-    backgroundColor: color ?? Colors.gray,
-  };
-  const image = imageUrl ? (
-    <View>
-      <ImageBackground
-        style={[styles.imageContainer, containerStyle]}
-        imageStyle={styles.image}
-        source={{ uri: imageUrl }}
+    height: imageSize,
+    width: imageSize,
+    borderRadius: imageSize * 0.5,
+    backgroundColor: color ?? Colors.staticLightBackground,
+    borderColor: Colors.gray,
+    borderWidth: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  } as ViewStyle;
+
+  const image = url ? (
+    <View style={[containerStyle, styleOverride]}>
+      <FastImage
+        source={{
+          uri: url,
+        }}
+        resizeMode={FastImage.resizeMode.contain}
+        style={{
+          width: imageSize * 0.75,
+          height: imageSize * 0.75,
+        }}
       />
-      {mode === "upload" ? <IconButton style={styles.IconButton} iconType="add-image" /> : null}
+      {mode === "upload" ? (
+        <IconButton
+          style={{
+            position: "absolute",
+            bottom: -7,
+            right: -6.5,
+            width: 30,
+            height: 30,
+          }}
+          iconType="add-image"
+        />
+      ) : null}
     </View>
   ) : (
-    <View style={[styles.imageContainer, containerStyle]}>
+    <View style={[containerStyle, styleOverride]}>
       <Icon name="image" color={Colors.white} size={imageSize * 0.5} />
       {mode === "upload" ? <IconButton style={styles.IconButton} iconType="add-image" /> : null}
     </View>
   );
+
+  if (mode === "upload") {
+    return <TouchableOpacity onPress={() => onPress()}>{image}</TouchableOpacity>;
+  }
+
   return image;
 }
 const styles = StyleSheet.create({
@@ -64,5 +95,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  image: {},
+  image: {
+    width: 50,
+    height: 50,
+    borderRadius: 50,
+    resizeMode: "cover",
+    marginRight: 10,
+  },
 });

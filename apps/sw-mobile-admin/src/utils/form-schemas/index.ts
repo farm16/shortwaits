@@ -2,6 +2,7 @@ import { createEventSchema, updateEventSchema } from "./events";
 import { onboarding1Schema, userLocalSignInSchema, userLocalSignUpSchema } from "./auth";
 import { createClientUserSchema, createBusinessUserSchema } from "./users";
 import { createServiceSchema, updateServiceSchema } from "./services";
+import { updateBusinessSchema } from "./my-business";
 
 type FormSchemas = {
   addService: typeof createServiceSchema;
@@ -13,9 +14,13 @@ type FormSchemas = {
   onboarding1: typeof onboarding1Schema;
   userLocalSignIn: typeof userLocalSignInSchema;
   userLocalSignUp: typeof userLocalSignUpSchema;
+  updateBusiness: typeof updateBusinessSchema;
 };
 
 export const formSchemas: FormSchemas = {
+  // My business
+  updateBusiness: updateBusinessSchema,
+
   // services
   addService: createServiceSchema,
   updateService: updateServiceSchema,

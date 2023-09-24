@@ -1,4 +1,4 @@
-import React, { FC, useLayoutEffect, useState } from "react";
+import React, { FC, useCallback, useLayoutEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 
@@ -42,15 +42,6 @@ export const StaticSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({
     });
   }, [navigation, headerTitle, isListSearchable, searchable]);
 
-  const handleOnSelect = item => {
-    if (closeOnSelect) {
-      onSelect(item);
-      navigation.goBack();
-    } else {
-      onSelect(item);
-    }
-  };
-
   const handleOnChangeText = (text: string) => {
     setSearchText(text);
     const filteredItems = data.filter(item => {
@@ -67,6 +58,31 @@ export const StaticSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({
     setFilteredData(filteredItems);
   };
 
+  const renderItem = useCallback(
+    ({ item }) => {
+      const handleOnSelect = _item => {
+        if (closeOnSelect) {
+          onSelect(_item);
+          navigation.goBack();
+        } else {
+          onSelect(_item);
+        }
+      };
+      return (
+        <StaticSelectorItem
+          itemRightIconName={itemRightIconName}
+          itemRightIconColor={itemRightIconColor}
+          multiple={multiple}
+          item={item}
+          onSelectItem={() => {
+            handleOnSelect(item);
+          }}
+        />
+      );
+    },
+    [itemRightIconName, itemRightIconColor, multiple, closeOnSelect, onSelect, navigation]
+  );
+
   return (
     <>
       <AnimatedSearchBar onChangeText={handleOnChangeText} isVisible={isListSearchable} />
@@ -75,19 +91,7 @@ export const StaticSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.listContainer}
         data={filteredData}
-        renderItem={({ item }) => {
-          return (
-            <StaticSelectorItem
-              itemRightIconName={itemRightIconName}
-              itemRightIconColor={itemRightIconColor}
-              multiple={multiple}
-              item={item}
-              onSelectItem={() => {
-                handleOnSelect(item);
-              }}
-            />
-          );
-        }}
+        renderItem={renderItem}
       />
     </>
   );

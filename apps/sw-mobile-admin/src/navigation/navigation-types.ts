@@ -113,6 +113,7 @@ export type AuthorizedStackParamList = {
   [AUTHORIZED_STACK_SCREENS.BUSINESS_STAFF_SCREEN]: {
     staff: BusinessUserDtoType;
   };
+  [AUTHORIZED_STACK_SCREENS.BUSINESS_PROFILE_SCREEN]: undefined;
 };
 
 export type UnauthorizedStackParamList = {

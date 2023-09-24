@@ -45,7 +45,7 @@ export const Card = (props: CardProps) => {
   const disabledCardModes: Partial<CardProps["mode"]>[] = ["text-field", "static"];
   const disabledStyles = disabled
     ? {
-        backgroundColor: Colors.gray,
+        backgroundColor: Colors.lightGray,
         borderColor: Colors.disabledText,
         borderWidth: 1,
         borderRadius: 4,

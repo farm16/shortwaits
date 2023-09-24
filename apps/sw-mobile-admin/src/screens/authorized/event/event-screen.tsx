@@ -19,7 +19,7 @@ import { ShareEvent } from "./share-event";
 
 // TODO: test this with real device ios and android
 // TODO: add config for android (missing)
-export const EventScreen: FC<AuthorizedScreenProps<"event-screen">> = ({ navigation, route }) => {
+export function EventScreen({ navigation, route }: AuthorizedScreenProps<"event-screen">) {
   const { eventId } = route.params;
 
   const event = useEvent(eventId);
@@ -70,4 +70,4 @@ export const EventScreen: FC<AuthorizedScreenProps<"event-screen">> = ({ navigat
       <ShareEvent event={event} ref={bottomSheetRef} />
     </Screen>
   );
-};
+}

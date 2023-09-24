@@ -12,7 +12,7 @@ import { useTheme } from "../../../theme";
 import { useSocialSignUpMutation } from "../../../services";
 import { onGoogleButtonPress } from "../../../utils";
 import { ActivityIndicator } from "react-native-paper";
-import LogoSvgLetter from "../../../assets/images/svg-components/logo-letters";
+import { Logo1 } from "../../../assets/images/svg-components/logo-1";
 
 export interface SignUpScreenProps {
   navigation: CompositeNavigationProp<
@@ -56,7 +56,7 @@ export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
   return (
     <Screen preset="fixed" withHorizontalPadding>
       <View style={{ justifyContent: "center", alignItems: "center", marginBottom: 100, flex: 1 }}>
-        <LogoSvgLetter height="25%" />
+        <Logo1 height="25%" />
         <Text
           style={{
             color: Colors.subText,

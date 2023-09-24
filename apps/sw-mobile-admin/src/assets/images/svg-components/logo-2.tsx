@@ -1,8 +1,8 @@
 import * as React from "react";
-import Svg, { Path } from "react-native-svg";
+import Svg, { Path, SvgProps } from "react-native-svg";
 
-const TwoLetterLogoSvg = props => (
-  <Svg width={588} height={339} viewBox="0 0 588 339" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+export const Logo2 = (props: SvgProps) => (
+  <Svg width={588} height={339} viewBox="0 0 588 339" fill="none" {...props}>
     <Path
       d="M199.648 3.43874C156.13 15.2284 131.68 61.9384 155.569 87.6511C162.86 95.5102 174.525 100.677 196.731 106.177C229.259 114.261 237.222 120.774 230.829 134.361C224.436 147.946 219.836 148.62 138.521 148.62H-4.7163L-5 164.434L-4.61451 180.059L142.56 180.846C238.006 181.856 250.792 178.599 267.056 150.079C288.701 112.241 272.214 86.5281 218.266 73.5026C192.359 67.2154 184.954 57.8972 195.273 44.6463C207.611 28.9281 244.624 33.0821 244.624 50.1487C244.624 53.8538 246.755 54.3026 264.812 54.3026H285V45.2078C285 11.7487 243.725 -8.46152 199.648 3.43874Z"
       fill="#45927B"
@@ -13,4 +13,3 @@ const TwoLetterLogoSvg = props => (
     />
   </Svg>
 );
-export default TwoLetterLogoSvg;

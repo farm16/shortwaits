@@ -1,8 +1,8 @@
 import * as React from "react";
-import Svg, { Mask, Path, G } from "react-native-svg";
+import Svg, { Mask, Path, G, SvgProps } from "react-native-svg";
 
-const LogoSvgLetter = props => (
-  <Svg width={590} height={207} viewBox="0 0 590 207" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+export const Logo1 = (props: SvgProps) => (
+  <Svg width={590} height={207} viewBox="0 0 590 207" fill="none" {...props}>
     <Mask id="mask0_1_43" maskUnits="userSpaceOnUse" x={0} y={0} width={590} height={207}>
       <Path d="M590 0H0V207H590V0Z" fill="white" />
     </Mask>
@@ -50,4 +50,3 @@ const LogoSvgLetter = props => (
     </G>
   </Svg>
 );
-export default LogoSvgLetter;

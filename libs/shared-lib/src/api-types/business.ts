@@ -16,6 +16,7 @@ export type UpdateBusinessDtoType = Omit<
   | "isRegistrationCompleted"
   | "accountType"
   | "shortId"
+  | "isDisabled"
   | "_id"
 >;
 
