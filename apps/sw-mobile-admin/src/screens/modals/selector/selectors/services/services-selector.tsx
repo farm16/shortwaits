@@ -173,7 +173,7 @@ export const ServicesSelector: FC<ModalsScreenProps<"selector-modal-screen">> = 
           renderItem={renderItem}
           keyExtractor={keyExtractor}
           maxToRenderPerBatch={10}
-          ListEmptyComponent={<NonIdealState image="noServices" />}
+          ListEmptyComponent={<NonIdealState type="noServices" />}
         />
       </>
     );

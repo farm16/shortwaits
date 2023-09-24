@@ -5,3 +5,4 @@ export * from "./no-clients";
 export * from "./no-events";
 export * from "./no-transactions";
 export * from "./welcome-app";
+export * from "./no-data";

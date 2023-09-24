@@ -72,7 +72,7 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
     const { title } = section;
     return !isEmpty(section.data) ? null : title === "Clients" ? (
       <NonIdealState
-        image={"noClientsInEvent"}
+        type={"noClientsInEvent"}
         buttons={[
           <Button
             style={{
@@ -96,7 +96,7 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
       />
     ) : (
       <NonIdealState
-        image={"noStaffInEvent"}
+        type={"noStaffInEvent"}
         buttons={[
           <Button
             style={{
@@ -216,7 +216,7 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
           padding: 16,
         }}
       >
-        <NonIdealState image={"noClients"} buttons={[<Button text="Sync contacts" onPress={() => null} />]} />
+        <NonIdealState type={"noClients"} buttons={[<Button text="Sync contacts" onPress={() => null} />]} />
       </View>
     );
   }, []);

@@ -2,7 +2,14 @@ import React, { FC, useCallback, useLayoutEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 
-import { LeftChevronButton, AnimatedSearchBar, IconButton, Container } from "../../../../../components";
+import {
+  LeftChevronButton,
+  AnimatedSearchBar,
+  IconButton,
+  Container,
+  NonIdealState,
+  NonIdealStateTypes,
+} from "../../../../../components";
 import { StaticSelectorItem } from "./static-selector-item";
 import { ModalsScreenProps } from "../../../../../navigation";
 
@@ -16,6 +23,7 @@ export const StaticSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({
     searchable,
     itemRightIconName,
     itemRightIconColor,
+    nonIdealStateType = "noData",
   } = route.params;
 
   const [searchText, setSearchText] = useState("");
@@ -91,6 +99,7 @@ export const StaticSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.listContainer}
         data={filteredData}
+        ListEmptyComponent={() => <NonIdealState type={nonIdealStateType as NonIdealStateTypes} />}
         renderItem={renderItem}
       />
     </>

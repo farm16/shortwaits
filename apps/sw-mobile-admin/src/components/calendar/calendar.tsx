@@ -59,7 +59,7 @@ export const Calendar: FC<CalendarProps> = memo(props => {
   const renderNonIdealState = useCallback(() => {
     return (
       <NonIdealState
-        image={"noEvents"}
+        type={"noEvents"}
         buttons={
           <Button
             text="Add Event"

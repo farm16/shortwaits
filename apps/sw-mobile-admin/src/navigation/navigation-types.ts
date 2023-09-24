@@ -25,6 +25,7 @@ import {
   WeekHoursType,
 } from "@shortwaits/shared-lib";
 import { ThemeColorName } from "../theme/Colors";
+import { NonIdealStateTypes } from "../components";
 
 export type FormData = {
   addEvent: CreateEventDtoType;
@@ -68,6 +69,7 @@ export type ModalStackParamList = {
     itemRightIconColor?: ThemeColorName;
     minSelectedItems?: number;
     maxSelectedItems?: number;
+    nonIdealStateType?: NonIdealStateTypes;
   };
   [MODAL_SCREENS.SCHEDULE_MODAL_SCREEN]: {
     hours: WeekHoursType;

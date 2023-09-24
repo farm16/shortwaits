@@ -27,7 +27,7 @@ export const AppInfoSettings = () => {
   const accordionData: AccordionDataItemType[] = [
     {
       title: intl.formatMessage({ id: "Settings_Screen.appInfo.appName" }),
-      description: intl.formatMessage({ id: "Settings_Screen.appInfo.appName" }),
+      description: appName,
     },
     {
       title: intl.formatMessage({ id: "Settings_Screen.appInfo.appVersion" }),
@@ -36,19 +36,19 @@ export const AppInfoSettings = () => {
           id: "Settings_Screen.appInfo.appVersionDescription",
         },
         {
-          appVersion: DeviceInfo.getVersion(),
-          appBuildNumber: DeviceInfo.getBuildNumber(),
+          appVersion: appVersion,
+          appBuildNumber: appBuildNumber,
           devProdLabel: __DEV__ ? " _dev_" : " _prod_",
         }
       ),
     },
     {
       title: intl.formatMessage({ id: "Settings_Screen.appInfo.appBundleId" }),
-      description: DeviceInfo.getBundleId(),
+      description: appBundleId,
     },
     {
       title: intl.formatMessage({ id: "Settings_Screen.appInfo.codepushVersion" }),
-      description: intl.formatMessage({ id: "Settings_Screen.appInfo.codepushVersionDescription" }),
+      description: "",
     },
     {
       title: intl.formatMessage({ id: "Settings_Screen.appInfo.targetDevice" }),
@@ -57,7 +57,7 @@ export const AppInfoSettings = () => {
           id: "Settings_Screen.appInfo.targetDeviceDescription",
         },
         {
-          deviceType: DeviceInfo.getDeviceType(),
+          deviceType: deviceType,
           apiLevel: Platform.OS === "android" ? `| ${apiLevel}` : "",
         }
       ),

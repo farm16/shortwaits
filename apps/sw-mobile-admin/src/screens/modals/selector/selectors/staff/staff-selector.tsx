@@ -193,7 +193,7 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
           data={filteredData}
           renderItem={renderItem}
           keyExtractor={keyExtractor}
-          ListEmptyComponent={<NonIdealState image="noStaff" />}
+          ListEmptyComponent={<NonIdealState type="noStaff" />}
         />
       </>
     );

@@ -197,7 +197,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({ navi
           >
             {isEmpty(currentClients) ? (
               <NonIdealState
-                image={"noClients"}
+                type={"noClients"}
                 buttons={[<Button text="Add Client" onPress={() => handleAddClient()} />]}
               />
             ) : null}

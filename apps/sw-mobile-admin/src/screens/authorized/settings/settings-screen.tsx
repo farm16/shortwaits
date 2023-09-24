@@ -41,6 +41,8 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
     }
   }, [currentBusiness, getAdmins]);
 
+  console.log("admins", admins);
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
@@ -94,7 +96,6 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
           description={<FormattedMessage id="Settings_Screen.web_booking_description" />}
           right={() => (
             <Switch
-              disabled
               isLoading={state.isLoading}
               value={currentBusiness?.isWebBookingEnabled ?? false}
               onChange={() => {

@@ -79,7 +79,7 @@ export function BusinessStaffScreen({ navigation, route }: AuthorizedScreenProps
   const renderNonIdealState = useCallback(() => {
     return (
       <NonIdealState
-        image={"noEvents"}
+        type={"noEvents"}
         buttons={
           <Button
             text="Add Event"

@@ -199,7 +199,7 @@ export const ClientsSelector: FC<ModalsScreenProps<"selector-modal-screen">> = (
           renderItem={renderItem}
           keyExtractor={keyExtractor}
           maxToRenderPerBatch={10}
-          ListEmptyComponent={<NonIdealState image="noClients" />}
+          ListEmptyComponent={<NonIdealState type="noClients" />}
         />
       </>
     );

@@ -4,17 +4,22 @@ import { SvgProps } from "react-native-svg";
 import { useTheme } from "../../theme";
 import { ThemeColorName } from "../../theme/Colors";
 import { Space, Text } from "../common";
-import { NoClients, NoEvents, NoTransactions } from "../../assets";
+import { NoClients, NoEvents, NoTransactions, NoData } from "../../assets";
 
-export type NonIdealStateTypes = keyof typeof images;
+export type NonIdealStateTypes = keyof typeof nonIdealTypes;
 
 interface NonIdealStateProps {
-  image: NonIdealStateTypes;
+  type: NonIdealStateTypes;
   buttons?: React.ReactNode | React.ReactNode[];
   imageProps?: SvgProps;
 }
 
-const images = {
+const nonIdealTypes = {
+  noData: {
+    Image: props => <NoData {...props} />,
+    message: "No data found",
+    messageColor: "brandAccent" as ThemeColorName,
+  },
   noTransactions: {
     Image: props => <NoTransactions {...props} />,
     message: "No transactions found",
@@ -54,7 +59,7 @@ const images = {
 
 export const NonIdealState = (props: NonIdealStateProps) => {
   const {
-    image = "noClients",
+    type = "noClients",
     buttons,
     imageProps = {
       width: Dimensions.get("window").width * 0.5,
@@ -66,7 +71,7 @@ export const NonIdealState = (props: NonIdealStateProps) => {
 
   const { Colors } = useTheme();
 
-  const Image = images[image].Image;
+  const Image = nonIdealTypes[type].Image;
   return (
     <View
       style={{
@@ -80,13 +85,13 @@ export const NonIdealState = (props: NonIdealStateProps) => {
     >
       <Image {...imageProps} />
 
-      {images[image].message ? (
+      {nonIdealTypes[type].message ? (
         <Text
-          text={images[image].message}
+          text={nonIdealTypes[type].message}
           preset="text"
           style={[
             {
-              color: Colors[images[image].messageColor],
+              color: Colors[nonIdealTypes[type].messageColor],
               textTransform: "uppercase",
               padding: 16,
             },

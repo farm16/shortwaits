@@ -21,8 +21,8 @@ export const ActivityScreen: FC<AuthorizedScreenProps<"activity-screen">> = ({ n
       headerRight: () => {
         return (
           <Container direction="row" alignItems="center">
-            <IconButton onPress={() => setActivityType("business")} withMarginRight iconType="business" />
-            <IconButton onPress={() => setActivityType("staff")} withMarginRight iconType="add-staff" />
+            {/* <IconButton onPress={() => setActivityType("business")} withMarginRight iconType="business" />
+            <IconButton onPress={() => setActivityType("staff")} withMarginRight iconType="add-staff" /> */}
           </Container>
         );
       },
@@ -47,7 +47,7 @@ export const ActivityScreen: FC<AuthorizedScreenProps<"activity-screen">> = ({ n
     {
       time: "09:00",
       title: "Event name",
-      // dotColor: "red",
+      //dotColor: "red",
       description: "Event Description",
     },
     { time: "10:45", title: "Event name", description: "Event Description" },

@@ -16,8 +16,8 @@ export const ManageAdminUsers = ({ admins }: ManageAdminUsersProps) => {
           isSuperAdmin: boolean;
         }
       ) => ({
-        title: `${admin.givenName || admin.displayName || admin.familyName || ""}${
-          admin.isSuperAdmin ? "(Super admin)" : ""
+        title: `${admin.givenName || admin.displayName || admin.familyName || admin.username || ""}${
+          admin.isSuperAdmin ? " (Super admin)" : ""
         }`,
         description: admin.email,
         iconName: admin.isSuperAdmin ? "shield-account" : "account",
