@@ -1,15 +1,11 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { View, useWindowDimensions, StyleSheet, StatusBar, Animated, Pressable } from "react-native";
 import { TabView, SceneMap, TabBarProps } from "react-native-tab-view";
 import { EventMoreTab } from "./event-more-tab";
 import { EventUsersTab } from "./event-users-tab";
 import { EventScreenHeader } from "../event-screen-header";
 import { useTheme } from "../../../../theme";
-
-const ROUTES = [
-  { key: "people", title: "People" },
-  { key: "more", title: "More" },
-];
+import { useIntl } from "react-intl";
 
 type Route = {
   key: string;
@@ -21,7 +17,14 @@ export const EventScreenTabs = props => {
   const layout = useWindowDimensions();
   const { Colors } = useTheme();
   const [index, setIndex] = useState(0);
-  const [routes] = useState(ROUTES);
+  const intl = useIntl();
+
+  const routes = useMemo(() => {
+    return [
+      { key: "people", title: intl.formatMessage({ id: "Event_Screen.routes.title.people" }) },
+      { key: "more", title: intl.formatMessage({ id: "Event_Screen.routes.title.more" }) },
+    ];
+  }, [intl]);
 
   const renderPeopleTab = useCallback(() => {
     return <EventUsersTab event={event} />;

@@ -27,11 +27,11 @@ export const eventStatusColors: Record<EventStatusName, { color: ThemeColorName;
 };
 
 export const eventStatusNames: Record<EventStatusName, string> = {
-  PENDING: "Pending",
-  APPROVED: "Accept",
-  REJECTED: "Reject",
-  CANCELED: "Cancel",
-  COMPLETED: "Complete",
+  PENDING: "pending",
+  APPROVED: "accept",
+  REJECTED: "reject",
+  CANCELED: "cancel",
+  COMPLETED: "complete",
 };
 
 export const CALENDAR_EVENT_HEIGHT = 75;

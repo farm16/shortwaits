@@ -116,9 +116,9 @@ export const AddClientModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ nav
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
-      headerTitle: () => <Text preset="text" text="Add Client" />,
+      headerTitle: () => <Text preset="text" text={intl.formatMessage({ id: "Common.addClient" })} />,
     });
-  }, [closeOnSubmit, handleSubmit, navigation]);
+  }, [closeOnSubmit, handleSubmit, intl, navigation]);
 
   useEffect(() => {
     if (createBusinessClientsStatus.isSuccess && closeOnSubmit) {

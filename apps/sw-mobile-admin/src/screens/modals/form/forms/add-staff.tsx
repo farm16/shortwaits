@@ -121,9 +121,9 @@ export const AddStaffModal: FC<ModalsScreenProps<"form-modal-screen">> = ({ navi
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
-      headerTitle: () => <Text preset="text" text="Add Staff" />,
+      headerTitle: () => <Text preset="text" text={intl.formatMessage({ id: "AddStaffModal.title" })} />,
     });
-  }, [closeOnSubmit, handleSubmit, navigation]);
+  }, [closeOnSubmit, handleSubmit, intl, navigation]);
 
   useEffect(() => {
     if (createBusinessStaffStatus.isSuccess && closeOnSubmit) {

@@ -6,12 +6,14 @@ import { AuthorizedScreenProps } from "../../../navigation";
 import { useBusiness, useEvents, useShowGhostComponent } from "../../../store";
 import { useGetServicesByBusinessQuery } from "../../../services";
 import { convertStaticSelectorModalData } from "../../../utils/static-selector-modal-utils";
+import { useIntl } from "react-intl";
 
 export function EventsScreen({ navigation }: AuthorizedScreenProps<"events-screen">) {
   const [isQrVisible, setIsQrVisible] = useState(false);
 
   const currentBusiness = useBusiness();
   const currentsEvents = useEvents();
+  const intl = useIntl();
 
   useGetServicesByBusinessQuery(currentBusiness._id ?? skipToken);
   useShowGhostComponent("floatingActionButton");
@@ -21,7 +23,7 @@ export function EventsScreen({ navigation }: AuthorizedScreenProps<"events-scree
       headerTitle: () => {
         return (
           <Container direction="row" justifyContent="center">
-            <Text preset="headerTitle" text={"Events"} />
+            <Text preset="headerTitle" text={intl.formatMessage({ id: "Events_Screen.title" })} />
           </Container>
         );
       },
@@ -49,9 +51,9 @@ export function EventsScreen({ navigation }: AuthorizedScreenProps<"events-scree
                   screen: "selector-modal-screen",
                   params: {
                     type: "static",
-                    closeOnSubmit: false,
+                    closeOnSelect: false,
                     searchable: true,
-                    headerTitle: "Search events",
+                    headerTitle: intl.formatMessage({ id: "Events_Screen.searchEvents.headerTitle" }),
                     itemRightIconColor: "brandSecondary",
                     itemRightIconName: "dots-vertical",
                     data: convertStaticSelectorModalData(currentsEvents ?? [], "events"),
@@ -71,7 +73,7 @@ export function EventsScreen({ navigation }: AuthorizedScreenProps<"events-scree
       },
       headerShadowVisible: false,
     });
-  }, [currentBusiness.shortName, currentsEvents, navigation]);
+  }, [currentBusiness.shortName, currentsEvents, intl, navigation]);
 
   return (
     <Screen preset="fixed" unsafe unsafeBottom backgroundColor="backgroundOverlay">
@@ -79,14 +81,14 @@ export function EventsScreen({ navigation }: AuthorizedScreenProps<"events-scree
         isVisible={isQrVisible}
         setIsVisible={setIsQrVisible}
         value={currentBusiness.web.baseUrl + "/booking"}
-        title="Book an appointment"
+        title={intl.formatMessage({ id: "Events_Screen.qrCodeModal.title" })}
         description={
           <Text>
-            Scan this QR code to book an appointment with{" "}
+            {intl.formatMessage({ id: "Events_Screen.qrCodeModal.description" })}{" "}
             <Text style={{ fontWeight: "700" }}>{currentBusiness.shortName}</Text>
           </Text>
         }
-        description2={"Note: The client will see all available services."}
+        description2={intl.formatMessage({ id: "Events_Screen.qrCodeModal.description2" })}
       />
       <Calendar />
     </Screen>

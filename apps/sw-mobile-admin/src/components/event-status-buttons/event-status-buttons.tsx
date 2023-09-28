@@ -4,6 +4,9 @@ import { Button, Text } from "..";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTheme } from "../../theme";
 import { EventDtoType } from "@shortwaits/shared-lib";
+import { ActivityIndicator } from "react-native-paper";
+import { useIntl } from "react-intl";
+
 import {
   CALENDAR_EVENT_HEIGHT,
   EVENT_ITEM_BORDER_RADIUS,
@@ -14,7 +17,6 @@ import {
 } from "../../utils";
 import { useUpdateEventMutation } from "../../services";
 import { useBusiness } from "../../store";
-import { ActivityIndicator } from "react-native-paper";
 
 export const EventStatusButtons: React.FC<{
   event: EventDtoType;
@@ -22,6 +24,7 @@ export const EventStatusButtons: React.FC<{
 }> = ({ event, size = "large" }) => {
   const { _id: businessId } = useBusiness();
   const { Colors } = useTheme();
+  const intl = useIntl();
 
   const statusCount = nextEventStatuses[event?.status?.statusName ?? ""].length;
 
@@ -33,8 +36,6 @@ export const EventStatusButtons: React.FC<{
   const [updateEvent, updatedEvent] = useUpdateEventMutation();
 
   const handleStatusUpdate = status => {
-    console.log(status);
-    console.log(event.status);
     updateEvent({
       businessId,
       body: {
@@ -88,7 +89,9 @@ export const EventStatusButtons: React.FC<{
               <Icon name={eventStatusIconNames[status]} size={24} color={Colors[eventStatusColors[status].color]} />
               {size === "large" ? (
                 <Text
-                  text={eventStatusNames[status]}
+                  text={intl.formatMessage({
+                    id: `Event_Screen.eventStatusButton.status.${eventStatusNames[status]}`,
+                  })}
                   preset="none"
                   style={[
                     {

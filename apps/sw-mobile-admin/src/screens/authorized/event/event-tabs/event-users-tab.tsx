@@ -24,12 +24,14 @@ import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { ActivityIndicator } from "react-native-paper";
 import { navigate } from "../../../../utils";
 import { useBusiness } from "../../../../store";
+import { useIntl } from "react-intl";
 
 type PeopleDtoType = BusinessUserDtoType | ClientUserDtoType;
 
 export function EventUsersTab({ event }: { event: EventDtoType }) {
   const { Colors } = useTheme();
   const business = useBusiness();
+  const intl = useIntl();
   const [updateEvent, updateEventStatus] = useUpdateEventMutation();
 
   const {
@@ -68,58 +70,61 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
     }
   };
 
-  const nonIdealState = useCallback(section => {
-    const { title } = section;
-    return !isEmpty(section.data) ? null : title === "Clients" ? (
-      <NonIdealState
-        type={"noClientsInEvent"}
-        buttons={[
-          <Button
-            style={{
-              width: "auto",
-              paddingHorizontal: 28,
-            }}
-            text="Add client"
-            onPress={() => {
-              navigate("modals", {
-                screen: "selector-modal-screen",
-                params: {
-                  type: title === "Staff" ? "staff" : "clients",
-                  onSelect: user => {
-                    console.log("selected user:", user);
+  const nonIdealState = useCallback(
+    section => {
+      const { title } = section;
+      return !isEmpty(section.data) ? null : title === "Clients" ? (
+        <NonIdealState
+          type={"noClientsInEvent"}
+          buttons={[
+            <Button
+              style={{
+                width: "auto",
+                paddingHorizontal: 28,
+              }}
+              text={intl.formatMessage({ id: "Common.addClient" })}
+              onPress={() => {
+                navigate("modals", {
+                  screen: "selector-modal-screen",
+                  params: {
+                    type: title === "Staff" ? "staff" : "clients",
+                    onSelect: user => {
+                      console.log("selected user:", user);
+                    },
                   },
-                },
-              });
-            }}
-          />,
-        ]}
-      />
-    ) : (
-      <NonIdealState
-        type={"noStaffInEvent"}
-        buttons={[
-          <Button
-            style={{
-              width: "auto",
-              paddingHorizontal: 28,
-            }}
-            text="Add staff"
-            onPress={() => {
-              navigate("modals", {
-                screen: "selector-modal-screen",
-                params: {
-                  type: title === "Staff" ? "staff" : "clients",
-                  onSelect: user => {
-                    console.log("selected user:", user);
+                });
+              }}
+            />,
+          ]}
+        />
+      ) : (
+        <NonIdealState
+          type={"noStaffInEvent"}
+          buttons={[
+            <Button
+              style={{
+                width: "auto",
+                paddingHorizontal: 28,
+              }}
+              text={intl.formatMessage({ id: "Common.addStaff" })}
+              onPress={() => {
+                navigate("modals", {
+                  screen: "selector-modal-screen",
+                  params: {
+                    type: title === "Staff" ? "staff" : "clients",
+                    onSelect: user => {
+                      console.log("selected user:", user);
+                    },
                   },
-                },
-              });
-            }}
-          />,
-        ]}
-      />
-    );
-  }, []);
+                });
+              }}
+            />,
+          ]}
+        />
+      );
+    },
+    [intl]
+  );
 
   const handleUpdateEvent = useCallback(
     (userType: "staff" | "clients", users: BusinessUsersDtoType & ClientUsersDtoType) => {
@@ -181,7 +186,9 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
                 color: Colors.text,
               }}
             >
-              {`${title} (${_data.find(({ title: _title }) => _title === title).data.length})`}
+              {`${intl.formatMessage({ id: `Common.${(title as string).toLowerCase()}` })} (${
+                _data.find(({ title: _title }) => _title === title).data.length
+              })`}
             </Text>
             <IconButton
               iconType="add"
@@ -205,7 +212,7 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
         </Fragment>
       );
     },
-    [Colors.backgroundOverlay, Colors.text, _data, event, handleUpdateEvent, nonIdealState]
+    [Colors.backgroundOverlay, Colors.text, _data, event, handleUpdateEvent, intl, nonIdealState]
   );
 
   const _renderListEmptyComponent = useCallback(() => {

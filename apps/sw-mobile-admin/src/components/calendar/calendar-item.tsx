@@ -1,13 +1,12 @@
+import { RectButton } from "react-native-gesture-handler";
 import React, { useCallback } from "react";
-import { Alert, View, Image, Animated, StyleSheet, Pressable } from "react-native";
+import { Alert, View, Animated, StyleSheet, Pressable } from "react-native";
 import { EventDtoType } from "@shortwaits/shared-lib";
 import { isEmpty, truncate } from "lodash";
-import { Container, Emoji, EventStatusButtons, Space, Text } from "..";
+import { Emoji, EventStatusButtons, Space, Text } from "..";
 import { useTheme } from "../../theme";
 import { getEventTime } from "./calendar-utils";
-import defaultUserImage from "../../assets/images/user.png";
 import { useService } from "../../store";
-import { RectButton } from "react-native-gesture-handler";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import { navigate } from "../../navigation";
 import {
@@ -16,6 +15,7 @@ import {
   statusDisplayMessagesColor,
 } from "../../utils/status-color";
 import { CALENDAR_EVENT_HEIGHT, EVENT_ITEM_BORDER_RADIUS } from "../../utils";
+import { useIntl } from "react-intl";
 
 type AgendaItemProps = {
   item: EventDtoType;
@@ -24,6 +24,7 @@ type AgendaItemProps = {
 export const AgendaItem = (props: AgendaItemProps) => {
   const { item } = props;
   const { Colors } = useTheme();
+  const intl = useIntl();
   const service = useService(item?.serviceId ?? "");
 
   const handleOnPress = useCallback(() => {
@@ -113,18 +114,19 @@ export const AgendaItem = (props: AgendaItemProps) => {
           }}
         >
           <Text style={{ color: Colors.subText, fontSize: 12, textAlign: "center" }}>
-            {`clients: ${item?.clientsIds?.length ?? 0}`}
+            {`${intl.formatMessage({ id: "CalendarItem.clients" })}: ${item?.clientsIds?.length ?? 0}`}
           </Text>
           <Text style={{ color: Colors.subText, fontSize: 12, textAlign: "center" }}>
-            {`staff: ${item?.staffIds?.length ?? 0}`}
+            {`${intl.formatMessage({ id: "CalendarItem.staff" })}: ${item?.staffIds?.length ?? 0}`}
           </Text>
         </View>
       </View>
     );
-  }, [Colors.subText, Colors.text, item?.clientsIds?.length, item.labels, item?.name, item?.staffIds?.length]);
+  }, [Colors.subText, Colors.text, intl, item?.clientsIds?.length, item.labels, item?.name, item?.staffIds?.length]);
 
   const eventStatus = useCallback(() => {
     const isPublicEvent = item.isPublicEvent;
+    const statusName = item.status?.statusName ? statusDisplayMessages[item.status.statusName] : "";
     return (
       <View style={[styles.statusContainer, { borderLeftColor: Colors.lightGray }]}>
         <View
@@ -140,21 +142,27 @@ export const AgendaItem = (props: AgendaItemProps) => {
               styles.eventNameRow2,
               {
                 color: statusDisplayMessagesColor[item.status.statusName],
+                width: "100%",
+                height: 20,
               },
             ]}
             preset={"none"}
-            text={item.status?.statusName ? statusDisplayMessages[item.status.statusName] : ""}
+            text={intl.formatMessage({ id: `CalendarItem.status.${statusName}` })}
           />
         </View>
         <Space size="tiny" />
         <Text
           style={[styles.eventTimeRow2, { color: Colors.subText }]}
           preset="none"
-          text={isPublicEvent ? "Public event" : "Private event"}
+          text={
+            isPublicEvent
+              ? intl.formatMessage({ id: "CalendarItem.publicEvent" })
+              : intl.formatMessage({ id: "CalendarItem.privateEvent" })
+          }
         />
       </View>
     );
-  }, [Colors.lightGray, Colors.subText, item.isPublicEvent, item.status.statusName]);
+  }, [Colors.lightGray, Colors.subText, intl, item.isPublicEvent, item.status.statusName]);
 
   return (
     <Swipeable renderRightActions={renderRightActions}>

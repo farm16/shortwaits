@@ -12,6 +12,7 @@ import Facebook from "../../../assets/icons/facebook.svg";
 import Google from "../../../assets/icons/google.svg";
 import { onGoogleButtonPress } from "../../../utils";
 import { Logo1 } from "../../../assets";
+import { useIntl } from "react-intl";
 
 export interface RegisterWithEmailScreenProps {
   navigation: CompositeNavigationProp<
@@ -23,6 +24,7 @@ export interface RegisterWithEmailScreenProps {
 export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) => {
   const { Colors } = useTheme();
   const [isVisible, setIsVisible] = useState(false);
+  const intl = useIntl(); // Access the intl object
 
   const [localSignIn, localSignInResponse] = useLocalSignInMutation();
   const [socialSignUp, socialSignUpResponse] = useSocialSignInMutation();
@@ -54,10 +56,17 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
         authCode,
       });
     } catch (error) {
-      Alert.alert("Oops", "Something went wrong. Please try again.");
+      Alert.alert(
+        intl.formatMessage({
+          id: "Common.error.title",
+        }),
+        intl.formatMessage({
+          id: "Common.error.message",
+        })
+      );
       console.log("Error during Google sign-up:", error);
     }
-  }, [socialSignUp]);
+  }, [intl, socialSignUp]);
 
   const handleFacebookSignIn = useCallback(async () => {
     try {
@@ -67,10 +76,17 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
         authCode,
       });
     } catch (error) {
-      Alert.alert("Oops", "Something went wrong. Please try again.");
+      Alert.alert(
+        intl.formatMessage({
+          id: "Common.error.title",
+        }),
+        intl.formatMessage({
+          id: "Common.error.message",
+        })
+      );
       console.log("Error during Facebook sign-up:", error);
     }
-  }, [socialSignUp]);
+  }, [intl, socialSignUp]);
 
   useEffect(() => {
     if (localSignInResponse.isError) {
@@ -87,11 +103,21 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
           style: "default",
         });
       }
-      Alert.alert("Oops", localSignInResponse?.error?.data?.message ?? "unknown error", buttons, {
-        cancelable: true,
-      });
+      Alert.alert(
+        intl.formatMessage({
+          id: "Common.error.title",
+        }),
+        localSignInResponse?.error?.data?.message ??
+          intl.formatMessage({
+            id: "Common.error.message",
+          }),
+        buttons,
+        {
+          cancelable: true,
+        }
+      );
     } else return;
-  }, [navigation, localSignInResponse?.error?.data?.message, localSignInResponse.isError]);
+  }, [navigation, localSignInResponse?.error?.data?.message, localSignInResponse.isError, intl]);
 
   if (localSignInResponse.isLoading || socialSignUpResponse.isLoading) return <ActivityIndicator />;
 
@@ -109,7 +135,9 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
       <TextFieldCard
         autoCapitalize="none"
         keyboardType="default"
-        title="Username"
+        title={intl.formatMessage({
+          id: "Sign_In_Screen.username",
+        })}
         placeholder="bod_ross123"
         value={values.username}
         onChangeText={handleChange("username")}
@@ -119,7 +147,9 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
       <Space size="small" />
       <TextFieldCard
         secureTextEntry={!isVisible}
-        title="Password"
+        title={intl.formatMessage({
+          id: "Sign_In_Screen.password",
+        })}
         placeholder=""
         value={values.password}
         rightIconOnPress={handlePasswordVisibility}
@@ -134,35 +164,64 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
           flexDirection: "row",
         }}
       >
-        <Button style={{ marginLeft: "auto" }} preset="subLink" text="Forgot password?" />
+        <Button
+          style={{ marginLeft: "auto" }}
+          preset="subLink"
+          text={intl.formatMessage({
+            id: "Sign_In_Screen.forgotPassword",
+          })}
+        />
       </View>
       <Space size="large" />
       <Button preset="primary" style={{ backgroundColor: Colors.brandSecondary }} onPress={() => handleSubmit()}>
-        <Text style={{ color: "white" }} preset="social">
-          Log in
-        </Text>
+        <Text
+          style={{ color: "white" }}
+          preset="social"
+          text={intl.formatMessage({
+            id: "Common.signIn",
+          })}
+        />
       </Button>
       <Space size="large" />
       <Button preset="social" onPress={handleFacebookSignIn}>
         <Facebook width={30} height={30} style={{ position: "absolute", left: 0, margin: 16 }} />
         <Container style={styles.buttonContainer}>
-          <Text preset="social">with Facebook</Text>
+          <Text
+            preset="social"
+            text={intl.formatMessage({
+              id: "Sign_In_Screen.facebook",
+            })}
+          />
         </Container>
       </Button>
       <Space size="small" />
       <Button preset="social" onPress={handleGoogleSignIn}>
         <Container style={styles.buttonContainer}>
           <Google width={30} height={30} style={{ position: "absolute", left: 0, margin: 16 }} />
-          <Text preset="social">with Gmail</Text>
+          <Text
+            preset="social"
+            text={intl.formatMessage({
+              id: "Sign_In_Screen.google",
+            })}
+          />
         </Container>
       </Button>
       <Space />
       <View style={styles.footer}>
-        <Text preset="subLink" style={{ color: Colors.text }} text="Don't have an account?   " />
+        <Text
+          preset="subLink"
+          style={{ color: Colors.text }}
+          text={intl.formatMessage({
+            id: "Sign_In_Screen.dontHaveAnAccount",
+          })}
+        />
+        <Space direction="vertical" />
         <Button
           preset="subLink"
           textStyle={{ color: Colors.brandSecondary6 }}
-          text="Sign up"
+          text={intl.formatMessage({
+            id: "Sign_In_Screen.signUp",
+          })}
           onPress={() => {
             navigation.navigate("unauthorized", { screen: "sign-up-screen" });
           }}

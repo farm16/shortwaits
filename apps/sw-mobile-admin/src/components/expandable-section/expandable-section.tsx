@@ -1,6 +1,7 @@
 import React, { useState, ReactNode, Fragment } from "react";
 import { Button, AnimatedHiddenView } from "../../components";
 import { useTheme } from "../../theme";
+import { useIntl } from "react-intl";
 
 interface ExpandableSectionProps {
   children: ReactNode;
@@ -9,7 +10,10 @@ interface ExpandableSectionProps {
 export const ExpandableSection: React.FC<ExpandableSectionProps> = ({ children }) => {
   const [isWithMoreInfo, setIsWithMoreInfo] = useState<boolean>(false);
   const { Colors } = useTheme();
-  const buttonText = isWithMoreInfo ? "Show Less Fields" : "Show More Fields";
+  const intl = useIntl();
+  const buttonText = isWithMoreInfo
+    ? intl.formatMessage({ id: "Common.showLessFields" })
+    : intl.formatMessage({ id: "Common.showMoreFields" });
 
   return (
     <Fragment>

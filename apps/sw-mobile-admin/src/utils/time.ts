@@ -4,13 +4,13 @@ import { BusinessHoursType } from "@shortwaits/shared-lib";
  * @todo this will need translation
  * @returns "mo - tu - we - th - fr - sa - su"
  */
-export const getPrettyStringFromHours = (hours: BusinessHoursType | null): string => {
-  if (!hours) return "select your business hours";
+export const getPrettyStringFromHours = (hours: BusinessHoursType | null, locale?: string): string => {
+  if (!hours) return null;
   const hoursArr: string[] = [];
   for (const day in hours) {
     for (let i = 0; i < hours[day].length; i++) {
       if (hours[day][i].isActive) {
-        hoursArr.push(getTwoLetterDay(day));
+        hoursArr.push(getTwoLetterDay(day, locale));
         break;
       }
     }
@@ -18,7 +18,30 @@ export const getPrettyStringFromHours = (hours: BusinessHoursType | null): strin
   return hoursArr.toString().replace(/,/g, " - ");
 };
 
-export const getTwoLetterDay = (day: string): string => day.slice(0, 2);
+export const getTwoLetterDay = (day: string, locale?: string): string => {
+  if (locale === "es") {
+    switch (day) {
+      case "mon":
+        return "lun";
+      case "tue":
+        return "mar";
+      case "wed":
+        return "mie";
+      case "thu":
+        return "jue";
+      case "fri":
+        return "vie";
+      case "sat":
+        return "sab";
+      case "sun":
+        return "dom";
+      default:
+        return day.slice(0, 2);
+    }
+  } else {
+    return day.slice(0, 2);
+  }
+};
 
 export const getPrettyStringFromDurationInMin = (durationInMin: number): string => {
   const minutes = Number(durationInMin);

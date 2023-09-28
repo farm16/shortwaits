@@ -13,6 +13,7 @@ import { useSocialSignUpMutation } from "../../../services";
 import { onGoogleButtonPress } from "../../../utils";
 import { ActivityIndicator } from "react-native-paper";
 import { Logo1 } from "../../../assets/images/svg-components/logo-1";
+import { useIntl } from "react-intl";
 
 export interface SignUpScreenProps {
   navigation: CompositeNavigationProp<
@@ -23,6 +24,7 @@ export interface SignUpScreenProps {
 
 export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
   const { Colors } = useTheme();
+  const intl = useIntl(); // Access the intl object
   const [socialSignUp, { isLoading }] = useSocialSignUpMutation();
 
   const handleGoogleSignUp = useCallback(async () => {
@@ -65,7 +67,7 @@ export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
             marginTop: 21,
             alignSelf: "center",
           }}
-          text="create account"
+          text={intl.formatMessage({ id: "Sign_Up_Screen.title" })}
         />
       </View>
 
@@ -73,14 +75,14 @@ export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
         <Button preset="social">
           <Facebook width={30} height={30} style={{ position: "absolute", left: 0, margin: 16 }} />
           <Container style={styles.buttonContainer}>
-            <Text preset="social">with Facebook</Text>
+            <Text preset="social">{intl.formatMessage({ id: "Sign_Up_Screen.facebook" })}</Text>
           </Container>
         </Button>
         <Space size="small" />
         <Button preset="social" onPress={handleGoogleSignUp}>
           <Google width={30} height={30} style={{ position: "absolute", left: 0, margin: 16 }} />
           <Container style={styles.buttonContainer}>
-            <Text preset="social">with Gmail</Text>
+            <Text preset="social">{intl.formatMessage({ id: "Sign_Up_Screen.google" })}</Text>
           </Container>
         </Button>
         <Space size="small" />
@@ -99,7 +101,7 @@ export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
           <EMail width={30} height={30} style={{ position: "absolute", left: 0, margin: 16 }} />
           <Container style={styles.buttonContainer}>
             <Text style={{ color: "white" }} preset="social">
-              with Email
+              {intl.formatMessage({ id: "Sign_Up_Screen.email" })}
             </Text>
           </Container>
         </Button>

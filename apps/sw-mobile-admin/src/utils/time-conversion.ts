@@ -5,9 +5,7 @@ export const get12hrTimeFromDecimal = (decimal: number): string => {
   }
   const meridiem = timeArr[0] >= 12 ? "pm" : "am";
   timeArr[0] = timeArr[0] % 12 || 12;
-  return `${timeArr[0]}:${
-    timeArr[1] < 10 ? "0" + timeArr[1] : timeArr[1]
-  } ${meridiem}`;
+  return `${timeArr[0]}:${timeArr[1] < 10 ? "0" + timeArr[1] : timeArr[1]} ${meridiem}`;
 };
 export const get24hrTimeFromDecimal = (decimal: number): string => {
   const timeArr = getTimeArrFromDecimal(decimal);
@@ -16,9 +14,7 @@ export const get24hrTimeFromDecimal = (decimal: number): string => {
   }
   return `${timeArr[0]}:${timeArr[1] < 10 ? "0" + timeArr[1] : timeArr[1]}`;
 };
-export const getTimeArrFromDecimal = (
-  decimal: number
-): [number, number] | [] => {
+export const getTimeArrFromDecimal = (decimal: number): [number, number] | [] => {
   if (decimal < 0 || decimal > 1440) {
     return [];
   }
@@ -43,10 +39,7 @@ export const getPrettyDateFromISO = (isoDateString: string): string => {
 };
 
 // outputs string in "13:00 PM - 15:00 PM"
-export const getPrettyTimeRangeFromISO = (
-  isoDateStartString: string,
-  isoDateEndString: string | undefined
-): string => {
+export const getPrettyTimeRangeFromISO = (isoDateStartString: string, isoDateEndString: string | undefined): string => {
   const dateStart = new Date(isoDateStartString);
   const options: Intl.DateTimeFormatOptions = {
     hour: "numeric",
@@ -57,7 +50,7 @@ export const getPrettyTimeRangeFromISO = (
   if (isoDateEndString && isoDateEndString.trim() !== "") {
     const dateEnd = new Date(isoDateEndString);
     const timeEnd = dateEnd.toLocaleTimeString("en-US", options);
-    return `${timeStart} -> ${timeEnd}`;
+    return `${timeStart} ⇢ ${timeEnd}`;
   }
 
   return timeStart;

@@ -1,10 +1,11 @@
 import React, { FC, useEffect } from "react";
-import { View, StatusBar } from "react-native";
+import { StyleSheet, View } from "react-native";
 import SplashScreen from "react-native-splash-screen";
 import { CompositeNavigationProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { skipToken } from "@reduxjs/toolkit/dist/query/react";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import { useIntl } from "react-intl";
 
 import { Button, Container, Screen, Space, Text } from "../../../components";
 import { useTheme } from "../../../theme";
@@ -29,6 +30,7 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation }) => {
   const { Colors } = useTheme();
   const business = useBusiness();
   const mobileAdminData = useMobileAdmin();
+  const intl = useIntl(); // Access the intl object
 
   const { isLoading: isAdminMobileLoading } = useGetAdminMobileQuery(mobileAdminData.defaultData && skipToken);
 
@@ -49,36 +51,17 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation }) => {
       <Container direction="row" alignItems="center" justifyContent="center">
         <Logo2 height={75} width={75} />
       </Container>
-      <View
-        style={{
-          // justifyContent: "center",
-          flex: 1,
-          alignItems: "center",
-          justifyContent: "flex-start",
-        }}
-      >
+      <View style={styles.box1}>
         <WelcomeImage height={"30%"} />
         <Space size="large" />
-        <View
-          style={{
-            width: "100%",
-            paddingHorizontal: 16,
-          }}
-        >
+        <View style={styles.box2}>
           <Text
             preset="cardSubtitle"
-            style={{
-              fontWeight: "500",
-            }}
-            text="Welcome to the Shortwaits Admin App"
+            style={styles.box2Text}
+            text={intl.formatMessage({ id: "Welcome_Screen.title" })}
           />
           <Space size="small" />
-          <Text
-            preset="title2"
-            text={
-              "Where you're the captain of your business!\nExplore our tools to take control and drive your success."
-            }
-          />
+          <Text preset="title2" text={intl.formatMessage({ id: "Welcome_Screen.description" })} />
         </View>
       </View>
       <View style={{ padding: 16 }}>
@@ -88,7 +71,7 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation }) => {
           }}
           textStyle={{ color: Colors.white }}
           preset="primary"
-          text="Register"
+          text={intl.formatMessage({ id: "Common.register" })}
           onPress={() =>
             navigation.navigate("unauthorized", {
               screen: "sign-up-screen",
@@ -103,7 +86,7 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation }) => {
             color: Colors.static_welcomeButtonText,
           }}
           preset="primary"
-          text="Login"
+          text={intl.formatMessage({ id: "Common.login" })}
           onPress={() =>
             navigation.navigate("unauthorized", {
               screen: "sign-in-screen",
@@ -115,3 +98,18 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation }) => {
     </Screen>
   );
 };
+
+const styles = StyleSheet.create({
+  box1: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "flex-start",
+  },
+  box2: {
+    width: "100%",
+    paddingHorizontal: 16,
+  },
+  box2Text: {
+    fontWeight: "500",
+  },
+});

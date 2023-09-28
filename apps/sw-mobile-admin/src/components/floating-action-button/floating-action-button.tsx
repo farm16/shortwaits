@@ -4,7 +4,7 @@ import { StyleSheet, ViewStyle } from "react-native";
 import { FAB } from "react-native-paper";
 import { selectCurrentMobileAdminState } from "../../store";
 import { useTheme } from "../../theme";
-import { actions as defaultActions } from "./fab-actions";
+import { actions as defaultActions, useActions } from "./fab-actions";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
 
@@ -28,13 +28,8 @@ export type FloatingActions = {
 }[];
 
 export const FloatingActionButton = (props: FloatingActionButtonProps) => {
-  const {
-    actions = defaultActions,
-    icon = "plus",
-    pressedIcon = "plus",
-    isVisible: isVisibleOverride,
-    ...rest
-  } = props;
+  const { icon = "plus", pressedIcon = "plus", isVisible: isVisibleOverride, ...rest } = props;
+  const actions = useActions();
   const { Colors } = useTheme();
   const insets = useSafeAreaInsets();
   const [isOpen, setIsOpen] = useState(false);

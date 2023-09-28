@@ -1,5 +1,5 @@
 import React from "react";
-import { Provider as ReduxProvider } from "react-redux";
+import { Provider as ReduxProvider, useDispatch } from "react-redux";
 import { Provider as PaperProvider } from "react-native-paper";
 import { SafeAreaProvider, initialWindowMetrics } from "react-native-safe-area-context";
 import { PortalProvider as GPortalProvider, enableLogging } from "@gorhom/portal";
@@ -10,7 +10,7 @@ import { persistor, store } from "./store";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { PersistGate } from "redux-persist/integration/react";
 import copies from "./i18n/copies.json";
-import { usePreferredLanguage } from "./utils";
+import { getDeviceLanguageCode, usePreferredLanguage } from "./utils";
 import { Banner, FloatingActionButton, PremiumMembershipModal } from "./components";
 
 enableLogging();
@@ -53,7 +53,9 @@ function WithProviders({ children }) {
 }
 
 const WithIntl = ({ children }) => {
-  const language = usePreferredLanguage();
+  const deviceLanguageCode = getDeviceLanguageCode();
+  const preferredLanguage = usePreferredLanguage();
+  const language = preferredLanguage || deviceLanguageCode;
   const messages = copies[language] || copies.en;
   return (
     <IntlProvider locale={language} messages={messages}>

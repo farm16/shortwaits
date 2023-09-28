@@ -18,6 +18,7 @@ import {
   truncated,
 } from "../../../utils";
 import { useService } from "../../../store";
+import { useIntl } from "react-intl";
 
 const IconNames = {
   date: "calendar-month-outline",
@@ -104,28 +105,59 @@ function InfoItem({ title, value, onPress, iconName }: InfoItemProps) {
 
 export function EventScreenHeader({ event }: { event: EventDtoType }) {
   const currentService = useService(event?.serviceId);
+  const intl = useIntl();
   return (
     <View style={styles.root}>
       <Container direction="row">
         {currentService?.name ? (
-          <InfoItem title="Service" iconName="service" value={currentService?.name ?? ""} />
+          <InfoItem
+            title={intl.formatMessage({
+              id: "Event_Screen.eventScreenHeader.service",
+            })}
+            iconName="service"
+            value={currentService?.name ?? ""}
+          />
         ) : null}
-        {event?.description ? <InfoItem title="Description" iconName="description" value={event.description} /> : null}
+        {event?.description ? (
+          <InfoItem
+            title={intl.formatMessage({
+              id: "Event_Screen.eventScreenHeader.description",
+            })}
+            iconName="description"
+            value={event.description}
+          />
+        ) : null}
       </Container>
       <Space direction="horizontal" size="tiny" extra={8} />
       <Container direction="row">
-        <InfoItem title="Status" iconName="status" value={event.status.statusName ?? ""} />
         <InfoItem
-          title="Cost"
+          title={intl.formatMessage({
+            id: "Event_Screen.eventScreenHeader.status",
+          })}
+          iconName="status"
+          value={event.status.statusName ?? ""}
+        />
+        <InfoItem
+          title={intl.formatMessage({
+            id: "Event_Screen.eventScreenHeader.cost",
+          })}
           iconName="price"
           value={getPrettyStringFromPriceWithSymbol("USD", event?.priceExpected ?? 0)}
         />
       </Container>
       <Space direction="horizontal" size="tiny" />
       <Container direction="row">
-        <InfoItem title="Date" iconName="date" value={getPrettyDateFromISO(event?.startTime)} />
         <InfoItem
-          title="Time"
+          title={intl.formatMessage({
+            id: "Event_Screen.eventScreenHeader.date",
+          })}
+          iconName="date"
+          value={getPrettyDateFromISO(event?.startTime)}
+        />
+        <InfoItem
+          title={intl.formatMessage({
+            id: "Event_Screen.eventScreenHeader.time",
+          })}
           iconName="time"
           value={getPrettyTimeRangeFromISO(event?.startTime, event?.expectedEndTime)}
         />
@@ -133,10 +165,22 @@ export function EventScreenHeader({ event }: { event: EventDtoType }) {
       {event?.notes && event?.labels && event?.labels.length > 0 ? <Space direction="horizontal" size="tiny" /> : null}
       <Container direction="row">
         {event?.notes ? (
-          <InfoItem title="Notes" iconName="notes" value={truncate(event?.notes, { length: 30 })} />
+          <InfoItem
+            title={intl.formatMessage({
+              id: "Event_Screen.eventScreenHeader.notes",
+            })}
+            iconName="notes"
+            value={truncate(event?.notes, { length: 30 })}
+          />
         ) : null}
         {event?.labels && event?.labels.length > 0 ? (
-          <InfoItem title="Labels" iconName="labels" value={event?.labels} />
+          <InfoItem
+            title={intl.formatMessage({
+              id: "Event_Screen.eventScreenHeader.labels",
+            })}
+            iconName="labels"
+            value={event?.labels}
+          />
         ) : null}
       </Container>
     </View>

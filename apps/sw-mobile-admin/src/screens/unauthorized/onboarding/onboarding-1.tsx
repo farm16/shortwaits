@@ -1,28 +1,19 @@
 import { useDispatch } from "react-redux";
 import React, { FC, useEffect, useLayoutEffect, useState } from "react";
 import { StackActions } from "@react-navigation/native";
-import LinearGradient from "react-native-linear-gradient";
 
-import { Screen, TextFieldCard, ButtonCard, Space, IconButton, Button, FormContainer } from "../../../components";
+import { TextFieldCard, ButtonCard, Space, IconButton, Button, FormContainer } from "../../../components";
 import { UnauthorizedScreenProps } from "../../../navigation";
 import { getPrettyStringFromHours } from "../../../utils/time";
 import { getStaffCount } from "../../../utils/staff";
-import { useTheme } from "../../../theme";
 import { useForm } from "../../../hooks";
-import {
-  useBusiness,
-  useUser,
-  setBusiness,
-  useSignOut,
-  useAuth,
-  useMobileAdmin,
-  setBusinessCategories,
-} from "../../../store";
+import { useBusiness, useUser, setBusiness, useSignOut, useAuth, setBusinessCategories } from "../../../store";
 import { useGetCategoriesQuery } from "../../../services";
+import { useIntl } from "react-intl";
 
 export const Onboarding1Screen: FC<UnauthorizedScreenProps<"onboarding-1-screen">> = ({ navigation }) => {
   const dispatch = useDispatch();
-
+  const intl = useIntl();
   const [isCategoriesTouched, setIsCategoriesTouched] = useState(false);
   const signOut = useSignOut();
   const business = useBusiness();
@@ -70,7 +61,15 @@ export const Onboarding1Screen: FC<UnauthorizedScreenProps<"onboarding-1-screen"
   const isCategorySelected = business?.categories?.length > 0;
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: `Welcome ${user?.familyName || ""}`,
+      // headerTitle: `Welcome ${user?.familyName || ""}`,
+      headerTitle: intl.formatMessage(
+        {
+          id: "Onboarding_1_Screen.headerTitle",
+        },
+        {
+          name: user?.username || "",
+        }
+      ),
       headerLeft: () => (
         <IconButton
           withMarginLeft
@@ -81,14 +80,16 @@ export const Onboarding1Screen: FC<UnauthorizedScreenProps<"onboarding-1-screen"
         />
       ),
     });
-  }, [navigation, dispatch, handleSubmit, errors, signOut, user?.familyName, isCategorySelected]);
+  }, [navigation, dispatch, handleSubmit, errors, signOut, user.familyName, isCategorySelected, intl, user?.username]);
 
   return (
     <FormContainer
       footer={
         <Button
-          preset={"secondary"}
-          text="CONTINUE"
+          preset="secondary"
+          text={intl.formatMessage({
+            id: "Common.continue",
+          })}
           onPress={e => {
             setIsCategoriesTouched(true);
             if (!(!Array.isArray(business?.categories) || !business?.categories.length)) {
@@ -106,16 +107,24 @@ export const Onboarding1Screen: FC<UnauthorizedScreenProps<"onboarding-1-screen"
        * <Space />
        **/}
       <TextFieldCard
-        title="Business Name"
-        placeholder={`The name of your business`}
+        title={intl.formatMessage({
+          id: "Onboarding_1_Screen.businessName",
+        })}
+        placeholder={intl.formatMessage({
+          id: "Onboarding_1_Screen.businessName.placeholder",
+        })}
         value={values.shortName}
         onChangeText={handleChange("shortName")}
         isTouched={touched.shortName}
         errors={errors.shortName}
       />
       <TextFieldCard
-        title="Description"
-        placeholder="A short description about your business"
+        title={intl.formatMessage({
+          id: "Onboarding_1_Screen.businessDescription",
+        })}
+        placeholder={intl.formatMessage({
+          id: "Onboarding_1_Screen.businessDescription.placeholder",
+        })}
         multiline
         maxLength={150} // get reduced to 140 by the form's validation
         value={values.description}
@@ -124,10 +133,14 @@ export const Onboarding1Screen: FC<UnauthorizedScreenProps<"onboarding-1-screen"
         errors={errors.description}
       />
       <ButtonCard
-        title="Business Categories"
+        title={intl.formatMessage({
+          id: "Onboarding_1_Screen.businessCategories",
+        })}
         subTitle={
           !Array.isArray(business?.categories) || !business?.categories?.length
-            ? "Select a business category"
+            ? intl.formatMessage({
+                id: "Onboarding_1_Screen.businessCategories.placeholder",
+              })
             : getSelectedCategoryNames(categories?.data || [], business?.categories)
         }
         errors={
@@ -140,7 +153,7 @@ export const Onboarding1Screen: FC<UnauthorizedScreenProps<"onboarding-1-screen"
             params: {
               type: "categories",
               multiple: true,
-              closeOnSubmit: true,
+              closeOnSelect: true,
               onSelect: (categories: string[]) => {
                 dispatch(setBusinessCategories(categories));
               },
@@ -153,8 +166,15 @@ export const Onboarding1Screen: FC<UnauthorizedScreenProps<"onboarding-1-screen"
        * schedule should default should be 5 days per week
        */}
       <ButtonCard
-        title="Hours"
-        subTitle={getPrettyStringFromHours(business?.hours)}
+        title={intl.formatMessage({
+          id: "Onboarding_1_Screen.businessHours",
+        })}
+        subTitle={
+          getPrettyStringFromHours(business?.hours, intl.locale) ??
+          intl.formatMessage({
+            id: "Onboarding_1_Screen.businessHours.placeholder",
+          })
+        }
         onPress={() =>
           navigation.navigate("modals", {
             screen: "schedule-modal-screen",
@@ -170,8 +190,18 @@ export const Onboarding1Screen: FC<UnauthorizedScreenProps<"onboarding-1-screen"
         }
       />
       <ButtonCard
-        title="Staff"
-        subTitle={getStaffCount(business?.staff ?? [])}
+        title={intl.formatMessage({
+          id: "Onboarding_1_Screen.businessStaff",
+        })}
+        // subTitle={getStaffCount(business?.staff ?? [])}
+        subTitle={intl.formatMessage(
+          {
+            id: "Common.getStaffCount",
+          },
+          {
+            count: getStaffCount(business?.staff ?? []),
+          }
+        )}
         onPress={() =>
           navigation.navigate("modals", {
             screen: "selector-modal-screen",

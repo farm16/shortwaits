@@ -3,6 +3,7 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { Platform } from "react-native";
+import { useIntl } from "react-intl";
 
 import { SettingsScreen, EventsScreen, MyBusinessScreen, ActivityScreen, ClientsScreen } from "../../screens";
 import { useTheme } from "../../theme";
@@ -12,6 +13,7 @@ const Tab = createBottomTabNavigator();
 
 export const AuthorizedTabNavigator = () => {
   const { Colors } = useTheme();
+  const intl = useIntl();
 
   return (
     <Tab.Navigator
@@ -50,7 +52,7 @@ export const AuthorizedTabNavigator = () => {
         name={AUTHORIZED_TAB_SCREENS.EVENTS_SCREEN}
         component={EventsScreen}
         options={{
-          tabBarLabel: "Events",
+          tabBarLabel: intl.formatMessage({ id: "Navigation.tab.label.events" }),
           tabBarIcon: ({ focused, color }) => (
             <MaterialCommunityIcons
               name={focused ? "calendar-clock" : "calendar-clock-outline"}
@@ -65,7 +67,7 @@ export const AuthorizedTabNavigator = () => {
         component={ClientsScreen}
         options={{
           headerTitleAlign: "center",
-          tabBarLabel: "Clients",
+          tabBarLabel: intl.formatMessage({ id: "Navigation.tab.label.clients" }),
           tabBarIcon: ({ focused, color }) => (
             <MaterialCommunityIcons
               name={focused ? "account-group" : "account-group-outline"}
@@ -79,7 +81,7 @@ export const AuthorizedTabNavigator = () => {
         name={AUTHORIZED_TAB_SCREENS.MY_BUSINESS_SCREEN}
         component={MyBusinessScreen}
         options={{
-          tabBarLabel: "My Business",
+          tabBarLabel: intl.formatMessage({ id: "Navigation.tab.label.myBusiness" }),
           tabBarIcon: ({ color, focused }) => (
             <MaterialCommunityIcons name={focused ? "store" : "store-outline"} color={color} size={25} />
           ),
@@ -89,7 +91,7 @@ export const AuthorizedTabNavigator = () => {
         name={AUTHORIZED_TAB_SCREENS.ACTIVITY_SCREEN}
         component={ActivityScreen}
         options={{
-          tabBarLabel: "Activities",
+          tabBarLabel: intl.formatMessage({ id: "Navigation.tab.label.activities" }),
           tabBarIcon: ({ color, focused }) => (
             <MaterialCommunityIcons
               name={focused ? "timeline-text" : "timeline-text-outline"}
@@ -103,7 +105,7 @@ export const AuthorizedTabNavigator = () => {
         name={AUTHORIZED_TAB_SCREENS.SETTINGS_SCREEN}
         component={SettingsScreen}
         options={{
-          tabBarLabel: "Settings",
+          tabBarLabel: intl.formatMessage({ id: "Navigation.tab.label.settings" }),
           tabBarIcon: ({ color, focused }) => (
             <MaterialCommunityIcons name={focused ? "account-cog" : "account-cog-outline"} color={color} size={25} />
           ),

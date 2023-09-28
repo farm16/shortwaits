@@ -2,8 +2,9 @@ import React, { FC, useCallback, useLayoutEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { CompositeNavigationProp } from "@react-navigation/native";
+import { useIntl } from "react-intl";
 
-import { Button, Space, Text, TextFieldCard, ScrollView, Screen } from "../../../components";
+import { Button, Space, Text, TextFieldCard, Screen } from "../../../components";
 import { useForm } from "../../../hooks";
 import { useTheme } from "../../../theme";
 import { RootStackParamList, UnauthorizedStackParamList } from "../../../navigation";
@@ -17,11 +18,13 @@ interface SignUpWithEmailScreenProps {
 }
 
 export const SignUpWithEmail: FC<SignUpWithEmailScreenProps> = ({ navigation }) => {
+  const intl = useIntl(); // Access the intl object
+
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "Create new account",
+      headerTitle: intl.formatMessage({ id: "Sign_Up_With_Email_Screen.headerTitle" }),
     });
-  }, [navigation]);
+  }, [intl, navigation]);
 
   const { Colors } = useTheme();
   const [isVisible, setIsVisible] = useState(false);
@@ -53,12 +56,11 @@ export const SignUpWithEmail: FC<SignUpWithEmailScreenProps> = ({ navigation }) 
   return (
     <Screen preset="scroll" withHorizontalPadding>
       <Space />
-
       <TextFieldCard
         keyboardType="default"
         autoCapitalize="none"
-        title="Email or username"
-        placeholder="bod_ross123"
+        title={intl.formatMessage({ id: "Sign_Up_With_Email_Screen.userNameOrEmail" })}
+        placeholder={intl.formatMessage({ id: "Sign_Up_With_Email_Screen.userNameOrEmail.placeholder" })}
         value={values.username}
         onChangeText={handleChange("username")}
         isTouched={touched.username}
@@ -67,7 +69,7 @@ export const SignUpWithEmail: FC<SignUpWithEmailScreenProps> = ({ navigation }) 
       <Space size="small" />
       <TextFieldCard
         secureTextEntry={!isVisible}
-        title="Password"
+        title={intl.formatMessage({ id: "Sign_Up_With_Email_Screen.password" })}
         placeholder=""
         value={values.password}
         rightIconOnPress={handlePasswordVisibility}
@@ -80,7 +82,7 @@ export const SignUpWithEmail: FC<SignUpWithEmailScreenProps> = ({ navigation }) 
       <Space size="small" />
       <TextFieldCard
         secureTextEntry={!isVisible}
-        title="Confirm password"
+        title={intl.formatMessage({ id: "Sign_Up_With_Email_Screen.confirmPassword" })}
         placeholder=""
         value={values.passwordConfirmation}
         onChangeText={handleChange("passwordConfirmation")}
@@ -91,15 +93,22 @@ export const SignUpWithEmail: FC<SignUpWithEmailScreenProps> = ({ navigation }) 
       <Button
         onPress={() => handleSubmit()}
         preset="primary"
-        text="Submit"
+        text={intl.formatMessage({ id: "Common.signUp" })}
         state={!dirty ? "disabled" : isLoading ? "loading" : "enabled"}
       />
       <Space />
       <View style={styles.signInRow}>
-        <Text preset="subLink" style={{ color: Colors.text }} text="Already have an account?    " />
+        <Text
+          preset="subLink"
+          style={{ color: Colors.text }}
+          text={intl.formatMessage({
+            id: "Sign_Up_With_Email_Screen.alreadyHaveAnAccount",
+          })}
+        />
+        <Space size="small" direction="vertical" />
         <Button
           preset="subLink"
-          text="Sign in"
+          text={intl.formatMessage({ id: "Common.signIn" })}
           onPress={() => {
             navigation.navigate("unauthorized", { screen: "sign-in-screen" });
           }}

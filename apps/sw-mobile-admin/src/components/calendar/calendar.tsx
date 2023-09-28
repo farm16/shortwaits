@@ -10,11 +10,13 @@ import { AgendaItem } from "./calendar-item";
 import { Button, Space } from "../common";
 import { useClosestDateFromAgendaData, useAgendaData } from "./calendar-utils";
 import { useGetEventsByBusinessQuery } from "../../services";
-import { useBusiness, useEvents } from "../../store";
+import { useBusiness, useEvents, useMobileAdmin } from "../../store";
 import { ActivityIndicator } from "react-native-paper";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { NonIdealState } from "../non-ideal-state/non-ideal-state";
 import { navigate } from "../../utils";
+import { useIntl } from "react-intl";
+import { LocaleConfig } from "./calendar-locales";
 
 type CalendarSectionData = EventType;
 type Sections = {
@@ -33,6 +35,11 @@ export const Calendar: FC<CalendarProps> = memo(props => {
   const currentBusiness = useBusiness();
   const currentEvents = useEvents();
   const agendaData = useAgendaData(currentEvents ?? []);
+  const intl = useIntl();
+
+  const locale = intl.locale || "en";
+
+  LocaleConfig.defaultLocale = locale;
 
   const [limit, setLimit] = React.useState(100);
 
@@ -62,7 +69,7 @@ export const Calendar: FC<CalendarProps> = memo(props => {
         type={"noEvents"}
         buttons={
           <Button
-            text="Add Event"
+            text={intl.formatMessage({ id: "Events_Screen.nonIdealState.button" })}
             preset="accent"
             onPress={() => {
               navigate("modals", {
@@ -81,7 +88,7 @@ export const Calendar: FC<CalendarProps> = memo(props => {
         }
       />
     );
-  }, [isEventsLoading, refetchEvents]);
+  }, [intl, isEventsLoading, refetchEvents]);
 
   const initialDate = useClosestDateFromAgendaData(agendaData);
 

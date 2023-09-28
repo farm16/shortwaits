@@ -1,61 +1,27 @@
-import React, { Children } from "react";
+import React, { Children, useMemo } from "react";
 import { Image, Dimensions, View } from "react-native";
 import { SvgProps } from "react-native-svg";
 import { useTheme } from "../../theme";
 import { ThemeColorName } from "../../theme/Colors";
 import { Space, Text } from "../common";
 import { NoClients, NoEvents, NoTransactions, NoData } from "../../assets";
+import { useIntl } from "react-intl";
 
-export type NonIdealStateTypes = keyof typeof nonIdealTypes;
+export type NonIdealStateTypes =
+  | "noData"
+  | "noTransactions"
+  | "noServices"
+  | "noClients"
+  | "noStaff"
+  | "noEvents"
+  | "noClientsInEvent"
+  | "noStaffInEvent";
 
 interface NonIdealStateProps {
   type: NonIdealStateTypes;
   buttons?: React.ReactNode | React.ReactNode[];
   imageProps?: SvgProps;
 }
-
-const nonIdealTypes = {
-  noData: {
-    Image: props => <NoData {...props} />,
-    message: "No data found",
-    messageColor: "brandAccent" as ThemeColorName,
-  },
-  noTransactions: {
-    Image: props => <NoTransactions {...props} />,
-    message: "No transactions found",
-    messageColor: "brandAccent" as ThemeColorName,
-  },
-  noServices: {
-    Image: props => <NoClients {...props} />,
-    message: "No clients found",
-    messageColor: "brandAccent" as ThemeColorName,
-  },
-  noClients: {
-    Image: props => <NoClients {...props} />,
-    message: "No clients found",
-    messageColor: "brandAccent" as ThemeColorName,
-  },
-  noStaff: {
-    Image: props => <NoClients {...props} />,
-    message: "No staff found",
-    messageColor: "brandAccent" as ThemeColorName,
-  },
-  noClientsInEvent: {
-    Image: props => <NoClients {...props} />,
-    message: "",
-    messageColor: "brandAccent" as ThemeColorName,
-  },
-  noStaffInEvent: {
-    Image: props => <NoClients {...props} />,
-    message: "",
-    messageColor: "brandAccent" as ThemeColorName,
-  },
-  noEvents: {
-    Image: props => <NoEvents {...props} />,
-    message: "No events found",
-    messageColor: "brandAccent" as ThemeColorName,
-  },
-};
 
 export const NonIdealState = (props: NonIdealStateProps) => {
   const {
@@ -66,6 +32,53 @@ export const NonIdealState = (props: NonIdealStateProps) => {
       height: Dimensions.get("window").width * 0.5,
     },
   } = props;
+
+  const intl = useIntl();
+
+  const nonIdealTypes = useMemo(() => {
+    return {
+      noData: {
+        Image: props => <NoData {...props} />,
+        message: intl.formatMessage({ id: "NonIdealState.noData.message" }),
+        messageColor: "brandAccent" as ThemeColorName,
+      },
+      noTransactions: {
+        Image: props => <NoTransactions {...props} />,
+        message: intl.formatMessage({ id: "NonIdealState.noTransactions.message" }),
+        messageColor: "brandAccent" as ThemeColorName,
+      },
+      noServices: {
+        Image: props => <NoClients {...props} />,
+        message: intl.formatMessage({ id: "NonIdealState.noServices.message" }),
+        messageColor: "brandAccent" as ThemeColorName,
+      },
+      noClients: {
+        Image: props => <NoClients {...props} />,
+        message: intl.formatMessage({ id: "NonIdealState.noClients.message" }),
+        messageColor: "brandAccent" as ThemeColorName,
+      },
+      noStaff: {
+        Image: props => <NoClients {...props} />,
+        message: intl.formatMessage({ id: "NonIdealState.noStaff.message" }),
+        messageColor: "brandAccent" as ThemeColorName,
+      },
+      noClientsInEvent: {
+        Image: props => <NoClients {...props} />,
+        message: intl.formatMessage({ id: "NonIdealState.noClientsInEvent.message" }),
+        messageColor: "brandAccent" as ThemeColorName,
+      },
+      noStaffInEvent: {
+        Image: props => <NoClients {...props} />,
+        message: intl.formatMessage({ id: "NonIdealState.noStaffInEvent.message" }),
+        messageColor: "brandAccent" as ThemeColorName,
+      },
+      noEvents: {
+        Image: props => <NoEvents {...props} />,
+        message: intl.formatMessage({ id: "NonIdealState.noEvents.message" }),
+        messageColor: "brandAccent" as ThemeColorName,
+      },
+    };
+  }, [intl]);
 
   const arrayChildren = Children.toArray(buttons);
 
