@@ -7,7 +7,7 @@ import { skipToken } from "@reduxjs/toolkit/dist/query/react";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { useIntl } from "react-intl";
 
-import { Button, Container, Screen, Space, Text } from "../../../components";
+import { Button, Container, Screen, ScrollView, Space, Text } from "../../../components";
 import { useTheme } from "../../../theme";
 import { RootStackParamList, UnauthorizedStackParamList } from "../../../navigation";
 import { useBusiness, useMobileAdmin } from "../../../store";
@@ -54,7 +54,7 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation }) => {
       <View style={styles.box1}>
         <WelcomeImage height={"30%"} />
         <Space size="large" />
-        <View style={styles.box2}>
+        <ScrollView style={styles.box2}>
           <Text
             preset="cardSubtitle"
             style={styles.box2Text}
@@ -62,7 +62,7 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation }) => {
           />
           <Space size="small" />
           <Text preset="title2" text={intl.formatMessage({ id: "Welcome_Screen.description" })} />
-        </View>
+        </ScrollView>
       </View>
       <View style={{ padding: 16 }}>
         <Button
@@ -93,7 +93,7 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation }) => {
             })
           }
         />
-        <Space size="large" />
+        <Space />
       </View>
     </Screen>
   );

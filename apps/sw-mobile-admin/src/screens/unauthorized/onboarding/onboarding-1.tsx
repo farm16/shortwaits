@@ -8,7 +8,6 @@ import { getPrettyStringFromHours } from "../../../utils/time";
 import { getArrCount } from "../../../utils";
 import { useForm } from "../../../hooks";
 import { useBusiness, useUser, setBusiness, useSignOut, useAuth, setBusinessCategories } from "../../../store";
-import { useGetCategoriesQuery } from "../../../services";
 import { useIntl } from "react-intl";
 
 export const Onboarding1Screen: FC<UnauthorizedScreenProps<"onboarding-1-screen">> = ({ navigation }) => {
@@ -19,19 +18,6 @@ export const Onboarding1Screen: FC<UnauthorizedScreenProps<"onboarding-1-screen"
   const business = useBusiness();
   const user = useUser();
   const auth = useAuth();
-  const { data: categories } = useGetCategoriesQuery(undefined);
-
-  const getSelectedCategoryNames = (availableCategories: any[], selectedCategories: any[]): string => {
-    const _selectedCategories = availableCategories
-      .filter(element => selectedCategories.includes(element._id))
-      .map(elem => elem.name);
-
-    if (_selectedCategories.length > 2) {
-      return _selectedCategories.slice(0, 2).join(", ") + ", ...";
-    } else {
-      return _selectedCategories.join(", ");
-    }
-  };
 
   useEffect(() => {
     if (auth.token === null) {
@@ -58,7 +44,7 @@ export const Onboarding1Screen: FC<UnauthorizedScreenProps<"onboarding-1-screen"
     },
     "onboarding1"
   );
-  const isCategorySelected = business?.categories?.length > 0;
+
   useLayoutEffect(() => {
     navigation.setOptions({
       // headerTitle: `Welcome ${user?.familyName || ""}`,
@@ -80,7 +66,7 @@ export const Onboarding1Screen: FC<UnauthorizedScreenProps<"onboarding-1-screen"
         />
       ),
     });
-  }, [navigation, dispatch, handleSubmit, errors, signOut, user.familyName, isCategorySelected, intl, user?.username]);
+  }, [intl, navigation, signOut, user?.username]);
 
   return (
     <FormContainer

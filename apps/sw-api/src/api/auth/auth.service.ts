@@ -281,8 +281,8 @@ export class AuthService {
 
   async createNewBusinessAndBusinessOwner(newUser: ConvertToDtoType<BusinessUserType>, storeIndicator = "en") {
     const storeIndicators = {
-      "0000001": "en",
-      "0000002": "es",
+      en: "0000001",
+      es: "0000002",
     };
 
     const currentShortwaitsAdmin =

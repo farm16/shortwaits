@@ -34,8 +34,8 @@ export const App = () => {
  */
 
 function WithProviders({ children }) {
-  const { preferredLanguage, deviceInfo } = store.getState().mobileAdmin;
-  const language = preferredLanguage || deviceInfo.language;
+  const { preferredLanguage, suggestedLanguage } = store.getState().mobileAdmin;
+  const language = preferredLanguage || suggestedLanguage;
   const messages = copies[language] || copies.en;
   return (
     <ReduxProvider store={store}>
