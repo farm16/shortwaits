@@ -1,4 +1,4 @@
-import React, { FC, useLayoutEffect, useMemo, useState } from "react";
+import React, { FC, useCallback, useLayoutEffect, useState } from "react";
 import { FlatList, StyleSheet } from "react-native";
 
 import { useBusiness, useMobileAdmin } from "../../../../../store";
@@ -9,109 +9,105 @@ import {
   Text,
   Button,
 } from "../../../../../components";
-import { selectorConfigs } from "../../selector-config";
 import { CategoriesSelectorItem } from "./categories-selector-item";
 import { useGetCategoriesQuery } from "../../../../../services";
 import { ModalsScreenProps } from "../../../../../navigation";
 import { useTheme } from "../../../../../theme";
 import { useIntl } from "react-intl";
+import { noop } from "lodash";
+import { ActivityIndicator } from "react-native-paper";
 
 export const CategoriesSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ navigation, route }) => {
-  const { type, onSelect, searchable, closeOnSelect, multiple = false } = route.params;
+  const { onSelect = noop, onGoBack = noop, selectedData = [], searchable = false, multiple = false } = route.params;
 
   const business = useBusiness();
   const intl = useIntl();
   const [selectedItems, setSelectedItems] = useState(business.categories ?? []);
 
+  const handleOnGoBack = useCallback(
+    payload => {
+      onGoBack(payload);
+      onSelect(payload);
+      navigation.goBack();
+    },
+    [navigation, onGoBack, onSelect]
+  );
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: intl.formatMessage({ id: "Common.categories" }),
-      headerLeft: () => <LeftChevronButton onPress={() => navigation.goBack()} />,
-      headerRight: () =>
-        multiple ? (
-          <Button
-            text="Done"
-            preset="headerLink"
-            onPress={() => {
-              if (closeOnSelect) {
-                onSelect(selectedItems);
-                navigation.goBack();
-              } else {
-                onSelect(selectedItems);
-              }
-            }}
-          />
-        ) : null,
+      headerLeft: () => (
+        <LeftChevronButton
+          onPress={() => handleOnGoBack(selectedItems)}
+          counter={selectedItems?.length > 0 ? `(${selectedItems.length})` : ""}
+        />
+      ),
     });
-  }, [closeOnSelect, intl, multiple, navigation, onSelect, selectedItems]);
+  }, [handleOnGoBack, intl, navigation, selectedItems]);
 
   const { Colors } = useTheme();
-
-  const handleOnSelect = item => {
-    if (multiple) {
-      if (selectedItems.includes(item._id)) {
-        setSelectedItems(selectedItems.filter(id => id !== item._id));
-      } else {
-        setSelectedItems([...selectedItems, item._id]);
-      }
-    } else {
-      if (closeOnSelect) {
-        onSelect(item);
-        navigation.goBack();
-      } else {
-        onSelect(item);
-      }
-    }
-  };
 
   const { data: categories, isError, isLoading, isSuccess } = useGetCategoriesQuery(undefined);
   const { preferredLanguage, suggestedLanguage } = useMobileAdmin();
   const language = preferredLanguage || suggestedLanguage;
-  console.log(">>>", language);
-
   /**
    * TODO: handle error to non ideal state
    */
 
-  if (isLoading) {
-    return <Text>Loading...</Text>;
+  const renderItem = useCallback(
+    ({ item }) => {
+      const handleOnSelect = item => {
+        if (multiple) {
+          if (selectedItems.includes(item._id)) {
+            setSelectedItems(selectedItems.filter(id => id !== item._id));
+          } else {
+            setSelectedItems([...selectedItems, item._id]);
+          }
+        } else {
+          handleOnGoBack(item);
+        }
+      };
+      return (
+        <CategoriesSelectorItem
+          language={language}
+          item={item}
+          onSelectItem={handleOnSelect}
+          isSelected={selectedItems.includes(item._id)}
+          multiple={multiple}
+        />
+      );
+    },
+    [handleOnGoBack, language, multiple, selectedItems]
+  );
+
+  const keyExtractor = useCallback(item => item._id, []);
+
+  if (isError) {
+    return <Text>Error</Text>;
   }
+  if (isLoading) {
+    return <ActivityIndicator />;
+  }
+
   if (isSuccess) {
-    // return null;
     return (
       <FlatList
         style={{
           backgroundColor: Colors.backgroundOverlay,
         }}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={[styles.listContainer]}
-        //data={insertIsSelected(categories.data)}
+        contentContainerStyle={styles.flatList}
         data={categories.data}
         ItemSeparatorComponent={() => <Space size="small" />}
-        renderItem={({ item }) => {
-          return (
-            <CategoriesSelectorItem
-              language={language}
-              item={item}
-              onSelectItem={handleOnSelect}
-              isSelected={selectedItems.includes(item._id)}
-              multiple={multiple}
-            />
-          );
-        }}
-        // keyExtractor={(item, index) => `${item.name || ""}${index}`}
+        renderItem={renderItem}
+        keyExtractor={keyExtractor}
       />
     );
   }
 };
+
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingVertical: 15,
-    alignItems: "center",
-  },
+  container: {},
   searchBar: {},
-  listContainer: {
-    alignItems: "center",
-  },
+  flatList: {},
 });

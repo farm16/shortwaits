@@ -5,7 +5,7 @@ import { StackActions } from "@react-navigation/native";
 import { TextFieldCard, ButtonCard, Space, IconButton, Button, FormContainer } from "../../../components";
 import { UnauthorizedScreenProps } from "../../../navigation";
 import { getPrettyStringFromHours } from "../../../utils/time";
-import { getStaffCount } from "../../../utils/staff";
+import { getArrCount } from "../../../utils";
 import { useForm } from "../../../hooks";
 import { useBusiness, useUser, setBusiness, useSignOut, useAuth, setBusinessCategories } from "../../../store";
 import { useGetCategoriesQuery } from "../../../services";
@@ -136,13 +136,14 @@ export const Onboarding1Screen: FC<UnauthorizedScreenProps<"onboarding-1-screen"
         title={intl.formatMessage({
           id: "Onboarding_1_Screen.businessCategories",
         })}
-        subTitle={
-          !Array.isArray(business?.categories) || !business?.categories?.length
-            ? intl.formatMessage({
-                id: "Onboarding_1_Screen.businessCategories.placeholder",
-              })
-            : getSelectedCategoryNames(categories?.data || [], business?.categories)
-        }
+        subTitle={intl.formatMessage(
+          {
+            id: "Common.Count",
+          },
+          {
+            count: getArrCount(business?.categories ?? []),
+          }
+        )}
         errors={
           !Array.isArray(business?.categories) || !business?.categories.length ? "this field is required" : undefined
         }
@@ -193,13 +194,13 @@ export const Onboarding1Screen: FC<UnauthorizedScreenProps<"onboarding-1-screen"
         title={intl.formatMessage({
           id: "Onboarding_1_Screen.businessStaff",
         })}
-        // subTitle={getStaffCount(business?.staff ?? [])}
+        // subTitle={getArrCount(business?.staff ?? [])}
         subTitle={intl.formatMessage(
           {
-            id: "Common.getStaffCount",
+            id: "Common.Count",
           },
           {
-            count: getStaffCount(business?.staff ?? []),
+            count: getArrCount(business?.staff ?? []),
           }
         )}
         onPress={() =>

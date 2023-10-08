@@ -7,12 +7,10 @@ import { SelectorItemProps } from "../../selector-types";
 export function CategoriesSelectorItem(props: SelectorItemProps<CategoryDtoType>) {
   const { item, onSelectItem, disabled = false, multiple = false, isSelected, language } = props;
 
-  console.log("item", language);
-
   const title =
     language === "en"
       ? item.name
-      : item.translations?.find(translation => translation?.languageCode === language)?.languageCode || item.name;
+      : item.translations?.find(translation => translation?.languageCode === language)?.translation || item.name;
 
   const getCheckIcon = () => (isSelected ? "checkbox-outline" : "checkbox-blank-outline");
 

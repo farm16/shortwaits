@@ -51,8 +51,6 @@ export const ClientsSelector: FC<ModalsScreenProps<"selector-modal-screen">> = (
     refetchOnMountOrArgChange: true,
   });
 
-  console.log("payload >>>", payload);
-
   const [searchText, setSearchText] = useState("");
   const [filteredData, setFilteredData] = useState<ClientUsersDtoType>([]);
   const [isListSearchable, setIsListSearchable] = useState(false);
