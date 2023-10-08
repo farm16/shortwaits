@@ -16,7 +16,7 @@ export const baseQueryWithInterceptor: BaseQueryFn<string | FetchArgs, unknown, 
 
   const {
     auth: { token, refreshToken },
-    mobileAdmin: { deviceInfo },
+    mobileAdmin: { deviceInfo, suggestedLanguage },
   } = api.getState() as RootState;
 
   const baseQuery = fetchBaseQuery({
@@ -27,9 +27,10 @@ export const baseQueryWithInterceptor: BaseQueryFn<string | FetchArgs, unknown, 
         headers.set("Authorization", `Bearer ${token}`); // we stored the token as "Bearer + key"
       }
 
-      headers.set("Device-language", deviceInfo.language);
-      headers.set("OS", deviceInfo.os);
-      headers.set("OS-version", deviceInfo.osVersion);
+      headers.set("device-language", deviceInfo.language);
+      headers.set("device-suggested-language", suggestedLanguage); // used as store indicator
+      headers.set("os", deviceInfo.os);
+      headers.set("os-version", deviceInfo.osVersion);
 
       return headers;
     },

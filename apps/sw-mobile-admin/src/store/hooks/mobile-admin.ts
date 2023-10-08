@@ -17,7 +17,7 @@ export const useMobileAdmin = () => {
 export const useMobileDefaultData = () => {
   const mobileAdmin = useSelector(selectCurrentMobileAdminState);
   return useMemo(() => {
-    return mobileAdmin ? mobileAdmin.defaultData : null;
+    return mobileAdmin ? mobileAdmin.shortwaits : null;
   }, [mobileAdmin]);
 };
 

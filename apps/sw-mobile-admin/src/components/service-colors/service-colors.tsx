@@ -47,16 +47,16 @@ export function ServiceColors({ selectedColor, onSelect }: ServiceColorsProps) {
 
   const circles = useMemo(() => {
     const { width } = getDimensions(87);
-    const colorsCount = mobileAdminData ? Object.keys(mobileAdminData?.defaultData?.serviceColors).length : 0;
+    const colorsCount = mobileAdminData ? Object.keys(mobileAdminData?.shortwaits?.serviceColors).length : 0;
     const circleWidth = width / (colorsCount * 1.9);
 
-    return Object.keys(mobileAdminData.defaultData?.serviceColors).map(elem => (
+    return Object.keys(mobileAdminData.shortwaits?.serviceColors).map(elem => (
       <Circle
-        key={mobileAdminData.defaultData?.serviceColors[elem].colorId}
-        onSelect={() => handleOnSelect(mobileAdminData.defaultData?.serviceColors[elem])}
+        key={mobileAdminData.shortwaits?.serviceColors[elem].colorId}
+        onSelect={() => handleOnSelect(mobileAdminData.shortwaits?.serviceColors[elem])}
         width={circleWidth}
-        color={mobileAdminData.defaultData?.serviceColors[elem].hexCode ?? "#ffffff"}
-        isSelected={mobileAdminData.defaultData?.serviceColors[elem].colorId == selectedColor?.colorId}
+        color={mobileAdminData.shortwaits?.serviceColors[elem].hexCode ?? "#ffffff"}
+        isSelected={mobileAdminData.shortwaits?.serviceColors[elem].colorId == selectedColor?.colorId}
         isDefault={false}
       />
     ));

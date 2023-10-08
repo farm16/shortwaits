@@ -9,7 +9,7 @@ import {
 import { shortwaitsApi } from "../../../services";
 import type { RootState } from "../..";
 import { Platform } from "react-native";
-import { getDeviceLanguageCode } from "../../../utils";
+import { getSupportedLanguageCode, languageCode } from "../../../utils";
 
 type GhostComponentProps = {
   [key: string]: string | boolean;
@@ -24,7 +24,7 @@ export interface MobileAdminStateType {
     osVersion: string;
     language: string;
   };
-  defaultData: ShortwaitsAdminDefaultDataPayloadType;
+  shortwaits: ShortwaitsAdminDefaultDataPayloadType;
   categories: CategoriesDtoType;
   components: {
     banner: GhostComponentProps;
@@ -37,10 +37,10 @@ export const mobileAdminInitialState: MobileAdminStateType = {
   deviceInfo: {
     os: Platform.OS,
     osVersion: `${Platform.Version}`,
-    language: getDeviceLanguageCode(),
+    language: languageCode,
   },
-  suggestedLanguage: "en",
-  defaultData: null,
+  suggestedLanguage: getSupportedLanguageCode(),
+  shortwaits: null,
   categories: null,
   components: {
     banner: {
@@ -143,7 +143,7 @@ export const mobileAdminSlice = createSlice({
   },
   extraReducers: builder => {
     builder.addMatcher(shortwaitsApi.endpoints.getAdminMobile.matchFulfilled, (state, action) => {
-      return { ...state, defaultData: action.payload.data };
+      return { ...state, shortwaits: action.payload.data };
     });
   },
 });

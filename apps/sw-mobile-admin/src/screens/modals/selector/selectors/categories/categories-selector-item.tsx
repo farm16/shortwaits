@@ -1,28 +1,26 @@
 import React from "react";
 import { CategoryDtoType } from "@shortwaits/shared-lib";
 
-import { ButtonCard, Card, Text } from "../../../../../components";
+import { ButtonCard } from "../../../../../components";
 import { SelectorItemProps } from "../../selector-types";
 
-export function CategoriesSelectorItem(
-  props: SelectorItemProps<CategoryDtoType>
-) {
-  const {
-    item,
-    onSelectItem,
-    disabled = false,
-    multiple = false,
-    isSelected,
-  } = props;
+export function CategoriesSelectorItem(props: SelectorItemProps<CategoryDtoType>) {
+  const { item, onSelectItem, disabled = false, multiple = false, isSelected, language } = props;
 
-  const getCheckIcon = () =>
-    isSelected ? "checkbox-outline" : "checkbox-blank-outline";
+  console.log("item", language);
+
+  const title =
+    language === "en"
+      ? item.name
+      : item.translations?.find(translation => translation?.languageCode === language)?.languageCode || item.name;
+
+  const getCheckIcon = () => (isSelected ? "checkbox-outline" : "checkbox-blank-outline");
 
   return (
     <ButtonCard
       rightIconName={multiple ? getCheckIcon() : "none"}
       disabled={disabled}
-      title={item.name}
+      title={title}
       onPress={() => {
         onSelectItem(item);
       }}

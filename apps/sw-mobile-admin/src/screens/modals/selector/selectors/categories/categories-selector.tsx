@@ -1,7 +1,7 @@
 import React, { FC, useLayoutEffect, useMemo, useState } from "react";
 import { FlatList, StyleSheet } from "react-native";
 
-import { useBusiness } from "../../../../../store";
+import { useBusiness, useMobileAdmin } from "../../../../../store";
 import {
   // SearchBar,
   Space,
@@ -14,17 +14,18 @@ import { CategoriesSelectorItem } from "./categories-selector-item";
 import { useGetCategoriesQuery } from "../../../../../services";
 import { ModalsScreenProps } from "../../../../../navigation";
 import { useTheme } from "../../../../../theme";
+import { useIntl } from "react-intl";
 
 export const CategoriesSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ navigation, route }) => {
   const { type, onSelect, searchable, closeOnSelect, multiple = false } = route.params;
 
   const business = useBusiness();
+  const intl = useIntl();
   const [selectedItems, setSelectedItems] = useState(business.categories ?? []);
 
-  const { headerTitle, searchPlaceholder, isReadOnly } = useMemo(() => selectorConfigs[type], [type]);
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: headerTitle,
+      headerTitle: intl.formatMessage({ id: "Common.categories" }),
       headerLeft: () => <LeftChevronButton onPress={() => navigation.goBack()} />,
       headerRight: () =>
         multiple ? (
@@ -42,7 +43,7 @@ export const CategoriesSelector: FC<ModalsScreenProps<"selector-modal-screen">> 
           />
         ) : null,
     });
-  }, [navigation, headerTitle, multiple, closeOnSelect, onSelect, selectedItems]);
+  }, [closeOnSelect, intl, multiple, navigation, onSelect, selectedItems]);
 
   const { Colors } = useTheme();
 
@@ -64,8 +65,9 @@ export const CategoriesSelector: FC<ModalsScreenProps<"selector-modal-screen">> 
   };
 
   const { data: categories, isError, isLoading, isSuccess } = useGetCategoriesQuery(undefined);
-
-  // console.log(categories);
+  const { preferredLanguage, suggestedLanguage } = useMobileAdmin();
+  const language = preferredLanguage || suggestedLanguage;
+  console.log(">>>", language);
 
   /**
    * TODO: handle error to non ideal state
@@ -89,6 +91,7 @@ export const CategoriesSelector: FC<ModalsScreenProps<"selector-modal-screen">> 
         renderItem={({ item }) => {
           return (
             <CategoriesSelectorItem
+              language={language}
               item={item}
               onSelectItem={handleOnSelect}
               isSelected={selectedItems.includes(item._id)}

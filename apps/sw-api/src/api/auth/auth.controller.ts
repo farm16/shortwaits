@@ -21,7 +21,10 @@ export class AuthController {
     description: "Returns new business user (super Admin) & business record",
     type: AuthSuccessResponse,
   })
-  async signUpSocial(@Body(new ValidationPipe()) dto: WithSocialAuthDto, @Headers("device-language") locale: string) {
+  async signUpSocial(
+    @Body(new ValidationPipe()) dto: WithSocialAuthDto,
+    @Headers("device-suggested-language") locale: string
+  ) {
     return this.authService.signUpSocial(dto, locale);
   }
 
@@ -33,7 +36,10 @@ export class AuthController {
     description: "Returns new business user (super Admin) & business record",
     type: AuthSuccessResponse,
   })
-  async signInSocial(@Body(new ValidationPipe()) dto: WithSocialAuthDto, @Headers("device-language") locale: string) {
+  async signInSocial(
+    @Body(new ValidationPipe()) dto: WithSocialAuthDto,
+    @Headers("device-suggested-language") locale: string
+  ) {
     return this.authService.signInSocial(dto, locale);
   }
 
@@ -45,7 +51,10 @@ export class AuthController {
     description: "Returns new business user (super Admin) & business record",
     type: AuthSuccessResponse,
   })
-  async signUpLocal(@Body(new ValidationPipe()) dto: SignUpWithEmailDto, @Headers("device-language") locale: string) {
+  async signUpLocal(
+    @Body(new ValidationPipe()) dto: SignUpWithEmailDto,
+    @Headers("device-suggested-language") locale: string
+  ) {
     return this.authService.signUpLocal(dto, locale);
   }
 

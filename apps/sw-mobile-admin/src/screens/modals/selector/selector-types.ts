@@ -1,3 +1,4 @@
+import { AvailableLanguagesType } from "@shortwaits/shared-lib";
 import { ThemeColorName } from "../../../theme/Colors";
 
 /**
@@ -26,6 +27,7 @@ export interface SelectorItemProps<T> {
   disabled?: boolean;
   item: T;
   onSelectItem?(item: T): void;
+  language?: AvailableLanguagesType;
   multiple?: boolean;
   itemRightIconName?: string;
   itemRightIconColor?: ThemeColorName;

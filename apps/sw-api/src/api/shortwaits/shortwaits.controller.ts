@@ -1,6 +1,5 @@
 import { Controller, Get, Inject, Headers, Query } from "@nestjs/common";
 import { ApiCreatedResponse, ApiQuery, ApiTags } from "@nestjs/swagger";
-import { ShortwaitsAdminDefaultDataPayloadType } from "@shortwaits/shared-lib";
 import { Public } from "../../common/decorators/auth.decorator";
 
 import { Shortwaits } from "./shortwaits.schema";
@@ -19,7 +18,7 @@ export class ShortwaitsController {
     description: "Returns default data for admin mobile",
     type: Shortwaits,
   })
-  getAdminMobileDefaultData(@Headers("device-language") locale: string) {
+  getAdminMobileDefaultData(@Headers("device-suggested-language") locale: string) {
     return this.shortwaitsService.getAdminMobileDefaultData(locale);
   }
 
@@ -30,7 +29,7 @@ export class ShortwaitsController {
     description: "Returns default data for admin mobile",
     type: Shortwaits,
   })
-  getAdminWebDefaultData(@Headers("device-language") locale: string) {
+  getAdminWebDefaultData(@Headers("device-suggested-language") locale: string) {
     return this.shortwaitsService.getAdminMobileDefaultData(locale);
   }
 
@@ -41,7 +40,7 @@ export class ShortwaitsController {
     description: "Returns default data for admin mobile",
     type: Shortwaits,
   })
-  getWebDefaultData(@Headers("device-language") locale: string) {
+  getWebDefaultData(@Headers("device-suggested-language") locale: string) {
     return this.shortwaitsService.getAdminMobileDefaultData(locale);
   }
 
@@ -52,7 +51,7 @@ export class ShortwaitsController {
     description: "Returns default data for admin mobile",
     type: Shortwaits,
   })
-  getClientWebDefaultData(@Headers("device-language") locale: string) {
+  getClientWebDefaultData(@Headers("device-suggested-language") locale: string) {
     return this.shortwaitsService.getAdminMobileDefaultData(locale);
   }
 

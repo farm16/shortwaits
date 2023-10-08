@@ -32,7 +32,7 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation }) => {
   const mobileAdminData = useMobileAdmin();
   const intl = useIntl(); // Access the intl object
 
-  const { isLoading: isAdminMobileLoading } = useGetAdminMobileQuery(mobileAdminData.defaultData && skipToken);
+  const { isLoading: isAdminMobileLoading } = useGetAdminMobileQuery(mobileAdminData.shortwaits && skipToken);
 
   useEffect(() => {
     SplashScreen.hide();
