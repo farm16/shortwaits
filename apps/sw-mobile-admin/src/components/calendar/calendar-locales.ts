@@ -18,6 +18,9 @@ LocaleConfig.locales["pt"] = {
   monthNamesShort: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul.", "Ago", "Set", "Out", "Nov", "Dec"],
   dayNames: ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"],
   dayNamesShort: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore - missing in type definition
+  today: "Hoje",
 };
 
 LocaleConfig.locales["en"] = {
@@ -40,6 +43,9 @@ LocaleConfig.locales["en"] = {
   ],
   monthNamesShort: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
   pmDesignator: "PM",
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore - missing in type definition
+  today: "Today",
 };
 
 LocaleConfig.locales["es"] = {
@@ -60,6 +66,9 @@ LocaleConfig.locales["es"] = {
   monthNamesShort: ["En", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
   dayNames: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
   dayNamesShort: ["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sáb"],
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore - missing in type definition
+  today: "Hoy",
 };
 
 export { LocaleConfig };

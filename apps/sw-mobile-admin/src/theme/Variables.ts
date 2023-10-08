@@ -7,6 +7,7 @@
 
 import { ThemeFontSize } from "./theme.type";
 import { getColors } from "./Colors";
+import { getFontSize } from "../utils";
 
 export const Colors = {
   ...getColors(),
@@ -16,10 +17,11 @@ export const Colors = {
  * FontSize
  */
 export const FontSize: ThemeFontSize = {
-  tiny: 13,
-  small: 15,
-  regular: 18,
-  large: 35,
+  tiny: getFontSize(12),
+  small: getFontSize(14),
+  regular: getFontSize(16),
+  large: getFontSize(18),
+  xLarge: getFontSize(21),
 };
 
 /**

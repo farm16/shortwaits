@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, Req, UseGuards, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, HttpCode, HttpStatus, Post, Req, UseGuards, ValidationPipe, Headers } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { SignUpWithEmailDto } from "./dto/sign-up-with-email.dto";
 import { SignInWithEmailDto } from "./dto/sign-in-with-email.dto";
@@ -21,8 +21,8 @@ export class AuthController {
     description: "Returns new business user (super Admin) & business record",
     type: AuthSuccessResponse,
   })
-  async signUpSocial(@Body(new ValidationPipe()) dto: WithSocialAuthDto) {
-    return this.authService.signUpSocial(dto);
+  async signUpSocial(@Body(new ValidationPipe()) dto: WithSocialAuthDto, @Headers("device-language") locale: string) {
+    return this.authService.signUpSocial(dto, locale);
   }
 
   @Public()
@@ -33,8 +33,8 @@ export class AuthController {
     description: "Returns new business user (super Admin) & business record",
     type: AuthSuccessResponse,
   })
-  async signInSocial(@Body(new ValidationPipe()) dto: WithSocialAuthDto) {
-    return this.authService.signInSocial(dto);
+  async signInSocial(@Body(new ValidationPipe()) dto: WithSocialAuthDto, @Headers("device-language") locale: string) {
+    return this.authService.signInSocial(dto, locale);
   }
 
   @Public()
@@ -45,8 +45,8 @@ export class AuthController {
     description: "Returns new business user (super Admin) & business record",
     type: AuthSuccessResponse,
   })
-  async signUpLocal(@Body(new ValidationPipe()) dto: SignUpWithEmailDto) {
-    return this.authService.signUpLocal(dto);
+  async signUpLocal(@Body(new ValidationPipe()) dto: SignUpWithEmailDto, @Headers("device-language") locale: string) {
+    return this.authService.signUpLocal(dto, locale);
   }
 
   @Public()
@@ -58,7 +58,6 @@ export class AuthController {
     type: AuthSuccessResponse,
   })
   async signInLocal(@Body(new ValidationPipe()) body: SignInWithEmailDto) {
-    console.log("signInLocal controller", body);
     return this.authService.signInLocal(body);
   }
 

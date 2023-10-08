@@ -48,7 +48,7 @@ export class AuthService {
     this.oAuth2Client = new OAuth2Client(googleAuthClientId, googleAuthClientSecret);
   }
 
-  async signUpSocial(dto: { authCode: string; provider: string }) {
+  async signUpSocial(dto: { authCode: string; provider: string }, storeIndicator = "en") {
     if (!providers.includes(dto.provider)) {
       throw new UnprocessableEntityException("Invalid provider");
     }
@@ -74,14 +74,14 @@ export class AuthService {
       }
 
       const newUser = getNewUserFromSocialAccount(userInfo);
-      return await this.createNewBusinessAndBusinessOwner(newUser);
+      return await this.createNewBusinessAndBusinessOwner(newUser, storeIndicator);
     } catch (error) {
       console.error("Error in signUpSocial:", error);
       throw new InternalServerErrorException("An error occurred while processing your request.");
     }
   }
 
-  async signInSocial(dto: { authCode: string; provider: string }) {
+  async signInSocial(dto: { authCode: string; provider: string }, storeIndicator = "en") {
     if (!providers.includes(dto.provider)) {
       throw new UnprocessableEntityException("Invalid provider");
     }
@@ -104,7 +104,7 @@ export class AuthService {
 
       if (!user) {
         const newUser = getNewUserFromSocialAccount(userInfo);
-        return await this.createNewBusinessAndBusinessOwner(newUser);
+        return await this.createNewBusinessAndBusinessOwner(newUser, storeIndicator);
       }
 
       return await this.successfulExistingUser(user);
@@ -114,7 +114,7 @@ export class AuthService {
     }
   }
 
-  async signUpLocal(newBusinessUserDto: SignUpWithEmailDto) {
+  async signUpLocal(newBusinessUserDto: SignUpWithEmailDto, storeIndicator = "en") {
     const user = await this.businessUserModel.findOne({
       username: newBusinessUserDto.username,
     });
@@ -129,10 +129,13 @@ export class AuthService {
 
     const filteredBusinessUser = getFilteredNewBusinessOwner(newBusinessUserDto);
 
-    return await this.createNewBusinessAndBusinessOwner({
-      ...filteredBusinessUser,
-      password: encodedPassword,
-    });
+    return await this.createNewBusinessAndBusinessOwner(
+      {
+        ...filteredBusinessUser,
+        password: encodedPassword,
+      },
+      storeIndicator
+    );
   }
 
   async signInLocal(dto: SignInWithEmailDto) {
@@ -276,7 +279,15 @@ export class AuthService {
     };
   }
 
-  async createNewBusinessAndBusinessOwner(newUser: ConvertToDtoType<BusinessUserType>) {
+  async createNewBusinessAndBusinessOwner(newUser: ConvertToDtoType<BusinessUserType>, storeIndicator = "en") {
+    const storeIndicators = {
+      "0000001": "en",
+      "0000002": "es",
+    };
+
+    const currentShortwaitsAdmin =
+      shortwaitsAdmin.find(shortWaits => shortWaits.short_id === storeIndicators[storeIndicator]) ?? shortwaitsAdmin[0];
+
     const saltRounds = Number(this.configService.get("SALT_ROUNDS"));
     const salt = await bcrypt.genSalt(saltRounds);
 
@@ -312,8 +323,8 @@ export class AuthService {
       createdBy: currentUser._id,
       updatedBy: currentUser._id,
       staff: [currentUser._id],
-      hours: shortwaitsAdmin[0].sampleBusinessData.hours,
-      labels: shortwaitsAdmin[0].sampleBusinessData.labels,
+      hours: currentShortwaitsAdmin.defaultBusinessData.hours,
+      labels: currentShortwaitsAdmin.defaultBusinessData.labels,
       email: "",
       categories: [],
       services: [],
@@ -350,11 +361,11 @@ export class AuthService {
     };
 
     const newBusinessAccount = new this.businessModel(newBusinessPayload);
-    const services = shortwaitsAdmin[0].sampleBusinessData.services.map(service => {
+    const services = currentShortwaitsAdmin.defaultBusinessData.services.map(service => {
       return { ...service, businessId: newBusinessAccount._id };
     });
     // create default labels (3) for the business from shortwaitsAdmin template
-    const labels = shortwaitsAdmin[0].sampleBusinessData.labels;
+    const labels = currentShortwaitsAdmin.defaultBusinessData.labels;
 
     const newBusinessServices = await this.serviceModel.insertMany(services);
     const servicesIds = newBusinessServices.map(service => service._id);

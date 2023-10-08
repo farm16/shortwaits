@@ -38,6 +38,11 @@
     "Common.showLess": "Show Less",
     "Common.showMoreFields": "Show More Fields",
     "Common.showLessFields": "Show Less Fields",
+    "Common.eventStatus.pending": "Pending",
+    "Common.eventStatus.approved": "Approved",
+    "Common.eventStatus.rejected": "Rejected",
+    "Common.eventStatus.canceled": "Canceled",
+    "Common.eventStatus.completed": "Completed",
 
     "Onboarding_1_Screen.headerTitle": "Welcome {name}",
     "Onboarding_1_Screen.businessName": "Business Name",
@@ -239,7 +244,16 @@
     "AddStaffModal.city": "City",
     "AddStaffModal.state": "State",
     "AddStaffModal.state.placeholder": "Select State",
-    "AddStaffModal.postCode": "Zip Code"
+    "AddStaffModal.postCode": "Zip Code",
+
+    "Banner.premiumMembership.text1": "need more from\n",
+    "Banner.premiumMembership.text2": "Shortwaits ?",
+    "Banner.premiumMembership.text3": "get 3 months for only $0.99!",
+    "Banner.premiumMembership.joinButton": "join now",
+    "Banner.premiumMembership.cancelButton": "cancel",
+
+    "MyBusiness_screen.eventSummary": "Event Summary",
+    "MyBusiness_screen.schedule": "Schedule"
   },
   "es": {
     "Navigation.tab.label.events": "Eventos",
@@ -280,6 +294,11 @@
     "Common.showLess": "Mostrar Menos",
     "Common.showMoreFields": "Mostrar Más Campos",
     "Common.showLessFields": "Mostrar Menos Campos",
+    "Common.eventStatus.pending": "Pendiente",
+    "Common.eventStatus.approved": "Aceptado",
+    "Common.eventStatus.rejected": "Rechazado",
+    "Common.eventStatus.canceled": "Cancelado",
+    "Common.eventStatus.completed": "Completado",
 
     "Onboarding_1_Screen.headerTitle": "Bienvenido {name}",
     "Onboarding_1_Screen.businessName": "Nombre del Negocio",
@@ -482,6 +501,12 @@
     "AddStaffModal.state.placeholder": "Seleccionar Estado",
     "AddStaffModal.zipCode": "Código postal",
     "AddStaffModal.postCode": "Código postal",
-    "AddStaffModal.schedule": "Horario"
+    "AddStaffModal.schedule": "Horario",
+
+    "Banner.premiumMembership.text1": "¿necesitas más de\n",
+    "Banner.premiumMembership.text2": "Shortwaits?",
+    "Banner.premiumMembership.text3": "¡obtén 3 meses por solo $0.99!",
+    "Banner.premiumMembership.joinButton": "unite ahora",
+    "Banner.premiumMembership.cancelButton": "cancelar"
   }
 }

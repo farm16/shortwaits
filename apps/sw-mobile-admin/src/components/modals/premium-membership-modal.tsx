@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { hidePremiumMembershipModal, selectCurrentMobileAdminState, useGhostComponent } from "../../store";
 import { useTheme } from "../../theme";
 import { Button, Container, Space, Text } from "../common";
-import { getResponsiveFontSize, navigate } from "../../utils";
+import { getFontSize, navigate } from "../../utils";
 
 const premiumAccountFeatures = [
   { name: "", description: "Text(SMS) Reminders" },
@@ -27,7 +27,7 @@ const CheckedList = ({ text }) => {
         <Space direction="vertical" />
         <Text
           style={{
-            fontSize: getResponsiveFontSize(16),
+            fontSize: getFontSize(16),
             color: Colors.text,
           }}
         >
@@ -48,8 +48,6 @@ export const PremiumMembershipModal = props => {
 
   const isVisible = mobileAdmin?.components.premiumMembership.isVisible ?? false;
   const { Colors } = useTheme();
-
-  console.log("===== PremiumMembershipModal");
 
   if (!isVisible) {
     return null;
@@ -102,7 +100,7 @@ export const PremiumMembershipModal = props => {
           <Button
             preset="link"
             textStyle={{
-              fontSize: getResponsiveFontSize(14),
+              fontSize: getFontSize(14),
               color: Colors.brandSecondary,
             }}
             text="Terms and Conditions"

@@ -66,7 +66,7 @@ export class Shortwaits extends Document implements ShortwaitsAdminDefaultDataTy
       hours: { type: Object },
     })
   )
-  sampleBusinessData: {
+  defaultBusinessData: {
     services: ServiceType[];
     currencies: CurrencyType[];
     hours: BusinessHoursType;

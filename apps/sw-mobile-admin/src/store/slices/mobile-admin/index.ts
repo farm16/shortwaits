@@ -8,6 +8,8 @@ import {
 
 import { shortwaitsApi } from "../../../services";
 import type { RootState } from "../..";
+import { Platform } from "react-native";
+import { getDeviceLanguageCode } from "../../../utils";
 
 type GhostComponentProps = {
   [key: string]: string | boolean;
@@ -17,6 +19,11 @@ type GhostComponentProps = {
 export interface MobileAdminStateType {
   preferredLanguage: AvailableLanguagesType;
   suggestedLanguage: AvailableLanguagesType;
+  deviceInfo: {
+    os: string;
+    osVersion: string;
+    language: string;
+  };
   defaultData: ShortwaitsAdminDefaultDataPayloadType;
   categories: CategoriesDtoType;
   components: {
@@ -27,6 +34,11 @@ export interface MobileAdminStateType {
 }
 export const mobileAdminInitialState: MobileAdminStateType = {
   preferredLanguage: null,
+  deviceInfo: {
+    os: Platform.OS,
+    osVersion: `${Platform.Version}`,
+    language: getDeviceLanguageCode(),
+  },
   suggestedLanguage: "en",
   defaultData: null,
   categories: null,

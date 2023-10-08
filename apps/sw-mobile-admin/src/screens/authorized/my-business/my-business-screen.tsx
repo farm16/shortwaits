@@ -4,6 +4,7 @@ import { truncate } from "lodash";
 import { useDispatch } from "react-redux";
 import { useIsFocused } from "@react-navigation/native";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
+import { useIntl } from "react-intl";
 
 import { BusinessIncomeInfo, ButtonCard, IconButton, Container, Screen, Text } from "../../../components";
 import { useTheme } from "../../../theme";
@@ -24,6 +25,7 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
   const { Colors } = useTheme();
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
+  const intl = useIntl();
   const [updateBusiness, updateBusinessStatus] = useUpdateBusinessMutation();
   const {
     data: eventSummary,

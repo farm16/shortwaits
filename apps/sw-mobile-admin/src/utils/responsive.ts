@@ -1,11 +1,7 @@
-import { Dimensions } from "react-native";
+import { PixelRatio } from "react-native";
 
-const windowWidth = Dimensions.get("window").width;
-
-export function getResponsiveFontSize(size, componentWidth = windowWidth) {
-  // You can adjust the formula based on your design preferences
-  const standardScreenWidth = 375; // Width of the screen you are designing for
-  const scaleFactor = componentWidth / standardScreenWidth;
-
-  return Math.round(scaleFactor * size);
-}
+export const getFontSize = (size = 16) => {
+  const fontScale = PixelRatio.getFontScale();
+  const fontSize = size / fontScale;
+  return fontSize;
+};

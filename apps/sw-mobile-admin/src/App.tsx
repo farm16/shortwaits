@@ -10,7 +10,6 @@ import { persistor, store } from "./store";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { PersistGate } from "redux-persist/integration/react";
 import copies from "./i18n/copies.json";
-import { getDeviceLanguageCode, usePreferredLanguage } from "./utils";
 import { Banner, FloatingActionButton, PremiumMembershipModal } from "./components";
 
 enableLogging();
@@ -35,9 +34,12 @@ export const App = () => {
  */
 
 function WithProviders({ children }) {
+  const { preferredLanguage, deviceInfo } = store.getState().mobileAdmin;
+  const language = preferredLanguage || deviceInfo.language;
+  const messages = copies[language] || copies.en;
   return (
     <ReduxProvider store={store}>
-      <WithIntl>
+      <IntlProvider locale={language} messages={messages}>
         <PersistGate loading={null} persistor={persistor}>
           <SafeAreaProvider initialMetrics={initialWindowMetrics}>
             <PaperProvider>
@@ -47,19 +49,7 @@ function WithProviders({ children }) {
             </PaperProvider>
           </SafeAreaProvider>
         </PersistGate>
-      </WithIntl>
+      </IntlProvider>
     </ReduxProvider>
   );
 }
-
-const WithIntl = ({ children }) => {
-  const deviceLanguageCode = getDeviceLanguageCode();
-  const preferredLanguage = usePreferredLanguage();
-  const language = preferredLanguage || deviceLanguageCode;
-  const messages = copies[language] || copies.en;
-  return (
-    <IntlProvider locale={language} messages={messages}>
-      {children}
-    </IntlProvider>
-  );
-};

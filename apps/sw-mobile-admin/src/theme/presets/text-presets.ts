@@ -24,20 +24,26 @@ export const textPresets = ({ FontSize, Fonts, Gutters, Colors }: ThemeCommonPar
       ...BASE,
       fontWeight: "bold",
     },
+    text: {
+      ...BASE,
+      ...Fonts.textRegular,
+      color: "rgba(152,152,152,1)",
+      fontWeight: "500",
+    },
     subText: {
       ...BASE,
-      ...Fonts.textSmall,
+      ...Fonts.textRegular,
       color: "rgba(152,152,152,1)",
       fontWeight: "500",
     },
     social: {
       ...BASE,
-      ...Fonts.textSmall,
+      ...Fonts.textRegular,
       color: Colors.darkGray,
       fontWeight: "600",
     },
     pending: {
-      ...Fonts.textTiny,
+      ...Fonts.textRegular,
       fontWeight: "400",
       // textTransform: "uppercase",
       color: Colors.pending,
@@ -112,10 +118,6 @@ export const textPresets = ({ FontSize, Fonts, Gutters, Colors }: ThemeCommonPar
       ...BASE,
       ...Fonts.textSmall,
     },
-    text: {
-      ...BASE,
-      ...Fonts.textRegular,
-    },
     textLarge: {
       ...BASE,
       ...Fonts.textLarge,
@@ -126,7 +128,7 @@ export const textPresets = ({ FontSize, Fonts, Gutters, Colors }: ThemeCommonPar
     },
     fieldLabel: {
       ...BASE,
-      fontSize: FontSize.regular * 2,
+      fontSize: FontSize.regular,
       fontWeight: "bold",
     },
     cardTitle: {

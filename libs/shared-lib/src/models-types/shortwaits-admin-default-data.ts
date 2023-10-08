@@ -41,7 +41,7 @@ export type ShortwaitsAdminDefaultDataType = {
   timeZones: string[];
   serviceColors: ServiceColorsType;
   categories: ObjectId[];
-  sampleBusinessData: {
+  defaultBusinessData: {
     services: Partial<ServiceType>[];
     currencies: CurrencyType[];
     hours: BusinessHoursType;

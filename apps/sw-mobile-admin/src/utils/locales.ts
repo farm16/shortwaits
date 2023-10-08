@@ -1,7 +1,7 @@
 import * as RNLocalize from "react-native-localize";
-import { updateSuggestedLanguage, useMobileAdmin } from "../store";
-import { useDispatch } from "react-redux";
+import { useMobileAdmin } from "../store";
 import copies from "../i18n/copies.json";
+import { useMemo } from "react";
 
 export const getDeviceLocales = () => {
   const locales = RNLocalize.getLocales();
@@ -14,23 +14,20 @@ export const getDeviceCountry = () => {
 };
 
 export const getDeviceLanguageCode = () => {
+  const regex = /es/;
   const supportedLanguages = Object.keys(JSON.parse(JSON.stringify(copies)));
-  const locales = RNLocalize.getLocales()[0].languageCode;
-
-  if (supportedLanguages.includes(locales)) {
-    return locales;
-  } else {
-    return "en";
+  let deviceLanguageCode = RNLocalize.getLocales()[0].languageCode;
+  if (regex.test(deviceLanguageCode)) {
+    deviceLanguageCode = "es";
   }
+  const languageCode = supportedLanguages.includes(deviceLanguageCode) ? deviceLanguageCode : "en";
+  console.log("LOCALE >>> ", languageCode);
+
+  return languageCode;
 };
 
 export const usePreferredLanguage = () => {
-  const { preferredLanguage, suggestedLanguage } = useMobileAdmin();
-
-  if (preferredLanguage) {
-    console.log("using preferred language from store");
-    return preferredLanguage;
-  } else {
-    return suggestedLanguage;
-  }
+  const { preferredLanguage } = useMobileAdmin();
+  console.log("PREFERRED_LANGUAGE >>> ", preferredLanguage);
+  return useMemo(() => preferredLanguage, [preferredLanguage]);
 };

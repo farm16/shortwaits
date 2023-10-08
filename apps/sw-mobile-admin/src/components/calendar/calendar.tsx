@@ -10,7 +10,7 @@ import { AgendaItem } from "./calendar-item";
 import { Button, Space } from "../common";
 import { useClosestDateFromAgendaData, useAgendaData } from "./calendar-utils";
 import { useGetEventsByBusinessQuery } from "../../services";
-import { useBusiness, useEvents, useMobileAdmin } from "../../store";
+import { useBusiness, useEvents } from "../../store";
 import { ActivityIndicator } from "react-native-paper";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { NonIdealState } from "../non-ideal-state/non-ideal-state";

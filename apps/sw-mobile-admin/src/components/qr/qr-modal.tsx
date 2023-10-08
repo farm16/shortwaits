@@ -6,7 +6,7 @@ import { View } from "react-native";
 import { Modal } from "react-native-paper";
 import { useTheme } from "../../theme";
 import { Text } from "../common";
-import { getResponsiveFontSize } from "../../utils";
+import { getFontSize } from "../../utils";
 import { IconButton } from "..";
 
 type QrModalProps = {
@@ -55,7 +55,7 @@ export const QrModal: FC<QrModalProps> = props => {
               marginBottom: 20,
               width: "90%",
               textAlign: "center",
-              fontSize: getResponsiveFontSize(18),
+              fontSize: getFontSize(18),
             }}
           >
             {title}
@@ -70,7 +70,7 @@ export const QrModal: FC<QrModalProps> = props => {
               marginBottom: 20,
               width: "90%",
               textAlign: "center",
-              fontSize: getResponsiveFontSize(16),
+              fontSize: getFontSize(16),
             }}
           >
             {description}
@@ -84,7 +84,7 @@ export const QrModal: FC<QrModalProps> = props => {
               marginBottom: 20,
               width: "90%",
               textAlign: "center",
-              fontSize: getResponsiveFontSize(14),
+              fontSize: getFontSize(14),
             }}
           >
             {description2}

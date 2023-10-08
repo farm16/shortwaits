@@ -1,3 +1,9 @@
+const LOCALES = {
+  en: "en-US",
+  fr: "fr-FR",
+  es: "es-ES",
+} as const;
+
 export const get12hrTimeFromDecimal = (decimal: number): string => {
   const timeArr = getTimeArrFromDecimal(decimal);
   if (timeArr.length === 0) {
@@ -27,19 +33,23 @@ export const getTimeDurationsFromMins = mins => {
 };
 
 // outputs string in "Wednesday, 24 Aug"
-export const getPrettyDateFromISO = (isoDateString: string): string => {
+export const getPrettyDateFromISO = (isoDateString: string, locale: string): string => {
   const date = new Date(isoDateString);
   const options: Intl.DateTimeFormatOptions = {
     weekday: "long",
     month: "short",
     day: "numeric",
   };
-  const prettyDate = date.toLocaleDateString("en-US", options);
+  const prettyDate = date.toLocaleDateString(LOCALES[locale ?? "en"], options);
   return prettyDate;
 };
 
 // outputs string in "13:00 PM - 15:00 PM"
-export const getPrettyTimeRangeFromISO = (isoDateStartString: string, isoDateEndString: string | undefined): string => {
+export const getPrettyTimeRangeFromISO = (
+  isoDateStartString: string,
+  isoDateEndString: string | undefined,
+  locale: string
+): string => {
   const dateStart = new Date(isoDateStartString);
   const options: Intl.DateTimeFormatOptions = {
     hour: "numeric",

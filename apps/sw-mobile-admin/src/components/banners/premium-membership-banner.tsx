@@ -6,9 +6,11 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useDispatch } from "react-redux";
 import { hidePremiumMembershipBanner } from "../../store";
 import { navigate } from "../../utils";
+import { useIntl } from "react-intl";
 
 export function PremiumMembershipBanner() {
   const insets = useSafeAreaInsets();
+  const intl = useIntl();
 
   const dispatch = useDispatch();
   const handleClose = useCallback(() => {
@@ -45,13 +47,11 @@ export function PremiumMembershipBanner() {
         }}
       >
         <Text preset="text" style={styles.title}>
-          <Text preset="text" style={[styles.title, { color: "white" }]}>
-            {"love "}
-          </Text>
-          {"Shortwaits\nPremium"}
+          {intl.formatMessage({ id: "Banner.premiumMembership.text1" })}
+          {intl.formatMessage({ id: "Banner.premiumMembership.text2" })}
         </Text>
         <Text preset="text" style={styles.subTitle}>
-          {"3 months for only $0.99!"}
+          {intl.formatMessage({ id: "Banner.premiumMembership.text3" })}
         </Text>
         <Container
           direction="row"
@@ -65,7 +65,7 @@ export function PremiumMembershipBanner() {
             onPress={() => navigate("authorized-stack", { screen: "plans-screen" })}
             style={styles.button}
             textStyle={styles.buttonText}
-            text="JOIN NOW"
+            text={intl.formatMessage({ id: "Banner.premiumMembership.joinButton" })}
           />
           <Button
             preset="link"
@@ -76,7 +76,7 @@ export function PremiumMembershipBanner() {
               textTransform: "uppercase",
               marginLeft: 16,
             }}
-            text="cancel"
+            text={intl.formatMessage({ id: "Banner.premiumMembership.cancelButton" })}
             onPress={handleClose}
           />
         </Container>
@@ -117,5 +117,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 28,
     fontSize: 14,
     fontWeight: "700",
+    textTransform: "uppercase",
   },
 });

@@ -7,10 +7,6 @@ import { Business } from "../business/entities/business.entity";
 import { getQuerySelect } from "../../utils/mongoDbUtils";
 import { convertStringToObjectId, validateId } from "../../utils/converters";
 
-const DEFAULT = {
-  short_id: "0000001",
-};
-
 @Injectable()
 export class ShortwaitsService {
   constructor(
@@ -22,8 +18,14 @@ export class ShortwaitsService {
     private clientUserModel: Model<ClientUser>
   ) {}
 
-  public async getAdminMobileDefaultData() {
-    const defaultAdminMobileDataArr = await this.shortwaitsModel.find(DEFAULT);
+  public async getAdminMobileDefaultData(storeIndicator = "en") {
+    const storeIndicators = {
+      en: "0000001",
+      es: "0000002",
+    };
+    const defaultAdminMobileDataArr = await this.shortwaitsModel.find({
+      short_id: storeIndicators[storeIndicator] || storeIndicators.en,
+    });
     /**will be distributed based on location (can be filtered by other means ???)*/
     const defaultAdminMobileData = defaultAdminMobileDataArr.find(elem => elem.short_id === "0000001");
 

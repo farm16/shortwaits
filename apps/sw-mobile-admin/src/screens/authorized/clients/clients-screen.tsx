@@ -3,6 +3,8 @@ import { Alert, ListRenderItem, RefreshControl, View } from "react-native";
 import { isEmpty } from "lodash";
 import { ActivityIndicator } from "react-native-paper";
 import { ClientUserDtoType } from "@shortwaits/shared-lib";
+import { useIntl } from "react-intl";
+
 import {
   Button,
   IconButton,
@@ -22,6 +24,7 @@ import { useOsContacts } from "../../../hooks";
 export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({ navigation }) => {
   useShowGhostComponent("floatingActionButton");
   const currentClients = useClients();
+  const intl = useIntl();
   const { error: osContactsError, isLoading: isOsContactsLoading, getContacts: getOsContacts } = useOsContacts();
   const business = useBusiness();
   const {
@@ -198,7 +201,9 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({ navi
             {isEmpty(currentClients) ? (
               <NonIdealState
                 type={"noClients"}
-                buttons={[<Button text="Add Client" onPress={() => handleAddClient()} />]}
+                buttons={[
+                  <Button text={intl.formatMessage({ id: "Common.addClient" })} onPress={() => handleAddClient()} />,
+                ]}
               />
             ) : null}
           </View>

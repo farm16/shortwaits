@@ -1,5 +1,10 @@
 import { BusinessAvailableCurrenciesType, CurrencyType } from "@shortwaits/shared-lib";
 
+const LOCALES = {
+  en: "en-US",
+  fr: "fr-FR",
+  es: "es-ES",
+} as const;
 /**
  * @todo this might need translation
  */
@@ -7,6 +12,7 @@ const currencies = {
   USD: "Dollar (USD)",
   PEN: "Sol (PEN)",
 };
+
 export const getPrettyStringFromCurrencyType = (currency: CurrencyType) => {
   if (!currency) return "select a currency";
   if (currencies[currency.code]) {
@@ -49,10 +55,10 @@ export const getPrettyStringFromPrice = (currency: BusinessAvailableCurrenciesTy
 /**
  * Todo: we are hardcoding the currency symbol here to be USD!!!
  */
-export const getPrettyStringFromPriceWithSymbol = (currency: string, priceInCents: number) => {
+export const getPrettyStringFromPriceWithSymbol = (currency: string, priceInCents: number, locale) => {
   const dollars = priceInCents / 100;
   dollars.toString(10);
-  const priceString = dollars.toLocaleString("en-US", {
+  const priceString = dollars.toLocaleString(LOCALES[locale ?? "en"], {
     style: "currency",
     currency: currency,
   });

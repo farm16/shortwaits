@@ -135,14 +135,20 @@ export function EventScreenHeader({ event }: { event: EventDtoType }) {
             id: "Event_Screen.eventScreenHeader.status",
           })}
           iconName="status"
-          value={event.status.statusName ?? ""}
+          value={
+            intl
+              .formatMessage({
+                id: `Common.eventStatus.${event.status.statusName.toLowerCase()}`,
+              })
+              .toUpperCase() ?? ""
+          }
         />
         <InfoItem
           title={intl.formatMessage({
             id: "Event_Screen.eventScreenHeader.cost",
           })}
           iconName="price"
-          value={getPrettyStringFromPriceWithSymbol("USD", event?.priceExpected ?? 0)}
+          value={getPrettyStringFromPriceWithSymbol("USD", event?.priceExpected ?? 0, intl.locale)}
         />
       </Container>
       <Space direction="horizontal" size="tiny" />
@@ -152,14 +158,14 @@ export function EventScreenHeader({ event }: { event: EventDtoType }) {
             id: "Event_Screen.eventScreenHeader.date",
           })}
           iconName="date"
-          value={getPrettyDateFromISO(event?.startTime)}
+          value={getPrettyDateFromISO(event?.startTime, intl.locale)}
         />
         <InfoItem
           title={intl.formatMessage({
             id: "Event_Screen.eventScreenHeader.time",
           })}
           iconName="time"
-          value={getPrettyTimeRangeFromISO(event?.startTime, event?.expectedEndTime)}
+          value={getPrettyTimeRangeFromISO(event?.startTime, event?.expectedEndTime, intl.locale)}
         />
       </Container>
       {event?.notes && event?.labels && event?.labels.length > 0 ? <Space direction="horizontal" size="tiny" /> : null}
