@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 
 import {
-  LeftChevronButton,
+  BackButton,
   AnimatedSearchBar,
   IconButton,
   Container,
@@ -33,7 +33,7 @@ export const StaticSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: headerTitle,
-      headerLeft: () => <LeftChevronButton onPress={() => navigation.goBack()} />,
+      headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
       headerRight: () => (
         <Container direction="row" alignItems="center">
           {searchable ? null : (

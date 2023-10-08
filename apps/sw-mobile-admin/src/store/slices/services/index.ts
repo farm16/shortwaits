@@ -14,12 +14,9 @@ export const servicesSlice = createSlice({
     },
   },
   extraReducers: builder => {
-    builder.addMatcher(
-      shortwaitsApi.endpoints.getServicesByBusiness.matchFulfilled,
-      (state, action) => {
-        return [...action.payload.data];
-      }
-    );
+    builder.addMatcher(shortwaitsApi.endpoints.getServices.matchFulfilled, (state, action) => {
+      return [...action.payload.data];
+    });
   },
 });
 

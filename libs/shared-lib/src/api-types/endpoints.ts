@@ -104,8 +104,12 @@ export const endpoints = {
   }>(`events/people`, "GET"),
 
   //services
-  getServices: createEndpoint("services", "GET"),
-  getService: createEndpoint(`services/:serviceId`, "GET"),
+  getService: createEndpoint<{
+    serviceId: string;
+  }>("services", "GET"),
+  getServices: createEndpoint<{
+    businessId: string;
+  }>("services", "GET"),
   updateService: createEndpoint(`services/:businessId`, "PUT"),
   createService: createEndpoint(`services/:businessId`, "POST"),
   deleteService: createEndpoint<{

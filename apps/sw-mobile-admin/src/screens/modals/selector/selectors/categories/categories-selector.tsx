@@ -5,7 +5,7 @@ import { useBusiness, useMobileAdmin } from "../../../../../store";
 import {
   // SearchBar,
   Space,
-  LeftChevronButton,
+  BackButton,
   Text,
   Button,
 } from "../../../../../components";
@@ -37,7 +37,7 @@ export const CategoriesSelector: FC<ModalsScreenProps<"selector-modal-screen">> 
     navigation.setOptions({
       headerTitle: intl.formatMessage({ id: "Common.categories" }),
       headerLeft: () => (
-        <LeftChevronButton
+        <BackButton
           onPress={() => handleOnGoBack(selectedItems)}
           counter={selectedItems?.length > 0 ? `(${selectedItems.length})` : ""}
         />

@@ -7,10 +7,11 @@ import { FlatList } from "react-native-gesture-handler";
 import {
   AnimatedSearchBar,
   Container,
-  LeftChevronButton,
+  BackButton,
   IconButton,
   Text,
   NonIdealState,
+  Space,
 } from "../../../../../components";
 import { ClientsSelectorItem } from "./clients-selector-item";
 import { useGetBusinessClientsQuery } from "../../../../../services";
@@ -88,7 +89,7 @@ export const ClientsSelector: FC<ModalsScreenProps<"selector-modal-screen">> = (
       headerTitle: headerTitle,
       headerLeft: () => (
         <Container direction="row" alignItems="center">
-          <LeftChevronButton
+          <BackButton
             onPress={() => handleOnGoBack()}
             counter={multiple && selectedItems?.length > 0 ? `(${selectedItems.length})` : ""}
           />
@@ -198,6 +199,7 @@ export const ClientsSelector: FC<ModalsScreenProps<"selector-modal-screen">> = (
           keyExtractor={keyExtractor}
           maxToRenderPerBatch={10}
           ListEmptyComponent={<NonIdealState type="noClients" />}
+          ListFooterComponent={<Space size="large" />}
         />
       </>
     );

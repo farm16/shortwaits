@@ -8,12 +8,6 @@ import { ThemeColorName } from "../../theme/Colors";
 
 const disabledStates = ["loading", "disabled", "enable"];
 
-export const BackButton: FC<ButtonProps> = props => (
-  <Button {...props} preset="icon">
-    <Icon name="chevron-left" color={useTheme().Colors.brandSecondary} size={30} />
-  </Button>
-);
-
 export const ForwardButton: FC<ButtonProps> = props => (
   <Button {...props} preset="icon">
     <Icon name="chevron-right" color={useTheme().Colors.text} size={30} />
@@ -89,7 +83,7 @@ export const RightChevronButton: FC<ButtonProps> = props => {
     </Button>
   );
 };
-export const LeftChevronButton: FC<
+export const BackButton: FC<
   ButtonProps & {
     counter?: string;
   }

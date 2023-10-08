@@ -33,7 +33,12 @@ export const MODAL_SCREENS = {
   SCHEDULE_MODAL_SCREEN: "schedule-modal-screen", // schedule
   SELECTOR_MODAL_SCREEN: "selector-modal-screen", // categories + staff
   SERVICE_MODAL_SCREEN: "service-modal-screen",
-  FORM_MODAL_SCREEN: "form-modal-screen",
+  ADD_CLIENT_MODAL_SCREEN: "add-client-modal-screen",
+  ADD_EVENT_MODAL_SCREEN: "add-event-modal-screen",
+  UPDATE_EVENT_MODAL_SCREEN: "update-event-modal-screen",
+  ADD_STAFF_MODAL_SCREEN: "add-staff-modal-screen",
+  ADD_SERVICE_MODAL_SCREEN: "add-service-modal-screen",
+  UPDATE_SERVICE_MODAL_SCREEN: "update-service-modal-screen",
 } as const;
 
 export const NAVIGATION_STACKS = {

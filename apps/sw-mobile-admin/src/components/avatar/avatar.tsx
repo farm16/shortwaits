@@ -1,11 +1,12 @@
 import React from "react";
-import { ImageBackground, StyleSheet, View, ViewStyle } from "react-native";
+import { StyleSheet, View, ViewStyle } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 import { useTheme } from "../../theme";
 import { IconButton } from "../navigator-action-buttons/navigator-action-buttons";
 import FastImage from "react-native-fast-image";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { noop } from "lodash";
 
 interface AvatarProps {
   url?: string;
@@ -13,7 +14,7 @@ interface AvatarProps {
   color?: string;
   mode?: "static" | "upload";
   style?: ViewStyle;
-  onPress?: () => void;
+  onPress: () => void;
 }
 
 const imageSizes = {
@@ -24,7 +25,7 @@ const imageSizes = {
 } as const;
 
 export function Avatar(props: AvatarProps) {
-  const { size = "default", url, color, mode = "static", style: styleOverride, onPress } = props;
+  const { size = "default", url, color, mode = "static", style: styleOverride, onPress = noop } = props;
   const { Colors } = useTheme();
 
   const imageSize = imageSizes[size];
@@ -33,11 +34,12 @@ export function Avatar(props: AvatarProps) {
     height: imageSize,
     width: imageSize,
     borderRadius: imageSize * 0.5,
-    backgroundColor: color ?? Colors.staticLightBackground,
+    backgroundColor: color ?? Colors.lightGray,
     borderColor: Colors.gray,
     borderWidth: 1,
     justifyContent: "center",
     alignItems: "center",
+    marginBottom: 7,
   } as ViewStyle;
 
   const image = url ? (

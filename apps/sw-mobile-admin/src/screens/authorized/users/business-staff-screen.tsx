@@ -86,15 +86,7 @@ export function BusinessStaffScreen({ navigation, route }: AuthorizedScreenProps
             preset="accent"
             onPress={() => {
               navigation.navigate("modals", {
-                screen: "form-modal-screen",
-                params: {
-                  form: "addEvent",
-                  onDone: () => {
-                    // if (!isEventsLoading) {
-                    //   refetchEvents();
-                    // }
-                  },
-                },
+                screen: "add-event-modal-screen",
               });
             }}
           />
@@ -217,10 +209,7 @@ export function BusinessStaffScreen({ navigation, route }: AuthorizedScreenProps
             iconType="add"
             onPress={() => {
               navigation.navigate("modals", {
-                screen: "form-modal-screen",
-                params: {
-                  form: "addEvent",
-                },
+                screen: "add-event-modal-screen",
               });
             }}
           />

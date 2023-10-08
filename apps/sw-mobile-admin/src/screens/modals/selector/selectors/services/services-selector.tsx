@@ -1,13 +1,12 @@
 import React, { FC, useCallback, useEffect, useLayoutEffect, useState } from "react";
-import { FlatList, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { ActivityIndicator } from "react-native-paper";
 
 import {
   ServiceItem,
-  Screen,
   Text,
-  LeftChevronButton,
+  BackButton,
   Space,
   Container,
   IconButton,
@@ -15,39 +14,48 @@ import {
   NonIdealState,
 } from "../../../../../components";
 import { showPremiumMembershipModal, useBusiness } from "../../../../../store";
-import { useGetServicesByBusinessQuery } from "../../../../../services";
+import { useGetServicesQuery } from "../../../../../services";
 import { ModalsScreenProps } from "../../../../../navigation";
 import { useDispatch } from "react-redux";
 import { ServicesDtoType } from "@shortwaits/shared-lib";
+import { FlatList, RefreshControl } from "react-native-gesture-handler";
+import { useIntl } from "react-intl";
+import { noop } from "lodash";
+import { useFocusEffect } from "@react-navigation/native";
 
 /**
  * TODO: handle error to non ideal state
  */
 export const ServicesSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ navigation, route }) => {
   const {
-    onSelect,
+    onSelect = noop,
     closeOnSelect = true,
-    headerTitle = "Services",
     selectedData = [],
-    onGoBack,
+    onGoBack = noop,
     searchable,
     multiple = false, // there is no case where multiple is needed
   } = route.params;
 
-  const dispatch = useDispatch();
-  const handleAddStaffPress = useCallback(() => {
-    dispatch(showPremiumMembershipModal());
-  }, [dispatch]);
+  // const dispatch = useDispatch();
+
   const business = useBusiness();
+  const intl = useIntl();
 
   const {
     data: services,
     isLoading,
     isSuccess,
     isError,
-  } = useGetServicesByBusinessQuery(business?._id ? business._id : skipToken, {
-    refetchOnMountOrArgChange: true,
-  });
+    refetch: refetchServices,
+  } = useGetServicesQuery(business?._id ?? skipToken);
+
+  useFocusEffect(
+    useCallback(() => {
+      refetchServices();
+    }, [refetchServices])
+  );
+
+  console.log("isLoading", isLoading);
 
   const [searchText, setSearchText] = useState("");
   const [filteredData, setFilteredData] = useState<ServicesDtoType>([]);
@@ -68,6 +76,17 @@ export const ServicesSelector: FC<ModalsScreenProps<"selector-modal-screen">> = 
   }, [isSuccess, services, searchText]);
 
   useLayoutEffect(() => {
+    const handleAddService = () => {
+      // dispatch(showPremiumMembershipModal());
+      navigation.navigate("modals", {
+        screen: "add-service-modal-screen",
+        params: {
+          onSubmit: async () => {
+            await refetchServices();
+          },
+        },
+      });
+    };
     const handleOnGoBack = () => {
       if (multiple) {
         const items = services?.data?.filter(item => selectedItems.includes(item._id)) || null;
@@ -80,8 +99,8 @@ export const ServicesSelector: FC<ModalsScreenProps<"selector-modal-screen">> = 
       }
     };
     navigation.setOptions({
-      headerTitle: headerTitle,
-      headerLeft: () => <LeftChevronButton onPress={handleOnGoBack} />,
+      headerTitle: intl.formatMessage({ id: "Selectors.services.headerTitle" }),
+      headerLeft: () => <BackButton onPress={handleOnGoBack} />,
       headerRight: () => (
         <Container direction="row" alignItems="center">
           {searchable ? (
@@ -93,17 +112,17 @@ export const ServicesSelector: FC<ModalsScreenProps<"selector-modal-screen">> = 
               }}
             />
           ) : null}
-          <IconButton onPress={() => handleAddStaffPress()} withMarginRight iconType="add" />
+          <IconButton onPress={() => handleAddService()} withMarginRight iconType="add" />
         </Container>
       ),
     });
   }, [
-    handleAddStaffPress,
-    headerTitle,
+    intl,
     isListSearchable,
     multiple,
     navigation,
     onGoBack,
+    refetchServices,
     searchable,
     selectedItems,
     services?.data,
@@ -123,12 +142,7 @@ export const ServicesSelector: FC<ModalsScreenProps<"selector-modal-screen">> = 
       } else if (onSelect) {
         onSelect(item);
       } else {
-        navigation.navigate("authorized-stack", {
-          screen: "business-client-screen",
-          params: {
-            client: item,
-          },
-        });
+        navigation.goBack();
       }
     },
     [closeOnSelect, navigation, onSelect]
@@ -160,11 +174,19 @@ export const ServicesSelector: FC<ModalsScreenProps<"selector-modal-screen">> = 
     return <ActivityIndicator />;
   }
 
-  if (isSuccess && services.data) {
+  if (isSuccess) {
     return (
       <>
         <AnimatedSearchBar onChangeText={handleOnChangeText} isVisible={isListSearchable} />
         <FlatList
+          refreshControl={
+            <RefreshControl
+              refreshing={isLoading}
+              onRefresh={async () => {
+                await refetchServices();
+              }}
+            />
+          }
           style={styles.flatList}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.flatListContainer}
@@ -172,17 +194,17 @@ export const ServicesSelector: FC<ModalsScreenProps<"selector-modal-screen">> = 
           ItemSeparatorComponent={renderSeparator}
           renderItem={renderItem}
           keyExtractor={keyExtractor}
-          maxToRenderPerBatch={10}
           ListEmptyComponent={<NonIdealState type="noServices" />}
+          ListFooterComponent={<Space size="large" />}
         />
       </>
     );
   }
+
+  return null;
 };
 const styles = StyleSheet.create({
   flatList: {},
   searchBar: {},
-  flatListContainer: {
-    flex: 1,
-  },
+  flatListContainer: {},
 });

@@ -27,10 +27,12 @@
     "Common.continue": "Continue",
     "Common.error.title": "Oops!",
     "Common.error.message": "Something went wrong. Please try again.",
-    "Common.Count": "{count, select, other {count: {count}}}",
+    "Common.count": "{count, select, other {count: {count}}}",
     "Common.addClient": "Add Client",
     "Common.addStaff": "Add Staff",
     "Common.addEvent": "Add Event",
+    "Common.addService": "Add Service",
+    "Common.retry": "Retry",
 
     "Common.categories": "Categories",
     "Common.category": "Category",
@@ -52,6 +54,9 @@
     "Common.eventStatus.canceled": "Canceled",
     "Common.eventStatus.completed": "Completed",
 
+    "Common.error.oops": "Oops!",
+    "Common.error.somethingWentWrong": "Something went wrong. Please try again.",
+
     "Onboarding_1_Screen.headerTitle": "Welcome {name}",
     "Onboarding_1_Screen.businessName": "Business Name",
     "Onboarding_1_Screen.businessName.placeholder": "The name of your business",
@@ -62,6 +67,10 @@
     "Onboarding_1_Screen.businessHours": "Hours",
     "Onboarding_1_Screen.businessHours.placeholder": "Select business hours",
     "Onboarding_1_Screen.businessStaff": "Staff",
+
+    "Onboarding_2_Screen.headerTitle": "Add Services",
+    "Onboarding_2_Screen.registerButton": "Register",
+
     "Sign_In_Screen.username": "Username",
     "Sign_In_Screen.username.placeholder": "bod_ross123",
     "Sign_In_Screen.password": "Password",
@@ -186,6 +195,7 @@
     "PlansScreen.plan.6months.offerDescription": "One month free",
     "PlansScreen.plan.6months.priceDescription": "per one time",
     "PlansScreen.plan.6months.description": "Billed every 6 months\n14-day money back guarantee",
+
     "AddEventModal.title": "Create Event",
     "AddEventModal.name": "Name",
     "AddEventModal.service.title": "Service",
@@ -219,6 +229,7 @@
     "AddEventModal.client.description": "count",
     "AddEventModal.client.emptyDescription": "Select a client",
     "AddEventModal.client.selector.headerTitle": "Clients",
+
     "AddClientModal.title": "Create Client",
     "AddClientModal.submitButton": "Create Client",
     "AddClientModal.nickname": "Nickname",
@@ -234,6 +245,7 @@
     "AddClientModal.city": "City",
     "AddClientModal.state": "State",
     "AddClientModal.postCode": "Zip Code",
+
     "AddStaffModal.title": "Create Staff",
     "AddStaffModal.submitButton": "Create Staff",
     "AddStaffModal.nickname": "Nickname",
@@ -254,6 +266,33 @@
     "AddStaffModal.state.placeholder": "Select State",
     "AddStaffModal.postCode": "Zip Code",
 
+    "UpdateServiceModal.serviceColor": "Service color",
+    "UpdateServiceModal.name": "Name",
+    "UpdateServiceModal.price": "Price",
+    "UpdateServiceModal.duration": "Duration",
+    "UpdateServiceModal.makePrivate": "Make Private",
+    "UpdateServiceModal.makePrivate.description": "Clients will need to request access\nto this service.",
+    "UpdateServiceModal.enableVideoConference": "Enable Video Conference",
+    "UpdateServiceModal.enableVideoConference.description": "Allow video conference link in booking",
+    "UpdateServiceModal.enableVideoConference.link": "Video Conference Link",
+    "UpdateServiceModal.enableVideoConference.link.description": "Insert link here (Zoom, Google Meet, etc.)",
+    "UpdateServiceModal.alertDelete.title": "Delete Service",
+    "UpdateServiceModal.alertDelete.message": "Are you sure you want to delete this service?",
+
+    "AddServiceModal.serviceColor": "Service color",
+    "AddServiceModal.name": "Name",
+    "AddServiceModal.name.placeholder": "Yoga class",
+    "AddServiceModal.price": "Price",
+    "AddServiceModal.duration": "Duration",
+    "AddServiceModal.makePrivate": "Make Private",
+    "AddServiceModal.makePrivate.description": "Clients will need to request access\nto this service.",
+    "AddServiceModal.enableVideoConference": "Enable Video Conference",
+    "AddServiceModal.enableVideoConference.description": "Allow video conference link in booking",
+    "AddServiceModal.enableVideoConference.link": "Video Conference Link",
+    "AddServiceModal.enableVideoConference.link.description": "Insert link here (Zoom, Google Meet, etc.)",
+    "AddServiceModal.alertDelete.title": "Delete Service",
+    "AddServiceModal.alertDelete.message": "Are you sure you want to delete this service?",
+
     "Banner.premiumMembership.text1": "need more from\n",
     "Banner.premiumMembership.text2": "Shortwaits ?",
     "Banner.premiumMembership.text3": "get 3 months for only $0.99!",
@@ -261,7 +300,9 @@
     "Banner.premiumMembership.cancelButton": "cancel",
 
     "MyBusiness_screen.eventSummary": "Event Summary",
-    "MyBusiness_screen.schedule": "Schedule"
+    "MyBusiness_screen.schedule": "Schedule",
+
+    "Selectors.services.headerTitle": "Select Services"
   },
   "es": {
     "Navigation.tab.label.events": "Eventos",
@@ -291,13 +332,15 @@
     "Common.error.title": "¡Ups!",
     "Common.error.message": "Algo salió mal. Por favor, inténtalo de nuevo.",
     "Common.continue": "Continuar",
-    "Common.Count": "{count, select, other {Conteo: {count}}}",
+    "Common.count": "{count, select, other {Conteo: {count}}}",
     "Common.addClient": "Agregar Cliente",
     "Common.addStaff": "Agregar Personal",
     "Common.addEvent": "Agregar Evento",
+    "Common.addService": "Agregar Servicio",
     "Common.staff": "Personal",
     "Common.showMore": "Mostrar Más",
     "Common.showLess": "Mostrar Menos",
+    "Common.retry": "Reintentar",
 
     "Common.categories": "Categorías",
     "Common.category": "Categoría",
@@ -316,6 +359,9 @@
     "Common.eventStatus.canceled": "Cancelado",
     "Common.eventStatus.completed": "Completado",
 
+    "Common.error.oops": "¡Ups!",
+    "Common.error.somethingWentWrong": "Algo salió mal. Por favor, inténtalo de nuevo.",
+
     "Onboarding_1_Screen.headerTitle": "Bienvenido {name}",
     "Onboarding_1_Screen.businessName": "Nombre del Negocio",
     "Onboarding_1_Screen.businessName.placeholder": "El nombre de tu negocio",
@@ -326,6 +372,10 @@
     "Onboarding_1_Screen.businessHours": "Horario",
     "Onboarding_1_Screen.businessHours.placeholder": "Seleccionar horario del negocio",
     "Onboarding_1_Screen.businessStaff": "Personal",
+
+    "Onboarding_2_Screen.headerTitle": "Agregar Servicios",
+    "Onboarding_2_Screen.registerButton": "Registrarse",
+
     "Sign_In_Screen.username": "Nombre de usuario",
     "Sign_In_Screen.username.placeholder": "bod_ross123",
     "Sign_In_Screen.password": "Contraseña",
@@ -347,6 +397,7 @@
     "Sign_Up_With_Email_Screen.confirmPassword.placeholder": "********",
     "Sign_Up_With_Email_Screen.alreadyHaveAnAccount": "¿Ya tienes una cuenta?",
     "Sign_Up_With_Email_Screen.headerTitle": "Crear nueva cuenta",
+
     "Welcome_Screen.title": "Bienvenido a la aplicación de administración de Shortwaits",
     "Welcome_Screen.description": "¡Donde eres el capitán de tu negocio!\nExplora nuestras herramientas para tomar el control y conducir tu éxito.",
 
@@ -450,6 +501,7 @@
     "PlansScreen.plan.6months.offerDescription": "Un mes gratis",
     "PlansScreen.plan.6months.priceDescription": "por una vez",
     "PlansScreen.plan.6months.description": "Facturado cada 6 meses\nGarantía de devolución de dinero de 14 días",
+
     "AddEventModal.title": "Crear Evento",
     "AddEventModal.name": "Nombre",
     "AddEventModal.service.title": "Servicio",
@@ -483,6 +535,7 @@
     "AddEventModal.client.description": "Numero de clientes",
     "AddEventModal.client.emptyDescription": "seleciona un cliente",
     "AddEventModal.client.selector.headerTitle": "Clientes",
+
     "AddClientModal.title": "Crear Cliente",
     "AddClientModal.submitButton": "Crear Cliente",
     "AddClientModal.nickname": "Apodo",
@@ -498,6 +551,7 @@
     "AddClientModal.city": "Ciudad",
     "AddClientModal.state": "Estado",
     "AddClientModal.postCode": "Código postal",
+
     "AddStaffModal.title": "Agregar Personal",
     "AddStaffModal.submitButton": "Crear Personal",
     "AddStaffModal.nickname": "Apodo",
@@ -519,10 +573,42 @@
     "AddStaffModal.postCode": "Código postal",
     "AddStaffModal.schedule": "Horario",
 
+    "UpdateServiceModal.serviceColor": "Color del servicio",
+    "UpdateServiceModal.name": "Nombre",
+    "UpdateServiceModal.price": "Precio",
+    "UpdateServiceModal.duration": "Duración",
+    "UpdateServiceModal.makePrivate": "Hacer privado",
+    "UpdateServiceModal.makePrivate.description": "Los clientes deberán solicitar acceso a este servicio.",
+    "UpdateServiceModal.enableVideoConference": "Habilitar videoconferencia",
+    "UpdateServiceModal.enableVideoConference.description": "Permite el enlace de videoconferencia en la reserva",
+    "UpdateServiceModal.enableVideoConference.link": "Enlace de videoconferencia",
+    "UpdateServiceModal.enableVideoConference.link.description": "Insertar enlace aquí (Zoom, Google Meet, etc.)",
+    "UpdateServiceModal.alertDelete.title": "Eliminar Servicio",
+    "UpdateServiceModal.alertDelete.message": "¿Estás seguro de que deseas eliminar este servicio?",
+
+    "AddServiceModal.serviceColor": "Color del servicio",
+    "AddServiceModal.name": "Nombre",
+    "AddServiceModal.name.placeholder": "Clase de yoga",
+    "AddServiceModal.price": "Precio",
+    "AddServiceModal.duration": "Duración",
+    "AddServiceModal.makePrivate": "Hacer privado",
+    "AddServiceModal.makePrivate.description": "Los clientes deberán solicitar acceso a este servicio.",
+    "AddServiceModal.enableVideoConference": "Habilitar videoconferencia",
+    "AddServiceModal.enableVideoConference.description": "Permite el enlace de videoconferencia en la reserva",
+    "AddServiceModal.enableVideoConference.link": "Enlace de videoconferencia",
+    "AddServiceModal.enableVideoConference.link.description": "Insertar enlace aquí (Zoom, Google Meet, etc.)",
+    "AddServiceModal.alertDelete.title": "Eliminar Servicio",
+    "AddServiceModal.alertDelete.message": "¿Estás seguro de que deseas eliminar este servicio?",
+
     "Banner.premiumMembership.text1": "¿necesitas más de\n",
     "Banner.premiumMembership.text2": "Shortwaits?",
     "Banner.premiumMembership.text3": "¡obtén 3 meses por solo $0.99!",
     "Banner.premiumMembership.joinButton": "unite ahora",
-    "Banner.premiumMembership.cancelButton": "cancelar"
+    "Banner.premiumMembership.cancelButton": "cancelar",
+
+    "MyBusiness_screen.eventSummary": "Resumen de Eventos",
+    "MyBusiness_screen.schedule": "Horario",
+
+    "Selectors.services.headerTitle": "Seleccionar Servicios"
   }
 }

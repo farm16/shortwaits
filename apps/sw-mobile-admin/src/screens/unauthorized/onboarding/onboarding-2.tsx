@@ -1,14 +1,16 @@
 import React, { useCallback, useLayoutEffect } from "react";
-import { FlatList, StyleSheet } from "react-native";
+import { FlatList, RefreshControl, StyleSheet } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { CompositeNavigationProp } from "@react-navigation/native";
+import { CompositeNavigationProp, useFocusEffect } from "@react-navigation/native";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { ActivityIndicator } from "react-native-paper";
+import { useIntl } from "react-intl";
 
-import { ServiceItem, LeftChevronButton, Space, Button, IconButton, FormContainer } from "../../../components";
+import { ServiceItem, BackButton, Space, Button, IconButton, FormContainer } from "../../../components";
 import { RootStackParamList, UnauthorizedStackParamList } from "../../../navigation";
 import { useBusiness } from "../../../store";
-import { useGetServicesByBusinessQuery, useRegisterBusinessMutation } from "../../../services";
+import { useGetServicesQuery, useRegisterBusinessMutation } from "../../../services";
+import { noop } from "lodash";
 
 export interface OnboardingScreenProps {
   navigation: CompositeNavigationProp<
@@ -17,25 +19,23 @@ export interface OnboardingScreenProps {
   >;
 }
 
-export type SampleBusinessServices = number;
-
 export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
   const business = useBusiness();
-
+  const intl = useIntl();
   const {
     data: services,
-    // isError,
-    // isFetching,
     isLoading,
     isSuccess,
-  } = useGetServicesByBusinessQuery(business ? business?._id : skipToken);
+    refetch,
+  } = useGetServicesQuery(business ? business?._id : skipToken, {
+    refetchOnMountOrArgChange: true,
+  });
 
   const handleCardOnPress = useCallback(
     item => {
       navigation.navigate("modals", {
-        screen: "form-modal-screen",
+        screen: "update-service-modal-screen",
         params: {
-          form: "updateService",
           initialValues: item,
         },
       });
@@ -50,16 +50,15 @@ export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "Services",
-      headerLeft: () => <LeftChevronButton onPress={() => navigation.goBack()} />,
+      headerTitle: intl.formatMessage({
+        id: "Onboarding_2_Screen.headerTitle",
+      }),
+      headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
       headerRight: () => (
         <IconButton
           onPress={() =>
             navigation.navigate("modals", {
-              screen: "form-modal-screen",
-              params: {
-                form: "addService",
-              },
+              screen: "add-service-modal-screen",
             })
           }
           iconType="add"
@@ -67,18 +66,36 @@ export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
         />
       ),
     });
-  }, [navigation]);
+  }, [intl, navigation]);
 
   if (isLoading || registerBusinessStatus.isLoading) {
     return <ActivityIndicator />;
   }
+
   if (isSuccess) {
     return (
       <FormContainer
         preset="fixed"
-        footer={<Button preset={"secondary"} text="Register" onPress={e => handleBusinessRegistration()} />}
+        footer={
+          <Button
+            preset={"secondary"}
+            text={intl.formatMessage({
+              id: "Onboarding_2_Screen.registerButton",
+            })}
+            onPress={e => handleBusinessRegistration()}
+          />
+        }
       >
+        <Space size="small" />
         <FlatList
+          refreshControl={
+            <RefreshControl
+              refreshing={isLoading}
+              onRefresh={async () => {
+                await refetch();
+              }}
+            />
+          }
           ItemSeparatorComponent={() => <Space size="tiny" />}
           contentContainerStyle={styles.contentContainer}
           data={services.data}
@@ -92,40 +109,7 @@ export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
   }
 };
 const styles = StyleSheet.create({
-  container: {
-    alignItems: "stretch",
-  },
-  bottomSheetHeader: {
-    alignItems: "center",
-  },
   contentContainer: {
-    alignItems: "center",
-  },
-  listSeparator: {
-    borderTopWidth: 1,
-    marginVertical: 5,
-  },
-  registerButton: {
-    borderWidth: 2,
-    paddingVertical: 1.75,
-    paddingHorizontal: 10,
-    marginHorizontal: 15,
-    borderRadius: 35,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  registerButtonText: {
-    fontSize: 16,
-    paddingTop: 5,
-    paddingBottom: 5,
-    fontWeight: "600",
-    textTransform: "uppercase",
-  },
-  fab: {
-    position: "absolute",
-    marginRight: 25,
-    marginBottom: 40,
-    right: 0,
-    bottom: 0,
+    paddingBottom: 24,
   },
 });

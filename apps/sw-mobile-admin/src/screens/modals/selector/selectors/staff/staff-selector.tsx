@@ -5,14 +5,7 @@ import { BusinessUsersDtoType } from "@shortwaits/shared-lib";
 import { ActivityIndicator } from "react-native-paper";
 import { useDispatch } from "react-redux";
 
-import {
-  AnimatedSearchBar,
-  Container,
-  LeftChevronButton,
-  IconButton,
-  NonIdealState,
-  Text,
-} from "../../../../../components";
+import { AnimatedSearchBar, Container, BackButton, IconButton, NonIdealState, Text } from "../../../../../components";
 import { StaffSelectorItem } from "./staff-selector-item";
 import { useGetBusinessStaffQuery } from "../../../../../services";
 import { ModalsScreenProps } from "../../../../../navigation";
@@ -86,7 +79,7 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
       headerTitle: headerTitle,
       headerLeft: () => (
         <Container direction="row" alignItems="center">
-          <LeftChevronButton
+          <BackButton
             onPress={() => handleOnGoBack()}
             counter={multiple && selectedItems?.length > 0 ? `(${selectedItems.length})` : ""}
           />

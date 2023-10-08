@@ -44,10 +44,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({ navi
 
   const handleAddClient = useCallback(() => {
     navigation.navigate("modals", {
-      screen: "form-modal-screen",
-      params: {
-        form: "addClient",
-      },
+      screen: "add-client-modal-screen",
     });
   }, [navigation]);
 

@@ -42,12 +42,16 @@ export const getPrettyStringFromPrice = (currency: BusinessAvailableCurrenciesTy
       locales: "en-US",
       options: { style: "currency", currency: "USD" },
     },
+    PEN: {
+      locales: "es-PE",
+      options: { style: "currency", currency: "PEN" },
+    },
   };
   const dollars = price / 100;
   dollars.toString(10);
   const priceString = dollars.toLocaleString(
-    localesWithOptions[currency].locales,
-    localesWithOptions[currency].options
+    localesWithOptions[currency]?.locales ?? "en-US",
+    localesWithOptions[currency]?.options ?? { style: "currency", currency: "USD" }
   );
   return priceString;
 };

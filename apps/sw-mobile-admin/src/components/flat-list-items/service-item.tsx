@@ -26,8 +26,8 @@ export const ServiceItem: FC<ServiceCardProps> = props => {
 
   const selectedStyle = isSelected
     ? ({
-        borderColor: service.serviceColor.hexCode + "80",
-        borderLeftColor: service.serviceColor.hexCode,
+        borderColor: service.serviceColor?.hexCode + "80",
+        borderLeftColor: service.serviceColor?.hexCode,
         borderLeftWidth: 5,
         borderWidth: 2,
       } as ViewStyle)
@@ -43,7 +43,7 @@ export const ServiceItem: FC<ServiceCardProps> = props => {
         {
           height: CARD_HEIGH,
           width: width * 0.9,
-          borderLeftColor: service.serviceColor.hexCode || Colors.transparent,
+          borderLeftColor: service.serviceColor?.hexCode || Colors.transparent,
           backgroundColor: Colors.backgroundOverlay,
         },
         styleOverride,
@@ -59,10 +59,10 @@ export const ServiceItem: FC<ServiceCardProps> = props => {
         />
         <Text
           text={getPrettyStringFromPrice(service.currency, service.price)}
-          style={[styles.textItem3, { color: service.serviceColor.hexCode || Colors.text }]}
+          style={[styles.textItem3, { color: service.serviceColor?.hexCode || Colors.text }]}
         />
       </View>
-      <Avatar imageUrl={service.imageUrl} size={"default"} color={Colors.gray} />
+      <Avatar url={service.imageUrl} size={"default"} color={Colors.gray} onPress={noop} />
       <Space size="tiny" direction="vertical" />
     </Button>
   );

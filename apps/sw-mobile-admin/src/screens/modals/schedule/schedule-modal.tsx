@@ -8,7 +8,7 @@ import {
   Button,
   FormContainer,
   IconButton,
-  LeftChevronButton,
+  BackButton,
   useBottomSheet,
 } from "../../../components";
 import { ModalsScreenProps } from "../../../navigation";
@@ -75,7 +75,7 @@ export const ScheduleModal: FC<ModalsScreenProps<"schedule-modal-screen">> = ({ 
     };
     navigation.setOptions({
       headerTitle: headerTitle,
-      headerLeft: () => <LeftChevronButton onPress={() => navigation.goBack()} />,
+      headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
       headerRight: () => (
         <View style={{ flexDirection: "row", justifyContent: "flex-end", alignItems: "flex-end" }}>
           {allowCloseAll && (

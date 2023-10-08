@@ -9,10 +9,7 @@ export const actions: FloatingActions = [
     label: "EVENT",
     onPress: () =>
       navigate("modals", {
-        screen: "form-modal-screen",
-        params: {
-          form: "addEvent",
-        },
+        screen: "add-event-modal-screen",
       }),
     icon: "calendar-clock",
     color: "#ffffff",
@@ -29,10 +26,7 @@ export const actions: FloatingActions = [
     label: "CLIENT",
     onPress: () =>
       navigate("modals", {
-        screen: "form-modal-screen",
-        params: {
-          form: "addClient",
-        },
+        screen: "add-client-modal-screen",
       }),
     icon: "account-group",
     color: "#ffffff",
@@ -51,10 +45,7 @@ export const actions: FloatingActions = [
     labelTextColor: "#ffffff",
     onPress: () =>
       navigate("modals", {
-        screen: "form-modal-screen",
-        params: {
-          form: "addStaff",
-        },
+        screen: "add-staff-modal-screen",
       }),
     icon: "account-tie",
     style: {
@@ -91,10 +82,7 @@ export const useActions = () => {
         label: intl.formatMessage({ id: "Common.events" }).toUpperCase(),
         onPress: () =>
           navigate("modals", {
-            screen: "form-modal-screen",
-            params: {
-              form: "addEvent",
-            },
+            screen: "add-event-modal-screen",
           }),
         icon: "calendar-clock",
         color: "#ffffff",
@@ -111,10 +99,7 @@ export const useActions = () => {
         label: intl.formatMessage({ id: "Common.clients" }).toUpperCase(),
         onPress: () =>
           navigate("modals", {
-            screen: "form-modal-screen",
-            params: {
-              form: "addClient",
-            },
+            screen: "add-client-modal-screen",
           }),
         icon: "account-group",
         color: "#ffffff",
@@ -133,10 +118,7 @@ export const useActions = () => {
         labelTextColor: "#ffffff",
         onPress: () =>
           navigate("modals", {
-            screen: "form-modal-screen",
-            params: {
-              form: "addStaff",
-            },
+            screen: "add-staff-modal-screen",
           }),
         icon: "account-tie",
         style: {

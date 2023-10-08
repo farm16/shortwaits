@@ -1,9 +1,6 @@
 import React from "react";
 import { StyleSheet } from "react-native";
-import {
-  CardStyleInterpolators,
-  createStackNavigator,
-} from "@react-navigation/stack";
+import { CardStyleInterpolators, createStackNavigator } from "@react-navigation/stack";
 
 import {
   WelcomeScreen,
@@ -80,14 +77,8 @@ export const UnauthorizedNavigator = () => {
       >
         <Stack.Screen name={SIGN_IN_SCREEN} component={SignInScreen} />
         <Stack.Screen name={SIGN_UP_SCREEN} component={SignUpScreen} />
-        <Stack.Screen
-          name={SIGN_IN_WITH_EMAIL_SCREEN}
-          component={SignInWithEmail}
-        />
-        <Stack.Screen
-          name={SIGN_UP_WITH_EMAIL_SCREEN}
-          component={SignUpWithEmail}
-        />
+        <Stack.Screen name={SIGN_IN_WITH_EMAIL_SCREEN} component={SignInWithEmail} />
+        <Stack.Screen name={SIGN_UP_WITH_EMAIL_SCREEN} component={SignUpWithEmail} />
       </Stack.Group>
       <Stack.Group
         screenOptions={{
@@ -103,14 +94,8 @@ export const UnauthorizedNavigator = () => {
           },
         }}
       >
-        <Stack.Screen
-          name={ONBOARDING_1_SCREEN}
-          component={Onboarding1Screen}
-        />
-        <Stack.Screen
-          name={ONBOARDING_2_SCREEN}
-          component={Onboarding2Screen}
-        />
+        <Stack.Screen name={ONBOARDING_1_SCREEN} component={Onboarding1Screen} />
+        <Stack.Screen name={ONBOARDING_2_SCREEN} component={Onboarding2Screen} />
       </Stack.Group>
     </Stack.Navigator>
   );

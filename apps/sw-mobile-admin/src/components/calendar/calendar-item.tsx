@@ -1,5 +1,5 @@
 import { RectButton } from "react-native-gesture-handler";
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { Alert, View, Animated, StyleSheet, Pressable } from "react-native";
 import { EventDtoType } from "@shortwaits/shared-lib";
 import { isEmpty, truncate } from "lodash";
@@ -16,16 +16,32 @@ import {
 } from "../../utils/status-color";
 import { CALENDAR_EVENT_HEIGHT, EVENT_ITEM_BORDER_RADIUS } from "../../utils";
 import { useIntl } from "react-intl";
+import { useFocusEffect } from "@react-navigation/native";
 
 type AgendaItemProps = {
   item: EventDtoType;
+  triggerTick?: boolean;
 };
 
 export const AgendaItem = (props: AgendaItemProps) => {
-  const { item } = props;
+  const { item, triggerTick = false } = props;
+  const swipeableRef = React.useRef<Swipeable>(null);
   const { Colors } = useTheme();
   const intl = useIntl();
   const service = useService(item?.serviceId ?? "");
+
+  useFocusEffect(() => {
+    if (triggerTick) {
+      console.log("triggerTick");
+      swipeableRef.current?.openRight();
+      const timerId = setTimeout(() => {
+        swipeableRef.current?.close();
+      }, 1000);
+      return () => {
+        clearTimeout(timerId);
+      };
+    }
+  });
 
   const handleOnPress = useCallback(() => {
     navigate("authorized-stack", {
@@ -165,7 +181,7 @@ export const AgendaItem = (props: AgendaItemProps) => {
   }, [Colors.lightGray, Colors.subText, intl, item.isPublicEvent, item.status.statusName]);
 
   return (
-    <Swipeable renderRightActions={renderRightActions}>
+    <Swipeable ref={swipeableRef} renderRightActions={renderRightActions}>
       <Pressable
         onPress={handleOnPress}
         onLongPress={handleOnLongPress}

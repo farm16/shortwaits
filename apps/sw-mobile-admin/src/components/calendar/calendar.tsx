@@ -56,8 +56,9 @@ export const Calendar: FC<CalendarProps> = memo(props => {
     } ?? skipToken
   );
 
-  const renderItem = useCallback(({ item }) => {
-    return <AgendaItem item={item} />;
+  const renderItem = useCallback(({ item, index }) => {
+    const triggerTick = index === 0;
+    return <AgendaItem item={item} triggerTick={triggerTick} />;
   }, []);
   const renderSeparatorItem = useCallback(() => <Space size="tiny" direction="horizontal" />, []);
   const handleRefresh = useCallback(() => {
@@ -73,9 +74,8 @@ export const Calendar: FC<CalendarProps> = memo(props => {
             preset="accent"
             onPress={() => {
               navigate("modals", {
-                screen: "form-modal-screen",
+                screen: "add-event-modal-screen",
                 params: {
-                  form: "addEvent",
                   onDone: () => {
                     if (!isEventsLoading) {
                       refetchEvents();

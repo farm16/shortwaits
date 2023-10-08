@@ -124,7 +124,7 @@ export const Onboarding1Screen: FC<UnauthorizedScreenProps<"onboarding-1-screen"
         })}
         subTitle={intl.formatMessage(
           {
-            id: "Common.Count",
+            id: "Common.count",
           },
           {
             count: getArrCount(business?.categories ?? []),
@@ -183,7 +183,7 @@ export const Onboarding1Screen: FC<UnauthorizedScreenProps<"onboarding-1-screen"
         // subTitle={getArrCount(business?.staff ?? [])}
         subTitle={intl.formatMessage(
           {
-            id: "Common.Count",
+            id: "Common.count",
           },
           {
             count: getArrCount(business?.staff ?? []),

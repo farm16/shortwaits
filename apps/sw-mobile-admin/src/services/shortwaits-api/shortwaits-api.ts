@@ -15,7 +15,7 @@ import {
   GetCategory,
   GetCategories,
   GetService,
-  GetServicesByBusiness,
+  GetServices,
   UpdateService,
   CreateService,
   GetBusinessUsers,
@@ -49,11 +49,14 @@ export const shortwaitsApi = createApi({
 
     // >>>>> business
     getBusiness: GetBusiness(builder),
-    getBusinessCategory: GetBusinessCategory(builder),
     getBusinessHours: GetBusinessHours(builder),
+
+    // this only return _ids
+    getBusinessCategory: GetBusinessCategory(builder),
     getBusinessServices: GetBusinessServices(builder),
     getBusinessClients: GetBusinessClients(builder),
     getBusinessStaff: GetBusinessStaff(builder),
+
     updateBusiness: UpdateBusiness(builder),
     registerBusiness: RegisterBusiness(builder),
     // A business User === Staff
@@ -68,9 +71,10 @@ export const shortwaitsApi = createApi({
     //categories
     getCategory: GetCategory(builder),
     getCategories: GetCategories(builder),
+
     //services
     getService: GetService(builder),
-    getServicesByBusiness: GetServicesByBusiness(builder),
+    getServices: GetServices(builder),
     updateService: UpdateService(builder),
     createService: CreateService(builder),
     deleteService: DeleteService(builder),

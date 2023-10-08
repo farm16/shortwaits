@@ -81,15 +81,7 @@ export function BusinessClientScreen({ navigation, route }: AuthorizedScreenProp
             preset="accent"
             onPress={() => {
               navigation.navigate("modals", {
-                screen: "form-modal-screen",
-                params: {
-                  form: "addEvent",
-                  onDone: () => {
-                    // if (!isEventsLoading) {
-                    //   refetchEvents();
-                    // }
-                  },
-                },
+                screen: "add-event-modal-screen",
               });
             }}
           />
@@ -212,10 +204,7 @@ export function BusinessClientScreen({ navigation, route }: AuthorizedScreenProp
             iconType="add"
             onPress={() => {
               navigation.navigate("modals", {
-                screen: "form-modal-screen",
-                params: {
-                  form: "addEvent",
-                },
+                screen: "add-event-modal-screen",
               });
             }}
           />

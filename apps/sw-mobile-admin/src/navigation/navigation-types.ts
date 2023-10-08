@@ -84,9 +84,38 @@ export type ModalStackParamList = {
   [MODAL_SCREENS.SERVICE_MODAL_SCREEN]: {
     service?: ServiceDtoType;
   };
-  // multiple forms in one modal ex. addClient, addEvent, addStaff, etc.
-  [MODAL_SCREENS.FORM_MODAL_SCREEN]: {
-    form: FormType;
+
+  [MODAL_SCREENS.ADD_CLIENT_MODAL_SCREEN]: {
+    initialValues?: FormData[FormType];
+    onSubmit?<T extends keyof FormData>(arg: FormData[T]): void;
+    onDone?(): void;
+    closeOnSubmit?: boolean;
+  };
+  [MODAL_SCREENS.ADD_EVENT_MODAL_SCREEN]: {
+    initialValues?: FormData[FormType];
+    onSubmit?<T extends keyof FormData>(arg: FormData[T]): void;
+    onDone?(): void;
+    closeOnSubmit?: boolean;
+  };
+  [MODAL_SCREENS.UPDATE_EVENT_MODAL_SCREEN]: {
+    initialValues?: FormData[FormType];
+    onSubmit?<T extends keyof FormData>(arg: FormData[T]): void;
+    onDone?(): void;
+    closeOnSubmit?: boolean;
+  };
+  [MODAL_SCREENS.ADD_STAFF_MODAL_SCREEN]: {
+    initialValues?: FormData[FormType];
+    onSubmit?<T extends keyof FormData>(arg: FormData[T]): void;
+    onDone?(): void;
+    closeOnSubmit?: boolean;
+  };
+  [MODAL_SCREENS.ADD_SERVICE_MODAL_SCREEN]: {
+    initialValues?: FormData[FormType];
+    onSubmit?<T extends keyof FormData>(arg: FormData[T]): void;
+    onDone?(): void;
+    closeOnSubmit?: boolean;
+  };
+  [MODAL_SCREENS.UPDATE_SERVICE_MODAL_SCREEN]: {
     initialValues?: FormData[FormType];
     onSubmit?<T extends keyof FormData>(arg: FormData[T]): void;
     onDone?(): void;

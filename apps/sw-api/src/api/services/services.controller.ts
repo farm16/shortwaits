@@ -55,8 +55,8 @@ export class ServicesController {
     return this.servicesService.create(businessId, createServiceDto);
   }
 
-  @Delete(":serviceId")
-  remove(@Param("serviceId") serviceId: string, @Query("businessId") businessId: string) {
+  @Delete(":businessId/:serviceId")
+  remove(@Param("serviceId") serviceId: string, @Param("businessId") businessId: string) {
     return this.servicesService.remove(serviceId, businessId);
   }
 }

@@ -4,7 +4,7 @@ import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { Calendar, Screen, Text, Container, IconButton, QrModal, Space } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useBusiness, useEvents, useShowGhostComponent } from "../../../store";
-import { useGetServicesByBusinessQuery } from "../../../services";
+import { useGetServicesQuery } from "../../../services";
 import { convertStaticSelectorModalData } from "../../../utils/static-selector-modal-utils";
 import { useIntl } from "react-intl";
 
@@ -15,7 +15,7 @@ export function EventsScreen({ navigation }: AuthorizedScreenProps<"events-scree
   const currentsEvents = useEvents();
   const intl = useIntl();
 
-  useGetServicesByBusinessQuery(currentBusiness._id ?? skipToken);
+  useGetServicesQuery(currentBusiness._id ?? skipToken);
   useShowGhostComponent("floatingActionButton");
 
   useLayoutEffect(() => {

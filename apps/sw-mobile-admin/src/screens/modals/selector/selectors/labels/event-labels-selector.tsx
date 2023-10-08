@@ -3,7 +3,7 @@ import { FlatList, StyleSheet } from "react-native";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 
 import { showPremiumMembershipModal, useUser } from "../../../../../store";
-import { SearchBar, Space, IconButton, LeftChevronButton, Text, BackButton } from "../../../../../components";
+import { SearchBar, Space, IconButton, BackButton, Text } from "../../../../../components";
 import { selectorConfigs } from "../../selector-config";
 import { LabelSelectorItem } from "./labels-selector-item";
 import { useGetBusinessQuery } from "../../../../../services";

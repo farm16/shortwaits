@@ -44,11 +44,7 @@ export function EventScreen({ navigation, route }: AuthorizedScreenProps<"event-
             <IconButton
               onPress={() => {
                 navigation.navigate("modals", {
-                  screen: "form-modal-screen",
-                  params: {
-                    form: "updateEvent",
-                    initialValues: event,
-                  },
+                  screen: "update-event-modal-screen",
                 });
               }}
               withMarginRight

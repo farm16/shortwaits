@@ -8,17 +8,18 @@ import { useFocusEffect } from "@react-navigation/native";
 import { Space, Screen, Text, BackButton, ServiceItem, IconButton } from "../../../components";
 import { ModalsScreenProps } from "../../../navigation";
 import { useBusiness } from "../../../store";
-import { useGetServicesByBusinessQuery } from "../../../services";
+import { useGetServicesQuery } from "../../../services";
+import { useIntl } from "react-intl";
 
 export const ServicesModal: FC<ModalsScreenProps<"service-modal-screen">> = ({ navigation, route }) => {
   const business = useBusiness();
-
+  const intl = useIntl();
   const {
     data: services,
     isLoading: isServicesLoading,
     isSuccess: isServicesSuccess,
     refetch: refetchServices,
-  } = useGetServicesByBusinessQuery(business?._id ?? skipToken);
+  } = useGetServicesQuery(business?._id ?? skipToken);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -29,9 +30,8 @@ export const ServicesModal: FC<ModalsScreenProps<"service-modal-screen">> = ({ n
           withMarginRight
           onPress={() => {
             navigation.navigate("modals", {
-              screen: "form-modal-screen",
+              screen: "add-service-modal-screen",
               params: {
-                form: "addService",
                 onSubmit: () => {
                   refetchServices();
                 },
@@ -40,9 +40,16 @@ export const ServicesModal: FC<ModalsScreenProps<"service-modal-screen">> = ({ n
           }}
         />
       ),
-      headerTitle: () => <Text preset="text" text={"Service"} />,
+      headerTitle: () => (
+        <Text
+          preset="text"
+          text={intl.formatMessage({
+            id: "Common.services",
+          })}
+        />
+      ),
     });
-  }, [navigation, refetchServices]);
+  }, [intl, navigation, refetchServices]);
 
   useFocusEffect(
     useCallback(() => {
@@ -77,9 +84,8 @@ export const ServicesModal: FC<ModalsScreenProps<"service-modal-screen">> = ({ n
               service={item}
               onPress={_service => {
                 navigation.navigate("modals", {
-                  screen: "form-modal-screen",
+                  screen: "update-service-modal-screen",
                   params: {
-                    form: "updateService",
                     initialValues: _service,
                     onSubmit: () => {
                       refetchServices();
