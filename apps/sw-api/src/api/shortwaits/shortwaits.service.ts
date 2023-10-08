@@ -23,11 +23,12 @@ export class ShortwaitsService {
       en: "0000001",
       es: "0000002",
     };
-    const defaultAdminMobileDataArr = await this.shortwaitsModel.find({
-      short_id: storeIndicators[storeIndicator] || storeIndicators.en,
+    const shortId = storeIndicators[storeIndicator] || storeIndicators.en;
+    console.log("store indicator >>> ", shortId);
+    const defaultAdminMobileData = await this.shortwaitsModel.find({
+      short_id: shortId,
     });
     /**will be distributed based on location (can be filtered by other means ???)*/
-    const defaultAdminMobileData = defaultAdminMobileDataArr.find(elem => elem.short_id === "0000001");
 
     return defaultAdminMobileData;
   }

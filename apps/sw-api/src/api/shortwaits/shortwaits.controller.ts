@@ -19,9 +19,7 @@ export class ShortwaitsController {
     description: "Returns default data for admin mobile",
     type: Shortwaits,
   })
-  getAdminMobileDefaultData(
-    @Headers("device-language") locale: string
-  ): Promise<ShortwaitsAdminDefaultDataPayloadType> {
+  getAdminMobileDefaultData(@Headers("device-language") locale: string) {
     return this.shortwaitsService.getAdminMobileDefaultData(locale);
   }
 
@@ -32,7 +30,7 @@ export class ShortwaitsController {
     description: "Returns default data for admin mobile",
     type: Shortwaits,
   })
-  getAdminWebDefaultData(@Headers("device-language") locale: string): Promise<ShortwaitsAdminDefaultDataPayloadType> {
+  getAdminWebDefaultData(@Headers("device-language") locale: string) {
     return this.shortwaitsService.getAdminMobileDefaultData(locale);
   }
 
@@ -43,7 +41,7 @@ export class ShortwaitsController {
     description: "Returns default data for admin mobile",
     type: Shortwaits,
   })
-  getWebDefaultData(@Headers("device-language") locale: string): Promise<ShortwaitsAdminDefaultDataPayloadType> {
+  getWebDefaultData(@Headers("device-language") locale: string) {
     return this.shortwaitsService.getAdminMobileDefaultData(locale);
   }
 
@@ -54,7 +52,7 @@ export class ShortwaitsController {
     description: "Returns default data for admin mobile",
     type: Shortwaits,
   })
-  getClientWebDefaultData(@Headers("device-language") locale: string): Promise<ShortwaitsAdminDefaultDataPayloadType> {
+  getClientWebDefaultData(@Headers("device-language") locale: string) {
     return this.shortwaitsService.getAdminMobileDefaultData(locale);
   }
 
