@@ -142,13 +142,9 @@ export const mobileAdminSlice = createSlice({
     },
   },
   extraReducers: builder => {
-    builder
-      .addMatcher(shortwaitsApi.endpoints.getAdminMobile.matchFulfilled, (state, action) => {
-        return { ...state, defaultData: action.payload.data };
-      })
-      .addMatcher(shortwaitsApi.endpoints.getCategories.matchFulfilled, (state, action) => {
-        return { ...state, categories: action.payload.data };
-      });
+    builder.addMatcher(shortwaitsApi.endpoints.getAdminMobile.matchFulfilled, (state, action) => {
+      return { ...state, defaultData: action.payload.data };
+    });
   },
 });
 

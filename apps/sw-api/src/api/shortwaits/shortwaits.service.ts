@@ -28,9 +28,14 @@ export class ShortwaitsService {
     const defaultAdminMobileData = await this.shortwaitsModel.find({
       short_id: shortId,
     });
-    /**will be distributed based on location (can be filtered by other means ???)*/
 
-    return defaultAdminMobileData;
+    // if empty, return 404
+    if (!defaultAdminMobileData) {
+      throw new Error("No default data found");
+    }
+
+    // if array is not empty, return first element
+    return defaultAdminMobileData[0];
   }
 
   public async getBusinessForBooking(shortId: string, clientUserId: string) {
