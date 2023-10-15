@@ -31,6 +31,7 @@ import {
   UpdateBusinessStaff,
   UpdateBusinessClient,
   DeleteService,
+  UploadImageFile,
 } from "./modules";
 import { baseQueryWithInterceptor } from "./interceptor";
 
@@ -87,5 +88,8 @@ export const shortwaitsApi = createApi({
     getPeopleInEvent: GetPeopleInEvent(builder),
     // todo: Users
     getBusinessUsers: GetBusinessUsers(builder),
+
+    //file uploads
+    uploadImageFile: UploadImageFile(builder),
   }),
 });

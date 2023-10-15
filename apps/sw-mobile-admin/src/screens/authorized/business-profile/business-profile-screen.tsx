@@ -1,64 +1,84 @@
-import React, { useLayoutEffect, useMemo } from "react";
-import { Text, BackButton, TextFieldCard, ButtonCard, Button, FormContainer, Avatar, Space } from "../../../components";
+import React, { Fragment, useEffect, useLayoutEffect, useMemo } from "react";
+import { Text, BackButton, TextFieldCard, ButtonCard, Button, FormContainer, Avatar, Space, Card, PhoneNumberCard } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useBusiness } from "../../../store";
 import { useForm, useSelectImage } from "../../../hooks";
 import { UpdateBusinessDtoType } from "@shortwaits/shared-lib";
+import { STATIC_FORM_AMERICAN_COUNTRIES, STATIC_FORM_USA_STATES } from "../../../utils";
+import { useIntl } from "react-intl";
+import { useUpdateBusinessMutation } from "../../../services";
+import { isObjsEqualWithAlert } from "../../../utils";
 
 export function BusinessProfileScreen({ navigation }: AuthorizedScreenProps<"business-profile-screen">) {
   const business = useBusiness();
+  const intl = useIntl();
 
   const initialValues = useMemo(() => {
     const _initialValues: UpdateBusinessDtoType = {
-      shortName: business.shortName,
-      description: business.description,
-      events: business.events,
-      services: business.services,
-      email: business.email,
-      labels: business.labels,
-      staff: business.staff,
-      categories: business.categories,
-      currency: business.currency,
-      country: business.country,
-      phone1: business.phone1,
-      longName: business.longName,
-      hours: business.hours,
-      location: business.location,
-      updatedBy: business.updatedBy,
-      clients: business.clients,
-      taggedClients: business.taggedClients,
-      isWebBookingEnabled: business.isWebBookingEnabled,
-      isSmsNotificationEnabled: business.isSmsNotificationEnabled,
-      isAppNotificationEnabled: business.isAppNotificationEnabled,
-      videoConference: business.videoConference,
-      isVideoConferenceEnabled: business.isVideoConferenceEnabled,
       web: business.web,
+      shortName: business.shortName,
+      longName: business.longName,
+      description: business.description,
+      email: business.email,
+      phone1: business.phone1,
+      location: business.location,
+      // todo: add these fields
+      // labels: business.labels,
+      // currency: business.currency,
+      // taggedClients: business.taggedClients,
+      // isWebBookingEnabled: business.isWebBookingEnabled,
+      // isSmsNotificationEnabled: business.isSmsNotificationEnabled,
+      // isAppNotificationEnabled: business.isAppNotificationEnabled,
+      // videoConference: business.videoConference,
+      // isVideoConferenceEnabled: business.isVideoConferenceEnabled,
     };
     return _initialValues;
   }, [business]);
 
-  const { init, isLoading, imageBase64 } = useSelectImage();
-
-  console.log("imageBase64", imageBase64);
-  console.log("isLoading", isLoading);
-
-  const { touched, errors, values, handleChange, handleSubmit, setFieldValue } = useForm(
+  const { init, isLoading: isImageLoading, imageUrl } = useSelectImage();
+  const [updateBusiness, { isError, isLoading, isSuccess }] = useUpdateBusinessMutation();
+  const { touched, errors, values, handleChange, handleSubmit, setFieldTouched, validateField, setFieldValue, setFieldError } = useForm(
     {
       initialValues,
       onSubmit: formData => {
-        console.log("formData", JSON.stringify(formData, null, 2));
+        // console.log("BUSINESS PROFILLE >>>>", JSON.stringify(formData, null, 2));
+        updateBusiness({
+          body: formData,
+          businessId: business._id,
+        });
       },
     },
-    "createEvent"
+    "updateBusiness"
   );
+
+  console.log(errors);
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
+      headerLeft: () => (
+        <BackButton
+          onPress={() => {
+            isObjsEqualWithAlert(initialValues, values, () => navigation.goBack());
+          }}
+        />
+      ),
       headerTitleAlign: "center",
-      headerTitle: () => <Text preset="text" text={"Business Info"} />,
+      headerTitle: () => (
+        <Text
+          preset="text"
+          text={intl.formatMessage({
+            id: "BusinessProfile_screen.headerTitle",
+          })}
+        />
+      ),
     });
-  }, [navigation]);
+  }, [initialValues, intl, navigation, values]);
+
+  useEffect(() => {
+    if (imageUrl) {
+      setFieldValue("web.logoImageUrl", imageUrl);
+    }
+  }, [imageUrl, setFieldValue]);
 
   const renderSubmitButton = (
     <Button
@@ -73,21 +93,161 @@ export function BusinessProfileScreen({ navigation }: AuthorizedScreenProps<"bus
     <FormContainer footer={renderSubmitButton}>
       <Avatar
         style={{ alignSelf: "center" }}
-        url={business.web.logoImageUrl}
+        url={values.web.logoImageUrl}
+        isLoading={isImageLoading}
+        disabled={isImageLoading}
         mode="upload"
         onPress={() => {
           init();
         }}
       />
       <Space />
-      <TextFieldCard title="ID" value={business.shortId} disabled />
-      <ButtonCard title="Account Type" subTitle={business.accountType.toUpperCase()} />
-      <TextFieldCard title="Short Name" value={values.shortName} />
-      <TextFieldCard title="Long Name" value={values.longName} />
-      <TextFieldCard title="Business Description" value={values.description} />
-      <TextFieldCard title="Email" value={values.email} />
-      <TextFieldCard title="Phone" value={values.phone1} />
-      <ButtonCard title="Business location" />
+      <TextFieldCard
+        title={intl.formatMessage({
+          id: "BusinessProfile_screen.id",
+        })}
+        textStyle={{
+          textTransform: "capitalize",
+        }}
+        value={business.shortId.toUpperCase()}
+        disabled
+      />
+      <ButtonCard
+        title={intl.formatMessage({
+          id: "BusinessProfile_screen.accountType",
+        })}
+        subTitle={business.accountType.toUpperCase()}
+      />
+      <TextFieldCard
+        title={intl.formatMessage({
+          id: "BusinessProfile_screen.shortName",
+        })}
+        onChangeText={handleChange("shortName")}
+        value={values.shortName}
+        isTouched={touched.shortName}
+        errors={errors.shortName}
+      />
+      <TextFieldCard
+        title={intl.formatMessage({
+          id: "BusinessProfile_screen.longName",
+        })}
+        placeholder={intl.formatMessage({
+          id: "BusinessProfile_screen.longName.placeholder",
+        })}
+        onChangeText={handleChange("longName")}
+        value={values.longName}
+        isTouched={touched.longName}
+        errors={errors.longName}
+      />
+      <TextFieldCard
+        title={intl.formatMessage({
+          id: "BusinessProfile_screen.description",
+        })}
+        placeholder={intl.formatMessage({
+          id: "BusinessProfile_screen.description.placeholder",
+        })}
+        maxLength={200}
+        onChangeText={handleChange("description")}
+        value={values.description}
+        isTouched={touched.description}
+        errors={errors.description}
+      />
+      <TextFieldCard
+        title={intl.formatMessage({
+          id: "BusinessProfile_screen.email",
+        })}
+        placeholder={intl.formatMessage({
+          id: "BusinessProfile_screen.email.placeholder",
+        })}
+        onChangeText={handleChange("email")}
+        value={values.email}
+        isTouched={touched.email}
+        errors={errors.email}
+      />
+      <PhoneNumberCard
+        title={intl.formatMessage({
+          id: "BusinessProfile_screen.phone",
+        })}
+        onChangeText={handleChange("phone1")}
+        isValid={async isValid => {
+          await setFieldTouched("phone1", true);
+          if (isValid) {
+            await validateField("phone1");
+          } else {
+            await setFieldError("phone1", "Invalid phone number");
+          }
+        }}
+        isTouched={touched?.phone1}
+        errors={errors.phone1}
+      />
+      <TextFieldCard
+        title={intl.formatMessage({
+          id: "BusinessProfile_screen.address",
+        })}
+        placeholder={intl.formatMessage({
+          id: "BusinessProfile_screen.address.placeholder",
+        })}
+        onChangeText={handleChange("location.streetAddress")}
+        value={values.location.streetAddress}
+      />
+      <ButtonCard
+        title={intl.formatMessage({
+          id: "BusinessProfile_screen.country",
+        })}
+        subTitle={STATIC_FORM_AMERICAN_COUNTRIES.find(country => country.key === values.location.country)?.title ?? "Select Country"}
+        onPress={() =>
+          navigation.navigate("modals", {
+            screen: "selector-modal-screen",
+            params: {
+              type: "static",
+              headerTitle: "Select a Country",
+              data: STATIC_FORM_AMERICAN_COUNTRIES,
+              closeOnSelect: true,
+              onSelect: country => {
+                setFieldValue("location.country", country.key);
+              },
+            },
+          })
+        }
+      />
+      {values.location?.country === "US" ? (
+        <Fragment>
+          <TextFieldCard
+            title={intl.formatMessage({
+              id: "BusinessProfile_screen.city",
+            })}
+            onChangeText={handleChange("location.city")}
+            value={values.location.city}
+          />
+          <ButtonCard
+            title={intl.formatMessage({
+              id: "BusinessProfile_screen.state",
+            })}
+            subTitle={STATIC_FORM_USA_STATES.find(state => state.key === values.location.state)?.title ?? "Select State"}
+            onPress={() =>
+              navigation.navigate("modals", {
+                screen: "selector-modal-screen",
+                params: {
+                  type: "static",
+                  headerTitle: "Select a State",
+                  data: STATIC_FORM_USA_STATES,
+                  closeOnSelect: true,
+                  onSelect: state => {
+                    setFieldValue("location.state", state.key);
+                  },
+                },
+              })
+            }
+          />
+          <TextFieldCard
+            title={intl.formatMessage({
+              id: "BusinessProfile_screen.zipCode",
+            })}
+            onChangeText={handleChange("location.postalCode")}
+            value={values.location.postalCode}
+          />
+        </Fragment>
+      ) : null}
       <Space />
     </FormContainer>
   );

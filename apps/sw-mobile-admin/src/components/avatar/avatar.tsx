@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { StyleSheet, View, ViewStyle } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
@@ -7,6 +7,7 @@ import { IconButton } from "../navigator-action-buttons/navigator-action-buttons
 import FastImage from "react-native-fast-image";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { noop } from "lodash";
+import Spinner from "react-native-spinkit";
 
 interface AvatarProps {
   url?: string;
@@ -14,6 +15,8 @@ interface AvatarProps {
   color?: string;
   mode?: "static" | "upload";
   style?: ViewStyle;
+  isLoading?: boolean;
+  disabled?: boolean;
   onPress: () => void;
 }
 
@@ -25,7 +28,7 @@ const imageSizes = {
 } as const;
 
 export function Avatar(props: AvatarProps) {
-  const { size = "default", url, color, mode = "static", style: styleOverride, onPress = noop } = props;
+  const { isLoading = true, disabled = false, size = "default", url, color, mode = "static", style: styleOverride, onPress = noop } = props;
   const { Colors } = useTheme();
 
   const imageSize = imageSizes[size];
@@ -42,43 +45,57 @@ export function Avatar(props: AvatarProps) {
     marginBottom: 7,
   } as ViewStyle;
 
-  const image = url ? (
-    <View style={[containerStyle, styleOverride]}>
+  const renderCameraButton = useCallback(() => {
+    return (
+      <IconButton
+        style={{
+          position: "absolute",
+          bottom: -7,
+          right: -6.5,
+          width: 30,
+          height: 30,
+        }}
+        iconType="add-image"
+      />
+    );
+  }, []);
+
+  const renderImage = useCallback(() => {
+    return url ? (
       <FastImage
         source={{
           uri: url,
         }}
-        resizeMode={FastImage.resizeMode.contain}
+        resizeMode={FastImage.resizeMode.cover}
         style={{
-          width: imageSize * 0.75,
-          height: imageSize * 0.75,
+          width: imageSize * 0.95,
+          height: imageSize * 0.95,
+          borderRadius: imageSize * 0.95 * 0.5,
         }}
       />
-      {mode === "upload" ? (
-        <IconButton
-          style={{
-            position: "absolute",
-            bottom: -7,
-            right: -6.5,
-            width: 30,
-            height: 30,
-          }}
-          iconType="add-image"
-        />
-      ) : null}
-    </View>
-  ) : (
-    <View style={[containerStyle, styleOverride]}>
+    ) : (
       <Icon name="image" color={Colors.white} size={imageSize * 0.5} />
-      {mode === "upload" ? <IconButton style={styles.IconButton} iconType="add-image" /> : null}
-    </View>
-  );
+    );
+  }, [Colors.white, imageSize, url]);
 
-  if (mode === "upload") {
-    return <TouchableOpacity onPress={() => onPress()}>{image}</TouchableOpacity>;
+  if (isLoading) {
+    return (
+      <View style={[containerStyle, styleOverride]}>
+        <Spinner style={{}} size={24} type={"ThreeBounce"} color={Colors.brandAccent} />
+      </View>
+    );
   }
 
-  return image;
+  if (mode === "upload") {
+    return (
+      <TouchableOpacity style={[containerStyle, styleOverride]} disabled={disabled} onPress={() => onPress()}>
+        {renderImage()}
+        {renderCameraButton()}
+      </TouchableOpacity>
+    );
+  }
+
+  return <View style={[containerStyle, styleOverride]}>{renderImage()} </View>;
 }
 const styles = StyleSheet.create({
   container: {

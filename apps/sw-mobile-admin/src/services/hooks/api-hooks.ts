@@ -19,6 +19,7 @@ export const {
   useUpdateServiceMutation,
   useCreateServiceMutation,
   useDeleteServiceMutation,
+  useUploadImageFileMutation,
 
   //Query hooks
   useGetAdminMobileQuery,

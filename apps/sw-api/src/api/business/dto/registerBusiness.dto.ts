@@ -13,6 +13,12 @@ export class RegisterBusinessDto {
   @Trim()
   @IsString()
   @IsNotEmpty()
+  @ApiProperty()
+  _id: string;
+
+  @Trim()
+  @IsString()
+  @IsNotEmpty()
   @MaxLength(164)
   @ApiProperty()
   description: string;

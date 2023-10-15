@@ -43,6 +43,12 @@ export class BusinessService {
   }
 
   filterBusiness(business: Partial<BusinessDtoType>) {
+    delete business._id;
+    delete business.createdAt;
+    delete business.updatedAt;
+    delete business.shortId;
+    delete business.updatedBy;
+    delete business.accountType;
     delete business.admins;
     delete business.backgroundAdmins;
     delete business.superAdmins;
@@ -76,8 +82,8 @@ export class BusinessService {
     }
   }
 
-  async updateBusiness(userId: string, business: Partial<BusinessDtoType>, isRegistrationCompleted: boolean) {
-    let filteredPayload = this.filterBusiness(business);
+  async updateBusiness(userId: string, businessId: string, payload: Partial<BusinessDtoType>, isRegistrationCompleted: boolean) {
+    let filteredPayload = this.filterBusiness(payload);
 
     if (isRegistrationCompleted) {
       console.log("isRegistrationCompleted", isRegistrationCompleted);
@@ -87,7 +93,7 @@ export class BusinessService {
       };
     }
 
-    const updatedBusiness = await this.businessModel.findByIdAndUpdate(filteredPayload._id, filteredPayload, {
+    const updatedBusiness = await this.businessModel.findByIdAndUpdate(businessId, filteredPayload, {
       new: true,
     });
 
@@ -123,7 +129,7 @@ export class BusinessService {
       });
     }
 
-    const updatedBusiness = this.updateBusiness(userId, business, isRegistrationCompleted);
+    const updatedBusiness = this.updateBusiness(userId, business._id, business, isRegistrationCompleted);
     return updatedBusiness;
   }
 

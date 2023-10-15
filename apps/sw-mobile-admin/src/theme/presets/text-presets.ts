@@ -20,44 +20,49 @@ export const textPresets = ({ FontSize, Fonts, Gutters, Colors }: ThemeCommonPar
       ...BASE,
     },
     none: {},
+    headerTitle: {
+      ...BASE,
+      ...Fonts.textRegular,
+      color: Colors.text,
+      fontWeight: "400",
+    },
     bold: {
       ...BASE,
-      fontWeight: "bold",
+      ...Fonts.textRegular,
+      color: Colors.text,
+      fontWeight: "700",
     },
     text: {
       ...BASE,
       ...Fonts.textRegular,
-      color: "rgba(152,152,152,1)",
-      fontWeight: "500",
+      color: Colors.text,
+      fontWeight: "400",
     },
     subText: {
       ...BASE,
       ...Fonts.textRegular,
-      color: "rgba(152,152,152,1)",
-      fontWeight: "500",
+      color: Colors.subText,
+      fontWeight: "400",
     },
     social: {
       ...BASE,
       ...Fonts.textRegular,
       color: Colors.darkGray,
-      fontWeight: "600",
+      fontWeight: "700",
     },
     pending: {
       ...Fonts.textRegular,
       fontWeight: "400",
-      // textTransform: "uppercase",
       color: Colors.pending,
     },
     success: {
-      ...Fonts.textTiny,
+      ...Fonts.textRegular,
       fontWeight: "400",
-      // textTransform: "uppercase",
       color: Colors.success,
     },
     failed: {
-      ...Fonts.textTiny,
+      ...Fonts.textRegular,
       fontWeight: "400",
-      // textTransform: "uppercase",
       color: Colors.failed,
     },
     error: {
@@ -65,7 +70,7 @@ export const textPresets = ({ FontSize, Fonts, Gutters, Colors }: ThemeCommonPar
       alignSelf: "flex-start",
       textAlign: "right",
       color: Colors.red3,
-      fontWeight: "500" as const,
+      fontWeight: "400" as const,
       letterSpacing: 0.65,
     },
     link: {
@@ -84,15 +89,10 @@ export const textPresets = ({ FontSize, Fonts, Gutters, Colors }: ThemeCommonPar
       ...BASE,
       ...Fonts.textRegular,
       color: Colors.brandSecondary,
-      fontWeight: "500" as const,
+      fontWeight: "400" as const,
       // fontWeight: "",
     },
-    headerTitle: {
-      ...Fonts.textRegular,
-      color: Colors.text,
-      fontWeight: "500" as const,
-    },
-    title1: {
+    title: {
       ...BASE,
       ...Fonts.titleLarge,
       // ...Gutters.largeVPadding
@@ -107,7 +107,7 @@ export const textPresets = ({ FontSize, Fonts, Gutters, Colors }: ThemeCommonPar
       textAlign: "left",
       ...Fonts.titleSmall,
       color: Colors.text,
-      fontWeight: "500" as const,
+      fontWeight: "400" as const,
       letterSpacing: 0.65,
     },
     textTiny: {
@@ -129,12 +129,12 @@ export const textPresets = ({ FontSize, Fonts, Gutters, Colors }: ThemeCommonPar
     fieldLabel: {
       ...BASE,
       fontSize: FontSize.regular,
-      fontWeight: "bold",
+      fontWeight: "700",
     },
     cardTitle: {
       ...Fonts.textSmall,
       color: Colors.text,
-      fontWeight: "500" as const,
+      fontWeight: "400" as const,
       // letterSpacing: 0.65,
     },
     cardSubtitle: {

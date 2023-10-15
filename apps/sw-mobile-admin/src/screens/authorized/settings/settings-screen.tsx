@@ -24,8 +24,7 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
 
   useEffect(() => {
     async function getCurrentAdmins() {
-      const admins = (await getAdmins({ body: [...currentBusiness.admins, ...currentBusiness.superAdmins] }).unwrap())
-        .data;
+      const admins = (await getAdmins({ body: [...currentBusiness.admins, ...currentBusiness.superAdmins] }).unwrap()).data;
       return admins;
     }
     if (currentBusiness) {
@@ -70,21 +69,11 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
         }}
       >
         <List.Item
-          title={
-            <FormattedMessage
-              id="Settings_Screen.business_plan.title"
-              values={{ accountType: currentBusiness?.accountType }}
-            />
-          }
+          title={<FormattedMessage id="Settings_Screen.business_plan.title" values={{ accountType: currentBusiness?.accountType }} />}
           style={itemStyle}
           titleStyle={{ color: Colors.text }}
           descriptionStyle={{ color: Colors.orange5, fontWeight: "700", textTransform: "uppercase" }}
-          description={
-            <FormattedMessage
-              id="Settings_Screen.business_plan.description"
-              values={{ accountType: currentBusiness?.accountType }}
-            />
-          }
+          description={<FormattedMessage id="Settings_Screen.business_plan.description" values={{ accountType: currentBusiness?.accountType }} />}
           right={props => <List.Icon {...props} color={Colors.brandSecondary} icon="chevron-right" />}
           onPress={() => navigation.navigate("authorized-stack", { screen: "plans-screen" })}
         />
@@ -102,8 +91,11 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
                 const isWebBookingEnabled = !(currentBusiness?.isWebBookingEnabled ?? false);
                 console.log("isWebBookingEnabled", isWebBookingEnabled);
                 updateBusiness({
-                  ...currentBusiness,
-                  isWebBookingEnabled,
+                  businessId: currentBusiness._id,
+                  body: {
+                    ...currentBusiness,
+                    isWebBookingEnabled,
+                  },
                 });
               }}
             />

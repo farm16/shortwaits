@@ -312,7 +312,28 @@
     "MyBusiness_screen.staff": "Staff",
     "MyBusiness_screen.clients": "Clients",
     "MyBusiness_screen.integrations": "Integrations",
-    "MyBusiness_screen.myReviews": "My Reviews"
+    "MyBusiness_screen.myReviews": "My Reviews",
+
+    "BusinessProfile_screen.headerTitle": "Business Profile",
+    "BusinessProfile_screen.id": "Identifier",
+    "BusinessProfile_screen.accountType": "Account Type",
+    "BusinessProfile_screen.shortName": "Friendly Name",
+    "BusinessProfile_screen.longName": "Business Name",
+    "BusinessProfile_screen.longName.placeholder": "Enter the full name of your business",
+    "BusinessProfile_screen.description": "Description",
+    "BusinessProfile_screen.description.placeholder": "Enter a short description of your business",
+    "BusinessProfile_screen.email": "Email",
+    "BusinessProfile_screen.email.placeholder": "Enter your business email",
+    "BusinessProfile_screen.phone": "Phone",
+    "BusinessProfile_screen.phone.placeholder": "Enter your business phone number",
+    "BusinessProfile_screen.address": "Address",
+    "BusinessProfile_screen.address.placeholder": "Enter your business address",
+    "BusinessProfile_screen.country": "Country",
+    "BusinessProfile_screen.state": "State",
+    "BusinessProfile_screen.state.select": "Select State",
+    "BusinessProfile_screen.city": "City",
+    "BusinessProfile_screen.city.select": "Select City",
+    "BusinessProfile_screen.zipCode": "Zip Code"
   },
   "es": {
     "Navigation.tab.label.events": "Eventos",
@@ -629,6 +650,27 @@
     "MyBusiness_screen.staff": "Personal",
     "MyBusiness_screen.clients": "Clientes",
     "MyBusiness_screen.integrations": "Integraciones",
-    "MyBusiness_screen.myReviews": "Mis Reseñas"
+    "MyBusiness_screen.myReviews": "Mis Reseñas",
+
+    "BusinessProfile_screen.headerTitle": "Perfil del Negocio",
+    "BusinessProfile_screen.id": "Identificador",
+    "BusinessProfile_screen.accountType": "Tipo de Cuenta",
+    "BusinessProfile_screen.shortName": "Nombre Corto",
+    "BusinessProfile_screen.longName": "Nombre del Negocio",
+    "BusinessProfile_screen.longName.placeholder": "Ingrese el nombre completo de su negocio",
+    "BusinessProfile_screen.description": "Descripción",
+    "BusinessProfile_screen.description.placeholder": "Ingrese una breve descripción de su negocio",
+    "BusinessProfile_screen.email": "Correo Electrónico",
+    "BusinessProfile_screen.email.placeholder": "Ingrese su correo electrónico comercial",
+    "BusinessProfile_screen.phone": "Teléfono",
+    "BusinessProfile_screen.phone.placeholder": "Ingrese su número de teléfono comercial",
+    "BusinessProfile_screen.address": "Dirección",
+    "BusinessProfile_screen.address.placeholder": "Ingrese la dirección de su negocio",
+    "BusinessProfile_screen.country": "País",
+    "BusinessProfile_screen.state": "Estado",
+    "BusinessProfile_screen.state.select": "Seleccionar Estado",
+    "BusinessProfile_screen.city": "Ciudad",
+    "BusinessProfile_screen.city.select": "Seleccionar Ciudad",
+    "BusinessProfile_screen.zipCode": "Código Postal"
   }
 }

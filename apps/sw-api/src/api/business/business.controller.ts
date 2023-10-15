@@ -1,16 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  HttpCode,
-  HttpStatus,
-  Param,
-  Post,
-  Put,
-  Req,
-  UseGuards,
-  ValidationPipe,
-} from "@nestjs/common";
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Put, Req, UseGuards, ValidationPipe } from "@nestjs/common";
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
 import { ClientUserUpdateDtoType, CreateBusinessUsersDtoType, CreateClientUsersDtoType } from "@shortwaits/shared-lib";
 
@@ -32,12 +20,8 @@ export class BusinessController {
     status: HttpStatus.OK,
     description: "Updates business record",
   })
-  async updateBusiness(
-    @Param("businessId") businessId: string,
-    @Req() request,
-    @Body(new ValidationPipe()) business: UpdateBusinessDto
-  ) {
-    return this.businessService.updateBusiness(request.user.sub, business, false);
+  async updateBusiness(@Param("businessId") businessId: string, @Req() request, @Body(new ValidationPipe()) business: UpdateBusinessDto) {
+    return this.businessService.updateBusiness(request.user.sub, businessId, business, false);
   }
 
   /**
@@ -119,11 +103,7 @@ export class BusinessController {
     status: HttpStatus.CREATED,
     description: "Returns created",
   })
-  async createBusinessClients(
-    @Param("businessId") businessId: string,
-    @Req() request,
-    @Body() dto: CreateClientUsersDtoType
-  ) {
+  async createBusinessClients(@Param("businessId") businessId: string, @Req() request, @Body() dto: CreateClientUsersDtoType) {
     return this.businessService.createBusinessClients(request.user.sub, businessId, dto);
   }
 
@@ -133,11 +113,7 @@ export class BusinessController {
     status: HttpStatus.CREATED,
     description: "Returns created",
   })
-  async updateBusinessClient(
-    @Param("businessId") businessId: string,
-    @Req() request,
-    @Body() dto: ClientUserUpdateDtoType
-  ) {
+  async updateBusinessClient(@Param("businessId") businessId: string, @Req() request, @Body() dto: ClientUserUpdateDtoType) {
     return this.businessService.updateBusinessClient(request.user.sub, businessId, dto);
   }
 
@@ -157,11 +133,7 @@ export class BusinessController {
     status: HttpStatus.OK,
     description: "Returns business staff",
   })
-  async createBusinessStaff(
-    @Param("businessId") businessId: string,
-    @Req() request,
-    @Body() dto: CreateBusinessUsersDtoType
-  ) {
+  async createBusinessStaff(@Param("businessId") businessId: string, @Req() request, @Body() dto: CreateBusinessUsersDtoType) {
     return this.businessService.createBusinessStaff(request.user.sub, businessId, dto);
   }
 
@@ -171,11 +143,7 @@ export class BusinessController {
     status: HttpStatus.CREATED,
     description: "Returns created",
   })
-  async updateBusinessStaff(
-    @Param("businessId") businessId: string,
-    @Req() request,
-    @Body() dto: ClientUserUpdateDtoType
-  ) {
+  async updateBusinessStaff(@Param("businessId") businessId: string, @Req() request, @Body() dto: ClientUserUpdateDtoType) {
     return this.businessService.updateBusinessStaff(request.user.sub, businessId, dto);
   }
 

@@ -3,16 +3,19 @@ import { useEffect, useState } from "react";
 import { Alert } from "react-native";
 import { ImageLibraryOptions, launchImageLibrary } from "react-native-image-picker";
 import { request, PERMISSIONS } from "react-native-permissions";
+import { useUploadImageFileMutation } from "../services";
 
 export function useSelectImage() {
+  const [uploadImageFile, { data: uploadImageFileData, isError: isUploadImageFileError, isLoading: isUploadImageFileLoading }] = useUploadImageFileMutation();
   const [imageBase64, setImageBase64] = useState<string>(null);
+  const [imageUrl, setImageUrl] = useState<string>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 
   const options: ImageLibraryOptions = {
     mediaType: "photo",
-    maxWidth: 500,
-    maxHeight: 500,
+    maxWidth: 250,
+    maxHeight: 250,
     selectionLimit: 1,
     includeBase64: true,
   };
@@ -31,7 +34,25 @@ export function useSelectImage() {
     ]);
   };
 
+  useEffect(() => {
+    if (uploadImageFileData) {
+      setImageUrl(uploadImageFileData.data.url);
+      setIsLoading(false);
+    }
+    if (isUploadImageFileError) {
+      setIsError(true);
+      setIsLoading(false);
+    }
+  }, [isUploadImageFileError, uploadImageFileData]);
+
+  useEffect(() => {
+    if (imageBase64) {
+      uploadImageFile({ body: { base64Data: imageBase64 } });
+    }
+  }, [imageBase64, uploadImageFile]);
+
   const init = async () => {
+    setIsError(false);
     setIsLoading(true);
     const permission = await request(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE);
     if (permission === "granted") {
@@ -41,8 +62,6 @@ export function useSelectImage() {
           setIsLoading(false);
           console.log("IMAGE PICKER ERROR >>>", response.errorMessage);
         } else {
-          setIsError(false);
-          setIsLoading(false);
           setImageBase64(response.assets[0].base64);
         }
       });
@@ -55,6 +74,6 @@ export function useSelectImage() {
     isLoading,
     isError,
     init,
-    imageBase64,
+    imageUrl,
   };
 }

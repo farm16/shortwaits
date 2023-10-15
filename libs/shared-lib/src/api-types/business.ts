@@ -5,19 +5,11 @@ export type BusinessDtoType = ConvertToDtoType<WithDbProps<BusinessType>>;
 
 export type BusinessResponseType = CommonResponseType<BusinessDtoType>;
 
-export type UpdateBusinessDtoType = Omit<
-  BusinessDtoType,
-  | "admins"
-  | "superAdmins"
-  | "backgroundAdmins"
-  | "deleted"
-  | "createdBy"
-  | "createdAt"
-  | "isRegistrationCompleted"
-  | "accountType"
-  | "shortId"
-  | "isDisabled"
-  | "_id"
+export type UpdateBusinessDtoType = Partial<
+  Omit<
+    ConvertToDtoType<BusinessType>,
+    "admins" | "superAdmins" | "backgroundAdmins" | "deleted" | "createdBy" | "createdAt" | "isRegistrationCompleted" | "accountType" | "shortId" | "isDisabled" | "_id"
+  >
 >;
 
 export interface BusinessEndpointsTypes extends GeneralSpecShape {

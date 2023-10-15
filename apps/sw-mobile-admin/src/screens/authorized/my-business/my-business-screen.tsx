@@ -35,8 +35,8 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
   const handleUpdateBusinessHours = useCallback(
     hours => {
       updateBusiness({
-        ...business,
-        hours,
+        businessId: business._id,
+        body: { ...business, hours },
       });
     },
     [business, updateBusiness]
