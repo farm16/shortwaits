@@ -5,3 +5,4 @@ export * from "./admin-mobile";
 export * from "./users";
 export * from "./categories";
 export * from "./events";
+export * from "./upload-files";

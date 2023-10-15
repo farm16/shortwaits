@@ -8,12 +8,7 @@ import { useIntl } from "react-intl";
 
 import { BusinessIncomeInfo, ButtonCard, IconButton, Container, Screen, Text } from "../../../components";
 import { useTheme } from "../../../theme";
-import {
-  showPremiumMembershipBanner,
-  useBusiness,
-  hidePremiumMembershipBanner,
-  useShowGhostComponent,
-} from "../../../store";
+import { showPremiumMembershipBanner, useBusiness, hidePremiumMembershipBanner, useShowGhostComponent } from "../../../store";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useGetEventsSummaryByBusinessQuery, useUpdateBusinessMutation } from "../../../services";
 import FastImage from "react-native-fast-image";
@@ -130,22 +125,18 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
     });
   }, [business.shortName, business.web.logoImageUrl, navigation]);
 
-  console.log("eventSummary", eventSummary?.data?.listData);
+  // console.log("eventSummary", eventSummary?.data?.listData);
 
   if (isLoading) return <ActivityIndicator />;
 
   return (
     <>
-      <BusinessIncomeInfo
-        data={eventSummary?.data?.graphData}
-        isLoading={isEventSummaryLoading}
-        error={errorEventSummary}
-      />
+      <BusinessIncomeInfo data={eventSummary?.data?.graphData} isLoading={isEventSummaryLoading} error={errorEventSummary} />
       <Screen preset="scroll" unsafe withHorizontalPadding>
         <ButtonCard
           leftIconName="calendar-month"
           leftIconColor={Colors.brandSecondary}
-          title={"Schedule"}
+          title={intl.formatMessage({ id: "MyBusiness_screen.schedule" })}
           onPress={() =>
             navigation.navigate("modals", {
               screen: "schedule-modal-screen",
@@ -161,7 +152,7 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
         <ButtonCard
           leftIconName="cash-fast"
           leftIconColor={Colors.brandSecondary}
-          title={"Transactions"}
+          title={intl.formatMessage({ id: "MyBusiness_screen.transactions" })}
           onPress={() =>
             navigation.navigate("modals", {
               screen: "selector-modal-screen",
@@ -170,7 +161,7 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
                 onSelect: item => {
                   console.log(item);
                 },
-                headerTitle: "Transactions",
+                headerTitle: intl.formatMessage({ id: "MyBusiness_screen.transactions" }),
                 data: [],
               },
             })
@@ -179,7 +170,7 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
         <ButtonCard
           leftIconName="layers-triple"
           leftIconColor={Colors.brandSecondary}
-          title={"Services"}
+          title={intl.formatMessage({ id: "MyBusiness_screen.services" })}
           onPress={() =>
             navigation.navigate("modals", {
               screen: "service-modal-screen",
@@ -189,7 +180,7 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
         <ButtonCard
           leftIconName="account-tie"
           leftIconColor={Colors.brandSecondary}
-          title={"Staff"}
+          title={intl.formatMessage({ id: "MyBusiness_screen.staff" })}
           onPress={() =>
             navigation.navigate("modals", {
               screen: "selector-modal-screen",
@@ -202,7 +193,7 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
         <ButtonCard
           leftIconName="account-multiple"
           leftIconColor={Colors.brandSecondary}
-          title={"Clients"}
+          title={intl.formatMessage({ id: "MyBusiness_screen.clients" })}
           onPress={() =>
             navigation.navigate("modals", {
               screen: "selector-modal-screen",
@@ -212,8 +203,8 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
             })
           }
         />
-        <ButtonCard leftIconName="puzzle" leftIconColor={Colors.brandSecondary} title={"Integrations"} />
-        <ButtonCard leftIconName="message-star" leftIconColor={Colors.brandSecondary} title={"My Reviews"} />
+        <ButtonCard leftIconName="puzzle" leftIconColor={Colors.brandSecondary} title={intl.formatMessage({ id: "MyBusiness_screen.integrations" })} />
+        <ButtonCard leftIconName="message-star" leftIconColor={Colors.brandSecondary} title={intl.formatMessage({ id: "MyBusiness_screen.myReviews" })} />
       </Screen>
     </>
   );

@@ -6,6 +6,6 @@ export * from "./services";
 export * from "./helpers";
 export * from "./events";
 export * from "./auth";
-//user types
 export * from "./business-user";
 export * from "./client-user";
+export * from "./upload-file";

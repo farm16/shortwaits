@@ -27,7 +27,8 @@ type Endpoint =
   | "events/delete"
   | "services"
   | `services/${string}`
-  | "business-user/multiple";
+  | "business-user/multiple"
+  | "upload-file/image";
 
 export const createEndpoint = <T = any>(endpoint: Endpoint, method: HttpMethod) => {
   return {
@@ -115,4 +116,7 @@ export const endpoints = {
   deleteService: createEndpoint<{
     businessId: string;
   }>(`services/:serviceId`, "DELETE"),
+
+  // upload file
+  uploadImageFile: createEndpoint("upload-file/image", "POST"),
 };

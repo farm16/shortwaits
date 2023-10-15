@@ -90,7 +90,6 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
-
         testBuildType System.getProperty('testBuildType', 'debug')
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         resValue "string", "shortwaitsApiBaseUrl_1", project.env.get("API_BASE_URL")

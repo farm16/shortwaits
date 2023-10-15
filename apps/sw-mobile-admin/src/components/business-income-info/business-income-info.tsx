@@ -5,6 +5,7 @@ import { useTheme } from "../../theme";
 import { Text } from "../common";
 import { Graph } from "../graph/graph";
 import { GraphData, GraphIdentifier, getGraphCoordinates } from "../graph/graph-utils";
+import { useIntl } from "react-intl";
 
 export type BusinessIncomeInfoProps = {
   data: GraphData;
@@ -16,6 +17,7 @@ function BusinessIncomeInfoComponent({ data, isLoading, error }: BusinessIncomeI
   const { Colors } = useTheme();
   const [visible, setVisible] = useState<boolean>(false);
   const [graphMode, setGraphMode] = useState<GraphIdentifier>("Week");
+  const intl = useIntl();
 
   if (error || !data) {
     return (
@@ -25,7 +27,6 @@ function BusinessIncomeInfoComponent({ data, isLoading, error }: BusinessIncomeI
     );
   }
 
-  console.log("data", data);
   return (
     <View style={styles.root}>
       {isLoading ? (
@@ -42,7 +43,12 @@ function BusinessIncomeInfoComponent({ data, isLoading, error }: BusinessIncomeI
           <Text
             preset="textSmall"
             style={{ fontWeight: "500" }}
-            text={`${graphMode}'s total income: $${getGraphCoordinates(data, graphMode)
+            text={`${intl.formatMessage(
+              { id: "MyBusiness_screen.totalIncome" },
+              {
+                period: graphMode,
+              }
+            )}${"$"}${getGraphCoordinates(data, graphMode)
               .reduce((pre, cur) => pre + cur.y, 0)
               .toLocaleString("en-US", {
                 maximumFractionDigits: 2,
@@ -66,7 +72,9 @@ function BusinessIncomeInfoComponent({ data, isLoading, error }: BusinessIncomeI
                     setGraphMode(name);
                     setVisible(false);
                   }}
-                  title={name}
+                  title={intl.formatMessage({
+                    id: `Common.${name.toLowerCase()}`,
+                  })}
                 />
               );
             })}

@@ -7,6 +7,7 @@ import { BusinessUsersModule } from "./business-user/business-users.module";
 import { EventsModule } from "./events/events.module";
 import { ServicesModule } from "./services/services.module";
 import { ClientUserModule } from "./client-user/client-user.module";
+import { FileUploadModule } from "./file-upload/file-upload.module";
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ClientUserModule } from "./client-user/client-user.module";
     CategoriesModule,
     ClientUserModule,
     BusinessUsersModule,
+    FileUploadModule,
   ],
 })
 export class ApiModule {}

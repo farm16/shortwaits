@@ -417,7 +417,7 @@ PODS:
     - React-Core
   - react-native-get-random-values (1.9.0):
     - React-Core
-  - react-native-image-picker (4.10.3):
+  - react-native-image-picker (7.0.1):
     - React-Core
   - react-native-mmkv (2.10.2):
     - MMKV (>= 1.2.13)
@@ -925,7 +925,7 @@ SPEC CHECKSUMS:
   react-native-contacts: 0aa99963d8f29099d4725cd0d2f8b6ef5f0d9a2d
   react-native-flipper: fc55961778140dcb1d80fc62320e466448c0ccdd
   react-native-get-random-values: dee677497c6a740b71e5612e8dbd83e7539ed5bb
-  react-native-image-picker: 60f4246eb5bb7187fc15638a8c1f13abd3820695
+  react-native-image-picker: 1569cfade34b3a011191ce262423e6ce2f8db5a1
   react-native-mmkv: 9ae7ca3977e8ef48dbf7f066974eb844c20b5fd7
   react-native-pager-view: d211379f61895b6349bd7e571b44a26d005c2975
   react-native-safe-area-context: b8979f5eda6ed5903d4dbc885be3846ea3daa753

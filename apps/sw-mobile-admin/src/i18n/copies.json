@@ -33,6 +33,10 @@
     "Common.addEvent": "Add Event",
     "Common.addService": "Add Service",
     "Common.retry": "Retry",
+    "Common.yesterday": "Yesterday",
+    "Common.week": "Week",
+    "Common.month": "Month",
+    "Common.year": "Year",
 
     "Common.categories": "Categories",
     "Common.category": "Category",
@@ -299,10 +303,16 @@
     "Banner.premiumMembership.joinButton": "join now",
     "Banner.premiumMembership.cancelButton": "cancel",
 
-    "MyBusiness_screen.eventSummary": "Event Summary",
-    "MyBusiness_screen.schedule": "Schedule",
+    "Selectors.services.headerTitle": "Select Services",
 
-    "Selectors.services.headerTitle": "Select Services"
+    "MyBusiness_screen.totalIncome": "{graphMode, select, Yesterday {Yesterday's total income: } Week {Week's total income: } Month {Month's total income: } Year {Year's total income: } other {}}",
+    "MyBusiness_screen.schedule": "Schedule",
+    "MyBusiness_screen.transactions": "Transactions",
+    "MyBusiness_screen.services": "Services",
+    "MyBusiness_screen.staff": "Staff",
+    "MyBusiness_screen.clients": "Clients",
+    "MyBusiness_screen.integrations": "Integrations",
+    "MyBusiness_screen.myReviews": "My Reviews"
   },
   "es": {
     "Navigation.tab.label.events": "Eventos",
@@ -341,6 +351,10 @@
     "Common.showMore": "Mostrar Más",
     "Common.showLess": "Mostrar Menos",
     "Common.retry": "Reintentar",
+    "Common.yesterday": "Ayer",
+    "Common.week": "Semana",
+    "Common.month": "Mes",
+    "Common.year": "Año",
 
     "Common.categories": "Categorías",
     "Common.category": "Categoría",
@@ -606,9 +620,15 @@
     "Banner.premiumMembership.joinButton": "unite ahora",
     "Banner.premiumMembership.cancelButton": "cancelar",
 
-    "MyBusiness_screen.eventSummary": "Resumen de Eventos",
-    "MyBusiness_screen.schedule": "Horario",
+    "Selectors.services.headerTitle": "Seleccionar Servicios",
 
-    "Selectors.services.headerTitle": "Seleccionar Servicios"
+    "MyBusiness_screen.totalIncome": "{period, select, Yesterday {Ingresos totales de ayer: } Week {Ingresos totales de la semana: } Month {Ingresos totales del mes: } Year {Ingresos totales del año: } other {}}",
+    "MyBusiness_screen.schedule": "Horario",
+    "MyBusiness_screen.transactions": "Transacciones",
+    "MyBusiness_screen.services": "Servicios",
+    "MyBusiness_screen.staff": "Personal",
+    "MyBusiness_screen.clients": "Clientes",
+    "MyBusiness_screen.integrations": "Integraciones",
+    "MyBusiness_screen.myReviews": "Mis Reseñas"
   }
 }

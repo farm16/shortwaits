@@ -2,7 +2,7 @@ import React, { useLayoutEffect, useMemo } from "react";
 import { Text, BackButton, TextFieldCard, ButtonCard, Button, FormContainer, Avatar, Space } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useBusiness } from "../../../store";
-import { useForm } from "../../../hooks";
+import { useForm, useSelectImage } from "../../../hooks";
 import { UpdateBusinessDtoType } from "@shortwaits/shared-lib";
 
 export function BusinessProfileScreen({ navigation }: AuthorizedScreenProps<"business-profile-screen">) {
@@ -32,9 +32,15 @@ export function BusinessProfileScreen({ navigation }: AuthorizedScreenProps<"bus
       isAppNotificationEnabled: business.isAppNotificationEnabled,
       videoConference: business.videoConference,
       isVideoConferenceEnabled: business.isVideoConferenceEnabled,
+      web: business.web,
     };
     return _initialValues;
   }, [business]);
+
+  const { init, isLoading, imageBase64 } = useSelectImage();
+
+  console.log("imageBase64", imageBase64);
+  console.log("isLoading", isLoading);
 
   const { touched, errors, values, handleChange, handleSubmit, setFieldValue } = useForm(
     {
@@ -70,7 +76,7 @@ export function BusinessProfileScreen({ navigation }: AuthorizedScreenProps<"bus
         url={business.web.logoImageUrl}
         mode="upload"
         onPress={() => {
-          console.log("onPress");
+          init();
         }}
       />
       <Space />
