@@ -5,6 +5,7 @@ import { ScreenProps } from "../../common/screen/screen.props";
 import { useTheme } from "../../../theme";
 import { Banner } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import Spinner from "react-native-spinkit";
 
 type FormContainerProps = {
   children: ReactNode;
@@ -12,6 +13,7 @@ type FormContainerProps = {
   withStatusBanner?: boolean;
   status?: "success" | "error";
   retry?: () => void;
+  isLoading?: boolean;
   successMessage?: string;
   errorMessage?: string;
 } & ScreenProps;
@@ -22,6 +24,7 @@ export const FormContainer = (props: FormContainerProps) => {
     footer,
     retry,
     status,
+    isLoading,
     withStatusBanner = true,
     preset = "scroll",
     errorMessage = "Something went wrong. Please try again later.",
@@ -68,6 +71,26 @@ export const FormContainer = (props: FormContainerProps) => {
       </Banner>
     );
   }, [Colors.failed, Colors.failedBackground, Colors.success, Colors.successBackground, Colors.text, errorMessage, isStatusBannerVisible, retry, status, successMessage]);
+
+  if (isLoading) {
+    return (
+      <Screen preset="fixed" unsafe {...rest}>
+        <Space size="small" />
+        <View
+          style={[
+            styles.fixedView,
+            {
+              justifyContent: "center",
+              alignItems: "center",
+            },
+          ]}
+        >
+          <Spinner isVisible={true} size={50} type="ThreeBounce" color={Colors.brandSecondary} />
+        </View>
+        {clonedFooter ? <View style={[styles.footer, { backgroundColor }]}>{clonedFooter}</View> : null}
+      </Screen>
+    );
+  }
 
   if (preset === "fixed") {
     return (

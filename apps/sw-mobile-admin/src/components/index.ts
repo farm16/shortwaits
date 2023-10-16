@@ -1,4 +1,4 @@
-export * from "./navigator-action-buttons/navigator-action-buttons";
+export * from "./icon-buttons/icon-buttons";
 export * from "./floating-action-button/floating-action-button";
 export * from "./upload-profile-image/upload-profile-image";
 export * from "./business-income-info/business-income-info";

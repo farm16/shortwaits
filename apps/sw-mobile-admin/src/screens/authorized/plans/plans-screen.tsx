@@ -76,29 +76,26 @@ export function PlansScreen({ navigation }: AuthorizedScreenProps<"plans-screen"
     >
       <View
         style={{
-          justifyContent: "center",
+          alignItems: "center",
           marginBottom: 8,
           flexDirection: "row",
-          marginHorizontal: 0,
-          paddingHorizontal: 0,
           marginTop: Platform.OS === "ios" ? 0 : 8,
         }}
       >
         <BackButton
           style={{
             position: "absolute",
-            alignSelf: "center",
             left: 5,
+            zIndex: 10,
           }}
           onPress={() => navigation.goBack()}
         />
         <Text
           style={{
+            flex: 1,
+            textAlign: "center",
             fontWeight: "700",
             fontSize: getFontSize(26),
-            fontStyle: "normal",
-            textAlign: "center",
-            fontFamily: "Helvetica Neue",
           }}
         >
           {intl.formatMessage({ id: "PlansScreen.choosePlan" })}

@@ -47,8 +47,8 @@ export const textPresets = ({ FontSize, Fonts, Gutters, Colors }: ThemeCommonPar
     social: {
       ...BASE,
       ...Fonts.textRegular,
-      color: Colors.darkGray,
-      fontWeight: "700",
+      color: Colors.subText,
+      fontWeight: "500",
     },
     pending: {
       ...Fonts.textRegular,
@@ -74,15 +74,13 @@ export const textPresets = ({ FontSize, Fonts, Gutters, Colors }: ThemeCommonPar
       letterSpacing: 0.65,
     },
     link: {
-      ...BASE,
-      ...Fonts.textSmall,
-      ...Gutters.smallVPadding,
+      ...Fonts.textRegular,
       color: Colors.brandSecondary,
+      fontWeight: "700",
     },
     subLink: {
-      ...BASE,
-      ...Fonts.textSmall,
-      color: Colors.brandSecondary6,
+      ...Fonts.textRegular,
+      color: Colors.brandSecondary4,
       fontWeight: "400",
     },
     headerLink: {

@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useEffect, useLayoutEffect, useState } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { List } from "react-native-paper";
 import { FormattedMessage, useIntl } from "react-intl"; // Import FormattedMessage and useIntl
 
@@ -83,7 +83,7 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
           descriptionStyle={{ color: Colors.subText }}
           title={<FormattedMessage id="Settings_Screen.web_booking_title" />}
           description={<FormattedMessage id="Settings_Screen.web_booking_description" />}
-          right={() => (
+          right={props => (
             <Switch
               isLoading={state.isLoading}
               value={currentBusiness?.isWebBookingEnabled ?? false}
@@ -114,8 +114,11 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
               onChange={() => {
                 const isAppNotificationEnabled = !(currentBusiness?.isAppNotificationEnabled ?? false);
                 updateBusiness({
-                  ...currentBusiness,
-                  isAppNotificationEnabled,
+                  businessId: currentBusiness._id,
+                  body: {
+                    ...currentBusiness,
+                    isAppNotificationEnabled,
+                  },
                 });
               }}
             />
@@ -135,8 +138,11 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
                 const isSmsNotificationEnabled = !(currentBusiness?.isSmsNotificationEnabled ?? false);
                 console.log("isSmsNotificationEnabled", isSmsNotificationEnabled);
                 updateBusiness({
-                  ...currentBusiness,
-                  isSmsNotificationEnabled,
+                  businessId: currentBusiness._id,
+                  body: {
+                    ...currentBusiness,
+                    isSmsNotificationEnabled,
+                  },
                 });
               }}
             />
@@ -158,8 +164,11 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
                 const isVideoConferenceEnabled = !(currentBusiness?.isVideoConferenceEnabled ?? false);
                 console.log("isVideoConferenceEnabled", isVideoConferenceEnabled);
                 updateBusiness({
-                  ...currentBusiness,
-                  isVideoConferenceEnabled,
+                  businessId: currentBusiness._id,
+                  body: {
+                    ...currentBusiness,
+                    isVideoConferenceEnabled,
+                  },
                 });
               }}
             />
@@ -174,17 +183,7 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
           style={itemStyle}
           title={<FormattedMessage id="Settings_Screen.rate_us_title" />}
           description={<FormattedMessage id="Settings_Screen.rate_us_description" />}
-          left={props => (
-            <List.Icon
-              {...props}
-              style={{
-                marginRight: 0,
-                paddingRight: 0,
-              }}
-              color={Colors.red4}
-              icon="heart"
-            />
-          )}
+          left={props => <List.Icon {...props} color={Colors.red4} icon="heart" />}
           right={props => <List.Icon {...props} color={Colors.brandSecondary} icon="chevron-right" />}
         />
         <AppLanguage />
@@ -213,8 +212,11 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
               onChange={() => {
                 const isDisabled = !(currentBusiness?.isDisabled ?? false);
                 updateBusiness({
-                  ...currentBusiness,
-                  isDisabled,
+                  businessId: currentBusiness._id,
+                  body: {
+                    ...currentBusiness,
+                    isDisabled,
+                  },
                 });
               }}
             />

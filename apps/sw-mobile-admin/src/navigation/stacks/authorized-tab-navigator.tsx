@@ -37,8 +37,8 @@ export const AuthorizedTabNavigator = () => {
             },
           }),
         },
-        tabBarActiveTintColor: Colors.brandAccent,
-        tabBarInactiveTintColor: Colors.brandAccent3,
+        tabBarActiveTintColor: Colors.brandPrimary,
+        tabBarInactiveTintColor: Colors.disabledText,
         tabBarAllowFontScaling: true,
         tabBarLabelStyle: {},
         tabBarStyle: {
@@ -53,13 +53,7 @@ export const AuthorizedTabNavigator = () => {
         component={EventsScreen}
         options={{
           tabBarLabel: intl.formatMessage({ id: "Navigation.tab.label.events" }),
-          tabBarIcon: ({ focused, color }) => (
-            <MaterialCommunityIcons
-              name={focused ? "calendar-clock" : "calendar-clock-outline"}
-              color={color}
-              size={25}
-            />
-          ),
+          tabBarIcon: ({ focused, color }) => <MaterialCommunityIcons name={focused ? "calendar-clock" : "calendar-clock-outline"} color={color} size={25} />,
         }}
       />
       <Tab.Screen
@@ -68,13 +62,7 @@ export const AuthorizedTabNavigator = () => {
         options={{
           headerTitleAlign: "center",
           tabBarLabel: intl.formatMessage({ id: "Navigation.tab.label.clients" }),
-          tabBarIcon: ({ focused, color }) => (
-            <MaterialCommunityIcons
-              name={focused ? "account-group" : "account-group-outline"}
-              color={color}
-              size={25}
-            />
-          ),
+          tabBarIcon: ({ focused, color }) => <MaterialCommunityIcons name={focused ? "account-group" : "account-group-outline"} color={color} size={25} />,
         }}
       />
       <Tab.Screen
@@ -82,9 +70,7 @@ export const AuthorizedTabNavigator = () => {
         component={MyBusinessScreen}
         options={{
           tabBarLabel: intl.formatMessage({ id: "Navigation.tab.label.myBusiness" }),
-          tabBarIcon: ({ color, focused }) => (
-            <MaterialCommunityIcons name={focused ? "store" : "store-outline"} color={color} size={25} />
-          ),
+          tabBarIcon: ({ color, focused }) => <MaterialCommunityIcons name={focused ? "store" : "store-outline"} color={color} size={25} />,
         }}
       />
       <Tab.Screen
@@ -92,13 +78,7 @@ export const AuthorizedTabNavigator = () => {
         component={ActivityScreen}
         options={{
           tabBarLabel: intl.formatMessage({ id: "Navigation.tab.label.activities" }),
-          tabBarIcon: ({ color, focused }) => (
-            <MaterialCommunityIcons
-              name={focused ? "timeline-text" : "timeline-text-outline"}
-              color={color}
-              size={25}
-            />
-          ),
+          tabBarIcon: ({ color, focused }) => <MaterialCommunityIcons name={focused ? "timeline-text" : "timeline-text-outline"} color={color} size={25} />,
         }}
       />
       <Tab.Screen
@@ -106,9 +86,7 @@ export const AuthorizedTabNavigator = () => {
         component={SettingsScreen}
         options={{
           tabBarLabel: intl.formatMessage({ id: "Navigation.tab.label.settings" }),
-          tabBarIcon: ({ color, focused }) => (
-            <MaterialCommunityIcons name={focused ? "account-cog" : "account-cog-outline"} color={color} size={25} />
-          ),
+          tabBarIcon: ({ color, focused }) => <MaterialCommunityIcons name={focused ? "account-cog" : "account-cog-outline"} color={color} size={25} />,
         }}
       />
     </Tab.Navigator>

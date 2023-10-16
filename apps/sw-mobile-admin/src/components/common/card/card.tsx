@@ -82,12 +82,7 @@ export const Card = (props: CardProps) => {
         {rightIconName &&
           (mode === "static" || rightIconName === "none" ? null : (
             <Pressable onPress={rightIconOnPress} style={styles.iconContainer}>
-              <Icon
-                style={styles.rightIcon}
-                name={rightIconName}
-                size={IconSizes[rightIconSize]}
-                color={rightIconColor}
-              />
+              <Icon style={styles.rightIcon} name={rightIconName} size={IconSizes[rightIconSize]} color={rightIconColor} />
             </Pressable>
           ))}
       </View>
@@ -96,15 +91,9 @@ export const Card = (props: CardProps) => {
 
   return (
     <Button preset="card" {...rest} disabled={disabled} style={[disabledStyles]}>
-      {leftIconName &&
-        (leftIconName === "none" ? null : (
-          <Icon style={styles.leftIcon} name={leftIconName} size={IconSizes[leftIconSize]} color={leftIconColor} />
-        ))}
+      {leftIconName && (leftIconName === "none" ? null : <Icon style={styles.leftIcon} name={leftIconName} size={IconSizes[leftIconSize]} color={leftIconColor} />)}
       <View style={styles.childrenContainer}>{children}</View>
-      {rightIconName &&
-        (rightIconName === "none" ? null : (
-          <Icon style={styles.rightIcon} name={rightIconName} size={IconSizes[rightIconSize]} color={rightIconColor} />
-        ))}
+      {rightIconName && (rightIconName === "none" ? null : <Icon style={styles.rightIcon} name={rightIconName} size={IconSizes[rightIconSize]} color={rightIconColor} />)}
     </Button>
   );
 };

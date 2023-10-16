@@ -16,7 +16,7 @@ export const ActivityScreen: FC<AuthorizedScreenProps<"activity-screen">> = ({ n
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: () => {
-        return <Text preset="headerTitle" style={{ textTransform: "capitalize" }} text={`${activityType} Activity`} />;
+        return <Text preset="headerTitle" text={`Business Activity`} />;
       },
       headerRight: () => {
         return (

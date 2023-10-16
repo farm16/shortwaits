@@ -6,7 +6,7 @@ import { getPaletteWithContrast, getReversePalette } from "./utils";
  * #F73859 primary
  * #63AE9D secondary
  * #C4EDDE secondary 2
- * #384259 accent
+ * #384259 accent// #3f3d56 // #2f2e41
  *
  */
 
@@ -15,9 +15,9 @@ import { getPaletteWithContrast, getReversePalette } from "./utils";
 // rgb(240, 240, 239)
 
 export const brandColors = {
-  primary: getPaletteWithContrast("brandPrimary", "#384259"),
+  primary: getPaletteWithContrast("brandPrimary", "#222130"),
   secondary: getPaletteWithContrast("brandSecondary", "#45927B"),
-  accent: getPaletteWithContrast("brandAccent", "#272727"),
+  accent: getPaletteWithContrast("brandAccent", "#3f3d56"),
 };
 
 // console.log(getPaletteWithContrast("brandAccent", "#E24939"))

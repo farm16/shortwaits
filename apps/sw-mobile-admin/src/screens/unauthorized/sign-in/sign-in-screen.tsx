@@ -15,10 +15,7 @@ import { Logo1 } from "../../../assets";
 import { useIntl } from "react-intl";
 
 export interface RegisterWithEmailScreenProps {
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<UnauthorizedStackParamList, "sign-in-screen">,
-    StackNavigationProp<RootStackParamList>
-  >;
+  navigation: CompositeNavigationProp<StackNavigationProp<UnauthorizedStackParamList, "sign-in-screen">, StackNavigationProp<RootStackParamList>>;
 }
 
 export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) => {
@@ -154,7 +151,7 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
         value={values.password}
         rightIconOnPress={handlePasswordVisibility}
         rightIconName={isVisible ? "eye-off" : "eye"}
-        rightIconColor={isVisible ? Colors.disabledText : Colors.brandSecondary}
+        rightIconColor={isVisible ? Colors.disabledText : Colors.brandPrimary}
         onChangeText={handleChange("password")}
         isTouched={touched.password}
         errors={errors.password}
@@ -166,14 +163,14 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
       >
         <Button
           style={{ marginLeft: "auto" }}
-          preset="subLink"
+          preset="link"
           text={intl.formatMessage({
             id: "Sign_In_Screen.forgotPassword",
           })}
         />
       </View>
-      <Space size="large" />
-      <Button preset="primary" style={{ backgroundColor: Colors.brandSecondary }} onPress={() => handleSubmit()}>
+      <Space />
+      <Button preset="primary" onPress={() => handleSubmit()}>
         <Text
           style={{ color: "white" }}
           preset="social"
@@ -215,9 +212,8 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
             id: "Sign_In_Screen.dontHaveAnAccount",
           })}
         />
-        <Space direction="vertical" />
         <Button
-          preset="subLink"
+          preset="link"
           textStyle={{ color: Colors.brandSecondary6 }}
           text={intl.formatMessage({
             id: "Sign_In_Screen.signUp",

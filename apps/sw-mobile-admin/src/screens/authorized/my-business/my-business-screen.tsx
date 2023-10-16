@@ -135,7 +135,7 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
       <Screen preset="scroll" unsafe withHorizontalPadding>
         <ButtonCard
           leftIconName="calendar-month"
-          leftIconColor={Colors.brandSecondary}
+          leftIconColor={Colors.text}
           title={intl.formatMessage({ id: "MyBusiness_screen.schedule" })}
           onPress={() =>
             navigation.navigate("modals", {
@@ -151,7 +151,7 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
         />
         <ButtonCard
           leftIconName="cash-fast"
-          leftIconColor={Colors.brandSecondary}
+          leftIconColor={Colors.text}
           title={intl.formatMessage({ id: "MyBusiness_screen.transactions" })}
           onPress={() =>
             navigation.navigate("modals", {
@@ -169,7 +169,7 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
         />
         <ButtonCard
           leftIconName="layers-triple"
-          leftIconColor={Colors.brandSecondary}
+          leftIconColor={Colors.text}
           title={intl.formatMessage({ id: "MyBusiness_screen.services" })}
           onPress={() =>
             navigation.navigate("modals", {
@@ -179,7 +179,7 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
         />
         <ButtonCard
           leftIconName="account-tie"
-          leftIconColor={Colors.brandSecondary}
+          leftIconColor={Colors.text}
           title={intl.formatMessage({ id: "MyBusiness_screen.staff" })}
           onPress={() =>
             navigation.navigate("modals", {
@@ -192,7 +192,7 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
         />
         <ButtonCard
           leftIconName="account-multiple"
-          leftIconColor={Colors.brandSecondary}
+          leftIconColor={Colors.text}
           title={intl.formatMessage({ id: "MyBusiness_screen.clients" })}
           onPress={() =>
             navigation.navigate("modals", {
@@ -203,8 +203,8 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
             })
           }
         />
-        <ButtonCard leftIconName="puzzle" leftIconColor={Colors.brandSecondary} title={intl.formatMessage({ id: "MyBusiness_screen.integrations" })} />
-        <ButtonCard leftIconName="message-star" leftIconColor={Colors.brandSecondary} title={intl.formatMessage({ id: "MyBusiness_screen.myReviews" })} />
+        <ButtonCard leftIconName="puzzle" leftIconColor={Colors.text} title={intl.formatMessage({ id: "MyBusiness_screen.integrations" })} />
+        <ButtonCard leftIconName="message-star" leftIconColor={Colors.text} title={intl.formatMessage({ id: "MyBusiness_screen.myReviews" })} />
       </Screen>
     </>
   );

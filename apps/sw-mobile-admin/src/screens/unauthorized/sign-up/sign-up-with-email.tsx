@@ -11,10 +11,7 @@ import { RootStackParamList, UnauthorizedStackParamList } from "../../../navigat
 import { useLocalSignUpMutation } from "../../../services";
 
 interface SignUpWithEmailScreenProps {
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<UnauthorizedStackParamList, "sign-up-with-email-screen">,
-    StackNavigationProp<RootStackParamList>
-  >;
+  navigation: CompositeNavigationProp<StackNavigationProp<UnauthorizedStackParamList, "sign-up-with-email-screen">, StackNavigationProp<RootStackParamList>>;
 }
 
 export const SignUpWithEmail: FC<SignUpWithEmailScreenProps> = ({ navigation }) => {
@@ -74,7 +71,7 @@ export const SignUpWithEmail: FC<SignUpWithEmailScreenProps> = ({ navigation }) 
         value={values.password}
         rightIconOnPress={handlePasswordVisibility}
         rightIconName={isVisible ? "eye" : "eye-off"}
-        rightIconColor={isVisible ? Colors.disabledText : Colors.brandSecondary}
+        rightIconColor={isVisible ? Colors.disabledText : Colors.brandPrimary}
         onChangeText={handleChange("password")}
         isTouched={touched.password}
         errors={errors.password}
@@ -90,12 +87,7 @@ export const SignUpWithEmail: FC<SignUpWithEmailScreenProps> = ({ navigation }) 
         errors={errors.passwordConfirmation}
       />
       <Space />
-      <Button
-        onPress={() => handleSubmit()}
-        preset="primary"
-        text={intl.formatMessage({ id: "Common.signUp" })}
-        state={!dirty ? "disabled" : isLoading ? "loading" : "enabled"}
-      />
+      <Button onPress={() => handleSubmit()} preset="primary" text={intl.formatMessage({ id: "Common.signUp" })} state={!dirty ? "disabled" : isLoading ? "loading" : "enabled"} />
       <Space />
       <View style={styles.signInRow}>
         <Text
@@ -105,9 +97,8 @@ export const SignUpWithEmail: FC<SignUpWithEmailScreenProps> = ({ navigation }) 
             id: "Sign_Up_With_Email_Screen.alreadyHaveAnAccount",
           })}
         />
-        <Space size="small" direction="vertical" />
         <Button
-          preset="subLink"
+          preset="link"
           text={intl.formatMessage({ id: "Common.signIn" })}
           onPress={() => {
             navigation.navigate("unauthorized", { screen: "sign-in-screen" });

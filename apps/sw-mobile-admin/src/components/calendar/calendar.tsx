@@ -104,7 +104,8 @@ export const Calendar: FC<CalendarProps> = memo(props => {
       date={initialDate}
       showTodayButton={true}
       todayButtonStyle={{
-        backgroundColor: Colors.brandSecondary,
+        backgroundColor: Colors.lightGray,
+        borderRadius: 10,
       }}
       theme={theme}
     >
@@ -114,7 +115,7 @@ export const Calendar: FC<CalendarProps> = memo(props => {
         hideArrows={false}
         allowShadow={true}
         renderArrow={direction => {
-          return <Icon name={`chevron-${direction}`} size={24} color={Colors.text} />;
+          return <Icon name={`chevron-${direction}`} size={24} color={Colors.brandPrimary} />;
         }}
       />
       <AgendaList

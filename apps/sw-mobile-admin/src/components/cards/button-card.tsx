@@ -13,19 +13,7 @@ export interface ButtonCardProps extends Omit<CardProps, "mode"> {
   isVisible?: boolean;
 }
 export const ButtonCard = (props: ButtonCardProps) => {
-  const {
-    title,
-    subTitle,
-    rightIconName = "chevron-right",
-    rightIconSize = "large",
-    textStyle,
-    errors,
-    isTouched,
-    withTopBorder,
-    disabled,
-    isVisible = true,
-    ...rest
-  } = props;
+  const { title, subTitle, rightIconName = "chevron-right", rightIconSize = "large", textStyle, errors, isTouched, withTopBorder, disabled, isVisible = true, ...rest } = props;
   const { Colors } = useTheme();
   const { width } = getDimensions();
 
@@ -37,14 +25,7 @@ export const ButtonCard = (props: ButtonCardProps) => {
 
   return (
     <>
-      <Card
-        {...rest}
-        disabled={disabled}
-        mode="button"
-        rightIconSize={rightIconSize}
-        rightIconName={rightIconName}
-        style={[withTopBorderStyle]}
-      >
+      <Card {...rest} disabled={disabled} mode="button" rightIconSize={rightIconSize} rightIconName={rightIconName} style={withTopBorderStyle}>
         <Text preset="cardTitle" style={textStyle} text={title} />
         {subTitle && (
           <>

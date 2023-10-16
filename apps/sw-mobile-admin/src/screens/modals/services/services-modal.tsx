@@ -14,12 +14,7 @@ import { useIntl } from "react-intl";
 export const ServicesModal: FC<ModalsScreenProps<"service-modal-screen">> = ({ navigation, route }) => {
   const business = useBusiness();
   const intl = useIntl();
-  const {
-    data: services,
-    isLoading: isServicesLoading,
-    isSuccess: isServicesSuccess,
-    refetch: refetchServices,
-  } = useGetServicesQuery(business?._id ?? skipToken);
+  const { data: services, isLoading: isServicesLoading, isSuccess: isServicesSuccess, refetch: refetchServices } = useGetServicesQuery(business?._id ?? skipToken);
 
   useLayoutEffect(() => {
     navigation.setOptions({

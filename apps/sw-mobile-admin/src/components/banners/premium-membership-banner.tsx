@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { View, StyleSheet, ImageBackground, StatusBar, Platform } from "react-native";
+import { View, StyleSheet, ImageBackground, TouchableOpacity, Platform } from "react-native";
 import { Button, Container, Text } from "../common";
 import image from "./background_1.png";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { hidePremiumMembershipBanner } from "../../store";
 import { navigate } from "../../utils";
 import { useIntl } from "react-intl";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 export function PremiumMembershipBanner() {
   const insets = useSafeAreaInsets();
@@ -25,16 +26,8 @@ export function PremiumMembershipBanner() {
         styles.container,
         {
           ...Platform.select({
-            ios: {
-              alignItems: "center",
-              // minHeight: 200,
-              justifyContent: "flex-end",
-              paddingBottom: 8,
-            },
-            android: {
-              justifyContent: "center",
-              minHeight: 170,
-            },
+            ios: {},
+            android: {},
           }),
         },
       ]}
@@ -46,6 +39,23 @@ export function PremiumMembershipBanner() {
           marginTop: insets.top,
         }}
       >
+        <TouchableOpacity
+          style={{
+            position: "absolute",
+            top: 0,
+            right: -30,
+            backgroundColor: "rgba(0,0,0,0.6)",
+            borderRadius: 25 / 2,
+            height: 25,
+            width: 25,
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 10,
+          }}
+          onPress={handleClose}
+        >
+          <Icon name="close" size={20} color="white" onPress={handleClose} />
+        </TouchableOpacity>
         <Text preset="text" style={styles.title}>
           {intl.formatMessage({ id: "Banner.premiumMembership.text1" })}
           {intl.formatMessage({ id: "Banner.premiumMembership.text2" })}
@@ -56,8 +66,9 @@ export function PremiumMembershipBanner() {
         <Container
           direction="row"
           style={{
-            justifyContent: "space-between",
+            justifyContent: "flex-end",
             alignItems: "center",
+            marginTop: 8,
           }}
         >
           <Button
@@ -67,18 +78,6 @@ export function PremiumMembershipBanner() {
             textStyle={styles.buttonText}
             text={intl.formatMessage({ id: "Banner.premiumMembership.joinButton" })}
           />
-          <Button
-            preset="link"
-            textStyle={{
-              fontSize: 14,
-              color: "#3B2C09",
-              fontWeight: "700",
-              textTransform: "uppercase",
-              marginLeft: 16,
-            }}
-            text={intl.formatMessage({ id: "Banner.premiumMembership.cancelButton" })}
-            onPress={handleClose}
-          />
         </Container>
       </View>
     </ImageBackground>
@@ -87,12 +86,14 @@ export function PremiumMembershipBanner() {
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: "flex-end",
+    justifyContent: "center",
     alignItems: "center",
-    minHeight: 180,
+    paddingTop: 16,
+    paddingBottom: 16,
+    // height: getResponsiveHeight(80),
   },
   image: {
-    minHeight: 180,
+    // minHeight: 180,
   },
   title: {
     fontSize: 23,

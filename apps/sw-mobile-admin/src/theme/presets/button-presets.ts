@@ -33,6 +33,14 @@ export const buttonPresets = ({
     none: {},
     primary: {
       ...VIEW_BASE,
+      backgroundColor: Colors.brandPrimary,
+      borderRightColor: Colors.brandSecondary,
+      borderBottomColor: Colors.brandSecondary,
+      borderBottomWidth: 3,
+      borderRightWidth: 3,
+    },
+    "primary-disabled": {
+      ...VIEW_BASE,
       backgroundColor: Colors.brandSecondary1,
     },
     primary2: {
@@ -98,16 +106,16 @@ export const buttonPresets = ({
       backgroundColor: Colors.backgroundOverlay,
       borderRadius: 25,
     },
+    link: {
+      alignSelf: "center",
+      paddingHorizontal: 16,
+      paddingVertical: 8,
+    },
     subLink: {
       ...VIEW_BASE,
       width: undefined,
       alignItems: "flex-end",
       height: undefined,
-      backgroundColor: Colors.transparent,
-    },
-    link: {
-      ...VIEW_BASE,
-      width: undefined,
       backgroundColor: Colors.transparent,
     },
     social: {
@@ -117,7 +125,7 @@ export const buttonPresets = ({
       flexDirection: "row",
       // backgroundColor: Colors.brandAccent,
       borderWidth: 2,
-      borderColor: Colors.brandAccent1,
+      borderColor: Colors.brandAccent4,
     },
     socialIcon: {
       position: "absolute",
@@ -154,33 +162,33 @@ export const buttonPresets = ({
     none: {},
     primary: {
       ...TEXT_BASE,
-      color: Colors.brandSecondary7,
-      fontWeight: "600",
+      color: Colors.white,
+      fontWeight: "700",
     },
     primary2: {
       ...TEXT_BASE,
       color: Colors.brandSecondary7,
-      fontWeight: "600",
+      fontWeight: "700",
     },
     "primary2-disabled": {
       ...TEXT_BASE,
       color: Colors.brandSecondary7,
-      fontWeight: "600",
+      fontWeight: "700",
     },
     secondary: {
       ...TEXT_BASE,
       color: Colors.white,
-      fontWeight: "600",
+      fontWeight: "700",
     },
     "secondary-disabled": {
       ...TEXT_BASE,
       color: Colors.white,
-      fontWeight: "600",
+      fontWeight: "700",
     },
     accent: {
       ...TEXT_BASE,
       color: Colors.brandAccent,
-      fontWeight: "600",
+      fontWeight: "700",
       paddingHorizontal: 21,
     },
     headerLink: {
@@ -196,25 +204,23 @@ export const buttonPresets = ({
     flat: {
       ...TEXT_BASE,
       color: Colors.darkGray,
-      fontWeight: "600",
-    },
-    subLink: {
-      ...TEXT_BASE,
-      ...Fonts.textSmall,
-      color: Colors.brandSecondary,
-      fontWeight: "600",
+      fontWeight: "700",
     },
     link: {
-      ...TEXT_BASE,
       ...Fonts.textRegular,
-      color: Colors.brandPrimary5,
+      color: Colors.brandSecondary,
+      fontWeight: "500",
+    },
+    subLink: {
+      ...Fonts.textRegular,
+      color: Colors.brandSecondary4,
       fontWeight: "400",
     },
     social: {
       ...TEXT_BASE,
-      ...Fonts.textSmall,
-      color: Colors.text,
-      fontWeight: "700",
+      ...Fonts.textRegular,
+      color: Colors.subText,
+      fontWeight: "500",
     },
     icon: {},
     icon2: {

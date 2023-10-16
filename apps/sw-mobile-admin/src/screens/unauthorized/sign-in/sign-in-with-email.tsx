@@ -4,34 +4,16 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { CompositeNavigationProp } from "@react-navigation/native";
 import { ScrollView } from "react-native-gesture-handler";
 
-import {
-  Button,
-  Text,
-  Checkbox,
-  Space,
-  TextFieldCard,
-  Screen,
-} from "../../../components";
+import { Button, Text, Checkbox, Space, TextFieldCard, Screen } from "../../../components";
 import { useTheme } from "../../../theme";
-import {
-  RootStackParamList,
-  UnauthorizedStackParamList,
-} from "../../../navigation";
+import { RootStackParamList, UnauthorizedStackParamList } from "../../../navigation";
 import { useForm } from "../../../hooks";
 import { useLocalSignInMutation } from "../../../services";
 interface SignInWithEmailScreenProps {
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<
-      UnauthorizedStackParamList,
-      "sign-in-with-email-screen"
-    >,
-    StackNavigationProp<RootStackParamList>
-  >;
+  navigation: CompositeNavigationProp<StackNavigationProp<UnauthorizedStackParamList, "sign-in-with-email-screen">, StackNavigationProp<RootStackParamList>>;
 }
 
-export const SignInWithEmail: FC<SignInWithEmailScreenProps> = ({
-  navigation,
-}) => {
+export const SignInWithEmail: FC<SignInWithEmailScreenProps> = ({ navigation }) => {
   const { Colors } = useTheme();
   const [isVisible, setIsVisible] = useState(false);
 
@@ -47,19 +29,18 @@ export const SignInWithEmail: FC<SignInWithEmailScreenProps> = ({
     email: "",
     password: "",
   };
-  const { touched, errors, values, handleChange, handleSubmit, dirty } =
-    useForm(
-      {
-        initialValues,
-        onSubmit: formData => {
-          localSignIn({
-            email: formData.email,
-            password: formData.password,
-          });
-        },
+  const { touched, errors, values, handleChange, handleSubmit, dirty } = useForm(
+    {
+      initialValues,
+      onSubmit: formData => {
+        localSignIn({
+          email: formData.email,
+          password: formData.password,
+        });
       },
-      "userLocalSignIn"
-    );
+    },
+    "userLocalSignIn"
+  );
   const handlePasswordVisibility = useCallback(() => {
     setIsVisible(visibility => !visibility);
   }, []);
@@ -86,9 +67,7 @@ export const SignInWithEmail: FC<SignInWithEmailScreenProps> = ({
           value={values.password}
           rightIconOnPress={handlePasswordVisibility}
           rightIconName={isVisible ? "eye-off" : "eye"}
-          rightIconColor={
-            isVisible ? Colors.disabledText : Colors.brandSecondary
-          }
+          rightIconColor={isVisible ? Colors.disabledText : Colors.brandPrimary}
           onChangeText={handleChange("password")}
           isTouched={touched.password}
           errors={errors.password}
@@ -102,41 +81,17 @@ export const SignInWithEmail: FC<SignInWithEmailScreenProps> = ({
           }}
         >
           <Checkbox />
-          <Text
-            preset="subLink"
-            style={{ color: Colors.text, marginLeft: 5 }}
-            text="Stay signed in"
-          />
-          <Button
-            style={{ marginLeft: "auto" }}
-            preset="subLink"
-            text="Forgot password?"
-          />
+          <Text preset="subLink" style={{ color: Colors.text, marginLeft: 5 }} text="Stay signed in" />
+          <Button style={{ marginLeft: "auto" }} preset="subLink" text="Forgot password?" />
         </View>
         <View>
-          <Text
-            preset="error"
-            text={
-              response.isError
-                ? "* " + (response?.error?.data?.message ?? "unknown error")
-                : ""
-            }
-          />
+          <Text preset="error" text={response.isError ? "* " + (response?.error?.data?.message ?? "unknown error") : ""} />
         </View>
         <Space />
-        <Button
-          disabled={response.isLoading}
-          onPress={() => handleSubmit()}
-          preset="primary"
-          text="Sign in"
-        />
+        <Button disabled={response.isLoading} onPress={() => handleSubmit()} preset="primary" text="Sign in" />
         <Space />
         <View style={{ flexDirection: "row", alignSelf: "center" }}>
-          <Text
-            preset="subLink"
-            style={{ color: Colors.text }}
-            text="Need an account? "
-          />
+          <Text preset="subLink" style={{ color: Colors.text }} text="Need an account? " />
           <Button
             preset="subLink"
             text="Sign up"

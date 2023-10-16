@@ -8,7 +8,7 @@ export type BusinessResponseType = CommonResponseType<BusinessDtoType>;
 export type UpdateBusinessDtoType = Partial<
   Omit<
     ConvertToDtoType<BusinessType>,
-    "admins" | "superAdmins" | "backgroundAdmins" | "deleted" | "createdBy" | "createdAt" | "isRegistrationCompleted" | "accountType" | "shortId" | "isDisabled" | "_id"
+    "admins" | "superAdmins" | "backgroundAdmins" | "deleted" | "createdBy" | "createdAt" | "isRegistrationCompleted" | "accountType" | "shortId" | "_id"
   >
 >;
 

@@ -1,0 +1,173 @@
+export const _circleIcons = {
+  edit: {
+    name: "pencil",
+    color: "brandAccent",
+    backgroundColor: undefined,
+    size: 21,
+  },
+  search: {
+    name: "magnify",
+    color: "brandAccent",
+    backgroundColor: undefined,
+    size: 23,
+  },
+  cancel: {
+    name: "cancel",
+    color: "red4",
+    backgroundColor: undefined,
+    size: 24,
+  },
+  delete: {
+    name: "delete-forever",
+    color: "red4",
+    backgroundColor: undefined,
+    size: 26,
+  },
+  "search-close": {
+    name: "magnify-close",
+    color: "brandAccent",
+    backgroundColor: undefined,
+    size: 23,
+  },
+  check: {
+    name: "check",
+    color: "white",
+    backgroundColor: "brandAccent",
+    size: 26,
+  },
+  close: {
+    name: "close",
+    color: "brandAccent",
+    backgroundColor: undefined,
+    size: 30,
+  },
+  "business-header": {
+    name: "store",
+    color: "brandAccent",
+    backgroundColor: "white",
+    size: 30,
+  },
+  business: {
+    name: "store",
+    color: "brandAccent",
+    backgroundColor: undefined,
+    size: 20,
+  },
+  "business-settings": {
+    name: "store-cog",
+    color: "brandAccent",
+    backgroundColor: undefined,
+    size: 20,
+  },
+  save: {
+    name: "content-save-outline",
+    color: "brandAccent",
+    backgroundColor: undefined,
+    size: 26,
+  },
+  "open-business": {
+    name: "door-open",
+    color: "green",
+    backgroundColor: undefined,
+    size: 25,
+  },
+  "closed-business": {
+    name: "door-closed-lock",
+    backgroundColor: undefined,
+    color: "failed",
+    size: 25,
+  },
+  "account-cancel": {
+    name: "account-cancel",
+    color: "brandAccent",
+    backgroundColor: undefined,
+    size: 24,
+  },
+  "add-categories": {
+    name: "plus",
+    backgroundColor: undefined,
+    color: "brandAccent",
+    size: 24,
+  },
+  "add-currency": {
+    name: "plus",
+    backgroundColor: undefined,
+    color: "brandAccent",
+    size: 24,
+  },
+  "add-staff": {
+    name: "account-plus-outline",
+    backgroundColor: undefined,
+    color: "brandAccent",
+    size: 21,
+  },
+  "add-client": {
+    name: "account-plus-outline",
+    backgroundColor: undefined,
+    color: "brandAccent",
+    size: 21,
+  },
+  "add-services": {
+    name: "text-box-plus",
+    backgroundColor: undefined,
+    color: "brandAccent",
+    size: 26,
+  },
+  "add-image": {
+    name: "camera-plus",
+    backgroundColor: undefined,
+    color: "brandAccent",
+    size: 24,
+  },
+  more: {
+    name: "camera-plus",
+    backgroundColor: undefined,
+    color: "brandAccent",
+    size: 24,
+  },
+  add: {
+    name: "plus",
+    backgroundColor: undefined,
+    color: "brandAccent",
+    size: 26,
+  },
+  contactSync: {
+    name: "account-sync-outline",
+    backgroundColor: undefined,
+    color: "brandAccent",
+    size: 24,
+  },
+  share: {
+    name: "share-variant",
+    backgroundColor: undefined,
+    color: "brandAccent",
+    size: 21,
+  },
+  calendar: {
+    name: "calendar-range-outline",
+    backgroundColor: undefined,
+    color: "brandAccent",
+    size: 21,
+  },
+  magnify: {
+    name: "magnify",
+    backgroundColor: undefined,
+    color: "brandAccent",
+    size: 21,
+  },
+  qr: {
+    name: "qrcode",
+    backgroundColor: undefined,
+    color: "brandAccent",
+    size: 21,
+  },
+
+  default: {
+    name: "plus",
+    backgroundColor: undefined,
+    color: "brandAccent",
+    size: 26,
+  },
+} as const;
+
+export type CircleIconsKeys = keyof typeof _circleIcons;

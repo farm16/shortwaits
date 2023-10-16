@@ -3,7 +3,7 @@ import { StyleSheet, View, ViewStyle } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 import { useTheme } from "../../theme";
-import { IconButton } from "../navigator-action-buttons/navigator-action-buttons";
+import { IconButton } from "../icon-buttons/icon-buttons";
 import FastImage from "react-native-fast-image";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { noop } from "lodash";
@@ -28,7 +28,7 @@ const imageSizes = {
 } as const;
 
 export function Avatar(props: AvatarProps) {
-  const { isLoading = true, disabled = false, size = "default", url, color, mode = "static", style: styleOverride, onPress = noop } = props;
+  const { isLoading, disabled = false, size = "default", url, color, mode = "static", style: styleOverride, onPress = noop } = props;
   const { Colors } = useTheme();
 
   const imageSize = imageSizes[size];
@@ -95,7 +95,7 @@ export function Avatar(props: AvatarProps) {
     );
   }
 
-  return <View style={[containerStyle, styleOverride]}>{renderImage()} </View>;
+  return <View style={[containerStyle, styleOverride]}>{renderImage()}</View>;
 }
 const styles = StyleSheet.create({
   container: {

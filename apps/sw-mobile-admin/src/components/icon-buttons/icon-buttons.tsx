@@ -5,6 +5,7 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { Button, ButtonProps, Spinner, Text } from "../common";
 import { useTheme } from "../../theme";
 import { ThemeColorName } from "../../theme/Colors";
+import { CircleIconsKeys, _circleIcons } from "./icon-presets";
 
 const disabledStates = ["loading", "disabled", "enable"];
 
@@ -44,11 +45,7 @@ export const RightArrowButton: FC<ButtonProps> = props => {
   const { state = "enable", ...rest } = props;
   return (
     <Button {...rest} preset="headerLink">
-      <Icon
-        name="arrow-right-bold"
-        color={disabledStates.includes(state) ? inputBackground : brandSecondary}
-        size={22}
-      />
+      <Icon name="arrow-right-bold" color={disabledStates.includes(state) ? inputBackground : brandSecondary} size={22} />
     </Button>
   );
 };
@@ -89,12 +86,11 @@ export const BackButton: FC<
   }
 > = props => {
   const {
-    Colors: { brandSecondary, backgroundOverlay },
+    Colors: { brandAccent, brandSecondary, backgroundOverlay },
   } = useTheme();
   const { state = "enabled", ...rest } = props;
   return (
     <Button
-      {...rest}
       state={state}
       preset="none"
       style={{
@@ -102,13 +98,14 @@ export const BackButton: FC<
         flexDirection: "row",
         alignItems: "center",
       }}
+      {...rest}
     >
       <Icon name="chevron-left" color={disabledStates.includes(state) ? backgroundOverlay : brandSecondary} size={35} />
       {props.counter ? (
         <Text
           preset="none"
           style={{
-            color: brandSecondary,
+            color: brandAccent,
             fontWeight: "600",
             padding: 0,
             marginTop: -2,
@@ -122,178 +119,6 @@ export const BackButton: FC<
   );
 };
 
-const _circleIcons = {
-  edit: {
-    name: "pencil",
-    color: "brandSecondary",
-    backgroundColor: undefined,
-    size: 21,
-  },
-  search: {
-    name: "magnify",
-    color: "brandSecondary",
-    backgroundColor: undefined,
-    size: 23,
-  },
-  cancel: {
-    name: "cancel",
-    color: "red4",
-    backgroundColor: undefined,
-    size: 24,
-  },
-  delete: {
-    name: "delete-forever",
-    color: "red4",
-    backgroundColor: undefined,
-    size: 26,
-  },
-  "search-close": {
-    name: "magnify-close",
-    color: "brandSecondary",
-    backgroundColor: undefined,
-    size: 23,
-  },
-  check: {
-    name: "check",
-    color: "white",
-    backgroundColor: "brandSecondary",
-    size: 26,
-  },
-  close: {
-    name: "close",
-    color: "brandSecondary",
-    backgroundColor: undefined,
-    size: 30,
-  },
-  "business-header": {
-    name: "store",
-    color: "brandAccent",
-    backgroundColor: "white",
-    size: 30,
-  },
-  business: {
-    name: "store",
-    color: "brandSecondary",
-    backgroundColor: undefined,
-    size: 20,
-  },
-  "business-settings": {
-    name: "store-cog",
-    color: "brandSecondary",
-    backgroundColor: undefined,
-    size: 20,
-  },
-  save: {
-    name: "content-save-outline",
-    color: "brandSecondary",
-    backgroundColor: undefined,
-    size: 26,
-  },
-  "open-business": {
-    name: "door-open",
-    color: "green",
-    backgroundColor: undefined,
-    size: 25,
-  },
-  "closed-business": {
-    name: "door-closed-lock",
-    backgroundColor: undefined,
-    color: "failed",
-    size: 25,
-  },
-  "account-cancel": {
-    name: "account-cancel",
-    color: "brandSecondary",
-    backgroundColor: undefined,
-    size: 24,
-  },
-  "add-categories": {
-    name: "plus",
-    backgroundColor: undefined,
-    color: "brandSecondary",
-    size: 24,
-  },
-  "add-currency": {
-    name: "plus",
-    backgroundColor: undefined,
-    color: "brandSecondary",
-    size: 24,
-  },
-  "add-staff": {
-    name: "account-plus-outline",
-    backgroundColor: undefined,
-    color: "brandSecondary",
-    size: 21,
-  },
-  "add-client": {
-    name: "account-plus-outline",
-    backgroundColor: undefined,
-    color: "brandSecondary",
-    size: 21,
-  },
-  "add-services": {
-    name: "text-box-plus",
-    backgroundColor: undefined,
-    color: "brandSecondary",
-    size: 26,
-  },
-  "add-image": {
-    name: "camera-plus",
-    backgroundColor: undefined,
-    color: "brandSecondary",
-    size: 24,
-  },
-  more: {
-    name: "camera-plus",
-    backgroundColor: undefined,
-    color: "brandSecondary",
-    size: 24,
-  },
-  add: {
-    name: "plus",
-    backgroundColor: undefined,
-    color: "brandSecondary",
-    size: 26,
-  },
-  contactSync: {
-    name: "account-sync-outline",
-    backgroundColor: undefined,
-    color: "brandSecondary",
-    size: 24,
-  },
-  share: {
-    name: "share-variant",
-    backgroundColor: undefined,
-    color: "brandSecondary",
-    size: 21,
-  },
-  calendar: {
-    name: "calendar-range-outline",
-    backgroundColor: undefined,
-    color: "brandSecondary",
-    size: 21,
-  },
-  magnify: {
-    name: "magnify",
-    backgroundColor: undefined,
-    color: "brandSecondary",
-    size: 21,
-  },
-  qr: {
-    name: "qrcode",
-    backgroundColor: undefined,
-    color: "brandSecondary",
-    size: 21,
-  },
-
-  default: {
-    name: "plus",
-    backgroundColor: undefined,
-    color: "brandSecondary",
-    size: 26,
-  },
-} as const;
-type CircleIconsKeys = keyof typeof _circleIcons;
 type CircleIconsValues = {
   name: string;
   color: ThemeColorName;
@@ -312,17 +137,7 @@ export const IconButton: FC<
 > = props => {
   const { Colors } = useTheme();
 
-  const {
-    state = "enabled",
-    iconSize = 22,
-    iconType = "default",
-    style: styleOverride,
-    text,
-    textStyle,
-    withMarginRight,
-    withMarginLeft,
-    ...rest
-  } = props;
+  const { state = "enabled", iconSize = 22, iconType = "default", style: styleOverride, text, textStyle, withMarginRight, withMarginLeft, ...rest } = props;
 
   const style: StyleProp<ViewStyle> = {
     backgroundColor: Colors[circleIcons[iconType].backgroundColor ?? undefined],

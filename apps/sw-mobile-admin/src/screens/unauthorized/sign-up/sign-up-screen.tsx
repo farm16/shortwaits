@@ -16,10 +16,7 @@ import { Logo1 } from "../../../assets/images/svg-components/logo-1";
 import { useIntl } from "react-intl";
 
 export interface SignUpScreenProps {
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<UnauthorizedStackParamList, "sign-up-screen">,
-    StackNavigationProp<RootStackParamList>
-  >;
+  navigation: CompositeNavigationProp<StackNavigationProp<UnauthorizedStackParamList, "sign-up-screen">, StackNavigationProp<RootStackParamList>>;
 }
 
 export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
@@ -88,10 +85,6 @@ export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
         <Space size="small" />
         <Button
           preset="social"
-          style={{
-            backgroundColor: Colors.brandSecondary4,
-            borderColor: Colors.brandSecondary4,
-          }}
           onPress={() =>
             navigation.navigate("unauthorized", {
               screen: "sign-up-with-email-screen",
@@ -100,20 +93,18 @@ export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
         >
           <EMail width={30} height={30} style={{ position: "absolute", left: 0, margin: 16 }} />
           <Container style={styles.buttonContainer}>
-            <Text style={{ color: "white" }} preset="social">
-              {intl.formatMessage({ id: "Sign_Up_Screen.email" })}
-            </Text>
+            <Text preset="social">{intl.formatMessage({ id: "Sign_Up_Screen.email" })}</Text>
           </Container>
         </Button>
-
-        <Space size="large" />
-        <View style={styles.footerContainer}>
-          <Button preset="subLink" onPress={() => {}}>
-            <Text text="T" preset="subLink" />
-            <Text text="&" preset="subLink" />
-            <Text text="C" preset="subLink" />
-          </Button>
-        </View>
+        <Space />
+        <Button preset="link" onPress={() => {}}>
+          <Container direction="row">
+            <Text text="T" preset="link" />
+            <Text text="&" preset="link" />
+            <Text text="C" preset="link" />
+          </Container>
+        </Button>
+        <Space />
       </View>
     </Screen>
   );

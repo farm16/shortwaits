@@ -8,6 +8,7 @@ import { STATIC_FORM_AMERICAN_COUNTRIES, STATIC_FORM_USA_STATES } from "../../..
 import { useIntl } from "react-intl";
 import { useUpdateBusinessMutation } from "../../../services";
 import { isObjsEqualWithAlert } from "../../../utils";
+import { Alert } from "react-native";
 
 export function BusinessProfileScreen({ navigation }: AuthorizedScreenProps<"business-profile-screen">) {
   const business = useBusiness();
@@ -80,8 +81,21 @@ export function BusinessProfileScreen({ navigation }: AuthorizedScreenProps<"bus
     }
   }, [imageUrl, setFieldValue]);
 
+  useEffect(() => {
+    if (isError) {
+      Alert.alert("Oops", "Something went wrong");
+    }
+  }, [isError]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      Alert.alert("Success", "Business updated successfully");
+    }
+  }, [isSuccess]);
+
   const renderSubmitButton = (
     <Button
+      preset={isLoading ? "primary-disabled" : "primary"}
       text={"Update"}
       onPress={() => {
         handleSubmit();
@@ -90,7 +104,7 @@ export function BusinessProfileScreen({ navigation }: AuthorizedScreenProps<"bus
   );
 
   return (
-    <FormContainer footer={renderSubmitButton}>
+    <FormContainer footer={renderSubmitButton} isLoading={isLoading}>
       <Avatar
         style={{ alignSelf: "center" }}
         url={values.web.logoImageUrl}

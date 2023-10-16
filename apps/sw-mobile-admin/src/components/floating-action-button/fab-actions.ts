@@ -1,148 +1,57 @@
 import { navigate } from "../../navigation";
-import { FloatingActions } from "..";
-import { brandColors } from "../../theme/Colors";
 import { useIntl } from "react-intl";
 import { useMemo } from "react";
-
-export const actions: FloatingActions = [
-  {
-    label: "EVENT",
-    onPress: () =>
-      navigate("modals", {
-        screen: "add-event-modal-screen",
-      }),
-    icon: "calendar-clock",
-    color: "#ffffff",
-    labelTextColor: "#ffffff",
-    style: {
-      backgroundColor: brandColors.secondary.brandSecondary5,
-    },
-    labelStyle: {
-      backgroundColor: brandColors.secondary.brandSecondary5,
-      borderRadius: 20,
-    },
-  },
-  {
-    label: "CLIENT",
-    onPress: () =>
-      navigate("modals", {
-        screen: "add-client-modal-screen",
-      }),
-    icon: "account-group",
-    color: "#ffffff",
-    labelTextColor: "#ffffff",
-    style: {
-      backgroundColor: brandColors.secondary.brandSecondary5,
-    },
-    labelStyle: {
-      backgroundColor: brandColors.secondary.brandSecondary5,
-      borderRadius: 20,
-    },
-  },
-  {
-    label: "STAFF",
-    color: "#ffffff",
-    labelTextColor: "#ffffff",
-    onPress: () =>
-      navigate("modals", {
-        screen: "add-staff-modal-screen",
-      }),
-    icon: "account-tie",
-    style: {
-      backgroundColor: brandColors.secondary.brandSecondary5,
-    },
-    labelStyle: {
-      backgroundColor: brandColors.secondary.brandSecondary5,
-      borderRadius: 20,
-    },
-  },
-  // ,
-  // {
-  //   label: "MORE",
-  //   onPress: () => null,
-  //   icon: "dots-horizontal",
-  //   color: "#ffffff",
-  //   labelTextColor: "#ffffff",
-  //   style: {
-  //     backgroundColor: brandColors.secondary.brandSecondary5,
-  //   },
-  //   labelStyle: {
-  //     backgroundColor: brandColors.secondary.brandSecondary5,
-  //     borderRadius: 20,
-  //   },
-  // },
-];
+import { useTheme } from "../../theme";
 
 export const useActions = () => {
   const intl = useIntl();
+  const { Colors } = useTheme();
 
   const actions = useMemo(() => {
+    const styles = {
+      color: Colors.white,
+      labelTextColor: Colors.brandSecondary7,
+      style: {
+        backgroundColor: Colors.brandSecondary,
+      },
+      labelStyle: {
+        // backgroundColor: brandColors.secondary.brandSecondary5,
+        // borderRadius: 20,
+      },
+    };
     return [
       {
-        label: intl.formatMessage({ id: "Common.events" }).toUpperCase(),
+        label: intl.formatMessage({ id: "Common.events" }),
         onPress: () =>
           navigate("modals", {
             screen: "add-event-modal-screen",
           }),
         icon: "calendar-clock",
-        color: "#ffffff",
-        labelTextColor: "#ffffff",
-        style: {
-          backgroundColor: brandColors.secondary.brandSecondary5,
-        },
-        labelStyle: {
-          backgroundColor: brandColors.secondary.brandSecondary5,
-          borderRadius: 20,
-        },
+        ...styles,
       },
       {
-        label: intl.formatMessage({ id: "Common.clients" }).toUpperCase(),
+        label: intl.formatMessage({ id: "Common.clients" }),
         onPress: () =>
           navigate("modals", {
             screen: "add-client-modal-screen",
           }),
         icon: "account-group",
-        color: "#ffffff",
-        labelTextColor: "#ffffff",
-        style: {
-          backgroundColor: brandColors.secondary.brandSecondary5,
-        },
-        labelStyle: {
-          backgroundColor: brandColors.secondary.brandSecondary5,
-          borderRadius: 20,
-        },
+        ...styles,
       },
       {
-        label: intl.formatMessage({ id: "Common.staff" }).toUpperCase(),
-        color: "#ffffff",
-        labelTextColor: "#ffffff",
+        label: intl.formatMessage({ id: "Common.staff" }),
         onPress: () =>
           navigate("modals", {
             screen: "add-staff-modal-screen",
           }),
         icon: "account-tie",
-        style: {
-          backgroundColor: brandColors.secondary.brandSecondary5,
-        },
-        labelStyle: {
-          backgroundColor: brandColors.secondary.brandSecondary5,
-          borderRadius: 20,
-        },
+        ...styles,
       },
       // ,
       // {
       //   label: "MORE",
       //   onPress: () => null,
-      //   icon: "dots-horizontal",
-      //   color: "#ffffff",
-      //   labelTextColor: "#ffffff",
-      //   style: {
-      //     backgroundColor: brandColors.secondary.brandSecondary5,
-      //   },
-      //   labelStyle: {
-      //     backgroundColor: brandColors.secondary.brandSecondary5,
-      //     borderRadius: 20,
-      //   },
+      //   icon: "dots-horizontal",s
       // },
     ];
   }, [intl]);

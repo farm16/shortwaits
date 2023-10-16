@@ -20,10 +20,7 @@ GoogleSignin.configure({
 });
 
 export interface WelcomeScreenProps {
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<UnauthorizedStackParamList, "welcome-screen">,
-    StackNavigationProp<RootStackParamList>
-  >;
+  navigation: CompositeNavigationProp<StackNavigationProp<UnauthorizedStackParamList, "welcome-screen">, StackNavigationProp<RootStackParamList>>;
 }
 
 export const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation }) => {
@@ -55,22 +52,13 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation }) => {
         <WelcomeImage height={"30%"} />
         <Space size="large" />
         <ScrollView style={styles.box2}>
-          <Text
-            preset="cardSubtitle"
-            style={styles.box2Text}
-            text={intl.formatMessage({ id: "Welcome_Screen.title" })}
-          />
+          <Text preset="cardSubtitle" style={styles.box2Text} text={intl.formatMessage({ id: "Welcome_Screen.title" })} />
           <Space size="small" />
           <Text preset="title2" text={intl.formatMessage({ id: "Welcome_Screen.description" })} />
         </ScrollView>
       </View>
       <View style={{ padding: 16 }}>
         <Button
-          style={{
-            backgroundColor: Colors.brandSecondary,
-          }}
-          textStyle={{ color: Colors.white }}
-          preset="primary"
           text={intl.formatMessage({ id: "Common.register" })}
           onPress={() =>
             navigation.navigate("unauthorized", {
@@ -78,14 +66,9 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation }) => {
             })
           }
         />
-        <Space />
+        <Space size="small" />
         <Button
-          style={{ backgroundColor: Colors.brandSecondary1 }}
-          textStyle={{
-            fontWeight: "500",
-            color: Colors.static_welcomeButtonText,
-          }}
-          preset="primary"
+          preset="link"
           text={intl.formatMessage({ id: "Common.login" })}
           onPress={() =>
             navigation.navigate("unauthorized", {
