@@ -116,7 +116,7 @@ export const _circleIcons = {
   "add-image": {
     name: "camera-plus",
     backgroundColor: undefined,
-    color: "brandAccent",
+    color: "brandSecondary",
     size: 24,
   },
   more: {

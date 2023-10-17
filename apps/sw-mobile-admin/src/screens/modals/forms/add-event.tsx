@@ -7,18 +7,7 @@ import { CreateEventDtoType, ServiceDtoType, eventPaymentMethods } from "@shortw
 
 import { useForm } from "../../../hooks";
 import { useBusiness, useUser } from "../../../store";
-import {
-  Text,
-  TextFieldCard,
-  TimePickerFieldCard,
-  Button,
-  BackButton,
-  ButtonCard,
-  CurrencyFieldCard,
-  Space,
-  FormContainer,
-  ExpandableSection,
-} from "../../../components";
+import { Text, TextFieldCard, TimePickerFieldCard, Button, BackButton, ButtonCard, CurrencyFieldCard, Space, FormContainer, ExpandableSection } from "../../../components";
 import { ModalsScreenProps } from "../../../navigation";
 import { useCreateEventMutation } from "../../../services";
 import { getEmojiString } from "../../../utils";
@@ -96,7 +85,7 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
     return _initialValues;
   }, [business._id, user?._id]);
 
-  const { touched, errors, values, handleChange, handleSubmit, setFieldValue } = useForm(
+  const { touched, errors, values, handleChange, handleSubmit, setFieldValue, setValues } = useForm(
     {
       initialValues,
       validate: validateDates,
@@ -142,45 +131,31 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
 
   useEffect(() => {
     if (!selectedService) {
-      setFieldValue("serviceId", initialValues.serviceId);
-      setFieldValue("isPublicEvent", initialValues.isPublicEvent);
-      setFieldValue("priceExpected", initialValues.priceExpected);
-      setFieldValue("durationInMin", initialValues.durationInMin);
-      setFieldValue("hasDuration", initialValues.hasDuration);
-      setFieldValue("expectedEndTime", initialValues.expectedEndTime);
-    }
+      setValues(initialValues, false);
+    } else return;
+  }, [initialValues, selectedService, setValues]);
+
+  useEffect(() => {
     if (selectedService) {
       const hasDuration = selectedService.durationInMin > 0;
-
       const startTime = new Date(values.startTime);
       const expectedEndTime = new Date(startTime.getTime() + selectedService.durationInMin * 60000).toISOString();
-
-      if (selectedService.price === 0) {
-        setIsFree(true);
-        setFieldValue("priceExpected", 0);
-      } else {
-        setIsFree(false);
-        setFieldValue("priceExpected", selectedService.price);
-      }
-
-      setFieldValue("serviceId", selectedService._id);
-      setFieldValue("isPublicEvent", selectedService.isPrivate);
-      setFieldValue("durationInMin", selectedService.durationInMin);
-      setFieldValue("hasDuration", hasDuration);
-      setFieldValue("expectedEndTime", expectedEndTime);
-    }
-  }, [
-    initialValues.durationInMin,
-    initialValues.expectedEndTime,
-    initialValues.hasDuration,
-    initialValues.isPublicEvent,
-    initialValues.priceExpected,
-    initialValues.serviceId,
-    selectedService,
-    setFieldValue,
-    values.expectedEndTime,
-    values.startTime,
-  ]);
+      setIsFree(selectedService.price === 0 ? true : false);
+      setValues(
+        {
+          ...initialValues,
+          startTime: values.startTime,
+          priceExpected: selectedService.price === 0 ? 0 : selectedService.price,
+          serviceId: selectedService._id,
+          isPublicEvent: selectedService.isPrivate,
+          durationInMin: selectedService.durationInMin,
+          hasDuration: hasDuration,
+          expectedEndTime: expectedEndTime,
+        },
+        false
+      );
+    } else return;
+  }, [initialValues, selectedService, setValues, values.startTime]);
 
   if (createEventStatus.isError) {
     Alert.alert(intl.formatMessage({ id: "AddEventModal.errorTitle" }), createEventStatus.error.message);
@@ -212,9 +187,7 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
 
       <ButtonCard
         title={intl.formatMessage({ id: "AddEventModal.service.title" })}
-        subTitle={
-          selectedService ? selectedService.name : intl.formatMessage({ id: "AddEventModal.service.description" })
-        }
+        subTitle={selectedService ? selectedService.name : intl.formatMessage({ id: "AddEventModal.service.description" })}
         leftIconName={selectedService ? "circle" : "circle-outline"}
         leftIconColor={selectedService?.serviceColor?.hexCode ?? "grey"}
         onPress={() =>
@@ -283,11 +256,7 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
         <>
           <ButtonCard
             title={intl.formatMessage({ id: "AddEventModal.paymentMethod" })}
-            subTitle={
-              values.paymentMethod
-                ? eventPaymentMethods[values.paymentMethod]
-                : intl.formatMessage({ id: "AddEventModal.selectPaymentMethod" })
-            }
+            subTitle={values.paymentMethod ? eventPaymentMethods[values.paymentMethod] : intl.formatMessage({ id: "AddEventModal.selectPaymentMethod" })}
             onPress={() =>
               navigation.navigate("modals", {
                 screen: "selector-modal-screen",
@@ -325,10 +294,7 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
           isVisible={!selectedService}
           rightIconName={values?.isPublicEvent ? "checkbox-outline" : "checkbox-blank-outline"}
           title={intl.formatMessage({ id: "AddEventModal.isPublicEvent" })}
-          subTitle={intl.formatMessage(
-            { id: "AddEventModal.isPublicEvent.description" },
-            { isPublicEvent: values?.isPublicEvent }
-          )}
+          subTitle={intl.formatMessage({ id: "AddEventModal.isPublicEvent.description" }, { isPublicEvent: values?.isPublicEvent })}
           onPress={() => {
             setFieldValue("isPublicEvent", !values?.isPublicEvent);
           }}

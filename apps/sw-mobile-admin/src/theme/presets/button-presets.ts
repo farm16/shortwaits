@@ -142,7 +142,7 @@ export const buttonPresets = ({
       flexDirection: "row",
       alignItems: "center",
       borderBottomWidth: 1,
-      borderBottomColor: "#E5E5E5",
+      borderBottomColor: Colors.gray,
     },
     listItem: {
       minHeight: 55,

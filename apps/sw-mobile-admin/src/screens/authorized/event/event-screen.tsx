@@ -1,17 +1,7 @@
 import React, { FC, useLayoutEffect, useRef } from "react";
 import { truncate } from "lodash";
 
-import {
-  Screen,
-  Text,
-  Container,
-  IconButton,
-  BackButton,
-  useBottomSheet,
-  BottomSheetType,
-  EventStatusButtons,
-  Space,
-} from "../../../components";
+import { Screen, Text, Container, IconButton, BackButton, useBottomSheet, BottomSheetType, EventStatusButtons, Space } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { EventScreenTabs } from "./event-tabs";
 import { useEvent } from "../../../store";
@@ -45,6 +35,9 @@ export function EventScreen({ navigation, route }: AuthorizedScreenProps<"event-
               onPress={() => {
                 navigation.navigate("modals", {
                   screen: "update-event-modal-screen",
+                  params: {
+                    initialValues: event,
+                  },
                 });
               }}
               withMarginRight

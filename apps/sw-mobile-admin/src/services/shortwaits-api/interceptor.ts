@@ -7,11 +7,7 @@ import { Alert } from "react-native";
 
 // const mutex = new Mutex();
 
-export const baseQueryWithInterceptor: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (
-  args,
-  api,
-  extraOptions
-) => {
+export const baseQueryWithInterceptor: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (args, api, extraOptions) => {
   // wait until the mutex is available without locking it
 
   const {
@@ -27,10 +23,10 @@ export const baseQueryWithInterceptor: BaseQueryFn<string | FetchArgs, unknown, 
         headers.set("Authorization", `Bearer ${token}`); // we stored the token as "Bearer + key"
       }
 
-      headers.set("device-language", deviceInfo.language);
-      headers.set("device-suggested-language", suggestedLanguage); // used as store indicator
-      headers.set("os", deviceInfo.os);
-      headers.set("os-version", deviceInfo.osVersion);
+      headers.set("device-language", deviceInfo?.language ?? "en");
+      headers.set("device-suggested-language", suggestedLanguage ?? ""); // used as store indicator
+      headers.set("os", deviceInfo?.os ?? "");
+      headers.set("os-version", deviceInfo?.osVersion ?? "");
 
       return headers;
     },

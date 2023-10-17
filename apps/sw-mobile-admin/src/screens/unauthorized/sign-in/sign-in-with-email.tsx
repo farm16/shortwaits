@@ -59,7 +59,7 @@ export const SignInWithEmail: FC<SignInWithEmailScreenProps> = ({ navigation }) 
           isTouched={touched.email}
           errors={errors.email}
         />
-        <Space />
+        <Space size="small" />
         <TextFieldCard
           secureTextEntry={!isVisible}
           title="Password"

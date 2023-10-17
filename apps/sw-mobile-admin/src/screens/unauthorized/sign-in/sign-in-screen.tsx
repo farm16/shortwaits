@@ -119,8 +119,8 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
   if (localSignInResponse.isLoading || socialSignUpResponse.isLoading) return <ActivityIndicator />;
 
   return (
-    <Screen preset="fixed" unsafe unsafeBottom withHorizontalPadding>
-      <View
+    <Screen preset="scroll" unsafe unsafeBottom withHorizontalPadding>
+      {/* <View
         style={{
           justifyContent: "center",
           alignItems: "center",
@@ -128,7 +128,8 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
         }}
       >
         <Logo1 height="25%" />
-      </View>
+      </View> */}
+      <Space />
       <TextFieldCard
         autoCapitalize="none"
         keyboardType="default"
@@ -141,7 +142,7 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
         isTouched={touched.username}
         errors={errors.username}
       />
-      <Space size="small" />
+      <Space size="tiny" />
       <TextFieldCard
         secureTextEntry={!isVisible}
         title={intl.formatMessage({
@@ -223,7 +224,7 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
           }}
         />
       </View>
-      <Space size="xLarge" />
+      <Space />
     </Screen>
   );
 };

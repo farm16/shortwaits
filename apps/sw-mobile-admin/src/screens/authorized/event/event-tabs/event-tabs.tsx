@@ -86,15 +86,7 @@ export const EventScreenTabs = props => {
     [Colors.brandSecondary, Colors.brandSecondary1, Colors.brandSecondary8, event, index]
   );
 
-  return (
-    <TabView
-      renderTabBar={_renderTabBar}
-      navigationState={{ index, routes }}
-      renderScene={renderScene}
-      onIndexChange={setIndex}
-      initialLayout={{ width: layout.width }}
-    />
-  );
+  return <TabView renderTabBar={_renderTabBar} navigationState={{ index, routes }} renderScene={renderScene} onIndexChange={setIndex} initialLayout={{ width: layout.width }} />;
 };
 
 const styles = StyleSheet.create({
