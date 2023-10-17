@@ -15,9 +15,9 @@ import { getPaletteWithContrast, getReversePalette } from "./utils";
 // rgb(240, 240, 239)
 
 export const brandColors = {
-  primary: getPaletteWithContrast("brandPrimary", "#222130"),
-  secondary: getPaletteWithContrast("brandSecondary", "#45927B"),
-  accent: getPaletteWithContrast("brandAccent", "#3f3d56"),
+  primary: getPaletteWithContrast("brandPrimary", "#030F26"),
+  secondary: getPaletteWithContrast("brandSecondary", "#595FD9"),
+  accent: getPaletteWithContrast("brandAccent", "#EB9B04"),
 };
 
 // console.log(getPaletteWithContrast("brandAccent", "#E24939"))
@@ -76,7 +76,7 @@ export const customColors = {
 
   transparent: "rgba(0,0,0,0)",
   background: "#ffffff",
-  backgroundOverlay: "#F8FAFC", //rgb(245, 245, 245) #e5e5e5
+  backgroundOverlay: "#F4F4F4", //rgb(245, 245, 245) #e5e5e5
   white: "#ffffff",
   black: "#202020",
 

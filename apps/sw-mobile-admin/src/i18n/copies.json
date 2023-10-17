@@ -297,15 +297,15 @@
     "AddServiceModal.alertDelete.title": "Delete Service",
     "AddServiceModal.alertDelete.message": "Are you sure you want to delete this service?",
 
-    "Banner.premiumMembership.text1": "need more from\n",
+    "Banner.premiumMembership.text1": "Need more from\n",
     "Banner.premiumMembership.text2": "Shortwaits ?",
-    "Banner.premiumMembership.text3": "get 3 months for only $0.99!",
+    "Banner.premiumMembership.text3": "Get 3 months for only $0.99!",
     "Banner.premiumMembership.joinButton": "join now",
     "Banner.premiumMembership.cancelButton": "cancel",
 
     "Selectors.services.headerTitle": "Select Services",
 
-    "MyBusiness_screen.totalIncome": "{graphMode, select, Yesterday {Yesterday's total income: } Week {Week's total income: } Month {Month's total income: } Year {Year's total income: } other {}}",
+    "MyBusiness_screen.totalIncome": "{period, select, Yesterday {Yesterday's total income: } Week {Week's total income: } Month {Month's total income: } Year {Year's total income: } other {}}",
     "MyBusiness_screen.schedule": "Schedule",
     "MyBusiness_screen.transactions": "Transactions",
     "MyBusiness_screen.services": "Services",
@@ -635,9 +635,9 @@
     "AddServiceModal.alertDelete.title": "Eliminar Servicio",
     "AddServiceModal.alertDelete.message": "¿Estás seguro de que deseas eliminar este servicio?",
 
-    "Banner.premiumMembership.text1": "¿necesitas más de\n",
+    "Banner.premiumMembership.text1": "¿Necesitas más de\n",
     "Banner.premiumMembership.text2": "Shortwaits?",
-    "Banner.premiumMembership.text3": "¡obtén 3 meses por solo $0.99!",
+    "Banner.premiumMembership.text3": "¡Obtén 3 meses por solo $0.99!",
     "Banner.premiumMembership.joinButton": "unite ahora",
     "Banner.premiumMembership.cancelButton": "cancelar",
 

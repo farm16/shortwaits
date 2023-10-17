@@ -74,7 +74,7 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
           titleStyle={{ color: Colors.text }}
           descriptionStyle={{ color: Colors.orange5, fontWeight: "700", textTransform: "uppercase" }}
           description={<FormattedMessage id="Settings_Screen.business_plan.description" values={{ accountType: currentBusiness?.accountType }} />}
-          right={props => <List.Icon {...props} color={Colors.brandSecondary} icon="chevron-right" />}
+          right={props => <List.Icon {...props} color={Colors.brandPrimary} icon="chevron-right" />}
           onPress={() => navigation.navigate("authorized-stack", { screen: "plans-screen" })}
         />
         <List.Item
@@ -184,7 +184,7 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
           title={<FormattedMessage id="Settings_Screen.rate_us_title" />}
           description={<FormattedMessage id="Settings_Screen.rate_us_description" />}
           left={props => <List.Icon {...props} color={Colors.red4} icon="heart" />}
-          right={props => <List.Icon {...props} color={Colors.brandSecondary} icon="chevron-right" />}
+          right={props => <List.Icon {...props} color={Colors.brandPrimary} icon="chevron-right" />}
         />
         <AppLanguage />
         <List.Item
@@ -244,6 +244,9 @@ const styles = StyleSheet.create({
     height: 45,
     backgroundColor: "white",
     borderColor: "red",
+    borderBottomColor: "red",
+    borderLeftColor: "red",
+    borderRightColor: "red",
     borderWidth: 2,
     alignSelf: "center",
     marginVertical: 20,

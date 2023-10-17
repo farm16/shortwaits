@@ -34,20 +34,11 @@ export const Accordion: React.FC<AccordionProps> = ({ accordionTitle, accordionD
         backgroundColor: Colors.backgroundOverlay,
       }}
       titleStyle={{ color: Colors.text }}
-      right={props => (
-        <List.Icon {...props} color={Colors.brandSecondary} icon={props.isExpanded ? "chevron-up" : "chevron-down"} />
-      )}
+      right={props => <List.Icon {...props} color={Colors.brandPrimary} icon={props.isExpanded ? "chevron-up" : "chevron-down"} />}
       {...rest}
     >
       {accordionData?.map((data, index) => (
-        <AccordionItem
-          key={index}
-          title={data.title}
-          onPress={data.onPress ?? noop}
-          description={data.description}
-          iconName={data.iconName}
-          iconColor={data.iconColor}
-        />
+        <AccordionItem key={index} title={data.title} onPress={data.onPress ?? noop} description={data.description} iconName={data.iconName} iconColor={data.iconColor} />
       ))}
     </List.Accordion>
   );

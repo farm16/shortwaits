@@ -34,8 +34,8 @@ export const buttonPresets = ({
     primary: {
       ...VIEW_BASE,
       backgroundColor: Colors.brandPrimary,
-      borderRightColor: Colors.brandSecondary,
-      borderBottomColor: Colors.brandSecondary,
+      borderRightColor: Colors.brandAccent,
+      borderBottomColor: Colors.brandAccent,
       borderBottomWidth: 3,
       borderRightWidth: 3,
     },
@@ -121,11 +121,11 @@ export const buttonPresets = ({
     social: {
       ...VIEW_BASE,
       borderRadius: 25,
-      backgroundColor: Colors.transparent,
+      backgroundColor: Colors.white,
       flexDirection: "row",
       // backgroundColor: Colors.brandAccent,
-      borderWidth: 2,
-      borderColor: Colors.brandAccent4,
+      // borderWidth: 2,
+      // borderColor: Colors.brandAccent4,
     },
     socialIcon: {
       position: "absolute",
@@ -209,7 +209,7 @@ export const buttonPresets = ({
     link: {
       ...Fonts.textRegular,
       color: Colors.brandSecondary,
-      fontWeight: "500",
+      fontWeight: "700",
     },
     subLink: {
       ...Fonts.textRegular,

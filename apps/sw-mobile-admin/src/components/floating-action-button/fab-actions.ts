@@ -10,9 +10,9 @@ export const useActions = () => {
   const actions = useMemo(() => {
     const styles = {
       color: Colors.white,
-      labelTextColor: Colors.brandSecondary7,
+      labelTextColor: Colors.brandAccent8,
       style: {
-        backgroundColor: Colors.brandSecondary,
+        backgroundColor: Colors.brandAccent,
       },
       labelStyle: {
         // backgroundColor: brandColors.secondary.brandSecondary5,

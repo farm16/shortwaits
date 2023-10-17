@@ -64,10 +64,5 @@ export const AppInfoSettings = () => {
     },
   ];
 
-  return (
-    <Accordion
-      accordionTitle={intl.formatMessage({ id: "Settings_Screen.appInfo.title" })}
-      accordionData={accordionData}
-    />
-  );
+  return <Accordion accordionTitle={intl.formatMessage({ id: "Settings_Screen.appInfo.title" })} accordionData={accordionData} />;
 };

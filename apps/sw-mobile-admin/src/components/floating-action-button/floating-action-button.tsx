@@ -53,7 +53,7 @@ export const FloatingActionButton = (props: FloatingActionButtonProps) => {
           paddingRight: insets.right + 8,
         }}
         fabStyle={{
-          backgroundColor: Colors.brandSecondary,
+          backgroundColor: Colors.brandAccent,
         }}
         // backdropColor={"rgba(0, 0, 0, 0.65)"}
         icon={isOpen ? pressedIcon : icon}

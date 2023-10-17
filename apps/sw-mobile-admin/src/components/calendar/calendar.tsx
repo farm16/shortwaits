@@ -115,7 +115,7 @@ export const Calendar: FC<CalendarProps> = memo(props => {
         hideArrows={false}
         allowShadow={true}
         renderArrow={direction => {
-          return <Icon name={`chevron-${direction}`} size={24} color={Colors.brandSecondary} />;
+          return <Icon name={`chevron-${direction}`} size={24} color={Colors.brandPrimary} />;
         }}
       />
       <AgendaList

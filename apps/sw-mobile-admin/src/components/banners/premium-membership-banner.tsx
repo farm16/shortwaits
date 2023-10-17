@@ -26,19 +26,20 @@ export function PremiumMembershipBanner() {
         styles.container,
         {
           ...Platform.select({
-            ios: {},
-            android: {},
+            ios: {
+              paddingTop: insets.top,
+              marginBottom: -insets.top,
+              zIndex: 10,
+            },
+            android: {
+              paddingTop: 16,
+            },
           }),
         },
       ]}
       imageStyle={styles.image}
     >
-      {/* <StatusBar barStyle="light-content" hidden backgroundColor={"rgba(0,0,0,0.8)"} /> */}
-      <View
-        style={{
-          marginTop: insets.top,
-        }}
-      >
+      <View>
         <TouchableOpacity
           style={{
             position: "absolute",

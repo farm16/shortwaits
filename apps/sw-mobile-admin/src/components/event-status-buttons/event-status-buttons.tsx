@@ -7,14 +7,7 @@ import { EventDtoType } from "@shortwaits/shared-lib";
 import { ActivityIndicator } from "react-native-paper";
 import { useIntl } from "react-intl";
 
-import {
-  CALENDAR_EVENT_HEIGHT,
-  EVENT_ITEM_BORDER_RADIUS,
-  eventStatusColors,
-  eventStatusIconNames,
-  eventStatusNames,
-  nextEventStatuses,
-} from "../../utils";
+import { CALENDAR_EVENT_HEIGHT, EVENT_ITEM_BORDER_RADIUS, eventStatusColors, eventStatusIconNames, eventStatusNames, getFontSize, nextEventStatuses } from "../../utils";
 import { useUpdateEventMutation } from "../../services";
 import { useBusiness } from "../../store";
 
@@ -96,7 +89,9 @@ export const EventStatusButtons: React.FC<{
                   style={[
                     {
                       marginTop: 8,
-                      color: Colors.brandAccent1,
+                      fontWeight: "500",
+                      fontSize: getFontSize(16),
+                      color: Colors[eventStatusColors[status].color],
                     },
                   ]}
                 />

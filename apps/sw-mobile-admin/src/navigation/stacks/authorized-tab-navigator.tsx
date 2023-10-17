@@ -40,10 +40,13 @@ export const AuthorizedTabNavigator = () => {
         tabBarActiveTintColor: Colors.brandPrimary,
         tabBarInactiveTintColor: Colors.disabledText,
         tabBarAllowFontScaling: true,
-        tabBarLabelStyle: {},
+        tabBarLabelStyle: {
+          paddingBottom: Platform.OS === "android" ? 4 : 0,
+        },
+        tabBarIconStyle: {},
         tabBarStyle: {
-          height: Platform.OS === "android" ? 50 : undefined,
-          paddingBottom: Platform.OS === "android" ? 4 : undefined,
+          // height: Platform.OS === "android" ? 50 : undefined,
+          // paddingBottom: Platform.OS === "android" ? 4 : undefined,
           backgroundColor: Colors.backgroundOverlay,
         },
       }}

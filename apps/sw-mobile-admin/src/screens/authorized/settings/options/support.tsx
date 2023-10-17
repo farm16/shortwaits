@@ -12,20 +12,15 @@ export const ShortwaitsCustomerSupport = () => {
       title: intl.formatMessage({ id: "Settings_Screen.shortwaitsSupport.email" }),
       description: intl.formatMessage({ id: "Settings_Screen.shortwaitsSupport.emailDescription" }),
       iconName: "email",
-      iconColor: Colors.brandSecondary,
+      iconColor: Colors.brandPrimary,
     },
     {
       title: intl.formatMessage({ id: "Settings_Screen.shortwaitsSupport.phone" }),
       description: intl.formatMessage({ id: "Settings_Screen.shortwaitsSupport.phoneDescription" }),
       iconName: "phone",
-      iconColor: Colors.brandSecondary,
+      iconColor: Colors.brandPrimary,
     },
   ];
 
-  return (
-    <Accordion
-      accordionTitle={intl.formatMessage({ id: "Settings_Screen.shortwaitsSupport.title" })}
-      accordionData={accordionData}
-    />
-  );
+  return <Accordion accordionTitle={intl.formatMessage({ id: "Settings_Screen.shortwaitsSupport.title" })} accordionData={accordionData} />;
 };
