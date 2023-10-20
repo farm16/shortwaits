@@ -6,3 +6,4 @@ export * from "./no-events";
 export * from "./no-transactions";
 export * from "./welcome-app";
 export * from "./no-data";
+export * from "./welcome-2";

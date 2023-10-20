@@ -7,7 +7,7 @@
 
 import { ThemeFontSize } from "./theme.type";
 import { getColors } from "./Colors";
-import { getFontSize } from "../utils";
+import { getFontSize, getResponsiveHeight } from "../utils";
 
 export const Colors = {
   ...getColors(),
@@ -27,11 +27,19 @@ export const FontSize: ThemeFontSize = {
 /**
  * Metrics Sizes
  */
-const tiny = 7; // 10
-const small = tiny * 2; // 8
-const regular = tiny * 3; // 12
-const large = regular * 2; // 24
-const xLarge = large * 2; // 24
+const tiny = getResponsiveHeight(8);
+const small = getResponsiveHeight(12);
+const regular = getResponsiveHeight(16);
+const large = getResponsiveHeight(18);
+const xLarge = getResponsiveHeight(21);
+
+console.log({
+  tiny,
+  small,
+  regular,
+  large,
+  xLarge,
+});
 
 export const MetricsSizes = {
   tiny,

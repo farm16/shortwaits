@@ -19,7 +19,7 @@ export const SignUpWithEmail: FC<SignUpWithEmailScreenProps> = ({ navigation }) 
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: intl.formatMessage({ id: "Sign_Up_With_Email_Screen.headerTitle" }),
+      headerTitle: () => <Text preset="headerTitle" text={intl.formatMessage({ id: "Sign_Up_With_Email_Screen.headerTitle" })} />,
     });
   }, [intl, navigation]);
 

@@ -96,7 +96,7 @@
     "Sign_Up_With_Email_Screen.confirmPassword": "Confirm Password",
     "Sign_Up_With_Email_Screen.confirmPassword.placeholder": "********",
     "Sign_Up_With_Email_Screen.alreadyHaveAnAccount": "Already have an account?",
-    "Welcome_Screen.title": "Welcome to the Shortwaits Admin App",
+    "Welcome_Screen.title": "Welcome to \nShortwaits Admin",
     "Welcome_Screen.description": "Where you're the captain of your business!\nExplore our tools to take control and drive your success.",
 
     "Events_Screen.title": "Events",
@@ -433,7 +433,7 @@
     "Sign_Up_With_Email_Screen.alreadyHaveAnAccount": "¿Ya tienes una cuenta?",
     "Sign_Up_With_Email_Screen.headerTitle": "Crear nueva cuenta",
 
-    "Welcome_Screen.title": "Bienvenido a la aplicación de administración de Shortwaits",
+    "Welcome_Screen.title": "Bienvenido a \nShortwaits Admin",
     "Welcome_Screen.description": "¡Donde eres el capitán de tu negocio!\nExplora nuestras herramientas para tomar el control y conducir tu éxito.",
 
     "Events_Screen.title": "Eventos",

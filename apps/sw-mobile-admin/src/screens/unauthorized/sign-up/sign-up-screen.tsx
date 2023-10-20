@@ -10,10 +10,11 @@ import EMail from "../../../assets/icons/email.svg";
 import { RootStackParamList, UnauthorizedStackParamList } from "../../../navigation";
 import { useTheme } from "../../../theme";
 import { useSocialSignUpMutation } from "../../../services";
-import { onGoogleButtonPress } from "../../../utils";
+import { getResponsiveHeight, onGoogleButtonPress } from "../../../utils";
 import { ActivityIndicator } from "react-native-paper";
 import { Logo1 } from "../../../assets/images/svg-components/logo-1";
 import { useIntl } from "react-intl";
+import { Welcome2 } from "apps/sw-mobile-admin/src/assets";
 
 export interface SignUpScreenProps {
   navigation: CompositeNavigationProp<StackNavigationProp<UnauthorizedStackParamList, "sign-up-screen">, StackNavigationProp<RootStackParamList>>;
@@ -55,7 +56,7 @@ export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
   return (
     <Screen preset="fixed" withHorizontalPadding>
       <View style={{ justifyContent: "center", alignItems: "center", marginBottom: 100, flex: 1 }}>
-        <Logo1 height="25%" />
+        <Welcome2 height={getResponsiveHeight(200)} width={getResponsiveHeight(200)} />
         <Text
           style={{
             color: Colors.subText,
@@ -67,7 +68,6 @@ export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
           text={intl.formatMessage({ id: "Sign_Up_Screen.title" })}
         />
       </View>
-
       <View style={styles.formContainer}>
         <Button preset="social">
           <Facebook width={30} height={30} style={{ position: "absolute", left: 0, margin: 16 }} />

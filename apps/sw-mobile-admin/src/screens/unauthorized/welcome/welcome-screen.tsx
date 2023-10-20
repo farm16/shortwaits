@@ -13,6 +13,7 @@ import { RootStackParamList, UnauthorizedStackParamList } from "../../../navigat
 import { useBusiness, useMobileAdmin } from "../../../store";
 import { useGetAdminMobileQuery } from "../../../services";
 import { Logo2, WelcomeImage } from "../../../assets";
+import { getFontSize, getResponsiveHeight } from "../../../utils";
 
 GoogleSignin.configure({
   webClientId: "805426205047-fcegaam9bmap1dagccindjh0ko7oro68.apps.googleusercontent.com",
@@ -45,17 +46,19 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation }) => {
 
   return (
     <Screen backgroundColor="white" statusBar="light-content">
-      <Container direction="row" alignItems="center" justifyContent="center">
-        <Logo2 height={75} width={75} />
+      <Container alignItems="center" justifyContent="center">
+        <Logo2 height={getFontSize(80)} width={getFontSize(80)} />
       </Container>
+      <Space size="large" />
       <View style={styles.box1}>
-        <WelcomeImage height={"30%"} />
-        <Space size="large" />
-        <ScrollView style={styles.box2}>
-          <Text preset="cardSubtitle" style={styles.box2Text} text={intl.formatMessage({ id: "Welcome_Screen.title" })} />
-          <Space size="small" />
-          <Text preset="title2" text={intl.formatMessage({ id: "Welcome_Screen.description" })} />
-        </ScrollView>
+        <WelcomeImage height={getResponsiveHeight(200)} width={getResponsiveHeight(200)} />
+        <View style={{ flex: 1 }}>
+          <ScrollView>
+            <Text preset="title2" style={styles.box2Text} text={intl.formatMessage({ id: "Welcome_Screen.title" })} />
+            <Space size="tiny" />
+            <Text preset="title3" text={intl.formatMessage({ id: "Welcome_Screen.description" })} />
+          </ScrollView>
+        </View>
       </View>
       <View style={{ padding: 16 }}>
         <Button
@@ -76,7 +79,7 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation }) => {
             })
           }
         />
-        <Space />
+        <Space size="tiny" />
       </View>
     </Screen>
   );
@@ -85,10 +88,13 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation }) => {
 const styles = StyleSheet.create({
   box1: {
     flex: 1,
+    justifyContent: "center",
     alignItems: "center",
-    justifyContent: "flex-start",
+    paddingHorizontal: 16,
   },
-  box2: {
+  scrollView: {
+    flex: 1,
+    backgroundColor: "green",
     width: "100%",
     paddingHorizontal: 16,
   },

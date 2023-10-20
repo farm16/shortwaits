@@ -23,7 +23,7 @@ export const textPresets = ({ FontSize, Fonts, Gutters, Colors }: ThemeCommonPar
     headerTitle: {
       ...BASE,
       ...Fonts.textRegular,
-      color: Colors.text,
+      color: Colors.brandPrimary,
       fontWeight: "600",
     },
     bold: {
