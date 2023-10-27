@@ -1,31 +1,28 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const shortwaitsAdmin = require("../../assets/default-data/2-shortwaits/shortwaits.js");
-
-import {
-  ForbiddenException,
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-  UnprocessableEntityException,
-} from "@nestjs/common";
-import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
-import bcrypt from "bcryptjs";
-import { JwtService } from "@nestjs/jwt";
+const shortwaitsAdmin = require("../../assets/default-data/3-shortwaits/shortwaits.js");
+import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundException, UnprocessableEntityException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { customAlphabet } from "nanoid";
-
-import { BusinessUser } from "../business-user/entities/business-user.entity";
-import { SignUpWithEmailDto } from "./dto/sign-up-with-email.dto";
-import { SignInWithEmailDto } from "./dto/sign-in-with-email.dto";
-import { Business } from "../business/entities/business.entity";
-import { Service } from "../services/entities/service.entity";
-import { convertDomainToLowercase } from "../../utils/converters";
-import { getFilteredNewBusinessOwner, getNewUserFromSocialAccount } from "../../utils/filtersForDtos";
+import { JwtService } from "@nestjs/jwt";
+import { InjectModel } from "@nestjs/mongoose";
+import { BusinessType, BusinessUserType, ClientUserType, ConvertToDtoType, ObjectId, generateAvatarUrl } from "@shortwaits/shared-lib";
+import bcrypt from "bcryptjs";
 import { OAuth2Client } from "google-auth-library";
+import { Model } from "mongoose";
+import { customAlphabet } from "nanoid";
 import { noop } from "rxjs";
-import { BusinessType, BusinessUserType, ConvertToDtoType } from "@shortwaits/shared-lib";
-import { generateBusinessUser } from "../../utils/generateUserPayload";
+import {
+  convertDomainToLowercase,
+  generateBusinessUser,
+  getDefaultClientPayloadValues,
+  getFilteredNewBusinessOwner,
+  getNewUserFromSocialAccount,
+  getSupportedLocales,
+} from "../../utils";
+import { BusinessUser } from "../business-user/entities/business-user.entity";
+import { Business } from "../business/entities/business.entity";
+import { ClientUser } from "../client-user/entities/client-user.entity";
+import { Service } from "../services/entities/service.entity";
+import { ClientSignInWithEmailDto, ClientSignUpWithEmailDto, SignInWithEmailDto, SignUpWithEmailDto } from "./dto";
 
 const providers = ["google", "facebook"];
 const googleApiOauthUrl = "https://www.googleapis.com/oauth2/v3";
@@ -36,6 +33,8 @@ export class AuthService {
   private readonly oAuth2Client: OAuth2Client;
 
   constructor(
+    @InjectModel(ClientUser.name)
+    private clientUserModel: Model<ClientUser>,
     @InjectModel(BusinessUser.name)
     private businessUserModel: Model<BusinessUser>,
     @InjectModel(Business.name) private businessModel: Model<Business>,
@@ -48,11 +47,10 @@ export class AuthService {
     this.oAuth2Client = new OAuth2Client(googleAuthClientId, googleAuthClientSecret);
   }
 
-  async signUpSocial(dto: { authCode: string; provider: string }, storeIndicator = "en") {
+  async businessSocialSignUp(dto: { authCode: string; provider: string }, storeIndicator = "en") {
     if (!providers.includes(dto.provider)) {
       throw new UnprocessableEntityException("Invalid provider");
     }
-
     try {
       let userInfo;
 
@@ -70,18 +68,18 @@ export class AuthService {
       });
 
       if (user) {
-        return await this.successfulExistingUser(user);
+        return await this.successfulExistingBusinessUser(user);
       }
 
       const newUser = getNewUserFromSocialAccount(userInfo);
       return await this.createNewBusinessAndBusinessOwner(newUser, storeIndicator);
     } catch (error) {
-      console.error("Error in signUpSocial:", error);
+      console.error("Error in businessSocialSignUp:", error);
       throw new InternalServerErrorException("An error occurred while processing your request.");
     }
   }
 
-  async signInSocial(dto: { authCode: string; provider: string }, storeIndicator = "en") {
+  async businessSocialSignIn(dto: { authCode: string; provider: string }, storeIndicator = "en") {
     if (!providers.includes(dto.provider)) {
       throw new UnprocessableEntityException("Invalid provider");
     }
@@ -107,20 +105,20 @@ export class AuthService {
         return await this.createNewBusinessAndBusinessOwner(newUser, storeIndicator);
       }
 
-      return await this.successfulExistingUser(user);
+      return await this.successfulExistingBusinessUser(user);
     } catch (error) {
-      console.error("Error in signInSocial:", error);
+      console.error("Error in businessSocialSignIn:", error);
       throw new InternalServerErrorException("An error occurred while processing your request.");
     }
   }
 
-  async signUpLocal(newBusinessUserDto: SignUpWithEmailDto, storeIndicator = "en") {
+  async businessLocalSignUp(newBusinessUserDto: SignUpWithEmailDto, storeIndicator = "en") {
     const user = await this.businessUserModel.findOne({
       username: newBusinessUserDto.username,
     });
 
     if (user) {
-      return await this.successfulExistingUser(user);
+      return await this.successfulExistingBusinessUser(user);
     }
 
     const saltRounds = Number(this.configService.get("SALT_ROUNDS"));
@@ -138,7 +136,41 @@ export class AuthService {
     );
   }
 
-  async signInLocal(dto: SignInWithEmailDto) {
+  async clientLocalSignUp(newUserClient: ClientSignUpWithEmailDto, locale: string) {
+    const user = await this.clientUserModel.findOne({
+      email: newUserClient.email,
+    });
+
+    if (user) {
+      return await this.successfulExistingBusinessUser(user);
+    }
+
+    return await this.createNewClient({
+      clientUser: newUserClient,
+      businesses: [],
+      locale,
+    });
+  }
+
+  async clientLocalSignIn(dto: ClientSignInWithEmailDto) {
+    const user = await this.clientUserModel.findOne({
+      email: convertDomainToLowercase(dto.email),
+    });
+
+    if (!user) {
+      throw new NotFoundException("User not registered");
+    }
+
+    const isPasswordValid = await bcrypt.compare(dto.password, user.password);
+
+    if (!isPasswordValid) {
+      throw new ForbiddenException("Invalid password or email");
+    }
+
+    return await this.successfulExistingClientUser(user);
+  }
+
+  async businessLocalSignIn(dto: SignInWithEmailDto) {
     const user = await this.businessUserModel.findOne({
       username: convertDomainToLowercase(dto.username), // todo: this might be a problem
     });
@@ -153,11 +185,11 @@ export class AuthService {
       throw new ForbiddenException("Invalid password or username");
     }
 
-    return await this.successfulExistingUser(user);
+    return await this.successfulExistingBusinessUser(user);
   }
 
   async logout(userId: number) {
-    console.log("logout user id: ", userId);
+    console.log("logout business user id: ", userId);
     await this.businessUserModel.findByIdAndUpdate(userId, {
       hashedRt: null,
     });
@@ -170,7 +202,20 @@ export class AuthService {
     };
   }
 
-  async refreshTokens(userId: string, rt: string) {
+  async clientLogout(userId: number) {
+    console.log("logout client user id: ", userId);
+    await this.clientUserModel.findByIdAndUpdate(userId, {
+      hashedRt: null,
+    });
+    return {
+      auth: null,
+      attributes: {
+        currentUser: null,
+      },
+    };
+  }
+
+  async businessRefreshToken(userId: string, rt: string) {
     const user = await this.businessUserModel.findById(userId).exec();
 
     if (!user) {
@@ -184,12 +229,31 @@ export class AuthService {
     }
 
     const signedTokens = await this.signTokens(user);
-    await this.updateUserRt(user, signedTokens.refreshToken);
+    await this.updateBusinessUserRt(user, signedTokens.refreshToken);
 
-    return { auth: signedTokens };
+    return { auth: signedTokens, attributes: { currentUser: user } };
   }
 
-  private async updateUserRt(user: BusinessUser, rt: string): Promise<void> {
+  async clientRefreshToken(userId: string, rt: string) {
+    const user = await this.clientUserModel.findById(userId).exec();
+
+    if (!user) {
+      throw new ForbiddenException("Unable to reauthenticate user");
+    }
+
+    const rtMatches = await bcrypt.compare(rt, user.hashedRt);
+
+    if (!rtMatches) {
+      throw new ForbiddenException("Unable to reauthenticate");
+    }
+
+    const signedTokens = await this.signTokens(user);
+    await this.updateClientUserRt(user, signedTokens.refreshToken);
+
+    return { auth: signedTokens, attributes: { currentUser: user } };
+  }
+
+  private async updateBusinessUserRt(user: BusinessUser, rt: string): Promise<void> {
     const saltRounds = Number(this.configService.get("SALT_ROUNDS"));
     const salt = await bcrypt.genSalt(saltRounds);
     const hash = await bcrypt.hash(rt, salt);
@@ -203,8 +267,22 @@ export class AuthService {
     );
   }
 
-  private async signTokens(userInfo: BusinessUser) {
-    const payload = { sub: userInfo._id, email: userInfo.email, username: userInfo.username };
+  private async updateClientUserRt(user: ClientUser, rt: string): Promise<void> {
+    const saltRounds = Number(this.configService.get("SALT_ROUNDS"));
+    const salt = await bcrypt.genSalt(saltRounds);
+    const hash = await bcrypt.hash(rt, salt);
+
+    await this.clientUserModel.findByIdAndUpdate(
+      { _id: user._id },
+      {
+        hashedRt: hash,
+        lastSignInAt: new Date(),
+      }
+    );
+  }
+
+  private async signTokens(userInfo: { _id: string; email: string }) {
+    const payload = { sub: userInfo._id, email: userInfo.email };
 
     const [token, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload, {
@@ -249,9 +327,9 @@ export class AuthService {
     return await userInfoResponse.json();
   }
 
-  async successfulExistingUser(existingUser) {
+  async successfulExistingBusinessUser(existingUser) {
     const signedTokens = await this.signTokens(existingUser);
-    await this.updateUserRt(existingUser, signedTokens.refreshToken);
+    await this.updateBusinessUserRt(existingUser, signedTokens.refreshToken);
 
     delete existingUser.password;
 
@@ -279,14 +357,27 @@ export class AuthService {
     };
   }
 
+  async successfulExistingClientUser(existingUser) {
+    const signedTokens = await this.signTokens(existingUser);
+    await this.updateClientUserRt(existingUser, signedTokens.refreshToken);
+
+    delete existingUser.password;
+
+    return {
+      auth: signedTokens,
+      attributes: {
+        currentUser: existingUser,
+      },
+    };
+  }
+
   async createNewBusinessAndBusinessOwner(newUser: ConvertToDtoType<BusinessUserType>, storeIndicator = "en") {
     const storeIndicators = {
       en: "0000001",
       es: "0000002",
     };
 
-    const currentShortwaitsAdmin =
-      shortwaitsAdmin.find(shortWaits => shortWaits.short_id === storeIndicators[storeIndicator]) ?? shortwaitsAdmin[0];
+    const currentShortwaitsAdmin = shortwaitsAdmin.find(shortWaits => shortWaits.short_id === storeIndicators[storeIndicator]) ?? shortwaitsAdmin[0];
 
     const saltRounds = Number(this.configService.get("SALT_ROUNDS"));
     const salt = await bcrypt.genSalt(saltRounds);
@@ -389,6 +480,68 @@ export class AuthService {
       attributes: {
         currentBusinessAccounts: [newBusinessAccDoc],
         currentUser: newUserDoc,
+      },
+    };
+  }
+
+  async createNewClient({ clientUser, businesses = [], locale = "es" }: { clientUser: Partial<ClientUserType>; businesses: ObjectId[]; locale: string }) {
+    const saltRounds = Number(this.configService.get("SALT_ROUNDS"));
+    const salt = await bcrypt.genSalt(saltRounds);
+
+    const newClientUser = new this.clientUserModel(clientUser);
+
+    const encodedPassword = await bcrypt.hash(newClientUser.password, salt);
+    const clientImageUrl = generateAvatarUrl(newClientUser.email || "?");
+    const tokens = await this.signTokens(newClientUser);
+    const hashedRt = await bcrypt.hash(tokens.refreshToken, salt);
+
+    const userPayload = getDefaultClientPayloadValues({
+      email: newClientUser.email,
+      password: encodedPassword,
+      displayName: newClientUser?.displayName ?? "",
+      familyName: newClientUser?.familyName ?? "",
+      givenName: newClientUser?.givenName ?? "",
+      middleName: newClientUser?.middleName ?? "",
+      accountImageUrl: clientImageUrl,
+      roleId: null,
+      deleted: false,
+      businesses: businesses,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      lastSignInAt: new Date(),
+      hashedRt: hashedRt,
+      clientType: "external",
+      locale: getSupportedLocales(locale),
+      registration: {
+        isRegistered: true,
+        state: {
+          screenName: "",
+          state: 2,
+          messages: ["Your account is pending verification."],
+          isPendingVerification: true,
+        },
+      },
+      currentMembership: {
+        membershipId: null,
+        membershipShortId: "1000",
+        membershipShortName: "Free",
+        status: "active",
+        invoiceId: null,
+        isFaulty: false,
+        faultyReason: null,
+      },
+    });
+
+    newClientUser.set(userPayload);
+
+    const clientUserCreated = await newClientUser.save();
+
+    clientUserCreated.password = null;
+
+    return {
+      auth: tokens,
+      attributes: {
+        currentUser: clientUserCreated,
       },
     };
   }

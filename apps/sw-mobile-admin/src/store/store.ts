@@ -1,6 +1,6 @@
-import { persistStore } from "redux-persist";
 import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
+import { persistStore } from "redux-persist";
 
 import { shortwaitsApi } from "../services";
 import { persistedReducer } from "./rootReducer";
@@ -28,4 +28,4 @@ setupListeners(store.dispatch);
 
 const persistor = persistStore(store);
 
-export { store, persistor };
+export { persistor, store };

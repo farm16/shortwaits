@@ -8,6 +8,13 @@ type Endpoint =
   | "auth/admin/local/refresh"
   | "auth/admin/social/sign-up"
   | "auth/admin/social/sign-in"
+  | "auth/client/local/sign-in"
+  | "auth/client/local/sign-out"
+  | "auth/client/local/sign-up"
+  | "auth/client/local/forgot-password"
+  | "auth/client/local/refresh"
+  | "auth/client/social/sign-up"
+  | "auth/client/social/sign-in"
   | `business/${string}`
   | `business/${string}/admins`
   | `business/${string}/services`
@@ -61,6 +68,15 @@ export const endpoints = {
   signInSocial: createEndpoint("auth/admin/social/sign-in", "POST"),
   forgotPasswordLocal: createEndpoint("auth/admin/local/forgot-password", "POST"),
   refreshLocal: createEndpoint("auth/admin/local/refresh", "PUT"),
+
+  // auth client
+  signInClientLocal: createEndpoint("auth/client/local/sign-in", "POST"),
+  signOutClientLocal: createEndpoint("auth/client/local/sign-out", "POST"),
+  signUpClientLocal: createEndpoint("auth/client/local/sign-up", "POST"),
+  signUpClientSocial: createEndpoint("auth/client/social/sign-up", "POST"),
+  signInClientSocial: createEndpoint("auth/client/social/sign-in", "POST"),
+  forgotPasswordClientLocal: createEndpoint("auth/client/local/forgot-password", "POST"),
+  refreshClientLocal: createEndpoint("auth/client/local/refresh", "PUT"),
 
   // business
   getBusiness: createEndpoint(`business/:businessId`, "GET"),

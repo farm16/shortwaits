@@ -1,8 +1,7 @@
 // warning:
 // don't remove this comment
-import { Document, PaginateModel } from "mongoose";
+import { Document } from "mongoose";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import * as paginate from "mongoose-paginate-v2";
 // end of warning //
 
 import { ObjectId } from "../common-types";
@@ -75,22 +74,20 @@ export type ClientUserType = {
   roleId: ObjectId;
   hashedRt: string;
   registration: {
-    stateDescriptions: string[];
-    isRegistered: boolean;
+    isRegistered: boolean; // if the user has completed the registration process ( code 2)
     state: {
       screenName: string;
-      state: number;
-      isCompleted: boolean;
+      state: 0 | 1 | 2 | 3 | 4; // 0: not started, 1: started, 2: completed , 3:verified, 4: failed
+      messages: string[]; // messages to be displayed to the user based on the state
+      isPendingVerification: boolean; // if the user has completed the registration process but the email is not verified yet
     };
   };
   currentMembership: {
-    membershipTypeId: ObjectId;
-    invoiceId: ObjectId;
-    type: string;
-    price: number;
-    code: string;
+    membershipId: ObjectId;
+    membershipShortId: string;
+    membershipShortName: string;
     status: string;
-    description: string;
+    invoiceId: ObjectId;
     isFaulty: boolean;
     faultyReason: string[];
   };

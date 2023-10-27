@@ -1,7 +1,7 @@
-import { Schema, Prop, SchemaFactory, raw } from "@nestjs/mongoose";
+import { Prop, Schema, SchemaFactory, raw } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
-import { Document, Schema as MongooseSchema } from "mongoose";
 import { ClientUserType, ObjectId } from "@shortwaits/shared-lib";
+import { Document, Schema as MongooseSchema } from "mongoose";
 
 @Schema({ collection: "client-users" })
 export class ClientUser extends Document implements ClientUserType {
@@ -160,12 +160,12 @@ export class ClientUser extends Document implements ClientUserType {
     })
   )
   registration: {
-    stateDescriptions: string[];
     isRegistered: boolean;
     state: {
       screenName: string;
-      state: number;
-      isCompleted: boolean;
+      state: 0 | 1 | 2 | 3 | 4;
+      messages: string[];
+      isPendingVerification: boolean;
     };
   };
   @ApiProperty()
@@ -175,13 +175,11 @@ export class ClientUser extends Document implements ClientUserType {
     })
   )
   currentMembership: {
-    membershipTypeId: MongooseSchema.Types.ObjectId;
+    membershipId: MongooseSchema.Types.ObjectId;
     invoiceId: MongooseSchema.Types.ObjectId;
-    type: string;
-    price: number;
-    code: string;
+    membershipShortId: string;
+    membershipShortName: string;
     status: string;
-    description: string;
     isFaulty: boolean;
     faultyReason: string[];
   };

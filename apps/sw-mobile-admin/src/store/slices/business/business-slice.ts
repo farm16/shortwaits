@@ -9,8 +9,8 @@ import {
   ServicesDtoType,
   WeekDayTimeRangeType,
 } from "@shortwaits/shared-lib";
-import { shortwaitsApi } from "../../../services";
 import { cloneDeep } from "lodash";
+import { shortwaitsApi } from "../../../services";
 
 const initialState: BusinessDtoType = null;
 
@@ -188,7 +188,7 @@ export const businessSlice = createSlice({
           ...action.payload.data.attributes.currentBusinessAccounts[0],
         };
       })
-      .addMatcher(shortwaitsApi.endpoints.socialSignIn.matchFulfilled, function (state, action) {
+      .addMatcher(shortwaitsApi.endpoints.businessSocialSignIn.matchFulfilled, function (state, action) {
         return {
           ...state,
           ...action.payload.data.attributes.currentBusinessAccounts[0],

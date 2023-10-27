@@ -32,7 +32,7 @@ export const authSlice = createSlice({
         console.log(">>> resetting AUTH state  ");
         return initialState;
       })
-      .addMatcher(shortwaitsApi.endpoints.socialSignIn.matchFulfilled, function (state, action) {
+      .addMatcher(shortwaitsApi.endpoints.businessSocialSignIn.matchFulfilled, function (state, action) {
         return {
           ...state,
           ...action.payload.data.auth,

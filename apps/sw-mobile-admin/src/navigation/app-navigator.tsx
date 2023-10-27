@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator, TransitionPresets } from "@react-navigation/stack";
 import { useFlipper } from "@react-navigation/devtools";
+import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
+import { TransitionPresets, createStackNavigator } from "@react-navigation/stack";
+import React, { useEffect, useState } from "react";
 
-import { RootStackParamList } from "./navigation-types";
-import { NAVIGATION_STACKS } from "./navigation-constants";
-import { navigationRef, useBackButtonHandler } from "./navigation-utils";
-import { ModalsNavigator, UnauthorizedNavigator, AuthorizedTabNavigator, AuthorizedStackNavigator } from "./stacks";
 import { useAuth, useBusiness } from "../store";
+import { NAVIGATION_STACKS } from "./navigation-constants";
+import { RootStackParamList } from "./navigation-types";
+import { navigationRef, useBackButtonHandler } from "./navigation-utils";
+import { AuthorizedStackNavigator, AuthorizedTabNavigator, ModalsNavigator, UnauthorizedNavigator } from "./stacks";
 
 const RootStack = createStackNavigator<RootStackParamList>();
 

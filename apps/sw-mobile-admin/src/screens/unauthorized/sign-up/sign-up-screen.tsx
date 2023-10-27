@@ -1,20 +1,19 @@
-import React, { FC, useCallback } from "react";
-import { View, StyleSheet, Alert } from "react-native";
-import { StackNavigationProp } from "@react-navigation/stack";
 import { CompositeNavigationProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import React, { FC, useCallback } from "react";
+import { useIntl } from "react-intl";
+import { Alert, StyleSheet, View } from "react-native";
+import { ActivityIndicator } from "react-native-paper";
 
-import { Screen, Button, Text, Space, Container } from "../../../components";
+import { Welcome2 } from "../../../assets";
+import EMail from "../../../assets/icons/email.svg";
 import Facebook from "../../../assets/icons/facebook.svg";
 import Google from "../../../assets/icons/google.svg";
-import EMail from "../../../assets/icons/email.svg";
+import { Button, Container, Screen, Space, Text } from "../../../components";
 import { RootStackParamList, UnauthorizedStackParamList } from "../../../navigation";
-import { useTheme } from "../../../theme";
 import { useSocialSignUpMutation } from "../../../services";
+import { useTheme } from "../../../theme";
 import { getResponsiveHeight, onGoogleButtonPress } from "../../../utils";
-import { ActivityIndicator } from "react-native-paper";
-import { Logo1 } from "../../../assets/images/svg-components/logo-1";
-import { useIntl } from "react-intl";
-import { Welcome2 } from "apps/sw-mobile-admin/src/assets";
 
 export interface SignUpScreenProps {
   navigation: CompositeNavigationProp<StackNavigationProp<UnauthorizedStackParamList, "sign-up-screen">, StackNavigationProp<RootStackParamList>>;

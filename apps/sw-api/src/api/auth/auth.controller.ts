@@ -1,12 +1,10 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, Req, UseGuards, ValidationPipe, Headers } from "@nestjs/common";
-import { AuthService } from "./auth.service";
-import { SignUpWithEmailDto } from "./dto/sign-up-with-email.dto";
-import { SignInWithEmailDto } from "./dto/sign-in-with-email.dto";
-import { WithSocialAuthDto } from "./dto/sign-up-with-social.dto";
+import { Body, Controller, Headers, HttpCode, HttpStatus, Post, Req, UseGuards, ValidationPipe } from "@nestjs/common";
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
 import { GetCurrentUser, GetCurrentUserId, Public } from "../../common/decorators/auth.decorator";
 import { AtGuard, RtGuard } from "../../common/guards";
-import { AuthSuccessResponse, AuthRefreshSuccessResponse } from "./auth.interface";
+import { AuthRefreshSuccessResponse, AuthSuccessResponse } from "./auth.interface";
+import { AuthService } from "./auth.service";
+import { ClientSignInWithEmailDto, ClientSignUpWithEmailDto, SignInWithEmailDto, SignUpWithEmailDto, WithSocialAuthDto } from "./dto";
 
 @ApiTags("auth")
 @Controller("auth")
@@ -21,11 +19,8 @@ export class AuthController {
     description: "Returns new business user (super Admin) & business record",
     type: AuthSuccessResponse,
   })
-  async signUpSocial(
-    @Body(new ValidationPipe()) dto: WithSocialAuthDto,
-    @Headers("device-suggested-language") locale: string
-  ) {
-    return this.authService.signUpSocial(dto, locale);
+  async businessSocialSignUp(@Body(new ValidationPipe()) dto: WithSocialAuthDto, @Headers("device-suggested-language") locale: string) {
+    return this.authService.businessSocialSignUp(dto, locale);
   }
 
   @Public()
@@ -36,11 +31,8 @@ export class AuthController {
     description: "Returns new business user (super Admin) & business record",
     type: AuthSuccessResponse,
   })
-  async signInSocial(
-    @Body(new ValidationPipe()) dto: WithSocialAuthDto,
-    @Headers("device-suggested-language") locale: string
-  ) {
-    return this.authService.signInSocial(dto, locale);
+  async businessSocialSignIn(@Body(new ValidationPipe()) dto: WithSocialAuthDto, @Headers("device-suggested-language") locale: string) {
+    return this.authService.businessSocialSignIn(dto, locale);
   }
 
   @Public()
@@ -51,11 +43,8 @@ export class AuthController {
     description: "Returns new business user (super Admin) & business record",
     type: AuthSuccessResponse,
   })
-  async signUpLocal(
-    @Body(new ValidationPipe()) dto: SignUpWithEmailDto,
-    @Headers("device-suggested-language") locale: string
-  ) {
-    return this.authService.signUpLocal(dto, locale);
+  async businessLocalSignUp(@Body(new ValidationPipe()) dto: SignUpWithEmailDto, @Headers("device-suggested-language") locale: string) {
+    return this.authService.businessLocalSignUp(dto, locale);
   }
 
   @Public()
@@ -66,8 +55,8 @@ export class AuthController {
     description: "Returns existing user record",
     type: AuthSuccessResponse,
   })
-  async signInLocal(@Body(new ValidationPipe()) body: SignInWithEmailDto) {
-    return this.authService.signInLocal(body);
+  async businessLocalSignIn(@Body(new ValidationPipe()) body: SignInWithEmailDto) {
+    return this.authService.businessLocalSignIn(body);
   }
 
   @UseGuards(AtGuard)
@@ -90,10 +79,81 @@ export class AuthController {
     status: HttpStatus.OK,
     description: "Returns refreshed token",
   })
-  async refreshTokens(
-    @GetCurrentUserId() userId: string,
-    @GetCurrentUser("refreshToken") refreshToken: string
-  ): Promise<AuthRefreshSuccessResponse> {
-    return this.authService.refreshTokens(userId, refreshToken);
+  async businessRefreshToken(@GetCurrentUserId() userId: string, @GetCurrentUser("refreshToken") refreshToken: string): Promise<AuthRefreshSuccessResponse> {
+    return this.authService.businessRefreshToken(userId, refreshToken);
+  }
+
+  // Client
+
+  @Public()
+  @Post("client/social/sign-up")
+  @HttpCode(HttpStatus.CREATED)
+  @ApiCreatedResponse({
+    status: HttpStatus.CREATED,
+    description: "Returns new business user (super Admin) & business record",
+    type: AuthSuccessResponse,
+  })
+  async clientSignUpSocial(@Body(new ValidationPipe()) dto: WithSocialAuthDto, @Headers("device-suggested-language") locale: string) {
+    return this.authService.businessSocialSignUp(dto, locale);
+  }
+
+  @Public()
+  @Post("client/local/sign-up")
+  @HttpCode(HttpStatus.CREATED)
+  @ApiCreatedResponse({
+    status: HttpStatus.CREATED,
+    description: "Returns new business user (super Admin) & business record",
+    type: AuthSuccessResponse,
+  })
+  async clientLocalSignUp(@Body(new ValidationPipe()) dto: ClientSignUpWithEmailDto, @Headers("device-suggested-language") locale: string) {
+    return this.authService.clientLocalSignUp(dto, locale);
+  }
+
+  @Public()
+  @Post("client/social/sign-in")
+  @HttpCode(HttpStatus.CREATED)
+  @ApiCreatedResponse({
+    status: HttpStatus.CREATED,
+    description: "Returns new business user (super Admin) & business record",
+    type: AuthSuccessResponse,
+  })
+  async clientSignInSocial(@Body(new ValidationPipe()) dto: WithSocialAuthDto, @Headers("device-suggested-language") locale: string) {
+    return this.authService.businessSocialSignIn(dto, locale);
+  }
+
+  @Public()
+  @Post("client/local/sign-in")
+  @HttpCode(HttpStatus.OK)
+  @ApiCreatedResponse({
+    status: HttpStatus.OK,
+    description: "Returns existing user record",
+    type: AuthSuccessResponse,
+  })
+  async clientLocalSignIn(@Body(new ValidationPipe()) body: ClientSignInWithEmailDto) {
+    return this.authService.clientLocalSignIn(body);
+  }
+
+  @UseGuards(AtGuard)
+  @ApiBearerAuth("bearer")
+  @Post("client/local/sign-out")
+  @HttpCode(HttpStatus.OK)
+  @ApiCreatedResponse({
+    status: HttpStatus.OK,
+    description: "Revokes tokens",
+  })
+  async clientLogout(@Req() request) {
+    console.log("logout controller", request.user.sub);
+    await this.authService.clientLogout(request.user.sub);
+  }
+
+  @UseGuards(RtGuard)
+  @Post("client/local/refresh")
+  @HttpCode(HttpStatus.OK)
+  @ApiCreatedResponse({
+    status: HttpStatus.OK,
+    description: "Returns refreshed token",
+  })
+  async clientRefreshToken(@GetCurrentUserId() userId: string, @GetCurrentUser("refreshToken") refreshToken: string): Promise<AuthRefreshSuccessResponse> {
+    return this.authService.clientRefreshToken(userId, refreshToken);
   }
 }

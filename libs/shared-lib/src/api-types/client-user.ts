@@ -10,19 +10,7 @@ export type ClientUsersResponseType = CommonResponseType<ClientUsersDtoType>;
 
 export type CreateClientUserDtoType = Omit<
   ClientUserDtoType,
-  | "_id"
-  | "__v"
-  | "billing"
-  | "password"
-  | "businesses"
-  | "deleted"
-  | "createdAt"
-  | "updatedAt"
-  | "lastSignInAt"
-  | "roleId"
-  | "hashedRt"
-  | "registration"
-  | "currentMembership"
+  "_id" | "__v" | "billing" | "businesses" | "deleted" | "createdAt" | "updatedAt" | "lastSignInAt" | "roleId" | "hashedRt" | "registration" | "currentMembership"
 >;
 export type CreateClientUsersDtoType = CreateClientUserDtoType[];
 
