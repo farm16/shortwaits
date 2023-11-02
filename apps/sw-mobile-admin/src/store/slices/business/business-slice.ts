@@ -188,7 +188,7 @@ export const businessSlice = createSlice({
           ...action.payload.data.attributes.currentBusinessAccounts[0],
         };
       })
-      .addMatcher(shortwaitsApi.endpoints.businessSocialSignIn.matchFulfilled, function (state, action) {
+      .addMatcher(shortwaitsApi.endpoints.socialSignIn.matchFulfilled, function (state, action) {
         return {
           ...state,
           ...action.payload.data.attributes.currentBusinessAccounts[0],

@@ -1,20 +1,10 @@
-import { persistReducer } from "redux-persist";
 import { combineReducers } from "redux";
+import { persistReducer } from "redux-persist";
 import { shortwaitsApi } from "../services";
 
 //reducers
-import {
-  authSlice,
-  themeSlice,
-  businessSlice,
-  userSlice,
-  mobileAdminSlice,
-  servicesSlice,
-  eventsSlice,
-  staffSlice,
-  clientsSlice,
-} from "./slices";
 import { persistRootConfig } from "./redux-persist";
+import { authSlice, businessSlice, clientsSlice, eventsSlice, mobileAdminSlice, servicesSlice, staffSlice, themeSlice, userSlice } from "./slices";
 
 const _combineReducers = combineReducers({
   [shortwaitsApi.reducerPath]: shortwaitsApi.reducer,

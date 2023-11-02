@@ -1,25 +1,15 @@
-import React, { FC, useCallback, useEffect, useLayoutEffect, useState } from "react";
-import { Alert, ListRenderItem, RefreshControl, View } from "react-native";
-import { isEmpty } from "lodash";
-import { ActivityIndicator } from "react-native-paper";
 import { ClientUserDtoType } from "@shortwaits/shared-lib";
+import { isEmpty } from "lodash";
+import React, { FC, useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { useIntl } from "react-intl";
+import { Alert, ListRenderItem, RefreshControl, View } from "react-native";
+import { ActivityIndicator } from "react-native-paper";
 
-import {
-  Button,
-  IconButton,
-  Container,
-  List,
-  NonIdealState,
-  Screen,
-  Text,
-  AnimatedSearchBar,
-  SelectorListItem,
-} from "../../../components";
-import { useBusiness, useClients, useShowGhostComponent } from "../../../store";
-import { useCreateBusinessClientsMutation, useGetBusinessClientsQuery } from "../../../services";
-import { AuthorizedScreenProps } from "../../../navigation";
+import { AnimatedSearchBar, Button, Container, IconButton, List, NonIdealState, Screen, SelectorListItem, Text } from "../../../components";
 import { useOsContacts } from "../../../hooks";
+import { AuthorizedScreenProps } from "../../../navigation";
+import { useCreateBusinessClientsMutation, useGetBusinessClientsQuery } from "../../../services";
+import { useBusiness, useClients, useShowGhostComponent } from "../../../store";
 
 export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({ navigation }) => {
   useShowGhostComponent("floatingActionButton");
@@ -27,11 +17,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({ navi
   const intl = useIntl();
   const { error: osContactsError, isLoading: isOsContactsLoading, getContacts: getOsContacts } = useOsContacts();
   const business = useBusiness();
-  const {
-    isLoading: isBusinessClientsQueryLoading,
-    isSuccess: isBusinessClientsQuerySuccess,
-    refetch: refetchBusinessClientsQuery,
-  } = useGetBusinessClientsQuery(business._id, {});
+  const { isLoading: isBusinessClientsQueryLoading, isSuccess: isBusinessClientsQuerySuccess, refetch: refetchBusinessClientsQuery } = useGetBusinessClientsQuery(business._id, {});
   const [createClients, createClientsResult] = useCreateBusinessClientsMutation();
   const [isListSearchable, setIsListSearchable] = useState(false);
   const [, setSearchText] = useState("");
@@ -55,19 +41,16 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({ navi
           Alert.alert("Error", osContactsError.message);
         }
         const contacts = await getOsContacts();
-        const clientKeySet = new Set(
-          currentClients.map(client => `${client.middleName}-${client.familyName}-${client.givenName}`)
-        );
-        const filteredContacts = contacts.data.filter(
-          contact => !clientKeySet.has(`${contact.middleName}-${contact.familyName}-${contact.givenName}`)
-        );
+        const clientKeySet = new Set(currentClients.map(client => client.phoneNumbers?.[0]?.number));
+        const filteredContacts = contacts.data.filter(contact => !clientKeySet.has(contact.phoneNumbers?.[0]?.number));
 
-        createClients({
-          businessId: business._id,
-          body: filteredContacts,
-        });
+        console.log("contacts", JSON.stringify(contacts, null, 2));
+        // createClients({
+        //   businessId: business._id,
+        //   body: filteredContacts,
+        // });
       };
-      Alert.alert("Sync Contacts", "Are you sure you want to sync your contacts?", [
+      Alert.alert("Do you want to sync your contacts?", "Contacts will be synced by phone numbers only.", [
         {
           text: "Cancel",
           style: "cancel",
@@ -75,6 +58,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({ navi
         {
           text: "OK",
           onPress: run,
+          style: "default",
         },
       ]);
     },
@@ -87,10 +71,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({ navi
       headerTitle: () => {
         return (
           <Container direction="row" justifyContent="center">
-            <Text
-              preset="headerTitle"
-              text={currentClients?.length > 0 ? `Clients (${currentClients.length})` : "Clients"}
-            />
+            <Text preset="headerTitle" text={currentClients?.length > 0 ? `Clients (${currentClients.length})` : "Clients"} />
           </Container>
         );
       },
@@ -163,14 +144,8 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({ navi
     if (trimmedText !== "") {
       const filteredItems = currentClients.filter(item => {
         // Adjust the filtering logic based on your data structure
-        const phoneNumberMatch = item.phoneNumbers.some(phone =>
-          phone.number.toLowerCase().includes(trimmedText.toLowerCase())
-        );
-        return (
-          item.givenName?.toLowerCase().includes(trimmedText.toLowerCase()) ||
-          item.email?.toLowerCase().includes(trimmedText.toLowerCase()) ||
-          phoneNumberMatch
-        );
+        const phoneNumberMatch = item.phoneNumbers.some(phone => phone.number.toLowerCase().includes(trimmedText.toLowerCase()));
+        return item.givenName?.toLowerCase().includes(trimmedText.toLowerCase()) || item.email?.toLowerCase().includes(trimmedText.toLowerCase()) || phoneNumberMatch;
       });
       setFilteredClientsData(filteredItems);
     } else {
@@ -185,9 +160,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({ navi
       <AnimatedSearchBar onChangeText={handleOnChangeText} isVisible={isListSearchable} />
       <List
         refreshing={isLoading}
-        refreshControl={
-          <RefreshControl refreshing={isBusinessClientsQueryLoading} onRefresh={refetchBusinessClientsQuery} />
-        }
+        refreshControl={<RefreshControl refreshing={isBusinessClientsQueryLoading} onRefresh={refetchBusinessClientsQuery} />}
         ListEmptyComponent={
           <View
             style={{
@@ -196,12 +169,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"events-screen">> = ({ navi
             }}
           >
             {isEmpty(currentClients) ? (
-              <NonIdealState
-                type={"noClients"}
-                buttons={[
-                  <Button text={intl.formatMessage({ id: "Common.addClient" })} onPress={() => handleAddClient()} />,
-                ]}
-              />
+              <NonIdealState type={"noClients"} buttons={[<Button text={intl.formatMessage({ id: "Common.addClient" })} onPress={() => handleAddClient()} />]} />
             ) : null}
           </View>
         }

@@ -1,26 +1,12 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Param,
-  UseGuards,
-  HttpCode,
-  HttpStatus,
-  Req,
-  Query,
-  Put,
-  NotFoundException,
-  InternalServerErrorException,
-} from "@nestjs/common";
-import { ApiTags, ApiBearerAuth, ApiCreatedResponse } from "@nestjs/swagger";
+import { Body, Controller, Get, HttpCode, HttpStatus, InternalServerErrorException, NotFoundException, Param, Post, Put, Query, Req, UseGuards } from "@nestjs/common";
+import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
 
-import { EventsService } from "./events.service";
-import { CreateEventsDto } from "./dto/create-event.dto";
-import { AtGuard } from "../../common/guards";
-import { Events } from "./entities/events.entity";
-import { GetEventsByBusinessDto } from "./dto/get-events-by-business.dto";
 import { EventDtoType } from "@shortwaits/shared-lib";
+import { AtGuard } from "../../common/guards";
+import { CreateEventsDto } from "./dto/create-event.dto";
+import { GetEventsByBusinessDto } from "./dto/get-events-by-business.dto";
+import { Events } from "./entities/events.entity";
+import { EventsService } from "./events.service";
 
 @UseGuards(AtGuard)
 @ApiTags("events")
@@ -51,6 +37,29 @@ export class EventsController {
     console.log(page, limit, date, filterBy);
 
     return this.eventsService.getEventsByBusiness(
+      businessId,
+      {
+        page,
+        limit,
+      },
+      {
+        date,
+        filterBy,
+      }
+    );
+  }
+
+  @Get("client/:clientId")
+  @HttpCode(HttpStatus.OK)
+  @ApiCreatedResponse({
+    status: HttpStatus.OK,
+    description: "Get all events in a business (business is NOT a user!!!)",
+  })
+  async getEventsByClientId(@Param("clientId") businessId: string, @Query() query: GetEventsByBusinessDto) {
+    const { page = 1, limit = 10, date = new Date().toISOString(), filterBy = "year" } = query;
+    console.log(page, limit, date, filterBy);
+
+    return this.eventsService.getEventsByClientId(
       businessId,
       {
         page,

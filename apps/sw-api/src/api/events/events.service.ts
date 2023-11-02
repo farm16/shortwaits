@@ -1,22 +1,16 @@
-import {
-  ForbiddenException,
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-  UnauthorizedException,
-} from "@nestjs/common";
+import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, ObjectId, Types } from "mongoose";
 
-import { Business } from "../business/entities/business.entity";
-import { Service } from "../services/entities/service.entity";
-import { BusinessUser } from "../business-user/entities/business-user.entity";
-import { Events } from "./entities/events.entity";
-import { CreateEventsDto } from "./dto/create-event.dto";
-import { convertArrayToObjectId } from "../../utils/converters";
 import { EventDtoType } from "@shortwaits/shared-lib";
+import { convertArrayToObjectId } from "../../utils/converters";
 import { getFilteredNewEvent } from "../../utils/filtersForDtos";
+import { BusinessUser } from "../business-user/entities/business-user.entity";
+import { Business } from "../business/entities/business.entity";
 import { ClientUser } from "../client-user/entities/client-user.entity";
+import { Service } from "../services/entities/service.entity";
+import { CreateEventsDto } from "./dto/create-event.dto";
+import { Events } from "./entities/events.entity";
 
 const WEEK_DAY = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -66,11 +60,7 @@ export class EventsService {
 
   async updateEvent(event: EventDtoType, businessId: string, updatedBy: string) {
     try {
-      const updatedEvent = await this.eventsModel.findOneAndUpdate(
-        { _id: event._id, deleted: false },
-        { ...event, updatedBy },
-        { new: true }
-      );
+      const updatedEvent = await this.eventsModel.findOneAndUpdate({ _id: event._id, deleted: false }, { ...event, updatedBy }, { new: true });
 
       if (!updatedEvent) {
         throw new NotFoundException("Event not found");
@@ -139,9 +129,7 @@ export class EventsService {
           modifiedClientCount: null, //pending
         };
       }
-      const updatedBusiness = await this.businessModel
-        .updateOne({ events: { $in: _eventIds } }, { $pullAll: { events: _eventIds } })
-        .exec();
+      const updatedBusiness = await this.businessModel.updateOne({ events: { $in: _eventIds } }, { $pullAll: { events: _eventIds } }).exec();
 
       return {
         modifiedCount: updatedEvents.modifiedCount,
@@ -246,11 +234,7 @@ export class EventsService {
     }
   }
 
-  async getEventsByBusiness(
-    businessId: string,
-    paginateOptions?: { page?: number; limit?: number },
-    filterOptions?: { date: string; filterBy: "day" | "month" | "year" }
-  ) {
+  async getEventsByBusiness(businessId: string, paginateOptions?: { page?: number; limit?: number }, filterOptions?: { date: string; filterBy: "day" | "month" | "year" }) {
     try {
       const { page, limit } = paginateOptions ?? {};
       const skip = (page - 1) * limit;
@@ -264,6 +248,55 @@ export class EventsService {
         startTime?: { $gte: Date; $lte: Date };
       } = {
         businessId,
+        deleted: false,
+      };
+
+      if (_date && filterBy === "day") {
+        console.log({
+          $gte: _date,
+          $lte: new Date(_date.getTime() + 24 * 60 * 60 * 1000),
+        });
+        filter.startTime = {
+          $gte: _date,
+          $lte: new Date(_date.getTime() + 24 * 60 * 60 * 1000),
+        };
+      } else if (_date && filterBy === "month") {
+        const startDate = new Date(_date.getFullYear(), _date.getMonth(), 1);
+        const endDate = new Date(_date.getFullYear(), _date.getMonth() + 1, 0);
+        filter.startTime = {
+          $gte: startDate,
+          $lte: endDate,
+        };
+      } else if (_date && filterBy === "year") {
+        const startDate = new Date(_date.getFullYear(), 0, 1);
+        const endDate = new Date(_date.getFullYear(), 11, 31);
+        filter.startTime = {
+          $gte: startDate,
+          $lte: endDate,
+        };
+      }
+      const events = await this.eventsModel.find(filter).skip(skip).limit(limit).exec();
+      return events;
+    } catch (error) {
+      console.error(error);
+      throw new InternalServerErrorException("Failed to get events");
+    }
+  }
+
+  async getEventsByClientId(clientId: string, paginateOptions?: { page?: number; limit?: number }, filterOptions?: { date: string; filterBy: "day" | "month" | "year" }) {
+    try {
+      const { page, limit } = paginateOptions ?? {};
+      const skip = (page - 1) * limit;
+
+      const { date, filterBy } = filterOptions ?? {};
+      const _date = new Date(date);
+
+      const filter: {
+        clientsIds: { $in: string[] };
+        deleted: boolean;
+        startTime?: { $gte: Date; $lte: Date };
+      } = {
+        clientsIds: { $in: [clientId] },
         deleted: false,
       };
 
@@ -339,18 +372,13 @@ export class EventsService {
         return { clientUsers: [], businessUsers: [] };
       }
       // turn all ids to string and push only unique ids
-      const eligibleUsers = [
-        ...new Set([...event.clientsIds.map(id => id?.toString()), ...event.staffIds.map(id => id?.toString())]),
-      ];
+      const eligibleUsers = [...new Set([...event.clientsIds.map(id => id?.toString()), ...event.staffIds.map(id => id?.toString())])];
 
       if (!eligibleUsers.includes(requestedBy)) {
         throw new ForbiddenException("You are not allowed to view this event");
       }
 
-      const [clientUsers, businessUsers] = await Promise.all([
-        this.findClientUsers(event?.clientsIds as ObjectId[]),
-        this.findBusinessUsers(event?.staffIds as ObjectId[]),
-      ]);
+      const [clientUsers, businessUsers] = await Promise.all([this.findClientUsers(event?.clientsIds as ObjectId[]), this.findBusinessUsers(event?.staffIds as ObjectId[])]);
 
       return { clientUsers, businessUsers, event };
     } catch (error) {

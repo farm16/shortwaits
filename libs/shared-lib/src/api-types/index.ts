@@ -8,5 +8,6 @@ export * from "./clientAuth";
 export * from "./endpoints";
 export * from "./events";
 export * from "./helpers";
+export * from "./local-client-user";
 export * from "./services";
 export * from "./upload-file";
