@@ -1,11 +1,11 @@
 import React, { useCallback, useMemo, useState } from "react";
-import { View, useWindowDimensions, StyleSheet, StatusBar, Animated, Pressable } from "react-native";
-import { TabView, SceneMap, TabBarProps } from "react-native-tab-view";
+import { useIntl } from "react-intl";
+import { Animated, Pressable, StyleSheet, View, useWindowDimensions } from "react-native";
+import { SceneMap, TabBarProps, TabView } from "react-native-tab-view";
+import { useTheme } from "../../../../theme";
+import { EventScreenHeader } from "../event-screen-header";
 import { EventMoreTab } from "./event-more-tab";
 import { EventUsersTab } from "./event-users-tab";
-import { EventScreenHeader } from "../event-screen-header";
-import { useTheme } from "../../../../theme";
-import { useIntl } from "react-intl";
 
 type Route = {
   key: string;

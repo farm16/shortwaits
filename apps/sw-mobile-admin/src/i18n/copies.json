@@ -333,7 +333,10 @@
     "BusinessProfile_screen.state.select": "Select State",
     "BusinessProfile_screen.city": "City",
     "BusinessProfile_screen.city.select": "Select City",
-    "BusinessProfile_screen.zipCode": "Zip Code"
+    "BusinessProfile_screen.zipCode": "Zip Code",
+
+    "Clients_screen.tab.shortwaits": "Shortwaits",
+    "Clients_screen.tab.devices": "Local"
   },
   "es": {
     "Navigation.tab.label.events": "Eventos",
@@ -671,6 +674,9 @@
     "BusinessProfile_screen.state.select": "Seleccionar Estado",
     "BusinessProfile_screen.city": "Ciudad",
     "BusinessProfile_screen.city.select": "Seleccionar Ciudad",
-    "BusinessProfile_screen.zipCode": "Código Postal"
+    "BusinessProfile_screen.zipCode": "Código Postal",
+
+    "Clients_screen.tab.shortwaits": "Shortwaits",
+    "Clients_screen.tab.devices": "Locales"
   }
 }

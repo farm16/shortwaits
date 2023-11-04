@@ -1,10 +1,10 @@
-import React, { FC, useLayoutEffect, useRef } from "react";
 import { truncate } from "lodash";
+import React, { useLayoutEffect, useRef } from "react";
 
-import { Screen, Text, Container, IconButton, BackButton, useBottomSheet, BottomSheetType, EventStatusButtons, Space } from "../../../components";
+import { BackButton, BottomSheetType, Container, EventStatusButtons, IconButton, Screen, Space, Text, useBottomSheet } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
-import { EventScreenTabs } from "./event-tabs";
 import { useEvent } from "../../../store";
+import { EventScreenTabs } from "./event-tabs";
 import { ShareEvent } from "./share-event";
 
 // TODO: test this with real device ios and android

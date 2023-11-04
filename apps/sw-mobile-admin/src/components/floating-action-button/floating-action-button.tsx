@@ -2,11 +2,11 @@ import { Portal } from "@gorhom/portal";
 import React, { useCallback, useMemo, useState } from "react";
 import { ViewStyle } from "react-native";
 import { FAB } from "react-native-paper";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useSelector } from "react-redux";
 import { selectCurrentMobileAdminState } from "../../store";
 import { useTheme } from "../../theme";
 import { useActions } from "./fab-actions";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useSelector } from "react-redux";
 
 type FloatingActionButtonProps = {
   actions?: FloatingActions;
@@ -53,7 +53,7 @@ export const FloatingActionButton = (props: FloatingActionButtonProps) => {
           paddingRight: insets.right + 8,
         }}
         fabStyle={{
-          backgroundColor: Colors.brandAccent,
+          backgroundColor: Colors.brandSecondary,
         }}
         // backdropColor={"rgba(0, 0, 0, 0.65)"}
         icon={isOpen ? pressedIcon : icon}

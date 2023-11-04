@@ -1,6 +1,6 @@
-import { navigate } from "../../navigation";
-import { useIntl } from "react-intl";
 import { useMemo } from "react";
+import { useIntl } from "react-intl";
+import { navigate } from "../../navigation";
 import { useTheme } from "../../theme";
 
 export const useActions = () => {
@@ -10,13 +10,18 @@ export const useActions = () => {
   const actions = useMemo(() => {
     const styles = {
       color: Colors.white,
-      labelTextColor: Colors.brandAccent8,
+      // labelTextColor: Colors.white,
+      labelTextColor: Colors.brandSecondary7,
+
       style: {
-        backgroundColor: Colors.brandAccent,
+        backgroundColor: Colors.brandSecondary,
       },
       labelStyle: {
-        // backgroundColor: brandColors.secondary.brandSecondary5,
-        // borderRadius: 20,
+        fontWeight: "600",
+        // backgroundColor: Colors.brandSecondary,
+        // paddingHorizontal: 15,
+        // paddingVertical: 5,
+        // borderRadius: 10,
       },
     };
     return [

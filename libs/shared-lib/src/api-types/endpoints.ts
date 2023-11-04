@@ -35,7 +35,8 @@ type Endpoint =
   | "services"
   | `services/${string}`
   | "business-user/multiple"
-  | "upload-file/image";
+  | "upload-file/image"
+  | `local-client-user/${string}`;
 
 export const createEndpoint = <T = any>(endpoint: Endpoint, method: HttpMethod) => {
   return {
@@ -87,6 +88,7 @@ export const endpoints = {
   getBusinessHours: createEndpoint(`business/:businessId/hours`, "GET"),
   getBusinessEvents: createEndpoint(`business/:businessId/events`, "GET"),
   getBusinessClients: createEndpoint(`business/:businessId/clients`, "GET"),
+  getBusinessLocalClients: createEndpoint(`local-client-user/business/:businessId`, "GET"),
   getBusinessStaff: createEndpoint(`business/:businessId/staff`, "GET"),
   registerBusiness: createEndpoint("business/register", "POST"),
   //business User === Staff

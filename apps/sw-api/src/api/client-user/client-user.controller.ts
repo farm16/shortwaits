@@ -1,9 +1,9 @@
-import { Post, Body, Controller, HttpStatus, UseGuards, HttpCode } from "@nestjs/common";
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Put, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 
+import { AtGuard } from "../../common/guards";
 import { ClientUserService } from "./client-user.service";
 import { CreateClientUserDto } from "./dto";
-import { AtGuard } from "../../common/guards";
 
 @ApiTags("client-user")
 @Controller("client-user")
@@ -12,17 +12,28 @@ import { AtGuard } from "../../common/guards";
 export class ClientUserController {
   constructor(private readonly clientUsersService: ClientUserService) {}
 
-  @Post("multiple")
+  @Get("business/:businessId")
   @HttpCode(HttpStatus.OK)
-  async getMultipleUsers(@Body() userIds: string[]) {
+  async getClientByBusiness(@Param("businessId") businessId: string) {
     // todo: validate permission with business
-    console.log("userIds", userIds);
-    return await this.clientUsersService.findMultiple(userIds);
+    // return await this.clientUsersService.findMultiple(userIds);
   }
 
-  @Post()
+  @Post("business/:businessId")
   @HttpCode(HttpStatus.CREATED)
-  async create(@Body() dto: CreateClientUserDto) {
+  async createBusinessClients(@Param("businessId") businessId: string, @Body() dto: CreateClientUserDto) {
+    return await this.clientUsersService.create(dto);
+  }
+
+  @Put("business/:businessId")
+  @HttpCode(HttpStatus.OK)
+  async updateBusinessClients(@Param("businessId") businessId: string, @Body() dto: CreateClientUserDto) {
+    return await this.clientUsersService.create(dto);
+  }
+
+  @Put(":clientId")
+  @HttpCode(HttpStatus.OK)
+  async updateClients(@Param("clientId") clientId: string, @Body() dto: CreateClientUserDto) {
     return await this.clientUsersService.create(dto);
   }
 }

@@ -87,7 +87,9 @@ export const customColors = {
 
   text: "rgb(77, 77, 77)",
   subText: "rgba(77, 77, 77,0.60)",
-  disabledText: "rgba(77, 77, 77,0.38)",
+  disabledText: "#C6C6C6",
+
+  disabledBackground: "#EBEBE4",
 
   success: "#28a745",
   pending: "#e0c01f",

@@ -1,22 +1,22 @@
-import React, { FC, memo, useCallback } from "react";
-import { RefreshControl, SectionListData } from "react-native";
 import { EventType } from "@shortwaits/shared-lib";
-import { CalendarProvider, ExpandableCalendar, AgendaList } from "react-native-calendars";
+import React, { FC, memo, useCallback } from "react";
+import { RefreshControl, SectionListData, View } from "react-native";
+import { AgendaList, CalendarProvider, ExpandableCalendar } from "react-native-calendars";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
-import { Colors } from "../../theme";
-import { useCalendarTheme } from "./calendar-hooks";
-import { AgendaItem } from "./calendar-item";
-import { Button, Space } from "../common";
-import { useClosestDateFromAgendaData, useAgendaData } from "./calendar-utils";
+import { skipToken } from "@reduxjs/toolkit/dist/query";
+import { useIntl } from "react-intl";
+import { ActivityIndicator } from "react-native-paper";
 import { useGetEventsByBusinessQuery } from "../../services";
 import { useBusiness, useEvents } from "../../store";
-import { ActivityIndicator } from "react-native-paper";
-import { skipToken } from "@reduxjs/toolkit/dist/query";
+import { Colors } from "../../theme";
+import { getResponsiveHeight, navigate } from "../../utils";
+import { Button, Space } from "../common";
 import { NonIdealState } from "../non-ideal-state/non-ideal-state";
-import { navigate } from "../../utils";
-import { useIntl } from "react-intl";
+import { useCalendarTheme } from "./calendar-hooks";
+import { AgendaItem } from "./calendar-item";
 import { LocaleConfig } from "./calendar-locales";
+import { useAgendaData, useClosestDateFromAgendaData } from "./calendar-utils";
 
 type CalendarSectionData = EventType;
 type Sections = {
@@ -66,27 +66,33 @@ export const Calendar: FC<CalendarProps> = memo(props => {
   }, [isEventsLoading, refetchEvents]);
   const renderNonIdealState = useCallback(() => {
     return (
-      <NonIdealState
-        type={"noEvents"}
-        buttons={
-          <Button
-            text={intl.formatMessage({ id: "Events_Screen.nonIdealState.button" })}
-            preset="accent"
-            onPress={() => {
-              navigate("modals", {
-                screen: "add-event-modal-screen",
-                params: {
-                  onDone: () => {
-                    if (!isEventsLoading) {
-                      refetchEvents();
-                    }
+      <View
+        style={{
+          marginTop: getResponsiveHeight(16),
+          marginHorizontal: getResponsiveHeight(32),
+        }}
+      >
+        <NonIdealState
+          type={"noEvents"}
+          buttons={
+            <Button
+              text={intl.formatMessage({ id: "Events_Screen.nonIdealState.button" })}
+              onPress={() => {
+                navigate("modals", {
+                  screen: "add-event-modal-screen",
+                  params: {
+                    onDone: () => {
+                      if (!isEventsLoading) {
+                        refetchEvents();
+                      }
+                    },
                   },
-                },
-              });
-            }}
-          />
-        }
-      />
+                });
+              }}
+            />
+          }
+        />
+      </View>
     );
   }, [intl, isEventsLoading, refetchEvents]);
 

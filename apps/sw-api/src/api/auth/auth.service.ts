@@ -18,7 +18,7 @@ import {
   getNewUserFromSocialAccount,
   getSupportedLocales,
 } from "../../utils";
-import { BusinessUser } from "../business-user/entities/business-user.entity";
+import { BusinessUser } from "../business-staff/entities/business-user.entity";
 import { Business } from "../business/entities/business.entity";
 import { ClientUser } from "../client-user/entities/client-user.entity";
 import { Service } from "../services/entities/service.entity";

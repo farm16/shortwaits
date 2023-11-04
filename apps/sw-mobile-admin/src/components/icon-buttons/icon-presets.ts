@@ -131,6 +131,12 @@ export const _circleIcons = {
     color: "brandPrimary",
     size: 26,
   },
+  sync: {
+    name: "sync",
+    backgroundColor: undefined,
+    color: "brandPrimary",
+    size: 26,
+  },
   contactSync: {
     name: "account-sync-outline",
     backgroundColor: undefined,
@@ -161,7 +167,12 @@ export const _circleIcons = {
     color: "brandPrimary",
     size: 21,
   },
-
+  "scan-qr": {
+    name: "qrcode-scan",
+    backgroundColor: undefined,
+    color: "brandPrimary",
+    size: 21,
+  },
   default: {
     name: "plus",
     backgroundColor: undefined,

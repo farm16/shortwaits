@@ -2,10 +2,10 @@ import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { InjectModel } from "@nestjs/mongoose";
 import { PassportStrategy } from "@nestjs/passport";
-import { ExtractJwt, Strategy } from "passport-jwt";
-import { JwtPayload } from "../types/jwtPayload.type";
 import { Model } from "mongoose";
-import { BusinessUser } from "../../business-user/entities/business-user.entity";
+import { ExtractJwt, Strategy } from "passport-jwt";
+import { BusinessUser } from "../../business-staff/entities/business-user.entity";
+import { JwtPayload } from "../types/jwtPayload.type";
 
 @Injectable()
 export class AtStrategy extends PassportStrategy(Strategy, "jwt") {

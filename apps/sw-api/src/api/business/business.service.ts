@@ -1,23 +1,22 @@
-import { Model } from "mongoose";
-import { InjectModel } from "@nestjs/mongoose";
 import { ForbiddenException, Injectable, NotFoundException, PreconditionFailedException } from "@nestjs/common";
+import { InjectModel } from "@nestjs/mongoose";
 import {
-  BusinessType,
-  BusinessHoursType,
   BusinessDtoType,
-  ClientUserUpdateDtoType,
-  CreateClientUserDtoType,
+  BusinessHoursType,
+  BusinessType,
   BusinessUserUpdateDtoType,
+  ClientUserUpdateDtoType,
   CreateBusinessUsersDtoType,
   CreateClientUsersDtoType,
 } from "@shortwaits/shared-lib";
+import { Model } from "mongoose";
 
-import { Business } from "./entities/business.entity";
-import { BusinessUser } from "../business-user/entities/business-user.entity";
-import { ClientUser } from "../client-user/entities/client-user.entity";
-import { RegisterBusinessDto } from "./dto/registerBusiness.dto";
 import { convertStringToObjectId } from "../../utils/converters";
 import { generateBusinessUsers, generateClientUsers } from "../../utils/generateUserPayload";
+import { BusinessUser } from "../business-staff/entities/business-user.entity";
+import { ClientUser } from "../client-user/entities/client-user.entity";
+import { RegisterBusinessDto } from "./dto/registerBusiness.dto";
+import { Business } from "./entities/business.entity";
 
 @Injectable()
 export class BusinessService {

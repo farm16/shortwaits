@@ -1,4 +1,4 @@
-import GetBusinessUsers from "./get-business-users";
+import GetBusinessUsers from "./get-staff";
 
 export { GetBusinessUsers };
 

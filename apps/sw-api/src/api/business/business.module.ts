@@ -1,12 +1,12 @@
 import { Module } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
 
+import { BusinessUser, BusinessUserSchema } from "../business-staff/entities/business-user.entity";
+import { ClientUser, ClientUserSchema } from "../client-user/entities/client-user.entity";
+import { Service, ServiceSchema } from "../services/entities/service.entity";
 import { BusinessController } from "./business.controller";
 import { BusinessService } from "./business.service";
-import { Service, ServiceSchema } from "../services/entities/service.entity";
-import { BusinessSchema, Business } from "./entities/business.entity";
-import { BusinessUserSchema, BusinessUser } from "../business-user/entities/business-user.entity";
-import { ClientUser, ClientUserSchema } from "../client-user/entities/client-user.entity";
+import { Business, BusinessSchema } from "./entities/business.entity";
 
 @Module({
   imports: [
