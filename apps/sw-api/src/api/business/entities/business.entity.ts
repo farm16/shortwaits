@@ -1,16 +1,7 @@
-import { Schema, Prop, SchemaFactory, raw } from "@nestjs/mongoose";
-import { Document, Schema as MongooseSchema } from "mongoose";
-import {
-  AccountType,
-  BusinessHoursType,
-  BusinessLocationType,
-  BusinessType,
-  CurrencyType,
-  ObjectId,
-  BusinessLabelsType,
-  EmojiType,
-} from "@shortwaits/shared-lib";
+import { Prop, Schema, SchemaFactory, raw } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
+import { AccountType, BusinessHoursType, BusinessLocationType, BusinessType, CurrencyType, EmojiType, ObjectId } from "@shortwaits/shared-lib";
+import { Document, Schema as MongooseSchema } from "mongoose";
 
 @Schema()
 export class Business extends Document implements BusinessType {
@@ -174,6 +165,10 @@ export class Business extends Document implements BusinessType {
   @ApiProperty()
   @Prop()
   clients: ObjectId[];
+
+  @ApiProperty()
+  @Prop()
+  localClients: ObjectId[];
 
   @ApiProperty()
   @Prop()

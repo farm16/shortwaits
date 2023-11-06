@@ -36,7 +36,13 @@ type Endpoint =
   | `services/${string}`
   | "business-user/multiple"
   | "upload-file/image"
-  | `local-client-user/${string}`;
+  // users endpoints
+  | `client-user`
+  | `client-user/business/${string}`
+  | `business-staff`
+  | `business-staff/business/${string}`
+  | `local-client-user/${string}`
+  | `local-client-user/business/${string}`;
 
 export const createEndpoint = <T = any>(endpoint: Endpoint, method: HttpMethod) => {
   return {
@@ -87,10 +93,11 @@ export const endpoints = {
   getBusinessCategories: createEndpoint(`business/:businessId/categories`, "GET"),
   getBusinessHours: createEndpoint(`business/:businessId/hours`, "GET"),
   getBusinessEvents: createEndpoint(`business/:businessId/events`, "GET"),
+  registerBusiness: createEndpoint("business/register", "POST"),
+  // Users
   getBusinessClients: createEndpoint(`business/:businessId/clients`, "GET"),
   getBusinessLocalClients: createEndpoint(`local-client-user/business/:businessId`, "GET"),
   getBusinessStaff: createEndpoint(`business/:businessId/staff`, "GET"),
-  registerBusiness: createEndpoint("business/register", "POST"),
   //business User === Staff
   //client User === Client
   createBusinessStaff: createEndpoint(`business/:businessId/staff`, "POST"),
@@ -134,6 +141,12 @@ export const endpoints = {
   deleteService: createEndpoint<{
     businessId: string;
   }>(`services/:serviceId`, "DELETE"),
+
+  // users
+  getStaffUsers: createEndpoint(`business-staff/business/:businessId`, "GET"),
+  getLocalClientUsers: createEndpoint("local-client-user/business/:businessId", "GET"),
+  getClientUsers: createEndpoint(`client-user/business/:businessId`, "GET"),
+  createLocalClientUser: createEndpoint(`local-client-user/business/:businessId`, "POST"),
 
   // upload file
   uploadImageFile: createEndpoint("upload-file/image", "POST"),

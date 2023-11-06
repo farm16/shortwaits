@@ -15,29 +15,48 @@ export const localClientsSlice = createSlice({
   },
   extraReducers: builder => {
     builder
-      .addMatcher(shortwaitsApi.endpoints.getBusinessClients.matchFulfilled, (_state, action) => {
-        return [...action.payload.data];
+      .addMatcher(shortwaitsApi.endpoints.getLocalClients.matchFulfilled, (state, action) => {
+        // merge local clients with existing clients in state by _id
+        const newClients = action.payload.data;
+        const existingClients = state;
+        const mergedClients = newClients.map(newClient => {
+          const existingClient = existingClients.find(existingClient => existingClient._id === newClient._id);
+          if (existingClient) {
+            return existingClient;
+          }
+          return newClient;
+        });
+        return mergedClients;
       })
-      .addMatcher(shortwaitsApi.endpoints.createBusinessClients.matchFulfilled, (_state, action) => {
-        return [...action.payload.data];
-      })
-      .addMatcher(shortwaitsApi.endpoints.updateBusinessClient.matchFulfilled, (state, action) => {
-        const updatedClient = action.payload.data;
-        const existingClient = state.findIndex(event => event._id === updatedClient._id);
-        let clients;
-
-        if (existingClient !== -1) {
-          clients = state.map(client => {
-            if (client._id === updatedClient._id) {
-              return updatedClient;
-            }
-            return client;
-          });
-        } else {
-          clients = state.push(updatedClient);
-        }
-        return clients;
+      .addMatcher(shortwaitsApi.endpoints.createLocalClients.matchFulfilled, (state, action) => {
+        const newClients = action.payload.data.localClientUsers;
+        const existingClients = state;
+        const mergedClients = newClients.map(newClient => {
+          const existingClient = existingClients.find(existingClient => existingClient._id === newClient._id);
+          if (existingClient) {
+            return existingClient;
+          }
+          return newClient;
+        });
+        return mergedClients;
       });
+    // .addMatcher(shortwaitsApi.endpoints.updateBusinessClient.matchFulfilled, (state, action) => {
+    //   const updatedClient = action.payload.data;
+    //   const existingClient = state.findIndex(event => event._id === updatedClient._id);
+    //   let clients;
+
+    //   if (existingClient !== -1) {
+    //     clients = state.map(client => {
+    //       if (client._id === updatedClient._id) {
+    //         return updatedClient;
+    //       }
+    //       return client;
+    //     });
+    //   } else {
+    //     clients = state.push(updatedClient);
+    //   }
+    //   return clients;
+    // });
   },
 });
 

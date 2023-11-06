@@ -38,6 +38,7 @@ export type BusinessType = {
   createdBy: ObjectId;
   updatedBy: ObjectId;
   clients: ObjectId[];
+  localClients: ObjectId[];
   taggedClients: [
     {
       clientId: ObjectId;

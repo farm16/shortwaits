@@ -1,6 +1,7 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Put, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 
+import { ClientUserDtoType } from "@shortwaits/shared-lib";
 import { AtGuard } from "../../common/guards";
 import { CreateLocalClientUserDto } from "./dto";
 import { LocalClientUserService } from "./local-client-user.service";
@@ -15,19 +16,18 @@ export class LocalClientUserController {
   @Get("business/:businessId")
   @HttpCode(HttpStatus.OK)
   async getLocalClientByBusiness(@Param("businessId") businessId: string) {
-    // todo: validate permission with business
-    // return await this.clientUsersService.findMultiple(userIds);
+    return await this.clientUsersService.getLocalClientUsersForBusiness(businessId);
   }
 
   @Post("business/:businessId")
   @HttpCode(HttpStatus.CREATED)
-  async createBusinessLocalClients(@Param("businessId") businessId: string, @Body() dto: CreateLocalClientUserDto) {
-    return await this.clientUsersService.create(dto);
+  async createBusinessLocalClients(@Param("businessId") businessId: string, @Body() localClientUsers: CreateLocalClientUserDto[]) {
+    return await this.clientUsersService.createLocalClientUsersForBusiness(businessId, localClientUsers);
   }
 
   @Put("business/:businessId")
   @HttpCode(HttpStatus.OK)
-  async updateBusinessLocalClient(@Param("businessId") businessId: string, @Body() dto: CreateLocalClientUserDto) {
-    return await this.clientUsersService.create(dto);
+  async updateBusinessLocalClient(@Param("businessId") businessId: string, @Body() localClientUser: ClientUserDtoType) {
+    return await this.clientUsersService.updateLocalClientUserForBusiness(businessId, localClientUser);
   }
 }

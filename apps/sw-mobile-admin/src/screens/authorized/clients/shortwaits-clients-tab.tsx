@@ -7,21 +7,15 @@ import { ListRenderItem, View } from "react-native";
 import { RefreshControl } from "react-native-gesture-handler";
 import { AnimatedSearchBar, Button, List, NonIdealState, SelectorListItem } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
-import { useGetBusinessClientsQuery } from "../../../services";
-import { useBusiness, useClients } from "../../../store";
+import { useClients } from "../../../store";
 import { getResponsiveHeight } from "../../../utils";
 
-export function ShortwaitsClientsTab({ isListSearchable }) {
+export function ShortwaitsClientsTab({ isListSearchable, isLoading, refetch }) {
   const intl = useIntl();
   const currentClients = useClients();
-  const business = useBusiness();
   const [, setSearchText] = useState("");
   const { navigate } = useNavigation<AuthorizedScreenProps<"events-screen">["navigation"]>();
-
-  const { isLoading: isBusinessClientsQueryLoading, isSuccess: isBusinessClientsQuerySuccess, refetch: refetchBusinessClientsQuery } = useGetBusinessClientsQuery(business._id, {});
-  const isClientsDataLoading = isBusinessClientsQueryLoading && !isBusinessClientsQuerySuccess;
   const [filteredClientsData, setFilteredClientsData] = useState([]);
-  const isLoading = isClientsDataLoading;
 
   const handleAddClient = useCallback(() => {
     navigate("modals", {
@@ -75,7 +69,7 @@ export function ShortwaitsClientsTab({ isListSearchable }) {
     }
   };
 
-  //      <AnimatedSearchBar onChangeText={handleOnChangeText} isVisible={isListSearchable} />
+  // <AnimatedSearchBar onChangeText={handleOnChangeText} isVisible={isListSearchable} />
 
   return (
     <Fragment>
@@ -91,7 +85,7 @@ export function ShortwaitsClientsTab({ isListSearchable }) {
         contentContainerStyle={{
           padding: getResponsiveHeight(16),
         }}
-        refreshControl={<RefreshControl refreshing={isBusinessClientsQueryLoading} onRefresh={refetchBusinessClientsQuery} />}
+        refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refetch} />}
         ListEmptyComponent={
           <View
             style={{

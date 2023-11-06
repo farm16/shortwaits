@@ -3,61 +3,19 @@ import { ClientUserDtoType } from "@shortwaits/shared-lib";
 import { isEmpty } from "lodash";
 import React, { Fragment, useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
-import { Alert, ListRenderItem, View } from "react-native";
+import { ListRenderItem, View } from "react-native";
 import { RefreshControl } from "react-native-gesture-handler";
 import { AnimatedSearchBar, Button, List, NonIdealState, SelectorListItem } from "../../../components";
-import { useOsContacts } from "../../../hooks";
 import { AuthorizedScreenProps } from "../../../navigation";
-import { useCreateBusinessClientsMutation, useGetBusinessClientsQuery } from "../../../services";
-import { useBusiness, useClients } from "../../../store";
+import { useLocalClients } from "../../../store";
 import { getResponsiveHeight } from "../../../utils";
 
-export function LocalClientsTab({ isListSearchable }) {
+export function LocalClientsTab({ isListSearchable, isLoading, refetch }) {
   const intl = useIntl();
-  const currentClients = useClients();
-  const business = useBusiness();
   const [, setSearchText] = useState("");
-  const { navigate, setOptions } = useNavigation<AuthorizedScreenProps<"events-screen">["navigation"]>();
-  const { isLoading: isBusinessClientsQueryLoading, isSuccess: isBusinessClientsQuerySuccess, refetch: refetchBusinessClientsQuery } = useGetBusinessClientsQuery(business._id, {});
-  const [createClients, createClientsResult] = useCreateBusinessClientsMutation();
-
-  const isClientsDataLoading = isBusinessClientsQueryLoading && !isBusinessClientsQuerySuccess;
-  const isCreateClientsLoading = createClientsResult.isLoading && !createClientsResult.isSuccess;
-  const [filteredClientsData, setFilteredClientsData] = useState([]);
-  const { error: osContactsError, isLoading: isOsContactsLoading, getContacts: getOsContacts } = useOsContacts();
-
-  const isLoading = isClientsDataLoading || isCreateClientsLoading;
-
-  const handleSyncContacts = useCallback(
-    async function () {
-      const run = async () => {
-        if (osContactsError) {
-          Alert.alert("Error", osContactsError.message);
-        }
-        const contacts = await getOsContacts();
-        const clientKeySet = new Set(currentClients.map(client => client.phoneNumbers?.[0]?.number));
-        const filteredContacts = contacts.data.filter(contact => !clientKeySet.has(contact.phoneNumbers?.[0]?.number));
-
-        console.log("contacts", JSON.stringify(contacts, null, 2));
-        // createClients({
-        //   businessId: business._id,
-        //   body: filteredContacts,
-        // });
-      };
-      Alert.alert("Do you want to sync your contacts?", "Contacts will be synced by phone numbers only.", [
-        {
-          text: "Cancel",
-          style: "cancel",
-        },
-        {
-          text: "OK",
-          onPress: run,
-          style: "default",
-        },
-      ]);
-    },
-    [currentClients, getOsContacts, osContactsError]
-  );
+  const currentLocalClients = useLocalClients();
+  const [filteredLocalClientsData, setFilteredLocalClientsData] = useState([]);
+  const { navigate } = useNavigation<AuthorizedScreenProps<"events-screen">["navigation"]>();
 
   const handleAddClient = useCallback(() => {
     navigate("modals", {
@@ -66,12 +24,12 @@ export function LocalClientsTab({ isListSearchable }) {
   }, [navigate]);
 
   useEffect(() => {
-    if (currentClients) {
-      setFilteredClientsData(currentClients);
+    if (currentLocalClients) {
+      setFilteredLocalClientsData(currentLocalClients);
     } else {
       return;
     }
-  }, [currentClients]);
+  }, [currentLocalClients]);
 
   const _renderItem: ListRenderItem<ClientUserDtoType> = useCallback(
     ({ item }) => {
@@ -100,14 +58,14 @@ export function LocalClientsTab({ isListSearchable }) {
     const trimmedText = text.trim();
     setSearchText(trimmedText);
     if (trimmedText !== "") {
-      const filteredItems = currentClients.filter(item => {
+      const filteredItems = currentLocalClients.filter(item => {
         // Adjust the filtering logic based on your data structure
         const phoneNumberMatch = item.phoneNumbers.some(phone => phone.number.toLowerCase().includes(trimmedText.toLowerCase()));
         return item.givenName?.toLowerCase().includes(trimmedText.toLowerCase()) || item.email?.toLowerCase().includes(trimmedText.toLowerCase()) || phoneNumberMatch;
       });
-      setFilteredClientsData(filteredItems);
+      setFilteredLocalClientsData(filteredItems);
     } else {
-      setFilteredClientsData(currentClients);
+      setFilteredLocalClientsData(currentLocalClients);
     }
   };
 
@@ -125,7 +83,7 @@ export function LocalClientsTab({ isListSearchable }) {
         contentContainerStyle={{
           padding: getResponsiveHeight(16),
         }}
-        refreshControl={<RefreshControl refreshing={isBusinessClientsQueryLoading} onRefresh={refetchBusinessClientsQuery} />}
+        refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refetch} />}
         ListEmptyComponent={
           <View
             style={{
@@ -133,13 +91,13 @@ export function LocalClientsTab({ isListSearchable }) {
               padding: 16,
             }}
           >
-            {isEmpty(currentClients) ? (
+            {isEmpty(currentLocalClients) ? (
               <NonIdealState type={"noClients"} buttons={[<Button text={intl.formatMessage({ id: "Common.addClient" })} onPress={() => handleAddClient()} />]} />
             ) : null}
           </View>
         }
         renderItem={_renderItem}
-        data={filteredClientsData}
+        data={filteredLocalClientsData}
       />
     </Fragment>
   );

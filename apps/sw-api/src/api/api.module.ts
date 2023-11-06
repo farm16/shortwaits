@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
 import { AuthModule } from "./auth/auth.module";
-import { BusinessUsersModule } from "./business-staff/business-users.module";
+import { BusinessStaffModule } from "./business-staff/business-staff.module";
 import { BusinessModule } from "./business/business.module";
 import { CategoriesModule } from "./categories/categories.module";
 import { ClientUserModule } from "./client-user/client-user.module";
@@ -20,7 +20,7 @@ import { ShortwaitsModule } from "./shortwaits/shortwaits.module";
     CategoriesModule,
     ClientUserModule,
     LocalClientUserModule,
-    BusinessUsersModule,
+    BusinessStaffModule,
     FileUploadModule,
   ],
 })

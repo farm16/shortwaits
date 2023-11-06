@@ -13,7 +13,7 @@ import { Model } from "mongoose";
 
 import { convertStringToObjectId } from "../../utils/converters";
 import { generateBusinessUsers, generateClientUsers } from "../../utils/generateUserPayload";
-import { BusinessUser } from "../business-staff/entities/business-user.entity";
+import { BusinessUser } from "../business-staff/entities/business-staff.entity";
 import { ClientUser } from "../client-user/entities/client-user.entity";
 import { RegisterBusinessDto } from "./dto/registerBusiness.dto";
 import { Business } from "./entities/business.entity";

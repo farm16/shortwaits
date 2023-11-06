@@ -1,12 +1,12 @@
-import { Model, ObjectId, Types } from "mongoose";
 import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { BusinessUser } from "./entities/business-user.entity";
-import { CreateBusinessUserDto, UpdateBusinessUserDto } from "./dto";
+import { Model, ObjectId, Types } from "mongoose";
 import { getFilteredBusinessUser } from "../../utils/filtersForDtos";
+import { CreateBusinessUserDto, UpdateBusinessUserDto } from "./dto";
+import { BusinessUser } from "./entities/business-staff.entity";
 
 @Injectable()
-export class BusinessUserService {
+export class BusinessStaffService {
   constructor(
     @InjectModel(BusinessUser.name)
     private readonly businessUserModel: Model<BusinessUser>

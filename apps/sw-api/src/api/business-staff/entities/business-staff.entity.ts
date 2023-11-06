@@ -1,7 +1,7 @@
-import { Schema, Prop, SchemaFactory, raw } from "@nestjs/mongoose";
+import { Prop, Schema, SchemaFactory, raw } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
-import { Document, Types } from "mongoose";
 import { BusinessUserType, WeekHoursType } from "@shortwaits/shared-lib";
+import { Document, Types } from "mongoose";
 
 @Schema({ collection: "business-users" })
 export class BusinessUser extends Document implements BusinessUserType {

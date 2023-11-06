@@ -1,4 +1,4 @@
-import { CreateClientUserDtoType } from "@shortwaits/shared-lib";
+import { CreateLocalClientUserDtoType } from "@shortwaits/shared-lib";
 import { Platform } from "react-native";
 import { Contact } from "react-native-contacts";
 
@@ -15,7 +15,7 @@ function getUserFromOsContact({
   postalAddresses,
   imAddresses,
   emailAddresses,
-}: Contact): CreateClientUserDtoType {
+}: Contact): CreateLocalClientUserDtoType {
   const addresses = postalAddresses.map(postalAddress => {
     return {
       label: postalAddress.label,
@@ -28,6 +28,7 @@ function getUserFromOsContact({
       country: postalAddress.country,
     };
   });
+
   if (Platform.OS === "android") {
     const phoneNumber = phoneNumbers.length > 0 ? phoneNumbers[0].number : null;
     const email = emailAddresses.length > 0 ? emailAddresses[0].email : null;

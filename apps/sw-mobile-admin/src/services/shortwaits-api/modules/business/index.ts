@@ -1,28 +1,28 @@
 import GetBusiness from "./get-business";
 import GetBusinessCategory from "./get-categories";
-import GetBusinessServices from "./get-services";
 import GetBusinessHours from "./get-hours";
-import GetBusinessStaff from "./get-staff";
-import UpdateBusiness from "./update-business";
+import GetBusinessServices from "./get-services";
 import RegisterBusiness from "./register-business";
-import GetBusinessClients from "./get-clients";
+import UpdateBusiness from "./update-business";
 // users
-import CreateBusinessStaff from "./create-business-staff-user";
 import CreateBusinessClients from "./create-business-client-users";
-import UpdateBusinessStaff from "./update-business-staff-user";
+import CreateBusinessStaff from "./create-business-staff-user";
+import GetBusinessClients from "./get-clients";
+import GetBusinessStaff from "./get-staff";
 import UpdateBusinessClient from "./update-business-client-user";
+import UpdateBusinessStaff from "./update-business-staff-user";
 
 export {
-  CreateBusinessStaff,
   CreateBusinessClients,
-  UpdateBusinessStaff,
-  UpdateBusinessClient,
+  CreateBusinessStaff,
   GetBusiness,
   GetBusinessCategory,
-  GetBusinessServices,
-  GetBusinessHours,
-  GetBusinessStaff,
-  UpdateBusiness,
-  RegisterBusiness,
   GetBusinessClients,
+  GetBusinessHours,
+  GetBusinessServices,
+  GetBusinessStaff,
+  RegisterBusiness,
+  UpdateBusiness,
+  UpdateBusinessClient,
+  UpdateBusinessStaff,
 };

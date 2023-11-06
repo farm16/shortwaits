@@ -1,11 +1,13 @@
+import { skipToken } from "@reduxjs/toolkit/dist/query";
 import React, { FC, Fragment, useCallback, useLayoutEffect, useMemo, useState } from "react";
 import { useIntl } from "react-intl";
-import { Animated, Dimensions, Pressable, StyleSheet, View } from "react-native";
+import { Alert, Animated, Dimensions, Pressable, StyleSheet, View } from "react-native";
 import { SceneMap, TabBarProps, TabView } from "react-native-tab-view";
-import { Container, IconButton, Screen, Text } from "../../../components";
+import { Camera, Container, IconButton, Screen, Text, WithPermission } from "../../../components";
+import { useOsContacts } from "../../../hooks";
 import { AuthorizedScreenProps } from "../../../navigation";
-import { useCreateBusinessClientsMutation, useGetBusinessClientsQuery } from "../../../services";
-import { useBusiness, useShowGhostComponent } from "../../../store";
+import { useCreateLocalClientsMutation, useGetClientsQuery, useGetLocalClientsQuery } from "../../../services";
+import { useBusiness, useLocalClients, useShowGhostComponent } from "../../../store";
 import { useTheme } from "../../../theme";
 import { getFontSize, getResponsiveHeight } from "../../../utils";
 import { LocalClientsTab } from "./local-clients-tab";
@@ -21,21 +23,68 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
 
   const intl = useIntl();
   const { Colors } = useTheme();
+  const business = useBusiness();
+  const currentClients = useLocalClients();
   const [tabIndex, setTabIndex] = useState(0);
+  const [isListSearchable, setIsListSearchable] = useState(false);
+  const [isCameraOpen, setIsCameraOpen] = useState(false);
 
   const handleAddClient = useCallback(() => {
     navigation.navigate("modals", {
       screen: "add-client-modal-screen",
     });
   }, [navigation]);
-  const [isListSearchable, setIsListSearchable] = useState(false);
 
-  const business = useBusiness();
-  const [createClients, createClientsResult] = useCreateBusinessClientsMutation();
-  const { isLoading: isBusinessClientsQueryLoading, isSuccess: isBusinessClientsQuerySuccess, refetch: refetchBusinessClientsQuery } = useGetBusinessClientsQuery(business._id, {});
-  const isClientsDataLoading = isBusinessClientsQueryLoading && !isBusinessClientsQuerySuccess;
-  const isCreateClientsLoading = createClientsResult.isLoading && !createClientsResult.isSuccess;
-  const isLoading = isClientsDataLoading || isCreateClientsLoading;
+  const handleOpenCamera = useCallback(() => {
+    setIsCameraOpen(true);
+  }, []);
+
+  const { error: osContactsError, isLoading: isOsContactsLoading, getContacts: getOsContacts } = useOsContacts();
+  const [createLocalClients, createLocalClientsResult] = useCreateLocalClientsMutation();
+  const {
+    isLoading: isClientsQueryLoading,
+    isSuccess: isClientsQuerySuccess,
+    refetch: refetchClientsQuery,
+  } = useGetClientsQuery(business?._id ?? skipToken, {
+    refetchOnFocus: true,
+  });
+  const { isLoading: isLocalClientsQueryLoading, isSuccess: isLocalClientsQuerySuccess, refetch: refetchLocalClientsQuery } = useGetLocalClientsQuery(business?._id ?? skipToken);
+
+  const isCreateClientsLoading = createLocalClientsResult.isLoading && !createLocalClientsResult.isSuccess;
+
+  const isLoading = isClientsQueryLoading || isLocalClientsQueryLoading || isCreateClientsLoading;
+
+  const handleSyncContacts = useCallback(
+    async function () {
+      const run = async () => {
+        if (osContactsError) {
+          Alert.alert("Error", osContactsError.message);
+        }
+        const contacts = await getOsContacts();
+        const clientKeySet = new Set(currentClients.map(client => client.phoneNumbers?.[0]?.number));
+        const filteredContacts = contacts.data.filter(contact => !clientKeySet.has(contact.phoneNumbers?.[0]?.number));
+
+        console.log("filteredContacts >>>", JSON.stringify(filteredContacts, null, 2));
+
+        createLocalClients({
+          businessId: business._id,
+          body: filteredContacts,
+        });
+      };
+      Alert.alert("Do you want to sync your contacts?", "Contacts will be synced by phone numbers only.", [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "OK",
+          onPress: run,
+          style: "default",
+        },
+      ]);
+    },
+    [business._id, createLocalClients, currentClients, getOsContacts, osContactsError]
+  );
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -65,10 +114,10 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
         return (
           <Container direction="row" alignItems="center">
             {tabIndex === 0 ? (
-              <IconButton iconType="scan-qr" withMarginRight />
+              <IconButton iconType="scan-qr" withMarginRight onPress={() => handleOpenCamera()} />
             ) : (
               <Fragment>
-                <IconButton iconType="sync" withMarginRight />
+                <IconButton iconType="sync" withMarginRight onPress={() => handleSyncContacts()} />
                 <IconButton iconType="add" withMarginRight onPress={() => handleAddClient()} />
               </Fragment>
             )}
@@ -76,22 +125,28 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
         );
       },
     });
-  }, [handleAddClient, intl, isLoading, isListSearchable, navigation, tabIndex]);
+  }, [handleAddClient, handleOpenCamera, handleSyncContacts, isListSearchable, isLoading, navigation, tabIndex]);
 
   const routes = useMemo(() => {
     return [
-      { key: "shortwaits", title: intl.formatMessage({ id: "Clients_screen.tab.shortwaits" }) },
-      { key: "local", title: intl.formatMessage({ id: "Clients_screen.tab.devices" }) },
+      {
+        key: "shortwaits",
+        title: intl.formatMessage({ id: "Clients_screen.tab.shortwaits" }),
+      },
+      {
+        key: "local",
+        title: intl.formatMessage({ id: "Clients_screen.tab.devices" }),
+      },
     ];
   }, [intl]);
 
   const renderShortwaitsClientsTab = useCallback(() => {
-    return <ShortwaitsClientsTab isListSearchable={isListSearchable} />;
-  }, [isListSearchable]);
+    return <ShortwaitsClientsTab isListSearchable={isListSearchable} isLoading={isClientsQueryLoading} refetch={refetchClientsQuery} />;
+  }, [isClientsQueryLoading, isListSearchable, refetchClientsQuery]);
 
   const renderLocalClientsTab = useCallback(() => {
-    return <LocalClientsTab isListSearchable={isListSearchable} />;
-  }, [isListSearchable]);
+    return <LocalClientsTab isListSearchable={isListSearchable} isLoading={isLocalClientsQueryLoading} refetch={refetchLocalClientsQuery} />;
+  }, [isListSearchable, isLocalClientsQueryLoading, refetchLocalClientsQuery]);
 
   const renderScene = SceneMap({
     shortwaits: renderShortwaitsClientsTab,
@@ -111,7 +166,6 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
                     styles.tabView,
                     {
                       backgroundColor: isSelected ? "#dddff7" : Colors.disabledBackground,
-                      //backgroundColor: isSelected ? Colors.brandPrimary : Colors.disabledBackground,
                       borderBottomColor: isSelected ? Colors.brandAccent : "transparent",
                     },
                   ]}
@@ -139,8 +193,11 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
 
   return (
     <Screen preset="fixed" unsafe backgroundColor="backgroundOverlay">
+      <WithPermission show={isCameraOpen} permission="camera">
+        <Camera isVisible={isCameraOpen} setIsVisible={setIsCameraOpen} />
+      </WithPermission>
       <TabView
-        lazy
+        //lazy
         renderTabBar={_renderTabBar}
         navigationState={{ index: tabIndex, routes }}
         renderScene={renderScene}
@@ -161,8 +218,8 @@ const styles = StyleSheet.create({
   tabView: {
     justifyContent: "center",
     alignItems: "center",
-    height: 50,
-    borderBottomWidth: getResponsiveHeight(3),
+    height: getResponsiveHeight(50),
+    borderBottomWidth: getResponsiveHeight(4),
   },
   tabText: {
     fontSize: getFontSize(16),

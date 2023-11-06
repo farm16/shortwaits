@@ -1,14 +1,7 @@
-import { BusinessUsersResponseType, EventResponseType, endpoints } from "@shortwaits/shared-lib";
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
-
-type RequestType = {
-  body: string[];
-};
+import { BusinessUsersResponseType, endpoints } from "@shortwaits/shared-lib";
 
 export default (builder: EndpointBuilder<any, any, any>) =>
-  builder.mutation<BusinessUsersResponseType, RequestType>({
-    query: ({ body }) => ({
-      ...endpoints.getBusinessUsers.getConfig([], {}),
-      body,
-    }),
+  builder.query<BusinessUsersResponseType, string>({
+    query: businessId => endpoints.getStaffUsers.getConfig([businessId], {}).url,
   });

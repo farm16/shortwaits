@@ -1,17 +1,17 @@
-import React, { FC, useCallback, useEffect, useLayoutEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
-import { List } from "react-native-paper";
+import React, { FC, useCallback, useLayoutEffect, useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl"; // Import FormattedMessage and useIntl
+import { StyleSheet } from "react-native";
+import { List } from "react-native-paper";
 
 import { Button, Screen, Space, Switch } from "../../../components";
-import { useTheme } from "../../../theme";
-import { useBusiness } from "../../../store";
-import { useGetBusinessUsersMutation, useLocalSignOutMutation, useUpdateBusinessMutation } from "../../../services";
 import { AuthorizedScreenProps } from "../../../navigation";
-import { ManageAdminUsers } from "./options/user-account";
-import { ShortwaitsCustomerSupport } from "./options/support";
+import { useLocalSignOutMutation, useUpdateBusinessMutation } from "../../../services";
+import { useBusiness } from "../../../store";
+import { useTheme } from "../../../theme";
 import { AppInfoSettings } from "./options/app-info";
 import { AppLanguage } from "./options/select-language";
+import { ShortwaitsCustomerSupport } from "./options/support";
+import { ManageAdminUsers } from "./options/user-account";
 
 export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ navigation }) => {
   const { Colors } = useTheme();
@@ -19,28 +19,28 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
   const currentBusiness = useBusiness();
   const [admins, setAdmins] = useState([]);
 
-  const [getAdmins] = useGetBusinessUsersMutation();
+  //const [getAdmins] = useGetBusinessUsersMutation();
   const intl = useIntl(); // Initialize the Intl instance
 
-  useEffect(() => {
-    async function getCurrentAdmins() {
-      const admins = (await getAdmins({ body: [...currentBusiness.admins, ...currentBusiness.superAdmins] }).unwrap()).data;
-      return admins;
-    }
-    if (currentBusiness) {
-      getCurrentAdmins().then(admins => {
-        const _admin = admins.map(admin => {
-          return {
-            ...admin,
-            isSuperAdmin: currentBusiness.superAdmins.includes(admin._id),
-          };
-        });
-        setAdmins(_admin);
-      });
-    }
-  }, [currentBusiness, getAdmins]);
+  // useEffect(() => {
+  //   async function getCurrentAdmins() {
+  //     const admins = (await getAdmins({ body: [...currentBusiness.admins, ...currentBusiness.superAdmins] }).unwrap()).data;
+  //     return admins;
+  //   }
+  //   if (currentBusiness) {
+  //     getCurrentAdmins().then(admins => {
+  //       const _admin = admins.map(admin => {
+  //         return {
+  //           ...admin,
+  //           isSuperAdmin: currentBusiness.superAdmins.includes(admin._id),
+  //         };
+  //       });
+  //       setAdmins(_admin);
+  //     });
+  //   }
+  // }, [currentBusiness, getAdmins]);
 
-  console.log("admins", admins);
+  // console.log("admins", admins);
 
   useLayoutEffect(() => {
     navigation.setOptions({

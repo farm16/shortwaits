@@ -2,15 +2,15 @@ import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Put, UseGuard
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 
 import { AtGuard } from "../../common/guards";
-import { BusinessUserService } from "./business-users.service";
+import { BusinessStaffService } from "./business-staff.service";
 import { CreateBusinessUserDto } from "./dto";
 
 @ApiTags("business-staff")
 @Controller("business-staff")
 @ApiBearerAuth("bearer")
 @UseGuards(AtGuard)
-export class BusinessUsersController {
-  constructor(private readonly businessUserService: BusinessUserService) {}
+export class BusinessStaffController {
+  constructor(private readonly businessUserService: BusinessStaffService) {}
 
   @Get("business/:businessId")
   @HttpCode(HttpStatus.OK)
