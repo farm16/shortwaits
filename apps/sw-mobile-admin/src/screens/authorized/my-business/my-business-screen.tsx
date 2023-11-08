@@ -1,18 +1,18 @@
-import React, { FC, useCallback, useLayoutEffect } from "react";
-import { Alert } from "react-native";
-import { truncate } from "lodash";
-import { useDispatch } from "react-redux";
 import { useIsFocused } from "@react-navigation/native";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
+import { truncate } from "lodash";
+import React, { FC, useCallback, useLayoutEffect } from "react";
 import { useIntl } from "react-intl";
+import { Alert } from "react-native";
+import { useDispatch } from "react-redux";
 
-import { BusinessIncomeInfo, ButtonCard, IconButton, Container, Screen, Text } from "../../../components";
-import { useTheme } from "../../../theme";
-import { showPremiumMembershipBanner, useBusiness, hidePremiumMembershipBanner, useShowGhostComponent } from "../../../store";
-import { AuthorizedScreenProps } from "../../../navigation";
-import { useGetEventsSummaryByBusinessQuery, useUpdateBusinessMutation } from "../../../services";
 import FastImage from "react-native-fast-image";
 import { ActivityIndicator } from "react-native-paper";
+import { BusinessIncomeInfo, ButtonCard, Container, IconButton, Screen, Text } from "../../../components";
+import { AuthorizedScreenProps } from "../../../navigation";
+import { useGetEventsSummaryByBusinessQuery, useUpdateBusinessMutation } from "../../../services";
+import { hidePremiumMembershipBanner, showPremiumMembershipBanner, useBusiness, useShowGhostComponent } from "../../../store";
+import { useTheme } from "../../../theme";
 
 export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> = ({ navigation }) => {
   useShowGhostComponent("floatingActionButton");
@@ -194,14 +194,7 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
           leftIconName="account-multiple"
           leftIconColor={Colors.text}
           title={intl.formatMessage({ id: "MyBusiness_screen.clients" })}
-          onPress={() =>
-            navigation.navigate("modals", {
-              screen: "selector-modal-screen",
-              params: {
-                type: "clients",
-              },
-            })
-          }
+          onPress={() => navigation.navigate("clients-screen")}
         />
         <ButtonCard leftIconName="puzzle" leftIconColor={Colors.text} title={intl.formatMessage({ id: "MyBusiness_screen.integrations" })} />
         <ButtonCard leftIconName="message-star" leftIconColor={Colors.text} title={intl.formatMessage({ id: "MyBusiness_screen.myReviews" })} />

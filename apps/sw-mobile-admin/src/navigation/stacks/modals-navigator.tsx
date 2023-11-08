@@ -1,18 +1,20 @@
-import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
+import React from "react";
 
-import { SelectorScreenModal, ScheduleModal, ServicesModal } from "../../screens";
-import { MODAL_SCREENS } from "../navigation-constants";
-import { ModalStackParamList } from "../navigation-types";
-import { useTheme } from "../../theme";
 import {
-  AddStaffModal,
-  AddServicesModal,
   AddClientModal,
   AddEventModal,
-  UpdateServicesModal,
+  AddServicesModal,
+  AddStaffModal,
+  ScheduleModal,
+  SelectorScreenModal,
+  ServicesModal,
   UpdateEventModal,
+  UpdateServicesModal,
 } from "../../screens";
+import { useTheme } from "../../theme";
+import { MODAL_SCREENS } from "../navigation-constants";
+import { ModalStackParamList } from "../navigation-types";
 
 const {
   SELECTOR_MODAL_SCREEN,
@@ -34,6 +36,7 @@ export const ModalsNavigator = (): React.ReactElement => {
   return (
     <Stack.Navigator
       screenOptions={{
+        presentation: "modal",
         headerTitleAlign: "center",
         headerStyle: {
           backgroundColor: Colors.backgroundOverlay,

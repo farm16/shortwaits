@@ -1,22 +1,17 @@
-import { RectButton } from "react-native-gesture-handler";
-import React, { useCallback, useEffect } from "react";
-import { Alert, View, Animated, StyleSheet, Pressable } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 import { EventDtoType } from "@shortwaits/shared-lib";
 import { isEmpty, truncate } from "lodash";
-import { Emoji, EventStatusButtons, Space, Text } from "..";
-import { useTheme } from "../../theme";
-import { getEventTime } from "./calendar-utils";
-import { useService } from "../../store";
-import Swipeable from "react-native-gesture-handler/Swipeable";
-import { navigate } from "../../navigation";
-import {
-  statusDisplayMessages,
-  statusDisplayMessagesBackgroundColor,
-  statusDisplayMessagesColor,
-} from "../../utils/status-color";
-import { CALENDAR_EVENT_HEIGHT, EVENT_ITEM_BORDER_RADIUS } from "../../utils";
+import React, { useCallback } from "react";
 import { useIntl } from "react-intl";
-import { useFocusEffect } from "@react-navigation/native";
+import { Alert, Animated, Pressable, StyleSheet, View } from "react-native";
+import Swipeable from "react-native-gesture-handler/Swipeable";
+import { Emoji, EventStatusButtons, Space, Text } from "..";
+import { navigate } from "../../navigation";
+import { useService } from "../../store";
+import { useTheme } from "../../theme";
+import { CALENDAR_EVENT_HEIGHT, EVENT_ITEM_BORDER_RADIUS } from "../../utils";
+import { statusDisplayMessages, statusDisplayMessagesBackgroundColor, statusDisplayMessagesColor } from "../../utils/status-color";
+import { getEventTime } from "./calendar-utils";
 
 type AgendaItemProps = {
   item: EventDtoType;
@@ -32,7 +27,6 @@ export const AgendaItem = (props: AgendaItemProps) => {
 
   useFocusEffect(() => {
     if (triggerTick) {
-      console.log("triggerTick");
       swipeableRef.current?.openRight();
       const timerId = setTimeout(() => {
         swipeableRef.current?.close();
@@ -67,10 +61,7 @@ export const AgendaItem = (props: AgendaItemProps) => {
     ),
     [Colors.brandAccent1, service?.serviceColor?.hexCode]
   );
-  const renderRightActions = (
-    _progress: Animated.AnimatedInterpolation<any>,
-    dragX: Animated.AnimatedInterpolation<any>
-  ) => {
+  const renderRightActions = (_progress: Animated.AnimatedInterpolation<any>, dragX: Animated.AnimatedInterpolation<any>) => {
     return <EventStatusButtons event={item} size="small" />;
   };
 
@@ -85,11 +76,7 @@ export const AgendaItem = (props: AgendaItemProps) => {
             minute: "2-digit",
           })}
         />
-        <Text
-          preset="none"
-          style={[styles.eventTimeRow2, { color: Colors.subText }]}
-          text={getEventTime(item.durationInMin * 60000)}
-        />
+        <Text preset="none" style={[styles.eventTimeRow2, { color: Colors.subText }]} text={getEventTime(item.durationInMin * 60000)} />
       </View>
     ),
     [Colors.lightGray, Colors.subText, Colors.text, item.durationInMin, item.startTime]
@@ -132,9 +119,7 @@ export const AgendaItem = (props: AgendaItemProps) => {
           <Text style={{ color: Colors.subText, fontSize: 12, textAlign: "center" }}>
             {`${intl.formatMessage({ id: "CalendarItem.clients" })}: ${item?.clientsIds?.length ?? 0}`}
           </Text>
-          <Text style={{ color: Colors.subText, fontSize: 12, textAlign: "center" }}>
-            {`${intl.formatMessage({ id: "CalendarItem.staff" })}: ${item?.staffIds?.length ?? 0}`}
-          </Text>
+          <Text style={{ color: Colors.subText, fontSize: 12, textAlign: "center" }}>{`${intl.formatMessage({ id: "CalendarItem.staff" })}: ${item?.staffIds?.length ?? 0}`}</Text>
         </View>
       </View>
     );
@@ -170,11 +155,7 @@ export const AgendaItem = (props: AgendaItemProps) => {
         <Text
           style={[styles.eventTimeRow2, { color: Colors.subText }]}
           preset="none"
-          text={
-            isPublicEvent
-              ? intl.formatMessage({ id: "CalendarItem.publicEvent" })
-              : intl.formatMessage({ id: "CalendarItem.privateEvent" })
-          }
+          text={isPublicEvent ? intl.formatMessage({ id: "CalendarItem.publicEvent" }) : intl.formatMessage({ id: "CalendarItem.privateEvent" })}
         />
       </View>
     );

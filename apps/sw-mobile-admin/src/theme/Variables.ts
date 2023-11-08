@@ -5,9 +5,9 @@
  * That allows to change them more easily later on.
  */
 
-import { ThemeFontSize } from "./theme.type";
-import { getColors } from "./Colors";
 import { getFontSize, getResponsiveHeight } from "../utils";
+import { getColors } from "./Colors";
+import { ThemeFontSize } from "./theme.type";
 
 export const Colors = {
   ...getColors(),

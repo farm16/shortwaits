@@ -17,6 +17,10 @@ export const localClientsSlice = createSlice({
     builder
       .addMatcher(shortwaitsApi.endpoints.getLocalClients.matchFulfilled, (state, action) => {
         // merge local clients with existing clients in state by _id
+        if (state === null) {
+          return action.payload.data;
+        }
+
         const newClients = action.payload.data;
         const existingClients = state;
         const mergedClients = newClients.map(newClient => {

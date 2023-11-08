@@ -1,76 +1,33 @@
-import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
+import { Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Model, ObjectId, Types } from "mongoose";
-import { getFilteredBusinessUser } from "../../utils/filtersForDtos";
-import { CreateBusinessUserDto, UpdateBusinessUserDto } from "./dto";
+import { Model } from "mongoose";
+import { Business } from "../business/entities/business.entity";
 import { BusinessUser } from "./entities/business-staff.entity";
 
 @Injectable()
 export class BusinessStaffService {
   constructor(
     @InjectModel(BusinessUser.name)
-    private readonly businessUserModel: Model<BusinessUser>
+    private readonly businessUserModel: Model<BusinessUser>,
+    @InjectModel(Business.name)
+    private readonly businessModel: Model<Business>
   ) {}
 
-  async findMultiple(userIds: (string | ObjectId)[]) {
-    if (!userIds || userIds.length === 0) {
-      return [];
-    }
+  //get business staff id then get records from businessUserModel
+  async getBusinessStaff(businessId: string) {
     try {
-      const uniqueUserIds = [...new Set(userIds)];
-      const businessUsers = await this.businessUserModel.find({ _id: { $in: uniqueUserIds } }).exec();
-      return businessUsers;
+      const business = await this.businessModel.findById(businessId).exec();
+      if (!business) {
+        throw new NotFoundException(`Business #${businessId} not found`);
+      }
+      if (business.staff?.length === 0) {
+        return [];
+      }
+      const businessStaff = await this.businessUserModel.find({ _id: { $in: business.staff } }).exec();
+      return businessStaff;
     } catch (error) {
+      console.log(error);
       throw new InternalServerErrorException(error.message);
     }
-  }
-
-  async create(createCustomerDto: CreateBusinessUserDto) {
-    const existingUser = await this.businessUserModel.findOne({ username: createCustomerDto.username }).exec();
-    if (existingUser) {
-      throw new NotFoundException(`Business User #${createCustomerDto.username} already exists`);
-    }
-    try {
-      const newCustomer = await this.businessUserModel.create(getFilteredBusinessUser(createCustomerDto));
-      return newCustomer;
-    } catch (error) {
-      throw new InternalServerErrorException(error.message);
-    }
-  }
-
-  async findByUserName(username: string): Promise<BusinessUser | undefined> {
-    try {
-      return await this.businessUserModel.findOne({ username: username }).exec();
-    } catch (error) {
-      throw new InternalServerErrorException(error.message);
-    }
-  }
-
-  async findById(id: string): Promise<BusinessUser | null> {
-    if (!Types.ObjectId.isValid(id)) {
-      throw new BadRequestException("Invalid ID");
-    }
-
-    try {
-      const businessUser = await this.businessUserModel.findById({ _id: id, deleted: false }).exec();
-      console.log("businessUser >>>", businessUser);
-      return businessUser;
-    } catch (error) {
-      console.log("businessUser error >>>", error);
-      throw new InternalServerErrorException(error.message);
-    }
-  }
-
-  async update(userId: string, UpdateBusinessUserDto: Partial<UpdateBusinessUserDto>) {
-    const existingUser = await this.businessUserModel.findByIdAndUpdate({ _id: userId }, UpdateBusinessUserDto);
-    if (!existingUser) {
-      throw new NotFoundException(`Customer #${userId} not found`);
-    }
-    return existingUser;
-  }
-
-  async remove(userId: string): Promise<any> {
-    const deletedUser = await this.businessUserModel.findByIdAndRemove(userId);
-    return deletedUser;
   }
 }

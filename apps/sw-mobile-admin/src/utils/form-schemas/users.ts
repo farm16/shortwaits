@@ -1,7 +1,7 @@
-import { CreateBusinessUserDtoType, CreateClientUserDtoType } from "@shortwaits/shared-lib";
+import { CreateBusinessUserDtoType, CreateLocalClientUserDtoType } from "@shortwaits/shared-lib";
 import * as Yup from "yup";
 
-export const createClientUserSchema: Yup.SchemaOf<CreateClientUserDtoType> = Yup.object().shape({
+export const createLocalClientUserSchema: Yup.SchemaOf<CreateLocalClientUserDtoType> = Yup.object().shape({
   clientType: Yup.mixed().required().oneOf(["local", "external"]),
   username: Yup.string().min(3, "a longer name is required").optional(),
   alias: Yup.mixed().required().oneOf(["username", "familyName", "givenName", "middleName", "displayName"]),
@@ -101,10 +101,7 @@ export const createBusinessUserSchema: Yup.SchemaOf<CreateBusinessUserDtoType> =
     )
     .optional(),
   birthday: Yup.string().optional(),
-  email: Yup.string()
-    .email("Please enter a valid email")
-    .min(2, "Must be more than 10 characters")
-    .required("this field is required"),
+  email: Yup.string().email("Please enter a valid email").min(2, "Must be more than 10 characters").required("this field is required"),
   desiredCurrencies: Yup.array().of(Yup.string()).optional(),
   locale: Yup.object()
     .shape({
@@ -207,10 +204,7 @@ export const updateBusinessUserSchema: Yup.SchemaOf<CreateBusinessUserDtoType> =
     })
   ),
   birthday: Yup.string(),
-  email: Yup.string()
-    .email("Please enter a valid email")
-    .min(2, "Must be more than 10 characters")
-    .required("this field is required"),
+  email: Yup.string().email("Please enter a valid email").min(2, "Must be more than 10 characters").required("this field is required"),
   password: Yup.string().min(6, "Must be more than 6 characters").required("this field is required"),
   desiredCurrencies: Yup.array().of(Yup.string()),
   locale: Yup.object().shape({

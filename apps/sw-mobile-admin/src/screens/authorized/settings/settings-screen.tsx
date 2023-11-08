@@ -3,9 +3,10 @@ import { FormattedMessage, useIntl } from "react-intl"; // Import FormattedMessa
 import { StyleSheet } from "react-native";
 import { List } from "react-native-paper";
 
+import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { Button, Screen, Space, Switch } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
-import { useLocalSignOutMutation, useUpdateBusinessMutation } from "../../../services";
+import { useGetStaffQuery, useLocalSignOutMutation, useUpdateBusinessMutation } from "../../../services";
 import { useBusiness } from "../../../store";
 import { useTheme } from "../../../theme";
 import { AppInfoSettings } from "./options/app-info";
@@ -19,26 +20,10 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
   const currentBusiness = useBusiness();
   const [admins, setAdmins] = useState([]);
 
-  //const [getAdmins] = useGetBusinessUsersMutation();
-  const intl = useIntl(); // Initialize the Intl instance
+  const { data, isLoading, isError, isSuccess } = useGetStaffQuery(currentBusiness?._id ?? skipToken);
 
-  // useEffect(() => {
-  //   async function getCurrentAdmins() {
-  //     const admins = (await getAdmins({ body: [...currentBusiness.admins, ...currentBusiness.superAdmins] }).unwrap()).data;
-  //     return admins;
-  //   }
-  //   if (currentBusiness) {
-  //     getCurrentAdmins().then(admins => {
-  //       const _admin = admins.map(admin => {
-  //         return {
-  //           ...admin,
-  //           isSuperAdmin: currentBusiness.superAdmins.includes(admin._id),
-  //         };
-  //       });
-  //       setAdmins(_admin);
-  //     });
-  //   }
-  // }, [currentBusiness, getAdmins]);
+  console.log("data >>>", data);
+  const intl = useIntl(); // Initialize the Intl instance
 
   // console.log("admins", admins);
 
@@ -61,7 +46,8 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
   };
 
   return (
-    <Screen preset="scroll" backgroundColor="backgroundOverlay" unsafeBottom>
+    <Screen preset="scroll" backgroundColor="backgroundOverlay" unsafeBottom unsafe>
+      <Space size="large" />
       <List.Section
         style={{
           borderTopWidth: StyleSheet.hairlineWidth,
@@ -191,7 +177,7 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
           descriptionStyle={{ color: Colors.subText }}
           title={<FormattedMessage id="Settings_Screen.currency_title" />}
           disabled
-          style={{ backgroundColor: Colors.lightGray }}
+          style={{ backgroundColor: Colors.disabledBackground }}
           titleStyle={{ color: Colors.text }}
           description={<FormattedMessage id="Settings_Screen.currency_description" />}
           right={props => <List.Icon {...props} color={Colors.gray} icon="chevron-right" />}

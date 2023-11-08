@@ -1,6 +1,6 @@
 import { useFlipper } from "@react-navigation/devtools";
 import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
-import { TransitionPresets, createStackNavigator } from "@react-navigation/stack";
+import { createStackNavigator } from "@react-navigation/stack";
 import React, { useEffect, useState } from "react";
 
 import { useAuth, useBusiness } from "../store";
@@ -49,15 +49,7 @@ const AppStack = () => {
       ) : (
         <RootStack.Screen name={NAVIGATION_STACKS.UNAUTHORIZED} component={UnauthorizedNavigator} />
       )}
-      <RootStack.Screen
-        options={{
-          gestureEnabled: false,
-          cardOverlayEnabled: false,
-          ...TransitionPresets.ModalPresentationIOS,
-        }}
-        name={NAVIGATION_STACKS.MODALS}
-        component={ModalsNavigator}
-      />
+      <RootStack.Screen name={NAVIGATION_STACKS.MODALS} component={ModalsNavigator} />
     </RootStack.Navigator>
   );
 };

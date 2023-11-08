@@ -1,4 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
+import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { ClientUserDtoType } from "@shortwaits/shared-lib";
 import { isEmpty } from "lodash";
 import React, { Fragment, useCallback, useEffect, useState } from "react";
@@ -7,19 +8,25 @@ import { ListRenderItem, View } from "react-native";
 import { RefreshControl } from "react-native-gesture-handler";
 import { AnimatedSearchBar, Button, List, NonIdealState, SelectorListItem } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
-import { useClients } from "../../../store";
+import { useGetClientsQuery } from "../../../services";
+import { useBusiness, useClients } from "../../../store";
 import { getResponsiveHeight } from "../../../utils";
 
-export function ShortwaitsClientsTab({ isListSearchable, isLoading, refetch }) {
+export function ShortwaitsClientsTab() {
   const intl = useIntl();
-  const currentClients = useClients();
   const [, setSearchText] = useState("");
+  const currentClients = useClients();
+  const business = useBusiness();
+  const { isLoading, isSuccess, refetch } = useGetClientsQuery(business?._id ?? skipToken);
   const { navigate } = useNavigation<AuthorizedScreenProps<"events-screen">["navigation"]>();
   const [filteredClientsData, setFilteredClientsData] = useState([]);
 
   const handleAddClient = useCallback(() => {
     navigate("modals", {
       screen: "add-client-modal-screen",
+      params: {
+        clientType: "shortwaits",
+      },
     });
   }, [navigate]);
 
@@ -69,8 +76,6 @@ export function ShortwaitsClientsTab({ isListSearchable, isLoading, refetch }) {
     }
   };
 
-  // <AnimatedSearchBar onChangeText={handleOnChangeText} isVisible={isListSearchable} />
-
   return (
     <Fragment>
       <View
@@ -78,7 +83,7 @@ export function ShortwaitsClientsTab({ isListSearchable, isLoading, refetch }) {
           paddingHorizontal: 16,
         }}
       >
-        <AnimatedSearchBar onChangeText={handleOnChangeText} isVisible={isListSearchable} />
+        <AnimatedSearchBar onChangeText={handleOnChangeText} isVisible={false} />
       </View>
       <List
         refreshing={isLoading}

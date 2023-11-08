@@ -1,9 +1,9 @@
-import React, { FC, useCallback, useMemo } from "react";
-import { StyleSheet, TextStyle, View, Image } from "react-native";
+import React, { FC, useMemo } from "react";
+import { StyleSheet, TextStyle, View } from "react-native";
 
-import { Text, Space, ButtonProps, Button } from "../";
-import { IconSizes, useTheme } from "../../theme";
 import FastImage from "react-native-fast-image";
+import { Button, ButtonProps, Space, Text } from "../";
+import { IconSizes, useTheme } from "../../theme";
 import { generateAvatarUrl } from "../../utils/generateAvatarUrl";
 
 type SelectorListItemProps = {
@@ -27,8 +27,8 @@ export const SelectorListItem: FC<SelectorListItemProps> = props => {
     onPress,
     rightIconName,
     leftIconName,
-    rightIconColor = Colors.brandSecondary,
-    leftIconColor = Colors.brandSecondary,
+    rightIconColor = Colors.brandPrimary,
+    leftIconColor = Colors.brandPrimary,
     rightIconSize = "regular",
     leftIconSize = "regular",
     title,

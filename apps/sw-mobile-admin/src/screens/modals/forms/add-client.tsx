@@ -1,42 +1,33 @@
-import React, { FC, useEffect, useLayoutEffect, useMemo } from "react";
-import { ActivityIndicator } from "react-native-paper";
-import { Alert } from "react-native";
+import { ClientUserType, CreateLocalClientUserDtoType } from "@shortwaits/shared-lib";
 import { FormikErrors } from "formik";
-import { ClientUserType, CreateClientUserDtoType } from "@shortwaits/shared-lib";
+import React, { FC, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { useIntl } from "react-intl";
+import { Alert, StatusBar, View } from "react-native";
+import { ActivityIndicator } from "react-native-paper";
 
-import { useCreateBusinessClientsMutation } from "../../../services";
-import { useForm } from "../../../hooks";
-import { useBusiness } from "../../../store";
-import {
-  Text,
-  TextFieldCard,
-  BackButton,
-  Button,
-  ButtonCard,
-  PhoneNumberCard,
-  Space,
-  ExpandableSection,
-  FormContainer,
-} from "../../../components";
-import { ModalsScreenProps } from "../../../navigation";
-import { STATIC_FORM_USA_STATES, getCapitalizedString } from "../../../utils";
 import { noop } from "lodash";
+import { BackButton, Button, ButtonCard, Camera, ExpandableSection, FormContainer, PhoneNumberCard, Space, Text, TextFieldCard, WithPermission } from "../../../components";
+import { useForm } from "../../../hooks";
+import { ModalsScreenProps } from "../../../navigation";
+import { useCreateLocalClientsMutation } from "../../../services";
+import { useBusiness } from "../../../store";
+import { STATIC_FORM_USA_STATES, getCapitalizedString } from "../../../utils";
 
 export const AddClientModal: FC<ModalsScreenProps<"add-client-modal-screen">> = ({ navigation, route }) => {
   const params = route?.params;
   const onSubmit = params?.onSubmit ?? noop;
   const onDone = params?.onDone ?? noop;
   const closeOnSubmit = params?.closeOnSubmit ?? true;
+  const clientType = params?.clientType ?? "local";
 
   const intl = useIntl(); // Access the intl object
-
+  const [isCameraOpen, setIsCameraOpen] = useState(clientType === "shortwaits");
   const business = useBusiness();
 
-  const [createBusinessClients, createBusinessClientsStatus] = useCreateBusinessClientsMutation();
+  const [createLocalClients, createLocalClientsStatus] = useCreateLocalClientsMutation();
 
   const initialValues = useMemo(() => {
-    const _initialValues: CreateClientUserDtoType = {
+    const _initialValues: CreateLocalClientUserDtoType = {
       clientType: "local",
       username: "",
       alias: "displayName",
@@ -87,30 +78,20 @@ export const AddClientModal: FC<ModalsScreenProps<"add-client-modal-screen">> = 
     return _initialValues;
   }, []);
 
-  const {
-    touched,
-    errors,
-    values,
-    validateField,
-    setFieldTouched,
-    handleChange,
-    handleSubmit,
-    setFieldError,
-    setFieldValue,
-  } = useForm(
+  const { touched, errors, values, validateField, setFieldTouched, handleChange, handleSubmit, setFieldError, setFieldValue } = useForm(
     {
       initialValues,
       onSubmit: formData => {
-        createBusinessClients({
+        createLocalClients({
           businessId: business._id,
           body: [formData],
         });
         if (onSubmit) {
-          onSubmit<"addClient">(formData);
+          onSubmit(formData);
         }
       },
     },
-    "addClient"
+    "addLocalClient"
   );
 
   console.log("errors", JSON.stringify(errors, null, 3));
@@ -118,16 +99,17 @@ export const AddClientModal: FC<ModalsScreenProps<"add-client-modal-screen">> = 
 
   useLayoutEffect(() => {
     navigation.setOptions({
+      headerShown: isCameraOpen ? false : true,
       headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
       headerTitle: () => <Text preset="text" text={intl.formatMessage({ id: "Common.addClient" })} />,
     });
-  }, [closeOnSubmit, handleSubmit, intl, navigation]);
+  }, [closeOnSubmit, handleSubmit, intl, isCameraOpen, navigation]);
 
   useEffect(() => {
-    if (createBusinessClientsStatus.isSuccess && closeOnSubmit) {
+    if (createLocalClientsStatus.isSuccess && closeOnSubmit) {
       navigation.goBack();
     }
-  }, [closeOnSubmit, createBusinessClientsStatus.isSuccess, navigation]);
+  }, [closeOnSubmit, createLocalClientsStatus.isSuccess, navigation]);
 
   useEffect(() => {
     const cleanup = async () => {
@@ -144,8 +126,8 @@ export const AddClientModal: FC<ModalsScreenProps<"add-client-modal-screen">> = 
     };
   }, []);
 
-  if (createBusinessClientsStatus.isError) {
-    Alert.alert("Error", createBusinessClientsStatus.error.message);
+  if (createLocalClientsStatus.isError) {
+    Alert.alert("Error", createLocalClientsStatus.error.message);
   }
 
   const renderSubmitButton = (
@@ -157,7 +139,34 @@ export const AddClientModal: FC<ModalsScreenProps<"add-client-modal-screen">> = 
     />
   );
 
-  return createBusinessClientsStatus.isLoading ? (
+  console.log("clientType", clientType);
+
+  useEffect(() => {
+    if (clientType === "shortwaits" && !isCameraOpen) {
+      navigation.goBack();
+      return () => {
+        StatusBar.setHidden(false);
+      };
+    }
+  }, [clientType, isCameraOpen, navigation]);
+
+  useEffect(() => {
+    if (clientType === "shortwaits" && isCameraOpen) {
+      StatusBar.setHidden(true);
+    }
+  }, [clientType, isCameraOpen]);
+
+  if (clientType === "shortwaits") {
+    return (
+      <View>
+        <WithPermission show={isCameraOpen} permission="camera">
+          <Camera isVisible={isCameraOpen} setIsVisible={setIsCameraOpen} />
+        </WithPermission>
+      </View>
+    );
+  }
+
+  return createLocalClientsStatus.isLoading ? (
     <ActivityIndicator />
   ) : (
     <FormContainer footer={renderSubmitButton}>
@@ -189,11 +198,7 @@ export const AddClientModal: FC<ModalsScreenProps<"add-client-modal-screen">> = 
           }
         }}
         isTouched={touched?.phoneNumbers ? touched.phoneNumbers[0]?.number ?? false : false}
-        errors={
-          errors.phoneNumbers
-            ? (errors.phoneNumbers[0] as FormikErrors<{ label: string; number: string }>)?.number ?? ""
-            : ""
-        }
+        errors={errors.phoneNumbers ? (errors.phoneNumbers[0] as FormikErrors<{ label: string; number: string }>)?.number ?? "" : ""}
       />
       <ExpandableSection>
         <TextFieldCard
@@ -224,11 +229,7 @@ export const AddClientModal: FC<ModalsScreenProps<"add-client-modal-screen">> = 
             }
           }}
           isTouched={touched?.phoneNumbers ? touched.phoneNumbers[1]?.number ?? false : false}
-          errors={
-            errors.phoneNumbers
-              ? (errors.phoneNumbers[1] as FormikErrors<{ label: string; number: string }>)?.number ?? ""
-              : ""
-          }
+          errors={errors.phoneNumbers ? (errors.phoneNumbers[1] as FormikErrors<{ label: string; number: string }>)?.number ?? "" : ""}
         />
         <PhoneNumberCard
           title={getCapitalizedString(values.phoneNumbers[2].label)}
@@ -242,56 +243,34 @@ export const AddClientModal: FC<ModalsScreenProps<"add-client-modal-screen">> = 
             }
           }}
           isTouched={touched?.phoneNumbers ? touched.phoneNumbers[2]?.number ?? false : false}
-          errors={
-            errors.phoneNumbers
-              ? (errors.phoneNumbers[2] as FormikErrors<{ label: string; number: string }>)?.number ?? ""
-              : ""
-          }
+          errors={errors.phoneNumbers ? (errors.phoneNumbers[2] as FormikErrors<{ label: string; number: string }>)?.number ?? "" : ""}
         />
         <TextFieldCard
           title={intl.formatMessage({ id: "AddClientModal.address1" })}
           value={values.addresses[0].address1}
           onChangeText={handleChange("addresses[0].address1")}
           isTouched={touched?.addresses ? touched.addresses[0]?.address1 ?? false : false}
-          errors={
-            errors.addresses
-              ? (errors.addresses[0] as FormikErrors<ClientUserType["addresses"][number]>)?.address1 ?? ""
-              : ""
-          }
+          errors={errors.addresses ? (errors.addresses[0] as FormikErrors<ClientUserType["addresses"][number]>)?.address1 ?? "" : ""}
         />
         <TextFieldCard
           title={intl.formatMessage({ id: "AddClientModal.address2" })}
           value={values.addresses[0].address2}
           onChangeText={handleChange("addresses[0].address2")}
           isTouched={touched?.addresses ? touched.addresses[0]?.address2 ?? false : false}
-          errors={
-            errors.addresses
-              ? (errors.addresses[0] as FormikErrors<ClientUserType["addresses"][number]>)?.address2 ?? ""
-              : ""
-          }
+          errors={errors.addresses ? (errors.addresses[0] as FormikErrors<ClientUserType["addresses"][number]>)?.address2 ?? "" : ""}
         />
         <TextFieldCard
           title={intl.formatMessage({ id: "AddClientModal.city" })}
           value={values.addresses[0].city}
           onChangeText={handleChange("addresses[0].city")}
           isTouched={touched?.addresses ? touched.addresses[0]?.city ?? false : false}
-          errors={
-            errors.addresses
-              ? (errors.addresses[0] as FormikErrors<ClientUserType["addresses"][number]>)?.city ?? ""
-              : ""
-          }
+          errors={errors.addresses ? (errors.addresses[0] as FormikErrors<ClientUserType["addresses"][number]>)?.city ?? "" : ""}
         />
         <ButtonCard
           title={intl.formatMessage({ id: "AddClientModal.state" })}
-          subTitle={
-            STATIC_FORM_USA_STATES.find(state => state.key === values.addresses[0].state)?.title ?? "Select State"
-          }
+          subTitle={STATIC_FORM_USA_STATES.find(state => state.key === values.addresses[0].state)?.title ?? "Select State"}
           isTouched={touched?.addresses ? touched.addresses[0]?.state ?? false : false}
-          errors={
-            errors.addresses
-              ? (errors.addresses[0] as FormikErrors<ClientUserType["addresses"][number]>)?.state ?? ""
-              : ""
-          }
+          errors={errors.addresses ? (errors.addresses[0] as FormikErrors<ClientUserType["addresses"][number]>)?.state ?? "" : ""}
           onPress={() =>
             navigation.navigate("modals", {
               screen: "selector-modal-screen",
@@ -315,11 +294,7 @@ export const AddClientModal: FC<ModalsScreenProps<"add-client-modal-screen">> = 
           maxLength={7}
           onChangeText={handleChange("addresses[0].postCode")}
           isTouched={touched?.addresses ? touched.addresses[0]?.postCode ?? false : false}
-          errors={
-            errors.addresses
-              ? (errors.addresses[0] as FormikErrors<ClientUserType["addresses"][number]>)?.postCode ?? ""
-              : ""
-          }
+          errors={errors.addresses ? (errors.addresses[0] as FormikErrors<ClientUserType["addresses"][number]>)?.postCode ?? "" : ""}
         />
       </ExpandableSection>
       <Space size="large" />

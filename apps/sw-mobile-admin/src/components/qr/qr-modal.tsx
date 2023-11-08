@@ -1,13 +1,12 @@
-import QRCode from "react-native-qrcode-svg";
-
 import { Portal } from "@gorhom/portal";
 import React, { FC } from "react";
 import { View } from "react-native";
 import { Modal } from "react-native-paper";
-import { useTheme } from "../../theme";
-import { Text } from "../common";
-import { getFontSize } from "../../utils";
+import QRCode from "react-native-qrcode-svg";
 import { IconButton } from "..";
+import { useTheme } from "../../theme";
+import { getFontSize } from "../../utils";
+import { Text } from "../common";
 
 type QrModalProps = {
   isVisible: boolean;

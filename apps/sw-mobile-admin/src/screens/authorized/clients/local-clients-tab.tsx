@@ -1,4 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
+import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { ClientUserDtoType } from "@shortwaits/shared-lib";
 import { isEmpty } from "lodash";
 import React, { Fragment, useCallback, useEffect, useState } from "react";
@@ -7,15 +8,18 @@ import { ListRenderItem, View } from "react-native";
 import { RefreshControl } from "react-native-gesture-handler";
 import { AnimatedSearchBar, Button, List, NonIdealState, SelectorListItem } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
-import { useLocalClients } from "../../../store";
+import { useGetLocalClientsQuery } from "../../../services";
+import { useBusiness, useLocalClients } from "../../../store";
 import { getResponsiveHeight } from "../../../utils";
 
-export function LocalClientsTab({ isListSearchable, isLoading, refetch }) {
+export function LocalClientsTab() {
+  const business = useBusiness();
   const intl = useIntl();
   const [, setSearchText] = useState("");
   const currentLocalClients = useLocalClients();
   const [filteredLocalClientsData, setFilteredLocalClientsData] = useState([]);
   const { navigate } = useNavigation<AuthorizedScreenProps<"events-screen">["navigation"]>();
+  const { isLoading, isSuccess, refetch } = useGetLocalClientsQuery(business?._id ?? skipToken);
 
   const handleAddClient = useCallback(() => {
     navigate("modals", {
@@ -76,7 +80,7 @@ export function LocalClientsTab({ isListSearchable, isLoading, refetch }) {
           paddingHorizontal: 16,
         }}
       >
-        <AnimatedSearchBar onChangeText={handleOnChangeText} isVisible={isListSearchable} />
+        <AnimatedSearchBar onChangeText={handleOnChangeText} isVisible={false} />
       </View>
       <List
         refreshing={isLoading}
@@ -87,8 +91,8 @@ export function LocalClientsTab({ isListSearchable, isLoading, refetch }) {
         ListEmptyComponent={
           <View
             style={{
-              marginTop: 16,
-              padding: 16,
+              marginTop: getResponsiveHeight(16),
+              marginHorizontal: getResponsiveHeight(16),
             }}
           >
             {isEmpty(currentLocalClients) ? (

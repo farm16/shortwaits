@@ -1,31 +1,25 @@
-import { StackNavigationProp } from "@react-navigation/stack";
 import { CompositeNavigationProp, NavigatorScreenParams, RouteProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 
 import {
-  NAVIGATION_STACKS,
-  UNAUTHORIZED_SCREENS,
-  AUTHORIZED_SCREENS,
-  AUTHORIZED_STACK_SCREENS,
-  MODAL_SCREENS,
-} from "./navigation-constants";
-import { selectorConfigs } from "../screens/modals/selector/selector-config";
-import {
+  BusinessDtoType,
   BusinessLabelType,
+  BusinessUserDtoType,
+  BusinessWeekDaysType,
   CategoryDtoType,
+  ClientUserDtoType,
+  CreateBusinessUserDtoType,
+  CreateClientUserDtoType,
   CreateEventDtoType,
   EventDtoType,
   ServiceDtoType,
   UpdateEventDtoType,
-  CreateBusinessUserDtoType,
-  CreateClientUserDtoType,
-  BusinessUserDtoType,
-  ClientUserDtoType,
-  BusinessDtoType,
-  BusinessWeekDaysType,
   WeekHoursType,
 } from "@shortwaits/shared-lib";
-import { ThemeColorName } from "../theme/Colors";
 import { NonIdealStateTypes } from "../components";
+import { selectorConfigs } from "../screens/modals/selector/selector-config";
+import { ThemeColorName } from "../theme/Colors";
+import { AUTHORIZED_SCREENS, AUTHORIZED_STACK_SCREENS, MODAL_SCREENS, NAVIGATION_STACKS, UNAUTHORIZED_SCREENS } from "./navigation-constants";
 
 export type FormData = {
   addEvent: CreateEventDtoType;
@@ -87,6 +81,7 @@ export type ModalStackParamList = {
 
   [MODAL_SCREENS.ADD_CLIENT_MODAL_SCREEN]: {
     initialValues?: FormData[FormType];
+    clientType: "local" | "shortwaits";
     onSubmit?<T extends keyof FormData>(arg: FormData[T]): void;
     onDone?(): void;
     closeOnSubmit?: boolean;
@@ -180,40 +175,25 @@ type AUTHORIZED_SCREENS_TYPES = (typeof AUTHORIZED_SCREENS)[AUTHORIZED_SCREENS_K
  *
  */
 export interface UnauthorizedScreenProps<T extends UNAUTHORIZED_SCREENS_TYPES> {
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<RootStackParamList>,
-    StackNavigationProp<UnauthorizedStackParamList & ModalStackParamList, T>
-  >;
+  navigation: CompositeNavigationProp<StackNavigationProp<RootStackParamList>, StackNavigationProp<UnauthorizedStackParamList & ModalStackParamList, T>>;
   route: RouteProp<UnauthorizedStackParamList & ModalStackParamList, T>;
 }
 
 export interface AuthorizedScreenProps<T extends AUTHORIZED_SCREENS_TYPES> {
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<RootStackParamList>,
-    StackNavigationProp<AuthorizedTabsParamList & AuthorizedStackParamList & ModalStackParamList, T>
-  >;
+  navigation: CompositeNavigationProp<StackNavigationProp<RootStackParamList>, StackNavigationProp<AuthorizedTabsParamList & AuthorizedStackParamList & ModalStackParamList, T>>;
   route: RouteProp<AuthorizedTabsParamList & AuthorizedStackParamList & ModalStackParamList, T>;
 }
 
 export interface ModalsScreenProps<T extends keyof ModalStackParamList> {
   navigation: CompositeNavigationProp<
     StackNavigationProp<RootStackParamList>,
-    StackNavigationProp<
-      UnauthorizedStackParamList & AuthorizedTabsParamList & AuthorizedStackParamList & ModalStackParamList,
-      T
-    >
+    StackNavigationProp<UnauthorizedStackParamList & AuthorizedTabsParamList & AuthorizedStackParamList & ModalStackParamList, T>
   >;
-  route: RouteProp<
-    UnauthorizedStackParamList & AuthorizedTabsParamList & AuthorizedStackParamList & ModalStackParamList,
-    T
-  >;
+  route: RouteProp<UnauthorizedStackParamList & AuthorizedTabsParamList & AuthorizedStackParamList & ModalStackParamList, T>;
 }
 
 export type STACKS_TYPES = (typeof NAVIGATION_STACKS)[keyof typeof NAVIGATION_STACKS];
 
 export type ALL_SCREENS_TYPE = AUTHORIZED_SCREENS_TYPES | UNAUTHORIZED_SCREENS_TYPES;
 
-export type ScreenProps = AuthorizedTabsParamList &
-  AuthorizedStackParamList &
-  ModalStackParamList &
-  UnauthorizedStackParamList;
+export type ScreenProps = AuthorizedTabsParamList & AuthorizedStackParamList & ModalStackParamList & UnauthorizedStackParamList;

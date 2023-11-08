@@ -1,9 +1,11 @@
 import { skipToken } from "@reduxjs/toolkit/dist/query";
+import { Logo3 } from "apps/sw-mobile-admin/src/assets/images/svg-components/logo-3";
 import React, { FC, Fragment, useCallback, useLayoutEffect, useMemo, useState } from "react";
 import { useIntl } from "react-intl";
 import { Alert, Animated, Dimensions, Pressable, StyleSheet, View } from "react-native";
 import { SceneMap, TabBarProps, TabView } from "react-native-tab-view";
-import { Camera, Container, IconButton, Screen, Text, WithPermission } from "../../../components";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { Container, IconButton, Screen, Text } from "../../../components";
 import { useOsContacts } from "../../../hooks";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useCreateLocalClientsMutation, useGetClientsQuery, useGetLocalClientsQuery } from "../../../services";
@@ -27,32 +29,31 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
   const currentClients = useLocalClients();
   const [tabIndex, setTabIndex] = useState(0);
   const [isListSearchable, setIsListSearchable] = useState(false);
-  const [isCameraOpen, setIsCameraOpen] = useState(false);
 
   const handleAddClient = useCallback(() => {
     navigation.navigate("modals", {
       screen: "add-client-modal-screen",
+      params: {
+        clientType: tabIndex === 0 ? "shortwaits" : "local",
+      },
     });
-  }, [navigation]);
-
-  const handleOpenCamera = useCallback(() => {
-    setIsCameraOpen(true);
-  }, []);
+  }, [navigation, tabIndex]);
 
   const { error: osContactsError, isLoading: isOsContactsLoading, getContacts: getOsContacts } = useOsContacts();
   const [createLocalClients, createLocalClientsResult] = useCreateLocalClientsMutation();
-  const {
-    isLoading: isClientsQueryLoading,
-    isSuccess: isClientsQuerySuccess,
-    refetch: refetchClientsQuery,
-  } = useGetClientsQuery(business?._id ?? skipToken, {
-    refetchOnFocus: true,
-  });
+  const { isLoading: isClientsQueryLoading, isSuccess: isClientsQuerySuccess, refetch: refetchClientsQuery } = useGetClientsQuery(business?._id ?? skipToken);
   const { isLoading: isLocalClientsQueryLoading, isSuccess: isLocalClientsQuerySuccess, refetch: refetchLocalClientsQuery } = useGetLocalClientsQuery(business?._id ?? skipToken);
 
   const isCreateClientsLoading = createLocalClientsResult.isLoading && !createLocalClientsResult.isSuccess;
-
   const isLoading = isClientsQueryLoading || isLocalClientsQueryLoading || isCreateClientsLoading;
+
+  const renderShortwaitsClientsTab = useCallback(() => {
+    return <ShortwaitsClientsTab />;
+  }, []);
+
+  const renderLocalClientsTab = useCallback(() => {
+    return <LocalClientsTab />;
+  }, []);
 
   const handleSyncContacts = useCallback(
     async function () {
@@ -114,10 +115,10 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
         return (
           <Container direction="row" alignItems="center">
             {tabIndex === 0 ? (
-              <IconButton iconType="scan-qr" withMarginRight onPress={() => handleOpenCamera()} />
+              <IconButton iconType="scan-qr" withMarginRight onPress={() => handleAddClient()} />
             ) : (
               <Fragment>
-                <IconButton iconType="sync" withMarginRight onPress={() => handleSyncContacts()} />
+                <IconButton iconType="contactSync" withMarginRight onPress={() => handleSyncContacts()} />
                 <IconButton iconType="add" withMarginRight onPress={() => handleAddClient()} />
               </Fragment>
             )}
@@ -125,7 +126,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
         );
       },
     });
-  }, [handleAddClient, handleOpenCamera, handleSyncContacts, isListSearchable, isLoading, navigation, tabIndex]);
+  }, [handleAddClient, handleSyncContacts, isListSearchable, isLoading, navigation, tabIndex]);
 
   const routes = useMemo(() => {
     return [
@@ -139,14 +140,6 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
       },
     ];
   }, [intl]);
-
-  const renderShortwaitsClientsTab = useCallback(() => {
-    return <ShortwaitsClientsTab isListSearchable={isListSearchable} isLoading={isClientsQueryLoading} refetch={refetchClientsQuery} />;
-  }, [isClientsQueryLoading, isListSearchable, refetchClientsQuery]);
-
-  const renderLocalClientsTab = useCallback(() => {
-    return <LocalClientsTab isListSearchable={isListSearchable} isLoading={isLocalClientsQueryLoading} refetch={refetchLocalClientsQuery} />;
-  }, [isListSearchable, isLocalClientsQueryLoading, refetchLocalClientsQuery]);
 
   const renderScene = SceneMap({
     shortwaits: renderShortwaitsClientsTab,
@@ -166,21 +159,26 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
                     styles.tabView,
                     {
                       backgroundColor: isSelected ? "#dddff7" : Colors.disabledBackground,
-                      borderBottomColor: isSelected ? Colors.brandAccent : "transparent",
+                      borderBottomColor: isSelected ? Colors.brandSecondary : Colors.disabledText,
                     },
                   ]}
                 >
-                  <Animated.Text
+                  {i === 0 ? (
+                    <Logo3 height={getResponsiveHeight(40)} color3={isSelected ? Colors.brandPrimary : "#8e8e93"} />
+                  ) : (
+                    <Icon name={"cellphone"} size={getResponsiveHeight(20)} color={isSelected ? Colors.brandPrimary : "#8e8e93"} />
+                  )}
+                  {/* <Animated.Text
                     style={[
                       styles.tabText,
                       {
-                        color: isSelected ? Colors.brandSecondary8 : Colors.subText,
+                        color: isSelected ? Colors.brandSecondary8 : "#8e8e93",
                         fontWeight: isSelected ? "700" : "400",
                       },
                     ]}
                   >
                     {route.title}
-                  </Animated.Text>
+                  </Animated.Text> */}
                 </Animated.View>
               </Pressable>
             );
@@ -188,14 +186,11 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
         </View>
       );
     },
-    [Colors.brandAccent, Colors.brandSecondary8, Colors.disabledBackground, Colors.subText, tabIndex]
+    [Colors.brandAccent, Colors.disabledBackground, tabIndex]
   );
 
   return (
     <Screen preset="fixed" unsafe backgroundColor="backgroundOverlay">
-      <WithPermission show={isCameraOpen} permission="camera">
-        <Camera isVisible={isCameraOpen} setIsVisible={setIsCameraOpen} />
-      </WithPermission>
       <TabView
         //lazy
         renderTabBar={_renderTabBar}
