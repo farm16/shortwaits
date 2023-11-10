@@ -186,7 +186,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
         </View>
       );
     },
-    [Colors.brandAccent, Colors.disabledBackground, tabIndex]
+    [Colors.brandPrimary, Colors.brandSecondary, Colors.disabledBackground, Colors.disabledText, tabIndex]
   );
 
   return (

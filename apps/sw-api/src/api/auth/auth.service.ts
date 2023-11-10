@@ -8,11 +8,11 @@ import { BusinessType, BusinessUserType, ClientUserType, ConvertToDtoType, Objec
 import bcrypt from "bcryptjs";
 import { OAuth2Client } from "google-auth-library";
 import { Model } from "mongoose";
-import { customAlphabet } from "nanoid";
 import { noop } from "rxjs";
 import {
   convertDomainToLowercase,
   generateBusinessUser,
+  generateUniqueId,
   getDefaultClientPayloadValues,
   getFilteredNewBusinessOwner,
   getNewUserFromSocialAccount,
@@ -28,7 +28,6 @@ const providers = ["google", "facebook"];
 const googleApiOauthUrl = "https://www.googleapis.com/oauth2/v3";
 @Injectable()
 export class AuthService {
-  private readonly generateShortId = customAlphabet("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 16);
   private readonly maxAttempts = 10;
   private readonly oAuth2Client: OAuth2Client;
 
@@ -301,9 +300,9 @@ export class AuthService {
     };
   }
 
-  private async generateUniqueId(): Promise<string | null> {
+  private async generateBusinessShortUniqueId(): Promise<string | null> {
     for (let attempt = 0; attempt < this.maxAttempts; attempt++) {
-      const generatedId = this.generateShortId().toLowerCase();
+      const generatedId = generateUniqueId();
       const existingEntity = await this.businessModel.findOne({ shortId: generatedId });
 
       if (!existingEntity) {
@@ -385,10 +384,11 @@ export class AuthService {
     const userPayload = generateBusinessUser(newUser);
     const currentUser = new this.businessUserModel(userPayload);
 
-    const businessShortId = await this.generateUniqueId();
+    const businessShortId = await this.generateBusinessShortUniqueId();
     if (!businessShortId) {
       throw new UnprocessableEntityException("Unable to create business account for user");
     }
+
     const baseUrl = `https://${businessShortId}.shortwaits.com`;
     const webLogoImageUrl = "https://img.icons8.com/bubbles/50/shop.png";
 
@@ -497,6 +497,7 @@ export class AuthService {
     const hashedRt = await bcrypt.hash(tokens.refreshToken, salt);
 
     const userPayload = getDefaultClientPayloadValues({
+      shortId: generateUniqueId(),
       email: newClientUser.email,
       password: encodedPassword,
       displayName: newClientUser?.displayName ?? "",

@@ -6,6 +6,10 @@ import { Document, Schema as MongooseSchema } from "mongoose";
 @Schema({ collection: "client-users" })
 export class ClientUser extends Document implements ClientUserType {
   @ApiProperty()
+  @Prop()
+  shortId: string;
+
+  @ApiProperty()
   @Prop(
     raw({
       type: MongooseSchema.Types.ObjectId,

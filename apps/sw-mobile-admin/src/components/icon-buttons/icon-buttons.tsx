@@ -2,9 +2,9 @@ import React, { FC } from "react";
 import { StyleProp, View, ViewStyle } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
-import { Button, ButtonProps, Spinner, Text } from "../common";
 import { useTheme } from "../../theme";
 import { ThemeColorName } from "../../theme/Colors";
+import { Button, ButtonProps, Spinner, Text } from "../common";
 import { CircleIconsKeys, _circleIcons } from "./icon-presets";
 
 const disabledStates = ["loading", "disabled", "enable"];
@@ -105,7 +105,7 @@ export const BackButton: FC<
         <Text
           preset="none"
           style={{
-            color: brandAccent,
+            color: brandSecondary,
             fontWeight: "600",
             padding: 0,
             marginTop: -2,

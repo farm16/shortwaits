@@ -22,6 +22,7 @@ export type ClientUserMethodsType = {
 };
 
 export type ClientUserType = {
+  shortId: string;
   clientType: "local" | "external"; // local means the user is created by the admin, external means the user is created by the client
   username: string;
   alias: "username" | "familyName" | "givenName" | "middleName" | "displayName";

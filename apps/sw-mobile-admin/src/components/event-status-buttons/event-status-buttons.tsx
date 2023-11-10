@@ -1,15 +1,15 @@
-import React from "react";
-import { View, StyleSheet, Dimensions } from "react-native";
-import { Button, Text } from "..";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { useTheme } from "../../theme";
 import { EventDtoType } from "@shortwaits/shared-lib";
-import { ActivityIndicator } from "react-native-paper";
+import React from "react";
 import { useIntl } from "react-intl";
+import { Dimensions, StyleSheet, View } from "react-native";
+import { ActivityIndicator } from "react-native-paper";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { Button, Text } from "..";
+import { useTheme } from "../../theme";
 
-import { CALENDAR_EVENT_HEIGHT, EVENT_ITEM_BORDER_RADIUS, eventStatusColors, eventStatusIconNames, eventStatusNames, getFontSize, nextEventStatuses } from "../../utils";
 import { useUpdateEventMutation } from "../../services";
 import { useBusiness } from "../../store";
+import { CALENDAR_EVENT_HEIGHT, EVENT_ITEM_BORDER_RADIUS, eventStatusColors, eventStatusIconNames, eventStatusNames, getFontSize, nextEventStatuses } from "../../utils";
 
 export const EventStatusButtons: React.FC<{
   event: EventDtoType;

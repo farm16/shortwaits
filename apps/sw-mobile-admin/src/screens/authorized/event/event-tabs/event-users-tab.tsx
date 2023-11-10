@@ -1,30 +1,15 @@
-import React, { Fragment, useCallback, useMemo } from "react";
-import { SectionListRenderItem, RefreshControl, View, SectionListData, SectionList } from "react-native";
-import {
-  Button,
-  NonIdealState,
-  Text,
-  BusinessUserCard,
-  ClientUserCard,
-  Container,
-  IconButton,
-  Space,
-} from "../../../../components";
-import { useTheme } from "../../../../theme";
-import { useGetPeopleInEventQuery, useUpdateEventMutation } from "../../../../services";
-import {
-  EventDtoType,
-  BusinessUserDtoType,
-  ClientUserDtoType,
-  ClientUsersDtoType,
-  BusinessUsersDtoType,
-} from "@shortwaits/shared-lib";
-import { isEmpty } from "lodash";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
-import { ActivityIndicator } from "react-native-paper";
-import { navigate } from "../../../../utils";
-import { useBusiness } from "../../../../store";
+import { BusinessUserDtoType, BusinessUsersDtoType, ClientUserDtoType, ClientUsersDtoType, EventDtoType } from "@shortwaits/shared-lib";
+import { isEmpty } from "lodash";
+import React, { Fragment, useCallback, useMemo } from "react";
 import { useIntl } from "react-intl";
+import { RefreshControl, SectionList, SectionListData, SectionListRenderItem, View } from "react-native";
+import { ActivityIndicator } from "react-native-paper";
+import { BusinessUserCard, Button, ClientUserCard, Container, IconButton, NonIdealState, Space, Text } from "../../../../components";
+import { useGetPeopleInEventQuery, useUpdateEventMutation } from "../../../../services";
+import { useBusiness } from "../../../../store";
+import { useTheme } from "../../../../theme";
+import { navigate } from "../../../../utils";
 
 type PeopleDtoType = BusinessUserDtoType | ClientUserDtoType;
 
@@ -186,9 +171,7 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
                 color: Colors.text,
               }}
             >
-              {`${intl.formatMessage({ id: `Common.${(title as string).toLowerCase()}` })} (${
-                _data.find(({ title: _title }) => _title === title).data.length
-              })`}
+              {`${intl.formatMessage({ id: `Common.${(title as string).toLowerCase()}` })} (${_data.find(({ title: _title }) => _title === title).data.length})`}
             </Text>
             <IconButton
               iconType="add"
@@ -228,8 +211,7 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
     );
   }, []);
 
-  if (isPeopleInEventQueryLoading || updateEventStatus.isLoading)
-    return <ActivityIndicator animating={true} color={Colors.brandPrimary} />;
+  if (isPeopleInEventQueryLoading || updateEventStatus.isLoading) return <ActivityIndicator animating={true} color={Colors.brandPrimary} />;
 
   return (
     <View

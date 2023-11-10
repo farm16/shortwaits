@@ -98,18 +98,6 @@ export class AuthController {
   }
 
   @Public()
-  @Post("client/local/sign-up")
-  @HttpCode(HttpStatus.CREATED)
-  @ApiCreatedResponse({
-    status: HttpStatus.CREATED,
-    description: "Returns new business user (super Admin) & business record",
-    type: AuthSuccessResponse,
-  })
-  async clientLocalSignUp(@Body(new ValidationPipe()) dto: ClientSignUpWithEmailDto, @Headers("device-suggested-language") locale: string) {
-    return this.authService.clientLocalSignUp(dto, locale);
-  }
-
-  @Public()
   @Post("client/social/sign-in")
   @HttpCode(HttpStatus.CREATED)
   @ApiCreatedResponse({
@@ -119,6 +107,18 @@ export class AuthController {
   })
   async clientSignInSocial(@Body(new ValidationPipe()) dto: WithSocialAuthDto, @Headers("device-suggested-language") locale: string) {
     return this.authService.businessSocialSignIn(dto, locale);
+  }
+
+  @Public()
+  @Post("client/local/sign-up")
+  @HttpCode(HttpStatus.CREATED)
+  @ApiCreatedResponse({
+    status: HttpStatus.CREATED,
+    description: "Returns new business user (super Admin) & business record",
+    type: AuthSuccessResponse,
+  })
+  async clientLocalSignUp(@Body(new ValidationPipe()) dto: ClientSignUpWithEmailDto, @Headers("device-suggested-language") locale: string) {
+    return this.authService.clientLocalSignUp(dto, locale);
   }
 
   @Public()

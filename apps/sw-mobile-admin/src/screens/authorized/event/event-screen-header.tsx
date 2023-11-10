@@ -1,24 +1,15 @@
-import React from "react";
-import { View, StyleSheet, Pressable } from "react-native";
 import { BusinessLabelsType, EventDtoType } from "@shortwaits/shared-lib";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { isEmpty, truncate } from "lodash";
+import React from "react";
+import { Pressable, StyleSheet, View } from "react-native";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
-import { Container, Emoji, Space, Text } from "../../../components";
-import { useTheme } from "../../../theme";
-import {
-  statusDisplayMessages,
-  statusDisplayMessagesBackgroundColor,
-  statusDisplayMessagesColor,
-} from "../../../utils/status-color";
-import {
-  getPrettyStringFromPriceWithSymbol,
-  getPrettyDateFromISO,
-  getPrettyTimeRangeFromISO,
-  truncated,
-} from "../../../utils";
-import { useService } from "../../../store";
 import { useIntl } from "react-intl";
+import { Container, Emoji, Space, Text } from "../../../components";
+import { useService } from "../../../store";
+import { useTheme } from "../../../theme";
+import { getPrettyDateFromISO, getPrettyStringFromPriceWithSymbol, getPrettyTimeRangeFromISO, truncated } from "../../../utils";
+import { statusDisplayMessages, statusDisplayMessagesBackgroundColor, statusDisplayMessagesColor } from "../../../utils/status-color";
 
 const IconNames = {
   date: "calendar-month-outline",
@@ -64,11 +55,7 @@ function InfoItem({ title, value, onPress, iconName }: InfoItemProps) {
 
       {title === "Labels" ? (
         <Container direction="row">
-          {isEmpty(value)
-            ? null
-            : (value as BusinessLabelsType).map(label => (
-                <Emoji key={label.emojiShortName} size={14} name={label.emojiShortName} />
-              ))}
+          {isEmpty(value) ? null : (value as BusinessLabelsType).map(label => <Emoji key={label.emojiShortName} size={14} name={label.emojiShortName} />)}
         </Container>
       ) : (
         <View
@@ -165,7 +152,18 @@ export function EventScreenHeader({ event }: { event: EventDtoType }) {
             id: "Event_Screen.eventScreenHeader.time",
           })}
           iconName="time"
-          value={getPrettyTimeRangeFromISO(event?.startTime, event?.expectedEndTime, intl.locale)}
+          value={
+            <Text
+              style={{
+                fontWeight: "500",
+                fontSize: 14,
+              }}
+            >
+              {getPrettyTimeRangeFromISO(event?.startTime, event?.expectedEndTime, intl.locale)[0]}
+              {getPrettyTimeRangeFromISO(event?.startTime, event?.expectedEndTime, intl.locale)[1] ? <Icon name={"arrow-right"} color={"grey"} size={14} /> : null}
+              {getPrettyTimeRangeFromISO(event?.startTime, event?.expectedEndTime, intl.locale)[1]}
+            </Text>
+          }
         />
       </Container>
       {event?.notes && event?.labels && event?.labels.length > 0 ? <Space direction="horizontal" size="tiny" /> : null}

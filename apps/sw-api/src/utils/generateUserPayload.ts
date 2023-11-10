@@ -46,6 +46,7 @@ export const generateClientUsers = (users: CreateClientUsersDtoType) => {
 
 export const getDefaultClientPayloadValues = (userPayloadOverride: Partial<ClientUserType>) => {
   const userPayload: ClientUserType = {
+    shortId: "",
     email: "",
     password: "",
     accountImageUrl: "",

@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useLayoutEffect, useState } from "react";
+import React, { FC, useCallback, useLayoutEffect } from "react";
 import { FormattedMessage, useIntl } from "react-intl"; // Import FormattedMessage and useIntl
 import { StyleSheet } from "react-native";
 import { List } from "react-native-paper";
@@ -16,29 +16,20 @@ import { ManageAdminUsers } from "./options/user-account";
 
 export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ navigation }) => {
   const { Colors } = useTheme();
-
   const currentBusiness = useBusiness();
-  const [admins, setAdmins] = useState([]);
-
-  const { data, isLoading, isError, isSuccess } = useGetStaffQuery(currentBusiness?._id ?? skipToken);
-
-  console.log("data >>>", data);
+  const { data: staffQuery, isLoading, isError, isSuccess } = useGetStaffQuery(currentBusiness?._id ?? skipToken);
   const intl = useIntl(); // Initialize the Intl instance
-
-  // console.log("admins", admins);
+  const [updateBusiness, state] = useUpdateBusinessMutation();
+  const [signOut] = useLocalSignOutMutation();
+  const handleSignOut = useCallback(async () => {
+    await signOut(undefined);
+  }, [signOut]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
     });
   }, [navigation]);
-
-  const [updateBusiness, state] = useUpdateBusinessMutation();
-
-  const [signOut] = useLocalSignOutMutation();
-  const handleSignOut = useCallback(async () => {
-    await signOut(undefined);
-  }, [signOut]);
 
   const itemStyle = {
     borderColor: Colors.gray,
@@ -160,7 +151,7 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
             />
           )}
         />
-        <ManageAdminUsers admins={admins} />
+        <ManageAdminUsers admins={staffQuery.data} />
         <List.Item
           descriptionStyle={{ color: Colors.subText }}
           titleStyle={{
