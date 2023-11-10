@@ -31,9 +31,27 @@ export class ClientUserController {
     return this.clientUsersService.updateClientUserForBusiness(businessId, clientUser);
   }
 
+  @Put("business/:businessId/clients")
+  @HttpCode(HttpStatus.OK)
+  async addClientToBusiness(@Param("businessId") businessId: string, @Body() clientsShortId: string) {
+    return this.clientUsersService.addClientUserToBusiness(businessId, clientsShortId);
+  }
+
   @Put(":clientId")
   @HttpCode(HttpStatus.OK)
   async updateClients(@Param("clientId") clientId: string, @Body() dto: CreateClientUserDto) {
     return null;
   }
+
+  @Get(":clientShortId")
+  @HttpCode(HttpStatus.OK)
+  async searchClients(@Param("clientShortId") clientShortId: string) {
+    return this.clientUsersService.getClient(clientShortId);
+  }
+
+  // @Get("search")
+  // @HttpCode(HttpStatus.OK)
+  // async searchClients(@Query("q") query: string) {
+  //   return this.clientUsersService.searchClients(query);
+  // }
 }

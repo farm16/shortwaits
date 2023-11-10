@@ -39,6 +39,7 @@ type Endpoint =
   // users endpoints
   | `client-user`
   | `client-user/business/${string}`
+  | `client-user/business/${string}/clients`
   | `business-staff`
   | `business-staff/business/${string}`
   | `local-client-user/${string}`
@@ -145,8 +146,9 @@ export const endpoints = {
   // users
   getStaffUsers: createEndpoint(`business-staff/business/:businessId`, "GET"),
   getLocalClientUsers: createEndpoint("local-client-user/business/:businessId", "GET"),
-  getClientUsers: createEndpoint(`client-user/business/:businessId`, "GET"),
   createLocalClientUser: createEndpoint(`local-client-user/business/:businessId`, "POST"),
+  getClientUsers: createEndpoint(`client-user/business/:businessId`, "GET"),
+  addClientToBusiness: createEndpoint(`client-user/business/:businessId/clients`, "PUT"),
 
   // upload file
   uploadImageFile: createEndpoint("upload-file/image", "POST"),

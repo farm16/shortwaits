@@ -71,4 +71,59 @@ export class ClientUserService {
       throw new InternalServerErrorException(error.message);
     }
   }
+
+  async addClientUserToBusiness(businessId: string, clientShortId: string) {
+    try {
+      // check business exists first else throw 404 then check if business has any users else throw 404 else return users
+      const business = await this.businessModel.findById(businessId).exec();
+      if (!business) {
+        throw new NotFoundException(`Business #${businessId} not found`);
+      }
+      if (!clientShortId) {
+        throw new PreconditionFailedException(`No client short id provided`);
+      }
+      const userClient = await this.clientUserModel.findOne({ clientShortId }).exec();
+      if (!userClient) {
+        throw new NotFoundException(`Client #${clientShortId} not found`);
+      }
+      // check if client is already in business
+      if (business.clients.includes(userClient._id)) {
+        throw new PreconditionFailedException(`Client #${clientShortId} already exists in business #${businessId}`);
+      }
+      // add client to business
+      business.clients.push(userClient._id);
+      await business.save();
+      return business;
+    } catch (error) {
+      console.log(error);
+      throw new InternalServerErrorException(error.message);
+    }
+  }
+
+  async searchClients(query: string) {
+    try {
+      return this.clientUserModel.find({ $text: { $search: query } }).exec();
+    } catch (error) {
+      console.log(error);
+      throw new InternalServerErrorException(error.message);
+    }
+  }
+
+  async getClient(clientShortId: string) {
+    try {
+      if (!clientShortId) {
+        throw new PreconditionFailedException(`No client short id provided`);
+      }
+      const userClient = await this.clientUserModel.findOne({ clientShortId }).exec();
+      if (!userClient) {
+        throw new NotFoundException(`Client #${clientShortId} not found`);
+      }
+      // filter out sensitive data
+      const { password, ...client } = userClient.toJSON();
+      return client;
+    } catch (error) {
+      console.log(error);
+      throw new InternalServerErrorException(error.message);
+    }
+  }
 }
