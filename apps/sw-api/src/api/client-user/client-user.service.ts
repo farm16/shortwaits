@@ -90,9 +90,14 @@ export class ClientUserService {
       if (business.clients?.includes(userClient._id)) {
         throw new PreconditionFailedException(`Client #${clientShortId} already exists in business #${businessId}`);
       }
-      // add client to business
+      // add client to business but first check if clients is null
+      if (!business.clients) {
+        business.clients = [];
+      }
       business.clients.push(userClient._id);
+
       await business.save();
+
       return business;
     } catch (error) {
       console.log(error);
