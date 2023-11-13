@@ -40,6 +40,7 @@ export const buttonPresets = ({
       borderBottomWidth: 3,
       borderRightWidth: 3,
       paddingHorizontal: getResponsiveWidth(20),
+      justifyContent: "center",
     },
     "primary-disabled": {
       ...VIEW_BASE,

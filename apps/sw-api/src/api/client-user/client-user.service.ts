@@ -17,17 +17,15 @@ export class ClientUserService {
 
   async getClientUsersForBusiness(businessId: string) {
     try {
-      // check business exists first else throw 404 then check if business has any users else throw 404 else return users
       const business = await this.businessModel.findById(businessId).exec();
       if (!business) {
         throw new NotFoundException(`Business #${businessId} not found`);
       }
-      if (business.localClients?.length === 0) {
+      if (business.clients?.length === 0) {
         return [];
       }
-      // look for multiple ids in clientUserModel
-      const localClientUsers = await this.clientUserModel.find({ _id: { $in: business.localClients } }).exec();
-      return localClientUsers;
+      const clients = await this.clientUserModel.find({ _id: { $in: business.clients } }).exec();
+      return clients;
     } catch (error) {
       console.log(error);
       throw new InternalServerErrorException(error.message);
@@ -42,7 +40,7 @@ export class ClientUserService {
         throw new NotFoundException(`Business #${businessId} not found`);
       }
       if (localClientUsers?.length === 0) {
-        throw new PreconditionFailedException(`No local clients provided`);
+        throw new PreconditionFailedException(`No clients provided`);
       }
       // todo we might need to limit on the number of local clients that can be created at once or in total
       const newLocalClientUsers = await this.clientUserModel.create(localClientUsers);
@@ -62,7 +60,7 @@ export class ClientUserService {
         throw new NotFoundException(`Business #${businessId} not found`);
       }
       if (!localClientUser) {
-        throw new PreconditionFailedException(`No local client provided`);
+        throw new PreconditionFailedException(`No client provided`);
       }
       const updatedLocalClientUser = await this.clientUserModel.findByIdAndUpdate(localClientUser._id, localClientUser, { new: true });
       return updatedLocalClientUser;
@@ -77,7 +75,7 @@ export class ClientUserService {
       // check business exists first else throw 404 then check if business has any users else throw 404 else return users
       const business = await this.businessModel.findById(businessId).exec();
       if (!business) {
-        throw new NotFoundException(`Business #${businessId} not found`);
+        throw new NotFoundException(`Business not found`);
       }
       if (!clientShortId) {
         throw new PreconditionFailedException(`No client short id provided`);
@@ -88,7 +86,7 @@ export class ClientUserService {
       }
       // check if client is already in business also clients be null
       if (business.clients?.includes(userClient._id)) {
-        throw new PreconditionFailedException(`Client #${clientShortId} already exists in business #${businessId}`);
+        throw new PreconditionFailedException(`Client #${clientShortId} already exists in business`);
       }
       // add client to business but first check if clients is null
       if (!business.clients) {

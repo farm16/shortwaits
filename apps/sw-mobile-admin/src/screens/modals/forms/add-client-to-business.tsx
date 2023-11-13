@@ -67,7 +67,8 @@ export const AddClientToBusinessModal: FC<ModalsScreenProps<"add-client-modal-sc
   }, []);
 
   if (addClientToBusinessStatus.isError) {
-    Alert.alert("Error", addClientToBusinessStatus.error.message);
+    console.log("addClientToBusinessStatus.error >>>", addClientToBusinessStatus.error);
+    Alert.alert("Error", addClientToBusinessStatus.error.data.message);
   }
 
   if (addClientToBusinessStatus.isLoading) {
