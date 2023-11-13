@@ -20,6 +20,7 @@ export const {
   useDeleteServiceMutation,
   useUploadImageFileMutation,
   useCreateLocalClientsMutation,
+  useAddClientToBusinessMutation,
 
   //Query hooks
   useGetAdminMobileQuery,

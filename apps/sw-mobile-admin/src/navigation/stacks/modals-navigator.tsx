@@ -3,6 +3,7 @@ import React from "react";
 
 import {
   AddClientModal,
+  AddClientToBusinessModal,
   AddEventModal,
   AddServicesModal,
   AddStaffModal,
@@ -26,6 +27,7 @@ const {
   ADD_SERVICE_MODAL_SCREEN,
   UPDATE_SERVICE_MODAL_SCREEN,
   UPDATE_EVENT_MODAL_SCREEN,
+  ADD_CLIENT_TO_BUSINESS_MODAL_SCREEN,
 } = MODAL_SCREENS;
 
 const Stack = createStackNavigator<ModalStackParamList>();
@@ -52,6 +54,15 @@ export const ModalsNavigator = (): React.ReactElement => {
       <Stack.Screen name={ADD_SERVICE_MODAL_SCREEN} component={AddServicesModal} />
       <Stack.Screen name={UPDATE_SERVICE_MODAL_SCREEN} component={UpdateServicesModal} />
       <Stack.Screen name={UPDATE_EVENT_MODAL_SCREEN} component={UpdateEventModal} />
+      <Stack.Group screenOptions={{ presentation: "transparentModal" }}>
+        <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
+          name={ADD_CLIENT_TO_BUSINESS_MODAL_SCREEN}
+          component={AddClientToBusinessModal}
+        />
+      </Stack.Group>
     </Stack.Navigator>
   );
 };

@@ -12,6 +12,11 @@ export type CreateClientUserDtoType = Omit<
   ClientUserDtoType,
   "_id" | "shortId" | "__v" | "billing" | "businesses" | "deleted" | "createdAt" | "updatedAt" | "lastSignInAt" | "roleId" | "hashedRt" | "registration" | "currentMembership"
 >;
+
+export type AddClientToBusinessDtoType = {
+  shortId: string;
+};
+
 export type CreateClientUsersDtoType = CreateClientUserDtoType[];
 
 export type ClientUserUpdateDtoType = Partial<ClientUserDtoType>;

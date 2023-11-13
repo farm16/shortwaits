@@ -116,6 +116,11 @@ export type ModalStackParamList = {
     onDone?(): void;
     closeOnSubmit?: boolean;
   };
+  [MODAL_SCREENS.ADD_CLIENT_TO_BUSINESS_MODAL_SCREEN]: {
+    onSubmit?<T extends keyof FormData>(arg: FormData[T]): void;
+    onDone?(): void;
+    closeOnSubmit?: boolean;
+  };
 };
 
 export type AuthorizedTabsParamList = {

@@ -1,10 +1,10 @@
 import { skipToken } from "@reduxjs/toolkit/dist/query";
-import { Logo3 } from "apps/sw-mobile-admin/src/assets/images/svg-components/logo-3";
 import React, { FC, Fragment, useCallback, useLayoutEffect, useMemo, useState } from "react";
 import { useIntl } from "react-intl";
 import { Alert, Animated, Dimensions, Pressable, StyleSheet, View } from "react-native";
 import { SceneMap, TabBarProps, TabView } from "react-native-tab-view";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { Logo3 } from "../../../assets/images/svg-components/logo-3";
 import { Container, IconButton, Screen, Text } from "../../../components";
 import { useOsContacts } from "../../../hooks";
 import { AuthorizedScreenProps } from "../../../navigation";
@@ -31,12 +31,18 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
   const [isListSearchable, setIsListSearchable] = useState(false);
 
   const handleAddClient = useCallback(() => {
-    navigation.navigate("modals", {
-      screen: "add-client-modal-screen",
-      params: {
-        clientType: tabIndex === 0 ? "shortwaits" : "local",
-      },
-    });
+    if (tabIndex === 0) {
+      navigation.navigate("modals", {
+        screen: "add-client-modal-screen",
+        params: {
+          clientType: "local",
+        },
+      });
+    } else {
+      navigation.navigate("modals", {
+        screen: "add-client-to-business-modal-screen",
+      });
+    }
   }, [navigation, tabIndex]);
 
   const { error: osContactsError, isLoading: isOsContactsLoading, getContacts: getOsContacts } = useOsContacts();

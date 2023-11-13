@@ -39,6 +39,7 @@ export const MODAL_SCREENS = {
   ADD_STAFF_MODAL_SCREEN: "add-staff-modal-screen",
   ADD_SERVICE_MODAL_SCREEN: "add-service-modal-screen",
   UPDATE_SERVICE_MODAL_SCREEN: "update-service-modal-screen",
+  ADD_CLIENT_TO_BUSINESS_MODAL_SCREEN: "add-client-to-business-modal-screen",
 } as const;
 
 export const NAVIGATION_STACKS = {

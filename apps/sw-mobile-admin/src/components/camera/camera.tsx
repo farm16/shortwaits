@@ -1,48 +1,45 @@
 import { Portal } from "@gorhom/portal";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Modal } from "react-native-paper";
-import { Camera as VisionCamera, useCameraDevice, useCodeScanner } from "react-native-vision-camera";
-import { IconButton, Space, Switch, Text, TextFieldCard } from "..";
+import { Code, Camera as VisionCamera, useCameraDevice, useCodeScanner } from "react-native-vision-camera";
+import { Button, IconButton, Space, Switch, Text, TextFieldCard } from "..";
 import { useTheme } from "../../theme";
 import { getFontSize, getResponsiveHeight, getResponsiveWidth } from "../../utils";
 
 type CameraProps = {
-  isVisible: boolean;
-  setIsVisible: (isVisible: boolean) => void;
-  onCodeScanned?: (codes: any) => void;
+  onClose: () => void;
+  onCodeScanned?: (codes: string) => void;
 };
 export function Camera(props: CameraProps) {
-  const { isVisible, setIsVisible, onCodeScanned } = props;
+  const { onClose, onCodeScanned } = props;
+  const [manualValue, setManualValue] = useState<string>("");
   const [isManual, setIsManual] = useState(false);
-  const [isCameraActive, setIsCameraActive] = useState(false);
+  const [isCameraActive, setIsCameraActive] = useState(true);
   const { Colors } = useTheme();
 
   const device = useCameraDevice("back");
-  console.log("device", device);
+
+  const handleCodeScanned = useCallback(
+    (codes: Code[]) => {
+      for (const code of codes) {
+        console.log(`Code value: ${code.value}`);
+      }
+      onCodeScanned && onCodeScanned(codes[0].value);
+    },
+    [onCodeScanned]
+  );
 
   const codeScanner = useCodeScanner({
     codeTypes: ["qr", "ean-13"],
-    onCodeScanned: codes => {
-      console.log(`Scanned ${codes.length} codes!`);
-      for (const code of codes) {
-        console.log(code.value);
-      }
-      onCodeScanned && onCodeScanned(codes);
-      setIsVisible(false);
-    },
+    onCodeScanned: handleCodeScanned,
   });
 
   useEffect(() => {
-    if (isVisible) {
-      setIsCameraActive(true);
-    } else {
-      setIsCameraActive(false);
-    }
     return () => {
       setIsCameraActive(false);
     };
-  }, [isVisible]);
+  }, []);
 
   if (!device) {
     return null;
@@ -50,7 +47,7 @@ export function Camera(props: CameraProps) {
 
   return (
     <Portal>
-      <Modal visible={isVisible} dismissable={false}>
+      <Modal visible={true} dismissable={false}>
         <View
           style={[
             styles.viewContainer,
@@ -64,16 +61,35 @@ export function Camera(props: CameraProps) {
           <Space />
           <View style={styles.closeButton}>
             <IconButton
-              // color={Colors.brandSecondary}
               iconType="close"
               onPress={() => {
-                setIsVisible(false);
+                onClose && onClose();
               }}
             />
           </View>
           {isManual ? (
-            <View style={{ paddingHorizontal: getResponsiveWidth(16) }}>
-              <TextFieldCard title={"ID"} placeholder="Enter the clients ID" />
+            <View style={{ paddingHorizontal: getResponsiveWidth(16), alignItems: "center" }}>
+              <TextFieldCard
+                title={"ID"}
+                placeholder="Enter the clients ID"
+                onChangeText={text => {
+                  setManualValue(text);
+                }}
+              />
+              <Space size="tiny" />
+              <Button
+                text={"Submit"}
+                preset={manualValue ? "primary" : "primary-disabled"}
+                disabled={manualValue ? false : true}
+                onPress={() => {
+                  handleCodeScanned([
+                    {
+                      value: manualValue,
+                      type: "qr",
+                    },
+                  ]);
+                }}
+              />
             </View>
           ) : (
             <View style={styles.cameraViewContainer}>

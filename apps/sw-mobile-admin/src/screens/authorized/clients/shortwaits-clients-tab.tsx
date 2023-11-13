@@ -23,10 +23,7 @@ export function ShortwaitsClientsTab() {
 
   const handleAddClient = useCallback(() => {
     navigate("modals", {
-      screen: "add-client-modal-screen",
-      params: {
-        clientType: "shortwaits",
-      },
+      screen: "add-client-to-business-modal-screen",
     });
   }, [navigate]);
 
@@ -61,6 +58,7 @@ export function ShortwaitsClientsTab() {
     },
     [navigate]
   );
+
   const handleOnChangeText = (text: string) => {
     const trimmedText = text.trim();
     setSearchText(trimmedText);

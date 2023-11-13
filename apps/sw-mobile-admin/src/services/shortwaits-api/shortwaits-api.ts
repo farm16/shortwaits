@@ -1,6 +1,7 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithInterceptor } from "./interceptor";
 import {
+  AddClientToBusiness,
   CreateBusinessClients,
   CreateBusinessStaff,
   CreateEvent,
@@ -93,6 +94,7 @@ export const shortwaitsApi = createApi({
     // todo: Users
     getClients: GetClients(builder),
     getLocalClients: GetLocalClients(builder),
+    addClientToBusiness: AddClientToBusiness(builder),
     createLocalClients: CreateLocalClients(builder),
     getStaff: GetStaff(builder),
 

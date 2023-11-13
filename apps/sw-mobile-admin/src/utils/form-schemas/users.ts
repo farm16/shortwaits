@@ -1,4 +1,4 @@
-import { CreateBusinessUserDtoType, CreateLocalClientUserDtoType } from "@shortwaits/shared-lib";
+import { AddClientToBusinessDtoType, CreateBusinessUserDtoType, CreateClientUserDtoType, CreateLocalClientUserDtoType } from "@shortwaits/shared-lib";
 import * as Yup from "yup";
 
 export const createLocalClientUserSchema: Yup.SchemaOf<CreateLocalClientUserDtoType> = Yup.object().shape({
@@ -51,6 +51,10 @@ export const createLocalClientUserSchema: Yup.SchemaOf<CreateLocalClientUserDtoT
   ),
   birthday: Yup.string(),
   desiredCurrencies: Yup.array().of(Yup.string()),
+});
+
+export const addClientToBusinessSchema: Yup.SchemaOf<AddClientToBusinessDtoType> = Yup.object().shape({
+  shortId: Yup.string().required("this field is required"),
 });
 
 export const createBusinessUserSchema: Yup.SchemaOf<CreateBusinessUserDtoType> = Yup.object().shape({

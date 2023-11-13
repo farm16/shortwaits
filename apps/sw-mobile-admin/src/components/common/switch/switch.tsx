@@ -1,7 +1,7 @@
-import { useTheme } from "../../../theme";
 import React, { ForwardedRef } from "react";
 import { Switch as RNSwitch } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
+import { useTheme } from "../../../theme";
 
 // component switch with fowardRef and memo with customizes colors
 type SwitchProps = {
@@ -12,7 +12,6 @@ export const Switch = React.memo(
   React.forwardRef((props: SwitchProps, ref: ForwardedRef<RNSwitch>) => {
     const { Colors } = useTheme();
     const { value, isLoading, disabled } = props;
-    console.log("value", value);
     const isDisabled = isLoading || disabled;
     if (isLoading) {
       return <ActivityIndicator size="small" />;

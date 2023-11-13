@@ -1,5 +1,6 @@
 import { StyleSheet, ViewStyle } from "react-native";
 
+import { getResponsiveWidth } from "../../utils";
 import { ThemeCommonParams } from "../theme.type";
 import { getDimensions } from "../utils";
 
@@ -20,12 +21,12 @@ export const buttonPresets = ({
 
   const VIEW_BASE = StyleSheet.flatten([
     {
-      ...Layout.center,
+      // ...Layout.center,
       height: 50,
-      width: "100%",
       backgroundColor: Colors.brandPrimary,
       flexDirection: "row",
       borderRadius: 25,
+      alignItems: "center",
     },
   ]) as ViewStyle;
 
@@ -38,10 +39,16 @@ export const buttonPresets = ({
       borderBottomColor: Colors.brandAccent,
       borderBottomWidth: 3,
       borderRightWidth: 3,
+      paddingHorizontal: getResponsiveWidth(20),
     },
     "primary-disabled": {
       ...VIEW_BASE,
-      backgroundColor: Colors.brandSecondary1,
+      backgroundColor: Colors.disabledBackground,
+      borderRightColor: undefined,
+      borderBottomColor: undefined,
+      borderBottomWidth: undefined,
+      borderRightWidth: undefined,
+      paddingHorizontal: getResponsiveWidth(20),
     },
     primary2: {
       ...VIEW_BASE,
