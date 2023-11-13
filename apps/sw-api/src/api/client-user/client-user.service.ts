@@ -82,12 +82,12 @@ export class ClientUserService {
       if (!clientShortId) {
         throw new PreconditionFailedException(`No client short id provided`);
       }
-      const userClient = await this.clientUserModel.findOne({ clientShortId }).exec();
+      const userClient = await this.clientUserModel.findOne({ shortId: clientShortId }).exec();
       if (!userClient) {
         throw new NotFoundException(`Client #${clientShortId} not found`);
       }
-      // check if client is already in business
-      if (business.clients.includes(userClient._id)) {
+      // check if client is already in business also clients be null
+      if (business.clients?.includes(userClient._id)) {
         throw new PreconditionFailedException(`Client #${clientShortId} already exists in business #${businessId}`);
       }
       // add client to business
