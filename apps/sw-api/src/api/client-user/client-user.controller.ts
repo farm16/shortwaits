@@ -33,8 +33,8 @@ export class ClientUserController {
 
   @Put("business/:businessId/clients")
   @HttpCode(HttpStatus.OK)
-  async addClientToBusiness(@Param("businessId") businessId: string, @Body() clientsShortId: string) {
-    return this.clientUsersService.addClientUserToBusiness(businessId, clientsShortId);
+  async addClientToBusiness(@Param("businessId") businessId: string, @Body() body: { shortId: string }) {
+    return this.clientUsersService.addClientUserToBusiness(businessId, body.shortId);
   }
 
   @Put(":clientId")
