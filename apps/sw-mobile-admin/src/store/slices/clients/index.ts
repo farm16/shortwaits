@@ -15,11 +15,15 @@ export const clientsSlice = createSlice({
   },
   extraReducers: builder => {
     builder
+      .addMatcher(shortwaitsApi.endpoints.getClients.matchFulfilled, (_state, action) => {
+        // return unique array of clients from _state and action.payload.data using Set
+        return [...new Set([..._state, ...action.payload.data])];
+      })
       .addMatcher(shortwaitsApi.endpoints.getBusinessClients.matchFulfilled, (_state, action) => {
-        return [...action.payload.data];
+        return [...new Set([..._state, ...action.payload.data])];
       })
       .addMatcher(shortwaitsApi.endpoints.createBusinessClients.matchFulfilled, (_state, action) => {
-        return [...action.payload.data];
+        return [...new Set([..._state, ...action.payload.data])];
       })
       .addMatcher(shortwaitsApi.endpoints.updateBusinessClient.matchFulfilled, (state, action) => {
         const updatedClient = action.payload.data;

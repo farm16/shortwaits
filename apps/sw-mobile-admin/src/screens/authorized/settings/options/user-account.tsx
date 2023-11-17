@@ -1,12 +1,12 @@
 import { BusinessUserDtoType, BusinessUsersDtoType } from "@shortwaits/shared-lib";
 import React from "react";
-import { useTheme } from "../../../../theme";
 import { Accordion, AccordionDataItemType } from "../../../../components";
+import { useTheme } from "../../../../theme";
 
 type ManageAdminUsersProps = {
-  admins: BusinessUsersDtoType;
+  admins?: BusinessUsersDtoType;
 };
-export const ManageAdminUsers = ({ admins }: ManageAdminUsersProps) => {
+export const ManageAdminUsers = ({ admins = [] }: ManageAdminUsersProps) => {
   const { Colors } = useTheme();
 
   const accordionData: AccordionDataItemType[] = [
@@ -16,9 +16,7 @@ export const ManageAdminUsers = ({ admins }: ManageAdminUsersProps) => {
           isSuperAdmin: boolean;
         }
       ) => ({
-        title: `${admin.givenName || admin.displayName || admin.familyName || admin.username || ""}${
-          admin.isSuperAdmin ? " (Super admin)" : ""
-        }`,
+        title: `${admin.givenName || admin.displayName || admin.familyName || admin.username || ""}${admin.isSuperAdmin ? " (Super admin)" : ""}`,
         description: admin.email,
         iconName: admin.isSuperAdmin ? "shield-account" : "account",
         iconColor: admin.isSuperAdmin ? Colors.orange4 : Colors.text,

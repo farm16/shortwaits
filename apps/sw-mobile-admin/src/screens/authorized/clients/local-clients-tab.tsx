@@ -58,6 +58,7 @@ export function LocalClientsTab() {
     },
     [navigate]
   );
+
   const handleOnChangeText = (text: string) => {
     const trimmedText = text.trim();
     setSearchText(trimmedText);

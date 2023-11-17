@@ -10,7 +10,6 @@ import {
   CreateClientUsersDtoType,
 } from "@shortwaits/shared-lib";
 import { Model } from "mongoose";
-
 import { convertStringToObjectId } from "../../utils/converters";
 import { generateBusinessUsers, generateClientUsers } from "../../utils/generateUserPayload";
 import { BusinessUser } from "../business-staff/entities/business-staff.entity";

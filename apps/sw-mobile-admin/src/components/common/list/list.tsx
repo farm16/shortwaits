@@ -1,8 +1,8 @@
 import React from "react";
 import { FlatListProps, StyleSheet } from "react-native";
-import { FlatList } from "react-native-gesture-handler";
+import { FlatList, RefreshControl } from "react-native-gesture-handler";
 
-export const List = (props: FlatListProps<any>) => {
+const List = (props: FlatListProps<any>) => {
   const { showsVerticalScrollIndicator = false, ...rest } = props;
   return <FlatList showsVerticalScrollIndicator={showsVerticalScrollIndicator} style={styles.root} {...rest} />;
 };
@@ -12,3 +12,5 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
+
+export { List, RefreshControl };

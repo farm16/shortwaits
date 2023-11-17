@@ -151,7 +151,7 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
             />
           )}
         />
-        <ManageAdminUsers admins={staffQuery.data} />
+        <ManageAdminUsers admins={staffQuery?.data} />
         <List.Item
           descriptionStyle={{ color: Colors.subText }}
           titleStyle={{

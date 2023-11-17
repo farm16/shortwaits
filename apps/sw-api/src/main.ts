@@ -1,9 +1,9 @@
-import { NestFactory } from "@nestjs/core";
 import { ConfigService } from "@nestjs/config";
-import { SwaggerTheme } from "swagger-themes";
-import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
-import helmet from "helmet";
+import { NestFactory } from "@nestjs/core";
+import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import * as fs from "fs";
+import helmet from "helmet";
+import { SwaggerTheme } from "swagger-themes";
 
 import { AppModule } from "./app.module";
 
@@ -34,6 +34,7 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, options);
+
   SwaggerModule.setup(DOCS_PREFIX, app, document, {
     explorer: true,
     customCss: theme.getBuffer("dark"),
@@ -50,6 +51,7 @@ async function bootstrap() {
   console.log("[HTTP]", appUrl);
   console.log("[DOCS]", `${appUrl}/${DOCS_PREFIX}`);
 }
+
 bootstrap();
 
 const html = `Shortwaits's successful response: <br>

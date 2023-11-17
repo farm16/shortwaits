@@ -1,11 +1,9 @@
 import { useNavigation } from "@react-navigation/native";
-import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { ClientUserDtoType } from "@shortwaits/shared-lib";
 import { isEmpty } from "lodash";
 import React, { Fragment, useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { ListRenderItem, View } from "react-native";
-import { RefreshControl } from "react-native-gesture-handler";
 import { AnimatedSearchBar, Button, List, NonIdealState, SelectorListItem } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useGetClientsQuery } from "../../../services";
@@ -13,13 +11,13 @@ import { useBusiness, useClients } from "../../../store";
 import { getResponsiveHeight } from "../../../utils";
 
 export function ShortwaitsClientsTab() {
+  const business = useBusiness();
   const intl = useIntl();
   const [, setSearchText] = useState("");
   const currentClients = useClients();
-  const business = useBusiness();
-  const { isLoading, isSuccess, refetch } = useGetClientsQuery(business?._id ?? skipToken);
-  const { navigate } = useNavigation<AuthorizedScreenProps<"events-screen">["navigation"]>();
   const [filteredClientsData, setFilteredClientsData] = useState([]);
+  const { navigate } = useNavigation<AuthorizedScreenProps<"events-screen">["navigation"]>();
+  const { isLoading, isSuccess, refetch } = useGetClientsQuery(business._id);
 
   const handleAddClient = useCallback(() => {
     navigate("modals", {
@@ -84,11 +82,11 @@ export function ShortwaitsClientsTab() {
         <AnimatedSearchBar onChangeText={handleOnChangeText} isVisible={false} />
       </View>
       <List
-        refreshing={isLoading}
+        // refreshing={isLoading}
         contentContainerStyle={{
           padding: getResponsiveHeight(16),
         }}
-        refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refetch} />}
+        // refreshControl={<RefreshControl refreshing={false} onRefresh={refetch} />}
         ListEmptyComponent={
           <View
             style={{

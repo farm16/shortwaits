@@ -1,21 +1,21 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Put, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
-
 import { ClientUserDtoType } from "@shortwaits/shared-lib";
 import { AtGuard } from "../../common/guards";
 import { ClientUserService } from "./client-user.service";
 import { CreateClientUserDto } from "./dto";
 
+@UseGuards(AtGuard)
 @ApiTags("client-user")
 @Controller("client-user")
 @ApiBearerAuth("bearer")
-@UseGuards(AtGuard)
 export class ClientUserController {
   constructor(private readonly clientUsersService: ClientUserService) {}
 
   @Get("business/:businessId")
   @HttpCode(HttpStatus.OK)
   async getClientByBusiness(@Param("businessId") businessId: string) {
+    console.log("businessId", businessId);
     return this.clientUsersService.getClientUsersForBusiness(businessId);
   }
 
@@ -37,11 +37,11 @@ export class ClientUserController {
     return this.clientUsersService.addClientUserToBusiness(businessId, body.shortId);
   }
 
-  @Put(":clientId")
-  @HttpCode(HttpStatus.OK)
-  async updateClients(@Param("clientId") clientId: string, @Body() dto: CreateClientUserDto) {
-    return null;
-  }
+  // @Put(":clientId")
+  // @HttpCode(HttpStatus.OK)
+  // async updateClients(@Param("clientId") clientId: string, @Body() dto: CreateClientUserDto) {
+  //   return null;
+  // }
 
   @Get(":clientShortId")
   @HttpCode(HttpStatus.OK)
