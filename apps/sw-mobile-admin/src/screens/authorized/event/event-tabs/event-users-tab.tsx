@@ -29,7 +29,7 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
     refetchOnMountOrArgChange: true,
   });
 
-  console.log("peopleInEventData >>>", peopleInEventData?.data?.clientUsers);
+  console.log("peopleInEventData >>>", peopleInEventData?.data?.localClientUsers);
 
   const _data = useMemo(
     () => [

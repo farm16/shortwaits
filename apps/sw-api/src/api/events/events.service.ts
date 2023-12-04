@@ -393,13 +393,13 @@ export class EventsService {
         throw new ForbiddenException("You are not allowed to view this event");
       }
 
-      const [clientUsers, localClients, businessUsers] = await Promise.all([
+      const [clientUsers, localClientUsers, businessUsers] = await Promise.all([
         this.findClientUsers(event?.clientsIds as ObjectId[]),
         this.findLocalClientUsers(event?.clientsIds as ObjectId[]),
         this.findBusinessUsers(event?.staffIds as ObjectId[]),
       ]);
 
-      return { clientUsers, localClients, businessUsers, event };
+      return { clientUsers, localClientUsers, businessUsers, event };
     } catch (error) {
       console.error(error);
       throw error;

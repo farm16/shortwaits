@@ -1,4 +1,4 @@
-import { GeneralSpecShape, CommonResponseType, ClientUsersDtoType, BusinessUsersDtoType } from ".";
+import { BusinessUsersDtoType, ClientUsersDtoType, CommonResponseType, LocalClientUserDtoType } from ".";
 import { ConvertToDtoType, EventType, WithDbProps } from "..";
 
 export type FilteredEvent = Pick<
@@ -42,6 +42,7 @@ export type EventsResponseType = CommonResponseType<EventsDtoType>;
 
 export type PeopleInEventResponseType = CommonResponseType<{
   clientUsers: ClientUsersDtoType;
+  localClientUsers: LocalClientUserDtoType;
   businessUsers: BusinessUsersDtoType;
   event: EventDtoType;
 }>;
