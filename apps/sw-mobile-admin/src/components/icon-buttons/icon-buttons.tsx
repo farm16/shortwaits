@@ -86,7 +86,7 @@ export const BackButton: FC<
   }
 > = props => {
   const {
-    Colors: { brandAccent, brandSecondary, backgroundOverlay },
+    Colors: { brandAccent, brandSecondary, lightBackground },
   } = useTheme();
   const { state = "enabled", ...rest } = props;
   return (
@@ -100,7 +100,7 @@ export const BackButton: FC<
       }}
       {...rest}
     >
-      <Icon name="chevron-left" color={disabledStates.includes(state) ? backgroundOverlay : brandSecondary} size={35} />
+      <Icon name="chevron-left" color={disabledStates.includes(state) ? lightBackground : brandSecondary} size={35} />
       {props.counter ? (
         <Text
           preset="none"

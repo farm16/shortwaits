@@ -49,7 +49,14 @@ const AppStack = () => {
       ) : (
         <RootStack.Screen name={NAVIGATION_STACKS.UNAUTHORIZED} component={UnauthorizedNavigator} />
       )}
-      <RootStack.Screen name={NAVIGATION_STACKS.MODALS} component={ModalsNavigator} />
+      <RootStack.Screen
+        options={{
+          presentation: "modal",
+          headerTitleAlign: "center",
+        }}
+        name={NAVIGATION_STACKS.MODALS}
+        component={ModalsNavigator}
+      />
     </RootStack.Navigator>
   );
 };

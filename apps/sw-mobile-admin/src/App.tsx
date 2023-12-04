@@ -1,7 +1,7 @@
 import { PortalProvider as GPortalProvider, enableLogging } from "@gorhom/portal";
 import React from "react";
 import { IntlProvider } from "react-intl";
-import { Provider as PaperProvider } from "react-native-paper";
+import { MD3LightTheme as DefaultTheme, Provider as PaperProvider } from "react-native-paper";
 import { SafeAreaProvider, initialWindowMetrics } from "react-native-safe-area-context";
 import { Provider as ReduxProvider } from "react-redux";
 
@@ -34,6 +34,9 @@ export const App = () => {
  */
 
 function WithProviders({ children }) {
+  const paperTheme = {
+    ...DefaultTheme,
+  };
   const { preferredLanguage, suggestedLanguage } = store.getState().mobileAdmin;
   const language = preferredLanguage || suggestedLanguage;
   const messages = copies[language] || copies.en;
@@ -42,7 +45,7 @@ function WithProviders({ children }) {
       <IntlProvider locale={language} messages={messages}>
         <PersistGate loading={null} persistor={persistor}>
           <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-            <PaperProvider>
+            <PaperProvider theme={paperTheme}>
               <GestureHandlerRootView style={{ flex: 1 }}>
                 <GPortalProvider rootHostName="root">{children}</GPortalProvider>
               </GestureHandlerRootView>

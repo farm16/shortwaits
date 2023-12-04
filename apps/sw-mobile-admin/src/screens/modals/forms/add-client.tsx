@@ -2,11 +2,11 @@ import { ClientUserType, CreateLocalClientUserDtoType } from "@shortwaits/shared
 import { FormikErrors } from "formik";
 import React, { FC, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { useIntl } from "react-intl";
-import { Alert, StatusBar, View } from "react-native";
+import { Alert, StatusBar } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 
 import { noop } from "lodash";
-import { BackButton, Button, ButtonCard, Camera, ExpandableSection, FormContainer, PhoneNumberCard, Space, Text, TextFieldCard, WithPermission } from "../../../components";
+import { BackButton, Button, ButtonCard, ExpandableSection, FormContainer, PhoneNumberCard, Space, Text, TextFieldCard } from "../../../components";
 import { useForm } from "../../../hooks";
 import { ModalsScreenProps } from "../../../navigation";
 import { useCreateLocalClientsMutation } from "../../../services";
@@ -99,7 +99,6 @@ export const AddClientModal: FC<ModalsScreenProps<"add-client-modal-screen">> = 
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerShown: isCameraOpen ? false : true,
       headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
       headerTitle: () => <Text preset="text" text={intl.formatMessage({ id: "Common.addClient" })} />,
     });
@@ -155,16 +154,6 @@ export const AddClientModal: FC<ModalsScreenProps<"add-client-modal-screen">> = 
       StatusBar.setHidden(true);
     }
   }, [clientType, isCameraOpen]);
-
-  if (clientType === "shortwaits") {
-    return (
-      <View>
-        <WithPermission show={isCameraOpen} permission="camera">
-          <Camera isVisible={isCameraOpen} setIsVisible={setIsCameraOpen} />
-        </WithPermission>
-      </View>
-    );
-  }
 
   return createLocalClientsStatus.isLoading ? (
     <ActivityIndicator />

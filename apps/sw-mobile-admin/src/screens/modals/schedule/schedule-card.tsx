@@ -1,10 +1,10 @@
 import React from "react";
+import { StyleSheet, View } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { View, StyleSheet } from "react-native";
 
-import { useTheme } from "../../../theme";
-import { Switch, Button, Container, Text, TimeRangeText } from "../../../components";
 import { BusinessWeekDaysType, WeekDayType } from "@shortwaits/shared-lib";
+import { Button, Container, Switch, Text, TimeRangeText } from "../../../components";
+import { useTheme } from "../../../theme";
 
 interface DayCardProps {
   day: BusinessWeekDaysType;
@@ -42,7 +42,7 @@ const ScheduleCardComponent: React.FC<DayCardProps> = props => {
     <View
       style={{
         ...styles.container,
-        borderBottomColor: Colors.backgroundOverlay,
+        borderBottomColor: Colors.lightBackground,
       }}
     >
       {allowHours ? (
@@ -74,7 +74,7 @@ const ScheduleCardComponent: React.FC<DayCardProps> = props => {
         <Switch
           trackColor={{ false: Colors.red1, true: Colors.brandSecondary1 }}
           thumbColor={isActive ? Colors.brandSecondary2 : Colors.gray}
-          ios_backgroundColor={Colors.backgroundOverlay}
+          ios_backgroundColor={Colors.lightBackground}
           onChange={() => {
             handleOnDayChange({ day: day, startTime, endTime, isActive: !isActive });
           }}

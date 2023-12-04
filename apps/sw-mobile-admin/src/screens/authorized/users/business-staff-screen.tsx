@@ -1,22 +1,12 @@
-import React, { useCallback, useLayoutEffect } from "react";
-import { View, Image, StyleSheet } from "react-native";
-import {
-  AgendaItem,
-  BackButton,
-  Button,
-  Container,
-  IconButton,
-  NonIdealState,
-  Screen,
-  Space,
-  Text,
-} from "../../../components";
-import { AuthorizedScreenProps } from "../../../navigation";
-import { useTheme } from "../../../theme";
-import { useEvents } from "../../../store";
-import { handleEmail, handlePhoneCall, handleSms } from "../../../utils";
-import { FlatList } from "react-native-gesture-handler";
 import { isEmpty } from "lodash";
+import React, { useCallback, useLayoutEffect } from "react";
+import { Image, StyleSheet, View } from "react-native";
+import { FlatList } from "react-native-gesture-handler";
+import { AgendaItem, BackButton, Button, Container, IconButton, NonIdealState, Screen, Space, Text } from "../../../components";
+import { AuthorizedScreenProps } from "../../../navigation";
+import { useEvents } from "../../../store";
+import { useTheme } from "../../../theme";
+import { handleEmail, handlePhoneCall, handleSms } from "../../../utils";
 
 export function BusinessStaffScreen({ navigation, route }: AuthorizedScreenProps<"business-staff-screen">) {
   const { staff } = route.params;
@@ -96,21 +86,18 @@ export function BusinessStaffScreen({ navigation, route }: AuthorizedScreenProps
   }, [navigation]);
 
   return (
-    <Screen preset="fixed" unsafe unsafeBottom backgroundColor="backgroundOverlay">
+    <Screen preset="fixed" unsafe unsafeBottom backgroundColor="lightBackground">
       <View
         style={[
           styles.headerContainer,
           {
-            backgroundColor: Colors.backgroundOverlay,
+            backgroundColor: Colors.lightBackground,
           },
         ]}
       >
         <Space size="small" />
         <Container direction="row" style={styles.staffInfoContainer}>
-          <Image
-            source={{ uri: staff.accountImageUrl ? staff.accountImageUrl : "https://picsum.photos/200" }}
-            style={styles.staffImage}
-          />
+          <Image source={{ uri: staff.accountImageUrl ? staff.accountImageUrl : "https://picsum.photos/200" }} style={styles.staffImage} />
           <View style={styles.staffDetails}>
             {staffName ? (
               <Text
@@ -188,14 +175,7 @@ export function BusinessStaffScreen({ navigation, route }: AuthorizedScreenProps
               handleSms(phoneNumber);
             }}
           />
-          <Button
-            leftIconSize={25}
-            leftIconColor={Colors.darkGray}
-            preset={"icon2"}
-            disabled={false}
-            leftIconName={"share-variant"}
-            onPress={() => {}}
-          />
+          <Button leftIconSize={25} leftIconColor={Colors.darkGray} preset={"icon2"} disabled={false} leftIconName={"share-variant"} onPress={() => {}} />
         </View>
         <Space />
       </View>

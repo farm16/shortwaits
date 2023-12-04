@@ -12,20 +12,22 @@ const permissions = {
 type WithPermissionProps = {
   children: React.ReactNode;
   permission: keyof typeof permissions;
+  onDenied?: () => void;
 };
 
-export function WithPermission({ children, permission }: WithPermissionProps) {
+export function WithPermission({ children, permission, onDenied }: WithPermissionProps) {
   const [isPermissionGranted, setIsPermissionGranted] = useState(false);
 
   useEffect(() => {
     console.log("checking for >>>", permissions[permission]);
     check(permissions[permission]!).then((result: PermissionStatus) => {
-      console.log("result", result);
+      console.log("result >>>", result);
       if (result === "granted") {
         setIsPermissionGranted(true);
       }
 
       if (result === "blocked") {
+        onDenied && onDenied();
         setIsPermissionGranted(false);
       }
       if (result === "denied") {
@@ -35,12 +37,13 @@ export function WithPermission({ children, permission }: WithPermissionProps) {
           }
 
           if (result === "blocked") {
+            onDenied && onDenied();
             setIsPermissionGranted(false);
           }
         });
       }
     });
-  }, [permission]);
+  }, [onDenied, permission]);
 
   if (!isPermissionGranted) {
     return null;

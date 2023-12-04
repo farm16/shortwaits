@@ -8,6 +8,7 @@ import { getFilteredNewEvent } from "../../utils/filtersForDtos";
 import { BusinessUser } from "../business-staff/entities/business-staff.entity";
 import { Business } from "../business/entities/business.entity";
 import { ClientUser } from "../client-user/entities/client-user.entity";
+import { LocalClientUser } from "../local-client-user/entities/local-client-user.entity";
 import { Service } from "../services/entities/service.entity";
 import { CreateEventsDto } from "./dto/create-event.dto";
 import { Events } from "./entities/events.entity";
@@ -21,7 +22,9 @@ export class EventsService {
     @InjectModel(Business.name) private businessModel: Model<Business>,
     @InjectModel(Service.name) private servicesModel: Model<Service>,
     @InjectModel(BusinessUser.name) private businessUserModel: Model<BusinessUser>,
-    @InjectModel(ClientUser.name) private clientUserModel: Model<ClientUser>
+    @InjectModel(ClientUser.name) private clientUserModel: Model<ClientUser>,
+    @InjectModel(LocalClientUser.name)
+    private localClientUserModel: Model<LocalClientUser>
   ) {}
 
   async createEvent(event: CreateEventsDto, userId: string): Promise<Events & { _id: Types.ObjectId }> {
@@ -332,6 +335,18 @@ export class EventsService {
     }
   }
 
+  async findLocalClientUsers(userIds: string[] | ObjectId[]) {
+    if (!userIds || !userIds.length) {
+      return [];
+    }
+    try {
+      const localClientUsers = await this.localClientUserModel.find({ _id: { $in: userIds } }).exec();
+      return localClientUsers;
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
+  }
+
   async findClientUsers(userIds: string[] | ObjectId[]) {
     if (!userIds || !userIds.length) {
       return [];
@@ -378,9 +393,13 @@ export class EventsService {
         throw new ForbiddenException("You are not allowed to view this event");
       }
 
-      const [clientUsers, businessUsers] = await Promise.all([this.findClientUsers(event?.clientsIds as ObjectId[]), this.findBusinessUsers(event?.staffIds as ObjectId[])]);
+      const [clientUsers, localClients, businessUsers] = await Promise.all([
+        this.findClientUsers(event?.clientsIds as ObjectId[]),
+        this.findLocalClientUsers(event?.clientsIds as ObjectId[]),
+        this.findBusinessUsers(event?.staffIds as ObjectId[]),
+      ]);
 
-      return { clientUsers, businessUsers, event };
+      return { clientUsers, localClients, businessUsers, event };
     } catch (error) {
       console.error(error);
       throw error;

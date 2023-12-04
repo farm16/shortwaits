@@ -9,17 +9,17 @@ export const statusDisplayMessages: Record<EventStatusName, string> = {
 };
 
 export const statusDisplayMessagesColor: Record<EventStatusName, string> = {
-  PENDING: "rgb(144,99,61)",
-  APPROVED: "rgb(113,160,153)",
-  REJECTED: "rgb(185,72,58)",
-  CANCELED: "rgb(185,72,58)",
-  COMPLETED: "rgb(95,95,95)",
+  PENDING: "#f39c12",
+  APPROVED: "#30cb83",
+  REJECTED: "#e74c3c",
+  CANCELED: "#34495e",
+  COMPLETED: "#f2faf2",
 };
 
 export const statusDisplayMessagesBackgroundColor: Record<EventStatusName, string> = {
-  PENDING: "rgb(253,244,219)",
-  APPROVED: "rgb(239,249,245)",
-  REJECTED: "rgb(254,243,241)",
-  CANCELED: "rgb(254,243,241)",
-  COMPLETED: "rgb(241,241,241)",
+  PENDING: "#fdf5e7",
+  APPROVED: "#eaf9f2",
+  REJECTED: "#fcf2f2",
+  CANCELED: "#eaecee",
+  COMPLETED: "#30cb83",
 };

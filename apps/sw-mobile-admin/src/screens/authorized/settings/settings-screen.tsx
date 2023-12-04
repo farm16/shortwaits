@@ -4,7 +4,7 @@ import { StyleSheet } from "react-native";
 import { List } from "react-native-paper";
 
 import { skipToken } from "@reduxjs/toolkit/dist/query";
-import { Button, Screen, Space, Switch } from "../../../components";
+import { Button, Container, Screen, Space, Switch, Text } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useGetStaffQuery, useLocalSignOutMutation, useUpdateBusinessMutation } from "../../../services";
 import { useBusiness } from "../../../store";
@@ -27,7 +27,21 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerShown: false,
+      headerTitle: "",
+      headerLeft: () => {
+        return (
+          <Container direction="row" alignItems="center">
+            <Text
+              preset="headerTitle"
+              style={{
+                fontWeight: "700",
+                paddingLeft: 16,
+              }}
+              text={"Settings"}
+            />
+          </Container>
+        );
+      },
     });
   }, [navigation]);
 
@@ -37,14 +51,8 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
   };
 
   return (
-    <Screen preset="scroll" backgroundColor="backgroundOverlay" unsafeBottom unsafe>
-      <Space size="large" />
-      <List.Section
-        style={{
-          borderTopWidth: StyleSheet.hairlineWidth,
-          borderColor: Colors.gray,
-        }}
-      >
+    <Screen preset="scroll" backgroundColor="lightBackground" unsafeBottom unsafe>
+      <List.Section>
         <List.Item
           title={<FormattedMessage id="Settings_Screen.business_plan.title" values={{ accountType: currentBusiness?.accountType }} />}
           style={itemStyle}

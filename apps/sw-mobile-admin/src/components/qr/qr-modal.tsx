@@ -6,7 +6,7 @@ import QRCode from "react-native-qrcode-svg";
 import { IconButton } from "..";
 import { useTheme } from "../../theme";
 import { getFontSize } from "../../utils";
-import { Text } from "../common";
+import { Space, Text } from "../common";
 
 type QrModalProps = {
   isVisible: boolean;
@@ -25,7 +25,7 @@ export const QrModal: FC<QrModalProps> = props => {
       <Modal visible={isVisible} dismissable={false}>
         <View
           style={{
-            backgroundColor: Colors.backgroundOverlay,
+            backgroundColor: Colors.lightBackground,
             width: "90%",
             alignSelf: "center",
             justifyContent: "flex-start",
@@ -60,34 +60,33 @@ export const QrModal: FC<QrModalProps> = props => {
             {title}
           </Text>
           <QRCode value={value} size={200} />
+          <Space size="large" />
           <Text
             preset="none"
             style={{
               color: Colors.text,
               fontWeight: "400",
-              marginTop: 20,
-              marginBottom: 20,
-              width: "90%",
               textAlign: "center",
+              paddingHorizontal: 16,
               fontSize: getFontSize(16),
             }}
           >
             {description}
           </Text>
+          <Space size="large" />
           <Text
             preset="none"
             style={{
               color: Colors.subText,
               fontWeight: "400",
-              marginTop: 8,
-              marginBottom: 20,
-              width: "90%",
               textAlign: "center",
+              paddingHorizontal: 16,
               fontSize: getFontSize(14),
             }}
           >
             {description2}
           </Text>
+          <Space size="xLarge" />
         </View>
       </Modal>
     </Portal>

@@ -1,13 +1,13 @@
 import { Portal } from "@gorhom/portal";
-import React, { FC, useCallback } from "react";
+import React, { useCallback } from "react";
 import { View } from "react-native";
 import { Modal } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useDispatch, useSelector } from "react-redux";
-import { hidePremiumMembershipModal, selectCurrentMobileAdminState, useGhostComponent } from "../../store";
+import { hidePremiumMembershipModal, selectCurrentMobileAdminState } from "../../store";
 import { useTheme } from "../../theme";
-import { Button, Container, Space, Text } from "../common";
 import { getFontSize, navigate } from "../../utils";
+import { Button, Container, Space, Text } from "../common";
 
 const premiumAccountFeatures = [
   { name: "", description: "Text(SMS) Reminders" },
@@ -58,7 +58,7 @@ export const PremiumMembershipModal = props => {
       <Modal visible={true} dismissable={true} onDismiss={handleDismiss}>
         <View
           style={{
-            backgroundColor: Colors.backgroundOverlay,
+            backgroundColor: Colors.lightBackground,
             marginHorizontal: 16,
             alignItems: "center",
             paddingHorizontal: 16,

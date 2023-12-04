@@ -46,38 +46,8 @@ export const customDarkColors = {
 
   transparent: "rgba(0,0,0,0)",
   background: "#ffffff",
-  backgroundOverlay: "#e5e5e5",
-  white: "#ffffff",
-  black: "#26242b",
-
-  //grays
-  lightGray: "rgb(239,239,239)",
-  gray: "rgb(200,200,200)",
-  darkGray: "rgb(50,50,50)",
-
-  text: "rgba(0,0,0,0.87)",
-  subText: "rgba(0,0,0,0.60)",
-  disabledText: "rgba(0,0,0,0.38)",
-
-  success: "#28a745",
-  pending: "#e0c01f",
-  failed: "#E24939",
-  successBackground: "#e0f4e0",
-  failedBackground: "#f9e0e0",
-
-  inputBackground: "rgb(218,226,226)",
-
-  staticLightBackground: "#f0f9f8",
-  staticDarkBackground: "#356E6E",
-};
-
-export const customColors = {
-  ...staticColors,
-
-  transparent: "rgba(0,0,0,0)",
-  background: "#ffffff",
-  backgroundOverlay: "#F4F4F4", //rgb(245, 245, 245) #e5e5e5
-  white: "#ffffff",
+  lightBackground: "#f8f8f8",
+  white: "#fffffc",
   black: "#202020",
 
   //grays
@@ -91,11 +61,48 @@ export const customColors = {
 
   disabledBackground: "#EBEBE4",
 
-  success: "#28a745",
-  pending: "#e0c01f",
-  failed: "#E24939",
-  successBackground: "#e0f4e0",
-  failedBackground: "#f9e0e0",
+  success: "#30cb83",
+  pending: "#f39c12",
+  failed: "#e74c3c",
+  cancel: "#34495e",
+  successBackground: "#eaf9f2",
+  failedBackground: "#fcf2f2",
+  warningBackground: "#fdf5e7",
+  cancelBackground: "#eaecee",
+
+  inputBackground: "rgb(218,226,226)",
+
+  staticLightBackground: "#f0f9f8",
+  staticDarkBackground: "#356E6E",
+};
+export const customColors = {
+  ...staticColors,
+
+  transparent: "rgba(0,0,0,0)",
+  background: "#ffffff",
+  lightBackground: "#f8f8f8",
+  white: "#fffffc",
+  black: "#202020",
+
+  //grays
+  lightGray: "rgb(241,241,241)",
+  gray: "rgb(226,226,226)",
+  darkGray: "rgb(141,141,141)",
+
+  text: "rgb(77, 77, 77)",
+  subText: "rgba(77, 77, 77,0.60)",
+  disabledText: "#C6C6C6",
+
+  disabledBackground: "#EBEBE4",
+
+  success: "#30cb83",
+  pending: "#f39c12",
+  failed: "#e74c3c",
+  cancel: "#34495e",
+  successBackground: "#eaf9f2",
+  failedBackground: "#fcf2f2",
+  warningBackground: "#fdf5e7",
+  cancelBackground: "#eaecee",
 
   inputBackground: "rgb(218,226,226)",
 

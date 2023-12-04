@@ -134,8 +134,10 @@ export const AgendaItem = (props: AgendaItemProps) => {
           style={{
             backgroundColor: statusDisplayMessagesBackgroundColor[item.status.statusName],
             paddingHorizontal: 8,
-            paddingVertical: 3,
+            paddingVertical: 4,
             borderRadius: 5,
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
           <Text
@@ -144,7 +146,6 @@ export const AgendaItem = (props: AgendaItemProps) => {
               {
                 color: statusDisplayMessagesColor[item.status.statusName],
                 width: "100%",
-                height: 20,
               },
             ]}
             preset={"none"}

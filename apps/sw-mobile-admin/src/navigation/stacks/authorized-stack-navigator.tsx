@@ -1,14 +1,8 @@
+import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
-import {
-  EventScreen,
-  PlansScreen,
-  BusinessClientScreen,
-  BusinessStaffScreen,
-  BusinessProfileScreen,
-} from "../../screens";
+import { BusinessClientScreen, BusinessProfileScreen, BusinessStaffScreen, EventScreen, PlansScreen } from "../../screens";
 import { useTheme } from "../../theme";
 import { AUTHORIZED_STACK_SCREENS } from "../navigation-constants";
-import { createStackNavigator } from "@react-navigation/stack";
 import { AuthorizedStackParamList } from "../navigation-types";
 
 const Stack = createStackNavigator<AuthorizedStackParamList>();
@@ -20,7 +14,7 @@ export const AuthorizedStackNavigator = () => {
     <Stack.Navigator
       screenOptions={{
         headerStyle: {
-          backgroundColor: Colors.backgroundOverlay,
+          backgroundColor: Colors.lightBackground,
         },
       }}
     >

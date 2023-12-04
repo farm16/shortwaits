@@ -50,6 +50,7 @@ export const buttonPresets = ({
       borderBottomWidth: undefined,
       borderRightWidth: undefined,
       paddingHorizontal: getResponsiveWidth(20),
+      justifyContent: "center",
     },
     primary2: {
       ...VIEW_BASE,
@@ -111,7 +112,7 @@ export const buttonPresets = ({
     },
     flat: {
       ...VIEW_BASE,
-      backgroundColor: Colors.backgroundOverlay,
+      backgroundColor: Colors.lightBackground,
       borderRadius: 25,
     },
     link: {
@@ -173,6 +174,11 @@ export const buttonPresets = ({
       color: Colors.white,
       fontWeight: "700",
     },
+    "primary-disabled": {
+      ...TEXT_BASE,
+      color: Colors.disabledText,
+      fontWeight: "700",
+    },
     primary2: {
       ...TEXT_BASE,
       color: Colors.brandSecondary7,
@@ -180,7 +186,7 @@ export const buttonPresets = ({
     },
     "primary2-disabled": {
       ...TEXT_BASE,
-      color: Colors.brandSecondary7,
+      color: Colors.disabledText,
       fontWeight: "700",
     },
     secondary: {

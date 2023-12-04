@@ -1,8 +1,8 @@
 import { EventDtoType, ServiceDtoType } from "@shortwaits/shared-lib";
-import { useTheme } from "../../../../theme";
 import React from "react";
-import { View, ScrollView, StyleSheet, Platform, Alert } from "react-native";
-import { Switch, UrlCard, Text, UrlTypes, Space, ServiceItem, Emoji } from "../../../../components";
+import { Alert, Platform, ScrollView, StyleSheet, View } from "react-native";
+import { Emoji, ServiceItem, Space, Switch, Text, UrlCard, UrlTypes } from "../../../../components";
+import { useTheme } from "../../../../theme";
 
 export function EventMoreTab({ event }: { event: EventDtoType }) {
   const { Colors } = useTheme();
@@ -68,9 +68,9 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
         <Text preset="none" style={styles.title} text="Repeat" />
         <Switch
           style={{ marginHorizontal: 16 }}
-          trackColor={{ false: Colors.red1, true: Colors.backgroundOverlay }}
+          trackColor={{ false: Colors.red1, true: Colors.lightBackground }}
           thumbColor={isActive ? Colors.brandSecondary2 : Colors.gray}
-          ios_backgroundColor={Colors.backgroundOverlay}
+          ios_backgroundColor={Colors.lightBackground}
           onChange={handleSwitch}
           value={isActive}
         />
@@ -92,7 +92,7 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
           style={{ marginHorizontal: 16 }}
           trackColor={{ false: Colors.red1, true: Colors.brandSecondary1 }}
           thumbColor={isActive ? Colors.brandSecondary2 : Colors.gray}
-          ios_backgroundColor={Colors.backgroundOverlay}
+          ios_backgroundColor={Colors.lightBackground}
           onChange={() => null}
           value={isActive}
         />
@@ -114,7 +114,7 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
           style={{ marginHorizontal: 16 }}
           trackColor={{ false: Colors.red1, true: Colors.brandSecondary1 }}
           thumbColor={isActive ? Colors.brandSecondary2 : Colors.gray}
-          ios_backgroundColor={Colors.backgroundOverlay}
+          ios_backgroundColor={Colors.lightBackground}
           onChange={() => null}
           value={isActive}
         />
@@ -140,7 +140,7 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
   };
 
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: Colors.backgroundOverlay }}>
+    <ScrollView style={{ flex: 1, backgroundColor: Colors.lightBackground }}>
       <Space direction="horizontal" size="tiny" />
       <EventService />
       <Space direction="horizontal" size="regular" />

@@ -1,9 +1,9 @@
+import { noop } from "lodash";
 import React, { useState } from "react";
-import { List } from "react-native-paper";
 import { StyleSheet } from "react-native";
+import { List } from "react-native-paper";
 import { useTheme } from "../../theme";
 import { AccordionItem } from "./accordion-item";
-import { noop } from "lodash";
 
 export interface AccordionDataItemType {
   title: string;
@@ -31,7 +31,7 @@ export const Accordion: React.FC<AccordionProps> = ({ accordionTitle, accordionD
       style={{
         borderBottomColor: Colors.gray,
         borderBottomWidth: StyleSheet.hairlineWidth,
-        backgroundColor: Colors.backgroundOverlay,
+        backgroundColor: Colors.lightBackground,
       }}
       titleStyle={{ color: Colors.text }}
       right={props => <List.Icon {...props} color={Colors.brandPrimary} icon={props.isExpanded ? "chevron-up" : "chevron-down"} />}

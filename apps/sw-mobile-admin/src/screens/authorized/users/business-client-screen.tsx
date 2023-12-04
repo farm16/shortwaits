@@ -1,21 +1,11 @@
 import React, { useCallback, useLayoutEffect } from "react";
-import { View, Image, StyleSheet } from "react-native";
-import {
-  AgendaItem,
-  BackButton,
-  Button,
-  Container,
-  IconButton,
-  NonIdealState,
-  Screen,
-  Space,
-  Text,
-} from "../../../components";
-import { AuthorizedScreenProps } from "../../../navigation";
-import { useTheme } from "../../../theme";
-import { useEvents } from "../../../store";
-import { handleEmail, handlePhoneCall, handleSms } from "../../../utils";
+import { Image, StyleSheet, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
+import { AgendaItem, BackButton, Button, Container, IconButton, NonIdealState, Screen, Space, Text } from "../../../components";
+import { AuthorizedScreenProps } from "../../../navigation";
+import { useEvents } from "../../../store";
+import { useTheme } from "../../../theme";
+import { handleEmail, handlePhoneCall, handleSms } from "../../../utils";
 
 export function BusinessClientScreen({ navigation, route }: AuthorizedScreenProps<"business-client-screen">) {
   const { client } = route.params;
@@ -91,21 +81,18 @@ export function BusinessClientScreen({ navigation, route }: AuthorizedScreenProp
   }, [navigation]);
 
   return (
-    <Screen preset="fixed" unsafe unsafeBottom backgroundColor="backgroundOverlay">
+    <Screen preset="fixed" unsafe unsafeBottom backgroundColor="lightBackground">
       <View
         style={[
           styles.headerContainer,
           {
-            backgroundColor: Colors.backgroundOverlay,
+            backgroundColor: Colors.lightBackground,
           },
         ]}
       >
         <Space size="small" />
         <Container direction="row" style={styles.clientInfoContainer}>
-          <Image
-            source={{ uri: client.accountImageUrl ? client.accountImageUrl : "https://picsum.photos/200" }}
-            style={styles.clientImage}
-          />
+          <Image source={{ uri: client.accountImageUrl ? client.accountImageUrl : "https://picsum.photos/200" }} style={styles.clientImage} />
           <View style={styles.clientDetails}>
             {clientName ? (
               <Text
@@ -183,14 +170,7 @@ export function BusinessClientScreen({ navigation, route }: AuthorizedScreenProp
               handleSms(client.phoneNumbers[0].number);
             }}
           />
-          <Button
-            leftIconSize={25}
-            leftIconColor={Colors.darkGray}
-            preset={"icon2"}
-            disabled={false}
-            leftIconName={"share-variant"}
-            onPress={() => {}}
-          />
+          <Button leftIconSize={25} leftIconColor={Colors.darkGray} preset={"icon2"} disabled={false} leftIconName={"share-variant"} onPress={() => {}} />
         </View>
         <Space />
       </View>

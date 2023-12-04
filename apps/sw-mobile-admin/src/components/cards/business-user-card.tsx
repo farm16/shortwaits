@@ -1,14 +1,14 @@
-import React, { useCallback, useMemo } from "react";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { StyleSheet, View, Pressable, TouchableOpacity } from "react-native";
-import { truncate } from "lodash";
-import FastImage from "react-native-fast-image";
 import { BusinessUserDtoType } from "@shortwaits/shared-lib";
+import { truncate } from "lodash";
+import React, { useCallback, useMemo } from "react";
+import { Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
+import FastImage from "react-native-fast-image";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
-import { ButtonProps, Card, Text } from "../common";
 import { useTheme } from "../../theme";
 import { handleEmail, handlePhoneCall, handleSms } from "../../utils";
 import { generateAvatarUrl } from "../../utils/generateAvatarUrl";
+import { ButtonProps, Card, Text } from "../common";
 
 export type BusinessUserCardProps = ButtonProps & {
   user: BusinessUserDtoType;

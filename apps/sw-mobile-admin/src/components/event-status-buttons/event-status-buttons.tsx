@@ -5,10 +5,9 @@ import { Dimensions, StyleSheet, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { Button, Text } from "..";
-import { useTheme } from "../../theme";
-
 import { useUpdateEventMutation } from "../../services";
 import { useBusiness } from "../../store";
+import { useTheme } from "../../theme";
 import { CALENDAR_EVENT_HEIGHT, EVENT_ITEM_BORDER_RADIUS, eventStatusColors, eventStatusIconNames, eventStatusNames, getFontSize, nextEventStatuses } from "../../utils";
 
 export const EventStatusButtons: React.FC<{
@@ -113,6 +112,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: EVENT_ITEM_BORDER_RADIUS,
+    // add shadow for ios and android
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 1,
   },
   button: {
     justifyContent: "center",

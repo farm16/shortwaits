@@ -1,22 +1,17 @@
-import { Portal } from "@gorhom/portal";
 import React, { useCallback, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { Modal } from "react-native-paper";
 import { Code, Camera as VisionCamera, useCameraDevice, useCodeScanner } from "react-native-vision-camera";
-import { Button, IconButton, Space, Switch, Text, TextFieldCard } from "..";
-import { useTheme } from "../../theme";
+import { Button, Space, Switch, Text, TextFieldCard } from "..";
 import { getFontSize, getResponsiveHeight, getResponsiveWidth } from "../../utils";
 
 type CameraProps = {
-  onClose: () => void;
   onCodeScanned?: (codes: string) => void;
 };
 export function Camera(props: CameraProps) {
-  const { onClose, onCodeScanned } = props;
+  const { onCodeScanned } = props;
   const [manualValue, setManualValue] = useState<string>("");
   const [isManual, setIsManual] = useState(false);
   const [isCameraActive, setIsCameraActive] = useState(true);
-  const { Colors } = useTheme();
 
   const device = useCameraDevice("back");
 
@@ -41,115 +36,96 @@ export function Camera(props: CameraProps) {
     };
   }, []);
 
-  if (!device) {
-    return null;
-  }
+  useEffect(() => {
+    console.log("device >>>", device);
+    if (!device) {
+      setIsManual(true);
+      setIsCameraActive(false);
+    }
+  }, [device]);
+
+  const renderCamera = useCallback(() => {
+    if (!device) {
+      return null;
+    }
+    return (
+      <View style={styles.cameraViewContainer}>
+        <VisionCamera style={styles.visionCamera} device={device} isActive={isCameraActive} codeScanner={codeScanner} />
+        <Space />
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <Text
+            style={{
+              fontWeight: "600",
+            }}
+            text={isManual ? "Disable manual input" : "Enable manual input"}
+          />
+          <Switch
+            value={isManual}
+            onValueChange={() => {
+              setIsManual(s => !s);
+            }}
+          />
+        </View>
+      </View>
+    );
+  }, [codeScanner, device, isCameraActive, isManual]);
 
   return (
-    <Portal>
-      <Modal visible={true} dismissable={false}>
-        <View
-          style={[
-            styles.viewContainer,
-            {
-              backgroundColor: Colors.white,
-            },
-          ]}
-        >
-          <Space />
-          <Text preset="title2" text={isManual ? "Enter Manually" : "Scan QR"} />
-          <Space />
-          <View style={styles.closeButton}>
-            <IconButton
-              iconType="close"
-              onPress={() => {
-                onClose && onClose();
-              }}
-            />
-          </View>
-          {isManual ? (
-            <View style={{ paddingHorizontal: getResponsiveWidth(16), alignItems: "center" }}>
-              <TextFieldCard
-                title={"ID"}
-                placeholder="Enter the clients ID"
-                onChangeText={text => {
-                  setManualValue(text);
-                }}
-              />
-              <Space size="tiny" />
-              <Button
-                text={"Submit"}
-                preset={manualValue ? "primary" : "primary-disabled"}
-                disabled={manualValue ? false : true}
-                onPress={() => {
-                  handleCodeScanned([
-                    {
-                      value: manualValue,
-                      type: "qr",
-                    },
-                  ]);
-                }}
-              />
-            </View>
-          ) : (
-            <View style={styles.cameraViewContainer}>
-              <VisionCamera style={styles.visionCamera} device={device} isActive={isCameraActive} codeScanner={codeScanner} />
-            </View>
-          )}
-          <Space />
-          <View
-            style={{
-              paddingHorizontal: getResponsiveWidth(16),
-              width: "100%",
+    <View style={styles.viewContainer}>
+      <Space />
+      <Text preset="title2" text={isManual ? "Enter Manually" : "Scan QR"} />
+      {isManual ? (
+        <View>
+          <TextFieldCard
+            title={"ID"}
+            placeholder="Enter the client's ID"
+            onChangeText={text => {
+              setManualValue(text);
             }}
-          >
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
-                marginBottom: 16,
-              }}
-            >
-              <Text
-                style={{
-                  fontWeight: "600",
-                }}
-                text={isManual ? "Disable manual input" : "Enable manual input"}
-              />
-              <Switch
-                value={isManual}
-                onValueChange={() => {
-                  setIsManual(s => !s);
-                }}
-              />
-            </View>
-            <Text
-              style={{
-                fontWeight: "400",
-                fontSize: getFontSize(16),
-              }}
-              text={`Note: ${isManual ? "Do not enter spaces" : "Make sure the QR code is in the center of the screen"}`}
-            />
-          </View>
-          <Space />
+          />
+          <Space size="tiny" />
+          <Button
+            text={"Submit"}
+            preset={manualValue ? "primary" : "primary-disabled"}
+            disabled={manualValue ? false : true}
+            onPress={() => {
+              handleCodeScanned([
+                {
+                  value: manualValue,
+                  type: "qr",
+                },
+              ]);
+            }}
+          />
         </View>
-      </Modal>
-    </Portal>
+      ) : (
+        renderCamera()
+      )}
+      <Space />
+      <Text
+        preset="subText"
+        style={{
+          fontWeight: "400",
+          fontSize: getFontSize(16),
+        }}
+        text={`Note: ${isManual ? "Do not include blank spaces" : "Make sure the QR code is in the center of the screen"}`}
+      />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  viewContainer: {
+    paddingHorizontal: getResponsiveWidth(16),
+  },
   visionCamera: {
     flex: 1,
-  },
-  viewContainer: {
-    //width: "95%",
-    marginHorizontal: getResponsiveWidth(16),
-    borderRadius: 15,
-    alignSelf: "stretch",
-    alignItems: "center",
-    justifyContent: "center",
   },
   cameraViewContainer: {
     width: getResponsiveHeight(300),

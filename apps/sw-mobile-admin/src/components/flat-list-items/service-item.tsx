@@ -1,13 +1,13 @@
+import { ServiceDtoType } from "@shortwaits/shared-lib";
 import React, { FC } from "react";
 import { StyleSheet, View, ViewStyle } from "react-native";
-import { ServiceDtoType } from "@shortwaits/shared-lib";
 
-import { Button, ButtonProps, Space, Text } from "../common";
-import { getDimensions, useTheme } from "../../theme";
-import { getPrettyStringFromDurationInMin } from "../../utils/time";
-import { getPrettyStringFromPrice } from "../../utils/currency";
-import { Avatar } from "../avatar/avatar";
 import { noop } from "lodash";
+import { getDimensions, useTheme } from "../../theme";
+import { getPrettyStringFromPrice } from "../../utils/currency";
+import { getPrettyStringFromDurationInMin } from "../../utils/time";
+import { Avatar } from "../avatar/avatar";
+import { Button, ButtonProps, Space, Text } from "../common";
 
 const CARD_HEIGH = 90;
 
@@ -44,7 +44,7 @@ export const ServiceItem: FC<ServiceCardProps> = props => {
           height: CARD_HEIGH,
           width: width * 0.9,
           borderLeftColor: service.serviceColor?.hexCode || Colors.transparent,
-          backgroundColor: Colors.backgroundOverlay,
+          backgroundColor: Colors.lightBackground,
         },
         styleOverride,
         selectedStyle,
@@ -53,14 +53,8 @@ export const ServiceItem: FC<ServiceCardProps> = props => {
     >
       <View style={styles.textItems}>
         <Text text={service.name} style={[styles.textItem1, { color: Colors.text }]} />
-        <Text
-          text={getPrettyStringFromDurationInMin(service.durationInMin)}
-          style={[styles.textItem2, { color: Colors.subText }]}
-        />
-        <Text
-          text={getPrettyStringFromPrice(service.currency, service.price)}
-          style={[styles.textItem3, { color: service.serviceColor?.hexCode || Colors.text }]}
-        />
+        <Text text={getPrettyStringFromDurationInMin(service.durationInMin)} style={[styles.textItem2, { color: Colors.subText }]} />
+        <Text text={getPrettyStringFromPrice(service.currency, service.price)} style={[styles.textItem3, { color: service.serviceColor?.hexCode || Colors.text }]} />
       </View>
       <Avatar url={service.imageUrl} size={"default"} color={Colors.gray} onPress={noop} />
       <Space size="tiny" direction="vertical" />

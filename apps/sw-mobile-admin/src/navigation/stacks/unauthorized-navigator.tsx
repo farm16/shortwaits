@@ -1,29 +1,13 @@
+import { CardStyleInterpolators, createStackNavigator } from "@react-navigation/stack";
 import React from "react";
 import { StyleSheet } from "react-native";
-import { CardStyleInterpolators, createStackNavigator } from "@react-navigation/stack";
 
-import {
-  WelcomeScreen,
-  SignInScreen,
-  SignUpScreen,
-  SignInWithEmail,
-  SignUpWithEmail,
-  Onboarding1Screen,
-  Onboarding2Screen,
-} from "../../screens";
 import { BackButton } from "../../components";
-import { UNAUTHORIZED_SCREENS } from "../navigation-constants";
+import { Onboarding1Screen, Onboarding2Screen, SignInScreen, SignInWithEmail, SignUpScreen, SignUpWithEmail, WelcomeScreen } from "../../screens";
 import { useTheme } from "../../theme";
+import { UNAUTHORIZED_SCREENS } from "../navigation-constants";
 
-const {
-  WELCOME_SCREEN,
-  SIGN_IN_SCREEN,
-  SIGN_IN_WITH_EMAIL_SCREEN,
-  SIGN_UP_SCREEN,
-  SIGN_UP_WITH_EMAIL_SCREEN,
-  ONBOARDING_1_SCREEN,
-  ONBOARDING_2_SCREEN,
-} = UNAUTHORIZED_SCREENS;
+const { WELCOME_SCREEN, SIGN_IN_SCREEN, SIGN_IN_WITH_EMAIL_SCREEN, SIGN_UP_SCREEN, SIGN_UP_WITH_EMAIL_SCREEN, ONBOARDING_1_SCREEN, ONBOARDING_2_SCREEN } = UNAUTHORIZED_SCREENS;
 
 const Stack = createStackNavigator();
 
@@ -38,7 +22,7 @@ export const UnauthorizedNavigator = () => {
       backgroundColor: Colors.background,
     },
     withOutBorder: {
-      backgroundColor: Colors.backgroundOverlay,
+      backgroundColor: Colors.lightBackground,
       shadowColor: Colors.transparent,
       borderBottomWidth: 0,
       elevation: 0, // for Android

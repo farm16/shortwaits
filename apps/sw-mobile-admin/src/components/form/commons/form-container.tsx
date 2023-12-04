@@ -1,11 +1,11 @@
-import React, { ReactNode, ReactElement, useCallback, useState } from "react";
-import { Platform, StyleSheet, View, Image } from "react-native";
-import { Screen, ScrollView, Space, Text } from "../..";
-import { ScreenProps } from "../../common/screen/screen.props";
-import { useTheme } from "../../../theme";
+import React, { ReactElement, ReactNode, useCallback, useState } from "react";
+import { Platform, StyleSheet, View } from "react-native";
 import { Banner } from "react-native-paper";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import Spinner from "react-native-spinkit";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { Screen, ScrollView, Space, Text } from "../..";
+import { useTheme } from "../../../theme";
+import { ScreenProps } from "../../common/screen/screen.props";
 
 type FormContainerProps = {
   children: ReactNode;
@@ -35,7 +35,7 @@ export const FormContainer = (props: FormContainerProps) => {
   const clonedFooter = footer ? React.cloneElement(footer) : null;
 
   const { Colors } = useTheme();
-  const backgroundColor = Colors.backgroundOverlay;
+  const backgroundColor = Colors.lightBackground;
   // todo work in progress
   const renderStatusBanner = useCallback(() => {
     const actions = [

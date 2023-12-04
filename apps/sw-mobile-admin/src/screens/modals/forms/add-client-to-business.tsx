@@ -1,11 +1,11 @@
 import { AddClientToBusinessDtoType } from "@shortwaits/shared-lib";
-import React, { FC, useEffect, useMemo } from "react";
+import React, { FC, useEffect, useLayoutEffect, useMemo } from "react";
 import { useIntl } from "react-intl";
-import { Alert, StatusBar } from "react-native";
+import { Alert } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 
 import { noop } from "lodash";
-import { Camera, WithPermission } from "../../../components";
+import { BackButton, Camera, Text, WithPermission } from "../../../components";
 import { useForm } from "../../../hooks";
 import { ModalsScreenProps } from "../../../navigation";
 import { useAddClientToBusinessMutation } from "../../../services";
@@ -25,12 +25,12 @@ export const AddClientToBusinessModal: FC<ModalsScreenProps<"add-client-modal-sc
     return _initialValues;
   }, []);
 
-  useEffect(() => {
-    StatusBar.setHidden(true);
-    return () => {
-      StatusBar.setHidden(false);
-    };
-  }, []);
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
+      headerTitle: () => <Text preset="text" text={intl.formatMessage({ id: "Common.addShortwaitsClient" })} />,
+    });
+  }, [intl, navigation]);
 
   const { touched, errors, values, validateField, setFieldTouched, handleChange, handleSubmit, setFieldError, setFieldValue } = useForm(
     {
@@ -76,11 +76,8 @@ export const AddClientToBusinessModal: FC<ModalsScreenProps<"add-client-modal-sc
   }
 
   return (
-    <WithPermission permission="camera">
+    <WithPermission permission="camera" onDenied={() => navigation.goBack()}>
       <Camera
-        onClose={() => {
-          navigation.goBack();
-        }}
         onCodeScanned={value => {
           console.log("camera >>>", value);
           addClientToBusiness({

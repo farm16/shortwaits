@@ -30,7 +30,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
   const [isListSearchable, setIsListSearchable] = useState(false);
 
   const handleAddClient = useCallback(() => {
-    if (tabIndex === 0) {
+    if (tabIndex === 1) {
       navigation.navigate("modals", {
         screen: "add-client-modal-screen",
         params: {
@@ -46,19 +46,18 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
 
   const { error: osContactsError, isLoading: isOsContactsLoading, getContacts: getOsContacts } = useOsContacts();
   const [createLocalClients, createLocalClientsResult] = useCreateLocalClientsMutation();
-  // const { isLoading: isClientsQueryLoading, isSuccess: isClientsQuerySuccess, refetch: refetchClientsQuery } = useGetClientsQuery(business?._id ?? skipToken);
   // const { isLoading: isLocalClientsQueryLoading, isSuccess: isLocalClientsQuerySuccess, refetch: refetchLocalClientsQuery } = useGetLocalClientsQuery(business?._id ?? skipToken);
 
   const isCreateClientsLoading = createLocalClientsResult.isLoading && !createLocalClientsResult.isSuccess;
   const isLoading = isCreateClientsLoading;
 
-  const renderShortwaitsClientsTab = () => {
+  const renderShortwaitsClientsTab = useCallback(() => {
     return <ShortwaitsClientsTab />;
-  };
+  }, []);
 
-  const renderLocalClientsTab = () => {
+  const renderLocalClientsTab = useCallback(() => {
     return <LocalClientsTab />;
-  };
+  }, []);
 
   const handleSyncContacts = useCallback(
     async function () {
@@ -95,23 +94,17 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShadowVisible: false,
-      headerTitle: () => {
-        return (
-          <Container direction="row" justifyContent="center">
-            <Text preset="headerTitle" text={"Clients"} />
-          </Container>
-        );
-      },
+      headerTitle: "",
       headerLeft: () => {
         return (
-          <Container direction="row" alignItems="center">
-            <IconButton
-              disabled={isLoading}
-              iconType={isListSearchable ? "search-close" : "search"}
-              withMarginLeft
-              onPress={() => {
-                setIsListSearchable(s => !s);
+          <Container direction="row" justifyContent="center">
+            <Text
+              preset="headerTitle"
+              style={{
+                fontWeight: "700",
+                paddingLeft: 16,
               }}
+              text={"Clients"}
             />
           </Container>
         );
@@ -119,6 +112,14 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
       headerRight: () => {
         return (
           <Container direction="row" alignItems="center">
+            <IconButton
+              disabled={isLoading}
+              iconType={isListSearchable ? "search-close" : "search"}
+              withMarginRight
+              onPress={() => {
+                setIsListSearchable(s => !s);
+              }}
+            />
             {tabIndex === 0 ? (
               <IconButton iconType="scan-qr" withMarginRight onPress={() => handleAddClient()} />
             ) : (
@@ -164,7 +165,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
                     styles.tabView,
                     {
                       backgroundColor: isSelected ? "#dddff7" : Colors.disabledBackground,
-                      borderBottomColor: isSelected ? Colors.brandSecondary : Colors.disabledText,
+                      borderBottomColor: isSelected ? Colors.brandSecondary : Colors.disabledBackground,
                     },
                   ]}
                 >
@@ -173,17 +174,6 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
                   ) : (
                     <Icon name={"cellphone"} size={getResponsiveHeight(20)} color={isSelected ? Colors.brandPrimary : "#8e8e93"} />
                   )}
-                  {/* <Animated.Text
-                    style={[
-                      styles.tabText,
-                      {
-                        color: isSelected ? Colors.brandSecondary8 : "#8e8e93",
-                        fontWeight: isSelected ? "700" : "400",
-                      },
-                    ]}
-                  >
-                    {route.title}
-                  </Animated.Text> */}
                 </Animated.View>
               </Pressable>
             );
@@ -191,13 +181,12 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
         </View>
       );
     },
-    [Colors.brandPrimary, Colors.brandSecondary, Colors.disabledBackground, Colors.disabledText, tabIndex]
+    [Colors.brandPrimary, Colors.brandSecondary, Colors.disabledBackground, tabIndex]
   );
 
   return (
-    <Screen preset="fixed" unsafe backgroundColor="backgroundOverlay">
+    <Screen preset="fixed" unsafe backgroundColor="lightBackground">
       <TabView
-        lazy
         renderTabBar={_renderTabBar}
         navigationState={{ index: tabIndex, routes }}
         renderScene={renderScene}

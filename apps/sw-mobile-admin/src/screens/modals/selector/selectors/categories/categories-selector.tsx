@@ -1,21 +1,20 @@
 import React, { FC, useCallback, useLayoutEffect, useState } from "react";
 import { FlatList, StyleSheet } from "react-native";
 
-import { useBusiness, useMobileAdmin } from "../../../../../store";
+import { noop } from "lodash";
+import { useIntl } from "react-intl";
+import { ActivityIndicator } from "react-native-paper";
 import {
+  BackButton,
   // SearchBar,
   Space,
-  BackButton,
   Text,
-  Button,
 } from "../../../../../components";
-import { CategoriesSelectorItem } from "./categories-selector-item";
-import { useGetCategoriesQuery } from "../../../../../services";
 import { ModalsScreenProps } from "../../../../../navigation";
+import { useGetCategoriesQuery } from "../../../../../services";
+import { useBusiness, useMobileAdmin } from "../../../../../store";
 import { useTheme } from "../../../../../theme";
-import { useIntl } from "react-intl";
-import { noop } from "lodash";
-import { ActivityIndicator } from "react-native-paper";
+import { CategoriesSelectorItem } from "./categories-selector-item";
 
 export const CategoriesSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ navigation, route }) => {
   const { onSelect = noop, onGoBack = noop, selectedData = [], searchable = false, multiple = false } = route.params;
@@ -36,12 +35,7 @@ export const CategoriesSelector: FC<ModalsScreenProps<"selector-modal-screen">> 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: intl.formatMessage({ id: "Common.categories" }),
-      headerLeft: () => (
-        <BackButton
-          onPress={() => handleOnGoBack(selectedItems)}
-          counter={selectedItems?.length > 0 ? `(${selectedItems.length})` : ""}
-        />
-      ),
+      headerLeft: () => <BackButton onPress={() => handleOnGoBack(selectedItems)} counter={selectedItems?.length > 0 ? `(${selectedItems.length})` : ""} />,
     });
   }, [handleOnGoBack, intl, navigation, selectedItems]);
 
@@ -67,15 +61,7 @@ export const CategoriesSelector: FC<ModalsScreenProps<"selector-modal-screen">> 
           handleOnGoBack(item);
         }
       };
-      return (
-        <CategoriesSelectorItem
-          language={language}
-          item={item}
-          onSelectItem={handleOnSelect}
-          isSelected={selectedItems.includes(item._id)}
-          multiple={multiple}
-        />
-      );
+      return <CategoriesSelectorItem language={language} item={item} onSelectItem={handleOnSelect} isSelected={selectedItems.includes(item._id)} multiple={multiple} />;
     },
     [handleOnGoBack, language, multiple, selectedItems]
   );
@@ -93,7 +79,7 @@ export const CategoriesSelector: FC<ModalsScreenProps<"selector-modal-screen">> 
     return (
       <FlatList
         style={{
-          backgroundColor: Colors.backgroundOverlay,
+          backgroundColor: Colors.lightBackground,
         }}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.flatList}

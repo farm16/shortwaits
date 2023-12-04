@@ -78,10 +78,10 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: () => {
+      headerTitle: "",
+      headerLeft: () => {
         return (
           <Container direction="row" justifyContent="center" alignItems="center">
-            <Text preset="headerTitle" text={truncate(business.shortName, { length: 16 })} />
             {business.web.logoImageUrl ? (
               <FastImage
                 source={{
@@ -91,24 +91,28 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
                 style={{
                   width: 32,
                   height: 32,
-                  marginLeft: 4,
                   borderRadius: 50,
+                  marginLeft: 8,
+                  marginRight: 4,
                 }}
               />
             ) : null}
+            <Text
+              preset="headerTitle"
+              style={{
+                fontWeight: "700",
+              }}
+              text={truncate(business.shortName, { length: 16 })}
+            />
           </Container>
         );
       },
-      headerLeft: () => {
-        return (
-          <Container direction="row" alignItems="center">
-            <IconButton withMarginLeft iconType="closed-business" onPress={handleCloseAndOpenBusiness} />
-          </Container>
-        );
-      },
+
       headerRight: () => {
         return (
           <Container direction="row" alignItems="center">
+            <IconButton withMarginRight iconType="closed-business" onPress={handleCloseAndOpenBusiness} />
+            <IconButton withMarginRight iconType="share" />
             <IconButton
               withMarginRight
               iconType="edit"
@@ -118,7 +122,6 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
                 });
               }}
             />
-            <IconButton withMarginRight iconType="share" />
           </Container>
         );
       },

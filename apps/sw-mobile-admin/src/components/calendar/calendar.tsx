@@ -107,32 +107,35 @@ export const Calendar: FC<CalendarProps> = memo(props => {
 
   return (
     <CalendarProvider
+      theme={{
+        calendarBackground: Colors.white,
+        backgroundColor: Colors.white,
+        todayTextColor: Colors.text,
+        dayTextColor: Colors.text,
+        todayButtonTextColor: Colors.text,
+      }}
       date={initialDate}
       showTodayButton={true}
-      todayButtonStyle={{
-        backgroundColor: Colors.lightGray,
-        borderRadius: 10,
-      }}
-      theme={theme}
     >
       <ExpandableCalendar
-        theme={theme}
         firstDay={1}
+        theme={{
+          selectedDayBackgroundColor: "#333248",
+        }}
         hideArrows={false}
-        allowShadow={true}
         renderArrow={direction => {
           return <Icon name={`chevron-${direction}`} size={24} color={Colors.brandPrimary} />;
         }}
       />
       <AgendaList
         sectionStyle={{
-          backgroundColor: "rgb(245, 245, 245)",
+          backgroundColor: Colors.lightBackground,
           color: Colors.text,
           fontWeight: "400",
           fontSize: 16,
         }}
         contentContainerStyle={{
-          backgroundColor: Colors.backgroundOverlay,
+          backgroundColor: Colors.lightBackground,
           paddingBottom: 100,
         }}
         ListEmptyComponent={renderNonIdealState}
@@ -141,7 +144,7 @@ export const Calendar: FC<CalendarProps> = memo(props => {
         stickySectionHeadersEnabled={true}
         refreshControl={<RefreshControl refreshing={isEventsLoading} onRefresh={handleRefresh} />}
         ItemSeparatorComponent={renderSeparatorItem}
-        style={{ backgroundColor: Colors.backgroundOverlay }}
+        style={{ backgroundColor: Colors.lightBackground }}
         onEndReached={() => {
           if (limit < currentEvents.length) {
             setLimit(limit + 100);

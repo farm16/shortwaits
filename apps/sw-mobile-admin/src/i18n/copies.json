@@ -29,6 +29,7 @@
     "Common.error.message": "Something went wrong. Please try again.",
     "Common.count": "{count, select, other {count: {count}}}",
     "Common.addClient": "Add Client",
+    "Common.addShortwaitsClient": "Add Shortwaits Client",
     "Common.addStaff": "Add Staff",
     "Common.addEvent": "Add Event",
     "Common.addService": "Add Service",
@@ -57,6 +58,9 @@
     "Common.eventStatus.rejected": "Rejected",
     "Common.eventStatus.canceled": "Canceled",
     "Common.eventStatus.completed": "Completed",
+    "Common.greeting.morning": "Good Morning",
+    "Common.greeting.afternoon": "Good Afternoon",
+    "Common.greeting.evening": "Good Evening",
 
     "Common.error.oops": "Oops!",
     "Common.error.somethingWentWrong": "Something went wrong. Please try again.",
@@ -368,6 +372,7 @@
     "Common.continue": "Continuar",
     "Common.count": "{count, select, other {Conteo: {count}}}",
     "Common.addClient": "Agregar Cliente",
+    "Common.addShortwaitsClient": "Agregar Cliente de Shortwaits",
     "Common.addStaff": "Agregar Personal",
     "Common.addEvent": "Agregar Evento",
     "Common.addService": "Agregar Servicio",
@@ -396,9 +401,11 @@
     "Common.eventStatus.rejected": "Rechazado",
     "Common.eventStatus.canceled": "Cancelado",
     "Common.eventStatus.completed": "Completado",
-
     "Common.error.oops": "¡Ups!",
     "Common.error.somethingWentWrong": "Algo salió mal. Por favor, inténtalo de nuevo.",
+    "Common.greeting.morning": "Buenos Días",
+    "Common.greeting.afternoon": "Buenas Tardes",
+    "Common.greeting.evening": "Buenas Noches",
 
     "Onboarding_1_Screen.headerTitle": "Bienvenido {name}",
     "Onboarding_1_Screen.businessName": "Nombre del Negocio",

@@ -18,7 +18,6 @@ export function EventScreen({ navigation, route }: AuthorizedScreenProps<"event-
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
       headerTitleAlign: "center",
       headerTitle: () => {
         return (
@@ -27,6 +26,7 @@ export function EventScreen({ navigation, route }: AuthorizedScreenProps<"event-
           </Container>
         );
       },
+      headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
       headerRight: () => {
         return (
           <Container direction="row" alignItems="center">
@@ -51,7 +51,7 @@ export function EventScreen({ navigation, route }: AuthorizedScreenProps<"event-
   }, [event, handleBottomSheet, navigation]);
 
   return (
-    <Screen preset="fixed" unsafe unsafeBottom backgroundColor="backgroundOverlay">
+    <Screen preset="fixed" unsafe unsafeBottom backgroundColor="lightBackground">
       <Space size="tiny" />
       <EventStatusButtons event={event} />
       <Space size="small" />

@@ -16,8 +16,9 @@ export const clientsSlice = createSlice({
   extraReducers: builder => {
     builder
       .addMatcher(shortwaitsApi.endpoints.getClients.matchFulfilled, (_state, action) => {
-        // return unique array of clients from _state and action.payload.data using Set
-        return [...new Set([..._state, ...action.payload.data])];
+        // return unique array of clients based on _id
+        console.log("action", action.payload.data);
+        return action.payload.data;
       })
       .addMatcher(shortwaitsApi.endpoints.getBusinessClients.matchFulfilled, (_state, action) => {
         return [...new Set([..._state, ...action.payload.data])];

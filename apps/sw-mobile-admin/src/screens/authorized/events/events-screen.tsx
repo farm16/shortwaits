@@ -1,41 +1,53 @@
-import React, { useLayoutEffect, useState } from "react";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
+import React, { useLayoutEffect, useState } from "react";
 
-import { Calendar, Screen, Text, Container, IconButton, QrModal, Space } from "../../../components";
-import { AuthorizedScreenProps } from "../../../navigation";
-import { useBusiness, useEvents, useShowGhostComponent } from "../../../store";
-import { useGetServicesQuery } from "../../../services";
-import { convertStaticSelectorModalData } from "../../../utils/static-selector-modal-utils";
 import { useIntl } from "react-intl";
+import { Calendar, Container, IconButton, QrModal, Screen, Text } from "../../../components";
+import { AuthorizedScreenProps } from "../../../navigation";
+import { useGetServicesQuery } from "../../../services";
+import { useBusiness, useEvents, useShowGhostComponent } from "../../../store";
+import { useTheme } from "../../../theme";
+import { convertStaticSelectorModalData } from "../../../utils/static-selector-modal-utils";
 
 export function EventsScreen({ navigation }: AuthorizedScreenProps<"events-screen">) {
   const [isQrVisible, setIsQrVisible] = useState(false);
 
   const currentBusiness = useBusiness();
   const currentsEvents = useEvents();
+  const { Colors } = useTheme();
   const intl = useIntl();
 
   useGetServicesQuery(currentBusiness._id ?? skipToken);
   useShowGhostComponent("floatingActionButton");
 
   useLayoutEffect(() => {
+    const getGreeting = () => {
+      const currentHour = new Date().getHours();
+      console.log("currentHour >>>", currentHour);
+      if (currentHour > 3) {
+        return intl.formatMessage({ id: "Common.greeting.morning" });
+      }
+      if (currentHour > 12) {
+        return intl.formatMessage({ id: "Common.greeting.afternoon" });
+      }
+      return intl.formatMessage({ id: "Common.greeting.evening" });
+    };
+
     navigation.setOptions({
-      headerTitle: () => {
-        return (
-          <Container direction="row" justifyContent="center">
-            <Text preset="headerTitle" text={intl.formatMessage({ id: "Events_Screen.title" })} />
-          </Container>
-        );
+      headerTitle: "",
+      headerStyle: {
+        backgroundColor: Colors.white,
       },
       headerLeft: () => {
         return (
           <Container direction="row" alignItems="center">
-            <IconButton
-              withMarginLeft
-              iconType="qr"
-              onPress={() => {
-                setIsQrVisible(true);
+            <Text
+              preset="headerTitle"
+              style={{
+                fontWeight: "700",
+                paddingLeft: 16,
               }}
+              text={getGreeting()}
             />
           </Container>
         );
@@ -67,16 +79,23 @@ export function EventsScreen({ navigation }: AuthorizedScreenProps<"events-scree
                 })
               }
             />
+            <IconButton
+              withMarginRight
+              iconType="qr"
+              onPress={() => {
+                setIsQrVisible(true);
+              }}
+            />
             {/* <IconButton withMarginRight iconType="calendar"  /> */}
           </Container>
         );
       },
       headerShadowVisible: false,
     });
-  }, [currentBusiness.shortName, currentsEvents, intl, navigation]);
+  }, [Colors.white, currentBusiness.shortName, currentsEvents, intl, navigation]);
 
   return (
-    <Screen preset="fixed" unsafe unsafeBottom backgroundColor="backgroundOverlay">
+    <Screen preset="fixed" unsafe unsafeBottom backgroundColor="white">
       <QrModal
         isVisible={isQrVisible}
         setIsVisible={setIsQrVisible}
@@ -84,8 +103,7 @@ export function EventsScreen({ navigation }: AuthorizedScreenProps<"events-scree
         title={intl.formatMessage({ id: "Events_Screen.qrCodeModal.title" })}
         description={
           <Text>
-            {intl.formatMessage({ id: "Events_Screen.qrCodeModal.description" })}{" "}
-            <Text style={{ fontWeight: "700" }}>{currentBusiness.shortName}</Text>
+            {intl.formatMessage({ id: "Events_Screen.qrCodeModal.description" })} <Text style={{ fontWeight: "700" }}>{currentBusiness.shortName}</Text>
           </Text>
         }
         description2={intl.formatMessage({ id: "Events_Screen.qrCodeModal.description2" })}

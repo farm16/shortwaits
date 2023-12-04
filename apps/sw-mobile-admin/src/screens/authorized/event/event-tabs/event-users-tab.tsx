@@ -5,7 +5,7 @@ import React, { Fragment, useCallback, useMemo } from "react";
 import { useIntl } from "react-intl";
 import { RefreshControl, SectionList, SectionListData, SectionListRenderItem, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
-import { BusinessUserCard, Button, ClientUserCard, Container, IconButton, NonIdealState, Space, Text } from "../../../../components";
+import { BusinessUserCard, Button, ClientUserCard, Container, IconButton, NonIdealState, Text } from "../../../../components";
 import { useGetPeopleInEventQuery, useUpdateEventMutation } from "../../../../services";
 import { useBusiness } from "../../../../store";
 import { useTheme } from "../../../../theme";
@@ -28,6 +28,8 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
   } = useGetPeopleInEventQuery(event._id ? event._id : skipToken, {
     refetchOnMountOrArgChange: true,
   });
+
+  console.log("peopleInEventData >>>", peopleInEventData?.data?.clientUsers);
 
   const _data = useMemo(
     () => [
@@ -157,7 +159,7 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
               width: "100%",
               justifyContent: "space-between",
               alignItems: "center",
-              backgroundColor: Colors.backgroundOverlay,
+              backgroundColor: Colors.lightBackground,
             }}
           >
             <Text
@@ -183,7 +185,8 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
                     type: userType,
                     multiple: true,
                     selectedData: event[`${userType}Ids`],
-                    onSubmit: users => {
+                    onGoBack: users => {
+                      console.log("users:", users);
                       handleUpdateEvent(userType, users);
                     },
                   },
@@ -195,7 +198,7 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
         </Fragment>
       );
     },
-    [Colors.backgroundOverlay, Colors.text, _data, event, handleUpdateEvent, intl, nonIdealState]
+    [Colors.lightBackground, Colors.text, _data, event, handleUpdateEvent, intl, nonIdealState]
   );
 
   const _renderListEmptyComponent = useCallback(() => {
@@ -214,26 +217,15 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
   if (isPeopleInEventQueryLoading || updateEventStatus.isLoading) return <ActivityIndicator animating={true} color={Colors.brandPrimary} />;
 
   return (
-    <View
-      style={{
-        flex: 1,
-        // backgroundColor: Colors.backgroundOverlay,
-        // backgroundColor: "red",
-        paddingHorizontal: 16,
-        alignItems: "center",
-      }}
-    >
-      <SectionList
-        refreshControl={<RefreshControl refreshing={isPeopleInEventQueryLoading} onRefresh={handleRefresh} />}
-        showsVerticalScrollIndicator={false}
-        keyExtractor={item => item._id}
-        style={{ flex: 1 }}
-        ListEmptyComponent={_renderListEmptyComponent}
-        renderSectionHeader={_renderSectionHeader}
-        renderItem={_renderItem}
-        sections={_data}
-      />
-      <Space />
-    </View>
+    <SectionList
+      refreshControl={<RefreshControl refreshing={isPeopleInEventQueryLoading} onRefresh={handleRefresh} />}
+      showsVerticalScrollIndicator={false}
+      keyExtractor={item => item._id}
+      style={{ flex: 1, paddingHorizontal: 16 }}
+      ListEmptyComponent={_renderListEmptyComponent}
+      renderSectionHeader={_renderSectionHeader}
+      renderItem={_renderItem}
+      sections={_data}
+    />
   );
 }
