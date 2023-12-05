@@ -1,11 +1,11 @@
 import React, { FC } from "react";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { Pressable, StyleSheet, TouchableOpacity } from "react-native";
 import Spinner from "react-native-spinkit";
 
-import { Text } from "../text/text";
-import { useTheme } from "../../../theme";
-import { ButtonProps } from "./button-types";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { useTheme } from "../../../theme";
+import { Text } from "../text/text";
+import { ButtonProps } from "./button-types";
 
 export const Button: FC<ButtonProps> = props => {
   const {
@@ -25,6 +25,7 @@ export const Button: FC<ButtonProps> = props => {
     leftIconColor,
     disabled = false,
     state = "enabled",
+    isTouchableOpacity = true,
     ...rest
   } = props;
 
@@ -41,16 +42,22 @@ export const Button: FC<ButtonProps> = props => {
 
   const content = children || <Text iText={iText} text={text} style={textStyles} />;
 
+  if (isTouchableOpacity) {
+    return (
+      <TouchableOpacity {...rest} style={[defaultStyle, styleOverride]} disabled={disabled || state === "disabled"}>
+        {leftIconName && (leftIconName === "none" ? null : <Icon name={leftIconName} size={leftIconSize} color={leftIconColor} />)}
+        {content}
+        {rightIconName && (rightIconName === "none" ? null : <Icon name={rightIconName} size={rightIconSize as number} color={rightIconColor} />)}
+      </TouchableOpacity>
+    );
+  }
+
   return (
-    <TouchableOpacity {...rest} style={[defaultStyle, styleOverride]} disabled={disabled || state === "disabled"}>
-      {leftIconName &&
-        (leftIconName === "none" ? null : <Icon name={leftIconName} size={leftIconSize} color={leftIconColor} />)}
+    <Pressable {...rest} style={[defaultStyle, styleOverride]} disabled={disabled || state === "disabled"}>
+      {leftIconName && (leftIconName === "none" ? null : <Icon name={leftIconName} size={leftIconSize} color={leftIconColor} />)}
       {content}
-      {rightIconName &&
-        (rightIconName === "none" ? null : (
-          <Icon name={rightIconName} size={rightIconSize as number} color={rightIconColor} />
-        ))}
-    </TouchableOpacity>
+      {rightIconName && (rightIconName === "none" ? null : <Icon name={rightIconName} size={rightIconSize as number} color={rightIconColor} />)}
+    </Pressable>
   );
 };
 

@@ -1,10 +1,4 @@
-import {
-  StyleProp,
-  TextStyle,
-  TouchableOpacityProps,
-  ViewStyle,
-} from "react-native";
-import { SvgProps } from "react-native-svg";
+import { StyleProp, TextStyle, TouchableOpacityProps, ViewStyle } from "react-native";
 
 import { ButtonViewType } from "../../../theme/presets";
 // import { TxKeyPath } from "../../i18n";
@@ -51,6 +45,8 @@ export interface ButtonProps extends TouchableOpacityProps {
   leftIconSize?: number;
   leftIconColor?: string;
   iconSize?: number;
+  isTouchableOpacity?: boolean;
+  isPressable?: boolean;
 
   state?: "loading" | "disabled" | "enabled";
 }

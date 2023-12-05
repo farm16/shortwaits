@@ -395,7 +395,7 @@ export class EventsService {
 
       const [clientUsers, localClientUsers, businessUsers] = await Promise.all([
         this.findClientUsers(event?.clientsIds as ObjectId[]),
-        this.findLocalClientUsers(event?.clientsIds as ObjectId[]),
+        this.findLocalClientUsers(event?.localClientsIds as ObjectId[]),
         this.findBusinessUsers(event?.staffIds as ObjectId[]),
       ]);
 

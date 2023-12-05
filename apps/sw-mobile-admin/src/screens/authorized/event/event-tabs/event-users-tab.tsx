@@ -9,7 +9,7 @@ import { BusinessUserCard, Button, ClientUserCard, Container, IconButton, NonIde
 import { useGetPeopleInEventQuery, useUpdateEventMutation } from "../../../../services";
 import { useBusiness } from "../../../../store";
 import { useTheme } from "../../../../theme";
-import { navigate } from "../../../../utils";
+import { getCombinedClientTypes, navigate } from "../../../../utils";
 
 type PeopleDtoType = BusinessUserDtoType | ClientUserDtoType;
 
@@ -29,7 +29,7 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
     refetchOnMountOrArgChange: true,
   });
 
-  console.log("peopleInEventData >>>", peopleInEventData?.data?.localClientUsers);
+  const clients = getCombinedClientTypes(peopleInEventData?.data?.clientUsers ?? [], peopleInEventData?.data?.localClientUsers ?? []);
 
   const _data = useMemo(
     () => [
@@ -39,10 +39,10 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
       },
       {
         title: "Clients",
-        data: peopleInEventData?.data?.clientUsers ?? [],
+        data: clients,
       },
     ],
-    [peopleInEventData?.data]
+    [clients, peopleInEventData?.data?.businessUsers]
   );
 
   const handleRefresh = useCallback(() => {

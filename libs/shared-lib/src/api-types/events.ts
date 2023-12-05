@@ -1,4 +1,4 @@
-import { BusinessUsersDtoType, ClientUsersDtoType, CommonResponseType, LocalClientUserDtoType } from ".";
+import { BusinessUsersDtoType, ClientUsersDtoType, CommonResponseType, LocalClientUsersDtoType } from ".";
 import { ConvertToDtoType, EventType, WithDbProps } from "..";
 
 export type FilteredEvent = Pick<
@@ -42,7 +42,7 @@ export type EventsResponseType = CommonResponseType<EventsDtoType>;
 
 export type PeopleInEventResponseType = CommonResponseType<{
   clientUsers: ClientUsersDtoType;
-  localClientUsers: LocalClientUserDtoType;
+  localClientUsers: LocalClientUsersDtoType;
   businessUsers: BusinessUsersDtoType;
   event: EventDtoType;
 }>;

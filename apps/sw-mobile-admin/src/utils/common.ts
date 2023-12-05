@@ -1,3 +1,4 @@
+import { ClientUsersDtoType, LocalClientUsersDtoType } from "@shortwaits/shared-lib";
 import { isEqual, noop } from "lodash";
 import { Alert } from "react-native";
 
@@ -19,4 +20,10 @@ export const isObjsEqualWithAlert = (obj1: any, obj2: any, onAccept = noop) => {
   } else {
     onAccept();
   }
+};
+
+// this combines clients with local clients into a single array
+export const getCombinedClientTypes = (clients: ClientUsersDtoType, localClients: LocalClientUsersDtoType) => {
+  const combinedClients = [...clients, ...localClients];
+  return combinedClients;
 };

@@ -1,7 +1,7 @@
 import { Document } from "mongoose";
-import { PaginatedModel } from "./helpers";
 import { ObjectId } from "../common-types/index";
 import { BusinessLabelsType } from "./business";
+import { PaginatedModel } from "./helpers";
 
 export type EventUrlsType = {
   type: string;
@@ -42,6 +42,7 @@ export type EventType = {
   participantsIds: ObjectId[]; // Array of participant IDs // can be invites by client
   staffIds: ObjectId[]; // Array of business user IDs
   clientsIds: ObjectId[]; // Array of client user IDs
+  localClientsIds: ObjectId[]; // Array of local client user IDs
   businessId: ObjectId; // ID of the associated business
   createdBy: ObjectId; // ID of the user who created the event
   updatedBy: ObjectId; // ID of the user who last updated the event

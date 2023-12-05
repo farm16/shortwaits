@@ -1,13 +1,6 @@
-import { Schema, Prop, SchemaFactory, raw } from "@nestjs/mongoose";
+import { Prop, Schema, SchemaFactory, raw } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
-import {
-  BusinessLabelsType,
-  EventLocationType,
-  EventPaymentMethodType,
-  EventType,
-  EventUrlsType,
-  ObjectId,
-} from "@shortwaits/shared-lib";
+import { BusinessLabelsType, EventLocationType, EventPaymentMethodType, EventType, EventUrlsType, ObjectId } from "@shortwaits/shared-lib";
 import { Document, Schema as MongooseSchema, Types } from "mongoose";
 
 class EventUrls implements EventUrlsType {
@@ -68,6 +61,10 @@ export class Events extends Document implements EventType {
   @ApiProperty()
   @Prop()
   staffIds: ObjectId[];
+
+  @ApiProperty()
+  @Prop()
+  localClientsIds: ObjectId[];
 
   @ApiProperty()
   @Prop()
