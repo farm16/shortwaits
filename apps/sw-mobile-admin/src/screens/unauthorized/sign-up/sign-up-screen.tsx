@@ -81,6 +81,7 @@ export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
             <Text preset="social">{intl.formatMessage({ id: "Sign_Up_Screen.google" })}</Text>
           </Container>
         </Button>
+
         <Space size="small" />
         <Button
           preset="social"
@@ -129,5 +130,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+    flex: 1,
   },
 });

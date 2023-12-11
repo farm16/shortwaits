@@ -19,6 +19,11 @@ type FormSchemas = {
 };
 
 export const formSchemas: FormSchemas = {
+  //auth
+  onboarding1: onboarding1Schema,
+  userLocalSignIn: userLocalSignInSchema,
+  userLocalSignUp: userLocalSignUpSchema,
+
   // My business
   updateBusiness: updateBusinessSchema,
 
@@ -30,15 +35,10 @@ export const formSchemas: FormSchemas = {
   addClientToBusiness: addClientToBusinessSchema,
   addLocalClient: createLocalClientUserSchema,
   addStaff: createBusinessUserSchema,
-  // updateClient: createLocalClientUserSchema,
-  // updateStaff: createBusinessUserSchema,
+  // updateClient: => createLocalClientUserSchema,
+  // updateStaff: => createBusinessUserSchema,
 
   //events
   createEvent: createEventSchema,
   updateEvent: updateEventSchema,
-
-  //auth
-  onboarding1: onboarding1Schema,
-  userLocalSignIn: userLocalSignInSchema,
-  userLocalSignUp: userLocalSignUpSchema,
 };

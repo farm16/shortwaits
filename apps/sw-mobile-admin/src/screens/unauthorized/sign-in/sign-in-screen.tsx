@@ -1,18 +1,17 @@
+import { CompositeNavigationProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 import React, { FC, useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, Alert, AlertButton, StyleSheet, View } from "react-native";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { CompositeNavigationProp } from "@react-navigation/native";
 
-import { useTheme } from "../../../theme";
-import { RootStackParamList, UnauthorizedStackParamList } from "../../../navigation";
-import { useForm } from "../../../hooks";
-import { useLocalSignInMutation, useSocialSignInMutation } from "../../../services";
-import { Container, Button, Text, Space, TextFieldCard, Screen } from "../../../components";
+import { useIntl } from "react-intl";
 import Facebook from "../../../assets/icons/facebook.svg";
 import Google from "../../../assets/icons/google.svg";
+import { Button, Container, Screen, Space, Text, TextFieldCard } from "../../../components";
+import { useForm } from "../../../hooks";
+import { RootStackParamList, UnauthorizedStackParamList } from "../../../navigation";
+import { useLocalSignInMutation, useSocialSignInMutation } from "../../../services";
+import { useTheme } from "../../../theme";
 import { onGoogleButtonPress } from "../../../utils";
-import { Logo1 } from "../../../assets";
-import { useIntl } from "react-intl";
 
 export interface RegisterWithEmailScreenProps {
   navigation: CompositeNavigationProp<StackNavigationProp<UnauthorizedStackParamList, "sign-in-screen">, StackNavigationProp<RootStackParamList>>;
@@ -27,7 +26,7 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
   const [socialSignUp, socialSignUpResponse] = useSocialSignInMutation();
 
   const initialValues = {
-    username: "",
+    email: "",
     password: "",
   };
   const { touched, errors, values, handleChange, handleSubmit, dirty } = useForm(
@@ -36,7 +35,7 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
       onSubmit: formData => {
         localSignIn({
           password: formData.password,
-          username: formData.username,
+          username: formData.email,
         });
       },
     },
@@ -134,13 +133,15 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
         autoCapitalize="none"
         keyboardType="default"
         title={intl.formatMessage({
-          id: "Sign_In_Screen.username",
+          id: "Sign_In_Screen.email",
         })}
-        placeholder="bod_ross123"
-        value={values.username}
-        onChangeText={handleChange("username")}
-        isTouched={touched.username}
-        errors={errors.username}
+        placeholder={intl.formatMessage({
+          id: "Sign_In_Screen.email.placeholder",
+        })}
+        value={values.email}
+        onChangeText={handleChange("email")}
+        isTouched={touched.email}
+        errors={errors.email}
       />
       <Space size="tiny" />
       <TextFieldCard
@@ -157,19 +158,7 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
         isTouched={touched.password}
         errors={errors.password}
       />
-      <View
-        style={{
-          flexDirection: "row",
-        }}
-      >
-        <Button
-          style={{ marginLeft: "auto" }}
-          preset="link"
-          text={intl.formatMessage({
-            id: "Sign_In_Screen.forgotPassword",
-          })}
-        />
-      </View>
+
       <Space />
       <Button preset="primary" onPress={() => handleSubmit()}>
         <Text
@@ -180,6 +169,14 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
           })}
         />
       </Button>
+      <Space size="tiny" />
+      <Button
+        style={{ marginLeft: "auto" }}
+        preset="link"
+        text={intl.formatMessage({
+          id: "Sign_In_Screen.forgotPassword",
+        })}
+      />
       <Space size="large" />
       <Button preset="social" onPress={handleFacebookSignIn}>
         <Facebook width={30} height={30} style={{ position: "absolute", left: 0, margin: 16 }} />
@@ -215,7 +212,6 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
         />
         <Button
           preset="link"
-          textStyle={{ color: Colors.brandSecondary6 }}
           text={intl.formatMessage({
             id: "Sign_In_Screen.signUp",
           })}

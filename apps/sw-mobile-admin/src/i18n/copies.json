@@ -81,6 +81,8 @@
 
     "Sign_In_Screen.username": "Username",
     "Sign_In_Screen.username.placeholder": "bod_ross123",
+    "Sign_In_Screen.email": "Email",
+    "Sign_In_Screen.email.placeholder": "bod_ross123@shortwaits.com",
     "Sign_In_Screen.password": "Password",
     "Sign_In_Screen.password.placeholder": "********",
     "Sign_In_Screen.forgotPassword": "Forgot Password?",
@@ -340,7 +342,10 @@
     "BusinessProfile_screen.zipCode": "Zip Code",
 
     "Clients_screen.tab.shortwaits": "Shortwaits",
-    "Clients_screen.tab.devices": "Local"
+    "Clients_screen.tab.devices": "Local",
+
+    "Validation.email": "Please enter a valid email address",
+    "Validation.password": "Please enter a valid password"
   },
   "es": {
     "Navigation.tab.label.events": "Eventos",
@@ -423,6 +428,8 @@
 
     "Sign_In_Screen.username": "Nombre de usuario",
     "Sign_In_Screen.username.placeholder": "bod_ross123",
+    "Sign_In_Screen.email": "Correo Electrónico",
+    "Sign_In_Screen.email.placeholder": "bod_ross123@shortwaits.com",
     "Sign_In_Screen.password": "Contraseña",
     "Sign_In_Screen.password.placeholder": "********",
     "Sign_In_Screen.forgotPassword": "¿Olvidaste tu contraseña?",
@@ -684,6 +691,9 @@
     "BusinessProfile_screen.zipCode": "Código Postal",
 
     "Clients_screen.tab.shortwaits": "Shortwaits",
-    "Clients_screen.tab.devices": "Locales"
+    "Clients_screen.tab.devices": "Locales",
+
+    "Validation.email": "Ingrese una dirección de correo electrónico válida",
+    "Validation.password": "Ingrese una contraseña válida"
   }
 }

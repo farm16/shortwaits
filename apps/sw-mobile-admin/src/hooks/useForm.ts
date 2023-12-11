@@ -1,10 +1,13 @@
 import { FormikConfig, useFormik } from "formik";
+import { useIntl } from "react-intl";
 import { GestureResponderEvent } from "react-native";
 import { formSchemas } from "../utils";
 
 export const useForm = <T>(config: FormikConfig<T>, schema: keyof typeof formSchemas) => {
+  const intl = useIntl();
+  const validationSchema = formSchemas[schema]({ intl });
   return useFormik({
-    validationSchema: formSchemas[schema],
+    validationSchema,
     ...config,
   });
 };
