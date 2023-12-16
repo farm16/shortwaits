@@ -62,7 +62,9 @@ export class LocalClientUserService {
         });
       });
       const newLocalClientUsers = await this.localClientUserModel.create(newLocalClientUsersPayload);
+      console.log("newLocalClientUsers", newLocalClientUsers);
       const newLocalClientUserIds = newLocalClientUsers.map(localClientUser => localClientUser._id);
+      console.log("newLocalClientUserIds", newLocalClientUserIds);
       const updatedBusiness = await business
         .updateOne({
           $push: {
