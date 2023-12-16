@@ -31,7 +31,6 @@ export class SignUpWithEmailDto {
   @Trim()
   @IsString()
   @IsOptional()
-  @MinLength(3)
   @MaxLength(320)
   @ApiProperty({ example: "sw123" })
   readonly username: string;
