@@ -1,4 +1,4 @@
-import { BusinessUserType, ConvertToDtoType, CreateClientUserDtoType, EventDtoType } from "@shortwaits/shared-lib";
+import { BusinessUserType, ConvertToDtoType, CreateClientUserDtoType, EventDtoType, generateAvatarUrl } from "@shortwaits/shared-lib";
 
 import { SignUpWithEmailDto } from "../api/auth/dto";
 import { CreateBusinessUserDto } from "../api/business-staff/dto";
@@ -20,8 +20,11 @@ export const getFilteredClientUser = (createCustomerDto: Partial<CreateClientUse
     phoneNumbers: createCustomerDto?.phoneNumbers,
     imAddresses: createCustomerDto?.imAddresses,
     addresses: createCustomerDto?.addresses,
-    socialAccounts: createCustomerDto?.socialAccounts,
     desiredCurrencies: createCustomerDto?.desiredCurrencies,
+    isSocialAccount: false,
+    socialAccount: undefined,
+    deviceSetting: undefined,
+    accountSettings: undefined,
   };
   return filteredClientUser;
 };
@@ -97,7 +100,7 @@ export const getFilteredNewBusinessOwner = (ownerSignupDto: SignUpWithEmailDto):
     familyName: null,
     givenName: null,
     middleName: null,
-    accountImageUrl: null,
+    accountImageUrl: generateAvatarUrl(ownerSignupDto.email),
     locale: null,
     phoneNumbers: null,
     imAddresses: null,

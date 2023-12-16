@@ -1,11 +1,43 @@
-import { IsNotEmpty, IsOptional } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
-import { CreateClientUserDtoType } from "@shortwaits/shared-lib";
+import { ConvertToDtoType, CreateClientUserDtoType } from "@shortwaits/shared-lib";
+import { IsNotEmpty, IsOptional } from "class-validator";
 
 export class CreateClientUserDto implements CreateClientUserDtoType {
   @ApiProperty()
   @IsNotEmpty()
-  clientType: "local" | "external";
+  isSocialAccount: boolean;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  socialAccount: ConvertToDtoType<{ kind: string; uid?: string; username?: string }>;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  deviceSetting: ConvertToDtoType<{
+    isEmailVerified: boolean;
+    isPhoneVerified: boolean;
+    isTwoFactorEnabled: boolean;
+    isTwoFactorVerified: boolean;
+    isTouchIdEnabled: boolean;
+    isTouchIdVerified: boolean;
+    isFaceIdEnabled: boolean;
+    isFaceIdVerified: boolean;
+    isPasswordlessEnabled: boolean;
+  }>;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  accountSettings: ConvertToDtoType<{
+    isDarkModeEnabled: boolean;
+    isNotificationsEnabled: boolean;
+    isLocationEnabled: boolean;
+    isLocationShared: boolean;
+    isLocationSharedWithBusinesses: boolean;
+  }>;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  clientType: "external";
 
   @ApiProperty()
   @IsNotEmpty()

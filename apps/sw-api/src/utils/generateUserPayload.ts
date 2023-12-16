@@ -1,4 +1,12 @@
-import { ClientUserType, CreateBusinessUserDtoType, CreateBusinessUsersDtoType, CreateClientUsersDtoType, generateAvatarUrl } from "@shortwaits/shared-lib";
+import {
+  ClientUserType,
+  CreateBusinessUserDtoType,
+  CreateBusinessUsersDtoType,
+  CreateClientUsersDtoType,
+  LocalClientUserType,
+  generateAvatarUrl,
+  generateShortId,
+} from "@shortwaits/shared-lib";
 import { ClientSignUpWithEmailDto } from "../api/auth/dto/auth-client-user.dto";
 
 export const generateBusinessUser = (user: CreateBusinessUserDtoType) => {
@@ -44,55 +52,70 @@ export const generateClientUsers = (users: CreateClientUsersDtoType) => {
   return clientUsers;
 };
 
-export const getDefaultClientPayloadValues = (userPayloadOverride: Partial<ClientUserType>) => {
-  const userPayload: ClientUserType = {
-    shortId: "",
-    email: "",
-    password: "",
-    accountImageUrl: "",
-    roleId: null,
+type RequiredKeys = Pick<
+  ClientUserType | LocalClientUserType,
+  "username" | "email" | "displayName" | "familyName" | "givenName" | "middleName" | "businesses" | "password" | "hashedRt" | "clientType" | "locale"
+>;
+export const getNewClientPayload = (userPayloadOverride: RequiredKeys) => {
+  const userPayload: Omit<ClientUserType | LocalClientUserType, "_id"> = {
+    shortId: generateShortId(),
+    alias: "email",
+    accountImageUrl: generateAvatarUrl(userPayloadOverride.email || "?"),
+    deviceSetting: {
+      isEmailVerified: false,
+      isPhoneVerified: false,
+      isTwoFactorEnabled: false,
+      isTwoFactorVerified: false,
+      isTouchIdEnabled: false,
+      isTouchIdVerified: false,
+      isFaceIdEnabled: false,
+      isFaceIdVerified: false,
+      isPasswordlessEnabled: false,
+    },
+    accountSettings: {
+      isDarkModeEnabled: false,
+      isNotificationsEnabled: false,
+      isLocationEnabled: false,
+      isLocationShared: false,
+      isLocationSharedWithBusinesses: false,
+    },
     deleted: false,
-    businesses: null,
-    clientType: "local",
-    username: "",
-    alias: "username",
-    displayName: "",
-    familyName: "",
-    givenName: "",
-    middleName: "",
-    locale: {
-      countryCode: "",
-      isRTL: false,
-      languageCode: "",
-      languageTag: "",
-    },
-    phoneNumbers: null,
-    imAddresses: null,
-    addresses: null,
-    socialAccounts: null,
-    desiredCurrencies: null,
-    billing: {
-      invoiceId: null,
-    },
-    createdAt: "",
-    updatedAt: "",
-    lastSignInAt: undefined,
-    hashedRt: "",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    lastSignInAt: new Date(),
     registration: {
-      isRegistered: false,
+      isRegistered: true,
       state: {
         screenName: "",
-        state: 0,
-        messages: null,
+        state: 2,
+        messages: ["Your account is pending verification."],
         isPendingVerification: true,
       },
     },
-    currentMembership: null,
-  };
-  return {
-    ...userPayload,
+    currentMembership: {
+      membershipId: null,
+      membershipShortId: "1000",
+      membershipShortName: "Free",
+      status: "active",
+      invoiceId: null,
+      isFaulty: false,
+      faultyReason: null,
+    },
+    roleId: null,
+    billing: null,
+    phoneNumbers: [],
+    imAddresses: [],
+    addresses: [],
+    desiredCurrencies: [],
+    isSocialAccount: false,
+    socialAccount: {
+      kind: "",
+      uid: "",
+      username: "",
+    },
     ...userPayloadOverride,
   };
+  return userPayload;
 };
 
 export const getSupportedLocales = (locale: string) => {

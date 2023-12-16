@@ -23,8 +23,8 @@ export const userLocalSignInSchema = config => {
         const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
         const usernameRegex = /^[A-Za-z0-9_]+$/;
         return emailRegex.test(value) || usernameRegex.test(value);
-      })
-      .required("no username provided."),
+      }),
+    //.required("no username provided."),
     password: Yup.string().required(passwordMessage),
   });
 };

@@ -5,7 +5,43 @@ import { IsNotEmpty, IsOptional } from "class-validator";
 export class CreateLocalClientUserDto implements CreateLocalClientUserDtoType {
   @ApiProperty()
   @IsNotEmpty()
-  clientType: "local" | "external";
+  shortId: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  isSocialAccount: boolean;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  socialAccount: { kind: string; uid?: string; username?: string };
+
+  @ApiProperty()
+  @IsNotEmpty()
+  deviceSetting: {
+    isEmailVerified: boolean;
+    isPhoneVerified: boolean;
+    isTwoFactorEnabled: boolean;
+    isTwoFactorVerified: boolean;
+    isTouchIdEnabled: boolean;
+    isTouchIdVerified: boolean;
+    isFaceIdEnabled: boolean;
+    isFaceIdVerified: boolean;
+    isPasswordlessEnabled: boolean;
+  };
+
+  @ApiProperty()
+  @IsNotEmpty()
+  accountSettings: {
+    isDarkModeEnabled: boolean;
+    isNotificationsEnabled: boolean;
+    isLocationEnabled: boolean;
+    isLocationShared: boolean;
+    isLocationSharedWithBusinesses: boolean;
+  };
+
+  @ApiProperty()
+  @IsNotEmpty()
+  clientType: "local";
 
   @ApiProperty()
   @IsNotEmpty()

@@ -4,7 +4,7 @@ import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundE
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import { InjectModel } from "@nestjs/mongoose";
-import { BusinessType, BusinessUserType, ClientUserType, ConvertToDtoType, ObjectId, generateAvatarUrl } from "@shortwaits/shared-lib";
+import { BusinessType, BusinessUserType, ClientUserType, ConvertToDtoType, ObjectId } from "@shortwaits/shared-lib";
 import bcrypt from "bcryptjs";
 import { OAuth2Client } from "google-auth-library";
 import { Model } from "mongoose";
@@ -13,8 +13,8 @@ import {
   convertDomainToLowercase,
   generateBusinessUser,
   generateUniqueId,
-  getDefaultClientPayloadValues,
   getFilteredNewBusinessOwner,
+  getNewClientPayload,
   getNewUserFromSocialAccount,
   getSupportedLocales,
 } from "../../utils";
@@ -135,6 +135,7 @@ export class AuthService {
     );
   }
 
+  // this is for Shortwaits user (Not Admin)
   async clientLocalSignUp(newUserClient: ClientSignUpWithEmailDto, locale: string) {
     const user = await this.clientUserModel.findOne({
       email: newUserClient.email,
@@ -490,48 +491,22 @@ export class AuthService {
     const salt = await bcrypt.genSalt(saltRounds);
 
     const newClientUser = new this.clientUserModel(clientUser);
-
     const encodedPassword = await bcrypt.hash(newClientUser.password, salt);
-    const clientImageUrl = generateAvatarUrl(newClientUser.email || "?");
     const tokens = await this.signTokens(newClientUser);
     const hashedRt = await bcrypt.hash(tokens.refreshToken, salt);
 
-    const userPayload = getDefaultClientPayloadValues({
-      shortId: generateUniqueId(),
+    const userPayload = getNewClientPayload({
       email: newClientUser.email,
-      password: encodedPassword,
+      username: newClientUser.email,
       displayName: newClientUser?.displayName ?? "",
       familyName: newClientUser?.familyName ?? "",
       givenName: newClientUser?.givenName ?? "",
       middleName: newClientUser?.middleName ?? "",
-      accountImageUrl: clientImageUrl,
-      roleId: null,
-      deleted: false,
       businesses: businesses,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      lastSignInAt: new Date(),
+      password: encodedPassword,
       hashedRt: hashedRt,
       clientType: "external",
       locale: getSupportedLocales(locale),
-      registration: {
-        isRegistered: true,
-        state: {
-          screenName: "",
-          state: 2,
-          messages: ["Your account is pending verification."],
-          isPendingVerification: true,
-        },
-      },
-      currentMembership: {
-        membershipId: null,
-        membershipShortId: "1000",
-        membershipShortName: "Free",
-        status: "active",
-        invoiceId: null,
-        isFaulty: false,
-        faultyReason: null,
-      },
     });
 
     newClientUser.set(userPayload);

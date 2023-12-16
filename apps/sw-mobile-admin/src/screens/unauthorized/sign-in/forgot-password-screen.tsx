@@ -1,9 +1,8 @@
 import { CompositeNavigationProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import React, { FC, useCallback, useEffect, useState } from "react";
-import { ActivityIndicator, Alert, AlertButton, StyleSheet, View } from "react-native";
-
 import { useIntl } from "react-intl";
+import { ActivityIndicator, Alert, AlertButton, StyleSheet, View } from "react-native";
 import Facebook from "../../../assets/icons/facebook.svg";
 import Google from "../../../assets/icons/google.svg";
 import { Button, Container, Screen, Space, Text, TextFieldCard } from "../../../components";
@@ -41,9 +40,6 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
     },
     "userLocalSignIn"
   );
-
-  console.log("errors", errors);
-
   const handlePasswordVisibility = useCallback(() => {
     setIsVisible(visibility => !visibility);
   }, []);

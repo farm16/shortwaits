@@ -7,6 +7,54 @@ import { Document, Schema as MongooseSchema } from "mongoose";
 export class ClientUser extends Document implements ClientUserType {
   @ApiProperty()
   @Prop()
+  isSocialAccount: boolean;
+
+  @ApiProperty()
+  @Prop(
+    raw({
+      type: MongooseSchema.Types.Mixed,
+    })
+  )
+  socialAccount: {
+    kind: string;
+    uid?: string;
+    username?: string;
+  };
+
+  @ApiProperty()
+  @Prop(
+    raw({
+      type: MongooseSchema.Types.Mixed,
+    })
+  )
+  deviceSetting: {
+    isEmailVerified: boolean;
+    isPhoneVerified: boolean;
+    isTwoFactorEnabled: boolean;
+    isTwoFactorVerified: boolean;
+    isTouchIdEnabled: boolean;
+    isTouchIdVerified: boolean;
+    isFaceIdEnabled: boolean;
+    isFaceIdVerified: boolean;
+    isPasswordlessEnabled: boolean;
+  };
+
+  @ApiProperty()
+  @Prop(
+    raw({
+      type: MongooseSchema.Types.Mixed,
+    })
+  )
+  accountSettings: {
+    isDarkModeEnabled: boolean;
+    isNotificationsEnabled: boolean;
+    isLocationEnabled: boolean;
+    isLocationShared: boolean;
+    isLocationSharedWithBusinesses: boolean;
+  };
+
+  @ApiProperty()
+  @Prop()
   shortId: string;
 
   @ApiProperty()
@@ -68,6 +116,7 @@ export class ClientUser extends Document implements ClientUserType {
     username: string;
     service: string;
   }[];
+
   @ApiProperty()
   @Prop(
     raw({
@@ -83,18 +132,6 @@ export class ClientUser extends Document implements ClientUserType {
     state: string;
     postCode: string;
     country: string;
-  }[];
-
-  @ApiProperty()
-  @Prop(
-    raw({
-      type: Array,
-    })
-  )
-  socialAccounts: {
-    kind: string;
-    uid?: string;
-    username?: string;
   }[];
 
   @ApiProperty()
@@ -155,7 +192,7 @@ export class ClientUser extends Document implements ClientUserType {
 
   @ApiProperty()
   @Prop()
-  clientType: "local" | "external";
+  clientType: "external";
 
   @ApiProperty()
   @Prop(

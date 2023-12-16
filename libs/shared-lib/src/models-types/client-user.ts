@@ -23,9 +23,9 @@ export type ClientUserMethodsType = {
 
 export type ClientUserType = {
   shortId: string;
-  clientType: "local" | "external"; // local means the user is created by the admin, external means the user is created by the client
+  clientType: "external";
+  alias: "username" | "familyName" | "givenName" | "middleName" | "displayName" | "email";
   username: string;
-  alias: "username" | "familyName" | "givenName" | "middleName" | "displayName";
   displayName: string;
   familyName: string;
   givenName: string;
@@ -57,11 +57,30 @@ export type ClientUserType = {
     postCode: string;
     country: string;
   }[];
-  socialAccounts: {
+  isSocialAccount: boolean;
+  socialAccount: {
     kind: string;
     uid?: string;
     username?: string;
-  }[];
+  };
+  deviceSetting: {
+    isEmailVerified: boolean;
+    isPhoneVerified: boolean;
+    isTwoFactorEnabled: boolean;
+    isTwoFactorVerified: boolean;
+    isTouchIdEnabled: boolean;
+    isTouchIdVerified: boolean;
+    isFaceIdEnabled: boolean;
+    isFaceIdVerified: boolean;
+    isPasswordlessEnabled: boolean;
+  };
+  accountSettings: {
+    isDarkModeEnabled: boolean;
+    isNotificationsEnabled: boolean;
+    isLocationEnabled: boolean;
+    isLocationShared: boolean;
+    isLocationSharedWithBusinesses: boolean;
+  };
   desiredCurrencies: string[];
   // below are fields from the that are not in the CreateClientUserDtoType
   billing: {
