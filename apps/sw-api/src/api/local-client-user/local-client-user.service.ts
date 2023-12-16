@@ -62,18 +62,23 @@ export class LocalClientUserService {
         });
       });
       const newLocalClientUsers = await this.localClientUserModel.create(newLocalClientUsersPayload);
-      console.log("newLocalClientUsers", newLocalClientUsers);
       const newLocalClientUserIds = newLocalClientUsers.map(localClientUser => localClientUser._id);
-      console.log("newLocalClientUserIds", newLocalClientUserIds);
-      const updatedBusiness = await business
-        .updateOne({
-          $push: {
-            localClients: {
-              $each: newLocalClientUserIds,
-            },
-          },
-        })
-        .exec();
+
+      const getUniqueArray = arr => {
+        const seen = new Set();
+        return arr.filter(item => {
+          const objectIdStr = item.toString(); // Convert ObjectId to string for Set
+          if (!seen.has(objectIdStr)) {
+            seen.add(objectIdStr);
+            return true;
+          }
+          return false;
+        });
+      };
+
+      const uniqueUserIds = getUniqueArray(newLocalClientUserIds);
+      business.localClients = uniqueUserIds;
+      const updatedBusiness = await business.save();
 
       return {
         localClientUsers: newLocalClientUsers,
