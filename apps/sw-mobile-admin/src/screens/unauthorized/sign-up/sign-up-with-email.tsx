@@ -1,14 +1,14 @@
-import React, { FC, useCallback, useLayoutEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
-import { StackNavigationProp } from "@react-navigation/stack";
 import { CompositeNavigationProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import React, { FC, useCallback, useLayoutEffect, useState } from "react";
 import { useIntl } from "react-intl";
+import { StyleSheet, View } from "react-native";
 
-import { Button, Space, Text, TextFieldCard, Screen } from "../../../components";
+import { Button, Screen, Space, Text, TextFieldCard } from "../../../components";
 import { useForm } from "../../../hooks";
-import { useTheme } from "../../../theme";
 import { RootStackParamList, UnauthorizedStackParamList } from "../../../navigation";
 import { useLocalSignUpMutation } from "../../../services";
+import { useTheme } from "../../../theme";
 
 interface SignUpWithEmailScreenProps {
   navigation: CompositeNavigationProp<StackNavigationProp<UnauthorizedStackParamList, "sign-up-with-email-screen">, StackNavigationProp<RootStackParamList>>;
@@ -23,6 +23,7 @@ export const SignUpWithEmail: FC<SignUpWithEmailScreenProps> = ({ navigation }) 
     });
   }, [intl, navigation]);
 
+  console.log("heellooo!!!");
   const { Colors } = useTheme();
   const [isVisible, setIsVisible] = useState(false);
   const [localSignUp, { isLoading }] = useLocalSignUpMutation();
@@ -36,6 +37,7 @@ export const SignUpWithEmail: FC<SignUpWithEmailScreenProps> = ({ navigation }) 
     {
       initialValues,
       onSubmit: formData => {
+        console.log("formData >>> ", formData);
         localSignUp({
           username: formData.username,
           email: formData.email,
@@ -58,10 +60,10 @@ export const SignUpWithEmail: FC<SignUpWithEmailScreenProps> = ({ navigation }) 
         autoCapitalize="none"
         title={intl.formatMessage({ id: "Sign_Up_With_Email_Screen.userNameOrEmail" })}
         placeholder={intl.formatMessage({ id: "Sign_Up_With_Email_Screen.userNameOrEmail.placeholder" })}
-        value={values.username}
-        onChangeText={handleChange("username")}
-        isTouched={touched.username}
-        errors={errors.username}
+        value={values.email}
+        onChangeText={handleChange("email")}
+        isTouched={touched.email}
+        errors={errors.email}
       />
       <Space size="small" />
       <TextFieldCard

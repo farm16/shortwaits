@@ -90,6 +90,7 @@
     "@shopify/flash-list": "*",
     "react-native-fast-image": "*",
     "react-native-permissions": "*",
-    "react-native-vision-camera": "*"
+    "react-native-vision-camera": "*",
+    "nanoid": "*"
   }
 }

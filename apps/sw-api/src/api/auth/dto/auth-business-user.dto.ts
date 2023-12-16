@@ -30,7 +30,7 @@ export class SignInWithEmailDto {
 export class SignUpWithEmailDto {
   @Trim()
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   @MinLength(3)
   @MaxLength(320)
   @ApiProperty({ example: "sw123" })
@@ -39,15 +39,16 @@ export class SignUpWithEmailDto {
   // make email optional for now
   @Trim()
   @IsString()
-  @IsOptional()
+  @IsNotEmpty()
   @MaxLength(320)
   @ApiProperty({ example: "sw@sw.com" })
   readonly email: string;
 
   @Trim()
   @IsString()
-  @MinLength(6)
   @IsNotEmpty()
+  @MinLength(6)
+  @MaxLength(320)
   @ApiProperty({ example: "Shortwaits123" })
   readonly password: string;
 }

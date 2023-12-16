@@ -15,7 +15,7 @@ export const userLocalSignInSchema = config => {
   const passwordMessage = intl.formatMessage({ id: "Validation.password", defaultMessage: "invalid password" });
 
   return Yup.object().shape({
-    email: Yup.string().email(emailMessage).optional(),
+    email: Yup.string().email(emailMessage).required(),
     username: Yup.string()
       .min(3)
       .max(320, "Username or email address is too long")
@@ -31,7 +31,7 @@ export const userLocalSignInSchema = config => {
 
 export const userLocalSignUpSchema = config =>
   Yup.object().shape({
-    email: Yup.string().email("invalid email").optional(),
+    email: Yup.string().email("invalid email").required(),
     username: Yup.string()
       .min(3)
       .max(320, "Username or email address is too long")
@@ -39,8 +39,7 @@ export const userLocalSignUpSchema = config =>
         const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
         const usernameRegex = /^[A-Za-z0-9_]+$/;
         return emailRegex.test(value) || usernameRegex.test(value);
-      })
-      .required("no username provided."),
+      }),
     password: Yup.string()
       .required("no password provided.")
       .min(6, "password is too short - should be 8 chars minimum.")
