@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ClientUsersDtoType } from "@shortwaits/shared-lib";
+import { LocalClientUsersDtoType } from "@shortwaits/shared-lib";
 
 import type { RootState } from "../..";
 import { shortwaitsApi } from "../../../services";
 
-export const localClientsInitialState: ClientUsersDtoType = null;
+export const localClientsInitialState: LocalClientUsersDtoType = null;
 export const localClientsSlice = createSlice({
   name: "localClients",
   initialState: localClientsInitialState,
@@ -20,7 +20,6 @@ export const localClientsSlice = createSlice({
         if (state === null) {
           return action.payload.data;
         }
-
         const newClients = action.payload.data;
         const existingClients = state;
         const mergedClients = newClients.map(newClient => {
@@ -31,6 +30,12 @@ export const localClientsSlice = createSlice({
           return newClient;
         });
         return mergedClients;
+      })
+      .addMatcher(shortwaitsApi.endpoints.createBusinessLocalClients.matchFulfilled, (_state, action) => {
+        return [...new Set([..._state, ...action.payload.data])];
+      })
+      .addMatcher(shortwaitsApi.endpoints.getAllBusinessClients.matchFulfilled, (_state, action) => {
+        return [...new Set([..._state, ...action.payload.data.localClients])];
       })
       .addMatcher(shortwaitsApi.endpoints.createLocalClients.matchFulfilled, (state, action) => {
         const newClients = action.payload.data.localClientUsers;
@@ -44,23 +49,6 @@ export const localClientsSlice = createSlice({
         });
         return mergedClients;
       });
-    // .addMatcher(shortwaitsApi.endpoints.updateBusinessClient.matchFulfilled, (state, action) => {
-    //   const updatedClient = action.payload.data;
-    //   const existingClient = state.findIndex(event => event._id === updatedClient._id);
-    //   let clients;
-
-    //   if (existingClient !== -1) {
-    //     clients = state.map(client => {
-    //       if (client._id === updatedClient._id) {
-    //         return updatedClient;
-    //       }
-    //       return client;
-    //     });
-    //   } else {
-    //     clients = state.push(updatedClient);
-    //   }
-    //   return clients;
-    // });
   },
 });
 

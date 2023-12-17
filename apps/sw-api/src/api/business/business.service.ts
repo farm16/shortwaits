@@ -14,6 +14,7 @@ import { convertStringToObjectId } from "../../utils/converters";
 import { generateBusinessStaffUsers, generateClientUsers } from "../../utils/generateUserPayload";
 import { BusinessUser } from "../business-staff/entities/business-staff.entity";
 import { ClientUser } from "../client-user/entities/client-user.entity";
+import { LocalClientUser } from "../local-client-user/entities/local-client-user.entity";
 import { RegisterBusinessDto } from "./dto/registerBusiness.dto";
 import { Business } from "./entities/business.entity";
 
@@ -25,7 +26,9 @@ export class BusinessService {
     @InjectModel(BusinessUser.name)
     private businessUserModel: Model<BusinessUser>,
     @InjectModel(ClientUser.name)
-    private clientUserModel: Model<ClientUser>
+    private clientUserModel: Model<ClientUser>,
+    @InjectModel(LocalClientUser.name)
+    private localClientUserModel: Model<LocalClientUser>
   ) {}
 
   isUserAdminType(business: Business, userId: any) {
@@ -152,30 +155,18 @@ export class BusinessService {
     }
   }
 
-  async getUsers(userType: "staff" | "client", businessId: string, userId: string) {
+  async getBusinessStaff(businessId: string, userId: string) {
     const businessData = await this.findBusinessById(businessId);
-
     const { isAdmin, isSuperAdmin } = this.isUserAdminType(businessData, userId);
     if (isAdmin || isSuperAdmin) {
-      if (userType === "staff") {
-        const staff = await this.businessUserModel
-          .find({
-            _id: {
-              $in: businessData.staff,
-            },
-          })
-          .select("-__v -hashedRt");
-        return staff;
-      } else if (userType === "client") {
-        const clients = await this.clientUserModel
-          .find({
-            _id: {
-              $in: businessData.clients,
-            },
-          })
-          .select("-__v -hashedRt");
-        return clients;
-      }
+      const staff = await this.businessUserModel
+        .find({
+          _id: {
+            $in: businessData.staff,
+          },
+        })
+        .select("-__v -hashedRt");
+      return staff;
     }
   }
 
@@ -202,14 +193,14 @@ export class BusinessService {
     }
   }
 
-  async createBusinessClients(businessUserId: string, businessId: string, clients: CreateClientUsersDtoType) {
+  async createBusinessLocalClients(businessUserId: string, businessId: string, clients: CreateClientUsersDtoType) {
     const businessData = await this.findBusinessById(businessId);
 
     const { isAdmin, isSuperAdmin } = this.isUserAdminType(businessData, businessUserId);
 
     if (isAdmin || isSuperAdmin) {
       const clientsPayload = generateClientUsers(clients);
-      const insertedClients = await this.clientUserModel.insertMany(clientsPayload);
+      const insertedClients = await this.localClientUserModel.insertMany(clientsPayload);
       const clientsIds = insertedClients.map(client => {
         return client._id;
       });
@@ -223,7 +214,7 @@ export class BusinessService {
       );
 
       const updatedBusiness = await business.save();
-      const newClients = await this.clientUserModel.find({
+      const newClients = await this.localClientUserModel.find({
         _id: {
           $in: updatedBusiness.clients,
         },
@@ -232,7 +223,40 @@ export class BusinessService {
     }
   }
 
-  async updateBusinessClient(businessUserId: string, businessId: string, client: ClientUserUpdateDtoType) {
+  async getAllBusinessClients(businessUserId: string, businessId: string) {
+    if (!businessId || !businessUserId) {
+      throw new ForbiddenException("Unrecognized business or user");
+    }
+
+    const businessData = await this.findBusinessById(businessId);
+    const { isAdmin, isSuperAdmin } = this.isUserAdminType(businessData, businessUserId);
+
+    if (isAdmin || isSuperAdmin) {
+      const localClients = await this.localClientUserModel
+        .find({
+          _id: {
+            $in: businessData.clients,
+          },
+        })
+        .select("-__v -hashedRt");
+
+      const clients = await this.clientUserModel
+        .find({
+          _id: {
+            $in: businessData.clients,
+          },
+        })
+        .select("-__v -hashedRt");
+      return {
+        localClients,
+        clients,
+      };
+    } else {
+      throw new ForbiddenException("Not enough permissions");
+    }
+  }
+
+  async updateBusinessLocalClient(businessUserId: string, businessId: string, client: ClientUserUpdateDtoType) {
     const businessData = await this.findBusinessById(businessId);
     const { isAdmin, isSuperAdmin } = this.isUserAdminType(businessData, businessUserId);
 

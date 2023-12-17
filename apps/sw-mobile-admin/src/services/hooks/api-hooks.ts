@@ -10,9 +10,9 @@ export const {
   useLocalSignInMutation,
   useLocalSignOutMutation,
   useUpdateBusinessMutation,
-  useCreateBusinessClientsMutation,
   useCreateBusinessStaffMutation,
-  useUpdateBusinessClientMutation,
+  useCreateBusinessLocalClientsMutation,
+  useUpdateBusinessLocalClientMutation,
   useUpdateBusinessStaffMutation,
   useUpdateEventMutation,
   useUpdateServiceMutation,
@@ -24,7 +24,7 @@ export const {
 
   //Query hooks
   useGetAdminMobileQuery,
-  useGetBusinessClientsQuery,
+  useGetAllBusinessClientsQuery,
   useGetBusinessQuery,
   useGetBusinessCategoryQuery,
   useGetBusinessHoursQuery,
@@ -42,14 +42,13 @@ export const {
   useGetStaffQuery,
 
   //Lazy Query hooks
-
   useLazyGetPeopleInEventQuery,
   useLazyGetCategoryQuery,
   useLazyGetCategoriesQuery,
   useLazyGetAdminMobileQuery,
   useLazyGetServiceQuery,
   useLazyGetServicesQuery,
-  useLazyGetBusinessClientsQuery,
+  useLazyGetAllBusinessClientsQuery,
   useLazyGetEventsByBusinessQuery,
   useLazyGetBusinessQuery,
   useLazyGetBusinessCategoryQuery,

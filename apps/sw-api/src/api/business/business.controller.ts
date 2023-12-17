@@ -2,10 +2,10 @@ import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Put, Req, Use
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
 import { ClientUserUpdateDtoType, CreateBusinessUsersDtoType, CreateClientUsersDtoType } from "@shortwaits/shared-lib";
 
-import { BusinessService } from "./business.service";
 import { AtGuard } from "../../common/guards";
-import { UpdateBusinessDto } from "./dto/updateBusiness.dto";
+import { BusinessService } from "./business.service";
 import { RegisterBusinessDto } from "./dto/registerBusiness.dto";
+import { UpdateBusinessDto } from "./dto/updateBusiness.dto";
 
 @UseGuards(AtGuard)
 @ApiTags("business")
@@ -93,28 +93,28 @@ export class BusinessController {
     status: HttpStatus.OK,
     description: "Returns business clients",
   })
-  async getBusinessClients(@Param("businessId") businessId: string, @Req() request) {
-    return this.businessService.getUsers("client", businessId, request.user.sub);
+  async getAllBusinessClientsController(@Param("businessId") businessId: string, @Req() request) {
+    return this.businessService.getAllBusinessClients(businessId, request.user.sub);
   }
 
-  @Post(":businessId/clients")
+  @Post(":businessId/local-clients")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.CREATED,
     description: "Returns created",
   })
-  async createBusinessClients(@Param("businessId") businessId: string, @Req() request, @Body() dto: CreateClientUsersDtoType) {
-    return this.businessService.createBusinessClients(request.user.sub, businessId, dto);
+  async createBusinessLocalClients(@Param("businessId") businessId: string, @Req() request, @Body() dto: CreateClientUsersDtoType) {
+    return this.businessService.createBusinessLocalClients(request.user.sub, businessId, dto);
   }
 
-  @Put(":businessId/client")
+  @Put(":businessId/local-client")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.CREATED,
     description: "Returns created",
   })
-  async updateBusinessClient(@Param("businessId") businessId: string, @Req() request, @Body() dto: ClientUserUpdateDtoType) {
-    return this.businessService.updateBusinessClient(request.user.sub, businessId, dto);
+  async updateBusinessLocalClient(@Param("businessId") businessId: string, @Req() request, @Body() dto: ClientUserUpdateDtoType) {
+    return this.businessService.updateBusinessLocalClient(request.user.sub, businessId, dto);
   }
 
   @Get(":businessId/staff")
@@ -124,7 +124,7 @@ export class BusinessController {
     description: "Returns business staff",
   })
   async getBusinessStaffByIds(@Param("businessId") businessId: string, @Req() request) {
-    return this.businessService.getUsers("staff", businessId, request.user.sub);
+    return this.businessService.getBusinessStaff(businessId, request.user.sub);
   }
 
   @Post(":businessId/staff")

@@ -1,17 +1,17 @@
-import { CreateClientUsersDtoType, ClientUsersResponseType, endpoints } from "@shortwaits/shared-lib";
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
+import { CreateLocalClientUsersDtoType, LocalClientUsersResponseType, endpoints } from "@shortwaits/shared-lib";
 
 type RequestType = {
   businessId: string;
-  body: CreateClientUsersDtoType;
+  body: CreateLocalClientUsersDtoType;
 };
 
 //business User === Staff
 //client User === Client
 export default (builder: EndpointBuilder<any, any, any>) =>
-  builder.mutation<ClientUsersResponseType, RequestType>({
+  builder.mutation<LocalClientUsersResponseType, RequestType>({
     query: ({ businessId, body }) => ({
-      ...endpoints.createBusinessClient.getConfig([businessId], {}),
+      ...endpoints.createBusinessLocalClient.getConfig([businessId], {}),
       body,
     }),
   });

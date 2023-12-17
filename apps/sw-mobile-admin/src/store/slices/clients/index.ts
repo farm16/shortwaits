@@ -20,13 +20,10 @@ export const clientsSlice = createSlice({
         console.log("action", action.payload.data);
         return action.payload.data;
       })
-      .addMatcher(shortwaitsApi.endpoints.getBusinessClients.matchFulfilled, (_state, action) => {
-        return [...new Set([..._state, ...action.payload.data])];
+      .addMatcher(shortwaitsApi.endpoints.getAllBusinessClients.matchFulfilled, (_state, action) => {
+        return [...new Set([..._state, ...action.payload.data.clients])];
       })
-      .addMatcher(shortwaitsApi.endpoints.createBusinessClients.matchFulfilled, (_state, action) => {
-        return [...new Set([..._state, ...action.payload.data])];
-      })
-      .addMatcher(shortwaitsApi.endpoints.updateBusinessClient.matchFulfilled, (state, action) => {
+      .addMatcher(shortwaitsApi.endpoints.updateBusinessLocalClient.matchFulfilled, (state, action) => {
         const updatedClient = action.payload.data;
         const existingClient = state.findIndex(event => event._id === updatedClient._id);
         let clients;

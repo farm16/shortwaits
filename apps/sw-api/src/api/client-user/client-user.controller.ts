@@ -31,7 +31,7 @@ export class ClientUserController {
     return this.clientUsersService.updateClientUserForBusiness(businessId, clientUser);
   }
 
-  @Put("business/:businessId/clients")
+  @Put("business/:businessId/local-clients")
   @HttpCode(HttpStatus.OK)
   async addClientToBusiness(@Param("businessId") businessId: string, @Body() body: { shortId: string }) {
     return this.clientUsersService.addClientUserToBusiness(businessId, body.shortId);

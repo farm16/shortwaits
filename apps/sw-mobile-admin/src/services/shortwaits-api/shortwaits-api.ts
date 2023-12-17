@@ -2,16 +2,16 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithInterceptor } from "./interceptor";
 import {
   AddClientToBusiness,
-  CreateBusinessClients,
+  CreateBusinessLocalClients,
   CreateBusinessStaff,
   CreateEvent,
   CreateLocalClients,
   CreateService,
   DeleteService,
   GetAdminMobile,
+  GetAllBusinessClients,
   GetBusiness,
   GetBusinessCategory,
-  GetBusinessClients,
   GetBusinessHours,
   GetBusinessServices,
   GetBusinessStaff,
@@ -32,7 +32,7 @@ import {
   PostSocialSignUp,
   RegisterBusiness,
   UpdateBusiness,
-  UpdateBusinessClient,
+  UpdateBusinessLocalClient,
   UpdateBusinessStaff,
   UpdateEvent,
   UpdateService,
@@ -59,7 +59,7 @@ export const shortwaitsApi = createApi({
     // this only return _ids
     getBusinessCategory: GetBusinessCategory(builder),
     getBusinessServices: GetBusinessServices(builder),
-    getBusinessClients: GetBusinessClients(builder),
+    getAllBusinessClients: GetAllBusinessClients(builder),
     getBusinessStaff: GetBusinessStaff(builder),
 
     updateBusiness: UpdateBusiness(builder),
@@ -68,9 +68,9 @@ export const shortwaitsApi = createApi({
 
     // A client User === Client also known as a customer
     createBusinessStaff: CreateBusinessStaff(builder),
-    createBusinessClients: CreateBusinessClients(builder),
+    createBusinessLocalClients: CreateBusinessLocalClients(builder),
     updateBusinessStaff: UpdateBusinessStaff(builder), // updates single business staff
-    updateBusinessClient: UpdateBusinessClient(builder), // updates single business client
+    updateBusinessLocalClient: UpdateBusinessLocalClient(builder), // updates single business client
     // <<<<< business
 
     //categories

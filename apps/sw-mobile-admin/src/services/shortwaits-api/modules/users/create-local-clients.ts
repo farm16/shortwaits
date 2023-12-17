@@ -10,7 +10,7 @@ export default (builder: EndpointBuilder<any, any, any>) =>
   builder.mutation<NewLocalClientUsersResponseType, RequestType>({
     query: ({ businessId, body }) => {
       return {
-        ...endpoints.createLocalClientUser.getConfig([businessId], {}),
+        ...endpoints.addLocalClientUser.getConfig([businessId], {}),
         body,
       };
     },

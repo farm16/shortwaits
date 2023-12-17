@@ -76,10 +76,11 @@ type RequiredKeys = Pick<
   "username" | "email" | "displayName" | "familyName" | "givenName" | "middleName" | "businesses" | "password" | "hashedRt" | "clientType" | "locale"
 >;
 export const getNewClientPayload = (userPayloadOverride: RequiredKeys) => {
+  const imageUrlIdentifier = userPayloadOverride.familyName || userPayloadOverride.givenName || userPayloadOverride.email || "?";
   const userPayload: Omit<ClientUserType | LocalClientUserType, "_id"> = {
     shortId: generateShortId(),
     alias: "email",
-    accountImageUrl: generateAvatarUrl(userPayloadOverride.email || "?"),
+    accountImageUrl: generateAvatarUrl(imageUrlIdentifier),
     deviceSetting: {
       isEmailVerified: false,
       isPhoneVerified: false,

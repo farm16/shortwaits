@@ -23,7 +23,7 @@ type Endpoint =
   | `business/${string}/events`
   | `business/${string}/clients`
   | `business/${string}/staff`
-  | "business/register"
+  | "business/registration/complete"
   | "shortwaits/admin/mobile"
   | `events/business/summary/${string}`
   | `events/business/${string}`
@@ -38,6 +38,7 @@ type Endpoint =
   | "upload-file/image"
   // users endpoints
   | `client-user`
+  | `client-user/${string}`
   | `client-user/business/${string}`
   | `client-user/business/${string}/clients`
   | `business-staff`
@@ -87,27 +88,20 @@ export const endpoints = {
   refreshClientLocal: createEndpoint("auth/client/local/refresh", "PUT"),
 
   // business
-  getBusiness: createEndpoint(`business/:businessId`, "GET"),
-  updateBusiness: createEndpoint(`business/:businessId`, "PUT"),
-  getBusinessAdmins: createEndpoint(`business/:businessId/admins`, "GET"),
-  getBusinessServices: createEndpoint(`business/:businessId/services`, "GET"),
-  getBusinessCategories: createEndpoint(`business/:businessId/categories`, "GET"),
-  getBusinessHours: createEndpoint(`business/:businessId/hours`, "GET"),
-  getBusinessEvents: createEndpoint(`business/:businessId/events`, "GET"),
-  registerBusiness: createEndpoint("business/register", "POST"),
-  // Users
-  getBusinessClients: createEndpoint(`business/:businessId/clients`, "GET"),
-  getBusinessLocalClients: createEndpoint(`local-client-user/business/:businessId`, "GET"),
-  getBusinessStaff: createEndpoint(`business/:businessId/staff`, "GET"),
-  //business User === Staff
-  //client User === Client
-  createBusinessStaff: createEndpoint(`business/:businessId/staff`, "POST"),
-  updateBusinessStaff: createEndpoint(`business/:businessId/staff`, "PUT"),
-  createBusinessClient: createEndpoint(`business/:businessId/clients`, "POST"),
-  updateBusinessClient: createEndpoint(`business/:businessId/clients`, "PUT"),
-
-  // Users this includes both staff and client users
-  getBusinessUsers: createEndpoint("business-user/multiple", "POST"),
+  getBusiness: createEndpoint("business/:businessId", "GET"),
+  updateBusiness: createEndpoint("business/:businessId", "PUT"),
+  getBusinessAdmins: createEndpoint("business/:businessId/admins", "GET"),
+  getBusinessServices: createEndpoint("business/:businessId/services", "GET"),
+  getBusinessCategories: createEndpoint("business/:businessId/categories", "GET"),
+  getBusinessHours: createEndpoint("business/:businessId/hours", "GET"),
+  getBusinessEvents: createEndpoint("business/:businessId/events", "GET"),
+  getAllBusinessClients: createEndpoint("business/:businessId/clients", "GET"),
+  createBusinessLocalClient: createEndpoint("business/:businessId/local-clients", "POST"),
+  updateBusinessLocalClient: createEndpoint("business/:businessId/local-client", "PUT"),
+  getBusinessStaff: createEndpoint("business/:businessId/staff", "GET"),
+  createBusinessStaff: createEndpoint("business/:businessId/staff", "POST"),
+  updateBusinessStaff: createEndpoint("business/:businessId/staff", "PUT"),
+  registerBusiness: createEndpoint("business/registration/complete", "POST"),
 
   // shortwaits
   getShortwaitsAdminMobile: createEndpoint("shortwaits/admin/mobile", "GET"),
@@ -143,12 +137,20 @@ export const endpoints = {
     businessId: string;
   }>(`services/:serviceId`, "DELETE"),
 
-  // users
-  getStaffUsers: createEndpoint(`business-staff/business/:businessId`, "GET"),
-  getLocalClientUsers: createEndpoint("local-client-user/business/:businessId", "GET"),
-  createLocalClientUser: createEndpoint("local-client-user/business/:businessId", "POST"),
+  // Client Users
   getClientUsers: createEndpoint("client-user/business/:businessId", "GET"),
-  addClientToBusiness: createEndpoint("client-user/business/:businessId/clients", "PUT"),
+  addClientUsers: createEndpoint("client-user/business/:businessId", "POST"),
+  updateClientUsers: createEndpoint("client-user/business/:businessId", "PUT"),
+  addClientToBusiness: createEndpoint("client-user/business/:businessId/local-clients", "PUT"),
+  getClientUser: createEndpoint("client-user/:clientShortId", "GET"),
+
+  // Local Client Users
+  getLocalClientUsers: createEndpoint("local-client-user/business/:businessId", "GET"),
+  addLocalClientUser: createEndpoint("local-client-user/business/:businessId", "POST"),
+  updateLocalClientUsers: createEndpoint(`local-client-user/business/:businessId`, "PUT"),
+
+  // business staff
+  getStaffUsers: createEndpoint(`business-staff/business/:businessId`, "GET"),
 
   // upload file
   uploadImageFile: createEndpoint("upload-file/image", "POST"),

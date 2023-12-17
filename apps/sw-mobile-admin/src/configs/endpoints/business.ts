@@ -46,8 +46,4 @@ export const BUSINESS = {
     getPath: (_id: string) => `${BUSINESS_BASE_PATH}/${_id}/clients`,
     METHOD: "POST",
   } as BusinessProps,
-  getBusinessClients: {
-    getPath: (_id: string) => `${BUSINESS_BASE_PATH}/${_id}/clients`,
-    METHOD: "GET",
-  } as BusinessProps,
 };
