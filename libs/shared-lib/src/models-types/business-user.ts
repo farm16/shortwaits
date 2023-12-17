@@ -1,8 +1,7 @@
 // warning:
 // don't remove this comment
-import { Document, PaginateModel } from "mongoose";
+import { Document } from "mongoose";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import * as paginate from "mongoose-paginate-v2";
 // end of warning //
 
 import { ObjectId } from "../common-types";
@@ -23,14 +22,21 @@ export type UserMethodsType = {
   matchPassword: (param1: string) => Promise<boolean>;
 };
 
+export type BusinessUserRole = "admin" | "superAdmin" | "backgroundAdmin" | "staff";
+export type BusinessUserRoles = BusinessUserRole[];
+
 export type BusinessUserType = {
   roleId: ObjectId;
   password: string;
   isPasswordProtected: boolean;
   businesses: ObjectId[];
   isDisabled: boolean; // if this is set to true, the user will not be able to login but user will be visible in the list of users
-
-  isStaff: boolean; // all users created by a business are staff, only superAdmins are not staff
+  userRoles: {
+    isStaff: boolean;
+    isAdmin: boolean;
+    isSuperAdmin: boolean;
+    isBackgroundAdmin: boolean;
+  };
   createdByBusinessId: ObjectId; // if this is set and user "A" is superAdmin, user "A" can delete or update this user
   // Also we need to let the user know that this user is created by a business (super admin) and belongs to that business
   deleted: boolean; // will not be shown in the list of users, but the data will be kept

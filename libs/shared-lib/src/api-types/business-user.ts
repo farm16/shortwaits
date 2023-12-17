@@ -21,7 +21,7 @@ export type CreateBusinessUserDtoType = Omit<
   | "roleId"
   | "hashedRt"
   | "isDisabled"
-  | "isStaff"
+  | "userRoles"
   | "createdByBusinessId"
   | "isEmailVerified"
 >;

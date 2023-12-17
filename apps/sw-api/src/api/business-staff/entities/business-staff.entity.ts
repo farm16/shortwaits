@@ -6,6 +6,22 @@ import { Document, Types } from "mongoose";
 @Schema({ collection: "business-users" })
 export class BusinessUser extends Document implements BusinessUserType {
   @ApiProperty()
+  @Prop(
+    raw({
+      isStaff: { type: Boolean, default: false },
+      isAdmin: { type: Boolean, default: false },
+      isSuperAdmin: { type: Boolean, default: false },
+      isBackgroundAdmin: { type: Boolean, default: false },
+    })
+  )
+  userRoles: {
+    isStaff: boolean;
+    isAdmin: boolean;
+    isSuperAdmin: boolean;
+    isBackgroundAdmin: boolean;
+  };
+
+  @ApiProperty()
   @Prop()
   roleId: Types.ObjectId;
 
@@ -24,10 +40,6 @@ export class BusinessUser extends Document implements BusinessUserType {
   @ApiProperty()
   @Prop()
   isDisabled: boolean;
-
-  @ApiProperty()
-  @Prop()
-  isStaff: boolean;
 
   @ApiProperty()
   @Prop()
@@ -76,12 +88,31 @@ export class BusinessUser extends Document implements BusinessUserType {
   @ApiProperty()
   @Prop()
   familyName: string;
+
+  @ApiProperty()
+  @Prop()
   givenName: string;
+
+  @ApiProperty()
+  @Prop()
   middleName: string;
+
+  @ApiProperty()
+  @Prop()
   accountImageUrl: string;
+
+  @ApiProperty()
+  @Prop()
   primaryPhoneNumberLabel: string;
+
+  @ApiProperty()
+  @Prop()
   phoneNumbers: { label: string; number: string }[];
+
+  @ApiProperty()
+  @Prop()
   imAddresses: { username: string; service: string }[];
+
   @ApiProperty()
   @Prop()
   addresses: {

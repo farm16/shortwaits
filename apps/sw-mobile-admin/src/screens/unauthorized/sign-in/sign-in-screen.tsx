@@ -27,6 +27,7 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
 
   const initialValues = {
     email: "",
+    username: "",
     password: "",
   };
   const { touched, errors, values, handleChange, handleSubmit, dirty } = useForm(
@@ -36,6 +37,7 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
         localSignIn({
           password: formData.password,
           username: formData.email,
+          email: formData.email,
         });
       },
     },

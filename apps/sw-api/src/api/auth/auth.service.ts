@@ -4,18 +4,18 @@ import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundE
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import { InjectModel } from "@nestjs/mongoose";
-import { BusinessType, BusinessUserType, ClientUserType, ConvertToDtoType, ObjectId } from "@shortwaits/shared-lib";
+import { BusinessType, BusinessUserType, ClientUserType, ObjectId } from "@shortwaits/shared-lib";
 import bcrypt from "bcryptjs";
 import { OAuth2Client } from "google-auth-library";
 import { Model } from "mongoose";
 import { noop } from "rxjs";
 import {
-  convertDomainToLowercase,
+  convertToLowercase,
+  filterBusinessOwnerPayload_localAuth,
+  filterBusinessOwnerPayload_socialAuth,
   generateBusinessUser,
   generateUniqueId,
-  getFilteredNewBusinessOwner,
   getNewClientPayload,
-  getNewUserFromSocialAccount,
   getSupportedLocales,
 } from "../../utils";
 import { BusinessUser } from "../business-staff/entities/business-staff.entity";
@@ -70,7 +70,7 @@ export class AuthService {
         return await this.successfulExistingBusinessUser(user);
       }
 
-      const newUser = getNewUserFromSocialAccount(userInfo);
+      const newUser = filterBusinessOwnerPayload_socialAuth(userInfo);
       return await this.createNewBusinessAndBusinessOwner(newUser, storeIndicator);
     } catch (error) {
       console.error("Error in businessSocialSignUp:", error);
@@ -100,7 +100,7 @@ export class AuthService {
       });
 
       if (!user) {
-        const newUser = getNewUserFromSocialAccount(userInfo);
+        const newUser = filterBusinessOwnerPayload_socialAuth(userInfo);
         return await this.createNewBusinessAndBusinessOwner(newUser, storeIndicator);
       }
 
@@ -113,7 +113,7 @@ export class AuthService {
 
   async businessLocalSignUp(newBusinessUserDto: SignUpWithEmailDto, storeIndicator = "en") {
     const user = await this.businessUserModel.findOne({
-      username: newBusinessUserDto.username,
+      email: newBusinessUserDto.email,
     });
 
     if (user) {
@@ -124,8 +124,7 @@ export class AuthService {
     const salt = await bcrypt.genSalt(saltRounds);
     const encodedPassword = await bcrypt.hash(newBusinessUserDto.password, salt);
 
-    const filteredBusinessUser = getFilteredNewBusinessOwner(newBusinessUserDto);
-
+    const filteredBusinessUser = filterBusinessOwnerPayload_localAuth(newBusinessUserDto);
     return await this.createNewBusinessAndBusinessOwner(
       {
         ...filteredBusinessUser,
@@ -154,7 +153,7 @@ export class AuthService {
 
   async clientLocalSignIn(dto: ClientSignInWithEmailDto) {
     const user = await this.clientUserModel.findOne({
-      email: convertDomainToLowercase(dto.email),
+      email: convertToLowercase(dto.email),
     });
 
     if (!user) {
@@ -172,7 +171,7 @@ export class AuthService {
 
   async businessLocalSignIn(dto: SignInWithEmailDto) {
     const user = await this.businessUserModel.findOne({
-      username: convertDomainToLowercase(dto.username), // todo: this might be a problem
+      email: convertToLowercase(dto.email), // we only auth via email
     });
 
     if (!user) {
@@ -371,7 +370,7 @@ export class AuthService {
     };
   }
 
-  async createNewBusinessAndBusinessOwner(newUser: ConvertToDtoType<BusinessUserType>, storeIndicator = "en") {
+  async createNewBusinessAndBusinessOwner(newUser: BusinessUserType, storeIndicator = "en") {
     const storeIndicators = {
       en: "0000001",
       es: "0000002",
@@ -382,7 +381,7 @@ export class AuthService {
     const saltRounds = Number(this.configService.get("SALT_ROUNDS"));
     const salt = await bcrypt.genSalt(saltRounds);
 
-    const userPayload = generateBusinessUser(newUser);
+    const userPayload = generateBusinessUser(newUser, ["superAdmin", "backgroundAdmin", "admin"]);
     const currentUser = new this.businessUserModel(userPayload);
 
     const businessShortId = await this.generateBusinessShortUniqueId();

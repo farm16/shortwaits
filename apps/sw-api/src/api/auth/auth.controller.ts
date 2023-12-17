@@ -12,7 +12,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Public()
-  @Post("admin/social/sign-up")
+  @Post("business/sign-up/social")
   @HttpCode(HttpStatus.CREATED)
   @ApiCreatedResponse({
     status: HttpStatus.CREATED,
@@ -24,7 +24,7 @@ export class AuthController {
   }
 
   @Public()
-  @Post("admin/social/sign-in")
+  @Post("business/sign-in/social")
   @HttpCode(HttpStatus.CREATED)
   @ApiCreatedResponse({
     status: HttpStatus.CREATED,
@@ -36,7 +36,7 @@ export class AuthController {
   }
 
   @Public()
-  @Post("admin/local/sign-up")
+  @Post("business/sign-up/local-auth")
   @HttpCode(HttpStatus.CREATED)
   @ApiCreatedResponse({
     status: HttpStatus.CREATED,
@@ -48,7 +48,7 @@ export class AuthController {
   }
 
   @Public()
-  @Post("admin/local/sign-in")
+  @Post("business/sign-in/local-auth")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
@@ -61,7 +61,7 @@ export class AuthController {
 
   @UseGuards(AtGuard)
   @ApiBearerAuth("bearer")
-  @Post("admin/local/sign-out")
+  @Post("business/sign-out/local-auth")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
@@ -73,7 +73,7 @@ export class AuthController {
   }
 
   @UseGuards(RtGuard)
-  @Post("admin/local/refresh")
+  @Post("business/refresh-token/local-auth")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,

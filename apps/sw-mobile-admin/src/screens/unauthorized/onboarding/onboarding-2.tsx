@@ -1,22 +1,18 @@
-import React, { useCallback, useLayoutEffect } from "react";
-import { FlatList, RefreshControl, StyleSheet } from "react-native";
+import { CompositeNavigationProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { CompositeNavigationProp, useFocusEffect } from "@react-navigation/native";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
-import { ActivityIndicator } from "react-native-paper";
+import React, { useCallback, useLayoutEffect } from "react";
 import { useIntl } from "react-intl";
+import { FlatList, RefreshControl, StyleSheet } from "react-native";
+import { ActivityIndicator } from "react-native-paper";
 
-import { ServiceItem, BackButton, Space, Button, IconButton, FormContainer } from "../../../components";
+import { BackButton, Button, FormContainer, IconButton, ServiceItem, Space } from "../../../components";
 import { RootStackParamList, UnauthorizedStackParamList } from "../../../navigation";
-import { useBusiness } from "../../../store";
 import { useGetServicesQuery, useRegisterBusinessMutation } from "../../../services";
-import { noop } from "lodash";
+import { useBusiness } from "../../../store";
 
 export interface OnboardingScreenProps {
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<UnauthorizedStackParamList, "onboarding-2-screen">,
-    StackNavigationProp<RootStackParamList>
-  >;
+  navigation: CompositeNavigationProp<StackNavigationProp<UnauthorizedStackParamList, "onboarding-2-screen">, StackNavigationProp<RootStackParamList>>;
 }
 
 export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
@@ -78,7 +74,7 @@ export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
         preset="fixed"
         footer={
           <Button
-            preset={"secondary"}
+            preset={"primary"}
             text={intl.formatMessage({
               id: "Onboarding_2_Screen.registerButton",
             })}

@@ -1,13 +1,13 @@
 type HttpMethod = "POST" | "GET" | "PUT" | "DELETE";
 
 type Endpoint =
-  | "auth/admin/local/sign-in"
-  | "auth/admin/local/sign-out"
-  | "auth/admin/local/sign-up"
+  | "auth/business/sign-in/local-auth"
+  | "auth/business/sign-out/local-auth"
+  | "auth/business/sign-up/local-auth"
   | "auth/admin/local/forgot-password"
-  | "auth/admin/local/refresh"
-  | "auth/admin/social/sign-up"
-  | "auth/admin/social/sign-in"
+  | "auth/business/refresh-token/local-auth"
+  | "auth/business/sign-up/social"
+  | "auth/business/sign-in/social"
   | "auth/client/local/sign-in"
   | "auth/client/local/sign-out"
   | "auth/client/local/sign-up"
@@ -69,13 +69,13 @@ export const createEndpoint = <T = any>(endpoint: Endpoint, method: HttpMethod) 
 
 export const endpoints = {
   // auth
-  signInLocal: createEndpoint("auth/admin/local/sign-in", "POST"),
-  signOutLocal: createEndpoint("auth/admin/local/sign-out", "POST"),
-  signUpLocal: createEndpoint("auth/admin/local/sign-up", "POST"),
-  signUpSocial: createEndpoint("auth/admin/social/sign-up", "POST"),
-  signInSocial: createEndpoint("auth/admin/social/sign-in", "POST"),
+  signInLocal: createEndpoint("auth/business/sign-in/local-auth", "POST"),
+  signOutLocal: createEndpoint("auth/business/sign-out/local-auth", "POST"),
+  signUpLocal: createEndpoint("auth/business/sign-up/local-auth", "POST"),
+  signUpSocial: createEndpoint("auth/business/sign-up/social", "POST"),
+  signInSocial: createEndpoint("auth/business/sign-in/social", "POST"),
   forgotPasswordLocal: createEndpoint("auth/admin/local/forgot-password", "POST"),
-  refreshLocal: createEndpoint("auth/admin/local/refresh", "PUT"),
+  refreshLocal: createEndpoint("auth/business/refresh-token/local-auth", "PUT"),
 
   // auth client
   signInClientLocal: createEndpoint("auth/client/local/sign-in", "POST"),

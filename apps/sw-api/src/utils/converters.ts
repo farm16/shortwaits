@@ -12,13 +12,6 @@ export function validateId(id: string): boolean {
   return Types.ObjectId.isValid(id);
 }
 
-export function convertDomainToLowercase(email: string) {
-  const atIndex = email.indexOf("@");
-  if (atIndex !== -1) {
-    const localPart = email.slice(0, atIndex);
-    const domainPart = email.slice(atIndex + 1);
-    const lowercaseDomain = domainPart.toLowerCase();
-    return `${localPart}@${lowercaseDomain}`;
-  }
-  return email;
+export function convertToLowercase(text: string) {
+  return text.toLowerCase();
 }

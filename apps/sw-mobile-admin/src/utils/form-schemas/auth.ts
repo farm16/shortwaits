@@ -23,7 +23,8 @@ export const userLocalSignInSchema = config => {
         const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
         const usernameRegex = /^[A-Za-z0-9_]+$/;
         return emailRegex.test(value) || usernameRegex.test(value);
-      }),
+      })
+      .optional(),
     //.required("no username provided."),
     password: Yup.string().required(passwordMessage),
   });
@@ -39,7 +40,8 @@ export const userLocalSignUpSchema = config =>
         const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
         const usernameRegex = /^[A-Za-z0-9_]+$/;
         return emailRegex.test(value) || usernameRegex.test(value);
-      }),
+      })
+      .optional(),
     password: Yup.string()
       .required("no password provided.")
       .min(6, "password is too short - should be 8 chars minimum.")

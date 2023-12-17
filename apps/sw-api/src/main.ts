@@ -1,22 +1,26 @@
 import { ConfigService } from "@nestjs/config";
 import { NestFactory } from "@nestjs/core";
+import { FastifyAdapter, NestFastifyApplication } from "@nestjs/platform-fastify";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import * as fs from "fs";
 import helmet from "helmet";
 import { SwaggerTheme } from "swagger-themes";
-
 import { AppModule } from "./app.module";
 
 const API_PREFIX = "v1";
 const DOCS_PREFIX = `${API_PREFIX}/docs`;
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter({ logger: true }));
   const configService = app.get(ConfigService);
 
   app.setGlobalPrefix(API_PREFIX);
-  app.enableCors();
   app.use(helmet());
+
+  if (configService.get("NODE_ENV") === "production") {
+    console.log(">>> Enabling CORS for production");
+    app.enableCors();
+  }
 
   const HTTP_PORT = configService.get("HTTP_PORT");
   const HTTP_HOST = configService.get("HTTP_HOST");
@@ -27,7 +31,6 @@ async function bootstrap() {
     .setTitle("Shortwaits Admin - API")
     .setDescription(html)
     .addServer("http://127.0.0.1:8080", "Dev server")
-    .addServer("http://sw-api.us-east-1.elasticbeanstalk.com", "Staging server")
     .addServer("https://api.shortwaits.com", "Production server")
     .addBearerAuth()
     .setVersion("1.0")

@@ -67,10 +67,12 @@ export const buttonPresets = ({
     secondary: {
       ...VIEW_BASE,
       backgroundColor: Colors.brandSecondary4,
+      justifyContent: "center",
     },
     "secondary-disabled": {
       ...VIEW_BASE,
       backgroundColor: Colors.gray,
+      justifyContent: "center",
     },
     accent: {
       ...VIEW_BASE,

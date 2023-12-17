@@ -11,7 +11,7 @@ import {
 } from "@shortwaits/shared-lib";
 import { Model } from "mongoose";
 import { convertStringToObjectId } from "../../utils/converters";
-import { generateBusinessUsers, generateClientUsers } from "../../utils/generateUserPayload";
+import { generateBusinessStaffUsers, generateClientUsers } from "../../utils/generateUserPayload";
 import { BusinessUser } from "../business-staff/entities/business-staff.entity";
 import { ClientUser } from "../client-user/entities/client-user.entity";
 import { RegisterBusinessDto } from "./dto/registerBusiness.dto";
@@ -185,7 +185,7 @@ export class BusinessService {
     const { isAdmin, isSuperAdmin } = this.isUserAdminType(businessData, businessUserId);
 
     if (isAdmin || isSuperAdmin) {
-      const staffPayload = generateBusinessUsers(staff);
+      const staffPayload = generateBusinessStaffUsers(staff);
       const insertedStaff = await this.businessUserModel.insertMany(staffPayload);
       const staffIds = insertedStaff.map(client => {
         return client._id;

@@ -1,5 +1,8 @@
 import {
+  BusinessUserRoles,
+  BusinessUserType,
   ClientUserType,
+  ConvertToDtoType,
   CreateBusinessUserDtoType,
   CreateBusinessUsersDtoType,
   CreateClientUsersDtoType,
@@ -9,26 +12,42 @@ import {
 } from "@shortwaits/shared-lib";
 import { ClientSignUpWithEmailDto } from "../api/auth/dto/auth-client-user.dto";
 
-export const generateBusinessUser = (user: CreateBusinessUserDtoType) => {
-  let accountImageUrl = "";
-  if (user.accountImageUrl === "" || user.accountImageUrl === null || user.accountImageUrl === undefined) {
-    const stringIdentifier = user.familyName || user.givenName || user.middleName || user.username || user.email || user.displayName || "?";
-    accountImageUrl = generateAvatarUrl(stringIdentifier);
-  } else {
-    accountImageUrl = user.accountImageUrl;
+export const generateBusinessUser = (user: CreateBusinessUserDtoType, businessUserRoles: BusinessUserRoles) => {
+  // if no accountImageUrl, insert a property with a generated avatar url to the user object
+  if (!user?.accountImageUrl) {
+    const stringIdentifier = user.email || user.username || "?";
+    user.accountImageUrl = generateAvatarUrl(stringIdentifier);
   }
-  return {
+  // get userRoles based on businessUserRoles
+  const userRoles = {
+    isStaff: businessUserRoles.some(role => role === "staff"),
+    isAdmin: businessUserRoles.some(role => role === "admin"),
+    isSuperAdmin: businessUserRoles.some(role => role === "superAdmin"),
+    isBackgroundAdmin: businessUserRoles.some(role => role === "backgroundAdmin"),
+  };
+
+  const businessUser: ConvertToDtoType<BusinessUserType> = {
     ...user,
-    accountImageUrl,
+    username: user.email, // username is the same as email
     roleId: null,
     deleted: false,
     isDisabled: false,
+    businesses: [],
+    userRoles: userRoles,
+    createdByBusinessId: "",
+    isEmailVerified: false,
+    registrationState: undefined,
+    createdAt: "",
+    updatedAt: "",
+    lastSignInAt: "",
+    hashedRt: "",
   };
+  return businessUser;
 };
 
-export const generateBusinessUsers = (users: CreateBusinessUsersDtoType) => {
+export const generateBusinessStaffUsers = (users: CreateBusinessUsersDtoType) => {
   const businessUsers = users.map(user => {
-    return generateBusinessUser(user);
+    return generateBusinessUser(user, ["staff"]);
   });
   return businessUsers;
 };

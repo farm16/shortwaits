@@ -1,17 +1,17 @@
-import React, { FC, useEffect, useLayoutEffect, useMemo, useState } from "react";
-import { ActivityIndicator } from "react-native-paper";
-import { Alert } from "react-native";
-import { FormikErrors } from "formik";
-import { useIntl } from "react-intl";
 import { CreateEventDtoType, ServiceDtoType, eventPaymentMethods } from "@shortwaits/shared-lib";
+import { FormikErrors } from "formik";
+import React, { FC, useEffect, useLayoutEffect, useMemo, useState } from "react";
+import { useIntl } from "react-intl";
+import { Alert } from "react-native";
+import { ActivityIndicator } from "react-native-paper";
 
+import { noop } from "lodash";
+import { BackButton, Button, ButtonCard, CurrencyFieldCard, ExpandableSection, FormContainer, Space, Text, TextFieldCard, TimePickerFieldCard } from "../../../components";
 import { useForm } from "../../../hooks";
-import { useBusiness, useUser } from "../../../store";
-import { Text, TextFieldCard, TimePickerFieldCard, Button, BackButton, ButtonCard, CurrencyFieldCard, Space, FormContainer, ExpandableSection } from "../../../components";
 import { ModalsScreenProps } from "../../../navigation";
 import { useCreateEventMutation } from "../../../services";
+import { useBusiness, useUser } from "../../../store";
 import { getEmojiString } from "../../../utils";
-import { noop } from "lodash";
 
 export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({ navigation, route }) => {
   const params = route?.params;
@@ -144,6 +144,7 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
       setValues(
         {
           ...initialValues,
+          name: values.name,
           startTime: values.startTime,
           priceExpected: selectedService.price === 0 ? 0 : selectedService.price,
           serviceId: selectedService._id,

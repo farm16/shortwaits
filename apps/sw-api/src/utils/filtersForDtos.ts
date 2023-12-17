@@ -1,4 +1,4 @@
-import { BusinessUserType, ConvertToDtoType, CreateClientUserDtoType, EventDtoType, generateAvatarUrl } from "@shortwaits/shared-lib";
+import { BusinessUserType, CreateClientUserDtoType, EventDtoType } from "@shortwaits/shared-lib";
 
 import { SignUpWithEmailDto } from "../api/auth/dto";
 import { CreateBusinessUserDto } from "../api/business-staff/dto";
@@ -93,14 +93,24 @@ export const getFilteredNewEvent = (event: CreateEventsDto, userId: string) => {
   return filteredEvent;
 };
 
-export const getFilteredNewBusinessOwner = (ownerSignupDto: SignUpWithEmailDto): ConvertToDtoType<BusinessUserType> => {
-  const filteredBusinessUser: ConvertToDtoType<BusinessUserType> = {
+const newBusinessOwnerRoles = {
+  isStaff: false,
+  isAdmin: true,
+  isSuperAdmin: true,
+  isBackgroundAdmin: true,
+};
+/**
+ * @description
+ * this inits values for business users
+ **/
+export const filterBusinessOwnerPayload_localAuth = (ownerSignupDto: SignUpWithEmailDto): BusinessUserType => {
+  const filteredBusinessUser: BusinessUserType = {
     preferredAlias: "username",
     displayName: null,
     familyName: null,
     givenName: null,
     middleName: null,
-    accountImageUrl: generateAvatarUrl(ownerSignupDto.email),
+    accountImageUrl: null,
     locale: null,
     phoneNumbers: null,
     imAddresses: null,
@@ -118,7 +128,7 @@ export const getFilteredNewBusinessOwner = (ownerSignupDto: SignUpWithEmailDto):
     password: ownerSignupDto?.password,
     isPasswordProtected: true,
     isDisabled: false,
-    isStaff: false,
+    userRoles: newBusinessOwnerRoles,
     createdByBusinessId: null,
     deleted: false,
 
@@ -140,8 +150,8 @@ export const getFilteredNewBusinessOwner = (ownerSignupDto: SignUpWithEmailDto):
   return filteredBusinessUser;
 };
 
-export const getNewUserFromSocialAccount = (ownerSignupDto: SignUpWithEmailDto): ConvertToDtoType<BusinessUserType> => {
-  const filteredBusinessUser: ConvertToDtoType<BusinessUserType> = {
+export const filterBusinessOwnerPayload_socialAuth = (ownerSignupDto: SignUpWithEmailDto) => {
+  const filteredBusinessUser: BusinessUserType = {
     preferredAlias: "username",
     displayName: null,
     familyName: null,
@@ -165,7 +175,6 @@ export const getNewUserFromSocialAccount = (ownerSignupDto: SignUpWithEmailDto):
     password: ownerSignupDto?.password,
     isPasswordProtected: true,
     isDisabled: false,
-    isStaff: false,
     createdByBusinessId: null,
     deleted: false,
 
@@ -183,6 +192,7 @@ export const getNewUserFromSocialAccount = (ownerSignupDto: SignUpWithEmailDto):
     // `createdAt` and `updatedAt` will get overridden by the Mongoose schema
     createdAt: null,
     updatedAt: null,
+    userRoles: newBusinessOwnerRoles,
   };
   return filteredBusinessUser;
 };
