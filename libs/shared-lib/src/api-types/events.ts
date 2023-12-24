@@ -1,35 +1,7 @@
 import { BusinessUsersDtoType, ClientUsersDtoType, CommonResponseType, LocalClientUsersDtoType } from ".";
 import { ConvertToDtoType, EventType, WithDbProps } from "..";
 
-export type FilteredEvent = Pick<
-  EventType,
-  | "paymentMethod"
-  | "participantsIds"
-  | "urls"
-  | "location"
-  | "attendeeLimit"
-  | "registrationFee"
-  | "hasDuration"
-  | "eventImage"
-  | "name"
-  | "description"
-  | "features"
-  | "durationInMin"
-  | "priceExpected"
-  | "isPublicEvent"
-  | "repeat"
-  // | "payment" // TODO: add when payment model is ready
-  | "notes"
-  | "labels"
-  | "registrationDeadlineTime"
-  | "leadClientId"
-  | "serviceId"
-  | "businessId"
-  | "clientsIds"
-  | "staffIds"
-  | "startTime"
-  | "expectedEndTime"
->;
+export type FilteredEvent = Omit<EventType, "deleted" | "createdBy" | "updatedBy" | "updatedBy" | "__v" | "_id" | "status">;
 
 export type CreateEventDtoType = ConvertToDtoType<FilteredEvent>;
 export type UpdateEventDtoType = ConvertToDtoType<FilteredEvent>;

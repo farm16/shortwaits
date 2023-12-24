@@ -5,6 +5,28 @@ import * as Yup from "yup";
 // @ts-ignore
 const paymentMethodSchema: Yup.SchemaOf<EventPaymentMethodType> = Yup.string().required().oneOf(Object.keys(eventPaymentMethods));
 
+const discountCodeSchema = Yup.object().shape({
+  code: Yup.string(),
+  discount: Yup.number(),
+  description: Yup.string(),
+  params: Yup.object()
+    .shape({
+      minPrice: Yup.number(),
+      maxPrice: Yup.number(),
+      minDuration: Yup.number(),
+      maxDuration: Yup.number(),
+      minParticipants: Yup.number(),
+      maxParticipants: Yup.number(),
+      minRegistrationFee: Yup.number(),
+      maxRegistrationFee: Yup.number(),
+      minAttendeeLimit: Yup.number(),
+      maxAttendeeLimit: Yup.number(),
+      minDiscount: Yup.number(),
+      maxDiscount: Yup.number(),
+    })
+    .optional(),
+});
+
 export const createEventSchema: (config: any) => Yup.SchemaOf<CreateEventDtoType> = config =>
   Yup.object().shape({
     paymentMethod: paymentMethodSchema,
@@ -28,37 +50,56 @@ export const createEventSchema: (config: any) => Yup.SchemaOf<CreateEventDtoType
     registrationFee: Yup.number(),
     hasDuration: Yup.boolean(),
     eventImage: Yup.string().url(),
-    name: Yup.string().required(),
-    description: Yup.string().optional(),
+    name: Yup.string(),
+    description: Yup.string(),
     features: Yup.array().of(Yup.string()),
     durationInMin: Yup.number(),
-    priceExpected: Yup.number().optional(),
-    isPublicEvent: Yup.boolean().optional(),
-    repeat: Yup.boolean().optional(),
-    notes: Yup.string().optional(),
+    priceExpected: Yup.number().notRequired(),
+    isPublicEvent: Yup.boolean().notRequired(),
+    repeat: Yup.boolean().notRequired(),
+    notes: Yup.string().notRequired(),
     labels: Yup.array().of(Yup.object()).optional(),
     registrationDeadlineTime: Yup.string().optional(),
-    leadClientId: Yup.string().optional(),
-    serviceId: Yup.string().optional(),
+    leadClientId: Yup.string().notRequired(),
+    serviceId: Yup.string(),
     businessId: Yup.string(),
     clientsIds: Yup.array().of(Yup.string()),
     staffIds: Yup.array().of(Yup.string()),
     startTime: Yup.string(),
     expectedEndTime: Yup.string(),
+    localClientsIds: Yup.array().of(Yup.string()),
+    endTime: Yup.string(),
+    canceled: Yup.boolean(),
+    priceFinal: Yup.number(),
+    payment: Yup.object().shape({
+      paymentProcessedOn: Yup.string(),
+      paymentMethodId: Yup.string(),
+      amount: Yup.number(),
+      currency: Yup.string(),
+      description: Yup.string(),
+      statementDescriptor: Yup.string(),
+      metadata: Yup.object(),
+    }),
+    cancellationReason: Yup.string(),
+    availableDiscountCodes: Yup.array().of(discountCodeSchema),
+    selectedDiscountCode: discountCodeSchema,
+    discountAmount: Yup.number(),
   });
 
 export const updateEventSchema: (config: any) => Yup.SchemaOf<UpdateEventDtoType> = config =>
   Yup.object().shape({
     paymentMethod: paymentMethodSchema,
     participantsIds: Yup.array().of(Yup.string()),
-    urls: Yup.array().of(
-      Yup.object().shape({
-        type: Yup.string(),
-        isSupported: Yup.boolean(),
-        name: Yup.string(),
-        url: Yup.string().url(),
-      })
-    ),
+    urls: Yup.array()
+      .optional()
+      .of(
+        Yup.object().shape({
+          type: Yup.string(),
+          isSupported: Yup.boolean(),
+          name: Yup.string(),
+          url: Yup.string().url(),
+        })
+      ),
     location: Yup.object().optional().shape({
       address: Yup.string(),
       latitude: Yup.number(),
@@ -76,8 +117,8 @@ export const updateEventSchema: (config: any) => Yup.SchemaOf<UpdateEventDtoType
     isPublicEvent: Yup.boolean().notRequired(),
     repeat: Yup.boolean().notRequired(),
     notes: Yup.string().notRequired(),
-    labels: Yup.array().of(Yup.string()).notRequired(),
-    registrationDeadlineTime: Yup.string().notRequired(),
+    labels: Yup.array().of(Yup.object()).optional(),
+    registrationDeadlineTime: Yup.string().optional(),
     leadClientId: Yup.string().notRequired(),
     serviceId: Yup.string(),
     businessId: Yup.string(),
@@ -85,4 +126,21 @@ export const updateEventSchema: (config: any) => Yup.SchemaOf<UpdateEventDtoType
     staffIds: Yup.array().of(Yup.string()),
     startTime: Yup.string(),
     expectedEndTime: Yup.string(),
+    localClientsIds: Yup.array().of(Yup.string()),
+    endTime: Yup.string(),
+    canceled: Yup.boolean(),
+    priceFinal: Yup.number(),
+    payment: Yup.object().shape({
+      paymentProcessedOn: Yup.string(),
+      paymentMethodId: Yup.string(),
+      amount: Yup.number(),
+      currency: Yup.string(),
+      description: Yup.string(),
+      statementDescriptor: Yup.string(),
+      metadata: Yup.object(),
+    }),
+    cancellationReason: Yup.string(),
+    availableDiscountCodes: Yup.array().of(discountCodeSchema),
+    selectedDiscountCode: discountCodeSchema,
+    discountAmount: Yup.number(),
   });

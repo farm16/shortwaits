@@ -16,38 +16,16 @@ export const localClientsSlice = createSlice({
   extraReducers: builder => {
     builder
       .addMatcher(shortwaitsApi.endpoints.getLocalClients.matchFulfilled, (state, action) => {
-        // merge local clients with existing clients in state by _id
-        if (state === null) {
-          return action.payload.data;
-        }
-        const newClients = action.payload.data;
-        const existingClients = state;
-        const mergedClients = newClients.map(newClient => {
-          const existingClient = existingClients.find(existingClient => existingClient._id === newClient._id);
-          if (existingClient) {
-            return existingClient;
-          }
-          return newClient;
-        });
-        return mergedClients;
+        return action.payload.data;
       })
       .addMatcher(shortwaitsApi.endpoints.createBusinessLocalClients.matchFulfilled, (_state, action) => {
-        return [...new Set([..._state, ...action.payload.data])];
+        return action.payload.data;
       })
       .addMatcher(shortwaitsApi.endpoints.getAllBusinessClients.matchFulfilled, (_state, action) => {
-        return [...new Set([..._state, ...action.payload.data.localClients])];
+        return action.payload.data.localClients;
       })
       .addMatcher(shortwaitsApi.endpoints.createLocalClients.matchFulfilled, (state, action) => {
-        const newClients = action.payload.data.localClientUsers;
-        const existingClients = state;
-        const mergedClients = newClients.map(newClient => {
-          const existingClient = existingClients.find(existingClient => existingClient._id === newClient._id);
-          if (existingClient) {
-            return existingClient;
-          }
-          return newClient;
-        });
-        return mergedClients;
+        return action.payload.data.localClientUsers;
       });
   },
 });

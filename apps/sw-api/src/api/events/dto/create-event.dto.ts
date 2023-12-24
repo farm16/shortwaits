@@ -1,12 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
-import {
-  BusinessLabelsType,
-  CreateEventDtoType,
-  EventPaymentMethodType,
-  eventPaymentMethodsKeys,
-} from "@shortwaits/shared-lib";
-import { IsArray, IsBoolean, IsDateString, IsIn, IsNumber, IsObject, IsString, ValidateNested } from "class-validator";
+import { BusinessLabelsType, CreateEventDtoType, DiscountType, EventPaymentMethodType, eventPaymentMethodsKeys } from "@shortwaits/shared-lib";
 import { Type } from "class-transformer";
+import { IsArray, IsBoolean, IsDateString, IsIn, IsNumber, IsObject, IsString, ValidateNested } from "class-validator";
 
 class UrlDto {
   @IsString()
@@ -22,6 +17,25 @@ class UrlDto {
   url: string;
 }
 
+class Discount implements DiscountType {
+  code: string;
+  discount: number;
+  description: string;
+  params?: {
+    minPrice: number;
+    maxPrice: number;
+    minDuration: number;
+    maxDuration: number;
+    minParticipants: number;
+    maxParticipants: number;
+    minRegistrationFee: number;
+    maxRegistrationFee: number;
+    minAttendeeLimit: number;
+    maxAttendeeLimit: number;
+    minDiscount: number;
+    maxDiscount: number;
+  };
+}
 class LocationDto {
   @IsString()
   address: string; // Full address of the location
@@ -32,6 +46,34 @@ class LocationDto {
 }
 
 export class CreateEventsDto implements CreateEventDtoType {
+  @IsString()
+  @ApiProperty({ required: false })
+  selectedDiscountCode: Discount;
+
+  @IsString()
+  @ApiProperty({ required: false })
+  discountAmount: number;
+
+  @IsString()
+  @ApiProperty({ required: false })
+  availableDiscountCodes: Discount[];
+
+  @IsString()
+  @ApiProperty({ required: false })
+  localClientsIds: string[];
+
+  @IsString()
+  @ApiProperty({ required: false })
+  priceFinal: number;
+
+  @IsString()
+  @ApiProperty({ required: false })
+  canceled: boolean;
+
+  @IsString()
+  @ApiProperty({ required: false })
+  cancellationReason: string;
+
   @IsString()
   @ApiProperty({ required: false })
   registrationDeadlineTime: string;

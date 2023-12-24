@@ -1,28 +1,57 @@
-import { EventDtoType, ServiceDtoType } from "@shortwaits/shared-lib";
+import { EventDtoType } from "@shortwaits/shared-lib";
 import React from "react";
 import { Alert, Platform, ScrollView, StyleSheet, View } from "react-native";
-import { Emoji, ServiceItem, Space, Switch, Text, UrlCard, UrlTypes } from "../../../../components";
+import { Emoji, Messages, ServiceItem, Space, Switch, Text, UrlCard, UrlTypes } from "../../../../components";
+import { useService } from "../../../../store";
 import { useTheme } from "../../../../theme";
 
 export function EventMoreTab({ event }: { event: EventDtoType }) {
   const { Colors } = useTheme();
-  // console.log("event", JSON.stringify(event, null, 2));
+  const service = useService(event.serviceId);
+
+  const PaymentMethod = () => {
+    const paymentMethod = event.paymentMethod || "Cash";
+    return (
+      <View style={styles.detail}>
+        <Text preset="none" style={styles.title} text="Payment method" />
+        <Text text={paymentMethod} />
+      </View>
+    );
+  };
 
   const EventLabels = () => {
-    if (event?.labels?.length === 0) return null;
+    const hasLabels = event?.labels?.length > 0;
     return (
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
-          paddingRight: 20,
-        }}
-      >
+      <View style={styles.detail}>
         <Text preset="none" style={styles.title} text="Labels" />
-        {event?.labels?.map(label => {
-          return <Emoji size={30} name={label.emojiShortName} />;
-        })}
+        {hasLabels ? (
+          event?.labels?.map(label => {
+            return <Emoji size={30} name={label.emojiShortName} />;
+          })
+        ) : (
+          <Messages type={"warning"} message={"This event has no labels"} />
+        )}
+      </View>
+    );
+  };
+  const EventNotes = () => {
+    return (
+      <View>
+        <Text preset="none" style={styles.title} text="Notes" />
+        <Space direction="horizontal" size="tiny" />
+        {event.notes ? (
+          <View style={styles.notes}>
+            <Text preset="none" style={{ color: Colors.text, fontWeight: "600" }} text="This is a test" />
+          </View>
+        ) : (
+          <Messages
+            style={{
+              marginLeft: 16,
+            }}
+            type={"warning"}
+            message={"This event has no notes"}
+          />
+        )}
       </View>
     );
   };
@@ -32,17 +61,66 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
       <View>
         <Text preset="none" style={styles.title} text="Service" />
         <Space direction="horizontal" size="tiny" />
-        <ServiceItem service={item} onPress={_service => {}} style={[styles.withShadow, { alignSelf: "center" }]} />
+        {service ? (
+          <ServiceItem
+            service={service}
+            onPress={_service => {
+              console.log("service", _service);
+            }}
+            style={[styles.withShadow, { alignSelf: "center" }]}
+          />
+        ) : (
+          <Messages
+            style={{
+              marginLeft: 16,
+            }}
+            type={"warning"}
+            message={"This event has no service"}
+          />
+        )}
       </View>
     );
   };
 
-  const EventNotes = () => {
+  const EventMeetingUrls = () => {
     return (
       <View>
-        <Text preset="none" style={styles.title} text="Notes" />
-        <Space direction="horizontal" size="tiny" />
-        <Text preset="none" style={[styles.notes, styles.withShadow]} text="This are test notes" />
+        <Text preset="none" style={styles.title} text="Meeting Platform" />
+        <Space direction="horizontal" size="small" />
+        {event.urls?.length === 0 ? (
+          <Messages
+            style={{
+              marginLeft: 16,
+            }}
+            type={"warning"}
+            message={"This event has no meeting platform"}
+          />
+        ) : (
+          event.urls.map((item, index) => {
+            return (
+              <React.Fragment key={index}>
+                <UrlCard key={index} url={item.url} type={item.type as UrlTypes} />
+                <Space direction="horizontal" size="small" />
+              </React.Fragment>
+            );
+          })
+        )}
+      </View>
+    );
+  };
+
+  const EventPrivacy = () => {
+    const isEventPublic = event.isPublicEvent;
+    return (
+      <View style={styles.detail}>
+        <Text preset="none" style={styles.title} text="Public event" />
+        <Switch
+          trackColor={{ false: Colors.red1, true: Colors.brandSecondary1 }}
+          thumbColor={isEventPublic ? Colors.brandSecondary2 : Colors.gray}
+          ios_backgroundColor={Colors.lightBackground}
+          onChange={() => null}
+          value={isEventPublic}
+        />
       </View>
     );
   };
@@ -58,16 +136,10 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
     };
 
     return (
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
+      <View style={styles.detail}>
         <Text preset="none" style={styles.title} text="Repeat" />
         <Switch
-          style={{ marginHorizontal: 16 }}
+          disabled
           trackColor={{ false: Colors.red1, true: Colors.lightBackground }}
           thumbColor={isActive ? Colors.brandSecondary2 : Colors.gray}
           ios_backgroundColor={Colors.lightBackground}
@@ -77,90 +149,54 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
       </View>
     );
   };
-  const EventGroup = () => {
-    const isActive = event.isPublicEvent;
-    return (
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <Text preset="none" style={styles.title} text="Group" />
-        <Switch
-          style={{ marginHorizontal: 16 }}
-          trackColor={{ false: Colors.red1, true: Colors.brandSecondary1 }}
-          thumbColor={isActive ? Colors.brandSecondary2 : Colors.gray}
-          ios_backgroundColor={Colors.lightBackground}
-          onChange={() => null}
-          value={isActive}
-        />
-      </View>
-    );
-  };
-  const EventFullDay = () => {
-    const isActive = event.isPublicEvent;
-    return (
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <Text preset="none" style={styles.title} text="All day event" />
-        <Switch
-          style={{ marginHorizontal: 16 }}
-          trackColor={{ false: Colors.red1, true: Colors.brandSecondary1 }}
-          thumbColor={isActive ? Colors.brandSecondary2 : Colors.gray}
-          ios_backgroundColor={Colors.lightBackground}
-          onChange={() => null}
-          value={isActive}
-        />
-      </View>
-    );
-  };
 
-  const EventMeetingUrls = () => {
+  const AttendeeLimit = () => {
+    event.attendeeLimit = 0;
+    const attendeeLimit = event.attendeeLimit === 0 || event.attendeeLimit === null || event.attendeeLimit === undefined ? "No limit" : event.attendeeLimit.toString();
     return (
-      <View>
-        <Text preset="none" style={styles.title} text="Meeting Platform" />
-        <Space direction="horizontal" size="small" />
-        {mock.map((item, index) => {
-          return (
-            <React.Fragment key={index}>
-              <UrlCard key={index} url={item.link} type={item.type as UrlTypes} />
-              <Space direction="horizontal" size="small" />
-            </React.Fragment>
-          );
-        })}
+      <View style={styles.detail}>
+        <Text preset="none" style={styles.title} text="Attendee limit" />
+        <Text text={attendeeLimit} />
       </View>
     );
   };
 
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: Colors.lightBackground }}>
-      <Space direction="horizontal" size="tiny" />
+    <ScrollView style={{ flex: 1, paddingHorizontal: 16, backgroundColor: Colors.lightBackground }}>
+      <Space size="large" />
+      <PaymentMethod />
+      <Space />
+      <EventLabels />
+      <Space />
+      <EventNotes />
+      <Space />
       <EventService />
-      <Space direction="horizontal" size="regular" />
+      <Space />
       <EventMeetingUrls />
-      <Space direction="horizontal" size="tiny" />
-      <EventGroup />
-      <Space direction="horizontal" size="regular" />
+      <Space />
+      <EventPrivacy />
+      <Space />
       <EventRepeat />
-      <Space direction="horizontal" size="regular" />
-      <EventFullDay />
-      <Space direction="horizontal" size="xLarge" />
+      <Space />
+      <AttendeeLimit />
+      <Space size="large" />
+      <Space size="large" />
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  detail: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingBottom: 16,
+    borderBottomColor: "#eee",
+    borderBottomWidth: 1,
+  },
   title: {
     fontSize: 16,
     fontWeight: "500",
-    marginHorizontal: 16,
   },
   notes: {
     padding: 20,
@@ -168,7 +204,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     width: "90%",
     alignSelf: "center",
-    backgroundColor: "#FFFF99",
+    backgroundColor: "# ",
+    borderRadius: 8,
   },
   withShadow: {
     ...Platform.select({
@@ -184,115 +221,3 @@ const styles = StyleSheet.create({
     }),
   },
 });
-
-const mock = [
-  {
-    type: "zoom",
-    link: "https://zoom.us/j/98596858109",
-  },
-  // {
-  //   type: "google_meet",
-  //   link: "https://zoom.us/j/98596858109",
-  // },
-  // {
-  //   type: "custom",
-  //   link: "https://zoom.us/j/98596858109",
-  // },
-  // {
-  //   type: "discord",
-  //   link: "https://zoom.us/j/98596858109",
-  // },
-  // {
-  //   type: "twitter_space",
-  //   link: "https://zoom.us/j/98596858109",
-  // },
-  // {
-  //   type: "facebook_live",
-  //   link: "https://zoom.us/j/98596858109",
-  // },
-  // {
-  //   type: "microsoft_teams",
-  //   link: "https://zoom.us/j/98596858109",
-  // },
-  // {
-  //   type: "skype",
-  //   link: "https://zoom.us/j/98596858109",
-  // },
-];
-
-const item: ServiceDtoType = {
-  _id: "63e756bc6048b02c398bcf7c",
-  applicableCategories: ["1ccacea16652f70da4bfc923", "ff1eb8bd6cb17940ab78c0ee", "cea8be18f8249fdbaaa535b0"],
-  currency: "USD",
-  deleted: false,
-  description: "Describe your service here =)",
-  durationInMin: 15,
-  hours: {
-    fri: [
-      {
-        endTime: 1020,
-        isActive: true,
-        startTime: 540,
-      },
-    ],
-    mon: [
-      {
-        endTime: 1020,
-        isActive: true,
-        startTime: 540,
-      },
-    ],
-    sat: [
-      {
-        endTime: 1020,
-        isActive: true,
-        startTime: 540,
-      },
-    ],
-    sun: [
-      {
-        endTime: 1020,
-        isActive: true,
-        startTime: 540,
-      },
-    ],
-    thu: [
-      {
-        endTime: 1020,
-        isActive: true,
-        startTime: 540,
-      },
-    ],
-    tue: [
-      {
-        endTime: 1020,
-        isActive: true,
-        startTime: 540,
-      },
-    ],
-    wed: [
-      {
-        endTime: 1020,
-        isActive: true,
-        startTime: 540,
-      },
-    ],
-  },
-  imageUrl: "",
-  isPrivate: false,
-  isVideoConference: false,
-  name: "Service I - 15 mins",
-  price: 1500,
-  serviceColor: {
-    colorId: "2",
-    colorName: "blue",
-    hexCode: "#3d405b",
-    isDefault: false,
-    isSelected: null,
-  },
-  staff: [],
-  // check this later
-  businessId: "",
-  createdBy: "",
-  updatedBy: "",
-};

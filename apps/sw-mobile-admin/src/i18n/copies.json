@@ -147,7 +147,7 @@
     "Event_Screen.eventScreenHeader.labels": "Labels",
 
     "Event_Screen.routes.title.people": "People",
-    "Event_Screen.routes.title.more": "More",
+    "Event_Screen.routes.title.more": "Details",
 
     "Event_Screen.tab.more.service": "Service",
     "Event_Screen.tab.more.meetingPlatform": "Meeting Platform",
@@ -217,6 +217,9 @@
     "AddEventModal.ends": "Ends",
     "AddEventModal.free": "Free",
     "AddEventModal.paymentMethod": "Payment method",
+    "AddEventModal.availableDiscountCodes.title": "Available discount codes",
+    "AddEventModal.availableDiscountCodes.subTitle": "Select a discount code",
+    "AddEventModal.availableDiscountCodes.addAvailableDiscountCode": "Add discount code",
     "AddEventModal.price": "Price",
     "AddEventModal.enterPrice": "Enter price",
     "AddEventModal.labels": "Labels",
@@ -495,7 +498,7 @@
     "Event_Screen.eventScreenHeader.labels": "Etiquetas",
 
     "Event_Screen.routes.title.people": "Personas",
-    "Event_Screen.routes.title.more": "Más",
+    "Event_Screen.routes.title.more": "Detalles",
 
     "Event_Screen.tab.more.service": "Servicio",
     "Event_Screen.tab.more.meetingPlatform": "Plataforma de reunión",

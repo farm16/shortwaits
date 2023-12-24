@@ -69,7 +69,15 @@ export const textPresets = ({ FontSize, Fonts, Gutters, Colors }: ThemeCommonPar
       ...Fonts.textSmall,
       alignSelf: "flex-start",
       textAlign: "right",
-      color: Colors.red3,
+      color: Colors.failed,
+      fontWeight: "400" as const,
+      letterSpacing: 0.65,
+    },
+    warning: {
+      ...Fonts.textSmall,
+      alignSelf: "flex-start",
+      textAlign: "right",
+      color: Colors.warning,
       fontWeight: "400" as const,
       letterSpacing: 0.65,
     },
@@ -121,8 +129,16 @@ export const textPresets = ({ FontSize, Fonts, Gutters, Colors }: ThemeCommonPar
       ...Fonts.textLarge,
     },
     errorMessage: {
-      ...Fonts.textTiny,
+      ...Fonts.textSmall,
       color: Colors.failed,
+    },
+    warningMessage: {
+      ...Fonts.textSmall,
+      color: Colors.warning,
+    },
+    successMessage: {
+      ...Fonts.textSmall,
+      color: Colors.success,
     },
     fieldLabel: {
       ...BASE,

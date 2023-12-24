@@ -1,22 +1,27 @@
 import { truncate } from "lodash";
-import React, { useLayoutEffect, useRef } from "react";
+import React, { useLayoutEffect } from "react";
 
-import { BackButton, BottomSheetType, Container, EventStatusButtons, IconButton, Screen, Space, Text, useBottomSheet } from "../../../components";
+import { BackButton, Container, EventStatusButtons, IconButton, Screen, Space, Text } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useEvent } from "../../../store";
+import { useShareUrlWithMessage } from "../../../utils";
 import { EventScreenTabs } from "./event-tabs";
-import { ShareEvent } from "./share-event";
 
 // TODO: test this with real device ios and android
 // TODO: add config for android (missing)
 export function EventScreen({ navigation, route }: AuthorizedScreenProps<"event-screen">) {
   const { eventId } = route.params;
-
   const event = useEvent(eventId);
-  const bottomSheetRef = useRef<BottomSheetType>(null);
-  const handleBottomSheet = useBottomSheet(bottomSheetRef);
+  const { share, data: shareData, loading: shareLoading, error: shareError } = useShareUrlWithMessage();
 
   useLayoutEffect(() => {
+    const handleShare = async () => {
+      await share({
+        message: `Check out ${event.name}`,
+        url: `https://shortwaits.com/event/${event._id}`,
+        title: event.name,
+      });
+    };
     navigation.setOptions({
       headerTitleAlign: "center",
       headerTitle: () => {
@@ -30,7 +35,7 @@ export function EventScreen({ navigation, route }: AuthorizedScreenProps<"event-
       headerRight: () => {
         return (
           <Container direction="row" alignItems="center">
-            <IconButton onPress={() => handleBottomSheet.expand()} withMarginRight iconType="share" />
+            <IconButton onPress={() => handleShare()} withMarginRight iconType="share" />
             <IconButton
               onPress={() => {
                 navigation.navigate("modals", {
@@ -48,7 +53,7 @@ export function EventScreen({ navigation, route }: AuthorizedScreenProps<"event-
       },
       headerShadowVisible: false,
     });
-  }, [event, handleBottomSheet, navigation]);
+  }, [event, navigation, share]);
 
   return (
     <Screen preset="fixed" unsafe unsafeBottom backgroundColor="lightBackground">
@@ -56,7 +61,6 @@ export function EventScreen({ navigation, route }: AuthorizedScreenProps<"event-
       <EventStatusButtons event={event} />
       <Space size="small" />
       <EventScreenTabs event={event} />
-      <ShareEvent event={event} ref={bottomSheetRef} />
     </Screen>
   );
 }

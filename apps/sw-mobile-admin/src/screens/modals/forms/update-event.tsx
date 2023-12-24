@@ -1,79 +1,85 @@
-import React, { FC, useEffect, useLayoutEffect, useState } from "react";
-import { ActivityIndicator } from "react-native-paper";
-import { Alert } from "react-native";
+import { ServiceDtoType, UpdateEventDtoType, eventPaymentMethods } from "@shortwaits/shared-lib";
 import { FormikErrors } from "formik";
-import { useIntl } from "react-intl";
-
-import { useForm } from "../../../hooks";
-import { useBusiness, useServices, useUser } from "../../../store";
-import {
-  Text,
-  TextFieldCard,
-  TimePickerFieldCard,
-  Button,
-  BackButton,
-  ButtonCard,
-  CurrencyFieldCard,
-  IconButton,
-  Space,
-  FormContainer,
-} from "../../../components";
-import { ModalsScreenProps } from "../../../navigation";
-import { EventDtoType, ServiceDtoType, UpdateEventDtoType } from "@shortwaits/shared-lib";
-import { useCreateEventMutation } from "../../../services";
-import { getEmojiString } from "../../../utils";
 import { noop } from "lodash";
+import React, { FC, useCallback, useEffect, useLayoutEffect, useState } from "react";
+import { useIntl } from "react-intl";
+import { Alert } from "react-native";
+import { ActivityIndicator } from "react-native-paper";
+import { BackButton, Button, ButtonCard, CurrencyFieldCard, FormContainer, IconButton, Space, Text, TextFieldCard, TimePickerFieldCard } from "../../../components";
+import { useForm } from "../../../hooks";
+import { ModalsScreenProps } from "../../../navigation";
+import { useUpdateEventMutation } from "../../../services";
+import { useBusiness, useServices } from "../../../store";
+import { compareFormObjectsBeforeAbort, getEmojiString } from "../../../utils";
 
 export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">> = ({ navigation, route }) => {
   const params = route?.params;
   const onSubmit = params?.onSubmit ?? noop;
-  const onDone = params?.onDone ?? noop;
+  const onGoBack = params?.onGoBack ?? noop;
   const closeOnSubmit = params?.closeOnSubmit ?? true;
   const initialValues = params?.initialValues ?? null;
 
   const intl = useIntl();
   const services = useServices();
   const business = useBusiness();
-  const [selectedService, setSelectedService] = useState<ServiceDtoType | null>(
-    services.find(service => service._id === (initialValues as EventDtoType).serviceId) || null
-  );
+  const [selectedService, setSelectedService] = useState<ServiceDtoType | null>(initialValues.serviceId ? services.find(service => service._id === initialValues.serviceId) : null);
   const [isFree, setIsFree] = useState<boolean>(false);
-  const [createEvent, createEventStatus] = useCreateEventMutation();
+  const [updateEvent, updateEventStatus] = useUpdateEventMutation();
 
-  const validateDates = (formData: UpdateEventDtoType): FormikErrors<UpdateEventDtoType> => {
+  const customEventValidation = (formData: UpdateEventDtoType): FormikErrors<UpdateEventDtoType> => {
     const errors: FormikErrors<UpdateEventDtoType> = {};
     const startTime = new Date(formData.startTime);
     const expectedEndTime = new Date(formData.expectedEndTime);
 
+    // validate start time and end time are not the same
     if (startTime && expectedEndTime) {
       if (startTime > expectedEndTime) {
         errors.startTime = "Start date must not be after the end date.";
         errors.expectedEndTime = "End date must not be before the start date.";
       }
     }
+    // validate discount amount
+    if (formData.selectedDiscountCode?.code === "MANUAL") {
+      if (formData.selectedDiscountCode?.discount >= formData.priceExpected) {
+        errors.selectedDiscountCode = {
+          discount: "Discount amount must be less or equal to the price.",
+        };
+      }
+    }
 
     return errors;
   };
 
-  const { touched, errors, values, handleChange, handleSubmit, setFieldValue } = useForm(
+  const { touched, errors, values, setValues, handleChange, handleSubmit, setFieldValue } = useForm(
     {
       // todo remove this hardcoded paymentMethod value
-      initialValues: { ...initialValues, paymentMethod: "CASH" } as UpdateEventDtoType,
-      validate: validateDates,
+      initialValues: initialValues as UpdateEventDtoType,
+      validate: customEventValidation,
       onSubmit: formData => {
+        console.log("create event >>>>> ", formData);
         if (onSubmit) {
-          onSubmit<"updateEvent">(formData);
-        } else {
-          createEvent({ businessId: business._id, body: formData });
+          onSubmit(formData);
         }
+        updateEvent({ businessId: business._id, body: formData });
       },
     },
     "updateEvent"
   );
 
+  const handleOnGoBack = useCallback(() => {
+    const onAbort = () => {
+      navigation.goBack();
+    };
+    if (onGoBack) {
+      onGoBack(values);
+    }
+
+    compareFormObjectsBeforeAbort({ obj1: initialValues, obj2: values, onAbort });
+  }, [initialValues, navigation, onGoBack, values]);
+
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
+      headerLeft: () => <BackButton onPress={handleOnGoBack} />,
       headerRight: () => (
         <IconButton
           onPress={() =>
@@ -96,36 +102,50 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
       ),
       headerTitle: () => <Text preset="text" text="Update Event" />,
     });
-  }, [closeOnSubmit, createEventStatus.isSuccess, handleSubmit, navigation]);
+  }, [handleOnGoBack, navigation]);
 
   useEffect(() => {
-    if (createEventStatus.isSuccess && closeOnSubmit) {
+    if (!selectedService) {
+      setValues(initialValues, false);
+    } else return;
+  }, [initialValues, selectedService, setValues]);
+
+  useEffect(() => {
+    if (selectedService) {
+      const hasDuration = selectedService.durationInMin > 0;
+      const startTime = new Date(values.startTime);
+      const expectedEndTime = new Date(startTime.getTime() + selectedService.durationInMin * 60000).toISOString();
+      setIsFree(selectedService.price === 0 ? true : false);
+      setValues(
+        {
+          ...initialValues,
+          name: values.name,
+          startTime: values.startTime,
+          priceExpected: selectedService.price === 0 ? 0 : selectedService.price,
+          serviceId: selectedService._id,
+          isPublicEvent: selectedService.isPrivate,
+          durationInMin: selectedService.durationInMin,
+          hasDuration: hasDuration,
+          expectedEndTime: expectedEndTime,
+        },
+        false
+      );
+    } else return;
+  }, [initialValues, selectedService, setValues, values.name, values.startTime]);
+
+  useEffect(() => {
+    if (updateEventStatus.isSuccess && closeOnSubmit) {
       navigation.goBack();
     }
-  }, [closeOnSubmit, createEventStatus.isSuccess, navigation]);
+  }, [closeOnSubmit, updateEventStatus.isSuccess, navigation]);
 
-  useEffect(() => {
-    const cleanup = async () => {
-      if (onDone) {
-        try {
-          await onDone();
-        } catch (error) {
-          console.error("Error in onDone:", error);
-        }
-      }
-    };
-    return () => {
-      cleanup();
-    };
-  }, []);
-
-  if (createEventStatus.isError) {
-    Alert.alert("Error", createEventStatus.error.message);
+  if (updateEventStatus.isError) {
+    Alert.alert("Error", updateEventStatus.error.message);
   }
 
   const renderSubmitButton = (
     <Button
-      text="Save"
+      text="Update"
       onPress={() => {
         handleSubmit();
       }}
@@ -135,17 +155,22 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
   console.log("errors >>>>>", JSON.stringify(errors, null, 2));
   const emojis = values.labels.map(label => getEmojiString(label.emojiShortName)).join(" ");
 
-  return createEventStatus.isLoading ? (
+  return updateEventStatus.isLoading ? (
     <ActivityIndicator />
   ) : (
     <FormContainer footer={renderSubmitButton}>
+      <TextFieldCard title="Name" value={values?.name} onChangeText={handleChange("name")} isTouched={touched.name} errors={errors.name} />
+      <Space size="tiny" />
       <TextFieldCard
-        title="Name"
-        value={values?.name}
-        onChangeText={handleChange("name")}
-        isTouched={touched.name}
-        errors={errors.name}
+        title="Description"
+        value={values?.description}
+        multiline
+        onChangeText={handleChange("description")}
+        isTouched={touched.description}
+        errors={errors.description}
       />
+      <Space size="tiny" />
+      <TextFieldCard title="Notes" value={values?.notes} multiline onChangeText={handleChange("notes")} isTouched={touched.notes} errors={errors.notes} />
       <ButtonCard
         title="Labels"
         subTitle={values.labels.length > 0 ? `${emojis}` : "Select labels"}
@@ -156,7 +181,7 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
               type: "eventLabels",
               data: values.labels,
               multiple: true,
-              onGoBack: labels => {
+              onSubmit: labels => {
                 if (labels.length > 0) {
                   setFieldValue("labels", labels);
                 }
@@ -165,94 +190,206 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
           })
         }
       />
-
-      <TextFieldCard
-        title="Description"
-        value={values?.description}
-        multiline
-        onChangeText={handleChange("description")}
-        isTouched={touched.description}
-        errors={errors.description}
-      />
       <ButtonCard
-        title="Services"
+        title={intl.formatMessage({ id: "AddEventModal.service.title" })}
+        subTitle={selectedService ? selectedService.name : intl.formatMessage({ id: "AddEventModal.service.description" })}
         leftIconName={selectedService ? "circle" : "circle-outline"}
         leftIconColor={selectedService?.serviceColor?.hexCode ?? "grey"}
-        subTitle={selectedService ? selectedService.name : "Select a service"}
         onPress={() =>
           navigation.navigate("modals", {
             screen: "selector-modal-screen",
             params: {
               type: "services",
-              data: services,
+              searchable: true,
+              selectedData: selectedService ? [selectedService._id] : [],
               onSelect: (service: ServiceDtoType) => {
-                console.log("selected service:", service._id);
-                setSelectedService(service);
-                setFieldValue("serviceId", service._id);
+                if (service._id === values.serviceId) {
+                  setFieldValue("serviceId", "");
+                  setSelectedService(null);
+                } else {
+                  setSelectedService(service);
+                  setFieldValue("serviceId", service._id);
+                }
               },
             },
           })
         }
       />
       <ButtonCard
+        isVisible={!selectedService}
         rightIconName={values?.hasDuration ? "checkbox-outline" : "checkbox-blank-outline"}
-        title={"Limited time"}
+        title={intl.formatMessage({ id: "AddEventModal.noDuration" })}
         onPress={() => {
           setFieldValue("hasDuration", !values?.hasDuration);
         }}
       />
       <TimePickerFieldCard
-        title={"Starts"}
-        date={new Date(values?.startTime || Date.now())}
+        title={intl.formatMessage({ id: "AddEventModal.startTime" })}
+        date={new Date(values.startTime)}
         onChange={handleChange("startTime")}
         isTouched={touched.startTime}
         errors={errors.startTime}
       />
-      {values?.hasDuration ? null : (
-        <TimePickerFieldCard
-          title={"Ends"}
-          date={new Date(values?.expectedEndTime || Date.now())}
-          onChange={handleChange("startTime")}
-          isTouched={touched.expectedEndTime}
-          errors={errors.expectedEndTime}
+      <TimePickerFieldCard
+        disabled={values?.hasDuration}
+        title={intl.formatMessage({ id: "AddEventModal.endTime" })}
+        date={new Date(values.expectedEndTime)}
+        onChange={handleChange("expectedEndTime")}
+        isTouched={touched.expectedEndTime}
+        errors={errors.expectedEndTime}
+      />
+
+      {selectedService?.price === 0 ? null : (
+        <ButtonCard
+          disabled={!selectedService}
+          rightIconName={isFree ? "checkbox-outline" : "checkbox-blank-outline"}
+          title={intl.formatMessage({ id: "AddEventModal.free" })}
+          isVisible={!selectedService}
+          onPress={() => {
+            setIsFree(isFree => {
+              if (!isFree) {
+                setFieldValue("priceExpected", 0);
+              }
+              return !isFree;
+            });
+          }}
         />
       )}
       <ButtonCard
+        title={intl.formatMessage({ id: "AddEventModal.paymentMethod" })}
+        subTitle={values.paymentMethod ? eventPaymentMethods[values.paymentMethod] : intl.formatMessage({ id: "AddEventModal.selectPaymentMethod" })}
+        onPress={() =>
+          navigation.navigate("modals", {
+            screen: "selector-modal-screen",
+            params: {
+              type: "static",
+              headerTitle: intl.formatMessage({ id: "AddEventModal.paymentMethod" }),
+              data: Object.keys(eventPaymentMethods).map(key => {
+                return {
+                  key,
+                  title: eventPaymentMethods[key],
+                };
+              }),
+              onSelect: paymentMethod => {
+                setFieldValue("paymentMethod", paymentMethod.key);
+              },
+            },
+          })
+        }
+      />
+      <CurrencyFieldCard
+        disabled={!!selectedService}
+        title={intl.formatMessage({ id: "AddEventModal.price" })}
+        keyboardType="number-pad"
+        placeholder={intl.formatMessage({ id: "AddEventModal.enterPrice" })}
+        value={values?.priceExpected}
+        onChangeValue={price => setFieldValue("priceExpected", price)}
+        isTouched={touched.priceExpected}
+        errors={errors.priceExpected}
+        currencyType={"USD"}
+      />
+      <ButtonCard
+        title={intl.formatMessage({ id: "AddEventModal.availableDiscountCodes.title" })}
+        subTitle={values.selectedDiscountCode ? values.selectedDiscountCode.code : intl.formatMessage({ id: "AddEventModal.availableDiscountCodes.subTitle" })}
+        onPress={() =>
+          navigation.navigate("modals", {
+            screen: "selector-modal-screen",
+            params: {
+              type: "static",
+              headerTitle: intl.formatMessage({ id: "AddEventModal.availableDiscountCodes.addAvailableDiscountCode" }),
+              data: [
+                {
+                  code: "MANUAL",
+                  discount: null,
+                  description: "Manual Discount",
+                },
+              ].map(key => {
+                return {
+                  key: key.code,
+                  title: key.code,
+                  subTitle: key.description,
+                  itemData: key,
+                };
+              }),
+              onSelect: selectedDiscountCode => {
+                console.log("selectedDiscountCode >>>>>", selectedDiscountCode);
+                setFieldValue("selectedDiscountCode", selectedDiscountCode.itemData);
+              },
+            },
+          })
+        }
+      />
+      {values?.selectedDiscountCode?.code === "MANUAL" ? (
+        <CurrencyFieldCard
+          title="Discount Amount"
+          keyboardType="number-pad"
+          value={values?.selectedDiscountCode?.discount}
+          onChangeValue={price => setFieldValue("selectedDiscountCode.discount", price)}
+          isTouched={touched.selectedDiscountCode?.discount}
+          errors={errors.selectedDiscountCode?.discount}
+          currencyType={"USD"}
+        />
+      ) : null}
+      <ButtonCard
         rightIconName={values?.repeat ? "checkbox-outline" : "checkbox-blank-outline"}
         title={"Recurring"}
+        disabled
         onPress={() => {
           setFieldValue("repeat", !values?.repeat);
         }}
       />
       <ButtonCard
-        rightIconName={isFree ? "checkbox-outline" : "checkbox-blank-outline"}
-        title={"Free"}
-        onPress={() => {
-          setIsFree(isFree => {
-            if (!isFree) {
-              setFieldValue("priceExpected", 0);
-            }
-            return !isFree;
-          });
-        }}
+        title={intl.formatMessage({ id: "AddEventModal.staff.title" })}
+        subTitle={
+          values.staffIds.length > 0
+            ? `${intl.formatMessage({ id: "AddEventModal.staff.description" })}: ${values.staffIds.length}`
+            : intl.formatMessage({ id: "AddEventModal.staff.emptyDescription" })
+        }
+        onPress={() =>
+          navigation.navigate("modals", {
+            screen: "selector-modal-screen",
+            params: {
+              type: "staff",
+              headerTitle: intl.formatMessage({ id: "AddEventModal.staff.selector.headerTitle" }),
+              selectedData: values.staffIds,
+              multiple: true,
+              minSelectedItems: 1,
+              onGoBack: staff => {
+                console.log("selected staff:", staff);
+                const staffIds = staff.map(s => s._id);
+                setFieldValue("staffIds", staffIds);
+              },
+            },
+          })
+        }
       />
-      <CurrencyFieldCard
-        title="Price"
-        disabled={isFree}
-        keyboardType="number-pad"
-        value={values?.priceExpected}
-        onChangeValue={price => setFieldValue("priceExpected", price)}
-        isTouched={touched.notes}
-        errors={errors.notes}
-        currencyType={"USD"}
-      />
-      <TextFieldCard
-        title="Notes"
-        multiline
-        value={values?.notes}
-        onChangeText={handleChange("notes")}
-        isTouched={touched.notes}
-        errors={errors.notes}
+      <ButtonCard
+        disabled={values?.isPublicEvent ? true : false}
+        title={intl.formatMessage({ id: "AddEventModal.client.title" })}
+        subTitle={
+          values.clientsIds.length > 0
+            ? `${intl.formatMessage({ id: "AddEventModal.client.description" })}: ${values.clientsIds.length}`
+            : intl.formatMessage({ id: "AddEventModal.client.emptyDescription" })
+        }
+        onPress={() =>
+          navigation.navigate("modals", {
+            screen: "selector-modal-screen",
+            params: {
+              type: "clients",
+              headerTitle: intl.formatMessage({ id: "AddEventModal.client.selector.headerTitle" }),
+              selectedData: values.clientsIds,
+              multiple: true,
+              minSelectedItems: 1,
+              onGoBack: clients => {
+                if (clients) {
+                  console.log("selected clients:", clients);
+                  const clientsIds = clients.map(s => s._id);
+                  setFieldValue("clientsIds", clientsIds);
+                }
+              },
+            },
+          })
+        }
       />
       <Space size="large" />
     </FormContainer>

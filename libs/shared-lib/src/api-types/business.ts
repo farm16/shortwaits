@@ -15,6 +15,7 @@ export type UpdateBusinessDtoType = Partial<
 export type AllBusinessClientsType = {
   localClients: LocalClientUsersDtoType;
   clients: ClientUsersDtoType;
+  allClients: ClientUsersDtoType & LocalClientUsersDtoType;
 };
 
 export type AllBusinessClientsResponseType = CommonResponseType<AllBusinessClientsType>;

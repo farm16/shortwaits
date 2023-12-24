@@ -1,12 +1,12 @@
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { ClientUsersDtoType } from "@shortwaits/shared-lib";
+import { isEmpty } from "lodash";
 import React, { FC, useCallback, useEffect, useLayoutEffect, useState } from "react";
-import { ActivityIndicator, Alert, StyleSheet } from "react-native";
-import { FlatList } from "react-native-gesture-handler";
+import { ActivityIndicator, Alert, SectionList, StyleSheet } from "react-native";
 import { useDispatch } from "react-redux";
 import { AnimatedSearchBar, BackButton, Container, IconButton, NonIdealState, Space, Text } from "../../../../../components";
 import { ModalsScreenProps } from "../../../../../navigation";
-import { useGetLocalClientsQuery } from "../../../../../services";
+import { useGetAllBusinessClientsQuery } from "../../../../../services";
 import { showPremiumMembershipModal, useBusiness } from "../../../../../store";
 import { useTheme } from "../../../../../theme";
 import { ClientsSelectorItem } from "./clients-selector-item";
@@ -27,22 +27,21 @@ export const ClientsSelector: FC<ModalsScreenProps<"selector-modal-screen">> = (
     maxSelectedItems = MAX_SELECTED_ITEMS_DEFAULT,
   } = route.params;
 
+  const business = useBusiness();
+
+  const {
+    isLoading: isAllClientsQueryLoading,
+    isSuccess: isAllClientsQuerySuccess,
+    refetch: refetchAllClientsQuery,
+    error: isAllClientsQueryError,
+    data: allClientsData,
+  } = useGetAllBusinessClientsQuery(business?._id ?? skipToken);
+
   const dispatch = useDispatch();
   const { Colors } = useTheme();
   const handleAddClientPress = useCallback(() => {
     dispatch(showPremiumMembershipModal());
   }, [dispatch]);
-
-  const business = useBusiness();
-
-  const {
-    data: payload,
-    isError,
-    isLoading,
-    isSuccess,
-  } = useGetLocalClientsQuery(business ? business._id : skipToken, {
-    refetchOnMountOrArgChange: true,
-  });
 
   const [searchText, setSearchText] = useState("");
   const [filteredData, setFilteredData] = useState<ClientUsersDtoType>([]);
@@ -56,16 +55,16 @@ export const ClientsSelector: FC<ModalsScreenProps<"selector-modal-screen">> = (
   }
 
   useEffect(() => {
-    if (payload?.data && isSuccess) {
-      const initialFilteredData = filterClientUsers(searchText, payload.data ?? []);
+    if (isAllClientsQuerySuccess) {
+      const initialFilteredData = filterClientUsers(searchText, allClientsData?.data?.allClients ?? []);
       setFilteredData(initialFilteredData);
     }
-  }, [isSuccess, payload, searchText]);
+  }, [allClientsData?.data?.allClients, isAllClientsQuerySuccess, searchText]);
 
   useLayoutEffect(() => {
     const handleOnGoBack = () => {
       if (multiple) {
-        const items = payload?.data?.filter(item => selectedItems.includes(item._id)) || null;
+        const items = allClientsData?.data?.allClients?.filter(item => selectedItems.includes(item._id)) || null;
         if (onGoBack) {
           onGoBack(items);
         }
@@ -97,11 +96,11 @@ export const ClientsSelector: FC<ModalsScreenProps<"selector-modal-screen">> = (
         </Container>
       ),
     });
-  }, [Colors.brandSecondary, handleAddClientPress, headerTitle, isListSearchable, multiple, navigation, onGoBack, payload?.data, searchable, selectedItems]);
+  }, [allClientsData?.data?.allClients, handleAddClientPress, headerTitle, isListSearchable, multiple, navigation, onGoBack, searchable, selectedItems]);
 
   const handleOnChangeText = (text: string) => {
     setSearchText(text);
-    const filteredItems = filterClientUsers(text, payload.data);
+    const filteredItems = filterClientUsers(text, allClientsData?.data?.allClients);
     setFilteredData(filteredItems);
   };
 
@@ -155,25 +154,51 @@ export const ClientsSelector: FC<ModalsScreenProps<"selector-modal-screen">> = (
 
   const keyExtractor = useCallback(item => item._id, []);
 
-  if (isError) {
+  if (isAllClientsQueryError) {
     return <Text>Error</Text>;
   }
-  if (isLoading) {
+  if (isAllClientsQueryLoading) {
     return <ActivityIndicator />;
   }
 
-  if (isSuccess && payload.data) {
+  const data = [
+    {
+      title: "Shortwaits",
+      data: allClientsData?.data?.clients ?? [],
+    },
+    {
+      title: "Local Contacts",
+      data: allClientsData?.data?.localClients ?? [],
+    },
+  ];
+
+  if (isAllClientsQuerySuccess && allClientsData?.data?.allClients) {
     return (
       <>
         <AnimatedSearchBar onChangeText={handleOnChangeText} isVisible={isListSearchable} />
-        <FlatList
+        <SectionList
           style={styles.container}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.flatList}
-          data={filteredData}
+          sections={data}
           renderItem={renderItem}
-          keyExtractor={keyExtractor}
-          maxToRenderPerBatch={10}
+          renderSectionHeader={({ section: { title, data } }) => {
+            return !isEmpty(data) ? (
+              <Text
+                preset="none"
+                style={{
+                  paddingTop: 24,
+                  paddingBottom: 16,
+                  fontSize: 14,
+                  fontWeight: "500",
+                  textTransform: "uppercase",
+                  color: Colors.text,
+                }}
+              >
+                {title}
+              </Text>
+            ) : null;
+          }}
           ListEmptyComponent={<NonIdealState type="noClients" />}
           ListFooterComponent={<Space size="large" />}
         />

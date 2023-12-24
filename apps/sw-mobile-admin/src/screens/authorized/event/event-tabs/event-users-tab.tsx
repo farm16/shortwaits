@@ -1,11 +1,11 @@
 import { skipToken } from "@reduxjs/toolkit/dist/query";
-import { BusinessUserDtoType, BusinessUsersDtoType, ClientUserDtoType, ClientUsersDtoType, EventDtoType } from "@shortwaits/shared-lib";
+import { AllClientsType, BusinessClientType, BusinessUserDtoType, BusinessUsersDtoType, ClientUserDtoType, ClientUsersDtoType, EventDtoType } from "@shortwaits/shared-lib";
 import { isEmpty } from "lodash";
 import React, { Fragment, useCallback, useMemo } from "react";
 import { useIntl } from "react-intl";
 import { RefreshControl, SectionList, SectionListData, SectionListRenderItem, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
-import { BusinessUserCard, Button, ClientUserCard, Container, IconButton, NonIdealState, Text } from "../../../../components";
+import { BusinessUserCard, Button, ClientUserCard, Container, IconButton, NonIdealState, Space, Text } from "../../../../components";
 import { useGetPeopleInEventQuery, useUpdateEventMutation } from "../../../../services";
 import { useBusiness } from "../../../../store";
 import { useTheme } from "../../../../theme";
@@ -29,7 +29,9 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
     refetchOnMountOrArgChange: true,
   });
 
-  const clients = getCombinedClientTypes(peopleInEventData?.data?.clientUsers ?? [], peopleInEventData?.data?.localClientUsers ?? []);
+  // console.log("peopleInEventData:", peopleInEventData);
+
+  const allClients = getCombinedClientTypes(peopleInEventData?.data?.clientUsers ?? [], peopleInEventData?.data?.localClientUsers ?? []);
 
   const _data = useMemo(
     () => [
@@ -39,10 +41,10 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
       },
       {
         title: "Clients",
-        data: clients,
+        data: allClients,
       },
     ],
-    [clients, peopleInEventData?.data?.businessUsers]
+    [allClients, peopleInEventData?.data?.businessUsers]
   );
 
   const handleRefresh = useCallback(() => {
@@ -113,37 +115,52 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
     [intl]
   );
 
-  const handleUpdateEvent = useCallback(
-    (userType: "staff" | "clients", users: BusinessUsersDtoType & ClientUsersDtoType) => {
-      if (userType === "staff") {
-        const staffIds = event.staffIds;
-        const newStaffIds = users.map(user => user._id);
-        const uniqueIds = [...new Set([...staffIds, ...newStaffIds])];
-        const isEqual = JSON.stringify(uniqueIds) === JSON.stringify(staffIds);
-        if (isEqual) {
-          return;
-        } else {
-          const updatedEvent = {
-            ...event,
-            staffIds: uniqueIds,
-          };
-          updateEvent({ body: updatedEvent, businessId: business._id });
-        }
-      } else if (userType === "clients") {
-        const clientsIds = event.clientsIds;
-        const newClientsIds = users.map(user => user._id);
-        const uniqueIds = [...new Set([...clientsIds, ...newClientsIds])];
-        const isEqual = JSON.stringify(uniqueIds) === JSON.stringify(clientsIds);
-        if (isEqual) {
-          return;
-        } else {
-          const updatedEvent = {
-            ...event,
-            clientsIds: uniqueIds,
-          };
-          updateEvent({ body: updatedEvent, businessId: business._id });
-        }
+  const handleClientsUpdateEvent = useCallback(
+    (users: AllClientsType) => {
+      const clientsIds = event.clientsIds;
+      const localClientsIds = event.localClientsIds;
+      const mapAllClientsToIds = (user: AllClientsType, type: BusinessClientType) => (user.filter(u => u.clientType === type) ?? []).map(u => u._id);
+
+      const newClientUserIds = mapAllClientsToIds(users, "external");
+      const newLocalClientIds = mapAllClientsToIds(users, "local");
+
+      const uniqueClientIds = [...new Set(newClientUserIds)];
+      const uniqueLocalClientIds = [...new Set(newLocalClientIds)];
+
+      const isClientEqual = JSON.stringify(uniqueClientIds) === JSON.stringify(clientsIds);
+      const isLocalClientEqual = JSON.stringify(uniqueLocalClientIds) === JSON.stringify(localClientsIds);
+
+      if (isClientEqual && isLocalClientEqual) {
+        console.log("equal");
+        return;
       }
+
+      const updatedEvent = {
+        ...event,
+        clientsIds: uniqueClientIds,
+        localClientsIds: uniqueLocalClientIds,
+      };
+
+      updateEvent({ body: updatedEvent, businessId: business._id });
+    },
+    [business._id, event, updateEvent]
+  );
+
+  const handleStaffUpdateEvent = useCallback(
+    (staff: BusinessUsersDtoType & ClientUsersDtoType) => {
+      const staffIds = event.staffIds;
+      const newStaffIds = staff.map(user => user._id);
+      const uniqueIds = [...new Set(newStaffIds)];
+      const isEqual = JSON.stringify(uniqueIds) === JSON.stringify(staffIds);
+      if (isEqual) {
+        return;
+      }
+      const updatedEvent = {
+        ...event,
+        staffIds: uniqueIds,
+      };
+
+      updateEvent({ body: updatedEvent, businessId: business._id });
     },
     [business._id, event, updateEvent]
   );
@@ -184,10 +201,13 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
                   params: {
                     type: userType,
                     multiple: true,
-                    selectedData: event[`${userType}Ids`],
+                    selectedData: title === "Staff" ? event.staffIds : allClients.map(client => client._id),
                     onGoBack: users => {
-                      console.log("users:", users);
-                      handleUpdateEvent(userType, users);
+                      if (title === "Staff") {
+                        handleStaffUpdateEvent(users);
+                      } else {
+                        handleClientsUpdateEvent(users);
+                      }
                     },
                   },
                 });
@@ -198,7 +218,7 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
         </Fragment>
       );
     },
-    [Colors.lightBackground, Colors.text, _data, event, handleUpdateEvent, intl, nonIdealState]
+    [allClients, Colors.lightBackground, Colors.text, _data, event.staffIds, handleClientsUpdateEvent, handleStaffUpdateEvent, intl, nonIdealState]
   );
 
   const _renderListEmptyComponent = useCallback(() => {
@@ -214,6 +234,10 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
     );
   }, []);
 
+  const _renderListFooterComponent = useCallback(() => {
+    return <Space size="large" />;
+  }, []);
+
   if (isPeopleInEventQueryLoading || updateEventStatus.isLoading) return <ActivityIndicator animating={true} color={Colors.brandPrimary} />;
 
   return (
@@ -224,6 +248,7 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
       style={{ flex: 1, paddingHorizontal: 16 }}
       ListEmptyComponent={_renderListEmptyComponent}
       renderSectionHeader={_renderSectionHeader}
+      ListFooterComponent={_renderListFooterComponent}
       renderItem={_renderItem}
       sections={_data}
     />

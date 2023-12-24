@@ -61,6 +61,7 @@ export const customDarkColors = {
 
   disabledBackground: "#EBEBE4",
 
+  warning: "#f1c40f",
   success: "#30cb83",
   pending: "#f39c12",
   failed: "#e74c3c",
@@ -99,6 +100,7 @@ export const customColors = {
   pending: "#f39c12",
   failed: "#e74c3c",
   cancel: "#34495e",
+  warning: "#f1c40f",
   successBackground: "#eaf9f2",
   failedBackground: "#fcf2f2",
   warningBackground: "#fdf5e7",

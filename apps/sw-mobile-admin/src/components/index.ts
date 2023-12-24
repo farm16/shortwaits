@@ -18,6 +18,7 @@ export * from "./headers";
 export * from "./icon-buttons/icon-buttons";
 export * from "./list-items";
 export * from "./logo-view/logo-view";
+export * from "./messages/messages";
 export * from "./modals";
 export * from "./non-ideal-state/non-ideal-state";
 export * from "./qr/qr-modal";

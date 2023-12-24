@@ -1,25 +1,19 @@
+import { skipToken } from "@reduxjs/toolkit/dist/query";
 import React, { FC, useCallback, useLayoutEffect, useMemo, useState } from "react";
 import { FlatList, StyleSheet } from "react-native";
-import { skipToken } from "@reduxjs/toolkit/dist/query";
 
+import { useDispatch } from "react-redux";
+import { BackButton, IconButton, Space, Text } from "../../../../../components";
+import { ModalsScreenProps } from "../../../../../navigation";
+import { useGetBusinessQuery } from "../../../../../services";
 import { showPremiumMembershipModal, useUser } from "../../../../../store";
-import { SearchBar, Space, IconButton, BackButton, Text } from "../../../../../components";
 import { selectorConfigs } from "../../selector-config";
 import { LabelSelectorItem } from "./labels-selector-item";
-import { useGetBusinessQuery } from "../../../../../services";
-import { useDispatch } from "react-redux";
-import { ModalsScreenProps } from "../../../../../navigation";
 
 export const LabelsSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ navigation, route }) => {
   const dispatch = useDispatch();
 
-  const {
-    type,
-    onSelect,
-    // searchable,
-    closeOnSubmit,
-    multiple = false,
-  } = route.params;
+  const { type, onSelect, multiple = false } = route.params;
 
   const { headerTitle, searchPlaceholder, isReadOnly } = useMemo(() => selectorConfigs[type], [type]);
 
@@ -50,12 +44,7 @@ export const LabelsSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({
         setSelectedItems([...selectedItems, item._id]);
       }
     } else {
-      if (closeOnSubmit) {
-        onSelect(item);
-        navigation.goBack();
-      } else {
-        onSelect(item);
-      }
+      onSelect(item);
     }
   };
 

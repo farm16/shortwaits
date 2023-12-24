@@ -1,9 +1,10 @@
 import React, { ReactElement, ReactNode, useCallback, useState } from "react";
 import { Platform, StyleSheet, View } from "react-native";
 import { Banner } from "react-native-paper";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Spinner from "react-native-spinkit";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { Screen, ScrollView, Space, Text } from "../..";
+import { Screen, Text } from "../..";
 import { useTheme } from "../../../theme";
 import { ScreenProps } from "../../common/screen/screen.props";
 
@@ -25,6 +26,7 @@ export const FormContainer = (props: FormContainerProps) => {
     retry,
     status,
     isLoading,
+    withHorizontalPadding = true,
     withStatusBanner = true,
     preset = "scroll",
     errorMessage = "Something went wrong. Please try again later.",
@@ -36,7 +38,7 @@ export const FormContainer = (props: FormContainerProps) => {
 
   const { Colors } = useTheme();
   const backgroundColor = Colors.lightBackground;
-  // todo work in progress
+  // todo: work in progress
   const renderStatusBanner = useCallback(() => {
     const actions = [
       {
@@ -71,45 +73,41 @@ export const FormContainer = (props: FormContainerProps) => {
       </Banner>
     );
   }, [Colors.failed, Colors.failedBackground, Colors.success, Colors.successBackground, Colors.text, errorMessage, isStatusBannerVisible, retry, status, successMessage]);
-
+  const insets = useSafeAreaInsets();
   if (isLoading) {
     return (
-      <Screen preset="fixed" unsafe {...rest}>
-        <Space size="small" />
-        <View
-          style={[
-            styles.fixedView,
-            {
-              justifyContent: "center",
-              alignItems: "center",
-            },
-          ]}
-        >
-          <Spinner isVisible={true} size={50} type="ThreeBounce" color={Colors.brandSecondary} />
-        </View>
-        {clonedFooter ? <View style={[styles.footer, { backgroundColor }]}>{clonedFooter}</View> : null}
-      </Screen>
+      <View
+        style={[
+          styles.fixedView,
+          {
+            justifyContent: "center",
+            alignItems: "center",
+          },
+        ]}
+      >
+        <Spinner isVisible={true} size={50} type="ThreeBounce" color={Colors.brandSecondary} />
+      </View>
     );
   }
 
   if (preset === "fixed") {
     return (
-      <Screen preset="fixed" unsafe {...rest}>
-        {/* {withStatusBanner ? renderStatusBanner() : null} */}
-        <Space size="small" />
-        <View style={styles.fixedView}>{children}</View>
-        {clonedFooter ? <View style={[styles.footer, { backgroundColor }]}>{clonedFooter}</View> : null}
-      </Screen>
+      <>
+        <Screen preset="fixed" unsafe {...rest} withHorizontalPadding={withHorizontalPadding}>
+          {children}
+        </Screen>
+        {clonedFooter ? <View style={[styles.footer, { backgroundColor, paddingBottom: insets.bottom + 16 }]}>{clonedFooter}</View> : null}
+      </>
     );
   }
 
   return (
-    <Screen preset="fixed" unsafe {...rest}>
-      {/* {withStatusBanner ? renderStatusBanner() : null} */}
-      <Space size="small" />
-      <ScrollView style={styles.scrollView}>{children}</ScrollView>
-      {clonedFooter ? <View style={[styles.footer, { backgroundColor }]}>{clonedFooter}</View> : null}
-    </Screen>
+    <>
+      <Screen preset="scroll" unsafe {...rest} withHorizontalPadding={withHorizontalPadding}>
+        {children}
+      </Screen>
+      {clonedFooter ? <View style={[styles.footer, { backgroundColor, paddingBottom: insets.bottom + 16 }]}>{clonedFooter}</View> : null}
+    </>
   );
 };
 
@@ -117,14 +115,10 @@ const styles = StyleSheet.create({
   root: {},
   fixedView: {
     flex: 1,
-    paddingHorizontal: 16,
   },
-  scrollView: {
-    paddingHorizontal: 16,
-  },
+  scrollView: {},
   footer: {
-    paddingTop: 16,
-    paddingBottom: 4,
+    paddingTop: 22,
     paddingHorizontal: 16,
     ...Platform.select({
       ios: {

@@ -1,14 +1,13 @@
-import React, { Fragment, useEffect, useLayoutEffect, useMemo } from "react";
-import { Text, BackButton, TextFieldCard, ButtonCard, Button, FormContainer, Avatar, Space, Card, PhoneNumberCard } from "../../../components";
-import { AuthorizedScreenProps } from "../../../navigation";
-import { useBusiness } from "../../../store";
-import { useForm, useSelectImage } from "../../../hooks";
 import { UpdateBusinessDtoType } from "@shortwaits/shared-lib";
-import { STATIC_FORM_AMERICAN_COUNTRIES, STATIC_FORM_USA_STATES } from "../../../utils";
+import React, { Fragment, useEffect, useLayoutEffect, useMemo } from "react";
 import { useIntl } from "react-intl";
-import { useUpdateBusinessMutation } from "../../../services";
-import { isObjsEqualWithAlert } from "../../../utils";
 import { Alert } from "react-native";
+import { Avatar, BackButton, Button, ButtonCard, FormContainer, PhoneNumberCard, Space, Text, TextFieldCard } from "../../../components";
+import { useForm, useSelectImage } from "../../../hooks";
+import { AuthorizedScreenProps } from "../../../navigation";
+import { useUpdateBusinessMutation } from "../../../services";
+import { useBusiness } from "../../../store";
+import { STATIC_FORM_AMERICAN_COUNTRIES, STATIC_FORM_USA_STATES, compareFormObjectsBeforeAbort } from "../../../utils";
 
 export function BusinessProfileScreen({ navigation }: AuthorizedScreenProps<"business-profile-screen">) {
   const business = useBusiness();
@@ -59,7 +58,7 @@ export function BusinessProfileScreen({ navigation }: AuthorizedScreenProps<"bus
       headerLeft: () => (
         <BackButton
           onPress={() => {
-            isObjsEqualWithAlert(initialValues, values, () => navigation.goBack());
+            compareFormObjectsBeforeAbort({ obj1: initialValues, obj2: values, onAbort: () => navigation.goBack() });
           }}
         />
       ),

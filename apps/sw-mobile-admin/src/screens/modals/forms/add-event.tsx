@@ -66,6 +66,7 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
       staffIds: [user?._id],
       //TODO will be able to select multiple clients
       clientsIds: [],
+      localClientsIds: [],
       hasDuration: true,
       eventImage: "",
       businessId: business._id as string,
@@ -81,6 +82,20 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
       paymentMethod: "CASH",
       notes: "",
       labels: [],
+      endTime: "",
+      canceled: false,
+      cancellationReason: "",
+      priceFinal: 0,
+      discountAmount: 0,
+      availableDiscountCodes: [
+        {
+          code: "MANUAL",
+          discount: null,
+          description: "Manual Discount",
+        },
+      ],
+      payment: undefined,
+      selectedDiscountCode: null,
     };
     return _initialValues;
   }, [business._id, user?._id]);
@@ -156,7 +171,7 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
         false
       );
     } else return;
-  }, [initialValues, selectedService, setValues, values.startTime]);
+  }, [initialValues, selectedService, setValues, values.name, values.startTime]);
 
   if (createEventStatus.isError) {
     Alert.alert(intl.formatMessage({ id: "AddEventModal.errorTitle" }), createEventStatus.error.message);
@@ -185,7 +200,6 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
         isTouched={touched.name}
         errors={errors.name}
       />
-
       <ButtonCard
         title={intl.formatMessage({ id: "AddEventModal.service.title" })}
         subTitle={selectedService ? selectedService.name : intl.formatMessage({ id: "AddEventModal.service.description" })}
@@ -239,6 +253,7 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
       />
       {selectedService?.price === 0 ? null : (
         <ButtonCard
+          disabled={!selectedService}
           rightIconName={isFree ? "checkbox-outline" : "checkbox-blank-outline"}
           title={intl.formatMessage({ id: "AddEventModal.free" })}
           isVisible={!selectedService}

@@ -1,13 +1,13 @@
 import React, { ForwardedRef, forwardRef } from "react";
 import Share, { ShareSingleOptions, Social } from "react-native-share";
 
-import { Text, BottomSheet, ButtonCard } from "../../../components";
-import { View } from "react-native";
-import { FlatList } from "react-native-gesture-handler";
-import { useTheme } from "../../../theme";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import GBottomSheet from "@gorhom/bottom-sheet";
 import { EventDtoType } from "@shortwaits/shared-lib";
+import { View } from "react-native";
+import { FlatList } from "react-native-gesture-handler";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { BottomSheet, ButtonCard, Text } from "../../../components";
+import { useTheme } from "../../../theme";
 
 type ShareEventProps = {
   event: EventDtoType;
@@ -96,14 +96,7 @@ export const ShareEvent = forwardRef((props: ShareEventProps, ref: ForwardedRef<
             paddingBottom: insets.bottom,
           }}
           renderItem={({ item }) => {
-            return (
-              <ButtonCard
-                title={item.friendlyName}
-                rightIconName={item.iconName}
-                rightIconColor={item.iconColor}
-                onPress={async () => await item.onPress()}
-              />
-            );
+            return <ButtonCard title={item.friendlyName} rightIconName={item.iconName} rightIconColor={item.iconColor} onPress={async () => await item.onPress()} />;
           }}
         />
       </View>

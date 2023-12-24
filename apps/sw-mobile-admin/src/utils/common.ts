@@ -8,17 +8,20 @@ export const isObjsEqual = (obj1: any, obj2: any) => {
   return isEqual(obj1, obj2);
 };
 
-export const isObjsEqualWithAlert = (obj1: any, obj2: any, onAccept = noop) => {
-  if (!isEqual(obj1, obj2)) {
+export const compareFormObjectsBeforeAbort = ({ obj1, obj2, onAbort = noop }) => {
+  console.log("obj1", obj1);
+  console.log("obj2", obj2);
+
+  if (isEqual(obj1, obj2)) {
+    onAbort();
+  } else {
     Alert.alert("Changes detected", "You have unsaved changes. Are you sure you want to leave?", [
       {
         text: "Yes",
-        onPress: () => onAccept(),
+        onPress: () => onAbort(),
       },
       { text: "No", onPress: () => console.log("No Pressed") },
     ]);
-  } else {
-    onAccept();
   }
 };
 

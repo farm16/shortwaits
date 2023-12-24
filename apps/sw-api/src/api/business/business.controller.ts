@@ -94,7 +94,7 @@ export class BusinessController {
     description: "Returns business clients",
   })
   async getAllBusinessClientsController(@Param("businessId") businessId: string, @Req() request) {
-    return this.businessService.getAllBusinessClients(businessId, request.user.sub);
+    return this.businessService.getAllBusinessClientsService(request.user.sub, businessId);
   }
 
   @Post(":businessId/local-clients")

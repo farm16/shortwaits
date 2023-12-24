@@ -1,5 +1,4 @@
 import { useNavigation } from "@react-navigation/native";
-import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { ClientUserDtoType } from "@shortwaits/shared-lib";
 import { isEmpty } from "lodash";
 import React, { Fragment, useCallback, useEffect, useState } from "react";
@@ -8,18 +7,15 @@ import { ListRenderItem, View } from "react-native";
 import { RefreshControl } from "react-native-gesture-handler";
 import { AnimatedSearchBar, Button, List, NonIdealState, SelectorListItem } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
-import { useGetLocalClientsQuery } from "../../../services";
-import { useBusiness, useLocalClients } from "../../../store";
+import { useLocalClients } from "../../../store";
 import { getResponsiveHeight } from "../../../utils";
 
-export function LocalClientsTab() {
-  const business = useBusiness();
+export function LocalClientsTab({ isLoading, refresh }: { isLoading: boolean; refresh: () => void }) {
   const intl = useIntl();
   const [, setSearchText] = useState("");
   const currentLocalClients = useLocalClients();
   const [filteredLocalClientsData, setFilteredLocalClientsData] = useState([]);
   const { navigate } = useNavigation<AuthorizedScreenProps<"events-screen">["navigation"]>();
-  const { isLoading, isSuccess, refetch } = useGetLocalClientsQuery(business?._id ?? skipToken);
 
   const handleAddClient = useCallback(() => {
     navigate("modals", {
@@ -88,7 +84,7 @@ export function LocalClientsTab() {
         contentContainerStyle={{
           padding: getResponsiveHeight(16),
         }}
-        refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refetch} />}
+        refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refresh} />}
         ListEmptyComponent={
           <View
             style={{

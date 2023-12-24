@@ -7,6 +7,7 @@ export * from "./getEmojiString";
 export * from "./handlePhoneUtils";
 export * from "./locales";
 export * from "./responsive";
+export * from "./share";
 export * from "./social-auth";
 export * from "./strings";
 export * from "./time";

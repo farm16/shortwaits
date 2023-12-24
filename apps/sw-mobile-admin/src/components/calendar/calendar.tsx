@@ -1,12 +1,11 @@
+import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { EventType } from "@shortwaits/shared-lib";
 import React, { FC, memo, useCallback } from "react";
+import { useIntl } from "react-intl";
 import { RefreshControl, SectionListData, View } from "react-native";
 import { AgendaList, CalendarProvider, ExpandableCalendar } from "react-native-calendars";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-
-import { skipToken } from "@reduxjs/toolkit/dist/query";
-import { useIntl } from "react-intl";
 import { ActivityIndicator } from "react-native-paper";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useGetEventsByBusinessQuery } from "../../services";
 import { useBusiness, useEvents } from "../../store";
 import { Colors } from "../../theme";
@@ -34,7 +33,14 @@ export const Calendar: FC<CalendarProps> = memo(props => {
   const theme = useCalendarTheme();
   const currentBusiness = useBusiness();
   const currentEvents = useEvents();
-  const agendaData = useAgendaData(currentEvents ?? []);
+
+  const filteredEvents = currentEvents.filter(event => {
+    console.log("event.status.statusName", event.status.statusName);
+    const isCompleted = event.status.statusName === "COMPLETED";
+    const isCanceled = event.status.statusName === "CANCELED";
+    return !isCompleted && !isCanceled;
+  });
+  const agendaData = useAgendaData(filteredEvents ?? []);
   const intl = useIntl();
 
   const locale = intl.locale || "en";
@@ -102,8 +108,8 @@ export const Calendar: FC<CalendarProps> = memo(props => {
     return <ActivityIndicator />;
   }
 
-  console.log("initialDate", initialDate);
-  console.log("agendaData", agendaData);
+  // console.log("initialDate", initialDate);
+  // console.log("agendaData", agendaData);
 
   return (
     <CalendarProvider

@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory, raw } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
-import { BusinessLabelsType, EventLocationType, EventPaymentMethodType, EventType, EventUrlsType, ObjectId } from "@shortwaits/shared-lib";
+import { BusinessLabelsType, DiscountType, EventLocationType, EventPaymentMethodType, EventType, EventUrlsType, ObjectId } from "@shortwaits/shared-lib";
 import { Document, Schema as MongooseSchema, Types } from "mongoose";
 
 class EventUrls implements EventUrlsType {
@@ -16,8 +16,40 @@ class EventLocation implements EventLocationType {
   longitude: number; // Longitude of the location
 }
 
+class Discount implements DiscountType {
+  code: string;
+  discount: number;
+  description: string;
+  params?: {
+    minPrice: number;
+    maxPrice: number;
+    minDuration: number;
+    maxDuration: number;
+    minParticipants: number;
+    maxParticipants: number;
+    minRegistrationFee: number;
+    maxRegistrationFee: number;
+    minAttendeeLimit: number;
+    maxAttendeeLimit: number;
+    minDiscount: number;
+    maxDiscount: number;
+  };
+}
+
 @Schema()
 export class Events extends Document implements EventType {
+  @ApiProperty()
+  @Prop()
+  selectedDiscountCode: Discount;
+
+  @ApiProperty()
+  @Prop({ type: Array })
+  availableDiscountCodes: Discount[];
+
+  @ApiProperty()
+  @Prop()
+  discountAmount: number;
+
   @ApiProperty()
   @Prop()
   expectedEndTime: Date;

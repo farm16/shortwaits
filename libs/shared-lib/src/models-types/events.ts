@@ -66,17 +66,13 @@ export type EventType = {
   startTime: Date; // Start time of the event
   endTime: Date; // End time of the event
   expectedEndTime: Date; // Expected end time of the event
-
   canceled: boolean; // Indicates if the event is canceled
   cancellationReason: string; // Reason for event cancellation
-
-  isPublicEvent: boolean; // Indicates if the event is a group event
-  repeat: boolean; // Indicates if the event is repeated
-
-  paymentMethod: EventPaymentMethodType;
-
   priceExpected: number; // Expected price for the event
   priceFinal: number; // Final price for the event
+  isPublicEvent: boolean; // Indicates if the event is a group event
+  repeat: boolean; // Indicates if the event is repeated
+  paymentMethod: EventPaymentMethodType;
   payment: {
     paymentProcessedOn: string; // Date when the payment was processed ISO 8601 format
     paymentMethodId?: string; // Stripe payment method ID
@@ -105,7 +101,29 @@ export type EventType = {
   attendeeLimit: number; // Maximum participant limit for the event (added field)
   registrationDeadlineTime: string; // Deadline for event registration (added field)
   registrationFee: number; // Registration fee for the event (added field)
-  // Additional metadata fields can be added here as needed
+  discountAmount: number; // Discount for the event
+  availableDiscountCodes: DiscountType[]; // Discount code for the event
+  selectedDiscountCode: DiscountType;
+};
+
+export type DiscountType = {
+  code: string;
+  discount: number | null;
+  description: string;
+  params?: {
+    minPrice: number;
+    maxPrice: number;
+    minDuration: number;
+    maxDuration: number;
+    minParticipants: number;
+    maxParticipants: number;
+    minRegistrationFee: number;
+    maxRegistrationFee: number;
+    minAttendeeLimit: number;
+    maxAttendeeLimit: number;
+    minDiscount: number;
+    maxDiscount: number;
+  };
 };
 
 export type EventDocType = EventType & Document;

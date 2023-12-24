@@ -5,12 +5,7 @@ import { selectCurrentServicesState } from "..";
 
 export const useService = (serviceId?: string) => {
   const services = useSelector(selectCurrentServicesState);
-  // console.log("useService hook | serviceId >>>", serviceId);
-  // console.log("useService hook | service >>>", services);
-  const service =
-    isEmpty(services) || !serviceId
-      ? null
-      : services.find(service => service._id === serviceId);
+  const service = isEmpty(services) || !serviceId ? null : services.find(service => service._id === serviceId);
 
   return useMemo(() => service, [service]);
 };

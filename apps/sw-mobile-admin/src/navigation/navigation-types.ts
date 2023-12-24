@@ -56,6 +56,7 @@ export type ModalStackParamList = {
     selectedData?: string[];
     onGoBack?(arg0): void;
     onSelect?(arg0): void;
+    onSubmit?(arg0): void;
     searchable?: boolean;
     closeOnSelect?: boolean;
     disableSelect?: boolean;
@@ -84,18 +85,20 @@ export type ModalStackParamList = {
     clientType: "local" | "shortwaits";
     onSubmit?<T extends keyof FormData>(arg: FormData[T]): void;
     onDone?(): void;
+    onGoBack?(arg0): void;
     closeOnSubmit?: boolean;
   };
   [MODAL_SCREENS.ADD_EVENT_MODAL_SCREEN]: {
     initialValues?: FormData[FormType];
     onSubmit?<T extends keyof FormData>(arg: FormData[T]): void;
     onDone?(): void;
+    onGoBack?(arg0): void;
     closeOnSubmit?: boolean;
   };
   [MODAL_SCREENS.UPDATE_EVENT_MODAL_SCREEN]: {
-    initialValues?: FormData[FormType];
+    initialValues: EventDtoType;
     onSubmit?<T extends keyof FormData>(arg: FormData[T]): void;
-    onDone?(): void;
+    onGoBack?(arg0): void;
     closeOnSubmit?: boolean;
   };
   [MODAL_SCREENS.ADD_STAFF_MODAL_SCREEN]: {

@@ -1,5 +1,4 @@
 import { useNavigation } from "@react-navigation/native";
-import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { ClientUserDtoType } from "@shortwaits/shared-lib";
 import { isEmpty } from "lodash";
 import React, { Fragment, useCallback, useEffect, useState } from "react";
@@ -7,12 +6,11 @@ import { useIntl } from "react-intl";
 import { ListRenderItem, View } from "react-native";
 import { AnimatedSearchBar, Button, List, NonIdealState, RefreshControl, SelectorListItem } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
-import { useGetClientsQuery } from "../../../services";
 import { useBusiness, useClients } from "../../../store";
 import { useTheme } from "../../../theme";
 import { getResponsiveHeight } from "../../../utils";
 
-export function ShortwaitsClientsTab() {
+export function ShortwaitsClientsTab({ isLoading, refresh }: { isLoading: boolean; refresh: () => void }) {
   const business = useBusiness();
   const intl = useIntl();
   const [, setSearchText] = useState("");
@@ -20,9 +18,6 @@ export function ShortwaitsClientsTab() {
   const { Colors } = useTheme();
   const [filteredClientsData, setFilteredClientsData] = useState([]);
   const { navigate } = useNavigation<AuthorizedScreenProps<"events-screen">["navigation"]>();
-  const { data, isLoading, isSuccess, refetch } = useGetClientsQuery(business?._id ?? skipToken);
-
-  console.log("data >>>>", business?._id, data);
 
   const handleAddClient = useCallback(() => {
     navigate("modals", {
@@ -95,7 +90,7 @@ export function ShortwaitsClientsTab() {
         style={{
           backgroundColor: Colors.lightBackground,
         }}
-        refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refetch} />}
+        refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refresh} />}
         ListEmptyComponent={
           <View
             style={{

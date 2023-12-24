@@ -1,6 +1,5 @@
 import React, { FC } from "react";
 
-import { Screen } from "../../../components";
 import { ModalsScreenProps, SelectorModalModeType } from "../../../navigation";
 import { CategoriesSelector } from "./selectors/categories/categories-selector";
 import { ClientsSelector } from "./selectors/clients/clients-selector";
@@ -24,9 +23,5 @@ export const SelectorScreenModal: FC<ModalsScreenProps<"selector-modal-screen">>
   const type = props.route.params.type;
   const Selector = selectorsComponents[type];
 
-  return (
-    <Screen preset="fixed" unsafe withHorizontalPadding>
-      <Selector {...props} />
-    </Screen>
-  );
+  return <Selector {...props} />;
 };

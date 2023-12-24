@@ -1,3 +1,4 @@
+import { skipToken } from "@reduxjs/toolkit/dist/query";
 import React, { FC, Fragment, useCallback, useLayoutEffect, useMemo, useState } from "react";
 import { useIntl } from "react-intl";
 import { Alert, Animated, Dimensions, Pressable, StyleSheet, View } from "react-native";
@@ -7,7 +8,7 @@ import { Logo3 } from "../../../assets/images/svg-components/logo-3";
 import { Container, IconButton, Screen, Text } from "../../../components";
 import { useOsContacts } from "../../../hooks";
 import { AuthorizedScreenProps } from "../../../navigation";
-import { useCreateLocalClientsMutation } from "../../../services";
+import { useCreateLocalClientsMutation, useGetAllBusinessClientsQuery } from "../../../services";
 import { useBusiness, useLocalClients, useShowGhostComponent } from "../../../store";
 import { useTheme } from "../../../theme";
 import { getFontSize, getResponsiveHeight } from "../../../utils";
@@ -46,18 +47,24 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
 
   const { error: osContactsError, isLoading: isOsContactsLoading, getContacts: getOsContacts } = useOsContacts();
   const [createLocalClients, createLocalClientsResult] = useCreateLocalClientsMutation();
-  // const { isLoading: isLocalClientsQueryLoading, isSuccess: isLocalClientsQuerySuccess, refetch: refetchLocalClientsQuery } = useGetLocalClientsQuery(business?._id ?? skipToken);
+  const {
+    isLoading: isAllClientsQueryLoading,
+    isSuccess: isAllClientsQuerySuccess,
+    refetch: refetchAllClientsQuery,
+  } = useGetAllBusinessClientsQuery(business?._id ?? skipToken, {
+    refetchOnMountOrArgChange: true,
+  });
 
   const isCreateClientsLoading = createLocalClientsResult.isLoading && !createLocalClientsResult.isSuccess;
   const isLoading = isCreateClientsLoading;
 
   const renderShortwaitsClientsTab = useCallback(() => {
-    return <ShortwaitsClientsTab />;
-  }, []);
+    return <ShortwaitsClientsTab isLoading={isAllClientsQueryLoading} refresh={refetchAllClientsQuery} />;
+  }, [isAllClientsQueryLoading, refetchAllClientsQuery]);
 
   const renderLocalClientsTab = useCallback(() => {
-    return <LocalClientsTab />;
-  }, []);
+    return <LocalClientsTab isLoading={isAllClientsQueryLoading} refresh={refetchAllClientsQuery} />;
+  }, [isAllClientsQueryLoading, refetchAllClientsQuery]);
 
   const handleSyncContacts = useCallback(
     async function () {

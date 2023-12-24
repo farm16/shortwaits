@@ -1,18 +1,18 @@
-import React, { FC, useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
-import { FlatList, StyleSheet } from "react-native";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
-
+import { BusinessLabelType } from "@shortwaits/shared-lib";
+import React, { FC, useCallback, useLayoutEffect, useMemo, useState } from "react";
+import { FlatList, StyleSheet } from "react-native";
+import { useDispatch } from "react-redux";
+import { BackButton, Button, FormContainer, IconButton, Space, Text } from "../../../../../components";
+import { ModalsScreenProps } from "../../../../../navigation";
+import { useGetBusinessQuery } from "../../../../../services";
 import { showPremiumMembershipModal, useUser } from "../../../../../store";
-import { SearchBar, Space, IconButton, BackButton, Text } from "../../../../../components";
+import { compareFormObjectsBeforeAbort } from "../../../../../utils";
 import { selectorConfigs } from "../../selector-config";
 import { LabelSelectorItem } from "./labels-selector-item";
-import { useGetBusinessQuery } from "../../../../../services";
-import { useDispatch } from "react-redux";
-import { ModalsScreenProps } from "../../../../../navigation";
-import { BusinessLabelType } from "@shortwaits/shared-lib";
 
 export const EventLabelsSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ navigation, route }) => {
-  const { type, onGoBack, data, multiple = false } = route.params;
+  const { type, onSelect, onGoBack, onSubmit, data, multiple = false } = route.params;
 
   const { headerTitle } = useMemo(() => selectorConfigs[type], [type]);
 
@@ -31,16 +31,27 @@ export const EventLabelsSelector: FC<ModalsScreenProps<"selector-modal-screen">>
       headerLeft: () => (
         <BackButton
           onPress={() => {
-            onGoBack(selectedItems);
-            navigation.goBack();
+            if (onGoBack) {
+              onGoBack(selectedItems);
+            }
+            compareFormObjectsBeforeAbort({
+              obj1: data,
+              obj2: selectedItems,
+              onAbort: () => {
+                navigation.goBack();
+              },
+            });
           }}
         />
       ),
-      headerRight: () => <IconButton onPress={() => handleAddLabels()} withMarginRight iconType="edit" />,
+      headerRight: () => <IconButton onPress={() => handleAddLabels()} withMarginRight iconType="add" />,
     });
-  }, [navigation, headerTitle, handleAddLabels, onGoBack, selectedItems]);
+  }, [data, handleAddLabels, headerTitle, navigation, onGoBack, selectedItems]);
 
   const handleOnSelect = item => {
+    if (onSelect) {
+      onSelect(item);
+    }
     if (multiple) {
       const isItemPresent = selectedItems.some(_item => _item.emojiShortName === item.emojiShortName);
       if (isItemPresent) {
@@ -52,6 +63,23 @@ export const EventLabelsSelector: FC<ModalsScreenProps<"selector-modal-screen">>
     }
   };
 
+  const renderSubmitButton = useCallback(
+    () => (
+      <Button
+        disabled={selectedItems.length === 0}
+        preset={selectedItems.length === 0 ? "primary-disabled" : "primary"}
+        text={`Add ${selectedItems.length > 1 ? "labels" : "label"}`}
+        onPress={() => {
+          if (onSubmit) {
+            onSubmit(selectedItems);
+          }
+          navigation.goBack();
+        }}
+      />
+    ),
+    [navigation, onSubmit, selectedItems]
+  );
+
   if (isError) {
     return <Text>Error</Text>;
   }
@@ -59,36 +87,36 @@ export const EventLabelsSelector: FC<ModalsScreenProps<"selector-modal-screen">>
     return <Text>Loading...</Text>;
   }
 
-  console.log("payload.data.labels", payload?.data?.labels);
-
   if (isSuccess) {
     return (
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={[styles.listContainer]}
-        data={payload.data.labels}
-        ItemSeparatorComponent={() => <Space size="small" />}
-        renderItem={({ item }) => {
-          return (
-            <LabelSelectorItem
-              isSelected={
-                multiple ? selectedItems.some(_item => _item.emojiShortName === item.emojiShortName) : undefined
-              }
-              disabled={false}
-              item={item}
-              onSelectItem={handleOnSelect}
-            />
-          );
-        }}
-      />
+      <FormContainer preset="fixed" footer={renderSubmitButton()}>
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={[styles.listContainer]}
+          data={payload.data.labels}
+          ItemSeparatorComponent={() => <Space size="small" />}
+          renderItem={({ item }) => {
+            return (
+              <LabelSelectorItem
+                isSelected={multiple ? selectedItems.some(_item => _item.emojiShortName === item.emojiShortName) : undefined}
+                disabled={false}
+                item={item}
+                onSelectItem={handleOnSelect}
+              />
+            );
+          }}
+        />
+      </FormContainer>
     );
   }
+
+  return null;
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingVertical: 15,
+
     alignItems: "center",
   },
   searchBar: {},
