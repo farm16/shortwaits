@@ -1,6 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import paginate from 'mongoose-paginate-v2';
-import mongoose, { Document, Types } from "mongoose";
+import mongoose, { Document } from "mongoose";
+import "mongoose-paginate-v2";
 
 export type PaginatedModel<T extends Document> = mongoose.PaginateModel<T>;
 
