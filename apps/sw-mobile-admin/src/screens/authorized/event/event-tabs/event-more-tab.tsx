@@ -1,7 +1,7 @@
 import { EventDtoType } from "@shortwaits/shared-lib";
 import React from "react";
 import { Alert, Platform, ScrollView, StyleSheet, View } from "react-native";
-import { Emoji, Messages, ServiceItem, Space, Switch, Text, UrlCard, UrlTypes } from "../../../../components";
+import { Messages, ServiceItem, Space, Switch, Text, UrlCard, UrlTypes } from "../../../../components";
 import { useService } from "../../../../store";
 import { useTheme } from "../../../../theme";
 
@@ -21,55 +21,51 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
 
   const EventLabels = () => {
     const hasLabels = event?.labels?.length > 0;
-    return (
+    return hasLabels ? null : (
       <View style={styles.detail}>
         <Text preset="none" style={styles.title} text="Labels" />
-        {hasLabels ? (
-          event?.labels?.map(label => {
-            return <Emoji size={30} name={label.emojiShortName} />;
-          })
-        ) : (
-          <Messages type={"warning"} message={"This event has no labels"} />
-        )}
+        <Messages type={"warning"} message={"This event has no labels"} />
       </View>
     );
   };
+
+  const EventDescription = () => {
+    const hasDescription = event?.description;
+    return hasDescription ? null : (
+      <View style={styles.detail}>
+        <Text preset="none" style={styles.title} text="Description" />
+        <Messages type={"warning"} message={"This event has no description"} />
+      </View>
+    );
+  };
+
   const EventNotes = () => {
+    if (!event.notes) {
+      return (
+        <View style={styles.detail}>
+          <Text preset="none" style={styles.title} text="Notes" />
+          <Messages type={"warning"} message={"This event has no Notes"} />
+        </View>
+      );
+    }
+
     return (
       <View>
         <Text preset="none" style={styles.title} text="Notes" />
         <Space direction="horizontal" size="tiny" />
-        {event.notes ? (
-          <View style={styles.notes}>
-            <Text preset="none" style={{ color: Colors.text, fontWeight: "600" }} text="This is a test" />
-          </View>
-        ) : (
-          <Messages
-            style={{
-              marginLeft: 16,
-            }}
-            type={"warning"}
-            message={"This event has no notes"}
-          />
-        )}
+        <View style={styles.notes}>
+          <Text preset="none" style={{ color: Colors.text, fontWeight: "600" }} text={event.notes} />
+        </View>
+        <Space />
       </View>
     );
   };
 
   const EventService = () => {
-    return (
-      <View>
-        <Text preset="none" style={styles.title} text="Service" />
-        <Space direction="horizontal" size="tiny" />
-        {service ? (
-          <ServiceItem
-            service={service}
-            onPress={_service => {
-              console.log("service", _service);
-            }}
-            style={[styles.withShadow, { alignSelf: "center" }]}
-          />
-        ) : (
+    if (!service) {
+      return (
+        <View style={styles.detail}>
+          <Text preset="none" style={styles.title} text="Service" />
           <Messages
             style={{
               marginLeft: 16,
@@ -77,7 +73,22 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
             type={"warning"}
             message={"This event has no service"}
           />
-        )}
+        </View>
+      );
+    }
+
+    return (
+      <View>
+        <Text preset="none" style={styles.title} text="Service" />
+        <Space direction="horizontal" size="tiny" />
+        <ServiceItem
+          service={service}
+          onPress={_service => {
+            console.log("service", _service);
+          }}
+          style={[styles.withShadow, { alignSelf: "center" }]}
+        />
+        <Space />
       </View>
     );
   };
@@ -105,6 +116,7 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
             );
           })
         )}
+        <Space />
       </View>
     );
   };
@@ -164,20 +176,22 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
   return (
     <ScrollView style={{ flex: 1, paddingHorizontal: 16, backgroundColor: Colors.lightBackground }}>
       <Space size="large" />
-      <PaymentMethod />
-      <Space />
-      <EventLabels />
-      <Space />
       <EventNotes />
-      <Space />
+
+      <EventDescription />
+
+      <PaymentMethod />
+
+      <EventLabels />
+
       <EventService />
-      <Space />
+
       <EventMeetingUrls />
-      <Space />
+
       <EventPrivacy />
-      <Space />
+
       <EventRepeat />
-      <Space />
+
       <AttendeeLimit />
       <Space size="large" />
       <Space size="large" />
@@ -193,6 +207,7 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
     borderBottomColor: "#eee",
     borderBottomWidth: 1,
+    marginBottom: 16,
   },
   title: {
     fontSize: 16,
@@ -201,10 +216,11 @@ const styles = StyleSheet.create({
   notes: {
     padding: 20,
     color: "#666",
+
     fontSize: 14,
     width: "90%",
     alignSelf: "center",
-    backgroundColor: "# ",
+    backgroundColor: "yellow", // color of a yellow notepad background
     borderRadius: 8,
   },
   withShadow: {

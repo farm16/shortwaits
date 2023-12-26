@@ -1,15 +1,15 @@
-import React, { FC, useCallback, useEffect, useLayoutEffect, useState } from "react";
-import { Alert, FlatList, StyleSheet } from "react-native";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { BusinessUsersDtoType } from "@shortwaits/shared-lib";
+import React, { FC, useCallback, useEffect, useLayoutEffect, useState } from "react";
+import { Alert, FlatList, StyleSheet } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import { useDispatch } from "react-redux";
 
-import { AnimatedSearchBar, Container, BackButton, IconButton, NonIdealState, Text } from "../../../../../components";
-import { StaffSelectorItem } from "./staff-selector-item";
-import { useGetBusinessStaffQuery } from "../../../../../services";
+import { AnimatedSearchBar, BackButton, Container, IconButton, NonIdealState, Screen, Text } from "../../../../../components";
 import { ModalsScreenProps } from "../../../../../navigation";
+import { useGetBusinessStaffQuery } from "../../../../../services";
 import { showPremiumMembershipModal, useBusiness } from "../../../../../store";
+import { StaffSelectorItem } from "./staff-selector-item";
 
 const MIN_SELECTED_ITEMS_DEFAULT = 0; // Define your minimum selected items here
 const MAX_SELECTED_ITEMS_DEFAULT = 10000; // Define your maximum selected items here
@@ -49,9 +49,7 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
 
   function filterBusinessUsers(searchText: string, users: BusinessUsersDtoType) {
     return users.filter(item =>
-      ["username", "email", "displayName", "familyName", "givenName", "middleName"].some(
-        prop => item[prop] ?? "".toLowerCase().includes(searchText.toLowerCase())
-      )
+      ["username", "email", "displayName", "familyName", "givenName", "middleName"].some(prop => item[prop] ?? "".toLowerCase().includes(searchText.toLowerCase()))
     );
   }
 
@@ -79,10 +77,7 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
       headerTitle: headerTitle,
       headerLeft: () => (
         <Container direction="row" alignItems="center">
-          <BackButton
-            onPress={() => handleOnGoBack()}
-            counter={multiple && selectedItems?.length > 0 ? `(${selectedItems.length})` : ""}
-          />
+          <BackButton onPress={() => handleOnGoBack()} counter={multiple && selectedItems?.length > 0 ? `(${selectedItems.length})` : ""} />
         </Container>
       ),
       headerRight: () => (
@@ -100,17 +95,7 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
         </Container>
       ),
     });
-  }, [
-    handleAddStaffPress,
-    headerTitle,
-    isListSearchable,
-    multiple,
-    navigation,
-    onGoBack,
-    payload?.data,
-    searchable,
-    selectedItems,
-  ]);
+  }, [handleAddStaffPress, headerTitle, isListSearchable, multiple, navigation, onGoBack, payload?.data, searchable, selectedItems]);
 
   const handleOnChangeText = (text: string) => {
     setSearchText(text);
@@ -177,7 +162,7 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
 
   if (isSuccess && payload.data) {
     return (
-      <>
+      <Screen preset="fixed" withHorizontalPadding unsafe>
         <AnimatedSearchBar onChangeText={handleOnChangeText} isVisible={isListSearchable} />
         <FlatList
           style={styles.container}
@@ -188,7 +173,7 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
           keyExtractor={keyExtractor}
           ListEmptyComponent={<NonIdealState type="noStaff" />}
         />
-      </>
+      </Screen>
     );
   }
 };

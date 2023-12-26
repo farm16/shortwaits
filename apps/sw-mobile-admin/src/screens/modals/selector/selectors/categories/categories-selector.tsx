@@ -1,12 +1,12 @@
-import React, { FC, useCallback, useLayoutEffect, useState } from "react";
-import { FlatList, StyleSheet } from "react-native";
-
 import { noop } from "lodash";
+import React, { FC, useCallback, useLayoutEffect, useState } from "react";
 import { useIntl } from "react-intl";
+import { FlatList, StyleSheet } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import {
   BackButton,
   // SearchBar,
+  Screen,
   Space,
   Text,
 } from "../../../../../components";
@@ -77,17 +77,19 @@ export const CategoriesSelector: FC<ModalsScreenProps<"selector-modal-screen">> 
 
   if (isSuccess) {
     return (
-      <FlatList
-        style={{
-          backgroundColor: Colors.lightBackground,
-        }}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.flatList}
-        data={categories.data}
-        ItemSeparatorComponent={() => <Space size="small" />}
-        renderItem={renderItem}
-        keyExtractor={keyExtractor}
-      />
+      <Screen preset="fixed" withHorizontalPadding unsafe>
+        <FlatList
+          style={{
+            backgroundColor: Colors.lightBackground,
+          }}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.flatList}
+          data={categories.data}
+          ItemSeparatorComponent={() => <Space size="small" />}
+          renderItem={renderItem}
+          keyExtractor={keyExtractor}
+        />
+      </Screen>
     );
   }
 };

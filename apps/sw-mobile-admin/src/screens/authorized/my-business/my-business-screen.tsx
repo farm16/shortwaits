@@ -4,15 +4,15 @@ import { truncate } from "lodash";
 import React, { FC, useCallback, useLayoutEffect } from "react";
 import { useIntl } from "react-intl";
 import { Alert } from "react-native";
-import { useDispatch } from "react-redux";
-
 import FastImage from "react-native-fast-image";
 import { ActivityIndicator } from "react-native-paper";
+import { useDispatch } from "react-redux";
 import { BusinessIncomeInfo, ButtonCard, Container, IconButton, Screen, Text } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useGetEventsSummaryByBusinessQuery, useUpdateBusinessMutation } from "../../../services";
 import { hidePremiumMembershipBanner, showPremiumMembershipBanner, useBusiness, useShowGhostComponent } from "../../../store";
 import { useTheme } from "../../../theme";
+import { useShareUrlWithMessage } from "../../../utils";
 
 export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> = ({ navigation }) => {
   useShowGhostComponent("floatingActionButton");
@@ -43,6 +43,7 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
   );
 
   const checkAccountType = accountType => ["free", "basic", "student"].some(type => type === accountType);
+  const { share, data: shareData, loading: shareLoading, error: shareError } = useShareUrlWithMessage();
 
   useLayoutEffect(() => {
     if (checkAccountType(business.accountType) && isFocused) {
@@ -77,6 +78,13 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
   };
 
   useLayoutEffect(() => {
+    const handleShare = async () => {
+      await share({
+        message: `Check out ${business.shortName || business.longName}`,
+        url: `https://shortwaits.com/business/${business._id}`,
+        title: business.shortName || business.longName,
+      });
+    };
     navigation.setOptions({
       headerTitle: "",
       headerLeft: () => {
@@ -112,7 +120,7 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
         return (
           <Container direction="row" alignItems="center">
             <IconButton withMarginRight iconType="closed-business" onPress={handleCloseAndOpenBusiness} />
-            <IconButton withMarginRight iconType="share" />
+            <IconButton withMarginRight iconType="share" onPress={() => handleShare()} />
             <IconButton
               withMarginRight
               iconType="edit"

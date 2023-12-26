@@ -4,7 +4,7 @@ import { isEmpty } from "lodash";
 import React, { FC, useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { ActivityIndicator, Alert, SectionList, StyleSheet } from "react-native";
 import { useDispatch } from "react-redux";
-import { AnimatedSearchBar, BackButton, Container, IconButton, NonIdealState, Space, Text } from "../../../../../components";
+import { AnimatedSearchBar, BackButton, Container, IconButton, NonIdealState, Screen, Space, Text } from "../../../../../components";
 import { ModalsScreenProps } from "../../../../../navigation";
 import { useGetAllBusinessClientsQuery } from "../../../../../services";
 import { showPremiumMembershipModal, useBusiness } from "../../../../../store";
@@ -174,7 +174,7 @@ export const ClientsSelector: FC<ModalsScreenProps<"selector-modal-screen">> = (
 
   if (isAllClientsQuerySuccess && allClientsData?.data?.allClients) {
     return (
-      <>
+      <Screen preset="fixed" withHorizontalPadding unsafe>
         <AnimatedSearchBar onChangeText={handleOnChangeText} isVisible={isListSearchable} />
         <SectionList
           style={styles.container}
@@ -202,7 +202,7 @@ export const ClientsSelector: FC<ModalsScreenProps<"selector-modal-screen">> = (
           ListEmptyComponent={<NonIdealState type="noClients" />}
           ListFooterComponent={<Space size="large" />}
         />
-      </>
+      </Screen>
     );
   }
 };

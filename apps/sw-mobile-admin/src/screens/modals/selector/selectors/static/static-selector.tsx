@@ -1,30 +1,12 @@
 import React, { FC, useCallback, useLayoutEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
-
-import {
-  BackButton,
-  AnimatedSearchBar,
-  IconButton,
-  Container,
-  NonIdealState,
-  NonIdealStateTypes,
-} from "../../../../../components";
-import { StaticSelectorItem } from "./static-selector-item";
+import { AnimatedSearchBar, BackButton, Container, IconButton, NonIdealState, NonIdealStateTypes, Screen } from "../../../../../components";
 import { ModalsScreenProps } from "../../../../../navigation";
+import { StaticSelectorItem } from "./static-selector-item";
 
 export const StaticSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ navigation, route }) => {
-  const {
-    headerTitle,
-    data,
-    onSelect,
-    closeOnSelect = true,
-    multiple = false,
-    searchable,
-    itemRightIconName,
-    itemRightIconColor,
-    nonIdealStateType = "noData",
-  } = route.params;
+  const { headerTitle, data, onSelect, closeOnSelect = true, multiple = false, searchable, itemRightIconName, itemRightIconColor, nonIdealStateType = "noData" } = route.params;
 
   const [searchText, setSearchText] = useState("");
   const [filteredData, setFilteredData] = useState(data);
@@ -57,10 +39,7 @@ export const StaticSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({
       if (typeof item === "string") {
         return item.toLowerCase().includes(text.toLowerCase());
       } else {
-        return (
-          item?.title?.toLowerCase().includes(text.toLowerCase()) ||
-          item?.subTitle?.toLowerCase().includes(text.toLowerCase())
-        );
+        return item?.title?.toLowerCase().includes(text.toLowerCase()) || item?.subTitle?.toLowerCase().includes(text.toLowerCase());
       }
     });
     setFilteredData(filteredItems);
@@ -92,7 +71,7 @@ export const StaticSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({
   );
 
   return (
-    <>
+    <Screen preset="fixed" withHorizontalPadding unsafe>
       <AnimatedSearchBar onChangeText={handleOnChangeText} isVisible={isListSearchable} />
       <FlatList
         style={styles.container}
@@ -102,7 +81,7 @@ export const StaticSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({
         ListEmptyComponent={() => <NonIdealState type={nonIdealStateType as NonIdealStateTypes} />}
         renderItem={renderItem}
       />
-    </>
+    </Screen>
   );
 };
 

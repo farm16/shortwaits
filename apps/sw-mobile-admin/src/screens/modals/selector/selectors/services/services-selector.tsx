@@ -1,27 +1,16 @@
-import React, { FC, useCallback, useEffect, useLayoutEffect, useState } from "react";
-import { StyleSheet } from "react-native";
-import { skipToken } from "@reduxjs/toolkit/dist/query";
-import { ActivityIndicator } from "react-native-paper";
-
-import {
-  ServiceItem,
-  Text,
-  BackButton,
-  Space,
-  Container,
-  IconButton,
-  AnimatedSearchBar,
-  NonIdealState,
-} from "../../../../../components";
-import { showPremiumMembershipModal, useBusiness } from "../../../../../store";
-import { useGetServicesQuery } from "../../../../../services";
-import { ModalsScreenProps } from "../../../../../navigation";
-import { useDispatch } from "react-redux";
-import { ServicesDtoType } from "@shortwaits/shared-lib";
-import { FlatList, RefreshControl } from "react-native-gesture-handler";
-import { useIntl } from "react-intl";
-import { noop } from "lodash";
 import { useFocusEffect } from "@react-navigation/native";
+import { skipToken } from "@reduxjs/toolkit/dist/query";
+import { ServicesDtoType } from "@shortwaits/shared-lib";
+import { noop } from "lodash";
+import React, { FC, useCallback, useEffect, useLayoutEffect, useState } from "react";
+import { useIntl } from "react-intl";
+import { StyleSheet } from "react-native";
+import { FlatList, RefreshControl } from "react-native-gesture-handler";
+import { ActivityIndicator } from "react-native-paper";
+import { AnimatedSearchBar, BackButton, Container, IconButton, NonIdealState, Screen, ServiceItem, Space, Text } from "../../../../../components";
+import { ModalsScreenProps } from "../../../../../navigation";
+import { useGetServicesQuery } from "../../../../../services";
+import { useBusiness } from "../../../../../store";
 
 /**
  * TODO: handle error to non ideal state
@@ -41,13 +30,7 @@ export const ServicesSelector: FC<ModalsScreenProps<"selector-modal-screen">> = 
   const business = useBusiness();
   const intl = useIntl();
 
-  const {
-    data: services,
-    isLoading,
-    isSuccess,
-    isError,
-    refetch: refetchServices,
-  } = useGetServicesQuery(business?._id ?? skipToken);
+  const { data: services, isLoading, isSuccess, isError, refetch: refetchServices } = useGetServicesQuery(business?._id ?? skipToken);
 
   useFocusEffect(
     useCallback(() => {
@@ -63,9 +46,7 @@ export const ServicesSelector: FC<ModalsScreenProps<"selector-modal-screen">> = 
   const [selectedItems, setSelectedItems] = useState(selectedData);
 
   function filterServicesUsers(searchText: string, services: ServicesDtoType) {
-    return services.filter(item =>
-      ["name", "description"].some(prop => item[prop] ?? "".toLowerCase().includes(searchText.toLowerCase()))
-    );
+    return services.filter(item => ["name", "description"].some(prop => item[prop] ?? "".toLowerCase().includes(searchText.toLowerCase())));
   }
 
   useEffect(() => {
@@ -116,17 +97,7 @@ export const ServicesSelector: FC<ModalsScreenProps<"selector-modal-screen">> = 
         </Container>
       ),
     });
-  }, [
-    intl,
-    isListSearchable,
-    multiple,
-    navigation,
-    onGoBack,
-    refetchServices,
-    searchable,
-    selectedItems,
-    services?.data,
-  ]);
+  }, [intl, isListSearchable, multiple, navigation, onGoBack, refetchServices, searchable, selectedItems, services?.data]);
 
   const handleOnChangeText = (text: string) => {
     setSearchText(text);
@@ -176,7 +147,7 @@ export const ServicesSelector: FC<ModalsScreenProps<"selector-modal-screen">> = 
 
   if (isSuccess) {
     return (
-      <>
+      <Screen preset="fixed" withHorizontalPadding unsafe>
         <AnimatedSearchBar onChangeText={handleOnChangeText} isVisible={isListSearchable} />
         <FlatList
           refreshControl={
@@ -197,7 +168,7 @@ export const ServicesSelector: FC<ModalsScreenProps<"selector-modal-screen">> = 
           ListEmptyComponent={<NonIdealState type="noServices" />}
           ListFooterComponent={<Space size="large" />}
         />
-      </>
+      </Screen>
     );
   }
 
