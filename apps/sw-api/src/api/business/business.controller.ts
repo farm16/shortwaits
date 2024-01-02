@@ -147,7 +147,7 @@ export class BusinessController {
     return this.businessService.updateBusinessStaff(request.user.sub, businessId, dto);
   }
 
-  @Put("registration/complete")
+  @Post("registration/complete")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
