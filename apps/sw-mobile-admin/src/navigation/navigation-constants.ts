@@ -30,16 +30,18 @@ export const AUTHORIZED_SCREENS = {
 } as const;
 
 export const MODAL_SCREENS = {
-  SCHEDULE_MODAL_SCREEN: "schedule-modal-screen", // schedule
-  SELECTOR_MODAL_SCREEN: "selector-modal-screen", // categories + staff
+  SCHEDULE_MODAL_SCREEN: "schedule-modal-screen",
+  SELECTOR_MODAL_SCREEN: "selector-modal-screen",
   SERVICE_MODAL_SCREEN: "service-modal-screen",
-  ADD_CLIENT_MODAL_SCREEN: "add-client-modal-screen",
   ADD_EVENT_MODAL_SCREEN: "add-event-modal-screen",
   UPDATE_EVENT_MODAL_SCREEN: "update-event-modal-screen",
-  ADD_STAFF_MODAL_SCREEN: "add-staff-modal-screen",
   ADD_SERVICE_MODAL_SCREEN: "add-service-modal-screen",
   UPDATE_SERVICE_MODAL_SCREEN: "update-service-modal-screen",
-  ADD_CLIENT_TO_BUSINESS_MODAL_SCREEN: "add-client-to-business-modal-screen",
+  ADD_CLIENT_MODAL_SCREEN: "add-client-modal-screen",
+  UPDATE_CLIENT_MODAL_SCREEN: "update-client-modal-screen",
+  ADD_LOCAL_CLIENT_MODAL_SCREEN: "add-local-client-modal-screen",
+  UPDATE_LOCAL_CLIENT_MODAL_SCREEN: "update-local-client-modal-screen",
+  ADD_STAFF_MODAL_SCREEN: "add-staff-modal-screen",
 } as const;
 
 export const NAVIGATION_STACKS = {

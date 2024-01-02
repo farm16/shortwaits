@@ -14,6 +14,7 @@ import {
   EventDtoType,
   ServiceDtoType,
   UpdateEventDtoType,
+  UpdateLocalClientDtoType,
   WeekHoursType,
 } from "@shortwaits/shared-lib";
 import { NonIdealStateTypes } from "../components";
@@ -79,10 +80,27 @@ export type ModalStackParamList = {
   [MODAL_SCREENS.SERVICE_MODAL_SCREEN]: {
     service?: ServiceDtoType;
   };
-
   [MODAL_SCREENS.ADD_CLIENT_MODAL_SCREEN]: {
-    initialValues?: FormData[FormType];
-    clientType: "local" | "shortwaits";
+    onSubmit?<T extends keyof FormData>(arg: FormData[T]): void;
+    onDone?(): void;
+    onGoBack?(arg0): void;
+    closeOnSubmit?: boolean;
+  };
+  [MODAL_SCREENS.UPDATE_CLIENT_MODAL_SCREEN]: {
+    initialValues: ClientUserDtoType;
+    onSubmit?<T extends keyof FormData>(arg: FormData[T]): void;
+    onDone?(): void;
+    onGoBack?(arg0): void;
+    closeOnSubmit?: boolean;
+  };
+  [MODAL_SCREENS.ADD_LOCAL_CLIENT_MODAL_SCREEN]: {
+    onSubmit?<T extends keyof FormData>(arg: FormData[T]): void;
+    onDone?(): void;
+    onGoBack?(arg0): void;
+    closeOnSubmit?: boolean;
+  };
+  [MODAL_SCREENS.UPDATE_LOCAL_CLIENT_MODAL_SCREEN]: {
+    initialValues: UpdateLocalClientDtoType;
     onSubmit?<T extends keyof FormData>(arg: FormData[T]): void;
     onDone?(): void;
     onGoBack?(arg0): void;
@@ -115,11 +133,6 @@ export type ModalStackParamList = {
   };
   [MODAL_SCREENS.UPDATE_SERVICE_MODAL_SCREEN]: {
     initialValues?: FormData[FormType];
-    onSubmit?<T extends keyof FormData>(arg: FormData[T]): void;
-    onDone?(): void;
-    closeOnSubmit?: boolean;
-  };
-  [MODAL_SCREENS.ADD_CLIENT_TO_BUSINESS_MODAL_SCREEN]: {
     onSubmit?<T extends keyof FormData>(arg: FormData[T]): void;
     onDone?(): void;
     closeOnSubmit?: boolean;

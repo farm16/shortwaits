@@ -1,4 +1,4 @@
-import { CreateLocalClientUserDtoType } from "@shortwaits/shared-lib";
+import { AddLocalClientDtoType } from "@shortwaits/shared-lib";
 import { Platform } from "react-native";
 import { Contact } from "react-native-contacts";
 
@@ -6,16 +6,7 @@ export function getUsersFromOsContacts(contacts: Contact[]) {
   return contacts.map(contact => getUserFromOsContact(contact as Contact));
 }
 
-function getUserFromOsContact({
-  givenName,
-  familyName,
-  middleName,
-  displayName,
-  phoneNumbers,
-  postalAddresses,
-  imAddresses,
-  emailAddresses,
-}: Contact): CreateLocalClientUserDtoType {
+function getUserFromOsContact({ givenName, familyName, middleName, displayName, phoneNumbers, postalAddresses, imAddresses, emailAddresses }: Contact): AddLocalClientDtoType {
   const addresses = postalAddresses.map(postalAddress => {
     return {
       label: postalAddress.label,

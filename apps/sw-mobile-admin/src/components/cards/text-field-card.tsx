@@ -1,8 +1,7 @@
 import React, { useRef } from "react";
-import { StyleSheet, Pressable, TextInputProps, TextInput as RnTextInput, Platform } from "react-native";
-
-import { TextField, Card, Text, CardProps, Space } from "../common";
+import { Platform, Pressable, TextInput as RnTextInput, StyleSheet, TextInputProps } from "react-native";
 import { getDimensions, useTheme } from "../../theme";
+import { Card, CardProps, Space, Text, TextField } from "../common";
 
 type TextFieldCardType = Omit<CardProps, "mode"> & {
   title: string;
@@ -66,14 +65,7 @@ export function TextFieldCard(props: TextFieldCardType) {
           <Text preset="cardTitle" text={title} />
           {Platform.OS === "ios" && <Space size="tiny" />}
         </Pressable>
-        <TextField
-          {...rest}
-          editable={!disabled}
-          multiline={multiline}
-          preset="cardSubtitle"
-          ref={textInputRef}
-          placeholder={placeholder}
-        />
+        <TextField {...rest} editable={!disabled} multiline={multiline} preset="cardSubtitle" ref={textInputRef} placeholder={placeholder} />
       </Card>
       {errors && isTouched ? (
         <Text

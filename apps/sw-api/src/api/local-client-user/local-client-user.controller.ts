@@ -1,7 +1,7 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Put, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 
-import { LocalClientUserDtoType } from "@shortwaits/shared-lib";
+import { LocalClientDtoType } from "@shortwaits/shared-lib";
 import { AtGuard } from "../../common/guards";
 import { CreateLocalClientUserDto } from "./dto";
 import { LocalClientUserService } from "./local-client-user.service";
@@ -27,7 +27,7 @@ export class LocalClientUserController {
 
   @Put("business/:businessId")
   @HttpCode(HttpStatus.OK)
-  async updateBusinessLocalClient(@Param("businessId") businessId: string, @Body() localClientUser: LocalClientUserDtoType) {
+  async updateBusinessLocalClient(@Param("businessId") businessId: string, @Body() localClientUser: LocalClientDtoType) {
     return this.clientUsersService.updateLocalClientUserForBusiness(businessId, localClientUser);
   }
 }

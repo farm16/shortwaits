@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { ClientUserDtoType } from "@shortwaits/shared-lib";
+import { LocalClientDtoType } from "@shortwaits/shared-lib";
 import { isEmpty } from "lodash";
 import React, { Fragment, useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
@@ -19,7 +19,7 @@ export function LocalClientsTab({ isLoading, refresh }: { isLoading: boolean; re
 
   const handleAddClient = useCallback(() => {
     navigate("modals", {
-      screen: "add-client-modal-screen",
+      screen: "add-local-client-modal-screen",
     });
   }, [navigate]);
 
@@ -31,7 +31,7 @@ export function LocalClientsTab({ isLoading, refresh }: { isLoading: boolean; re
     }
   }, [currentLocalClients]);
 
-  const _renderItem: ListRenderItem<ClientUserDtoType> = useCallback(
+  const _renderItem: ListRenderItem<LocalClientDtoType> = useCallback(
     ({ item }) => {
       const title = item.givenName || item.familyName || item.displayName || item.username;
       const subTitle = item.email || item.phoneNumbers?.[0]?.number;
@@ -39,10 +39,10 @@ export function LocalClientsTab({ isLoading, refresh }: { isLoading: boolean; re
         <SelectorListItem
           imageUrl={item.accountImageUrl}
           onPress={() => {
-            navigate("authorized-stack", {
-              screen: "business-client-screen",
+            navigate("modals", {
+              screen: "update-local-client-modal-screen",
               params: {
-                client: item,
+                initialValues: item,
               },
             });
           }}

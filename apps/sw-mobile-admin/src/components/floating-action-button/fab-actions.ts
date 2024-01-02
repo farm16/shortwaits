@@ -38,7 +38,7 @@ export const useActions = () => {
         label: intl.formatMessage({ id: "Common.clients" }),
         onPress: () =>
           navigate("modals", {
-            screen: "add-client-modal-screen",
+            screen: "add-local-client-modal-screen",
           }),
         icon: "account-group",
         ...styles,

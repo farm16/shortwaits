@@ -1,4 +1,4 @@
-import { LocalClientUserDtoType } from "./local-client-user";
+import { LocalClientDtoType } from "./client-local";
 
 export type BusinessClientType = "external" | "local";
-export type AllClientsType = (Omit<LocalClientUserDtoType, "clientType"> & { clientType: BusinessClientType })[];
+export type AllClientsType = (Omit<LocalClientDtoType, "clientType"> & { clientType: BusinessClientType })[];

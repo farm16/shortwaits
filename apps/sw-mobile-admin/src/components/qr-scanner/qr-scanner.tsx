@@ -7,7 +7,8 @@ import { getFontSize, getResponsiveHeight, getResponsiveWidth } from "../../util
 type CameraProps = {
   onCodeScanned?: (codes: string) => void;
 };
-export function Camera(props: CameraProps) {
+
+export function QRScanner(props: CameraProps) {
   const { onCodeScanned } = props;
   const [manualValue, setManualValue] = useState<string>("");
   const [isManual, setIsManual] = useState(false);

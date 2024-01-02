@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { LocalClientUsersDtoType } from "@shortwaits/shared-lib";
+import { LocalClientsDtoType } from "@shortwaits/shared-lib";
 
 import type { RootState } from "../..";
 import { shortwaitsApi } from "../../../services";
 
-export const localClientsInitialState: LocalClientUsersDtoType = null;
+export const localClientsInitialState: LocalClientsDtoType = null;
 export const localClientsSlice = createSlice({
   name: "localClients",
   initialState: localClientsInitialState,

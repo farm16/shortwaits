@@ -94,7 +94,7 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
           description: "Manual Discount",
         },
       ],
-      payment: undefined,
+      payment: null,
       selectedDiscountCode: null,
     };
     return _initialValues;

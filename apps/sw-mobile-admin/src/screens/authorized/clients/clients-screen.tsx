@@ -31,19 +31,16 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
   const [isListSearchable, setIsListSearchable] = useState(false);
 
   const handleAddClient = useCallback(() => {
-    if (tabIndex === 1) {
-      navigation.navigate("modals", {
-        screen: "add-client-modal-screen",
-        params: {
-          clientType: "local",
-        },
-      });
-    } else {
-      navigation.navigate("modals", {
-        screen: "add-client-to-business-modal-screen",
-      });
-    }
-  }, [navigation, tabIndex]);
+    navigation.navigate("modals", {
+      screen: "add-client-modal-screen",
+    });
+  }, [navigation]);
+
+  const handleAddLocalClient = useCallback(() => {
+    navigation.navigate("modals", {
+      screen: "add-local-client-modal-screen",
+    });
+  }, [navigation]);
 
   const { error: osContactsError, isLoading: isOsContactsLoading, getContacts: getOsContacts } = useOsContacts();
   const [createLocalClients, createLocalClientsResult] = useCreateLocalClientsMutation();
@@ -132,14 +129,14 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
             ) : (
               <Fragment>
                 <IconButton iconType="contactSync" withMarginRight onPress={() => handleSyncContacts()} />
-                <IconButton iconType="add" withMarginRight onPress={() => handleAddClient()} />
+                <IconButton iconType="add" withMarginRight onPress={() => handleAddLocalClient()} />
               </Fragment>
             )}
           </Container>
         );
       },
     });
-  }, [handleAddClient, handleSyncContacts, isListSearchable, isLoading, navigation, tabIndex]);
+  }, [handleAddClient, handleAddLocalClient, handleSyncContacts, isListSearchable, isLoading, navigation, tabIndex]);
 
   const routes = useMemo(() => {
     return [
@@ -154,7 +151,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
     ];
   }, [intl]);
 
-  const renderScene = SceneMap({
+  const _renderScene = SceneMap({
     shortwaits: renderShortwaitsClientsTab,
     local: renderLocalClientsTab,
   });
@@ -179,7 +176,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
                   {i === 0 ? (
                     <Logo3 height={getResponsiveHeight(40)} color3={isSelected ? Colors.brandPrimary : "#8e8e93"} />
                   ) : (
-                    <Icon name={"cellphone"} size={getResponsiveHeight(20)} color={isSelected ? Colors.brandPrimary : "#8e8e93"} />
+                    <Icon name={"card-account-details"} size={getResponsiveHeight(23)} color={isSelected ? Colors.brandPrimary : "#8e8e93"} />
                   )}
                 </Animated.View>
               </Pressable>
@@ -196,7 +193,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
       <TabView
         renderTabBar={_renderTabBar}
         navigationState={{ index: tabIndex, routes }}
-        renderScene={renderScene}
+        renderScene={_renderScene}
         onIndexChange={setTabIndex}
         initialLayout={{ width: Dimensions.get("window").width }}
       />

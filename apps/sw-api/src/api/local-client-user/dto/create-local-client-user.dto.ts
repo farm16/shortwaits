@@ -1,8 +1,8 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { CreateLocalClientUserDtoType } from "@shortwaits/shared-lib";
+import { AddLocalClientDtoType } from "@shortwaits/shared-lib";
 import { IsNotEmpty, IsOptional } from "class-validator";
 
-export class CreateLocalClientUserDto implements CreateLocalClientUserDtoType {
+export class CreateLocalClientUserDto implements AddLocalClientDtoType {
   @ApiProperty()
   @IsNotEmpty()
   shortId: string;

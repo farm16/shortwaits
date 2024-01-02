@@ -1,6 +1,6 @@
 import { Injectable, InternalServerErrorException, NotFoundException, PreconditionFailedException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { LocalClientUserDtoType } from "@shortwaits/shared-lib";
+import { LocalClientDtoType } from "@shortwaits/shared-lib";
 import { Model } from "mongoose";
 import { getNewClientPayload, getSupportedLocales } from "../../utils";
 import { Business } from "../business/entities/business.entity";
@@ -90,7 +90,7 @@ export class LocalClientUserService {
   }
 
   // updates a single local client user
-  async updateLocalClientUserForBusiness(businessId: string, localClientUser: LocalClientUserDtoType) {
+  async updateLocalClientUserForBusiness(businessId: string, localClientUser: LocalClientDtoType) {
     try {
       // check business exists first else throw 404 then check if business has any users else throw 404 else return users
       const business = await this.businessModel.findById(businessId).exec();

@@ -1,19 +1,18 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
-
 import {
   AddClientModal,
-  AddClientToBusinessModal,
   AddEventModal,
+  AddLocalClientModal,
   AddServicesModal,
   AddStaffModal,
   ScheduleModal,
   SelectorScreenModal,
   ServicesModal,
   UpdateEventModal,
+  UpdateLocalClientModal,
   UpdateServicesModal,
 } from "../../screens";
-import { useTheme } from "../../theme";
 import { MODAL_SCREENS } from "../navigation-constants";
 import { ModalStackParamList } from "../navigation-types";
 
@@ -27,14 +26,13 @@ const {
   ADD_SERVICE_MODAL_SCREEN,
   UPDATE_SERVICE_MODAL_SCREEN,
   UPDATE_EVENT_MODAL_SCREEN,
-  ADD_CLIENT_TO_BUSINESS_MODAL_SCREEN,
+  UPDATE_LOCAL_CLIENT_MODAL_SCREEN,
+  ADD_LOCAL_CLIENT_MODAL_SCREEN,
 } = MODAL_SCREENS;
 
 const Stack = createStackNavigator<ModalStackParamList>();
 
 export const ModalsNavigator = (): React.ReactElement => {
-  const { Colors } = useTheme();
-
   return (
     <Stack.Navigator>
       <Stack.Screen name={SELECTOR_MODAL_SCREEN} component={SelectorScreenModal} />
@@ -45,8 +43,9 @@ export const ModalsNavigator = (): React.ReactElement => {
       <Stack.Screen name={ADD_SERVICE_MODAL_SCREEN} component={AddServicesModal} />
       <Stack.Screen name={UPDATE_SERVICE_MODAL_SCREEN} component={UpdateServicesModal} />
       <Stack.Screen name={UPDATE_EVENT_MODAL_SCREEN} component={UpdateEventModal} />
+      <Stack.Screen name={ADD_LOCAL_CLIENT_MODAL_SCREEN} component={AddLocalClientModal} />
+      <Stack.Screen name={UPDATE_LOCAL_CLIENT_MODAL_SCREEN} component={UpdateLocalClientModal} />
       <Stack.Screen name={ADD_CLIENT_MODAL_SCREEN} component={AddClientModal} />
-      <Stack.Screen name={ADD_CLIENT_TO_BUSINESS_MODAL_SCREEN} component={AddClientToBusinessModal} />
     </Stack.Navigator>
   );
 };

@@ -7,8 +7,8 @@ const paymentMethodSchema: Yup.SchemaOf<EventPaymentMethodType> = Yup.string().r
 
 const discountCodeSchema = Yup.object().shape({
   code: Yup.string(),
-  discount: Yup.number(),
-  description: Yup.string(),
+  discount: Yup.number().nullable(),
+  description: Yup.string().notRequired(),
   params: Yup.object()
     .shape({
       minPrice: Yup.number(),
@@ -24,7 +24,17 @@ const discountCodeSchema = Yup.object().shape({
       minDiscount: Yup.number(),
       maxDiscount: Yup.number(),
     })
-    .optional(),
+    .notRequired(),
+});
+
+const paymentSchema = Yup.object().shape({
+  paymentProcessedOn: Yup.string(),
+  paymentMethodId: Yup.string(),
+  amount: Yup.number(),
+  currency: Yup.string(),
+  description: Yup.string(),
+  statementDescriptor: Yup.string(),
+  metadata: Yup.object(),
 });
 
 export const createEventSchema: (config: any) => Yup.SchemaOf<CreateEventDtoType> = config =>
@@ -71,19 +81,21 @@ export const createEventSchema: (config: any) => Yup.SchemaOf<CreateEventDtoType
     endTime: Yup.string(),
     canceled: Yup.boolean(),
     priceFinal: Yup.number(),
-    payment: Yup.object().shape({
-      paymentProcessedOn: Yup.string(),
-      paymentMethodId: Yup.string(),
-      amount: Yup.number(),
-      currency: Yup.string(),
-      description: Yup.string(),
-      statementDescriptor: Yup.string(),
-      metadata: Yup.object(),
-    }),
-    cancellationReason: Yup.string(),
-    availableDiscountCodes: Yup.array().of(discountCodeSchema),
-    selectedDiscountCode: discountCodeSchema,
-    discountAmount: Yup.number(),
+    payment: Yup.object()
+      .shape({
+        paymentProcessedOn: Yup.string(),
+        paymentMethodId: Yup.string(),
+        amount: Yup.number(),
+        currency: Yup.string(),
+        description: Yup.string(),
+        statementDescriptor: Yup.string(),
+        metadata: Yup.object(),
+      })
+      .nullable(),
+    cancellationReason: Yup.string().optional(),
+    availableDiscountCodes: Yup.array().of(discountCodeSchema).optional(),
+    selectedDiscountCode: discountCodeSchema.nullable(),
+    discountAmount: Yup.number().optional(),
   });
 
 export const updateEventSchema: (config: any) => Yup.SchemaOf<UpdateEventDtoType> = config =>
@@ -130,17 +142,19 @@ export const updateEventSchema: (config: any) => Yup.SchemaOf<UpdateEventDtoType
     endTime: Yup.string(),
     canceled: Yup.boolean(),
     priceFinal: Yup.number(),
-    payment: Yup.object().shape({
-      paymentProcessedOn: Yup.string(),
-      paymentMethodId: Yup.string(),
-      amount: Yup.number(),
-      currency: Yup.string(),
-      description: Yup.string(),
-      statementDescriptor: Yup.string(),
-      metadata: Yup.object(),
-    }),
-    cancellationReason: Yup.string(),
-    availableDiscountCodes: Yup.array().of(discountCodeSchema),
-    selectedDiscountCode: discountCodeSchema,
-    discountAmount: Yup.number(),
+    payment: Yup.object()
+      .shape({
+        paymentProcessedOn: Yup.string(),
+        paymentMethodId: Yup.string(),
+        amount: Yup.number(),
+        currency: Yup.string(),
+        description: Yup.string(),
+        statementDescriptor: Yup.string(),
+        metadata: Yup.object(),
+      })
+      .optional(),
+    cancellationReason: Yup.string().optional(),
+    availableDiscountCodes: Yup.array().of(discountCodeSchema).optional(),
+    selectedDiscountCode: discountCodeSchema.optional(),
+    discountAmount: Yup.number().optional(),
   });

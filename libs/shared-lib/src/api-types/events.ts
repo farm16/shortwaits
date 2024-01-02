@@ -1,4 +1,4 @@
-import { BusinessUsersDtoType, ClientUsersDtoType, CommonResponseType, LocalClientUsersDtoType } from ".";
+import { BusinessUsersDtoType, ClientUsersDtoType, CommonResponseType, LocalClientsDtoType } from ".";
 import { ConvertToDtoType, EventType, WithDbProps } from "..";
 
 export type FilteredEvent = Omit<EventType, "deleted" | "createdBy" | "updatedBy" | "updatedBy" | "__v" | "_id" | "status">;
@@ -14,7 +14,7 @@ export type EventsResponseType = CommonResponseType<EventsDtoType>;
 
 export type PeopleInEventResponseType = CommonResponseType<{
   clientUsers: ClientUsersDtoType;
-  localClientUsers: LocalClientUsersDtoType;
+  localClientUsers: LocalClientsDtoType;
   businessUsers: BusinessUsersDtoType;
   event: EventDtoType;
 }>;

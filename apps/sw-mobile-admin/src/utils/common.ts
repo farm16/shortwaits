@@ -1,4 +1,4 @@
-import { ClientUsersDtoType, LocalClientUsersDtoType } from "@shortwaits/shared-lib";
+import { ClientUsersDtoType, LocalClientsDtoType } from "@shortwaits/shared-lib";
 import { isEqual, noop } from "lodash";
 import { Alert } from "react-native";
 
@@ -26,7 +26,7 @@ export const compareFormObjectsBeforeAbort = ({ obj1, obj2, onAbort = noop }) =>
 };
 
 // this combines clients with local clients into a single array
-export const getCombinedClientTypes = (clients: ClientUsersDtoType, localClients: LocalClientUsersDtoType) => {
+export const getCombinedClientTypes = (clients: ClientUsersDtoType, localClients: LocalClientsDtoType) => {
   const combinedClients = [...clients, ...localClients];
   return combinedClients;
 };

@@ -21,7 +21,7 @@ export function ShortwaitsClientsTab({ isLoading, refresh }: { isLoading: boolea
 
   const handleAddClient = useCallback(() => {
     navigate("modals", {
-      screen: "add-client-to-business-modal-screen",
+      screen: "add-client-modal-screen",
     });
   }, [navigate]);
 
