@@ -40,12 +40,14 @@ export class LocalClientUserService {
       if (!business) {
         throw new NotFoundException(`Business #${businessId} not found`);
       }
+
       if (localClientUsers?.length === 0) {
         return {
           localClientUsers: [],
           business: business,
         };
       }
+
       const newLocalClientUsersPayload = localClientUsers.map(localClientUser => {
         return getNewClientPayload({
           email: localClientUser.email,
@@ -66,10 +68,12 @@ export class LocalClientUserService {
 
       const uniqueLocalClientsIds = getUniqueIdArray([...newLocalClientUserIds, ...business.localClients]);
       business.localClients = uniqueLocalClientsIds;
+
       const updatedBusiness = await business.save();
+      const newLocalClients = await this.localClientUserModel.find({ _id: { $in: updatedBusiness.localClients } }).exec();
 
       return {
-        localClientUsers: newLocalClientUsers,
+        localClientUsers: newLocalClients,
         business: updatedBusiness,
       };
     } catch (error) {
