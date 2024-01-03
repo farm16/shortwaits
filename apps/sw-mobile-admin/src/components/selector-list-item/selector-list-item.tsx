@@ -17,6 +17,7 @@ type SelectorListItemProps = {
   title: string;
   subTitle?: string;
   textStyle?: TextStyle;
+  subTextStyle?: TextStyle;
   imageUrl?: string;
 } & ButtonProps;
 
@@ -35,6 +36,7 @@ export const SelectorListItem: FC<SelectorListItemProps> = props => {
     subTitle,
     textStyle,
     imageUrl,
+    subTextStyle,
     ...rest
   } = props;
 
@@ -70,7 +72,7 @@ export const SelectorListItem: FC<SelectorListItemProps> = props => {
         {subTitle && (
           <>
             <Space size="tiny" />
-            <Text preset="cardSubtitle" text={subTitle} />
+            <Text preset="cardSubtitle" text={subTitle} style={subTextStyle} />
           </>
         )}
       </View>

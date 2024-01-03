@@ -34,7 +34,7 @@ export function LocalClientsTab({ isLoading, refresh }: { isLoading: boolean; re
   const _renderItem: ListRenderItem<LocalClientDtoType> = useCallback(
     ({ item }) => {
       const title = item.givenName || item.familyName || item.displayName || item.username;
-      const subTitle = item.email || item.phoneNumbers?.[0]?.number;
+      const subTitle = `ID: ${item.shortId}`;
       return (
         <SelectorListItem
           imageUrl={item.accountImageUrl}
@@ -45,6 +45,9 @@ export function LocalClientsTab({ isLoading, refresh }: { isLoading: boolean; re
                 initialValues: item,
               },
             });
+          }}
+          subTextStyle={{
+            fontSize: getResponsiveHeight(16),
           }}
           rightIconName={"chevron-right"}
           title={title}
@@ -70,6 +73,21 @@ export function LocalClientsTab({ isLoading, refresh }: { isLoading: boolean; re
     }
   };
 
+  const _renderListEmptyComponent = useCallback(() => {
+    return (
+      <View
+        style={{
+          marginTop: getResponsiveHeight(16),
+          marginHorizontal: getResponsiveHeight(16),
+        }}
+      >
+        {isEmpty(currentLocalClients) ? (
+          <NonIdealState type={"noClients"} buttons={[<Button text={intl.formatMessage({ id: "Common.addClient" })} onPress={() => handleAddClient()} />]} />
+        ) : null}
+      </View>
+    );
+  }, [currentLocalClients, handleAddClient, intl]);
+
   return (
     <Fragment>
       <View
@@ -85,18 +103,7 @@ export function LocalClientsTab({ isLoading, refresh }: { isLoading: boolean; re
           padding: getResponsiveHeight(16),
         }}
         refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refresh} />}
-        ListEmptyComponent={
-          <View
-            style={{
-              marginTop: getResponsiveHeight(16),
-              marginHorizontal: getResponsiveHeight(16),
-            }}
-          >
-            {isEmpty(currentLocalClients) ? (
-              <NonIdealState type={"noClients"} buttons={[<Button text={intl.formatMessage({ id: "Common.addClient" })} onPress={() => handleAddClient()} />]} />
-            ) : null}
-          </View>
-        }
+        ListEmptyComponent={_renderListEmptyComponent}
         renderItem={_renderItem}
         data={filteredLocalClientsData}
       />

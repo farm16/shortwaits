@@ -83,11 +83,11 @@ export const addLocalClientSchema: (config: any) => Yup.SchemaOf<AddLocalClientD
   Yup.object().shape({
     shortId: Yup.string().optional(),
     isSocialAccount: Yup.boolean().optional(),
-    socialAccount: socialAccountSchema.optional(),
-    deviceSetting: deviceSettingSchema.optional(),
-    accountSettings: accountSettingsSchema.optional(),
-    clientType: Yup.mixed().required().oneOf(["local", "external"]),
-    username: Yup.string().min(3, "a longer name is required").required(),
+    socialAccount: socialAccountSchema.nullable(),
+    deviceSetting: deviceSettingSchema.nullable(),
+    accountSettings: accountSettingsSchema.nullable(),
+    clientType: Yup.mixed().required().oneOf(["local", "external"]).required(),
+    username: Yup.string().min(3, "a longer name is required").optional(),
     alias: Yup.mixed().required().oneOf(["username", "familyName", "givenName", "middleName", "displayName"]),
     displayName: Yup.string().min(3, "a longer name is required").required("this field is required"),
     familyName: Yup.string().min(3, "need to add more characters").optional(),
@@ -99,7 +99,6 @@ export const addLocalClientSchema: (config: any) => Yup.SchemaOf<AddLocalClientD
     phoneNumbers: phoneNumbersSchema.optional(),
     imAddresses: imAddressesSchema.optional(),
     addresses: addressesSchema.optional(),
-    socialAccounts: socialAccountsSchema.optional(),
     desiredCurrencies: Yup.array().of(Yup.string()),
   });
 

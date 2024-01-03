@@ -72,9 +72,9 @@ export const AddLocalClientModal: FC<ModalsScreenProps<"add-local-client-modal-s
       ],
       shortId: "",
       isSocialAccount: false,
-      socialAccount: undefined,
-      deviceSetting: undefined,
-      accountSettings: undefined,
+      socialAccount: null,
+      deviceSetting: null,
+      accountSettings: null,
     };
     return _initialValues;
   }, []);
@@ -85,7 +85,7 @@ export const AddLocalClientModal: FC<ModalsScreenProps<"add-local-client-modal-s
       onSubmit: formData => {
         createLocalClients({
           businessId: business._id,
-          body: [formData],
+          body: [formData], // needs to be an array to support multiple clients
         });
         if (onSubmit) {
           onSubmit(formData);

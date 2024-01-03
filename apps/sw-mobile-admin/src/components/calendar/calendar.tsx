@@ -34,7 +34,7 @@ export const Calendar: FC<CalendarProps> = memo(props => {
   const currentBusiness = useBusiness();
   const currentEvents = useEvents();
 
-  const filteredEvents = currentEvents.filter(event => {
+  const filteredEvents = currentEvents?.filter(event => {
     console.log("event.status.statusName", event.status.statusName);
     const isCompleted = event.status.statusName === "COMPLETED";
     const isCanceled = event.status.statusName === "CANCELED";
