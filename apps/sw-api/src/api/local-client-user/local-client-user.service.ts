@@ -2,7 +2,7 @@ import { Injectable, InternalServerErrorException, NotFoundException, Preconditi
 import { InjectModel } from "@nestjs/mongoose";
 import { LocalClientDtoType } from "@shortwaits/shared-lib";
 import { Model } from "mongoose";
-import { getNewClientPayload, getSupportedLocales } from "../../utils";
+import { getNewClientPayload, getSupportedLocales, getUniqueIdArray } from "../../utils";
 import { Business } from "../business/entities/business.entity";
 import { CreateLocalClientUserDto } from "./dto";
 import { LocalClientUser } from "./entities/local-client-user.entity";
@@ -64,20 +64,8 @@ export class LocalClientUserService {
       const newLocalClientUsers = await this.localClientUserModel.create(newLocalClientUsersPayload);
       const newLocalClientUserIds = newLocalClientUsers.map(localClientUser => localClientUser._id);
 
-      const getUniqueArray = arr => {
-        const seen = new Set();
-        return arr.filter(item => {
-          const objectIdStr = item.toString(); // Convert ObjectId to string for Set
-          if (!seen.has(objectIdStr)) {
-            seen.add(objectIdStr);
-            return true;
-          }
-          return false;
-        });
-      };
-
-      const uniqueUserIds = getUniqueArray(newLocalClientUserIds);
-      business.localClients = uniqueUserIds;
+      const uniqueLocalClientsIds = getUniqueIdArray([...newLocalClientUserIds, ...business.localClients]);
+      business.localClients = uniqueLocalClientsIds;
       const updatedBusiness = await business.save();
 
       return {
