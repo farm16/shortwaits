@@ -30,3 +30,20 @@ export const getCombinedClientTypes = (clients: ClientUsersDtoType, localClients
   const combinedClients = [...clients, ...localClients];
   return combinedClients;
 };
+
+// this converts id to asdd-asdas-asdds every 4 characters
+export const getFriendlyShortId = (inputId: string) => {
+  // Check if the inputId is a valid string
+  if (typeof inputId !== "string") {
+    return "";
+  }
+
+  // Remove any non-alphanumeric characters from the inputId
+  const cleanedId = inputId.replace(/[^a-zA-Z0-9]/g, "");
+  // Split the cleanedId into chunks of 4 characters
+  const chunks = cleanedId.match(/.{1,4}/g) || [];
+  // Join the chunks with dashes to get the desired format
+  const formattedId = chunks.join("-");
+
+  return formattedId;
+};

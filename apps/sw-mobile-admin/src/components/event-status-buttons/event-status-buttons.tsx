@@ -113,11 +113,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: EVENT_ITEM_BORDER_RADIUS,
     // add shadow for ios and android
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 1,
+    // shadowColor: "#000",
+    // shadowOffset: { width: 0, height: 1 },
+    // shadowOpacity: 0.1,
+    // shadowRadius: 2,
+    // elevation: 1,
   },
   button: {
     justifyContent: "center",

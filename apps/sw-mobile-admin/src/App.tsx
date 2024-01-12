@@ -1,11 +1,10 @@
 import { PortalProvider as GPortalProvider, enableLogging } from "@gorhom/portal";
 import React from "react";
 import { IntlProvider } from "react-intl";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { MD3LightTheme as DefaultTheme, Provider as PaperProvider } from "react-native-paper";
 import { SafeAreaProvider, initialWindowMetrics } from "react-native-safe-area-context";
 import { Provider as ReduxProvider } from "react-redux";
-
-import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { PersistGate } from "redux-persist/integration/react";
 import { Banner, FloatingActionButton, PremiumMembershipModal } from "./components";
 import copies from "./i18n/copies.json";

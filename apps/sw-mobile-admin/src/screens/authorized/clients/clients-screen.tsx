@@ -108,7 +108,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
                 fontWeight: "700",
                 paddingLeft: 16,
               }}
-              text={"Clients"}
+              text={tabIndex === 0 ? "Shortwaits Clients" : "Internal Clients"}
             />
           </Container>
         );

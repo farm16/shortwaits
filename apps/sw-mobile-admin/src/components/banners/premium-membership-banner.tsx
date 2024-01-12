@@ -1,16 +1,18 @@
 import React, { useCallback } from "react";
-import { View, StyleSheet, ImageBackground, TouchableOpacity, Platform } from "react-native";
-import { Button, Container, Text } from "../common";
-import image from "./background_1.png";
+import { useIntl } from "react-intl";
+import { ImageBackground, Platform, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useDispatch } from "react-redux";
 import { hidePremiumMembershipBanner } from "../../store";
+import { useTheme } from "../../theme";
 import { navigate } from "../../utils";
-import { useIntl } from "react-intl";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { Button, Container, Text } from "../common";
+import image from "./background_1.png";
 
 export function PremiumMembershipBanner() {
   const insets = useSafeAreaInsets();
+  const { Colors } = useTheme();
   const intl = useIntl();
 
   const dispatch = useDispatch();
@@ -39,7 +41,12 @@ export function PremiumMembershipBanner() {
       ]}
       imageStyle={styles.image}
     >
-      <View>
+      <View
+        style={{
+          width: "100%",
+          paddingHorizontal: 16,
+        }}
+      >
         <TouchableOpacity
           style={{
             position: "absolute",
@@ -74,8 +81,18 @@ export function PremiumMembershipBanner() {
         >
           <Button
             preset="none"
-            onPress={() => navigate("authorized-stack", { screen: "plans-screen" })}
-            style={styles.button}
+            onPress={() =>
+              navigate("authorized-stack", {
+                screen: "plans-screen",
+              })
+            }
+            style={[
+              styles.button,
+              {
+                backgroundColor: "rgba(0,0,0,0.7)",
+                //backgroundColor: Colors.brandPrimary
+              },
+            ]}
             textStyle={styles.buttonText}
             text={intl.formatMessage({ id: "Banner.premiumMembership.joinButton" })}
           />
@@ -100,22 +117,25 @@ const styles = StyleSheet.create({
     fontSize: 23,
     fontWeight: "800",
     color: "#170F02",
+    alignSelf: "center",
+    textAlign: "center",
   },
   subTitle: {
     marginTop: 4,
     fontSize: 16,
     color: "white",
     fontWeight: "600",
+    alignSelf: "center",
+    textAlign: "center",
   },
   button: {
-    backgroundColor: "pink",
     height: 32,
     borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
   },
   buttonText: {
-    color: "rgba(0,0,0,0.87)",
+    color: "white",
     marginHorizontal: 28,
     fontSize: 14,
     fontWeight: "700",

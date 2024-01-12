@@ -8,7 +8,7 @@ import { RefreshControl } from "react-native-gesture-handler";
 import { AnimatedSearchBar, Button, List, NonIdealState, SelectorListItem } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useLocalClients } from "../../../store";
-import { getResponsiveHeight } from "../../../utils";
+import { getFriendlyShortId, getResponsiveHeight } from "../../../utils";
 
 export function LocalClientsTab({ isLoading, refresh }: { isLoading: boolean; refresh: () => void }) {
   const intl = useIntl();
@@ -34,7 +34,9 @@ export function LocalClientsTab({ isLoading, refresh }: { isLoading: boolean; re
   const _renderItem: ListRenderItem<LocalClientDtoType> = useCallback(
     ({ item }) => {
       const title = item.givenName || item.familyName || item.displayName || item.username;
-      const subTitle = `ID: ${item.shortId}`;
+
+      const subTitle = `ID: ${getFriendlyShortId(item.shortId)}`;
+
       return (
         <SelectorListItem
           imageUrl={item.accountImageUrl}
@@ -47,7 +49,7 @@ export function LocalClientsTab({ isLoading, refresh }: { isLoading: boolean; re
             });
           }}
           subTextStyle={{
-            fontSize: getResponsiveHeight(16),
+            fontSize: getResponsiveHeight(14),
           }}
           rightIconName={"chevron-right"}
           title={title}

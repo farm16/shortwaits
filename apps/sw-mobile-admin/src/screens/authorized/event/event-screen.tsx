@@ -1,6 +1,5 @@
 import { truncate } from "lodash";
 import React, { useLayoutEffect } from "react";
-
 import { BackButton, Container, EventStatusButtons, IconButton, Screen, Space, Text } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useEvent } from "../../../store";
