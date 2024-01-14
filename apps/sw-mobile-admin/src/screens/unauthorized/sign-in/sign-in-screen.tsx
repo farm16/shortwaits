@@ -1,9 +1,8 @@
 import { CompositeNavigationProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import React, { FC, useCallback, useEffect, useState } from "react";
-import { ActivityIndicator, Alert, AlertButton, StyleSheet, View } from "react-native";
-
 import { useIntl } from "react-intl";
+import { ActivityIndicator, Alert, AlertButton, StyleSheet, View } from "react-native";
 import Facebook from "../../../assets/icons/facebook.svg";
 import Google from "../../../assets/icons/google.svg";
 import { Button, Container, Screen, Space, Text, TextFieldCard } from "../../../components";
@@ -185,7 +184,7 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
       <Space size="large" />
       <Button preset="social" onPress={handleFacebookSignIn}>
         <Facebook width={30} height={30} style={{ position: "absolute", left: 0, margin: 16 }} />
-        <Container style={styles.buttonContainer}>
+        <Container style={styles.socialButtonContainer}>
           <Text
             preset="social"
             text={intl.formatMessage({
@@ -196,7 +195,7 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
       </Button>
       <Space size="small" />
       <Button preset="social" onPress={handleGoogleSignIn}>
-        <Container style={styles.buttonContainer}>
+        <Container style={styles.socialButtonContainer}>
           <Google width={30} height={30} style={{ position: "absolute", left: 0, margin: 16 }} />
           <Text
             preset="social"
@@ -240,7 +239,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     alignItems: "center",
   },
-  buttonContainer: {
+  socialButtonContainer: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",

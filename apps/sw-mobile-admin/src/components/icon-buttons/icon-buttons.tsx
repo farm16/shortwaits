@@ -7,7 +7,7 @@ import { ThemeColorName } from "../../theme/Colors";
 import { Button, ButtonProps, Spinner, Text } from "../common";
 import { CircleIconsKeys, _circleIcons } from "./icon-presets";
 
-const disabledStates = ["loading", "disabled", "enable"];
+const disabledStates = ["loading", "disabled"];
 
 export const ForwardButton: FC<ButtonProps> = props => (
   <Button {...props} preset="icon">
@@ -131,6 +131,7 @@ export const IconButton: FC<
   ButtonProps & {
     iconType: CircleIconsKeys;
     iconSize?: number;
+    disabledAlertMessage?: string;
     withMarginLeft?: boolean;
     withMarginRight?: boolean;
   }
@@ -150,14 +151,20 @@ export const IconButton: FC<
     marginRight: withMarginRight ? 16 : undefined,
   };
 
+  const handleDisabledAlert = () => {
+    alert(props.disabledAlertMessage ?? "button is disabled");
+  };
+  const isDisabled = props.disabledAlertMessage ? false : props.disabled;
+  const onPress = props.disabledAlertMessage ? handleDisabledAlert : props.onPress;
+
   return (
-    <Button preset="none" {...rest} style={[style, styleOverride]} state={state}>
+    <Button preset="none" {...rest} onPress={onPress} disabled={isDisabled} style={[style, styleOverride]} state={state}>
       {text ? (
         <Text preset="none" style={[{ color: Colors.brandSecondary7, fontWeight: "600" }, textStyle]} text={text} />
       ) : (
         <Icon
           name={circleIcons[iconType] ? circleIcons[iconType].name : circleIcons.default.name}
-          color={disabledStates.includes(state) ? Colors.gray : Colors[circleIcons[iconType]["color"]]}
+          color={props.disabled ? Colors.gray : Colors[circleIcons[iconType]["color"]]}
           size={circleIcons[iconType].size || iconSize}
         />
       )}

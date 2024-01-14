@@ -22,7 +22,7 @@ export const UnauthorizedNavigator = () => {
       backgroundColor: Colors.background,
     },
     withOutBorder: {
-      backgroundColor: Colors.lightBackground,
+      // backgroundColor: Colors.lightBackground,
       shadowColor: Colors.transparent,
       borderBottomWidth: 0,
       elevation: 0, // for Android

@@ -5,12 +5,14 @@ import React, { FC, useCallback, useEffect, useLayoutEffect, useState } from "re
 import { useIntl } from "react-intl";
 import { Alert } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
-import { BackButton, Button, ButtonCard, CurrencyFieldCard, FormContainer, IconButton, Space, Text, TextFieldCard, TimePickerFieldCard } from "../../../components";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { BackButton, Button, ButtonCard, Container, CurrencyFieldCard, FormContainer, IconButton, Space, Text, TextFieldCard, TimePickerFieldCard } from "../../../components";
 import { useForm } from "../../../hooks";
 import { ModalsScreenProps } from "../../../navigation";
 import { useUpdateEventMutation } from "../../../services";
 import { useBusiness, useServices } from "../../../store";
-import { compareFormObjectsBeforeAbort, getEmojiString } from "../../../utils";
+import { useTheme } from "../../../theme";
+import { compareFormObjectsBeforeAbort, getEmojiString, nextEventStatuses } from "../../../utils";
 
 export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">> = ({ navigation, route }) => {
   const params = route?.params;
@@ -20,11 +22,13 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
   const initialValues = params?.initialValues ?? null;
 
   const intl = useIntl();
+  const { Colors } = useTheme();
   const services = useServices();
   const business = useBusiness();
   const [selectedService, setSelectedService] = useState<ServiceDtoType | null>(initialValues.serviceId ? services.find(service => service._id === initialValues.serviceId) : null);
   const [isFree, setIsFree] = useState<boolean>(false);
   const [updateEvent, updateEventStatus] = useUpdateEventMutation();
+  const isEventDisabled = (nextEventStatuses[initialValues?.status?.statusName] ?? []).length === 0;
 
   const customEventValidation = (formData: UpdateEventDtoType): FormikErrors<UpdateEventDtoType> => {
     const errors: FormikErrors<UpdateEventDtoType> = {};
@@ -82,6 +86,7 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
       headerLeft: () => <BackButton onPress={handleOnGoBack} />,
       headerRight: () => (
         <IconButton
+          disabled={isEventDisabled}
           onPress={() =>
             Alert.alert("Delete Event", "Are you sure you want to delete this event?", [
               {
@@ -102,7 +107,7 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
       ),
       headerTitle: () => <Text preset="text" text="Update Event" />,
     });
-  }, [handleOnGoBack, navigation]);
+  }, [handleOnGoBack, isEventDisabled, navigation]);
 
   useEffect(() => {
     if (!selectedService) {
@@ -155,13 +160,28 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
   console.log("errors >>>>>", JSON.stringify(errors, null, 2));
   const emojis = values.labels.map(label => getEmojiString(label.emojiShortName)).join(" ");
 
+  const renderErrorMessage = useCallback(() => {
+    if (isEventDisabled) {
+      return (
+        <Container direction="row" alignItems="center" justifyContent="center" style={{ marginBottom: 16 }}>
+          <Icon name="alert-outline" size={24} color={Colors.warning} />
+          <Space direction="vertical" size="tiny" />
+          <Text preset="warning" text="This event is no longer active." />
+        </Container>
+      );
+    } else return null;
+  }, [Colors.warning, isEventDisabled]);
+
   return updateEventStatus.isLoading ? (
     <ActivityIndicator />
   ) : (
     <FormContainer footer={renderSubmitButton}>
-      <TextFieldCard title="Name" value={values?.name} onChangeText={handleChange("name")} isTouched={touched.name} errors={errors.name} />
+      <Space />
+      {renderErrorMessage()}
+      <TextFieldCard disabled={isEventDisabled} title="Name" value={values?.name} onChangeText={handleChange("name")} isTouched={touched.name} errors={errors.name} />
       <Space size="tiny" />
       <TextFieldCard
+        disabled={isEventDisabled}
         title="Description"
         value={values?.description}
         multiline
@@ -170,9 +190,18 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
         errors={errors.description}
       />
       <Space size="tiny" />
-      <TextFieldCard title="Notes" value={values?.notes} multiline onChangeText={handleChange("notes")} isTouched={touched.notes} errors={errors.notes} />
+      <TextFieldCard
+        disabled={isEventDisabled}
+        title="Notes"
+        value={values?.notes}
+        multiline
+        onChangeText={handleChange("notes")}
+        isTouched={touched.notes}
+        errors={errors.notes}
+      />
       <ButtonCard
         title="Labels"
+        disabled={isEventDisabled}
         subTitle={values.labels.length > 0 ? `${emojis}` : "Select labels"}
         onPress={() =>
           navigation.navigate("modals", {
@@ -191,6 +220,7 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
         }
       />
       <ButtonCard
+        disabled={isEventDisabled}
         title={intl.formatMessage({ id: "AddEventModal.service.title" })}
         subTitle={selectedService ? selectedService.name : intl.formatMessage({ id: "AddEventModal.service.description" })}
         leftIconName={selectedService ? "circle" : "circle-outline"}
@@ -216,6 +246,7 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
         }
       />
       <ButtonCard
+        disabled={isEventDisabled}
         isVisible={!selectedService}
         rightIconName={values?.hasDuration ? "checkbox-outline" : "checkbox-blank-outline"}
         title={intl.formatMessage({ id: "AddEventModal.noDuration" })}
@@ -224,6 +255,7 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
         }}
       />
       <TimePickerFieldCard
+        disabled={isEventDisabled}
         title={intl.formatMessage({ id: "AddEventModal.startTime" })}
         date={new Date(values.startTime)}
         onChange={handleChange("startTime")}
@@ -231,7 +263,7 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
         errors={errors.startTime}
       />
       <TimePickerFieldCard
-        disabled={values?.hasDuration}
+        disabled={values?.hasDuration || isEventDisabled}
         title={intl.formatMessage({ id: "AddEventModal.endTime" })}
         date={new Date(values.expectedEndTime)}
         onChange={handleChange("expectedEndTime")}
@@ -241,7 +273,7 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
 
       {selectedService?.price === 0 ? null : (
         <ButtonCard
-          disabled={!selectedService}
+          disabled={!selectedService || isEventDisabled}
           rightIconName={isFree ? "checkbox-outline" : "checkbox-blank-outline"}
           title={intl.formatMessage({ id: "AddEventModal.free" })}
           isVisible={!selectedService}
@@ -256,6 +288,7 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
         />
       )}
       <ButtonCard
+        disabled={isEventDisabled}
         title={intl.formatMessage({ id: "AddEventModal.paymentMethod" })}
         subTitle={values.paymentMethod ? eventPaymentMethods[values.paymentMethod] : intl.formatMessage({ id: "AddEventModal.selectPaymentMethod" })}
         onPress={() =>
@@ -278,7 +311,7 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
         }
       />
       <CurrencyFieldCard
-        disabled={!!selectedService}
+        disabled={!!selectedService || isEventDisabled}
         title={intl.formatMessage({ id: "AddEventModal.price" })}
         keyboardType="number-pad"
         placeholder={intl.formatMessage({ id: "AddEventModal.enterPrice" })}
@@ -289,6 +322,7 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
         currencyType={"USD"}
       />
       <ButtonCard
+        disabled={isEventDisabled}
         title={intl.formatMessage({ id: "AddEventModal.availableDiscountCodes.title" })}
         subTitle={values.selectedDiscountCode ? values.selectedDiscountCode.code : intl.formatMessage({ id: "AddEventModal.availableDiscountCodes.subTitle" })}
         onPress={() =>
@@ -321,6 +355,7 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
       />
       {values?.selectedDiscountCode?.code === "MANUAL" ? (
         <CurrencyFieldCard
+          disabled={isEventDisabled}
           title="Discount Amount"
           keyboardType="number-pad"
           value={values?.selectedDiscountCode?.discount}
@@ -333,12 +368,13 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
       <ButtonCard
         rightIconName={values?.repeat ? "checkbox-outline" : "checkbox-blank-outline"}
         title={"Recurring"}
-        disabled
+        disabled // TODO: implement recurring events
         onPress={() => {
           setFieldValue("repeat", !values?.repeat);
         }}
       />
       <ButtonCard
+        disabled={isEventDisabled}
         title={intl.formatMessage({ id: "AddEventModal.staff.title" })}
         subTitle={
           values.staffIds.length > 0
@@ -364,7 +400,7 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
         }
       />
       <ButtonCard
-        disabled={values?.isPublicEvent ? true : false}
+        disabled={values?.isPublicEvent || isEventDisabled}
         title={intl.formatMessage({ id: "AddEventModal.client.title" })}
         subTitle={
           values.clientsIds.length > 0

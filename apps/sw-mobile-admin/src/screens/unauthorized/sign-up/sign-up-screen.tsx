@@ -4,7 +4,6 @@ import React, { FC, useCallback } from "react";
 import { useIntl } from "react-intl";
 import { Alert, StyleSheet, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
-
 import { Welcome2 } from "../../../assets";
 import EMail from "../../../assets/icons/email.svg";
 import Facebook from "../../../assets/icons/facebook.svg";

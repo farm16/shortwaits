@@ -23,11 +23,11 @@ export class LocalClientUserService {
       if (!business) {
         throw new NotFoundException(`Business #${businessId} not found`);
       }
-      if (business.localClients?.length === 0) {
+      if (business?.localClients?.length === 0) {
         return [];
       }
       // look for multiple ids in localClientUserModel
-      const localClientUsers = await this.localClientUserModel.find({ _id: { $in: business.localClients } }).exec();
+      const localClientUsers = await this.localClientUserModel.find({ _id: { $in: business.localClients ?? [] } }).exec();
       return localClientUsers;
     } catch (error) {
       throw new InternalServerErrorException(error.message);
@@ -66,11 +66,11 @@ export class LocalClientUserService {
       const newLocalClientUsers = await this.localClientUserModel.create(newLocalClientUsersPayload);
       const newLocalClientUserIds = newLocalClientUsers.map(localClientUser => localClientUser._id);
 
-      const uniqueLocalClientsIds = getUniqueIdArray([...newLocalClientUserIds, ...business.localClients]);
+      const uniqueLocalClientsIds = getUniqueIdArray([...newLocalClientUserIds, ...(business?.localClients ?? [])]);
       business.localClients = uniqueLocalClientsIds;
 
       const updatedBusiness = await business.save();
-      const newLocalClients = await this.localClientUserModel.find({ _id: { $in: updatedBusiness.localClients } }).exec();
+      const newLocalClients = await this.localClientUserModel.find({ _id: { $in: updatedBusiness?.localClients ?? [] } }).exec();
 
       return {
         localClientUsers: newLocalClients,

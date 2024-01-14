@@ -51,7 +51,7 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
   };
 
   return (
-    <Screen preset="scroll" backgroundColor="lightBackground" unsafeBottom unsafe>
+    <Screen preset="scroll" unsafeBottom unsafe>
       <List.Section>
         <List.Item
           title={<FormattedMessage id="Settings_Screen.business_plan.title" values={{ accountType: currentBusiness?.accountType }} />}

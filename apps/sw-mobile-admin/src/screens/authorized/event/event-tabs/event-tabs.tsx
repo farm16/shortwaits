@@ -1,3 +1,4 @@
+import { EventDtoType } from "@shortwaits/shared-lib";
 import React, { useCallback, useMemo, useState } from "react";
 import { useIntl } from "react-intl";
 import { Animated, Pressable, StyleSheet, View, useWindowDimensions } from "react-native";
@@ -12,7 +13,10 @@ type Route = {
   title: string;
 };
 
-export const EventScreenTabs = props => {
+type EventScreenTabsProps = {
+  event: EventDtoType;
+};
+export const EventScreenTabs = (props: EventScreenTabsProps) => {
   const { event } = props;
   const layout = useWindowDimensions();
   const { Colors } = useTheme();

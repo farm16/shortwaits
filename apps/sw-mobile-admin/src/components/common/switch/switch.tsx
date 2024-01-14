@@ -27,7 +27,7 @@ export const Switch = React.memo(
         ios_backgroundColor={isDisabled ? "#ddd" : Colors.red3}
         {...(isDisabled && {
           thumbColor: "#fff",
-          trackColor: { false: Colors.brandAccent1, true: Colors.brandAccent1 },
+          trackColor: { false: Colors.gray, true: Colors.gray },
         })}
       />
     );

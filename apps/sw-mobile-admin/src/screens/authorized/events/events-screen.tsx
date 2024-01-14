@@ -57,15 +57,21 @@ export function EventsScreen({ navigation }: AuthorizedScreenProps<"events-scree
           <Container direction="row" alignItems="center">
             <IconButton
               withMarginRight
-              iconType="magnify"
+              iconType="qr"
+              onPress={() => {
+                setIsQrVisible(true);
+              }}
+            />
+            <IconButton
+              withMarginRight
+              iconType="list"
               onPress={() =>
                 navigation.navigate("modals", {
                   screen: "selector-modal-screen",
                   params: {
-                    type: "static",
+                    type: "events",
                     closeOnSelect: false,
-                    searchable: true,
-                    headerTitle: intl.formatMessage({ id: "Events_Screen.searchEvents.headerTitle" }),
+                    headerTitle: intl.formatMessage({ id: "Events_Screen.allEvents.headerTitle" }),
                     itemRightIconColor: "brandSecondary",
                     itemRightIconName: "dots-vertical",
                     data: convertStaticSelectorModalData(currentsEvents ?? [], "events"),
@@ -79,13 +85,7 @@ export function EventsScreen({ navigation }: AuthorizedScreenProps<"events-scree
                 })
               }
             />
-            <IconButton
-              withMarginRight
-              iconType="qr"
-              onPress={() => {
-                setIsQrVisible(true);
-              }}
-            />
+
             {/* <IconButton withMarginRight iconType="calendar"  /> */}
           </Container>
         );

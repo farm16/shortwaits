@@ -27,20 +27,20 @@
     android:dataExtractionRules="@xml/data_extraction_rules"
     tools:ignore="DataExtractionRules"
     android:theme="@style/AppTheme">
-  <activity
-      android:name=".MainActivity"
-      android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode"
-      android:launchMode="singleTask"
-      android:windowSoftInputMode="adjustResize"
-      
-      android:exported="true">
-        <intent-filter>
-          <action android:name="android.intent.action.MAIN" />
-          <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+      <activity
+        android:name=".MainActivity"
+        android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode"
+        android:launchMode="singleTask"
+        android:windowSoftInputMode="adjustResize"
+        android:exported="true">
+          <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+          </intent-filter>
       </activity>
-    <meta-data
-      android:name="com.google.mlkit.vision.DEPENDENCIES"
-      android:value="barcode" />
+      <meta-data
+        android:name="com.google.mlkit.vision.DEPENDENCIES"
+        android:value="barcode"
+      />
   </application>
 </manifest>

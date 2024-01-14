@@ -189,7 +189,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
   );
 
   return (
-    <Screen preset="fixed" unsafe backgroundColor="lightBackground">
+    <Screen preset="fixed" unsafe>
       <TabView
         renderTabBar={_renderTabBar}
         navigationState={{ index: tabIndex, routes }}

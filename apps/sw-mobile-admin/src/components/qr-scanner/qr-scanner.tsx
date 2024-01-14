@@ -4,6 +4,10 @@ import { Code, Camera as VisionCamera, useCameraDevice, useCodeScanner } from "r
 import { Button, Space, Switch, Text, TextFieldCard } from "..";
 import { getFontSize, getResponsiveHeight, getResponsiveWidth } from "../../utils";
 
+/**
+ * todo: https://github.com/mrousavy/react-native-vision-camera/issues/2257
+ */
+
 type CameraProps = {
   onCodeScanned?: (codes: string) => void;
 };
@@ -33,9 +37,11 @@ export function QRScanner(props: CameraProps) {
 
   useEffect(() => {
     return () => {
-      setIsCameraActive(false);
+      if (device) {
+        setIsCameraActive(false);
+      }
     };
-  }, []);
+  }, [device]);
 
   useEffect(() => {
     console.log("device >>>", device);
@@ -52,35 +58,17 @@ export function QRScanner(props: CameraProps) {
     return (
       <View style={styles.cameraViewContainer}>
         <VisionCamera style={styles.visionCamera} device={device} isActive={isCameraActive} codeScanner={codeScanner} />
+        {/* </View> */}
         <Space />
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <Text
-            style={{
-              fontWeight: "600",
-            }}
-            text={isManual ? "Disable manual input" : "Enable manual input"}
-          />
-          <Switch
-            value={isManual}
-            onValueChange={() => {
-              setIsManual(s => !s);
-            }}
-          />
-        </View>
       </View>
     );
-  }, [codeScanner, device, isCameraActive, isManual]);
+  }, [codeScanner, device, isCameraActive]);
 
   return (
     <View style={styles.viewContainer}>
       <Space />
       <Text preset="title2" text={isManual ? "Enter Manually" : "Scan QR"} />
+
       {isManual ? (
         <View>
           <TextFieldCard
@@ -109,6 +97,29 @@ export function QRScanner(props: CameraProps) {
         renderCamera()
       )}
       <Space />
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <Text
+          style={{
+            fontWeight: "600",
+          }}
+          text={isManual ? "Disable manual input" : "Enable manual input"}
+        />
+        <Switch
+          disabled={!isCameraActive}
+          value={isManual}
+          onValueChange={() => {
+            setIsManual(s => !s);
+          }}
+        />
+      </View>
+      {isCameraActive ? null : <Text preset="failed" text={device ? "camera is not available" : "Camera is not available, please enable camera access in your device settings"} />}
+      <Space />
       <Text
         preset="subText"
         style={{
@@ -129,7 +140,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   cameraViewContainer: {
-    width: getResponsiveHeight(300),
+    // flex: 1,
+    // width: getResponsiveHeight(300),
     height: getResponsiveHeight(300),
     borderRadius: 15,
   },

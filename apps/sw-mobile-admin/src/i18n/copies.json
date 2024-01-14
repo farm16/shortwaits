@@ -111,6 +111,7 @@
     "Events_Screen.qrCodeModal.description": "Scan the QR code to book an appointment with",
     "Events_Screen.qrCodeModal.description2": "Note: The client will see all available services.",
     "Events_Screen.searchEvents.headerTitle": "Search Events",
+    "Events_Screen.allEvents.headerTitle": "All Events",
     "Events_Screen.nonIdealState.button": "Add Event",
     "NonIdealState.noData.message": "No events found",
     "NonIdealState.noTransactions.message": "No transactions found",
@@ -460,6 +461,7 @@
 
     "Events_Screen.title": "Eventos",
     "Events_Screen.searchEvents.headerTitle": "Buscar Eventos",
+    "Events_Screen.allEvents.headerTitle": "Todos los Eventos",
     "Events_Screen.qrCodeModal.title": "Reservar una cita",
     "Events_Screen.qrCodeModal.description": "Escanee el código QR para reservar una cita con",
     "Events_Screen.qrCodeModal.description2": "Nota: El cliente verá todos los servicios disponibles.",
@@ -592,6 +594,9 @@
     "AddEventModal.client.description": "Numero de clientes",
     "AddEventModal.client.emptyDescription": "seleciona un cliente",
     "AddEventModal.client.selector.headerTitle": "Clientes",
+    "AddEventModal.availableDiscountCodes.title": "Códigos de descuento disponibles",
+    "AddEventModal.availableDiscountCodes.subTitle": "Selecciona un código de descuento",
+    "AddEventModal.availableDiscountCodes.addAvailableDiscountCode": "Agregar descuento",
 
     "AddLocalClientModal.title": "Crear Cliente",
     "AddLocalClientModal.submitButton": "Crear Cliente",

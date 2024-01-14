@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useMemo } from "react";
 // import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { BottomTabNavigationOptions, createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useIntl } from "react-intl";
 import { Platform } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-
 import { ClientsScreen, EventsScreen, MyBusinessScreen, SettingsScreen } from "../../screens";
 import { useTheme } from "../../theme";
 import { AUTHORIZED_TAB_SCREENS } from "../navigation-constants";
@@ -14,17 +13,14 @@ const Tab = createBottomTabNavigator();
 export const AuthorizedTabNavigator = () => {
   const { Colors } = useTheme();
   const intl = useIntl();
-
-  return (
-    <Tab.Navigator
-      initialRouteName={AUTHORIZED_TAB_SCREENS.EVENTS_SCREEN}
-      screenOptions={{
+  const screenOptions = useMemo(
+    () =>
+      ({
         unmountOnBlur: true,
         headerShown: true,
         headerTitleAlign: "center",
         headerStyle: {
           borderTopWidth: 0,
-          backgroundColor: Colors.lightBackground,
           ...Platform.select({
             ios: {
               shadowColor: "#858F96",
@@ -45,12 +41,14 @@ export const AuthorizedTabNavigator = () => {
         },
         tabBarIconStyle: {},
         tabBarStyle: {
-          // height: Platform.OS === "android" ? 50 : undefined,
-          // paddingBottom: Platform.OS === "android" ? 4 : undefined,
           backgroundColor: Colors.white,
         },
-      }}
-    >
+      } as BottomTabNavigationOptions),
+    [Colors]
+  );
+
+  return (
+    <Tab.Navigator initialRouteName={AUTHORIZED_TAB_SCREENS.EVENTS_SCREEN} screenOptions={screenOptions}>
       <Tab.Screen
         name={AUTHORIZED_TAB_SCREENS.EVENTS_SCREEN}
         component={EventsScreen}

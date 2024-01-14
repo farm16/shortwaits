@@ -132,7 +132,7 @@ export const buttonPresets = ({
     social: {
       ...VIEW_BASE,
       borderRadius: 25,
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.lightBackground,
       flexDirection: "row",
       // backgroundColor: Colors.brandAccent,
       // borderWidth: 2,

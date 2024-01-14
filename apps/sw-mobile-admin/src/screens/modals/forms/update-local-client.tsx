@@ -126,7 +126,6 @@ export const UpdateLocalClientModal: FC<ModalsScreenProps<"update-local-client-m
     <FormContainer footer={_renderSubmitButton}>
       <TextFieldCard
         title={intl.formatMessage({ id: "AddLocalClientModal.nickname" })}
-        placeholder={""}
         value={values.displayName}
         onChangeText={handleChange("displayName")}
         isTouched={touched.displayName}
@@ -134,7 +133,6 @@ export const UpdateLocalClientModal: FC<ModalsScreenProps<"update-local-client-m
       />
       <TextFieldCard
         title={intl.formatMessage({ id: "AddLocalClientModal.firstName" })}
-        placeholder={intl.formatMessage({ id: "AddLocalClientModal.firstName.placeholder" })}
         value={values.givenName}
         onChangeText={handleChange("givenName")}
         isTouched={touched.givenName}
@@ -142,20 +140,12 @@ export const UpdateLocalClientModal: FC<ModalsScreenProps<"update-local-client-m
       />
       <TextFieldCard
         title={intl.formatMessage({ id: "AddLocalClientModal.lastName" })}
-        placeholder={intl.formatMessage({ id: "AddLocalClientModal.lastName.placeholder" })}
         value={values.familyName}
         onChangeText={handleChange("familyName")}
         isTouched={touched.familyName}
         errors={errors.familyName}
       />
-      <TextFieldCard
-        title={"Email or phone"}
-        placeholder={intl.formatMessage({ id: "AddLocalClientModal.email.placeholder" })}
-        value={values.email}
-        onChangeText={handleChange("email")}
-        isTouched={touched.email}
-        errors={errors.email}
-      />
+      <TextFieldCard title={"Email or phone"} value={values.email} onChangeText={handleChange("email")} isTouched={touched.email} errors={errors.email} />
       <PhoneNumberCard
         title={getCapitalizedString(values.phoneNumbers[0]?.label ?? "mobile")}
         onChangeText={handleChange(`phoneNumbers[0].number`)}

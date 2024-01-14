@@ -17,7 +17,7 @@ function ScreenWithoutScrolling(props: ScreenProps) {
   const style = styleOverride || {};
   const { Colors } = useTheme();
 
-  const backgroundColor = overrideBackgroundColor ? Colors[overrideBackgroundColor] : style?.backgroundColor ? style.backgroundColor : Colors.lightBackground;
+  const backgroundColor = overrideBackgroundColor ? Colors[overrideBackgroundColor] : style?.backgroundColor ? style.backgroundColor : Colors.white;
 
   const insetStyle = {
     paddingTop: unsafe ? 0 : insets.top,
@@ -52,7 +52,7 @@ function ScreenWithScrolling(props: ScreenProps) {
   const style = styleOverride || {};
   const { Colors } = useTheme();
 
-  const backgroundColor = overrideBackgroundColor ? Colors[overrideBackgroundColor] : style?.backgroundColor ? style.backgroundColor : Colors.lightBackground;
+  const backgroundColor = overrideBackgroundColor ? Colors[overrideBackgroundColor] : style?.backgroundColor ? style.backgroundColor : Colors.white;
 
   const insetStyle = {
     paddingTop: unsafe ? 0 : insets.top,

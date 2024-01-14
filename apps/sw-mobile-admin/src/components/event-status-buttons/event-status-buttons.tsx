@@ -17,6 +17,7 @@ export const EventStatusButtons: React.FC<{
   const { _id: businessId } = useBusiness();
   const { Colors } = useTheme();
   const intl = useIntl();
+  const [updateEvent, updatedEvent] = useUpdateEventMutation();
 
   const statusCount = nextEventStatuses[event?.status?.statusName ?? ""].length;
 
@@ -25,7 +26,7 @@ export const EventStatusButtons: React.FC<{
   const cardHeight = size === "small" ? CALENDAR_EVENT_HEIGHT : CALENDAR_EVENT_HEIGHT;
   const cardWidth = size === "small" ? CALENDAR_EVENT_HEIGHT : _width;
 
-  const [updateEvent, updatedEvent] = useUpdateEventMutation();
+  // const isDisabled =
 
   const handleStatusUpdate = status => {
     updateEvent({

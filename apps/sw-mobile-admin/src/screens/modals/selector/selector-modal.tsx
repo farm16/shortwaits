@@ -1,8 +1,8 @@
 import React, { FC } from "react";
-
 import { ModalsScreenProps, SelectorModalModeType } from "../../../navigation";
 import { CategoriesSelector } from "./selectors/categories/categories-selector";
 import { ClientsSelector } from "./selectors/clients/clients-selector";
+import { EventsSelector } from "./selectors/events/events-selector";
 import { EventLabelsSelector } from "./selectors/labels/event-labels-selector";
 import { LabelsSelector } from "./selectors/labels/labels-selector";
 import { ServicesSelector } from "./selectors/services/services-selector";
@@ -16,6 +16,7 @@ const selectorsComponents: Record<SelectorModalModeType, FC<ModalsScreenProps<"s
   services: ServicesSelector,
   static: StaticSelector,
   labels: LabelsSelector,
+  events: EventsSelector,
   eventLabels: EventLabelsSelector,
 };
 

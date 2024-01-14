@@ -9,7 +9,7 @@ import { BusinessUserCard, Button, ClientUserCard, Container, IconButton, NonIde
 import { useGetPeopleInEventQuery, useUpdateEventMutation } from "../../../../services";
 import { useBusiness } from "../../../../store";
 import { useTheme } from "../../../../theme";
-import { getCombinedClientTypes, navigate } from "../../../../utils";
+import { getCombinedClientTypes, navigate, nextEventStatuses } from "../../../../utils";
 
 type PeopleDtoType = BusinessUserDtoType | ClientUserDtoType;
 
@@ -18,6 +18,7 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
   const business = useBusiness();
   const intl = useIntl();
   const [updateEvent, updateEventStatus] = useUpdateEventMutation();
+  const isEventDisabled = (nextEventStatuses[event?.status?.statusName] ?? []).length === 0;
 
   const {
     data: peopleInEventData,
@@ -67,6 +68,7 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
           type={"noClientsInEvent"}
           buttons={[
             <Button
+              disabled={isEventDisabled}
               style={{
                 width: "auto",
                 paddingHorizontal: 28,
@@ -91,6 +93,7 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
           type={"noStaffInEvent"}
           buttons={[
             <Button
+              disabled={isEventDisabled}
               style={{
                 width: "auto",
                 paddingHorizontal: 28,
@@ -194,6 +197,8 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
             </Text>
             <IconButton
               iconType="add"
+              disabled={isEventDisabled}
+              disabledAlertMessage="The event is no longer active"
               onPress={() => {
                 const userType = title === "Staff" ? "staff" : "clients";
                 navigate("modals", {
@@ -218,7 +223,7 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
         </Fragment>
       );
     },
-    [allClients, Colors.lightBackground, Colors.text, _data, event.staffIds, handleClientsUpdateEvent, handleStaffUpdateEvent, intl, nonIdealState]
+    [Colors.lightBackground, Colors.text, _data, allClients, event.staffIds, handleClientsUpdateEvent, handleStaffUpdateEvent, intl, isEventDisabled, nonIdealState]
   );
 
   const _renderListEmptyComponent = useCallback(() => {

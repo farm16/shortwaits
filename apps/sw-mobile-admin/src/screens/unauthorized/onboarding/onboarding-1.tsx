@@ -1,14 +1,14 @@
-import { useDispatch } from "react-redux";
-import React, { FC, useEffect, useLayoutEffect, useState } from "react";
 import { StackActions } from "@react-navigation/native";
+import React, { FC, useEffect, useLayoutEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 
-import { TextFieldCard, ButtonCard, Space, IconButton, Button, FormContainer } from "../../../components";
-import { UnauthorizedScreenProps } from "../../../navigation";
-import { getPrettyStringFromHours } from "../../../utils/time";
-import { getArrCount } from "../../../utils";
-import { useForm } from "../../../hooks";
-import { useBusiness, useUser, setBusiness, useSignOut, useAuth, setBusinessCategories } from "../../../store";
 import { useIntl } from "react-intl";
+import { Button, ButtonCard, FormContainer, IconButton, Space, TextFieldCard } from "../../../components";
+import { useForm } from "../../../hooks";
+import { UnauthorizedScreenProps } from "../../../navigation";
+import { setBusiness, setBusinessCategories, useAuth, useBusiness, useSignOut, useUser } from "../../../store";
+import { getArrCount, truncated } from "../../../utils";
+import { getPrettyStringFromHours } from "../../../utils/time";
 
 export const Onboarding1Screen: FC<UnauthorizedScreenProps<"onboarding-1-screen">> = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -47,13 +47,12 @@ export const Onboarding1Screen: FC<UnauthorizedScreenProps<"onboarding-1-screen"
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      // headerTitle: `Welcome ${user?.familyName || ""}`,
       headerTitle: intl.formatMessage(
         {
           id: "Onboarding_1_Screen.headerTitle",
         },
         {
-          name: user?.username || "",
+          name: truncated(user?.username, 16) || "",
         }
       ),
       headerLeft: () => (
@@ -130,9 +129,7 @@ export const Onboarding1Screen: FC<UnauthorizedScreenProps<"onboarding-1-screen"
             count: getArrCount(business?.categories ?? []),
           }
         )}
-        errors={
-          !Array.isArray(business?.categories) || !business?.categories.length ? "this field is required" : undefined
-        }
+        errors={!Array.isArray(business?.categories) || !business?.categories.length ? "this field is required" : undefined}
         isTouched={isCategoriesTouched}
         onPress={() => {
           navigation.navigate("modals", {

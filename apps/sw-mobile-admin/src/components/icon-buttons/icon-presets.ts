@@ -173,6 +173,12 @@ export const _circleIcons = {
     color: "brandPrimary",
     size: 21,
   },
+  list: {
+    name: "format-list-text",
+    backgroundColor: undefined,
+    color: "brandPrimary",
+    size: 21,
+  },
   default: {
     name: "plus",
     backgroundColor: undefined,
