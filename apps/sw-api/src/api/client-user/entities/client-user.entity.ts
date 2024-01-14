@@ -176,11 +176,11 @@ export class ClientUser extends Document implements ClientUserType {
 
   @ApiProperty()
   @Prop()
-  createdAt: string;
+  createdAt: Date;
 
   @ApiProperty()
   @Prop()
-  updatedAt: string;
+  updatedAt: Date;
 
   @ApiProperty()
   @Prop()

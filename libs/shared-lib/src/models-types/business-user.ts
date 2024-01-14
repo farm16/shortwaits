@@ -1,6 +1,5 @@
 // warning:
 // don't remove this comment
-import { Document } from "mongoose";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 // end of warning //
 
@@ -98,10 +97,8 @@ export type BusinessUserType = {
     isCompleted: boolean;
   };
 
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date;
+  updatedAt: Date;
   lastSignInAt: Date;
   hashedRt: string;
 };
-
-export type BusinessUserDocument = BusinessUserType & Document;

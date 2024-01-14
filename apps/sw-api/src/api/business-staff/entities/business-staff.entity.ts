@@ -157,11 +157,11 @@ export class BusinessUser extends Document implements BusinessUserType {
 
   @ApiProperty()
   @Prop()
-  createdAt: string;
+  createdAt: Date;
 
   @ApiProperty()
   @Prop()
-  updatedAt: string;
+  updatedAt: Date;
 
   @ApiProperty()
   @Prop()

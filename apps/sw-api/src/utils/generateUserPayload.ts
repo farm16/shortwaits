@@ -45,6 +45,39 @@ export const generateBusinessUser = (user: CreateBusinessUserDtoType, businessUs
   return businessUser;
 };
 
+export const generateBusinessUser_socialAuth = (user: CreateBusinessUserDtoType, businessUserRoles: BusinessUserRoles) => {
+  // if no accountImageUrl, insert a property with a generated avatar url to the user object
+  if (!user?.accountImageUrl) {
+    const stringIdentifier = user.email || user.username || "?";
+    user.accountImageUrl = generateAvatarUrl(stringIdentifier);
+  }
+  // get userRoles based on businessUserRoles
+  const userRoles = {
+    isStaff: businessUserRoles.some(role => role === "staff"),
+    isAdmin: businessUserRoles.some(role => role === "admin"),
+    isSuperAdmin: businessUserRoles.some(role => role === "superAdmin"),
+    isBackgroundAdmin: businessUserRoles.some(role => role === "backgroundAdmin"),
+  };
+
+  const businessUser: ConvertToDtoType<BusinessUserType> = {
+    ...user,
+    username: user.email, // username is the same as email
+    roleId: null,
+    deleted: false,
+    isDisabled: false,
+    businesses: [],
+    userRoles: userRoles,
+    createdByBusinessId: "",
+    isEmailVerified: true,
+    registrationState: undefined,
+    createdAt: "",
+    updatedAt: "",
+    lastSignInAt: "",
+    hashedRt: "",
+  };
+  return businessUser;
+};
+
 export const generateBusinessStaffUsers = (users: CreateBusinessUsersDtoType) => {
   const businessUsers = users.map(user => {
     return generateBusinessUser(user, ["staff"]);

@@ -4,7 +4,7 @@ import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundE
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import { InjectModel } from "@nestjs/mongoose";
-import { BusinessType, BusinessUserType, ClientUserType, ObjectId } from "@shortwaits/shared-lib";
+import { BusinessType, BusinessUserType, ClientUserType, ObjectId, WithDbProps } from "@shortwaits/shared-lib";
 import bcrypt from "bcryptjs";
 import { OAuth2Client } from "google-auth-library";
 import { Model } from "mongoose";
@@ -14,6 +14,7 @@ import {
   filterBusinessOwnerPayload_localAuth,
   filterBusinessOwnerPayload_socialAuth,
   generateBusinessUser,
+  generateBusinessUser_socialAuth,
   generateUniqueId,
   getNewClientPayload,
   getSupportedLocales,
@@ -71,7 +72,7 @@ export class AuthService {
       }
 
       const newUser = filterBusinessOwnerPayload_socialAuth(userInfo);
-      return await this.createNewBusinessAndBusinessOwner(newUser, storeIndicator);
+      return await this.createNewBusinessAndBusinessOwner_socialAuth(newUser, storeIndicator);
     } catch (error) {
       console.error("Error in businessSocialSignUp:", error);
       throw new InternalServerErrorException("An error occurred while processing your request.");
@@ -88,6 +89,7 @@ export class AuthService {
 
       if (dto.provider === "google") {
         userInfo = await this.googleAuth(dto.authCode);
+        console.log("businessSocialSignIn : userInfo >>>", userInfo);
         // check if email is verified for google
       } else if (dto.provider === "facebook") {
         noop();
@@ -99,9 +101,11 @@ export class AuthService {
         isEmailVerified: true,
       });
 
+      console.log("businessSocialSignIn : user >>>", user);
+
       if (!user) {
         const newUser = filterBusinessOwnerPayload_socialAuth(userInfo);
-        return await this.createNewBusinessAndBusinessOwner(newUser, storeIndicator);
+        return await this.createNewBusinessAndBusinessOwner_socialAuth(newUser, storeIndicator);
       }
 
       return await this.successfulExistingBusinessUser(user);
@@ -134,14 +138,14 @@ export class AuthService {
     );
   }
 
-  // this is for Shortwaits user (Not Admin)
+  // this is for Shortwaits user (Not Admin !!!)
   async clientLocalSignUp(newUserClient: ClientSignUpWithEmailDto, locale: string) {
     const user = await this.clientUserModel.findOne({
       email: newUserClient.email,
     });
 
     if (user) {
-      return await this.successfulExistingBusinessUser(user);
+      return await this.successfulExistingClientUser(user);
     }
 
     return await this.createNewClient({
@@ -227,7 +231,7 @@ export class AuthService {
       throw new ForbiddenException("Unable to reauthenticate");
     }
 
-    const signedTokens = await this.signTokens(user);
+    const signedTokens = await this.signBusinessUserTokens(user);
     await this.updateBusinessUserRt(user, signedTokens.refreshToken);
 
     return { auth: signedTokens, attributes: { currentUser: user } };
@@ -252,18 +256,22 @@ export class AuthService {
     return { auth: signedTokens, attributes: { currentUser: user } };
   }
 
-  private async updateBusinessUserRt(user: BusinessUser, rt: string): Promise<void> {
+  private async updateBusinessUserRt(user: WithDbProps<BusinessUserType>, rt: string) {
     const saltRounds = Number(this.configService.get("SALT_ROUNDS"));
     const salt = await bcrypt.genSalt(saltRounds);
     const hash = await bcrypt.hash(rt, salt);
 
-    await this.businessUserModel.findByIdAndUpdate(
-      { _id: user._id },
+    console.log("updateBusinessUserRt for >>>", user._id);
+    const updatedBusinessUser = await this.businessUserModel.findByIdAndUpdate(
+      user._id,
       {
         hashedRt: hash,
         lastSignInAt: new Date(),
-      }
+      },
+      { new: true }
     );
+
+    return updatedBusinessUser;
   }
 
   private async updateClientUserRt(user: ClientUser, rt: string): Promise<void> {
@@ -280,7 +288,27 @@ export class AuthService {
     );
   }
 
-  private async signTokens(userInfo: { _id: string; email: string }) {
+  private async signTokens(userInfo: WithDbProps<ClientUser>) {
+    const payload = { sub: userInfo._id, email: userInfo.email };
+
+    const [token, refreshToken] = await Promise.all([
+      this.jwtService.signAsync(payload, {
+        secret: this.configService.get<string>("AT_SECRET"),
+        expiresIn: this.configService.get<string>("AT_EXPIRES_IN"),
+      }),
+      this.jwtService.signAsync(payload, {
+        secret: this.configService.get<string>("RT_SECRET"),
+        expiresIn: this.configService.get<string>("RT_EXPIRES_IN"),
+      }),
+    ]);
+
+    return {
+      token,
+      refreshToken,
+    };
+  }
+
+  private async signBusinessUserTokens(userInfo: WithDbProps<BusinessUserType>) {
     const payload = { sub: userInfo._id, email: userInfo.email };
 
     const [token, refreshToken] = await Promise.all([
@@ -314,6 +342,16 @@ export class AuthService {
   }
 
   async googleAuth(authCode: string) {
+    // userInfo >>> {
+    //   sub: '103181813044606974798',
+    //   name: 'Christopher Fajardo',
+    //   given_name: 'Christopher',
+    //   family_name: 'Fajardo',
+    //   picture: 'https://lh3.googleusercontent.com/a/ACg8ocKBYpErv8Z6fsGRxuYsztyn2bxv80vcz1GkFG1ki7rMRs0=s96-c',
+    //   email: 'christopher.fajardo73@gmail.com',
+    //   email_verified: true,
+    //   locale: 'en'
+    // }
     const { tokens } = await this.oAuth2Client.getToken(authCode);
     const userInfoResponse = await fetch(`${googleApiOauthUrl}/userinfo`, {
       headers: {
@@ -326,11 +364,9 @@ export class AuthService {
     return await userInfoResponse.json();
   }
 
-  async successfulExistingBusinessUser(existingUser) {
-    const signedTokens = await this.signTokens(existingUser);
-    await this.updateBusinessUserRt(existingUser, signedTokens.refreshToken);
-
-    delete existingUser.password;
+  async successfulExistingBusinessUser(existingUser: WithDbProps<BusinessUserType>) {
+    const signedTokens = await this.signBusinessUserTokens(existingUser);
+    const updatedBusinessUser = await this.updateBusinessUserRt(existingUser, signedTokens.refreshToken);
 
     // todo:
     // this is a problem if
@@ -342,16 +378,18 @@ export class AuthService {
     const currentBusinessAccounts = await this.businessModel
       .find({
         _id: {
-          $in: existingUser.businesses,
+          $in: updatedBusinessUser.businesses,
         },
       })
       .select("-__v");
+
+    delete updatedBusinessUser.password;
 
     return {
       auth: signedTokens,
       attributes: {
         currentBusinessAccounts,
-        currentUser: existingUser,
+        currentUser: updatedBusinessUser,
       },
     };
   }
@@ -462,7 +500,122 @@ export class AuthService {
     const newBusinessServices = await this.serviceModel.insertMany(services);
     const servicesIds = newBusinessServices.map(service => service._id);
 
-    const tokens = await this.signTokens(currentUser);
+    const tokens = await this.signBusinessUserTokens(currentUser);
+    const hashedRefreshToken = await bcrypt.hash(tokens.refreshToken, salt);
+
+    newBusinessAccount.services = servicesIds;
+    newBusinessAccount.labels = labels;
+
+    currentUser.businesses = [newBusinessAccount._id];
+    currentUser.hashedRt = hashedRefreshToken;
+    currentUser.lastSignInAt = new Date();
+
+    const [newUserDoc, newBusinessAccDoc] = await Promise.all([currentUser.save(), newBusinessAccount.save()]);
+
+    newUserDoc.password = null;
+
+    return {
+      auth: tokens,
+      attributes: {
+        currentBusinessAccounts: [newBusinessAccDoc],
+        currentUser: newUserDoc,
+      },
+    };
+  }
+
+  async createNewBusinessAndBusinessOwner_socialAuth(newUser: BusinessUserType, storeIndicator = "en") {
+    const storeIndicators = {
+      en: "0000001",
+      es: "0000002",
+    };
+
+    const currentShortwaitsAdmin = shortwaitsAdmin.find(shortWaits => shortWaits.short_id === storeIndicators[storeIndicator]) ?? shortwaitsAdmin[0];
+
+    const saltRounds = Number(this.configService.get("SALT_ROUNDS"));
+    const salt = await bcrypt.genSalt(saltRounds);
+
+    const userPayload = generateBusinessUser_socialAuth(newUser, ["superAdmin", "backgroundAdmin", "admin"]);
+    const currentUser = new this.businessUserModel(userPayload);
+
+    const businessShortId = await this.generateBusinessShortUniqueId();
+    if (!businessShortId) {
+      throw new UnprocessableEntityException("Unable to create business account for user");
+    }
+
+    const baseUrl = `https://${businessShortId}.shortwaits.com`;
+    const webLogoImageUrl = "https://img.icons8.com/bubbles/50/shop.png";
+
+    const newBusinessPayload: BusinessType = {
+      shortId: businessShortId,
+      isRegistrationCompleted: false,
+      web: {
+        isActive: true,
+        baseUrl,
+        bannerImageUrl: "",
+        logoImageUrl: webLogoImageUrl,
+        faviconImageUrl: "",
+        primaryColor: "",
+        secondaryColor: "",
+        accentColor: "",
+        notificationMessage: "",
+      },
+      clients: null,
+      localClients: null,
+      taggedClients: null,
+      admins: [currentUser._id],
+      superAdmins: [currentUser._id],
+      backgroundAdmins: [currentUser._id],
+      createdBy: currentUser._id,
+      updatedBy: currentUser._id,
+      staff: [currentUser._id],
+      hours: currentShortwaitsAdmin.defaultBusinessData.hours,
+      labels: currentShortwaitsAdmin.defaultBusinessData.labels,
+      email: "",
+      categories: [],
+      services: [],
+      events: [],
+      description: "",
+      currency: {
+        name: "",
+        code: "",
+        symbol: "",
+        codeNumber: 0,
+        decimalSeparator: 0,
+      },
+      country: "",
+      phone1: "",
+      shortName: "",
+      longName: "",
+      location: {
+        formattedAddress: "",
+        streetAddress: "",
+        city: "",
+        state: "",
+        postalCode: "",
+        country: "",
+        coordinates: [0, 0],
+      },
+      deleted: false,
+      accountType: "free",
+      isWebBookingEnabled: true,
+      isSmsNotificationEnabled: false,
+      isAppNotificationEnabled: true,
+      videoConference: [],
+      isVideoConferenceEnabled: false,
+      isDisabled: false,
+    };
+
+    const newBusinessAccount = new this.businessModel(newBusinessPayload);
+    const services = currentShortwaitsAdmin.defaultBusinessData.services.map(service => {
+      return { ...service, businessId: newBusinessAccount._id };
+    });
+    // create default labels (3) for the business from shortwaitsAdmin template
+    const labels = currentShortwaitsAdmin.defaultBusinessData.labels;
+
+    const newBusinessServices = await this.serviceModel.insertMany(services);
+    const servicesIds = newBusinessServices.map(service => service._id);
+
+    const tokens = await this.signBusinessUserTokens(currentUser);
     const hashedRefreshToken = await bcrypt.hash(tokens.refreshToken, salt);
 
     newBusinessAccount.services = servicesIds;

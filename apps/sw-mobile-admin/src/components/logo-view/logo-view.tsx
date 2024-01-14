@@ -1,9 +1,8 @@
 import React from "react";
-import { View, Image as RNImage } from "react-native";
-
-import { AutoImage as Image } from "../common";
-import { getDimensions } from "../../theme";
+import { Image as RNImage, View } from "react-native";
 import logo from "../../assets/images/logo.png";
+import { getDimensions } from "../../theme";
+import { AutoImage as Image } from "../common";
 
 const MAX_LOGO_HEIGHT = 100;
 

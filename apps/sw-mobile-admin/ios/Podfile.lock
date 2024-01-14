@@ -546,8 +546,6 @@ PODS:
     - React-jsi (= 0.72.3)
     - React-logger (= 0.72.3)
     - React-perflogger (= 0.72.3)
-  - RNBootSplash (5.2.1):
-    - React-Core
   - RNCCheckbox (0.5.16):
     - BEMCheckBox (~> 1.4)
     - React-Core
@@ -704,7 +702,6 @@ DEPENDENCIES:
   - React-runtimescheduler (from `../node_modules/react-native/ReactCommon/react/renderer/runtimescheduler`)
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
-  - RNBootSplash (from `../node_modules/react-native-bootsplash`)
   - "RNCCheckbox (from `../node_modules/@react-native-community/checkbox`)"
   - "RNCClipboard (from `../node_modules/@react-native-clipboard/clipboard`)"
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
@@ -854,8 +851,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/react/utils"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
-  RNBootSplash:
-    :path: "../node_modules/react-native-bootsplash"
   RNCCheckbox:
     :path: "../node_modules/@react-native-community/checkbox"
   RNCClipboard:
@@ -966,7 +961,6 @@ SPEC CHECKSUMS:
   React-runtimescheduler: 837c1bebd2f84572db17698cd702ceaf585b0d9a
   React-utils: bcb57da67eec2711f8b353f6e3d33bd8e4b2efa3
   ReactCommon: 3ccb8fb14e6b3277e38c73b0ff5e4a1b8db017a9
-  RNBootSplash: f7fd5a7d4f1c13be3d0f5f31d27af7bcc1b1acef
   RNCCheckbox: 75255b03e604bbcc26411eb31c4cbe3e3865f538
   RNCClipboard: d77213bfa269013bf4b857b7a9ca37ee062d8ef1
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
