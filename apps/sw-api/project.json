@@ -14,7 +14,7 @@
         "outputPath": "dist/apps/sw-api",
         "main": "apps/sw-api/src/main.ts",
         "tsConfig": "apps/sw-api/tsconfig.app.json",
-        "assets": ["apps/sw-api/src/assets"],
+        "assets": ["apps/sw-api/src/assets", "apps/sw-api/src/views"],
         "isolatedConfig": true,
         "webpackConfig": "apps/sw-api/webpack.config.js"
       },
@@ -62,9 +62,7 @@
     "seed": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "DEBUG=mongo-seeding node apps/sw-api/scripts/seeds/default-data.js"
-        ]
+        "commands": ["DEBUG=mongo-seeding node apps/sw-api/scripts/seeds/default-data.js"]
       }
     }
   },

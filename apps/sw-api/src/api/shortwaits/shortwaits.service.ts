@@ -1,11 +1,11 @@
 import { Injectable } from "@nestjs/common";
-import { Shortwaits } from "./shortwaits.schema";
-import { Model } from "mongoose";
 import { InjectModel } from "@nestjs/mongoose";
-import { ClientUser } from "../client-user/entities/client-user.entity";
-import { Business } from "../business/entities/business.entity";
-import { getQuerySelect } from "../../utils/mongoDbUtils";
+import { Model } from "mongoose";
 import { convertStringToObjectId, validateId } from "../../utils/converters";
+import { getQuerySelect } from "../../utils/mongoDbUtils";
+import { Business } from "../business/entities/business.entity";
+import { ClientUser } from "../client-user/entities/client-user.entity";
+import { Shortwaits } from "./shortwaits.schema";
 
 @Injectable()
 export class ShortwaitsService {
@@ -81,5 +81,27 @@ export class ShortwaitsService {
       console.log(error);
       throw new Error("An error occurred while fetching data.");
     }
+  }
+
+  getPrivacyPolicyData(locale: string) {
+    const lastUpdated = new Date().toISOString().split("T")[0];
+    return {
+      lastUpdated: lastUpdated,
+      overview:
+        'Shortwaits App ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your personal information when you use our mobile application.',
+      informationCollection: {
+        personalInformation: ["Name", "Email address", "Phone number", "[Any additional information relevant to the app]"],
+        nonPersonalInformation:
+          "We may also collect non-personal information such as device information, usage data, and analytics to improve our services and enhance user experience.",
+      },
+      howWeUseInformation:
+        "We may use the information we collect for purposes such as providing and maintaining Shortwaits App, improving user experience, responding to inquiries, and sending important notifications and updates.",
+      dataSecurity: "We implement reasonable security measures to protect your personal information from unauthorized access, disclosure, alteration, and destruction.",
+      thirdPartyServices:
+        "Shortwaits App may contain links to third-party services. Please be aware that we are not responsible for the content or privacy practices of these third-party services.",
+      changesToPolicy: "We may update our Privacy Policy from time to time. You are advised to review this Privacy Policy periodically for any changes.",
+      contactUs: "If you have any questions or concerns about our Privacy Policy, please contact us at [Your Contact Information].",
+      consent: "By using Shortwaits App, you consent to the terms of this Privacy Policy.",
+    };
   }
 }

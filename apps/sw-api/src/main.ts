@@ -4,6 +4,7 @@ import { FastifyAdapter, NestFastifyApplication } from "@nestjs/platform-fastify
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import * as fs from "fs";
 import helmet from "helmet";
+import { join } from "path";
 import { SwaggerTheme } from "swagger-themes";
 import { AppModule } from "./app.module";
 
@@ -16,6 +17,12 @@ async function bootstrap() {
 
   app.setGlobalPrefix(API_PREFIX);
   app.use(helmet());
+  app.setViewEngine({
+    engine: {
+      handlebars: require("handlebars"),
+    },
+    templates: join(__dirname, ".", "views"),
+  });
 
   if (configService.get("NODE_ENV") === "production") {
     console.log(">>> Enabling CORS for production");

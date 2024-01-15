@@ -1,4 +1,4 @@
-import { Controller, Get, Inject, Headers, Query } from "@nestjs/common";
+import { Controller, Get, Headers, Inject, Query, Render } from "@nestjs/common";
 import { ApiCreatedResponse, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { Public } from "../../common/decorators/auth.decorator";
 
@@ -72,10 +72,29 @@ export class ShortwaitsController {
     description: "Returns default data for admin mobile",
     type: Shortwaits,
   })
-  getBusinessForBooking(
-    @Query("businessShortId") businessShortId: string,
-    @Query("clientUserId") clientUserId?: string
-  ) {
+  getBusinessForBooking(@Query("businessShortId") businessShortId: string, @Query("clientUserId") clientUserId?: string) {
     return this.shortwaitsService.getBusinessForBooking(businessShortId, clientUserId);
+  }
+
+  @Get("privacy-policy/en")
+  @Public()
+  @Render("privacy-policy-en.hbs")
+  getPrivacyPolicyEn(@Headers("device-suggested-language") locale = "en") {
+    const service = this.shortwaitsService.getPrivacyPolicyData(locale);
+    return "privacy-policy";
+  }
+
+  @Get("privacy-policy/es")
+  @Public()
+  @Render("privacy-policy-es.hbs")
+  getPrivacyPolicyEs(@Headers("device-suggested-language") locale = "en") {
+    const service = this.shortwaitsService.getPrivacyPolicyData(locale);
+    return "privacy-policy";
+  }
+
+  @Get("privacy-policy/json")
+  @Public()
+  getPrivacyPolicyJson(@Headers("device-suggested-language") locale = "en") {
+    return this.shortwaitsService.getPrivacyPolicyData(locale);
   }
 }
