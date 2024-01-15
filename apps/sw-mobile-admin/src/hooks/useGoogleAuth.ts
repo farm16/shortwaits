@@ -20,6 +20,7 @@ export function useGoogleAuth() {
 
       return serverAuthCode;
     } catch (error) {
+      console.log("useGoogleAuth error >>>", error);
       setError("An error occurred during Google sign-in.");
     } finally {
       setIsLoading(false);
@@ -34,7 +35,7 @@ export function useGoogleAuth() {
       });
     } catch (error) {
       // Handle social sign-up errors if needed
-      console.error("Social sign-up Shortwaits API error >>>", error);
+      console.log("useGoogleAuth error >>>", error);
     }
   };
 

@@ -1,6 +1,6 @@
 import { CompositeNavigationProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import React, { FC, useCallback, useEffect, useState } from "react";
+import React, { FC, useCallback, useState } from "react";
 import { useIntl } from "react-intl";
 import { ActivityIndicator, Alert, AlertButton, StyleSheet, View } from "react-native";
 import Facebook from "../../../assets/icons/facebook.svg";
@@ -23,9 +23,8 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
   const { isLoading: isGoogleAuthLoading, error: googleAuthError, handleGoogleAuth } = useGoogleAuth();
 
   const isLoading = localSignInResponse.isLoading || isGoogleAuthLoading;
-  const error = localSignInResponse.error || googleAuthError;
 
-  if (error) {
+  if (googleAuthError) {
     Alert.alert(
       intl.formatMessage({
         id: "Common.error.title",
@@ -61,36 +60,34 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
     setIsVisible(visibility => !visibility);
   }, []);
 
-  useEffect(() => {
-    if (localSignInResponse.isError) {
-      const canRegister = localSignInResponse?.error?.data?.message === "User not registered";
-      const buttons: AlertButton[] = [{ text: "Back", style: "cancel" }];
-      if (canRegister) {
-        buttons.push({
-          text: "Register",
-          onPress: () => {
-            navigation.navigate("unauthorized", {
-              screen: "sign-up-with-email-screen",
-            });
-          },
-          style: "default",
-        });
-      }
-      Alert.alert(
+  if (localSignInResponse.isError) {
+    const canRegister = localSignInResponse?.error?.data?.message === "User not registered";
+    const buttons: AlertButton[] = [{ text: "Back", style: "cancel" }];
+    if (canRegister) {
+      buttons.push({
+        text: "Register",
+        onPress: () => {
+          navigation.navigate("unauthorized", {
+            screen: "sign-up-with-email-screen",
+          });
+        },
+        style: "default",
+      });
+    }
+    Alert.alert(
+      intl.formatMessage({
+        id: "Common.error.title",
+      }),
+      localSignInResponse?.error?.data?.message ??
         intl.formatMessage({
-          id: "Common.error.title",
+          id: "Common.error.message",
         }),
-        localSignInResponse?.error?.data?.message ??
-          intl.formatMessage({
-            id: "Common.error.message",
-          }),
-        buttons,
-        {
-          cancelable: true,
-        }
-      );
-    } else return;
-  }, [navigation, localSignInResponse?.error?.data?.message, localSignInResponse.isError, intl]);
+      buttons,
+      {
+        cancelable: true,
+      }
+    );
+  }
 
   if (isLoading) return <ActivityIndicator />;
 
