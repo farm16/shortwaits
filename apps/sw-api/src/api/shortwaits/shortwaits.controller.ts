@@ -76,11 +76,17 @@ export class ShortwaitsController {
     return this.shortwaitsService.getBusinessForBooking(businessShortId, clientUserId);
   }
 
+  @Get("privacy-policy")
+  @Public()
+  @Render("privacy-policy-en.hbs")
+  getPrivacyPolicy(@Headers("device-suggested-language") locale = "en") {
+    return "privacy-policy";
+  }
+
   @Get("privacy-policy/en")
   @Public()
   @Render("privacy-policy-en.hbs")
   getPrivacyPolicyEn(@Headers("device-suggested-language") locale = "en") {
-    const service = this.shortwaitsService.getPrivacyPolicyData(locale);
     return "privacy-policy";
   }
 
@@ -88,13 +94,33 @@ export class ShortwaitsController {
   @Public()
   @Render("privacy-policy-es.hbs")
   getPrivacyPolicyEs(@Headers("device-suggested-language") locale = "en") {
-    const service = this.shortwaitsService.getPrivacyPolicyData(locale);
     return "privacy-policy";
   }
 
-  @Get("privacy-policy/json")
+  @Get("terms-of-use")
   @Public()
-  getPrivacyPolicyJson(@Headers("device-suggested-language") locale = "en") {
-    return this.shortwaitsService.getPrivacyPolicyData(locale);
+  @Render("terms-of-use-en.hbs")
+  getTermsOfUser(@Headers("device-suggested-language") locale = "en") {
+    return "terms-of-use";
   }
+
+  @Get("terms-of-use/en")
+  @Public()
+  @Render("terms-of-use-en.hbs")
+  getTermsOfUserEn(@Headers("device-suggested-language") locale = "en") {
+    return "terms-of-use";
+  }
+
+  @Get("terms-of-use/es")
+  @Public()
+  @Render("terms-of-use-es.hbs")
+  getTermsOfUserEs(@Headers("device-suggested-language") locale = "en") {
+    return "terms-of-use";
+  }
+
+  // @Get("privacy-policy/json")
+  // @Public()
+  // getPrivacyPolicyJson(@Headers("device-suggested-language") locale = "en") {
+  //   return this.shortwaitsService.getPrivacyPolicyData(locale);
+  // }
 }
