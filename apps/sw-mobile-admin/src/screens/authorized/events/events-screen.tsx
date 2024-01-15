@@ -1,6 +1,5 @@
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 import React, { useLayoutEffect, useState } from "react";
-
 import { useIntl } from "react-intl";
 import { Calendar, Container, IconButton, QrModal, Screen, Text } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
@@ -24,10 +23,10 @@ export function EventsScreen({ navigation }: AuthorizedScreenProps<"events-scree
     const getGreeting = () => {
       const currentHour = new Date().getHours();
       console.log("currentHour >>>", currentHour);
-      if (currentHour > 3) {
+      if (currentHour > 3 && currentHour < 12) {
         return intl.formatMessage({ id: "Common.greeting.morning" });
       }
-      if (currentHour > 12) {
+      if (currentHour > 12 && currentHour < 18) {
         return intl.formatMessage({ id: "Common.greeting.afternoon" });
       }
       return intl.formatMessage({ id: "Common.greeting.evening" });

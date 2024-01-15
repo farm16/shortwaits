@@ -2,6 +2,7 @@ import { useFlipper } from "@react-navigation/devtools";
 import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import React, { useEffect, useState } from "react";
+import SplashScreen from "react-native-splash-screen";
 import { useAuth, useBusiness } from "../store";
 import { NAVIGATION_STACKS } from "./navigation-constants";
 import { RootStackParamList } from "./navigation-types";
@@ -68,9 +69,9 @@ export const AppNavigator = (props: NavigationProps): React.ReactElement => {
 
   return (
     <NavigationContainer
-      // onReady={() => {
-      //   BootSplash.hide();
-      // }}
+      onReady={() => {
+        SplashScreen.hide();
+      }}
       ref={navigationRef}
       theme={DefaultTheme}
       {...props}

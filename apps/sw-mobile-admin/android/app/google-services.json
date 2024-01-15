@@ -37,6 +37,13 @@
             {
               "client_id": "805426205047-fcegaam9bmap1dagccindjh0ko7oro68.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "805426205047-mlghv968heekr2u7egondvv621g17h81.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.swmobileadmin"
+              }
             }
           ]
         }

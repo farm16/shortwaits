@@ -6,11 +6,10 @@ import { ActivityIndicator, Alert, AlertButton, StyleSheet, View } from "react-n
 import Facebook from "../../../assets/icons/facebook.svg";
 import Google from "../../../assets/icons/google.svg";
 import { Button, Container, Screen, Space, Text, TextFieldCard } from "../../../components";
-import { useForm } from "../../../hooks";
+import { useForm, useGoogleAuth } from "../../../hooks";
 import { RootStackParamList, UnauthorizedStackParamList } from "../../../navigation";
-import { useLocalSignInMutation, useSocialSignInMutation } from "../../../services";
+import { useLocalSignInMutation } from "../../../services";
 import { useTheme } from "../../../theme";
-import { onGoogleButtonPress } from "../../../utils";
 
 export interface RegisterWithEmailScreenProps {
   navigation: CompositeNavigationProp<StackNavigationProp<UnauthorizedStackParamList, "sign-in-screen">, StackNavigationProp<RootStackParamList>>;
@@ -19,10 +18,23 @@ export interface RegisterWithEmailScreenProps {
 export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) => {
   const { Colors } = useTheme();
   const [isVisible, setIsVisible] = useState(false);
-  const intl = useIntl(); // Access the intl object
-
+  const intl = useIntl();
   const [localSignIn, localSignInResponse] = useLocalSignInMutation();
-  const [socialSignUp, socialSignUpResponse] = useSocialSignInMutation();
+  const { isLoading: isGoogleAuthLoading, error: googleAuthError, handleGoogleAuth } = useGoogleAuth();
+
+  const isLoading = localSignInResponse.isLoading || isGoogleAuthLoading;
+  const error = localSignInResponse.error || googleAuthError;
+
+  if (error) {
+    Alert.alert(
+      intl.formatMessage({
+        id: "Common.error.title",
+      }),
+      intl.formatMessage({
+        id: "Common.error.message",
+      })
+    );
+  }
 
   const initialValues = {
     email: "",
@@ -48,45 +60,6 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
   const handlePasswordVisibility = useCallback(() => {
     setIsVisible(visibility => !visibility);
   }, []);
-  const handleGoogleSignIn = useCallback(async () => {
-    try {
-      const authCode = await onGoogleButtonPress();
-      await socialSignUp({
-        provider: "google",
-        authCode,
-      });
-    } catch (error) {
-      Alert.alert(
-        intl.formatMessage({
-          id: "Common.error.title",
-        }),
-        intl.formatMessage({
-          id: "Common.error.message",
-        })
-      );
-      console.log("Error during Google sign-up:", error);
-    }
-  }, [intl, socialSignUp]);
-
-  const handleFacebookSignIn = useCallback(async () => {
-    try {
-      const authCode = await onGoogleButtonPress();
-      await socialSignUp({
-        provider: "facebook",
-        authCode,
-      });
-    } catch (error) {
-      Alert.alert(
-        intl.formatMessage({
-          id: "Common.error.title",
-        }),
-        intl.formatMessage({
-          id: "Common.error.message",
-        })
-      );
-      console.log("Error during Facebook sign-up:", error);
-    }
-  }, [intl, socialSignUp]);
 
   useEffect(() => {
     if (localSignInResponse.isError) {
@@ -119,7 +92,7 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
     } else return;
   }, [navigation, localSignInResponse?.error?.data?.message, localSignInResponse.isError, intl]);
 
-  if (localSignInResponse.isLoading || socialSignUpResponse.isLoading) return <ActivityIndicator />;
+  if (isLoading) return <ActivityIndicator />;
 
   return (
     <Screen preset="scroll" unsafe unsafeBottom withHorizontalPadding>
@@ -182,7 +155,7 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
         })}
       />
       <Space size="large" />
-      <Button preset="social" onPress={handleFacebookSignIn}>
+      <Button preset="social" onPress={handleGoogleAuth}>
         <Facebook width={30} height={30} style={{ position: "absolute", left: 0, margin: 16 }} />
         <Container style={styles.socialButtonContainer}>
           <Text
@@ -194,7 +167,7 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
         </Container>
       </Button>
       <Space size="small" />
-      <Button preset="social" onPress={handleGoogleSignIn}>
+      <Button preset="social" onPress={handleGoogleAuth}>
         <Container style={styles.socialButtonContainer}>
           <Google width={30} height={30} style={{ position: "absolute", left: 0, margin: 16 }} />
           <Text

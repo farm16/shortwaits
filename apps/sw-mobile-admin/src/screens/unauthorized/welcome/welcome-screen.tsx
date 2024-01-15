@@ -1,18 +1,15 @@
-import React, { FC, useEffect } from "react";
-import { StyleSheet, View } from "react-native";
-import SplashScreen from "react-native-splash-screen";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { CompositeNavigationProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { skipToken } from "@reduxjs/toolkit/dist/query/react";
-import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import React, { FC, useEffect } from "react";
 import { useIntl } from "react-intl";
-
-import { Button, Container, Screen, ScrollView, Space, Text } from "../../../components";
-import { useTheme } from "../../../theme";
-import { RootStackParamList, UnauthorizedStackParamList } from "../../../navigation";
-import { useBusiness, useMobileAdmin } from "../../../store";
-import { useGetAdminMobileQuery } from "../../../services";
+import { StyleSheet, View } from "react-native";
 import { Logo2, WelcomeImage } from "../../../assets";
+import { Button, Container, Screen, ScrollView, Space, Text } from "../../../components";
+import { RootStackParamList, UnauthorizedStackParamList } from "../../../navigation";
+import { useGetAdminMobileQuery } from "../../../services";
+import { useBusiness, useMobileAdmin } from "../../../store";
 import { getFontSize, getResponsiveHeight } from "../../../utils";
 
 GoogleSignin.configure({
@@ -25,16 +22,11 @@ export interface WelcomeScreenProps {
 }
 
 export const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation }) => {
-  const { Colors } = useTheme();
   const business = useBusiness();
   const mobileAdminData = useMobileAdmin();
   const intl = useIntl(); // Access the intl object
 
   const { isLoading: isAdminMobileLoading } = useGetAdminMobileQuery(mobileAdminData.shortwaits && skipToken);
-
-  useEffect(() => {
-    SplashScreen.hide();
-  }, []);
 
   useEffect(() => {
     if (business?.isRegistrationCompleted === false) {

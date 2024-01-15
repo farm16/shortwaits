@@ -11,7 +11,7 @@ export async function onGoogleButtonPress() {
 
     return serverAuthCode;
   } catch (error) {
-    console.log("Google sign-in error:", error);
+    console.log("Google sign-in error >>> ", error);
     Alert.alert("Oops", "An error occurred during Google sign-in.");
   }
 }

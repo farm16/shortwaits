@@ -47,72 +47,43 @@ export class AuthService {
     this.oAuth2Client = new OAuth2Client(googleAuthClientId, googleAuthClientSecret);
   }
 
-  async businessSocialSignUp(dto: { authCode: string; provider: string }, storeIndicator = "en") {
-    if (!providers.includes(dto.provider)) {
-      throw new UnprocessableEntityException("Invalid provider");
-    }
-    try {
-      let userInfo;
-
-      if (dto.provider === "google") {
-        userInfo = await this.googleAuth(dto.authCode);
-        // check if email is verified for google
-      } else if (dto.provider === "facebook") {
-        noop();
-        // check if email is verified for facebook
-      }
-
-      const user = await this.businessUserModel.findOne({
-        email: userInfo.email,
-        isEmailVerified: true,
-      });
-
-      if (user) {
-        return await this.successfulExistingBusinessUser(user);
-      }
-
-      const newUser = filterBusinessOwnerPayload_socialAuth(userInfo);
-      return await this.createNewBusinessAndBusinessOwner_socialAuth(newUser, storeIndicator);
-    } catch (error) {
-      console.error("Error in businessSocialSignUp:", error);
-      throw new InternalServerErrorException("An error occurred while processing your request.");
-    }
-  }
-
   async businessSocialSignIn(dto: { authCode: string; provider: string }, storeIndicator = "en") {
     if (!providers.includes(dto.provider)) {
       throw new UnprocessableEntityException("Invalid provider");
     }
 
     try {
-      let userInfo;
+      let socialAuthUser;
 
       if (dto.provider === "google") {
-        userInfo = await this.googleAuth(dto.authCode);
-        console.log("businessSocialSignIn : userInfo >>>", userInfo);
-        // check if email is verified for google
+        socialAuthUser = await this.googleAuth(dto.authCode);
+        console.log("businessSocialSignIn : socialAuthUser >>>", socialAuthUser);
       } else if (dto.provider === "facebook") {
         noop();
         // check if email is verified for facebook
       }
 
-      const user = await this.businessUserModel.findOne({
-        email: userInfo.email,
+      const existingUser = await this.businessUserModel.findOne({
+        email: socialAuthUser.email,
         isEmailVerified: true,
       });
 
-      console.log("businessSocialSignIn : user >>>", user);
+      console.log("businessSocialSignIn : user >>>", existingUser);
 
-      if (!user) {
-        const newUser = filterBusinessOwnerPayload_socialAuth(userInfo);
+      if (!existingUser) {
+        const newUser = filterBusinessOwnerPayload_socialAuth(socialAuthUser);
         return await this.createNewBusinessAndBusinessOwner_socialAuth(newUser, storeIndicator);
       }
 
-      return await this.successfulExistingBusinessUser(user);
+      return await this.successfulExistingBusinessUser(existingUser);
     } catch (error) {
       console.error("Error in businessSocialSignIn:", error);
       throw new InternalServerErrorException("An error occurred while processing your request.");
     }
+  }
+
+  async businessSocialSignUp(dto: { authCode: string; provider: string }, storeIndicator = "en") {
+    return await this.businessSocialSignIn(dto, storeIndicator);
   }
 
   async businessLocalSignUp(newBusinessUserDto: SignUpWithEmailDto, storeIndicator = "en") {

@@ -1,6 +1,6 @@
 import { CompositeNavigationProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import React, { FC, useCallback } from "react";
+import React, { FC } from "react";
 import { useIntl } from "react-intl";
 import { Alert, StyleSheet, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
@@ -9,10 +9,10 @@ import EMail from "../../../assets/icons/email.svg";
 import Facebook from "../../../assets/icons/facebook.svg";
 import Google from "../../../assets/icons/google.svg";
 import { Button, Container, Screen, Space, Text } from "../../../components";
+import { useGoogleAuth } from "../../../hooks";
 import { RootStackParamList, UnauthorizedStackParamList } from "../../../navigation";
-import { useSocialSignUpMutation } from "../../../services";
 import { useTheme } from "../../../theme";
-import { getResponsiveHeight, onGoogleButtonPress } from "../../../utils";
+import { getResponsiveHeight } from "../../../utils";
 
 export interface SignUpScreenProps {
   navigation: CompositeNavigationProp<StackNavigationProp<UnauthorizedStackParamList, "sign-up-screen">, StackNavigationProp<RootStackParamList>>;
@@ -21,33 +21,19 @@ export interface SignUpScreenProps {
 export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
   const { Colors } = useTheme();
   const intl = useIntl(); // Access the intl object
-  const [socialSignUp, { isLoading }] = useSocialSignUpMutation();
 
-  const handleGoogleSignUp = useCallback(async () => {
-    try {
-      const authCode = await onGoogleButtonPress();
-      await socialSignUp({
-        provider: "google",
-        authCode,
-      });
-    } catch (error) {
-      Alert.alert("Oops", "Something went wrong. Please try again.");
-      console.log("Error during Google sign-up:", error);
-    }
-  }, [socialSignUp]);
+  const { isLoading, error, handleGoogleAuth } = useGoogleAuth();
 
-  const handleFacebookSignUp = useCallback(async () => {
-    try {
-      const authCode = await onGoogleButtonPress();
-      await socialSignUp({
-        provider: "google",
-        authCode,
-      });
-    } catch (error) {
-      Alert.alert("Oops", "Something went wrong. Please try again.");
-      console.log("Error during Google sign-up:", error);
-    }
-  }, [socialSignUp]);
+  if (error) {
+    Alert.alert(
+      intl.formatMessage({
+        id: "Common.error.title",
+      }),
+      intl.formatMessage({
+        id: "Common.error.message",
+      })
+    );
+  }
 
   if (isLoading) return <ActivityIndicator />;
 
@@ -67,14 +53,14 @@ export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
         />
       </View>
       <View style={styles.formContainer}>
-        <Button preset="social">
+        <Button preset="social" onPress={handleGoogleAuth}>
           <Facebook width={30} height={30} style={{ position: "absolute", left: 0, margin: 16 }} />
           <Container style={styles.buttonContainer}>
             <Text preset="social">{intl.formatMessage({ id: "Sign_Up_Screen.facebook" })}</Text>
           </Container>
         </Button>
         <Space size="small" />
-        <Button preset="social" onPress={handleGoogleSignUp}>
+        <Button preset="social" onPress={handleGoogleAuth}>
           <Google width={30} height={30} style={{ position: "absolute", left: 0, margin: 16 }} />
           <Container style={styles.buttonContainer}>
             <Text preset="social">{intl.formatMessage({ id: "Sign_Up_Screen.google" })}</Text>
