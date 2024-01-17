@@ -22,6 +22,7 @@ export const AUTHORIZED_STACK_SCREENS = {
   BUSINESS_PROFILE_SCREEN: "business-profile-screen",
   BUSINESS_CLIENT_SCREEN: "business-client-screen",
   BUSINESS_STAFF_SCREEN: "business-staff-screen",
+  APP_INFO_SCREEN: "app-info-screen",
 } as const;
 
 export const AUTHORIZED_SCREENS = {
@@ -42,6 +43,7 @@ export const MODAL_SCREENS = {
   ADD_LOCAL_CLIENT_MODAL_SCREEN: "add-local-client-modal-screen",
   UPDATE_LOCAL_CLIENT_MODAL_SCREEN: "update-local-client-modal-screen",
   ADD_STAFF_MODAL_SCREEN: "add-staff-modal-screen",
+  WEBVIEW_MODAL_SCREEN: "webview-modal-screen",
 } as const;
 
 export const NAVIGATION_STACKS = {

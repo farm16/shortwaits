@@ -45,7 +45,7 @@
     "Common.services": "Services",
     "Common.service": "Service",
     "Common.events": "Events",
-    "Common.event": "Service Type",
+    "Common.event": "Event",
     "Common.clients": "Clients",
     "Common.client": "Client",
 

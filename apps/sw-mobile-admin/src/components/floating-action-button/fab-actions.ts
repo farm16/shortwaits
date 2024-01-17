@@ -26,7 +26,7 @@ export const useActions = () => {
     };
     return [
       {
-        label: intl.formatMessage({ id: "Common.events" }),
+        label: intl.formatMessage({ id: "Common.event" }),
         onPress: () =>
           navigate("modals", {
             screen: "add-event-modal-screen",
@@ -35,7 +35,7 @@ export const useActions = () => {
         ...styles,
       },
       {
-        label: intl.formatMessage({ id: "Common.clients" }),
+        label: intl.formatMessage({ id: "Common.client" }),
         onPress: () =>
           navigate("modals", {
             screen: "add-local-client-modal-screen",

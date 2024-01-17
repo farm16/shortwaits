@@ -8,7 +8,7 @@ import { Welcome2 } from "../../../assets";
 import EMail from "../../../assets/icons/email.svg";
 import Facebook from "../../../assets/icons/facebook.svg";
 import Google from "../../../assets/icons/google.svg";
-import { Button, Container, Screen, Space, Text } from "../../../components";
+import { Button, Container, Screen, Space, TermsAndConditions, Text } from "../../../components";
 import { useGoogleAuth } from "../../../hooks";
 import { RootStackParamList, UnauthorizedStackParamList } from "../../../navigation";
 import { useTheme } from "../../../theme";
@@ -82,13 +82,7 @@ export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
           </Container>
         </Button>
         <Space />
-        <Button preset="link" onPress={() => {}}>
-          <Container direction="row">
-            <Text text="T" preset="link" />
-            <Text text="&" preset="link" />
-            <Text text="C" preset="link" />
-          </Container>
-        </Button>
+        <TermsAndConditions />
         <Space />
       </View>
     </Screen>

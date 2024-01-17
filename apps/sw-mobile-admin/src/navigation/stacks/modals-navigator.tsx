@@ -12,6 +12,7 @@ import {
   UpdateEventModal,
   UpdateLocalClientModal,
   UpdateServicesModal,
+  WebViewModal,
 } from "../../screens";
 import { MODAL_SCREENS } from "../navigation-constants";
 import { ModalStackParamList } from "../navigation-types";
@@ -28,6 +29,7 @@ const {
   UPDATE_EVENT_MODAL_SCREEN,
   UPDATE_LOCAL_CLIENT_MODAL_SCREEN,
   ADD_LOCAL_CLIENT_MODAL_SCREEN,
+  WEBVIEW_MODAL_SCREEN,
 } = MODAL_SCREENS;
 
 const Stack = createStackNavigator<ModalStackParamList>();
@@ -46,6 +48,7 @@ export const ModalsNavigator = (): React.ReactElement => {
       <Stack.Screen name={ADD_LOCAL_CLIENT_MODAL_SCREEN} component={AddLocalClientModal} />
       <Stack.Screen name={UPDATE_LOCAL_CLIENT_MODAL_SCREEN} component={UpdateLocalClientModal} />
       <Stack.Screen name={ADD_CLIENT_MODAL_SCREEN} component={AddClientModal} />
+      <Stack.Screen name={WEBVIEW_MODAL_SCREEN} component={WebViewModal} />
     </Stack.Navigator>
   );
 };

@@ -91,6 +91,7 @@
     "react-native-fast-image": "*",
     "react-native-permissions": "*",
     "react-native-vision-camera": "*",
-    "nanoid": "*"
+    "nanoid": "*",
+    "react-native-webview": "*"
   }
 }

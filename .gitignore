@@ -117,3 +117,7 @@ keystore.properties
 
 # Next.js
 .next
+
+*.apk
+*.aab
+output-metadata.json

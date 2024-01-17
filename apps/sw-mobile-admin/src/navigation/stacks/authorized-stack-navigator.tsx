@@ -1,6 +1,6 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
-import { BusinessClientScreen, BusinessProfileScreen, BusinessStaffScreen, EventScreen, PlansScreen } from "../../screens";
+import { AppInfoScreen, BusinessClientScreen, BusinessProfileScreen, BusinessStaffScreen, EventScreen, PlansScreen } from "../../screens";
 import { AUTHORIZED_STACK_SCREENS } from "../navigation-constants";
 import { AuthorizedStackParamList } from "../navigation-types";
 
@@ -14,6 +14,7 @@ export const AuthorizedStackNavigator = () => {
       <Stack.Screen name={AUTHORIZED_STACK_SCREENS.BUSINESS_STAFF_SCREEN} component={BusinessStaffScreen} />
       <Stack.Screen name={AUTHORIZED_STACK_SCREENS.BUSINESS_PROFILE_SCREEN} component={BusinessProfileScreen} />
       <Stack.Screen name={AUTHORIZED_STACK_SCREENS.PLANS_SCREEN} component={PlansScreen} />
+      <Stack.Screen name={AUTHORIZED_STACK_SCREENS.APP_INFO_SCREEN} component={AppInfoScreen} />
     </Stack.Navigator>
   );
 };

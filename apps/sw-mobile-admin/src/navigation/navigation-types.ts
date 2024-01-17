@@ -137,6 +137,12 @@ export type ModalStackParamList = {
     onDone?(): void;
     closeOnSubmit?: boolean;
   };
+  [MODAL_SCREENS.WEBVIEW_MODAL_SCREEN]: {
+    uri: string;
+    header?: string;
+    onLoad?(): void;
+    onGoBack?(arg0): void;
+  };
 };
 
 export type AuthorizedTabsParamList = {
@@ -161,6 +167,7 @@ export type AuthorizedStackParamList = {
     staff: BusinessUserDtoType;
   };
   [AUTHORIZED_STACK_SCREENS.BUSINESS_PROFILE_SCREEN]: undefined;
+  [AUTHORIZED_STACK_SCREENS.APP_INFO_SCREEN]: undefined;
 };
 
 export type UnauthorizedStackParamList = {
@@ -180,15 +187,14 @@ export type RootStackParamList = {
   [NAVIGATION_STACKS.MODALS]: NavigatorScreenParams<ModalStackParamList>;
 };
 
-type MODAL_SCREENS_KEYS = keyof typeof MODAL_SCREENS;
-type MODAL_SCREENS_TYPES = (typeof MODAL_SCREENS)[MODAL_SCREENS_KEYS];
+export type MODAL_SCREENS_KEYS = keyof typeof MODAL_SCREENS;
+export type MODAL_SCREENS_TYPES = (typeof MODAL_SCREENS)[MODAL_SCREENS_KEYS];
 
-type UNAUTHORIZED_SCREENS_KEYS = keyof typeof UNAUTHORIZED_SCREENS;
-type UNAUTHORIZED_SCREENS_TYPES = (typeof UNAUTHORIZED_SCREENS)[UNAUTHORIZED_SCREENS_KEYS] | MODAL_SCREENS_TYPES;
+export type UNAUTHORIZED_SCREENS_KEYS = keyof typeof UNAUTHORIZED_SCREENS;
+export type UNAUTHORIZED_SCREENS_TYPES = (typeof UNAUTHORIZED_SCREENS)[UNAUTHORIZED_SCREENS_KEYS] | MODAL_SCREENS_TYPES;
 
-type AUTHORIZED_SCREENS_KEYS = keyof typeof AUTHORIZED_SCREENS;
-
-type AUTHORIZED_SCREENS_TYPES = (typeof AUTHORIZED_SCREENS)[AUTHORIZED_SCREENS_KEYS] | MODAL_SCREENS_TYPES;
+export type AUTHORIZED_SCREENS_KEYS = keyof typeof AUTHORIZED_SCREENS;
+export type AUTHORIZED_SCREENS_TYPES = (typeof AUTHORIZED_SCREENS)[AUTHORIZED_SCREENS_KEYS] | MODAL_SCREENS_TYPES;
 
 /**
  * @UnauthorizedScreenProps
