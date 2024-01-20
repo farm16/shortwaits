@@ -1,6 +1,6 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Put, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
-import { ClientUserDtoType } from "@shortwaits/shared-lib";
+import { ClientUserDtoType } from "@shortwaits/shared-utils";
 import { AtGuard } from "../../common/guards";
 import { ClientUserService } from "./client-user.service";
 import { CreateClientUserDto } from "./dto";

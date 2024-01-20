@@ -1,11 +1,11 @@
+import { ServiceColorType } from "@shortwaits/shared-utils";
 import React, { useCallback, useMemo } from "react";
 import { StyleSheet, View, ViewStyle } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { ServiceColorType } from "@shortwaits/shared-lib";
 
+import { useMobileAdmin } from "../../store";
 import { getDimensions } from "../../theme";
 import { Button, ButtonProps } from "../common";
-import { useMobileAdmin } from "../../store";
 
 interface ServiceColorsProps {
   selectedColor?: ServiceColorType;

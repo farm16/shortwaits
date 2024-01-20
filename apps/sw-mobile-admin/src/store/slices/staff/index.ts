@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { BusinessUsersDtoType } from "@shortwaits/shared-lib";
+import { BusinessUsersDtoType } from "@shortwaits/shared-utils";
 
-import { shortwaitsApi } from "../../../services";
 import type { RootState } from "../..";
+import { shortwaitsApi } from "../../../services";
 
 export const staffInitialState: BusinessUsersDtoType = null;
 export const staffSlice = createSlice({

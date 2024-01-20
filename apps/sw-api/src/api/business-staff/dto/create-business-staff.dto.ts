@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsOptional } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
-import { ConvertToDtoType, CreateBusinessUserDtoType, WeekHoursType } from "@shortwaits/shared-lib";
+import { ConvertToDtoType, CreateBusinessUserDtoType, WeekHoursType } from "@shortwaits/shared-utils";
 
 export class CreateBusinessUserDto implements CreateBusinessUserDtoType {
   @ApiProperty()

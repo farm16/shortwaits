@@ -2,7 +2,7 @@ import React, { useLayoutEffect, useState } from "react";
 import { Text, BackButton, Button, FormContainer, Container, Space } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useTheme } from "../../../theme";
-import { SubscriptionPlans } from "@shortwaits/shared-lib";
+import { SubscriptionPlans } from "@shortwaits/shared-utils";
 import PlanCard from "./planCard";
 import { Platform, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";

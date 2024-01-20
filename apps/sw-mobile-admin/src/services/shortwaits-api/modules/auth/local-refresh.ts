@@ -1,5 +1,5 @@
-import { endpoints, type AuthResponseType } from "@shortwaits/shared-lib";
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
+import { endpoints, type AuthResponseType } from "@shortwaits/shared-utils";
 
 type RequestType = undefined;
 

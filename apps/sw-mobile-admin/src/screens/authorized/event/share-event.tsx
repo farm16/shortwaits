@@ -2,7 +2,7 @@ import React, { ForwardedRef, forwardRef } from "react";
 import Share, { ShareSingleOptions, Social } from "react-native-share";
 
 import GBottomSheet from "@gorhom/bottom-sheet";
-import { EventDtoType } from "@shortwaits/shared-lib";
+import { EventDtoType } from "@shortwaits/shared-utils";
 import { View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";

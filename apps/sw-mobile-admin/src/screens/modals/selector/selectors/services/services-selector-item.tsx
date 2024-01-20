@@ -1,5 +1,5 @@
+import { ServiceDtoType } from "@shortwaits/shared-utils";
 import React from "react";
-import { ServiceDtoType } from "@shortwaits/shared-lib";
 import { ServiceItem } from "../../../../../components";
 import { SelectorItemProps } from "../../selector-types";
 

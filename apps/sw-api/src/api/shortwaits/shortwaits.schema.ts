@@ -10,7 +10,7 @@ import {
   ObjectId,
   ShortwaitsAdminBannersType,
   AccountPermissions,
-} from "@shortwaits/shared-lib";
+} from "@shortwaits/shared-utils";
 
 @Schema()
 export class Shortwaits extends Document implements ShortwaitsAdminDefaultDataType {

@@ -1,9 +1,9 @@
+import { EmojiType } from "@shortwaits/shared-utils";
 import React from "react";
 import { TextStyle } from "react-native";
-import { EmojiType } from "@shortwaits/shared-lib";
 
-import { Text } from "../common";
 import { getEmojiString } from "../../utils";
+import { Text } from "../common";
 
 type EmojiProps = {
   name: EmojiType;

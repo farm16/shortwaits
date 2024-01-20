@@ -16,8 +16,8 @@
     "baseUrl": ".",
     "paths": {
       "@shortwaits/calendar": ["libs/calendar/src/index.ts"],
-      "@shortwaits/shared-lib": ["libs/shared-lib/src/index.ts"],
-      "@shortwaits/shared-ui-layout": ["libs/shared-ui-layout/src/index.ts"]
+      "@shortwaits/shared-utils": ["libs/shared-utils/src/index.ts"],
+      "@shortwaits/shared-ui": ["libs/shared-ui/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

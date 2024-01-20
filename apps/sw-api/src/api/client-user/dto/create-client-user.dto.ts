@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { ConvertToDtoType, CreateClientUserDtoType } from "@shortwaits/shared-lib";
+import { ConvertToDtoType, CreateClientUserDtoType } from "@shortwaits/shared-utils";
 import { IsNotEmpty, IsOptional } from "class-validator";
 
 export class CreateClientUserDto implements CreateClientUserDtoType {

@@ -9,7 +9,7 @@ import {
   LocalClientUserType,
   generateAvatarUrl,
   generateShortId,
-} from "@shortwaits/shared-lib";
+} from "@shortwaits/shared-utils";
 import { ClientSignUpWithEmailDto } from "../api/auth/dto/auth-client-user.dto";
 
 export const generateBusinessUser = (user: CreateBusinessUserDtoType, businessUserRoles: BusinessUserRoles) => {

@@ -1,4 +1,4 @@
-import { CreateServiceDtoType } from "@shortwaits/shared-lib";
+import { CreateServiceDtoType } from "@shortwaits/shared-utils";
 import * as Yup from "yup";
 import { hoursOptional } from "./commons";
 

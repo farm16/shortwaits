@@ -1,5 +1,5 @@
-import { ServicesDtoType } from "@shortwaits/shared-lib";
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
+import { ServicesDtoType } from "@shortwaits/shared-utils";
 import { shortwaitsApiEndpoints } from "../../../../configs";
 
 const { getBusinessServices } = shortwaitsApiEndpoints.BUSINESS;

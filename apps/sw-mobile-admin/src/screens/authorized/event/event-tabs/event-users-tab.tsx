@@ -1,5 +1,5 @@
 import { skipToken } from "@reduxjs/toolkit/dist/query";
-import { AllClientsType, BusinessClientType, BusinessUserDtoType, BusinessUsersDtoType, ClientUserDtoType, ClientUsersDtoType, EventDtoType } from "@shortwaits/shared-lib";
+import { AllClientsType, BusinessClientType, BusinessUserDtoType, BusinessUsersDtoType, ClientUserDtoType, ClientUsersDtoType, EventDtoType } from "@shortwaits/shared-utils";
 import { isEmpty } from "lodash";
 import React, { Fragment, useCallback, useMemo } from "react";
 import { useIntl } from "react-intl";

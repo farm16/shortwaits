@@ -1,4 +1,4 @@
-import { BusinessUserDtoType, BusinessUsersDtoType } from "@shortwaits/shared-lib";
+import { BusinessUserDtoType, BusinessUsersDtoType } from "@shortwaits/shared-utils";
 import React from "react";
 import { Accordion, AccordionDataItemType } from "../../../../components";
 import { useTheme } from "../../../../theme";

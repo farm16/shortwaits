@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory, raw } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
-import { BusinessLabelsType, DiscountType, EventLocationType, EventPaymentMethodType, EventType, EventUrlsType, ObjectId } from "@shortwaits/shared-lib";
+import { BusinessLabelsType, DiscountType, EventLocationType, EventPaymentMethodType, EventType, EventUrlsType, ObjectId } from "@shortwaits/shared-utils";
 import { Document, Schema as MongooseSchema, Types } from "mongoose";
 
 class EventUrls implements EventUrlsType {

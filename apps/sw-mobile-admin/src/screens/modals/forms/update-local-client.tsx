@@ -1,4 +1,4 @@
-import { ClientUserType, UpdateLocalClientDtoType } from "@shortwaits/shared-lib";
+import { ClientUserType, UpdateLocalClientDtoType } from "@shortwaits/shared-utils";
 import { FormikErrors } from "formik";
 import { isEmpty, noop } from "lodash";
 import React, { FC, useEffect, useLayoutEffect } from "react";

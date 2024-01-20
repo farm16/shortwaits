@@ -16,7 +16,7 @@ import {
   UpdateEventDtoType,
   UpdateLocalClientDtoType,
   WeekHoursType,
-} from "@shortwaits/shared-lib";
+} from "@shortwaits/shared-utils";
 import { NonIdealStateTypes } from "../components";
 import { selectorConfigs } from "../screens/modals/selector/selector-config";
 import { ThemeColorName } from "../theme/Colors";

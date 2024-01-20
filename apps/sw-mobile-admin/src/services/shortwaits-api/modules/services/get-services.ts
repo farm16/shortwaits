@@ -1,5 +1,5 @@
-import { endpoints, ServicesResponseType } from "@shortwaits/shared-lib";
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
+import { endpoints, ServicesResponseType } from "@shortwaits/shared-utils";
 
 export default (builder: EndpointBuilder<any, any, any>) =>
   builder.query<ServicesResponseType, string>({

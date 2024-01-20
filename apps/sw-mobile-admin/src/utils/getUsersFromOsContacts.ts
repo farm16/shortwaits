@@ -1,4 +1,4 @@
-import { AddLocalClientDtoType } from "@shortwaits/shared-lib";
+import { AddLocalClientDtoType } from "@shortwaits/shared-utils";
 import { Platform } from "react-native";
 import { Contact } from "react-native-contacts";
 

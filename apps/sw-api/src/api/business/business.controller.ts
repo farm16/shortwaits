@@ -1,6 +1,6 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Put, Req, UseGuards, ValidationPipe } from "@nestjs/common";
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
-import { ClientUserUpdateDtoType, CreateBusinessUsersDtoType, CreateClientUsersDtoType } from "@shortwaits/shared-lib";
+import { ClientUserUpdateDtoType, CreateBusinessUsersDtoType, CreateClientUsersDtoType } from "@shortwaits/shared-utils";
 
 import { AtGuard } from "../../common/guards";
 import { BusinessService } from "./business.service";

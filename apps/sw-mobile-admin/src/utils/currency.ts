@@ -1,4 +1,4 @@
-import { BusinessAvailableCurrenciesType, CurrencyType } from "@shortwaits/shared-lib";
+import { BusinessAvailableCurrenciesType, CurrencyType } from "@shortwaits/shared-utils";
 
 const LOCALES = {
   en: "en-US",
@@ -49,10 +49,7 @@ export const getPrettyStringFromPrice = (currency: BusinessAvailableCurrenciesTy
   };
   const dollars = price / 100;
   dollars.toString(10);
-  const priceString = dollars.toLocaleString(
-    localesWithOptions[currency]?.locales ?? "en-US",
-    localesWithOptions[currency]?.options ?? { style: "currency", currency: "USD" }
-  );
+  const priceString = dollars.toLocaleString(localesWithOptions[currency]?.locales ?? "en-US", localesWithOptions[currency]?.options ?? { style: "currency", currency: "USD" });
   return priceString;
 };
 

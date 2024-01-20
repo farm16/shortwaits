@@ -1,4 +1,4 @@
-import { BusinessUserType, CreateClientUserDtoType, EventDtoType } from "@shortwaits/shared-lib";
+import { BusinessUserType, CreateClientUserDtoType, EventDtoType } from "@shortwaits/shared-utils";
 
 import { SignUpWithEmailDto } from "../api/auth/dto";
 import { CreateBusinessUserDto } from "../api/business-staff/dto";

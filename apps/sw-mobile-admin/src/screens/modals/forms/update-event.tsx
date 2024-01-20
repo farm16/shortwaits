@@ -1,4 +1,4 @@
-import { ServiceDtoType, UpdateEventDtoType, eventPaymentMethods } from "@shortwaits/shared-lib";
+import { ServiceDtoType, UpdateEventDtoType, eventPaymentMethods } from "@shortwaits/shared-utils";
 import { FormikErrors } from "formik";
 import { noop } from "lodash";
 import React, { FC, useCallback, useEffect, useLayoutEffect, useState } from "react";

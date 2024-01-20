@@ -1,5 +1,5 @@
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
-import { AddLocalClientsDtoType, AddLocalClientsResponseType, endpoints } from "@shortwaits/shared-lib";
+import { AddLocalClientsDtoType, AddLocalClientsResponseType, endpoints } from "@shortwaits/shared-utils";
 
 type RequestType = {
   businessId: string;

@@ -1,4 +1,4 @@
-import { BusinessHoursType } from "@shortwaits/shared-lib";
+import { BusinessHoursType } from "@shortwaits/shared-utils";
 
 /**
  * @todo this will need translation

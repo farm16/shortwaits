@@ -2,7 +2,7 @@ import * as RNLocalize from "react-native-localize";
 import { useMobileAdmin } from "../store";
 import copies from "../i18n/copies.json";
 import { useMemo } from "react";
-import { AvailableLanguagesType } from "@shortwaits/shared-lib";
+import { AvailableLanguagesType } from "@shortwaits/shared-utils";
 
 export const getDeviceLocales = () => {
   const locales = RNLocalize.getLocales();

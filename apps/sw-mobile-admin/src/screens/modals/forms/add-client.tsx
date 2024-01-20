@@ -1,4 +1,4 @@
-import { AddClientToBusinessDtoType } from "@shortwaits/shared-lib";
+import { AddClientToBusinessDtoType } from "@shortwaits/shared-utils";
 import { noop } from "lodash";
 import React, { FC, useEffect, useLayoutEffect, useMemo } from "react";
 import { useIntl } from "react-intl";

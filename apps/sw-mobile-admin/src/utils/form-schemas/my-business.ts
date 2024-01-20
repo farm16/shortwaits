@@ -1,4 +1,4 @@
-import { eventPaymentMethods } from "@shortwaits/shared-lib";
+import { eventPaymentMethods } from "@shortwaits/shared-utils";
 import * as Yup from "yup";
 import { hoursOptional } from "./commons";
 

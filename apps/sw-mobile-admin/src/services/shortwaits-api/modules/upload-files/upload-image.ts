@@ -1,5 +1,5 @@
-import { UploadFileDtoType, UploadFileResponseType, endpoints } from "@shortwaits/shared-lib";
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
+import { UploadFileDtoType, UploadFileResponseType, endpoints } from "@shortwaits/shared-utils";
 
 type RequestType = {
   body: UploadFileDtoType;

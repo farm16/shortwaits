@@ -1,4 +1,4 @@
-import { CreateBusinessUserDtoType } from "@shortwaits/shared-lib";
+import { CreateBusinessUserDtoType } from "@shortwaits/shared-utils";
 import * as Yup from "yup";
 
 export const addBusinessUserSchema: (config: any) => Yup.SchemaOf<CreateBusinessUserDtoType> = config =>

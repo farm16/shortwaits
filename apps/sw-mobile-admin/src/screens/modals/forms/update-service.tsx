@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useEffect, useLayoutEffect } from "react";
-import { ServiceDtoType } from "@shortwaits/shared-lib";
+import { ServiceDtoType } from "@shortwaits/shared-utils";
 import { Alert } from "react-native";
 import { useIntl } from "react-intl";
 
@@ -63,25 +63,21 @@ export const UpdateServicesModal: FC<ModalsScreenProps<"update-service-modal-scr
           iconType="delete"
           withMarginRight
           onPress={() => {
-            Alert.alert(
-              intl.formatMessage({ id: "UpdateServiceModal.alertDelete.title" }),
-              intl.formatMessage({ id: "UpdateServiceModal.alertDelete.message" }),
-              [
-                {
-                  text: intl.formatMessage({ id: "Common.cancel" }),
-                  style: "cancel",
+            Alert.alert(intl.formatMessage({ id: "UpdateServiceModal.alertDelete.title" }), intl.formatMessage({ id: "UpdateServiceModal.alertDelete.message" }), [
+              {
+                text: intl.formatMessage({ id: "Common.cancel" }),
+                style: "cancel",
+              },
+              {
+                text: intl.formatMessage({ id: "Common.delete" }),
+                onPress: () => {
+                  deleteService({
+                    businessId: business._id,
+                    serviceId: service._id,
+                  });
                 },
-                {
-                  text: intl.formatMessage({ id: "Common.delete" }),
-                  onPress: () => {
-                    deleteService({
-                      businessId: business._id,
-                      serviceId: service._id,
-                    });
-                  },
-                },
-              ]
-            );
+              },
+            ]);
           }}
         />
       ),
@@ -95,9 +91,7 @@ export const UpdateServicesModal: FC<ModalsScreenProps<"update-service-modal-scr
     [setFieldValue]
   );
 
-  const renderFooter = (
-    <Button preset="primary" onPress={() => handleSubmit()} text={intl.formatMessage({ id: "Common.update" })} />
-  );
+  const renderFooter = <Button preset="primary" onPress={() => handleSubmit()} text={intl.formatMessage({ id: "Common.update" })} />;
 
   const renderDurationBar = useCallback(() => {
     const handleDurationTimeChange = durationInMin => {
@@ -105,13 +99,7 @@ export const UpdateServicesModal: FC<ModalsScreenProps<"update-service-modal-scr
       setFieldValue("durationInMin", durationInMin[0]);
     };
 
-    return (
-      <DurationFieldCard
-        title={intl.formatMessage({ id: "UpdateServiceModal.duration" })}
-        values={[values.durationInMin]}
-        onValuesChange={handleDurationTimeChange}
-      />
-    );
+    return <DurationFieldCard title={intl.formatMessage({ id: "UpdateServiceModal.duration" })} values={[values.durationInMin]} onValuesChange={handleDurationTimeChange} />;
   }, [intl, setFieldValue, values.durationInMin]);
 
   console.log("values", values?.serviceColor);

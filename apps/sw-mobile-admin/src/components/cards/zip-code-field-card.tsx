@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import { TextFieldProps, Card, Text, CardIconsProps, Space } from "../common";
 import CurrencyInput, { CurrencyInputProps } from "react-native-currency-input";
-import { BusinessAvailableCurrenciesType } from "@shortwaits/shared-lib";
+import { BusinessAvailableCurrenciesType } from "@shortwaits/shared-utils";
 
 import { getDimensions, useTheme } from "../../theme";
 import { getCurrencySymbolFromCurrencyType } from "../../utils/currency";
@@ -19,17 +19,7 @@ type TextFieldCard = CurrencyInputProps & {
 const MAX = 10000;
 
 export function CurrencyFieldCard(props: TextFieldCard) {
-  const {
-    value,
-    style,
-    errors,
-    isTouched,
-    title,
-    rightIconName,
-    onChangeValue,
-    currencyType,
-    ...rest
-  } = props;
+  const { value, style, errors, isTouched, title, rightIconName, onChangeValue, currencyType, ...rest } = props;
 
   const {
     Colors,

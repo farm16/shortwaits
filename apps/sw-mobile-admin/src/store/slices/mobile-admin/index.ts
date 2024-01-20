@@ -1,10 +1,6 @@
 import { cloneDeep } from "lodash";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import {
-  AvailableLanguagesType,
-  CategoriesDtoType,
-  ShortwaitsAdminDefaultDataPayloadType,
-} from "@shortwaits/shared-lib";
+import { AvailableLanguagesType, CategoriesDtoType, ShortwaitsAdminDefaultDataPayloadType } from "@shortwaits/shared-utils";
 
 import { shortwaitsApi } from "../../../services";
 import type { RootState } from "../..";

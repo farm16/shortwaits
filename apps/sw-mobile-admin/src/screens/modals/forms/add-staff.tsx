@@ -2,24 +2,13 @@ import React, { FC, useEffect, useLayoutEffect, useMemo } from "react";
 import { ActivityIndicator } from "react-native-paper";
 import { Alert } from "react-native";
 import { FormikErrors } from "formik";
-import { ClientUserType, CreateBusinessUserDtoType } from "@shortwaits/shared-lib";
+import { ClientUserType, CreateBusinessUserDtoType } from "@shortwaits/shared-utils";
 import { useIntl } from "react-intl";
 
 import { useCreateBusinessStaffMutation } from "../../../services";
 import { useForm } from "../../../hooks";
 import { useBusiness } from "../../../store";
-import {
-  Text,
-  TextFieldCard,
-  BackButton,
-  Button,
-  PhoneNumberCard,
-  Space,
-  ExpandableSection,
-  TimePickerFieldCard,
-  FormContainer,
-  ButtonCard,
-} from "../../../components";
+import { Text, TextFieldCard, BackButton, Button, PhoneNumberCard, Space, ExpandableSection, TimePickerFieldCard, FormContainer, ButtonCard } from "../../../components";
 import { ModalsScreenProps } from "../../../navigation";
 import { STATIC_FORM_USA_STATES, getCapitalizedString } from "../../../utils";
 import { getPrettyStringFromHours } from "../../../utils/time";
@@ -96,17 +85,7 @@ export const AddStaffModal: FC<ModalsScreenProps<"add-staff-modal-screen">> = ({
     return _initialValues;
   }, [business?.hours]);
 
-  const {
-    touched,
-    errors,
-    values,
-    setFieldValue,
-    validateField,
-    setFieldTouched,
-    handleChange,
-    handleSubmit,
-    setFieldError,
-  } = useForm(
+  const { touched, errors, values, setFieldValue, validateField, setFieldTouched, handleChange, handleSubmit, setFieldError } = useForm(
     {
       initialValues,
       onSubmit: formData => {
@@ -195,11 +174,7 @@ export const AddStaffModal: FC<ModalsScreenProps<"add-staff-modal-screen">> = ({
           }
         }}
         isTouched={touched?.phoneNumbers ? touched.phoneNumbers[0]?.number ?? false : false}
-        errors={
-          errors.phoneNumbers
-            ? (errors.phoneNumbers[0] as FormikErrors<{ label: string; number: string }>)?.number ?? ""
-            : ""
-        }
+        errors={errors.phoneNumbers ? (errors.phoneNumbers[0] as FormikErrors<{ label: string; number: string }>)?.number ?? "" : ""}
       />
       <ButtonCard
         title={intl.formatMessage({ id: "AddStaffModal.schedule" })}
@@ -254,11 +229,7 @@ export const AddStaffModal: FC<ModalsScreenProps<"add-staff-modal-screen">> = ({
             }
           }}
           isTouched={touched?.phoneNumbers ? touched.phoneNumbers[1]?.number ?? false : false}
-          errors={
-            errors.phoneNumbers
-              ? (errors.phoneNumbers[1] as FormikErrors<{ label: string; number: string }>)?.number ?? ""
-              : ""
-          }
+          errors={errors.phoneNumbers ? (errors.phoneNumbers[1] as FormikErrors<{ label: string; number: string }>)?.number ?? "" : ""}
         />
         <PhoneNumberCard
           title={getCapitalizedString(values.phoneNumbers[2].label)}
@@ -272,56 +243,34 @@ export const AddStaffModal: FC<ModalsScreenProps<"add-staff-modal-screen">> = ({
             }
           }}
           isTouched={touched?.phoneNumbers ? touched.phoneNumbers[2]?.number ?? false : false}
-          errors={
-            errors.phoneNumbers
-              ? (errors.phoneNumbers[2] as FormikErrors<{ label: string; number: string }>)?.number ?? ""
-              : ""
-          }
+          errors={errors.phoneNumbers ? (errors.phoneNumbers[2] as FormikErrors<{ label: string; number: string }>)?.number ?? "" : ""}
         />
         <TextFieldCard
           title={intl.formatMessage({ id: "AddStaffModal.address1" })}
           value={values.addresses[0].address1}
           onChangeText={handleChange("addresses[0].address1")}
           isTouched={touched?.addresses ? touched.addresses[0]?.address1 ?? false : false}
-          errors={
-            errors.addresses
-              ? (errors.addresses[0] as FormikErrors<ClientUserType["addresses"][number]>)?.address1 ?? ""
-              : ""
-          }
+          errors={errors.addresses ? (errors.addresses[0] as FormikErrors<ClientUserType["addresses"][number]>)?.address1 ?? "" : ""}
         />
         <TextFieldCard
           title={intl.formatMessage({ id: "AddStaffModal.address2" })}
           value={values.addresses[0].address2}
           onChangeText={handleChange("addresses[0].address2")}
           isTouched={touched?.addresses ? touched.addresses[0]?.address2 ?? false : false}
-          errors={
-            errors.addresses
-              ? (errors.addresses[0] as FormikErrors<ClientUserType["addresses"][number]>)?.address2 ?? ""
-              : ""
-          }
+          errors={errors.addresses ? (errors.addresses[0] as FormikErrors<ClientUserType["addresses"][number]>)?.address2 ?? "" : ""}
         />
         <TextFieldCard
           title={intl.formatMessage({ id: "AddStaffModal.city" })}
           value={values.addresses[0].city}
           onChangeText={handleChange("addresses[0].city")}
           isTouched={touched?.addresses ? touched.addresses[0]?.city ?? false : false}
-          errors={
-            errors.addresses
-              ? (errors.addresses[0] as FormikErrors<ClientUserType["addresses"][number]>)?.city ?? ""
-              : ""
-          }
+          errors={errors.addresses ? (errors.addresses[0] as FormikErrors<ClientUserType["addresses"][number]>)?.city ?? "" : ""}
         />
         <ButtonCard
           title={intl.formatMessage({ id: "AddStaffModal.state" })}
-          subTitle={
-            STATIC_FORM_USA_STATES.find(state => state.key === values.addresses[0].state)?.title ?? "Select State"
-          }
+          subTitle={STATIC_FORM_USA_STATES.find(state => state.key === values.addresses[0].state)?.title ?? "Select State"}
           isTouched={touched?.addresses ? touched.addresses[0]?.state ?? false : false}
-          errors={
-            errors.addresses
-              ? (errors.addresses[0] as FormikErrors<ClientUserType["addresses"][number]>)?.state ?? ""
-              : ""
-          }
+          errors={errors.addresses ? (errors.addresses[0] as FormikErrors<ClientUserType["addresses"][number]>)?.state ?? "" : ""}
           onPress={() =>
             navigation.navigate("modals", {
               screen: "selector-modal-screen",
@@ -344,11 +293,7 @@ export const AddStaffModal: FC<ModalsScreenProps<"add-staff-modal-screen">> = ({
           inputMode="numeric"
           onChangeText={handleChange("addresses[0].postCode")}
           isTouched={touched?.addresses ? touched.addresses[0]?.postCode ?? false : false}
-          errors={
-            errors.addresses
-              ? (errors.addresses[0] as FormikErrors<ClientUserType["addresses"][number]>)?.postCode ?? ""
-              : ""
-          }
+          errors={errors.addresses ? (errors.addresses[0] as FormikErrors<ClientUserType["addresses"][number]>)?.postCode ?? "" : ""}
         />
       </ExpandableSection>
       <Space size="large" />

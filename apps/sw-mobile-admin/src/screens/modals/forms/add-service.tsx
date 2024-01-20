@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useEffect, useLayoutEffect, useMemo } from "react";
-import { CreateServiceDtoType } from "@shortwaits/shared-lib";
+import { CreateServiceDtoType } from "@shortwaits/shared-utils";
 import { noop } from "lodash";
 import { useIntl } from "react-intl";
 
@@ -73,34 +73,22 @@ export const AddServicesModal: FC<ModalsScreenProps<"add-service-modal-screen">>
     if (createServiceStatus.isSuccess) {
       navigation.goBack();
     } else if (createServiceStatus.isError) {
-      Alert.alert(
-        intl.formatMessage({ id: "Common.error.oops" }),
-        intl.formatMessage({ id: "Common.error.somethingWentWrong" }),
-        [
-          {
-            text: intl.formatMessage({ id: "Common.retry" }),
-            onPress: () => {
-              createService({
-                businessId: business._id,
-                body: values,
-              });
-            },
+      Alert.alert(intl.formatMessage({ id: "Common.error.oops" }), intl.formatMessage({ id: "Common.error.somethingWentWrong" }), [
+        {
+          text: intl.formatMessage({ id: "Common.retry" }),
+          onPress: () => {
+            createService({
+              businessId: business._id,
+              body: values,
+            });
           },
-          {
-            text: "Cancel",
-          },
-        ]
-      );
+        },
+        {
+          text: "Cancel",
+        },
+      ]);
     }
-  }, [
-    business._id,
-    createService,
-    createServiceStatus.isError,
-    createServiceStatus.isSuccess,
-    intl,
-    navigation,
-    values,
-  ]);
+  }, [business._id, createService, createServiceStatus.isError, createServiceStatus.isSuccess, intl, navigation, values]);
 
   useLayoutEffect(() => {
     navigation.setOptions({

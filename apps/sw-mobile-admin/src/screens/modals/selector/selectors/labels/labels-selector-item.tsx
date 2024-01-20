@@ -1,5 +1,5 @@
 import React from "react";
-import { BusinessLabelType } from "@shortwaits/shared-lib";
+import { BusinessLabelType } from "@shortwaits/shared-utils";
 
 import { Text, Card, Space, Emoji } from "../../../../../components";
 import { SelectorItemProps } from "../../selector-types";

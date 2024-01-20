@@ -1,7 +1,4 @@
-import {
-  BusinessCategoryType,
-  CommonResponseType,
-} from "@shortwaits/shared-lib";
+import { BusinessCategoryType, CommonResponseType } from "@shortwaits/shared-utils";
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
 import { shortwaitsApiEndpoints } from "../../../../configs";
 

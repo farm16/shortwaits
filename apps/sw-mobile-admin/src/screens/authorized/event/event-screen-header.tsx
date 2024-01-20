@@ -1,4 +1,4 @@
-import { BusinessLabelsType, EventDtoType } from "@shortwaits/shared-lib";
+import { BusinessLabelsType, EventDtoType } from "@shortwaits/shared-utils";
 import { isEmpty, truncate } from "lodash";
 import React from "react";
 import { Pressable, StyleSheet, View } from "react-native";

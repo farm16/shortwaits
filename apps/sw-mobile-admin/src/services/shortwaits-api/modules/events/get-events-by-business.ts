@@ -1,5 +1,5 @@
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
-import { EventsResponseType, endpoints } from "@shortwaits/shared-lib";
+import { EventsResponseType, endpoints } from "@shortwaits/shared-utils";
 
 export default (builder: EndpointBuilder<any, any, any>) =>
   builder.query<
@@ -14,6 +14,5 @@ export default (builder: EndpointBuilder<any, any, any>) =>
       };
     }
   >({
-    query: ({ businessId, query }) =>
-      endpoints.getEventsForBusiness.getConfig([businessId], query).url,
+    query: ({ businessId, query }) => endpoints.getEventsForBusiness.getConfig([businessId], query).url,
   });

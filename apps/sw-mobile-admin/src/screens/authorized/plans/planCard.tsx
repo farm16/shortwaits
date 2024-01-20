@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import { View, TouchableOpacity, StyleSheet, Dimensions } from "react-native";
 import { useTheme } from "../../../theme";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { SubscriptionPlan } from "@shortwaits/shared-lib";
+import { SubscriptionPlan } from "@shortwaits/shared-utils";
 import { Container, Text } from "../../../components";
 import { getFontSize } from "../../../utils";
 

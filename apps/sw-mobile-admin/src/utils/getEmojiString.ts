@@ -1,5 +1,5 @@
+import { EmojiType } from "@shortwaits/shared-utils";
 import EmojiData from "emoji-datasource/emoji.json";
-import { EmojiType } from "@shortwaits/shared-lib";
 
 export function getEmojiString(name: EmojiType) {
   const charFromUtf16 = utf16 => String.fromCodePoint(...utf16.split("-").map(u => "0x" + u));

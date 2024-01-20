@@ -1,4 +1,4 @@
-// import { BusinessCategoryType, DocType, SuccessResponseType } from "@shortwaits/shared-lib"
+// import { BusinessCategoryType, DocType, SuccessResponseType } from "@shortwaits/shared-utils"
 // import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions"
 
 // export default (builder: EndpointBuilder<any, any, any>) =>

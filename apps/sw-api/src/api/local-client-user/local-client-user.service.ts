@@ -1,6 +1,6 @@
 import { Injectable, InternalServerErrorException, NotFoundException, PreconditionFailedException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { LocalClientDtoType } from "@shortwaits/shared-lib";
+import { LocalClientDtoType } from "@shortwaits/shared-utils";
 import { Model } from "mongoose";
 import { getNewClientPayload, getSupportedLocales, getUniqueIdArray } from "../../utils";
 import { Business } from "../business/entities/business.entity";

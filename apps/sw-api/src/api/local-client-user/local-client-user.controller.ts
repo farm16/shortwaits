@@ -1,7 +1,7 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Put, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 
-import { LocalClientDtoType } from "@shortwaits/shared-lib";
+import { LocalClientDtoType } from "@shortwaits/shared-utils";
 import { AtGuard } from "../../common/guards";
 import { CreateLocalClientUserDto } from "./dto";
 import { LocalClientUserService } from "./local-client-user.service";

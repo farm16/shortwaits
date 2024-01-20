@@ -1,5 +1,5 @@
 import { skipToken } from "@reduxjs/toolkit/dist/query";
-import { ClientUsersDtoType } from "@shortwaits/shared-lib";
+import { ClientUsersDtoType } from "@shortwaits/shared-utils";
 import { isEmpty } from "lodash";
 import React, { FC, useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { ActivityIndicator, Alert, SectionList, StyleSheet } from "react-native";

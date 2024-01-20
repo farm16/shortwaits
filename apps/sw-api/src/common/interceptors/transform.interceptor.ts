@@ -1,5 +1,5 @@
 import { Injectable, NestInterceptor, ExecutionContext, CallHandler } from "@nestjs/common";
-import { CommonResponseType } from "@shortwaits/shared-lib";
+import { CommonResponseType } from "@shortwaits/shared-utils";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { ConfigService } from "@nestjs/config";

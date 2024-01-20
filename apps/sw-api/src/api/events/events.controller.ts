@@ -1,7 +1,7 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, InternalServerErrorException, NotFoundException, Param, Post, Put, Query, Req, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
 
-import { EventDtoType } from "@shortwaits/shared-lib";
+import { EventDtoType } from "@shortwaits/shared-utils";
 import { AtGuard } from "../../common/guards";
 import { CreateEventsDto } from "./dto/create-event.dto";
 import { GetEventsByBusinessDto } from "./dto/get-events-by-business.dto";

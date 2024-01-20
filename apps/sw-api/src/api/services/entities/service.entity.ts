@@ -1,12 +1,6 @@
 import { Schema, Prop, SchemaFactory, raw } from "@nestjs/mongoose";
 import { Document, Types } from "mongoose";
-import {
-  BusinessAvailableCurrenciesType,
-  BusinessHoursType,
-  ObjectId,
-  ServiceColorType,
-  ServiceType,
-} from "@shortwaits/shared-lib";
+import { BusinessAvailableCurrenciesType, BusinessHoursType, ObjectId, ServiceColorType, ServiceType } from "@shortwaits/shared-utils";
 import { ApiProperty } from "@nestjs/swagger";
 
 @Schema()

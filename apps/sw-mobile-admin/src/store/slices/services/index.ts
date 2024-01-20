@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ServicesDtoType } from "@shortwaits/shared-lib";
+import { ServicesDtoType } from "@shortwaits/shared-utils";
 
 import { shortwaitsApi } from "../../../services";
 import type { RootState } from "../..";

@@ -2,7 +2,7 @@ import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundE
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, ObjectId, Types } from "mongoose";
 
-import { EventDtoType } from "@shortwaits/shared-lib";
+import { EventDtoType } from "@shortwaits/shared-utils";
 import { convertArrayToObjectId } from "../../utils/converters";
 import { getFilteredNewEvent } from "../../utils/filtersForDtos";
 import { BusinessUser } from "../business-staff/entities/business-staff.entity";

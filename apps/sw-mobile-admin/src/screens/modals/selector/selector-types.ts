@@ -1,4 +1,4 @@
-import { AvailableLanguagesType } from "@shortwaits/shared-lib";
+import { AvailableLanguagesType } from "@shortwaits/shared-utils";
 import { ThemeColorName } from "../../../theme/Colors";
 
 /**

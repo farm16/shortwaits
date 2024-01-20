@@ -1,16 +1,8 @@
 import React, { FC, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { BusinessWeekDaysType, WEEKDAYS_ARR, WeekHoursType } from "@shortwaits/shared-lib";
+import { BusinessWeekDaysType, WEEKDAYS_ARR, WeekHoursType } from "@shortwaits/shared-utils";
 import { Alert, View } from "react-native";
 
-import {
-  BottomSheet,
-  BottomSheetType,
-  Button,
-  FormContainer,
-  IconButton,
-  BackButton,
-  useBottomSheet,
-} from "../../../components";
+import { BottomSheet, BottomSheetType, Button, FormContainer, IconButton, BackButton, useBottomSheet } from "../../../components";
 import { ModalsScreenProps } from "../../../navigation";
 import { ScheduleCard } from "./schedule-card";
 import { SelectTimeRange } from "./select-time-range";
@@ -26,16 +18,7 @@ import { cloneDeep } from "lodash";
  */
 
 export const ScheduleModal: FC<ModalsScreenProps<"schedule-modal-screen">> = ({ navigation, route }) => {
-  const {
-    disabledDays = [],
-    allowCloseAll = true,
-    hours,
-    days = WEEKDAYS_ARR,
-    allowHours = true,
-    headerTitle = "Schedule",
-    closeOnSubmit = true,
-    onSubmit,
-  } = route.params;
+  const { disabledDays = [], allowCloseAll = true, hours, days = WEEKDAYS_ARR, allowHours = true, headerTitle = "Schedule", closeOnSubmit = true, onSubmit } = route.params;
 
   const [currentWeekHours, setCurrentWeekHours] = useState<WeekHoursType>(hours);
   const [selectedWeekDay, setSelectedWeekDay] = useState<BusinessWeekDaysType>(null);
@@ -56,35 +39,25 @@ export const ScheduleModal: FC<ModalsScreenProps<"schedule-modal-screen">> = ({ 
       setIsBusinessClosed(isClosed => !isClosed);
     };
     const handleEnableDisableAllHours = () => {
-      Alert.alert(
-        `${isBusinessClosed ? "Enable" : "Disable"} all hours`,
-        "This will affect all your working hours. Are you sure you want to proceed?",
-        [
-          {
-            text: "Cancel",
-            style: "cancel",
+      Alert.alert(`${isBusinessClosed ? "Enable" : "Disable"} all hours`, "This will affect all your working hours. Are you sure you want to proceed?", [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Yes",
+          onPress: () => {
+            toggleBusinessHours();
           },
-          {
-            text: "Yes",
-            onPress: () => {
-              toggleBusinessHours();
-            },
-          },
-        ]
-      );
+        },
+      ]);
     };
     navigation.setOptions({
       headerTitle: headerTitle,
       headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
       headerRight: () => (
         <View style={{ flexDirection: "row", justifyContent: "flex-end", alignItems: "flex-end" }}>
-          {allowCloseAll && (
-            <IconButton
-              withMarginRight
-              onPress={() => handleEnableDisableAllHours()}
-              iconType={isBusinessClosed ? "open-business" : "closed-business"}
-            />
-          )}
+          {allowCloseAll && <IconButton withMarginRight onPress={() => handleEnableDisableAllHours()} iconType={isBusinessClosed ? "open-business" : "closed-business"} />}
         </View>
       ),
     });
@@ -133,12 +106,7 @@ export const ScheduleModal: FC<ModalsScreenProps<"schedule-modal-screen">> = ({ 
       >
         {renderCurrentDays()}
       </FormContainer>
-      <BottomSheet
-        onClose={() => setSelectedWeekDay(null)}
-        snapPointsLevel={7}
-        onChange={handleSheetChanges}
-        ref={bottomSheetRef}
-      >
+      <BottomSheet onClose={() => setSelectedWeekDay(null)} snapPointsLevel={7} onChange={handleSheetChanges} ref={bottomSheetRef}>
         {selectedWeekDay && (
           <SelectTimeRange
             day={selectedWeekDay}

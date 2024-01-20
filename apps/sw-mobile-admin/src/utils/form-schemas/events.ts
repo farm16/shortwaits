@@ -1,4 +1,4 @@
-import { CreateEventDtoType, EventPaymentMethodType, UpdateEventDtoType, eventPaymentMethods } from "@shortwaits/shared-lib";
+import { CreateEventDtoType, EventPaymentMethodType, UpdateEventDtoType, eventPaymentMethods } from "@shortwaits/shared-utils";
 import * as Yup from "yup";
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment

@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from "react";
 import { View, StyleSheet } from "react-native";
-import { BusinessWeekDaysType, WEEKDAYS, WeekHoursType } from "@shortwaits/shared-lib";
+import { BusinessWeekDaysType, WEEKDAYS, WeekHoursType } from "@shortwaits/shared-utils";
 
 import { Text, MultiSlider, Space, TimeRangeText, Button } from "../../../components";
 import { useSafeAreaInsets } from "react-native-safe-area-context";

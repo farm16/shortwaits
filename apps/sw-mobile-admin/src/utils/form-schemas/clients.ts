@@ -1,4 +1,4 @@
-import { AddClientToBusinessDtoType, AddLocalClientDtoType, UpdateLocalClientDtoType } from "@shortwaits/shared-lib";
+import { AddClientToBusinessDtoType, AddLocalClientDtoType, UpdateLocalClientDtoType } from "@shortwaits/shared-utils";
 import * as Yup from "yup";
 
 const deviceSettingSchema = Yup.object().shape({
