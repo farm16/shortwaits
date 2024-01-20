@@ -63,6 +63,17 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
           onPress={() => navigation.navigate("authorized-stack", { screen: "plans-screen" })}
         />
         <List.Item
+          descriptionStyle={{ color: Colors.subText }}
+          titleStyle={{
+            color: Colors.text,
+          }}
+          style={itemStyle}
+          title={<FormattedMessage id="Settings_Screen.rate_us_title" />}
+          description={<FormattedMessage id="Settings_Screen.rate_us_description" />}
+          left={props => <List.Icon {...props} color={Colors.red4} icon="heart" />}
+          right={props => <List.Icon {...props} color={Colors.brandPrimary} icon="chevron-right" />}
+        />
+        <List.Item
           titleStyle={{ color: Colors.text }}
           style={itemStyle}
           descriptionStyle={{ color: Colors.subText }}
@@ -160,17 +171,7 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
           )}
         />
         <ManageAdminUsers admins={staffQuery?.data} />
-        <List.Item
-          descriptionStyle={{ color: Colors.subText }}
-          titleStyle={{
-            color: Colors.text,
-          }}
-          style={itemStyle}
-          title={<FormattedMessage id="Settings_Screen.rate_us_title" />}
-          description={<FormattedMessage id="Settings_Screen.rate_us_description" />}
-          left={props => <List.Icon {...props} color={Colors.red4} icon="heart" />}
-          right={props => <List.Icon {...props} color={Colors.brandPrimary} icon="chevron-right" />}
-        />
+
         <AppLanguage />
         <List.Item
           descriptionStyle={{ color: Colors.subText }}

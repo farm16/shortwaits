@@ -92,6 +92,8 @@
     "react-native-permissions": "*",
     "react-native-vision-camera": "*",
     "nanoid": "*",
-    "react-native-webview": "*"
+    "react-native-webview": "*",
+    "react-native-code-push": "*",
+    "react-native-fbsdk-next": "*"
   }
 }

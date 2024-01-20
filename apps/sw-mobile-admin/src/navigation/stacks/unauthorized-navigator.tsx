@@ -1,7 +1,6 @@
 import { CardStyleInterpolators, createStackNavigator } from "@react-navigation/stack";
 import React from "react";
 import { StyleSheet } from "react-native";
-
 import { BackButton } from "../../components";
 import { Onboarding1Screen, Onboarding2Screen, SignInScreen, SignInWithEmail, SignUpScreen, SignUpWithEmail, WelcomeScreen } from "../../screens";
 import { useTheme } from "../../theme";
