@@ -1,3 +1,3 @@
 #!/usr/bin/env sh
 
-bash scripts/increment-version-and-push.sh
+bash  tools/scripts/increment-version-and-push.sh
