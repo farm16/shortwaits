@@ -1,11 +1,10 @@
 import { skipToken } from "@reduxjs/toolkit/dist/query";
+import { AnimatedSearchBar, BackButton, Container, IconButton, NonIdealState, Screen, Text } from "@shortwaits/shared-ui";
 import { BusinessUsersDtoType } from "@shortwaits/shared-utils";
 import React, { FC, useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { Alert, FlatList, StyleSheet } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import { useDispatch } from "react-redux";
-
-import { AnimatedSearchBar, BackButton, Container, IconButton, NonIdealState, Screen, Text } from "../../../../../components";
 import { ModalsScreenProps } from "../../../../../navigation";
 import { useGetBusinessStaffQuery } from "../../../../../services";
 import { showPremiumMembershipModal, useBusiness } from "../../../../../store";

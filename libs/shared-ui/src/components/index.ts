@@ -3,7 +3,6 @@ export * from "./animated";
 export * from "./avatar/avatar";
 export * from "./banners/banner";
 export * from "./business-income-info/business-income-info";
-export * from "./calendar";
 export * from "./cards";
 export * from "./common";
 export * from "./emoji";

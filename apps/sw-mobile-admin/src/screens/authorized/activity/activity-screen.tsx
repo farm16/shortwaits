@@ -1,11 +1,8 @@
+import { Container, Screen, Space, Text, useTheme } from "@shortwaits/shared-ui";
 import React, { FC, useLayoutEffect, useState } from "react";
-import { View, StyleSheet, StyleProp, ViewStyle, FlatListProps } from "react-native";
-import { useDispatch } from "react-redux";
+import { FlatListProps, StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import Timeline from "react-native-timeline-flatlist";
-
 import { AuthorizedScreenProps } from "../../../navigation";
-import { AuthorizedScreenHeader, Button, IconButton, Container, Screen, Space, Text } from "../../../components";
-import { useTheme } from "../../../theme";
 import { useShowGhostComponent } from "../../../store";
 
 export const ActivityScreen: FC<AuthorizedScreenProps<"activity-screen">> = ({ navigation }) => {

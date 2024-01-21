@@ -1,6 +1,6 @@
+import { ServiceItem } from "@shortwaits/shared-ui";
 import { ServiceDtoType } from "@shortwaits/shared-utils";
 import React from "react";
-import { ServiceItem } from "../../../../../components";
 import { SelectorItemProps } from "../../selector-types";
 
 export function ServiceSelectorItem(props: SelectorItemProps<ServiceDtoType>) {

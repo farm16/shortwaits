@@ -1,8 +1,8 @@
+import { useTheme } from "@shortwaits/shared-ui";
 import React from "react";
 import { StyleSheet } from "react-native";
 import { List } from "react-native-paper";
 import { useAuthorizedScreensNavigation } from "../../../../navigation";
-import { useTheme } from "../../../../theme";
 
 export const AppInfoSettings = () => {
   const { Colors } = useTheme();

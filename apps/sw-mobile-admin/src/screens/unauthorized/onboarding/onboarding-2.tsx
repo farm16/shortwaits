@@ -1,12 +1,11 @@
 import { CompositeNavigationProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
+import { BackButton, Button, FormContainer, IconButton, ServiceItem, Space } from "@shortwaits/shared-ui";
 import React, { useCallback, useLayoutEffect } from "react";
 import { useIntl } from "react-intl";
 import { FlatList, RefreshControl, StyleSheet } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
-
-import { BackButton, Button, FormContainer, IconButton, ServiceItem, Space } from "../../../components";
 import { RootStackParamList, UnauthorizedStackParamList } from "../../../navigation";
 import { useGetServicesQuery, useRegisterBusinessMutation } from "../../../services";
 import { useBusiness } from "../../../store";

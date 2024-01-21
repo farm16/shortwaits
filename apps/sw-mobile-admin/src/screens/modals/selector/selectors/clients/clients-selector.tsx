@@ -1,14 +1,13 @@
 import { skipToken } from "@reduxjs/toolkit/dist/query";
+import { AnimatedSearchBar, BackButton, Container, IconButton, NonIdealState, Screen, Space, Text, useTheme } from "@shortwaits/shared-ui";
 import { ClientUsersDtoType } from "@shortwaits/shared-utils";
 import { isEmpty } from "lodash";
 import React, { FC, useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { ActivityIndicator, Alert, SectionList, StyleSheet } from "react-native";
 import { useDispatch } from "react-redux";
-import { AnimatedSearchBar, BackButton, Container, IconButton, NonIdealState, Screen, Space, Text } from "../../../../../components";
 import { ModalsScreenProps } from "../../../../../navigation";
 import { useGetAllBusinessClientsQuery } from "../../../../../services";
 import { showPremiumMembershipModal, useBusiness } from "../../../../../store";
-import { useTheme } from "../../../../../theme";
 import { ClientsSelectorItem } from "./clients-selector-item";
 
 const MIN_SELECTED_ITEMS_DEFAULT = 0; // Define your minimum selected items here

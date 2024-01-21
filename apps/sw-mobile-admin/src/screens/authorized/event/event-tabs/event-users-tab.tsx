@@ -1,15 +1,26 @@
 import { skipToken } from "@reduxjs/toolkit/dist/query";
+import {
+  BusinessUserCard,
+  Button,
+  ClientUserCard,
+  Container,
+  IconButton,
+  NonIdealState,
+  Space,
+  Text,
+  getCombinedClientTypes,
+  nextEventStatuses,
+  useTheme,
+} from "@shortwaits/shared-ui";
 import { AllClientsType, BusinessClientType, BusinessUserDtoType, BusinessUsersDtoType, ClientUserDtoType, ClientUsersDtoType, EventDtoType } from "@shortwaits/shared-utils";
 import { isEmpty } from "lodash";
 import React, { Fragment, useCallback, useMemo } from "react";
 import { useIntl } from "react-intl";
 import { RefreshControl, SectionList, SectionListData, SectionListRenderItem, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
-import { BusinessUserCard, Button, ClientUserCard, Container, IconButton, NonIdealState, Space, Text } from "../../../../components";
+import { navigate } from "../../../../navigation";
 import { useGetPeopleInEventQuery, useUpdateEventMutation } from "../../../../services";
 import { useBusiness } from "../../../../store";
-import { useTheme } from "../../../../theme";
-import { getCombinedClientTypes, navigate, nextEventStatuses } from "../../../../utils";
 
 type PeopleDtoType = BusinessUserDtoType | ClientUserDtoType;
 

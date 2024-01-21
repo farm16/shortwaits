@@ -1,14 +1,13 @@
 import { useNavigation } from "@react-navigation/native";
+import { AnimatedSearchBar, Button, List, NonIdealState, SelectorListItem, getFriendlyShortId, getResponsiveHeight } from "@shortwaits/shared-ui";
 import { LocalClientDtoType } from "@shortwaits/shared-utils";
 import { isEmpty } from "lodash";
 import React, { Fragment, useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { ListRenderItem, View } from "react-native";
 import { RefreshControl } from "react-native-gesture-handler";
-import { AnimatedSearchBar, Button, List, NonIdealState, SelectorListItem } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useLocalClients } from "../../../store";
-import { getFriendlyShortId, getResponsiveHeight } from "../../../utils";
 
 export function LocalClientsTab({ isLoading, refresh }: { isLoading: boolean; refresh: () => void }) {
   const intl = useIntl();

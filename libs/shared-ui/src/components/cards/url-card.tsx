@@ -1,17 +1,16 @@
-import React, { useCallback, useRef } from "react";
-import { Linking, Pressable, StyleSheet, Alert, Platform } from "react-native";
-import { Text } from "../common";
 import Clipboard from "@react-native-clipboard/clipboard";
+import React, { useCallback, useRef } from "react";
+import { Alert, Linking, Platform, Pressable, StyleSheet } from "react-native";
 import MaterialIcon from "react-native-vector-icons/MaterialCommunityIcons";
-
 import CustomUrl from "../../assets/icons/custom-url.svg";
-import Zoom from "../../assets/icons/zoom-url.svg";
-import Teams from "../../assets/icons/teams-url.svg";
-import GoogleMeet from "../../assets/icons/meet-url.svg";
-import FacebookLive from "../../assets/icons/fb-url.svg";
-import Skype from "../../assets/icons/skype-url.svg";
 import Discord from "../../assets/icons/discord-url.svg";
+import FacebookLive from "../../assets/icons/fb-url.svg";
+import GoogleMeet from "../../assets/icons/meet-url.svg";
+import Skype from "../../assets/icons/skype-url.svg";
+import Teams from "../../assets/icons/teams-url.svg";
 import Twitter from "../../assets/icons/twitter-url.svg";
+import Zoom from "../../assets/icons/zoom-url.svg";
+import { Text } from "../common";
 
 const urlIcons = {
   custom: {
@@ -123,26 +122,9 @@ export function UrlCard({ type, url }: UrlCardProps) {
   }, [url]);
 
   return (
-    <Pressable
-      onPress={handleOnPress}
-      style={[
-        styles.root,
-        { backgroundColor: cardProps.current.style.backgroundColor },
-      ]}
-    >
-      {type === "custom" ? (
-        <Text
-          style={{ color: "white" }}
-          text={cardProps.current.friendlyName}
-        />
-      ) : (
-        <Icon height={iconSize} width={iconSize} />
-      )}
-      <MaterialIcon
-        name="link-variant"
-        size={27}
-        color={cardProps.current.style.linkIconColor}
-      />
+    <Pressable onPress={handleOnPress} style={[styles.root, { backgroundColor: cardProps.current.style.backgroundColor }]}>
+      {type === "custom" ? <Text style={{ color: "white" }} text={cardProps.current.friendlyName} /> : <Icon height={iconSize} width={iconSize} />}
+      <MaterialIcon name="link-variant" size={27} color={cardProps.current.style.linkIconColor} />
     </Pressable>
   );
 }

@@ -1,6 +1,5 @@
-import React, { useMemo } from "react";
-// import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import { BottomTabNavigationOptions, createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import React, { useMemo } from "react";
 import { useIntl } from "react-intl";
 import { Platform } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";

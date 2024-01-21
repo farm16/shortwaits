@@ -1,18 +1,14 @@
 import React from "react";
-import { useModalScreensNavigation } from "../../navigation";
 import { Button, Text } from "../common";
 
-export const TermsAndConditions: React.FC = () => {
-  const navigation = useModalScreensNavigation<"webview-modal-screen">();
+type TermsAndConditionsProps = {
+  onPress?(): null;
+};
+export const TermsAndConditions: React.FC<TermsAndConditionsProps> = props => {
+  const { onPress } = props;
 
   const navigateToTermsAndConditions = () => {
-    navigation.navigate("modals", {
-      screen: "webview-modal-screen",
-      params: {
-        uri: "https://www.shortwaits.com/v1/shortwaits/privacy-policy",
-        header: "Terms and Conditions",
-      },
-    });
+    if (onPress) onPress();
   };
 
   return (

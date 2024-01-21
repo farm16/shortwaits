@@ -3,10 +3,8 @@ import React, { useCallback } from "react";
 import { View } from "react-native";
 import { Modal } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { useDispatch, useSelector } from "react-redux";
-import { hidePremiumMembershipModal, selectCurrentMobileAdminState } from "../../store";
 import { useTheme } from "../../theme";
-import { getFontSize, navigate } from "../../utils";
+import { getFontSize } from "../../utils";
 import { Button, Container, Space, Text } from "../common";
 
 const premiumAccountFeatures = [
@@ -17,7 +15,7 @@ const premiumAccountFeatures = [
   { name: "", description: "Recurring Appointments" },
   { name: "", description: "Multiple users support" },
 ];
-const CheckedList = ({ text }) => {
+const CheckedList = ({ text }: { text: string }) => {
   const { Colors } = useTheme();
 
   return (
@@ -39,17 +37,28 @@ const CheckedList = ({ text }) => {
   );
 };
 
-export const PremiumMembershipModal = props => {
-  const dispatch = useDispatch();
-  const mobileAdmin = useSelector(selectCurrentMobileAdminState);
-  const handleDismiss = useCallback(() => {
-    dispatch(hidePremiumMembershipModal());
-  }, [dispatch]);
+type PremiumMembershipModalProps = {
+  onPress?(): void;
+  onDismiss?(): void;
+  isVisible?: boolean;
+};
 
-  const isVisible = mobileAdmin?.components.premiumMembership.isVisible ?? false;
+export const PremiumMembershipModal = (props: PremiumMembershipModalProps) => {
+  const handleDismiss = useCallback(() => {
+    if (props.onDismiss) {
+      props.onDismiss();
+    }
+  }, [props]);
+
+  const handleOnPress = useCallback(() => {
+    if (props.onPress) {
+      props.onPress();
+    }
+  }, [props]);
+
   const { Colors } = useTheme();
 
-  if (!isVisible) {
+  if (!props.isVisible) {
     return null;
   }
 
@@ -81,13 +90,7 @@ export const PremiumMembershipModal = props => {
             })}
           </View>
           <Space />
-          <Button
-            onPress={() => {
-              handleDismiss();
-              navigate("authorized-stack", { screen: "plans-screen" });
-            }}
-            text="GET PREMIUM"
-          />
+          <Button onPress={handleOnPress} text="GET PREMIUM" />
           <Space size="small" />
           <Button
             onPress={() => {

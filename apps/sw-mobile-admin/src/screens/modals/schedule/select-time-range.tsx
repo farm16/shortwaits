@@ -1,8 +1,7 @@
-import React, { FC, useEffect, useState } from "react";
-import { View, StyleSheet } from "react-native";
+import { Button, MultiSlider, Space, Text, TimeRangeText } from "@shortwaits/shared-ui";
 import { BusinessWeekDaysType, WEEKDAYS, WeekHoursType } from "@shortwaits/shared-utils";
-
-import { Text, MultiSlider, Space, TimeRangeText, Button } from "../../../components";
+import React, { FC, useEffect, useState } from "react";
+import { StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export interface SelectTimeRangeProps {

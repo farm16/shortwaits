@@ -1,11 +1,10 @@
+import { BackButton, Screen, Text, useTheme } from "@shortwaits/shared-ui";
 import React, { FC, useEffect, useLayoutEffect, useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl"; // Import FormattedMessage and useIntl
 import { Platform, StyleSheet } from "react-native";
 import DeviceInfo from "react-native-device-info";
 import { List } from "react-native-paper";
-import { BackButton, Screen, Text } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
-import { useTheme } from "../../../theme";
 
 const appName = DeviceInfo.getApplicationName();
 const appVersion = DeviceInfo.getVersion();

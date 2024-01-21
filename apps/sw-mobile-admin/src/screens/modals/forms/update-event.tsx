@@ -1,3 +1,20 @@
+import {
+  BackButton,
+  Button,
+  ButtonCard,
+  Container,
+  CurrencyFieldCard,
+  FormContainer,
+  IconButton,
+  Space,
+  Text,
+  TextFieldCard,
+  TimePickerFieldCard,
+  compareFormObjectsBeforeAbort,
+  getEmojiString,
+  nextEventStatuses,
+  useTheme,
+} from "@shortwaits/shared-ui";
 import { ServiceDtoType, UpdateEventDtoType, eventPaymentMethods } from "@shortwaits/shared-utils";
 import { FormikErrors } from "formik";
 import { noop } from "lodash";
@@ -6,13 +23,10 @@ import { useIntl } from "react-intl";
 import { Alert } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { BackButton, Button, ButtonCard, Container, CurrencyFieldCard, FormContainer, IconButton, Space, Text, TextFieldCard, TimePickerFieldCard } from "../../../components";
 import { useForm } from "../../../hooks";
 import { ModalsScreenProps } from "../../../navigation";
 import { useUpdateEventMutation } from "../../../services";
 import { useBusiness, useServices } from "../../../store";
-import { useTheme } from "../../../theme";
-import { compareFormObjectsBeforeAbort, getEmojiString, nextEventStatuses } from "../../../utils";
 
 export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">> = ({ navigation, route }) => {
   const params = route?.params;

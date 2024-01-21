@@ -1,15 +1,24 @@
+import {
+  Container,
+  Emoji,
+  Space,
+  Text,
+  getPrettyDateFromISO,
+  getPrettyStringFromPriceWithSymbol,
+  getPrettyTimeRangeFromISO,
+  statusDisplayMessages,
+  statusDisplayMessagesBackgroundColor,
+  statusDisplayMessagesColor,
+  truncated,
+  useTheme,
+} from "@shortwaits/shared-ui";
 import { BusinessLabelsType, EventDtoType } from "@shortwaits/shared-utils";
 import { isEmpty, truncate } from "lodash";
 import React from "react";
+import { useIntl } from "react-intl";
 import { Pressable, StyleSheet, View } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-
-import { useIntl } from "react-intl";
-import { Container, Emoji, Space, Text } from "../../../components";
 import { useService } from "../../../store";
-import { useTheme } from "../../../theme";
-import { getPrettyDateFromISO, getPrettyStringFromPriceWithSymbol, getPrettyTimeRangeFromISO, truncated } from "../../../utils";
-import { statusDisplayMessages, statusDisplayMessagesBackgroundColor, statusDisplayMessagesColor } from "../../../utils/status-color";
 
 const IconNames = {
   date: "calendar-month-outline",

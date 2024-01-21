@@ -1,8 +1,8 @@
+import { BackButton, Screen, Text } from "@shortwaits/shared-ui";
 import { noop } from "lodash";
 import React, { FC, useCallback, useEffect, useLayoutEffect } from "react";
 import { StyleSheet } from "react-native";
 import WebView from "react-native-webview";
-import { BackButton, Screen, Text } from "../../../components";
 import { ModalsScreenProps } from "../../../navigation";
 
 export const WebViewModal: FC<ModalsScreenProps<"webview-modal-screen">> = ({ navigation, route }) => {

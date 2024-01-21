@@ -1,7 +1,7 @@
 import React from "react";
 import { ColorValue, ScrollViewProps, ViewStyle } from "react-native";
-import { KeyboardOffsets, ScreenPresets } from "./screen.presets";
 import { ThemeColorName } from "../../../theme/Colors";
+import { KeyboardOffsets, ScreenPresets } from "./screen.presets";
 
 export interface ScreenProps extends ScrollViewProps {
   header?: JSX.Element;

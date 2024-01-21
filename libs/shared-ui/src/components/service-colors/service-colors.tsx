@@ -1,13 +1,12 @@
+import { ServiceColorType, ServiceColorsType } from "@shortwaits/shared-utils";
 import React, { useCallback, useMemo } from "react";
 import { StyleSheet, View, ViewStyle } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { ServiceColorType } from "@shortwaits/shared-utils";
-
 import { getDimensions } from "../../theme";
 import { Button, ButtonProps } from "../common";
-import { useMobileAdmin } from "../../store";
 
 interface ServiceColorsProps {
+  serviceColors: ServiceColorsType;
   selectedColor?: ServiceColorType;
   onSelect(arg: ServiceColorType): void;
 }
@@ -19,7 +18,7 @@ interface CircleProps extends ButtonProps {
   onSelect(): void;
 }
 
-function Circle({ width: circleDiameter, color, isSelected, isDefault = false, onSelect }: CircleProps) {
+function Circle({ width: circleDiameter, color, isSelected, onSelect }: CircleProps) {
   const style: ViewStyle = {
     backgroundColor: color,
     width: circleDiameter,
@@ -35,34 +34,31 @@ function Circle({ width: circleDiameter, color, isSelected, isDefault = false, o
   );
 }
 
-export function ServiceColors({ selectedColor, onSelect }: ServiceColorsProps) {
-  const mobileAdminData = useMobileAdmin();
-
+export function ServiceColors({ selectedColor, onSelect, serviceColors }: ServiceColorsProps) {
   const handleOnSelect = useCallback(
-    color => {
-      onSelect(color);
+    (item: ServiceColorType) => {
+      if (onSelect) onSelect(item);
     },
     [onSelect]
   );
 
   const circles = useMemo(() => {
     const { width } = getDimensions(87);
-    const colorsCount = mobileAdminData ? Object.keys(mobileAdminData?.shortwaits?.serviceColors).length : 0;
+    const colorsCount = serviceColors ? Object.keys(serviceColors).length : 0;
     const circleWidth = width / (colorsCount * 1.9);
 
-    return Object.keys(mobileAdminData.shortwaits?.serviceColors).map(elem => (
+    return Object.keys(serviceColors).map(elem => (
       <Circle
-        key={mobileAdminData.shortwaits?.serviceColors[elem].colorId}
-        onSelect={() => handleOnSelect(mobileAdminData.shortwaits?.serviceColors[elem])}
+        key={serviceColors[elem].colorId}
+        onSelect={() => handleOnSelect(serviceColors[elem])}
         width={circleWidth}
-        color={mobileAdminData.shortwaits?.serviceColors[elem].hexCode ?? "#ffffff"}
-        isSelected={mobileAdminData.shortwaits?.serviceColors[elem].colorId == selectedColor?.colorId}
-        isDefault={false}
+        color={serviceColors[elem].hexCode ?? "#ffffff"}
+        isSelected={serviceColors[elem].colorId === selectedColor?.colorId}
       />
     ));
-  }, [mobileAdminData, handleOnSelect, selectedColor]);
+  }, [handleOnSelect, selectedColor?.colorId, serviceColors]);
 
-  if (!mobileAdminData) return null;
+  if (!serviceColors) return null;
 
   return <View style={[styles.root]}>{circles}</View>;
 }

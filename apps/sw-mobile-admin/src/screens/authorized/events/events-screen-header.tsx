@@ -1,8 +1,7 @@
-import { useTheme } from "../../../theme";
-import { Button, Text } from "../../../components";
+import { Button, Text, useTheme } from "@shortwaits/shared-ui";
 import { truncate } from "lodash";
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 
 export const EventsScreenHeader = ({ user, business }) => {
@@ -16,16 +15,8 @@ export const EventsScreenHeader = ({ user, business }) => {
         },
       ]}
     >
-      <Button
-        preset="none"
-        style={{ flexDirection: "row", alignItems: "center" }}
-      >
-        <MaterialCommunityIcon
-          name={"account-box"}
-          size={21}
-          color={Colors.brandSecondary}
-          style={{ marginRight: 5 }}
-        />
+      <Button preset="none" style={{ flexDirection: "row", alignItems: "center" }}>
+        <MaterialCommunityIcon name={"account-box"} size={21} color={Colors.brandSecondary} style={{ marginRight: 5 }} />
         <Text
           text={truncate(user.username, { length: 16, separator: "." })}
           style={[
@@ -48,12 +39,7 @@ export const EventsScreenHeader = ({ user, business }) => {
           backgroundColor: Colors.white,
         }}
       >
-        <MaterialCommunityIcon
-          name={"account-box-multiple"}
-          size={21}
-          color={Colors.brandSecondary}
-          style={{ marginRight: 5 }}
-        />
+        <MaterialCommunityIcon name={"account-box-multiple"} size={21} color={Colors.brandSecondary} style={{ marginRight: 5 }} />
         <Text
           preset="none"
           style={[

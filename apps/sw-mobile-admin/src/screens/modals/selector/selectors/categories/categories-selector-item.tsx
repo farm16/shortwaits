@@ -1,7 +1,6 @@
+import { ButtonCard } from "@shortwaits/shared-ui";
 import { CategoryDtoType } from "@shortwaits/shared-utils";
 import React from "react";
-
-import { ButtonCard } from "../../../../../components";
 import { SelectorItemProps } from "../../selector-types";
 
 export function CategoriesSelectorItem(props: SelectorItemProps<CategoryDtoType>) {

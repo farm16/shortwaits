@@ -1,13 +1,11 @@
-import React, { FC, useCallback, useLayoutEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
-import { StackNavigationProp } from "@react-navigation/stack";
 import { CompositeNavigationProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { Button, Checkbox, Screen, Space, Text, TextFieldCard, useTheme } from "@shortwaits/shared-ui";
+import React, { FC, useCallback, useLayoutEffect, useState } from "react";
+import { View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-
-import { Button, Text, Checkbox, Space, TextFieldCard, Screen } from "../../../components";
-import { useTheme } from "../../../theme";
-import { RootStackParamList, UnauthorizedStackParamList } from "../../../navigation";
 import { useForm } from "../../../hooks";
+import { RootStackParamList, UnauthorizedStackParamList } from "../../../navigation";
 import { useLocalSignInMutation } from "../../../services";
 interface SignInWithEmailScreenProps {
   navigation: CompositeNavigationProp<StackNavigationProp<UnauthorizedStackParamList, "sign-in-with-email-screen">, StackNavigationProp<RootStackParamList>>;

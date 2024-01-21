@@ -1,8 +1,7 @@
 import * as React from "react";
 import { Text as ReactNativeText } from "react-native";
-
-import { TextProps } from "./text-types";
 import { useTheme } from "../../../theme";
+import { TextProps } from "./text-types";
 // ctv5y
 /**
  * For your text displaying needs.

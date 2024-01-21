@@ -1,14 +1,12 @@
 import { useNavigation } from "@react-navigation/native";
+import { AnimatedSearchBar, Button, List, NonIdealState, RefreshControl, SelectorListItem, getResponsiveHeight, useTheme } from "@shortwaits/shared-ui";
 import { ClientUserDtoType } from "@shortwaits/shared-utils";
 import { isEmpty } from "lodash";
 import React, { Fragment, useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { ListRenderItem, View } from "react-native";
-import { AnimatedSearchBar, Button, List, NonIdealState, RefreshControl, SelectorListItem } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useBusiness, useClients } from "../../../store";
-import { useTheme } from "../../../theme";
-import { getResponsiveHeight } from "../../../utils";
 
 export function ShortwaitsClientsTab({ isLoading, refresh }: { isLoading: boolean; refresh: () => void }) {
   const business = useBusiness();

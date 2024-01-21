@@ -1,8 +1,8 @@
+import { Accordion, AccordionDataItemType } from "@shortwaits/shared-ui";
 import React from "react";
-import { Accordion, AccordionDataItemType } from "../../../../components"; // Import the Accordion component
-import { updatePreferredLanguage, useMobileAdmin } from "../../../../store";
-import { useDispatch } from "react-redux";
 import { useIntl } from "react-intl";
+import { useDispatch } from "react-redux";
+import { updatePreferredLanguage, useMobileAdmin } from "../../../../store";
 
 export const AppLanguage = () => {
   const intl = useIntl();

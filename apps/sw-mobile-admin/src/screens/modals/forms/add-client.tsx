@@ -1,10 +1,10 @@
+import { BackButton, QRScanner, Text, WithPermission } from "@shortwaits/shared-ui";
 import { AddClientToBusinessDtoType } from "@shortwaits/shared-utils";
 import { noop } from "lodash";
 import React, { FC, useEffect, useLayoutEffect, useMemo } from "react";
 import { useIntl } from "react-intl";
 import { Alert } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
-import { BackButton, QRScanner, Text, WithPermission } from "../../../components";
 import { useForm } from "../../../hooks";
 import { ModalsScreenProps } from "../../../navigation";
 import { useAddClientToBusinessMutation } from "../../../services";

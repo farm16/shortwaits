@@ -1,29 +1,28 @@
-import React, { FC, useCallback, useEffect, useLayoutEffect, useMemo } from "react";
-import { CreateServiceDtoType } from "@shortwaits/shared-utils";
-import { noop } from "lodash";
-import { useIntl } from "react-intl";
-
 import {
-  ServiceColors,
-  CurrencyFieldCard,
-  TextFieldCard,
-  Text,
-  DurationFieldCard,
-  Card,
-  FormContainer,
-  Button,
-  Space,
-  ExpandableSection,
-  BackButton,
   Avatar,
+  BackButton,
+  Button,
   ButtonCard,
-} from "../../../components";
-import { ModalsScreenProps } from "../../../navigation";
-import { useBusiness, useMobileAdmin } from "../../../store";
-import { useForm } from "../../../hooks";
-import { useCreateServiceMutation } from "../../../services";
-import { Alert } from "react-native";
+  Card,
+  CurrencyFieldCard,
+  DurationFieldCard,
+  ExpandableSection,
+  FormContainer,
+  ServiceColors,
+  Space,
+  Text,
+  TextFieldCard,
+} from "@shortwaits/shared-ui";
+import { CreateServiceDtoType } from "@shortwaits/shared-utils";
 import { FormikErrors } from "formik";
+import { noop } from "lodash";
+import React, { FC, useCallback, useEffect, useLayoutEffect, useMemo } from "react";
+import { useIntl } from "react-intl";
+import { Alert } from "react-native";
+import { useForm } from "../../../hooks";
+import { ModalsScreenProps } from "../../../navigation";
+import { useCreateServiceMutation } from "../../../services";
+import { useBusiness, useMobileAdmin } from "../../../store";
 
 export const AddServicesModal: FC<ModalsScreenProps<"add-service-modal-screen">> = ({ navigation, route }) => {
   const params = route?.params;

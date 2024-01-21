@@ -1,7 +1,7 @@
+import { AnimatedSearchBar, BackButton, Container, IconButton, NonIdealState, NonIdealStateTypes, Screen, Space } from "@shortwaits/shared-ui";
 import React, { FC, useCallback, useLayoutEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
-import { AnimatedSearchBar, BackButton, Container, IconButton, NonIdealState, NonIdealStateTypes, Screen, Space } from "../../../../../components";
 import { ModalsScreenProps } from "../../../../../navigation";
 import { EventsSelectorItem } from "./events-selector-item";
 

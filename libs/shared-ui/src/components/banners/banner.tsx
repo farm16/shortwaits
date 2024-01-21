@@ -1,13 +1,23 @@
 import React from "react";
-import { useMobileAdmin } from "../../store";
 import { PremiumMembershipBanner } from "./premium-membership-banner";
 
 const banners = {
   "premium-membership": PremiumMembershipBanner,
 };
 
-export function Banner() {
-  const { components } = useMobileAdmin();
-  const BannerComponent = banners[components?.banner?.name as string] || null;
-  return BannerComponent ? <BannerComponent /> : null;
+type BannerProps = {
+  banner: keyof typeof banners;
+  onPress?: () => void;
+  onDismiss?: () => void;
+};
+
+export function Banner(props: BannerProps) {
+  const { onDismiss, onPress, banner } = props;
+
+  if (!banner) {
+    return null;
+  }
+
+  const BannerComponent = banners[props.banner];
+  return <BannerComponent onDismiss={onDismiss} onPress={onPress} />;
 }

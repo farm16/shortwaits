@@ -1,14 +1,12 @@
 import { CompositeNavigationProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { Button, Screen, Space, Text, TextFieldCard, useTheme } from "@shortwaits/shared-ui";
 import React, { FC, useCallback, useLayoutEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { StyleSheet, View } from "react-native";
-
-import { Button, Screen, Space, Text, TextFieldCard } from "../../../components";
 import { useForm } from "../../../hooks";
 import { RootStackParamList, UnauthorizedStackParamList } from "../../../navigation";
 import { useLocalSignUpMutation } from "../../../services";
-import { useTheme } from "../../../theme";
 
 interface SignUpWithEmailScreenProps {
   navigation: CompositeNavigationProp<StackNavigationProp<UnauthorizedStackParamList, "sign-up-with-email-screen">, StackNavigationProp<RootStackParamList>>;

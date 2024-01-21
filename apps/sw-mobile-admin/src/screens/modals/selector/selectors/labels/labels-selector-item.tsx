@@ -1,10 +1,9 @@
-import React from "react";
+import { Card, Emoji, Space, Text } from "@shortwaits/shared-ui";
 import { BusinessLabelType } from "@shortwaits/shared-utils";
-
-import { Text, Card, Space, Emoji } from "../../../../../components";
-import { SelectorItemProps } from "../../selector-types";
-import { View } from "react-native";
 import { truncate } from "lodash";
+import React from "react";
+import { View } from "react-native";
+import { SelectorItemProps } from "../../selector-types";
 
 export function LabelSelectorItem(props: SelectorItemProps<BusinessLabelType>) {
   const { item, onSelectItem, isSelected } = props;

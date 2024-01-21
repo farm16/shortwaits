@@ -1,13 +1,12 @@
 import { skipToken } from "@reduxjs/toolkit/dist/query";
+import { BackButton, Button, FormContainer, IconButton, Space, Text, compareFormObjectsBeforeAbort } from "@shortwaits/shared-ui";
 import { BusinessLabelType } from "@shortwaits/shared-utils";
 import React, { FC, useCallback, useLayoutEffect, useMemo, useState } from "react";
 import { FlatList, StyleSheet } from "react-native";
 import { useDispatch } from "react-redux";
-import { BackButton, Button, FormContainer, IconButton, Space, Text } from "../../../../../components";
 import { ModalsScreenProps } from "../../../../../navigation";
 import { useGetBusinessQuery } from "../../../../../services";
 import { showPremiumMembershipModal, useUser } from "../../../../../store";
-import { compareFormObjectsBeforeAbort } from "../../../../../utils";
 import { selectorConfigs } from "../../selector-config";
 import { LabelSelectorItem } from "./labels-selector-item";
 

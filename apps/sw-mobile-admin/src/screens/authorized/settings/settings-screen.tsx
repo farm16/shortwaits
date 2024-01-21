@@ -1,14 +1,12 @@
+import { skipToken } from "@reduxjs/toolkit/dist/query";
+import { Button, Container, Screen, Space, Switch, Text, useTheme } from "@shortwaits/shared-ui";
 import React, { FC, useCallback, useLayoutEffect } from "react";
 import { FormattedMessage, useIntl } from "react-intl"; // Import FormattedMessage and useIntl
 import { StyleSheet } from "react-native";
 import { List } from "react-native-paper";
-
-import { skipToken } from "@reduxjs/toolkit/dist/query";
-import { Button, Container, Screen, Space, Switch, Text } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useGetStaffQuery, useLocalSignOutMutation, useUpdateBusinessMutation } from "../../../services";
 import { useBusiness } from "../../../store";
-import { useTheme } from "../../../theme";
 import { AppInfoSettings } from "./options/app-info";
 import { AppLanguage } from "./options/select-language";
 import { ShortwaitsCustomerSupport } from "./options/support";

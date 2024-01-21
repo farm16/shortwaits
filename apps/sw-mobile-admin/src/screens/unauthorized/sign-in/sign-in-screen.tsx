@@ -1,15 +1,12 @@
 import { CompositeNavigationProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { Button, Container, FacebookIcon, GoogleIcon, Screen, Space, Text, TextFieldCard, useTheme } from "@shortwaits/shared-ui";
 import React, { FC, useCallback, useState } from "react";
 import { useIntl } from "react-intl";
 import { ActivityIndicator, Alert, AlertButton, StyleSheet, View } from "react-native";
-import Facebook from "../../../assets/icons/facebook.svg";
-import Google from "../../../assets/icons/google.svg";
-import { Button, Container, Screen, Space, Text, TextFieldCard } from "../../../components";
 import { useForm, useGoogleAuth } from "../../../hooks";
 import { RootStackParamList, UnauthorizedStackParamList } from "../../../navigation";
 import { useLocalSignInMutation } from "../../../services";
-import { useTheme } from "../../../theme";
 
 export interface RegisterWithEmailScreenProps {
   navigation: CompositeNavigationProp<StackNavigationProp<UnauthorizedStackParamList, "sign-in-screen">, StackNavigationProp<RootStackParamList>>;
@@ -153,7 +150,7 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
       />
       <Space size="large" />
       <Button preset="social" onPress={handleGoogleAuth}>
-        <Facebook width={30} height={30} style={{ position: "absolute", left: 0, margin: 16 }} />
+        <FacebookIcon width={30} height={30} style={{ position: "absolute", left: 0, margin: 16 }} />
         <Container style={styles.socialButtonContainer}>
           <Text
             preset="social"
@@ -166,7 +163,7 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
       <Space size="small" />
       <Button preset="social" onPress={handleGoogleAuth}>
         <Container style={styles.socialButtonContainer}>
-          <Google width={30} height={30} style={{ position: "absolute", left: 0, margin: 16 }} />
+          <GoogleIcon width={30} height={30} style={{ position: "absolute", left: 0, margin: 16 }} />
           <Text
             preset="social"
             text={intl.formatMessage({

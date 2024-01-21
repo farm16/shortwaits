@@ -1,13 +1,11 @@
-import React, { useLayoutEffect, useState } from "react";
-import { Text, BackButton, Button, FormContainer, Container, Space } from "../../../components";
-import { AuthorizedScreenProps } from "../../../navigation";
-import { useTheme } from "../../../theme";
+import { BackButton, Button, FormContainer, Text, getFontSize, useTheme } from "@shortwaits/shared-ui";
 import { SubscriptionPlans } from "@shortwaits/shared-utils";
-import PlanCard from "./planCard";
+import React, { useLayoutEffect, useState } from "react";
+import { useIntl } from "react-intl"; // Import the useIntl hook
 import { Platform, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { getFontSize } from "../../../utils";
-import { useIntl } from "react-intl"; // Import the useIntl hook
+import { AuthorizedScreenProps } from "../../../navigation";
+import PlanCard from "./planCard";
 
 export function PlansScreen({ navigation }: AuthorizedScreenProps<"plans-screen">) {
   const { Colors } = useTheme();

@@ -1,19 +1,19 @@
-import { noop } from "lodash";
-import React, { FC, useCallback, useLayoutEffect, useState } from "react";
-import { useIntl } from "react-intl";
-import { FlatList, StyleSheet } from "react-native";
-import { ActivityIndicator } from "react-native-paper";
 import {
   BackButton,
   // SearchBar,
   Screen,
   Space,
   Text,
-} from "../../../../../components";
+  useTheme,
+} from "@shortwaits/shared-ui";
+import { noop } from "lodash";
+import React, { FC, useCallback, useLayoutEffect, useState } from "react";
+import { useIntl } from "react-intl";
+import { FlatList, StyleSheet } from "react-native";
+import { ActivityIndicator } from "react-native-paper";
 import { ModalsScreenProps } from "../../../../../navigation";
 import { useGetCategoriesQuery } from "../../../../../services";
 import { useBusiness, useMobileAdmin } from "../../../../../store";
-import { useTheme } from "../../../../../theme";
 import { CategoriesSelectorItem } from "./categories-selector-item";
 
 export const CategoriesSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ navigation, route }) => {

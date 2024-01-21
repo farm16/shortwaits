@@ -1,5 +1,6 @@
 import { useIsFocused } from "@react-navigation/native";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
+import { BusinessIncomeInfo, ButtonCard, Container, IconButton, Screen, Text, useShareUrlWithMessage, useTheme } from "@shortwaits/shared-ui";
 import { truncate } from "lodash";
 import React, { FC, useCallback, useLayoutEffect } from "react";
 import { useIntl } from "react-intl";
@@ -7,12 +8,9 @@ import { Alert } from "react-native";
 import FastImage from "react-native-fast-image";
 import { ActivityIndicator } from "react-native-paper";
 import { useDispatch } from "react-redux";
-import { BusinessIncomeInfo, ButtonCard, Container, IconButton, Screen, Text } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useGetEventsSummaryByBusinessQuery, useUpdateBusinessMutation } from "../../../services";
 import { hidePremiumMembershipBanner, showPremiumMembershipBanner, useBusiness, useShowGhostComponent } from "../../../store";
-import { useTheme } from "../../../theme";
-import { useShareUrlWithMessage } from "../../../utils";
 
 export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> = ({ navigation }) => {
   useShowGhostComponent("floatingActionButton");

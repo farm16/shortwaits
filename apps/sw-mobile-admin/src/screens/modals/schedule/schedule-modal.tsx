@@ -1,12 +1,11 @@
-import React, { FC, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { BackButton, BottomSheet, BottomSheetType, Button, FormContainer, IconButton, useBottomSheet } from "@shortwaits/shared-ui";
 import { BusinessWeekDaysType, WEEKDAYS_ARR, WeekHoursType } from "@shortwaits/shared-utils";
+import { cloneDeep } from "lodash";
+import React, { FC, useCallback, useEffect, useRef, useState } from "react";
 import { Alert, View } from "react-native";
-
-import { BottomSheet, BottomSheetType, Button, FormContainer, IconButton, BackButton, useBottomSheet } from "../../../components";
 import { ModalsScreenProps } from "../../../navigation";
 import { ScheduleCard } from "./schedule-card";
 import { SelectTimeRange } from "./select-time-range";
-import { cloneDeep } from "lodash";
 
 /**
  * ...business?.hours[day][0]

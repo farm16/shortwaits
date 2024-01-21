@@ -1,49 +1,37 @@
-import { EventDtoType } from "@shortwaits/shared-utils";
+import { EventDtoType, EventStatusName } from "@shortwaits/shared-utils";
 import React from "react";
 import { useIntl } from "react-intl";
 import { Dimensions, StyleSheet, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { Button, Text } from "..";
-import { useUpdateEventMutation } from "../../services";
-import { useBusiness } from "../../store";
 import { useTheme } from "../../theme";
 import { CALENDAR_EVENT_HEIGHT, EVENT_ITEM_BORDER_RADIUS, eventStatusColors, eventStatusIconNames, eventStatusNames, getFontSize, nextEventStatuses } from "../../utils";
 
-export const EventStatusButtons: React.FC<{
+type EventStatusButtonsProps = {
   event: EventDtoType;
   size?: "small" | "large";
-}> = ({ event, size = "large" }) => {
-  const { _id: businessId } = useBusiness();
+  onPress?(status: EventStatusName): void;
+  isLoading?: boolean;
+};
+export const EventStatusButtons: React.FC<EventStatusButtonsProps> = ({ event, onPress, isLoading, size = "large" }) => {
   const { Colors } = useTheme();
   const intl = useIntl();
-  const [updateEvent, updatedEvent] = useUpdateEventMutation();
 
   const statusCount = nextEventStatuses[event?.status?.statusName ?? ""].length;
-
   const _width = (Dimensions.get("window").width - 32) / statusCount;
-
   const cardHeight = size === "small" ? CALENDAR_EVENT_HEIGHT : CALENDAR_EVENT_HEIGHT;
   const cardWidth = size === "small" ? CALENDAR_EVENT_HEIGHT : _width;
 
-  // const isDisabled =
-
-  const handleStatusUpdate = status => {
-    updateEvent({
-      businessId,
-      body: {
-        ...event,
-        status: {
-          statusCode: event.status.statusCode,
-          statusName: status,
-        },
-      },
-    });
+  const handleStatusUpdate = (status: EventStatusName) => {
+    if (onPress) {
+      onPress(status);
+    }
   };
 
   return (
     <View style={[styles.container]}>
-      {updatedEvent.isLoading ? (
+      {isLoading ? (
         <View
           style={{
             width: cardWidth,
@@ -113,12 +101,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: EVENT_ITEM_BORDER_RADIUS,
-    // add shadow for ios and android
-    // shadowColor: "#000",
-    // shadowOffset: { width: 0, height: 1 },
-    // shadowOpacity: 0.1,
-    // shadowRadius: 2,
-    // elevation: 1,
   },
   button: {
     justifyContent: "center",

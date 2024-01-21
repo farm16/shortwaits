@@ -1,12 +1,11 @@
+import { BackButton, Button, Container, IconButton, NonIdealState, Screen, Space, Text, handleEmail, handlePhoneCall, handleSms, useTheme } from "@shortwaits/shared-ui";
 import { isEmpty } from "lodash";
 import React, { useCallback, useLayoutEffect } from "react";
 import { Image, StyleSheet, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
-import { AgendaItem, BackButton, Button, Container, IconButton, NonIdealState, Screen, Space, Text } from "../../../components";
+import { AgendaItem } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useEvents } from "../../../store";
-import { useTheme } from "../../../theme";
-import { handleEmail, handlePhoneCall, handleSms } from "../../../utils";
 
 export function BusinessStaffScreen({ navigation, route }: AuthorizedScreenProps<"business-staff-screen">) {
   const { staff } = route.params;

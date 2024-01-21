@@ -1,17 +1,27 @@
+import {
+  BackButton,
+  Button,
+  ButtonCard,
+  CurrencyFieldCard,
+  ExpandableSection,
+  FormContainer,
+  Space,
+  Text,
+  TextFieldCard,
+  TimePickerFieldCard,
+  getEmojiString,
+} from "@shortwaits/shared-ui";
 import { CreateEventDtoType, ServiceDtoType, eventPaymentMethods } from "@shortwaits/shared-utils";
 import { FormikErrors } from "formik";
+import { noop } from "lodash";
 import React, { FC, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { useIntl } from "react-intl";
 import { Alert } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
-
-import { noop } from "lodash";
-import { BackButton, Button, ButtonCard, CurrencyFieldCard, ExpandableSection, FormContainer, Space, Text, TextFieldCard, TimePickerFieldCard } from "../../../components";
 import { useForm } from "../../../hooks";
 import { ModalsScreenProps } from "../../../navigation";
 import { useCreateEventMutation } from "../../../services";
 import { useBusiness, useUser } from "../../../store";
-import { getEmojiString } from "../../../utils";
 
 export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({ navigation, route }) => {
   const params = route?.params;

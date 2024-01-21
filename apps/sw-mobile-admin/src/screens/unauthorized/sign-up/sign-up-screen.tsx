@@ -1,18 +1,12 @@
 import { CompositeNavigationProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { Button, Container, EMailIcon, FacebookIcon, GoogleIcon, Screen, Space, TermsAndConditions, Text, Welcome2, getResponsiveHeight, useTheme } from "@shortwaits/shared-ui";
 import React, { FC } from "react";
 import { useIntl } from "react-intl";
 import { Alert, StyleSheet, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
-import { Welcome2 } from "../../../assets";
-import EMail from "../../../assets/icons/email.svg";
-import Facebook from "../../../assets/icons/facebook.svg";
-import Google from "../../../assets/icons/google.svg";
-import { Button, Container, Screen, Space, TermsAndConditions, Text } from "../../../components";
 import { useGoogleAuth } from "../../../hooks";
 import { RootStackParamList, UnauthorizedStackParamList } from "../../../navigation";
-import { useTheme } from "../../../theme";
-import { getResponsiveHeight } from "../../../utils";
 
 export interface SignUpScreenProps {
   navigation: CompositeNavigationProp<StackNavigationProp<UnauthorizedStackParamList, "sign-up-screen">, StackNavigationProp<RootStackParamList>>;
@@ -54,14 +48,14 @@ export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
       </View>
       <View style={styles.formContainer}>
         <Button preset="social" onPress={handleGoogleAuth}>
-          <Facebook width={30} height={30} style={{ position: "absolute", left: 0, margin: 16 }} />
+          <FacebookIcon width={30} height={30} style={{ position: "absolute", left: 0, margin: 16 }} />
           <Container style={styles.buttonContainer}>
             <Text preset="social">{intl.formatMessage({ id: "Sign_Up_Screen.facebook" })}</Text>
           </Container>
         </Button>
         <Space size="small" />
         <Button preset="social" onPress={handleGoogleAuth}>
-          <Google width={30} height={30} style={{ position: "absolute", left: 0, margin: 16 }} />
+          <GoogleIcon width={30} height={30} style={{ position: "absolute", left: 0, margin: 16 }} />
           <Container style={styles.buttonContainer}>
             <Text preset="social">{intl.formatMessage({ id: "Sign_Up_Screen.google" })}</Text>
           </Container>
@@ -76,7 +70,7 @@ export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
             })
           }
         >
-          <EMail width={30} height={30} style={{ position: "absolute", left: 0, margin: 16 }} />
+          <EMailIcon width={30} height={30} style={{ position: "absolute", left: 0, margin: 16 }} />
           <Container style={styles.buttonContainer}>
             <Text preset="social">{intl.formatMessage({ id: "Sign_Up_Screen.email" })}</Text>
           </Container>

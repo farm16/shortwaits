@@ -1,10 +1,8 @@
+import { Button, Container, Switch, Text, TimeRangeText, useTheme } from "@shortwaits/shared-ui";
+import { BusinessWeekDaysType, WeekDayType } from "@shortwaits/shared-utils";
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-
-import { BusinessWeekDaysType, WeekDayType } from "@shortwaits/shared-utils";
-import { Button, Container, Switch, Text, TimeRangeText } from "../../../components";
-import { useTheme } from "../../../theme";
 
 interface DayCardProps {
   day: BusinessWeekDaysType;

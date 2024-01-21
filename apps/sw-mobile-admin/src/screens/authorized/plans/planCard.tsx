@@ -1,10 +1,8 @@
-import React, { useCallback } from "react";
-import { View, TouchableOpacity, StyleSheet, Dimensions } from "react-native";
-import { useTheme } from "../../../theme";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { Container, Text, getFontSize, useTheme } from "@shortwaits/shared-ui";
 import { SubscriptionPlan } from "@shortwaits/shared-utils";
-import { Container, Text } from "../../../components";
-import { getFontSize } from "../../../utils";
+import React, { useCallback } from "react";
+import { Dimensions, StyleSheet, TouchableOpacity, View } from "react-native";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 interface PlanCardProps {
   planData: SubscriptionPlan;

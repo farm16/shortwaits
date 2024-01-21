@@ -1,3 +1,16 @@
+import {
+  BackButton,
+  Button,
+  ButtonCard,
+  ExpandableSection,
+  FormContainer,
+  PhoneNumberCard,
+  STATIC_FORM_USA_STATES,
+  Space,
+  Text,
+  TextFieldCard,
+  getCapitalizedString,
+} from "@shortwaits/shared-ui";
 import { AddLocalClientDtoType, ClientUserType } from "@shortwaits/shared-utils";
 import { FormikErrors } from "formik";
 import { noop } from "lodash";
@@ -5,12 +18,10 @@ import React, { FC, useEffect, useLayoutEffect, useMemo } from "react";
 import { useIntl } from "react-intl";
 import { Alert } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
-import { BackButton, Button, ButtonCard, ExpandableSection, FormContainer, PhoneNumberCard, Space, Text, TextFieldCard } from "../../../components";
 import { useForm } from "../../../hooks";
 import { ModalsScreenProps } from "../../../navigation";
 import { useCreateLocalClientsMutation } from "../../../services";
 import { useBusiness } from "../../../store";
-import { STATIC_FORM_USA_STATES, getCapitalizedString } from "../../../utils";
 
 export const AddLocalClientModal: FC<ModalsScreenProps<"add-local-client-modal-screen">> = ({ navigation, route }) => {
   const params = route?.params;

@@ -1,15 +1,14 @@
+import { useFocusEffect } from "@react-navigation/native";
+import { skipToken } from "@reduxjs/toolkit/dist/query";
+import { BackButton, IconButton, Screen, ServiceItem, Space, Text } from "@shortwaits/shared-ui";
 import React, { FC, useCallback, useLayoutEffect } from "react";
+import { useIntl } from "react-intl";
 import { StyleSheet } from "react-native";
 import { FlatList, RefreshControl } from "react-native-gesture-handler";
-import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { ActivityIndicator } from "react-native-paper";
-import { useFocusEffect } from "@react-navigation/native";
-
-import { Space, Screen, Text, BackButton, ServiceItem, IconButton } from "../../../components";
 import { ModalsScreenProps } from "../../../navigation";
-import { useBusiness } from "../../../store";
 import { useGetServicesQuery } from "../../../services";
-import { useIntl } from "react-intl";
+import { useBusiness } from "../../../store";
 
 export const ServicesModal: FC<ModalsScreenProps<"service-modal-screen">> = ({ navigation, route }) => {
   const business = useBusiness();

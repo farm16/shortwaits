@@ -1,9 +1,9 @@
+import { useTheme } from "@shortwaits/shared-ui";
 import { EventDtoType } from "@shortwaits/shared-utils";
 import React, { useCallback, useMemo, useState } from "react";
 import { useIntl } from "react-intl";
 import { Animated, Pressable, StyleSheet, View, useWindowDimensions } from "react-native";
 import { SceneMap, TabBarProps, TabView } from "react-native-tab-view";
-import { useTheme } from "../../../../theme";
 import { EventScreenHeader } from "../event-screen-header";
 import { EventMoreTab } from "./event-more-tab";
 import { EventUsersTab } from "./event-users-tab";

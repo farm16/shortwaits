@@ -1,6 +1,5 @@
+import { Accordion, AccordionDataItemType, useTheme } from "@shortwaits/shared-ui";
 import React from "react";
-import { useTheme } from "../../../../theme";
-import { Accordion, AccordionDataItemType } from "../../../../components";
 import { useIntl } from "react-intl"; // Import the useIntl hook
 
 export const ShortwaitsCustomerSupport = () => {

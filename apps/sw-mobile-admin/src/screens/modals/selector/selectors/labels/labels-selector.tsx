@@ -1,9 +1,8 @@
 import { skipToken } from "@reduxjs/toolkit/dist/query";
+import { BackButton, IconButton, Space, Text } from "@shortwaits/shared-ui";
 import React, { FC, useCallback, useLayoutEffect, useMemo, useState } from "react";
 import { FlatList, StyleSheet } from "react-native";
-
 import { useDispatch } from "react-redux";
-import { BackButton, IconButton, Space, Text } from "../../../../../components";
 import { ModalsScreenProps } from "../../../../../navigation";
 import { useGetBusinessQuery } from "../../../../../services";
 import { showPremiumMembershipModal, useUser } from "../../../../../store";

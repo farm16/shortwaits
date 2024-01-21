@@ -1,15 +1,11 @@
 import { Portal } from "@gorhom/portal";
-import React, { useCallback, useMemo, useState } from "react";
-import { ViewStyle } from "react-native";
-import { FAB } from "react-native-paper";
+import React, { useCallback, useState } from "react";
+import { FAB, FABGroupProps } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useSelector } from "react-redux";
-import { selectCurrentMobileAdminState } from "../../store";
 import { useTheme } from "../../theme";
-import { useActions } from "./fab-actions";
 
 type FloatingActionButtonProps = {
-  actions?: FloatingActions;
+  actions: FABGroupProps["actions"];
   hasPaddingBottom?: boolean;
   onPress?(): null;
   icon?: string;
@@ -17,36 +13,19 @@ type FloatingActionButtonProps = {
   isVisible?: boolean;
 };
 
-export type FloatingActions = {
-  icon: string;
-  onPress(): void;
-  label: string;
-  color?: string;
-  labelTextColor?: string;
-  labelStyle: ViewStyle;
-  style: ViewStyle;
-}[];
-
 export const FloatingActionButton = (props: FloatingActionButtonProps) => {
-  const { icon = "plus", pressedIcon = "plus", isVisible: isVisibleOverride, ...rest } = props;
-  const actions = useActions();
+  const { icon = "plus", pressedIcon = "plus", isVisible = true, actions, ...rest } = props;
+
   const { Colors } = useTheme();
   const insets = useSafeAreaInsets();
   const [isOpen, setIsOpen] = useState(false);
-  const mobileAdmin = useSelector(selectCurrentMobileAdminState);
 
-  const { isVisible } = useMemo(() => {
-    return mobileAdmin ? mobileAdmin.components.floatingActionButton : null;
-  }, [mobileAdmin]);
-
-  // console.log("floatingActionButton visibility >>>", isVisible);
-
-  const onStateChange = useCallback(({ open }) => setIsOpen(open), []);
+  const onStateChange = useCallback(({ open }: { open: boolean }) => setIsOpen(open), []);
 
   return (
     <Portal>
       <FAB.Group
-        visible={isVisibleOverride ?? isVisible}
+        visible={isVisible}
         open={isOpen}
         style={{
           paddingBottom: insets.bottom + 70,
@@ -58,7 +37,7 @@ export const FloatingActionButton = (props: FloatingActionButtonProps) => {
         // backdropColor={"rgba(0, 0, 0, 0.65)"}
         icon={isOpen ? pressedIcon : icon}
         color={Colors.white}
-        actions={actions}
+        actions={ac}
         onStateChange={onStateChange}
         onPress={() => {
           if (isOpen) {

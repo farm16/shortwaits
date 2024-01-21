@@ -1,5 +1,6 @@
 import { useFocusEffect } from "@react-navigation/native";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
+import { AnimatedSearchBar, BackButton, Container, IconButton, NonIdealState, Screen, ServiceItem, Space, Text } from "@shortwaits/shared-ui";
 import { ServicesDtoType } from "@shortwaits/shared-utils";
 import { noop } from "lodash";
 import React, { FC, useCallback, useEffect, useLayoutEffect, useState } from "react";
@@ -7,7 +8,6 @@ import { useIntl } from "react-intl";
 import { StyleSheet } from "react-native";
 import { FlatList, RefreshControl } from "react-native-gesture-handler";
 import { ActivityIndicator } from "react-native-paper";
-import { AnimatedSearchBar, BackButton, Container, IconButton, NonIdealState, Screen, ServiceItem, Space, Text } from "../../../../../components";
 import { ModalsScreenProps } from "../../../../../navigation";
 import { useGetServicesQuery } from "../../../../../services";
 import { useBusiness } from "../../../../../store";

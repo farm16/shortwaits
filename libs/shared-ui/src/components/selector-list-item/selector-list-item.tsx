@@ -1,6 +1,5 @@
 import React, { FC, useMemo } from "react";
 import { StyleSheet, TextStyle, View } from "react-native";
-
 import FastImage from "react-native-fast-image";
 import { Button, ButtonProps, Space, Text } from "..";
 import { IconSizes, useTheme } from "../../theme";

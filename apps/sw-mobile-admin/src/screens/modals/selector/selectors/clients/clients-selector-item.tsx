@@ -1,6 +1,6 @@
-import React, { FC } from "react";
+import { SelectorListItem } from "@shortwaits/shared-ui";
 import { ClientUserDtoType } from "@shortwaits/shared-utils";
-import { SelectorListItem } from "../../../../../components";
+import React, { FC } from "react";
 
 type ClientsSelectorItemProps = {
   disabled?: boolean;

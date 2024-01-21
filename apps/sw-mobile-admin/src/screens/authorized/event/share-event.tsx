@@ -1,13 +1,11 @@
-import React, { ForwardedRef, forwardRef } from "react";
-import Share, { ShareSingleOptions, Social } from "react-native-share";
-
 import GBottomSheet from "@gorhom/bottom-sheet";
+import { BottomSheet, ButtonCard, Text, useTheme } from "@shortwaits/shared-ui";
 import { EventDtoType } from "@shortwaits/shared-utils";
+import React, { ForwardedRef, forwardRef } from "react";
 import { View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { BottomSheet, ButtonCard, Text } from "../../../components";
-import { useTheme } from "../../../theme";
+import Share, { ShareSingleOptions, Social } from "react-native-share";
 
 type ShareEventProps = {
   event: EventDtoType;

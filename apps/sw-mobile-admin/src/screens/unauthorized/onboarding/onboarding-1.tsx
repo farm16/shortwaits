@@ -1,14 +1,11 @@
 import { StackActions } from "@react-navigation/native";
+import { Button, ButtonCard, FormContainer, IconButton, Space, TextFieldCard, getArrCount, getPrettyStringFromHours, truncated } from "@shortwaits/shared-ui";
 import React, { FC, useEffect, useLayoutEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-
 import { useIntl } from "react-intl";
-import { Button, ButtonCard, FormContainer, IconButton, Space, TextFieldCard } from "../../../components";
+import { useDispatch } from "react-redux";
 import { useForm } from "../../../hooks";
 import { UnauthorizedScreenProps } from "../../../navigation";
 import { setBusiness, setBusinessCategories, useAuth, useBusiness, useSignOut, useUser } from "../../../store";
-import { getArrCount, truncated } from "../../../utils";
-import { getPrettyStringFromHours } from "../../../utils/time";
 
 export const Onboarding1Screen: FC<UnauthorizedScreenProps<"onboarding-1-screen">> = ({ navigation }) => {
   const dispatch = useDispatch();

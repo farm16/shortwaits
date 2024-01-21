@@ -1,11 +1,10 @@
+import { BackButton, Button, Container, IconButton, NonIdealState, Screen, Space, Text, handleEmail, handlePhoneCall, handleSms, useTheme } from "@shortwaits/shared-ui";
 import React, { useCallback, useLayoutEffect } from "react";
 import { Image, StyleSheet, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
-import { AgendaItem, BackButton, Button, Container, IconButton, NonIdealState, Screen, Space, Text } from "../../../components";
+import { AgendaItem } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useEvents } from "../../../store";
-import { useTheme } from "../../../theme";
-import { handleEmail, handlePhoneCall, handleSms } from "../../../utils";
 
 export function BusinessClientScreen({ navigation, route }: AuthorizedScreenProps<"business-client-screen">) {
   const { client } = route.params;

@@ -1,7 +1,7 @@
+import { useTheme } from "@shortwaits/shared-ui";
 import React from "react";
 import { AgendaItem } from "../../../../../components";
 import { SelectorModalData } from "../../../../../navigation";
-import { useTheme } from "../../../../../theme";
 import { SelectorItemProps } from "../../selector-types";
 
 export function EventsSelectorItem(props: SelectorItemProps<SelectorModalData>) {

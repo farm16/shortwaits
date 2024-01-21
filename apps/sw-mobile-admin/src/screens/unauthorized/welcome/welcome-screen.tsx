@@ -2,22 +2,20 @@ import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { CompositeNavigationProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { skipToken } from "@reduxjs/toolkit/dist/query/react";
+import { Button, Container, Logo2, Screen, ScrollView, Space, Text, WelcomeImage, getFontSize, getResponsiveHeight } from "@shortwaits/shared-ui";
 import React, { FC, useEffect } from "react";
 import { useIntl } from "react-intl";
 import { StyleSheet, View } from "react-native";
-import { Settings } from "react-native-fbsdk-next";
-import { Logo2, WelcomeImage } from "../../../assets";
-import { Button, Container, Screen, ScrollView, Space, Text } from "../../../components";
+import { Settings as FacebookSettings } from "react-native-fbsdk-next";
 import { RootStackParamList, UnauthorizedStackParamList } from "../../../navigation";
 import { useGetAdminMobileQuery } from "../../../services";
 import { useBusiness, useMobileAdmin } from "../../../store";
-import { getFontSize, getResponsiveHeight } from "../../../utils";
 
 GoogleSignin.configure({
   webClientId: "805426205047-fcegaam9bmap1dagccindjh0ko7oro68.apps.googleusercontent.com",
   offlineAccess: true,
 });
-Settings.setAppID("693197073014015");
+FacebookSettings.setAppID("693197073014015");
 
 export interface WelcomeScreenProps {
   navigation: CompositeNavigationProp<StackNavigationProp<UnauthorizedStackParamList, "welcome-screen">, StackNavigationProp<RootStackParamList>>;

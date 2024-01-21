@@ -3,22 +3,29 @@ import { useIntl } from "react-intl";
 import { ImageBackground, Platform, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { useDispatch } from "react-redux";
-import { hidePremiumMembershipBanner } from "../../store";
-import { useTheme } from "../../theme";
-import { navigate } from "../../utils";
 import { Button, Container, Text } from "../common";
 import image from "./background_1.png";
 
-export function PremiumMembershipBanner() {
+type PremiumMembershipBannerProps = {
+  onPress?: () => void;
+  onDismiss?: () => void;
+};
+
+export function PremiumMembershipBanner(props: PremiumMembershipBannerProps) {
   const insets = useSafeAreaInsets();
-  const { Colors } = useTheme();
   const intl = useIntl();
 
-  const dispatch = useDispatch();
   const handleClose = useCallback(() => {
-    dispatch(hidePremiumMembershipBanner());
-  }, [dispatch]);
+    if (props.onDismiss) {
+      props.onDismiss();
+    }
+  }, [props]);
+
+  const handleOnPress = useCallback(() => {
+    if (props.onPress) {
+      props.onPress();
+    }
+  }, [props]);
 
   return (
     <ImageBackground
@@ -81,16 +88,11 @@ export function PremiumMembershipBanner() {
         >
           <Button
             preset="none"
-            onPress={() =>
-              navigate("authorized-stack", {
-                screen: "plans-screen",
-              })
-            }
+            onPress={handleOnPress}
             style={[
               styles.button,
               {
                 backgroundColor: "rgba(0,0,0,0.7)",
-                //backgroundColor: Colors.brandPrimary
               },
             ]}
             textStyle={styles.buttonText}

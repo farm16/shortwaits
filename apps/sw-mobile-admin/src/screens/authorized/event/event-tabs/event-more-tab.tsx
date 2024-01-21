@@ -1,9 +1,8 @@
+import { Messages, ServiceItem, Space, Switch, Text, UrlCard, UrlTypes, useTheme } from "@shortwaits/shared-ui";
 import { EventDtoType } from "@shortwaits/shared-utils";
 import React from "react";
 import { Alert, Platform, ScrollView, StyleSheet, View } from "react-native";
-import { Messages, ServiceItem, Space, Switch, Text, UrlCard, UrlTypes } from "../../../../components";
 import { useService } from "../../../../store";
-import { useTheme } from "../../../../theme";
 
 export function EventMoreTab({ event }: { event: EventDtoType }) {
   const { Colors } = useTheme();

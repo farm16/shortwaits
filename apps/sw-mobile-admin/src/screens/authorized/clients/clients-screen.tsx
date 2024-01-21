@@ -1,17 +1,15 @@
 import { skipToken } from "@reduxjs/toolkit/dist/query";
+import { Container, IconButton, Screen, Text, getFontSize, getResponsiveHeight, useTheme } from "@shortwaits/shared-ui";
 import React, { FC, Fragment, useCallback, useLayoutEffect, useMemo, useState } from "react";
 import { useIntl } from "react-intl";
 import { Alert, Animated, Dimensions, Pressable, StyleSheet, View } from "react-native";
 import { SceneMap, TabBarProps, TabView } from "react-native-tab-view";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { Logo3 } from "../../../assets/images/svg-components/logo-3";
-import { Container, IconButton, Screen, Text } from "../../../components";
 import { useOsContacts } from "../../../hooks";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useCreateLocalClientsMutation, useGetAllBusinessClientsQuery } from "../../../services";
 import { useBusiness, useLocalClients, useShowGhostComponent } from "../../../store";
-import { useTheme } from "../../../theme";
-import { getFontSize, getResponsiveHeight } from "../../../utils";
 import { LocalClientsTab } from "./local-clients-tab";
 import { ShortwaitsClientsTab } from "./shortwaits-clients-tab";
 

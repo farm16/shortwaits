@@ -1,9 +1,8 @@
+import { BackButton, Container, EventStatusButtons, IconButton, Screen, Space, Text, useShareUrlWithMessage } from "@shortwaits/shared-ui";
 import { truncate } from "lodash";
 import React, { useLayoutEffect } from "react";
-import { BackButton, Container, EventStatusButtons, IconButton, Screen, Space, Text } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useEvent } from "../../../store";
-import { useShareUrlWithMessage } from "../../../utils";
 import { EventScreenTabs } from "./event-tabs";
 
 // TODO: test this with real device ios and android

@@ -1,12 +1,11 @@
 import { skipToken } from "@reduxjs/toolkit/dist/query";
+import { Container, IconButton, QrModal, Screen, Text, convertStaticSelectorModalData, useTheme } from "@shortwaits/shared-ui";
 import React, { useLayoutEffect, useState } from "react";
 import { useIntl } from "react-intl";
-import { Calendar, Container, IconButton, QrModal, Screen, Text } from "../../../components";
+import { Calendar } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useGetServicesQuery } from "../../../services";
 import { useBusiness, useEvents, useShowGhostComponent } from "../../../store";
-import { useTheme } from "../../../theme";
-import { convertStaticSelectorModalData } from "../../../utils/static-selector-modal-utils";
 
 export function EventsScreen({ navigation }: AuthorizedScreenProps<"events-screen">) {
   const [isQrVisible, setIsQrVisible] = useState(false);

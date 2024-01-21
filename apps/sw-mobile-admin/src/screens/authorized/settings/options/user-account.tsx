@@ -1,7 +1,6 @@
+import { Accordion, AccordionDataItemType, useTheme } from "@shortwaits/shared-ui";
 import { BusinessUserDtoType, BusinessUsersDtoType } from "@shortwaits/shared-utils";
 import React from "react";
-import { Accordion, AccordionDataItemType } from "../../../../components";
-import { useTheme } from "../../../../theme";
 
 type ManageAdminUsersProps = {
   admins?: BusinessUsersDtoType;

@@ -1,13 +1,25 @@
+import {
+  Avatar,
+  BackButton,
+  Button,
+  ButtonCard,
+  FormContainer,
+  PhoneNumberCard,
+  STATIC_FORM_AMERICAN_COUNTRIES,
+  STATIC_FORM_USA_STATES,
+  Space,
+  Text,
+  TextFieldCard,
+  compareFormObjectsBeforeAbort,
+} from "@shortwaits/shared-ui";
 import { UpdateBusinessDtoType } from "@shortwaits/shared-utils";
 import React, { Fragment, useEffect, useLayoutEffect, useMemo } from "react";
 import { useIntl } from "react-intl";
 import { Alert } from "react-native";
-import { Avatar, BackButton, Button, ButtonCard, FormContainer, PhoneNumberCard, Space, Text, TextFieldCard } from "../../../components";
 import { useForm, useSelectImage } from "../../../hooks";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useUpdateBusinessMutation } from "../../../services";
 import { useBusiness } from "../../../store";
-import { STATIC_FORM_AMERICAN_COUNTRIES, STATIC_FORM_USA_STATES, compareFormObjectsBeforeAbort } from "../../../utils";
 
 export function BusinessProfileScreen({ navigation }: AuthorizedScreenProps<"business-profile-screen">) {
   const business = useBusiness();
