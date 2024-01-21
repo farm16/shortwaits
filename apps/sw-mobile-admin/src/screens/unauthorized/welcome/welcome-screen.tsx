@@ -9,7 +9,7 @@ import { StyleSheet, View } from "react-native";
 import { Settings as FacebookSettings } from "react-native-fbsdk-next";
 import { RootStackParamList, UnauthorizedStackParamList } from "../../../navigation";
 import { useGetAdminMobileQuery } from "../../../services";
-import { useBusiness, useMobileAdmin } from "../../../store";
+import { useBusiness, useShortwaitsAdmin } from "../../../store";
 
 GoogleSignin.configure({
   webClientId: "805426205047-fcegaam9bmap1dagccindjh0ko7oro68.apps.googleusercontent.com",
@@ -23,7 +23,7 @@ export interface WelcomeScreenProps {
 
 export const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation }) => {
   const business = useBusiness();
-  const mobileAdminData = useMobileAdmin();
+  const mobileAdminData = useShortwaitsAdmin();
   const intl = useIntl(); // Access the intl object
 
   const { isLoading: isAdminMobileLoading } = useGetAdminMobileQuery(mobileAdminData.shortwaits && skipToken);

@@ -13,7 +13,7 @@ import { FlatList, StyleSheet } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import { ModalsScreenProps } from "../../../../../navigation";
 import { useGetCategoriesQuery } from "../../../../../services";
-import { useBusiness, useMobileAdmin } from "../../../../../store";
+import { useBusiness, useShortwaitsAdmin } from "../../../../../store";
 import { CategoriesSelectorItem } from "./categories-selector-item";
 
 export const CategoriesSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ navigation, route }) => {
@@ -42,7 +42,7 @@ export const CategoriesSelector: FC<ModalsScreenProps<"selector-modal-screen">> 
   const { Colors } = useTheme();
 
   const { data: categories, isError, isLoading, isSuccess } = useGetCategoriesQuery(undefined);
-  const { preferredLanguage, suggestedLanguage } = useMobileAdmin();
+  const { preferredLanguage, suggestedLanguage } = useShortwaitsAdmin();
   const language = preferredLanguage || suggestedLanguage;
   /**
    * TODO: handle error to non ideal state

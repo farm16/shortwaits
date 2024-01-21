@@ -1,13 +1,13 @@
+import { useIsFocused } from "@react-navigation/native";
 import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { changeFloatingActionButtonVisibility, mobileAdminInitialState, selectCurrentMobileAdminState } from "..";
-import { useIsFocused } from "@react-navigation/native";
 
 /**
  *
  * @returns returns element 0 which is `short_id: 0001`
  */
-export const useMobileAdmin = () => {
+export const useShortwaitsAdmin = () => {
   const mobileAdmin = useSelector(selectCurrentMobileAdminState);
   return useMemo(() => {
     return mobileAdmin ? mobileAdmin : null;

@@ -23,13 +23,14 @@ import { Alert } from "react-native";
 import { useForm } from "../../../hooks";
 import { ModalsScreenProps } from "../../../navigation";
 import { useDeleteServiceMutation, useUpdateServiceMutation } from "../../../services";
-import { useBusiness } from "../../../store";
+import { useBusiness, useShortwaitsAdmin } from "../../../store";
 
 export const UpdateServicesModal: FC<ModalsScreenProps<"update-service-modal-screen">> = ({ navigation, route }) => {
   const service = route?.params?.initialValues as ServiceDtoType;
 
   const intl = useIntl();
   const business = useBusiness();
+  const shortwaitsAdmin = useShortwaitsAdmin();
   const [deleteService, deleteServiceStatus] = useDeleteServiceMutation();
   const [updateService, updateServiceStatus] = useUpdateServiceMutation();
 
@@ -118,7 +119,7 @@ export const UpdateServicesModal: FC<ModalsScreenProps<"update-service-modal-scr
       <Card mode="static">
         <Text preset="cardTitle" text={intl.formatMessage({ id: "UpdateServiceModal.serviceColor" })} />
         <Space size="small" />
-        <ServiceColors selectedColor={values?.serviceColor} onSelect={handleServiceColorChange} />
+        <ServiceColors selectedColor={values?.serviceColor} onSelect={handleServiceColorChange} serviceColors={shortwaitsAdmin.shortwaits.serviceColors} />
         <Space size="small" />
       </Card>
       <TextFieldCard

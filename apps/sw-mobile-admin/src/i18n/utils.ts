@@ -1,7 +1,7 @@
 import { AvailableLanguagesType } from "@shortwaits/shared-utils";
 import { useMemo } from "react";
 import * as RNLocalize from "react-native-localize";
-import { useMobileAdmin } from "../store";
+import { useShortwaitsAdmin } from "../store";
 import copies from "./copies.json";
 
 export const getDeviceLocales = () => {
@@ -30,7 +30,7 @@ export const getSupportedLanguageCode = () => {
 export const languageCode = RNLocalize.getLocales()[0].languageCode;
 
 export const usePreferredLanguage = () => {
-  const { preferredLanguage } = useMobileAdmin();
+  const { preferredLanguage } = useShortwaitsAdmin();
   console.log("PREFERRED_LANGUAGE >>> ", preferredLanguage);
   return useMemo(() => preferredLanguage, [preferredLanguage]);
 };
