@@ -1,9 +1,8 @@
 import { CardStyleInterpolators, createStackNavigator } from "@react-navigation/stack";
+import { BackButton, useTheme } from "@shortwaits/shared-ui";
 import React from "react";
 import { StyleSheet } from "react-native";
-import { BackButton } from "../../components";
 import { Onboarding1Screen, Onboarding2Screen, SignInScreen, SignInWithEmail, SignUpScreen, SignUpWithEmail, WelcomeScreen } from "../../screens";
-import { useTheme } from "../../theme";
 import { UNAUTHORIZED_SCREENS } from "../navigation-constants";
 
 const { WELCOME_SCREEN, SIGN_IN_SCREEN, SIGN_IN_WITH_EMAIL_SCREEN, SIGN_UP_SCREEN, SIGN_UP_WITH_EMAIL_SCREEN, ONBOARDING_1_SCREEN, ONBOARDING_2_SCREEN } = UNAUTHORIZED_SCREENS;

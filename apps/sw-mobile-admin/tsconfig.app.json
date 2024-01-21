@@ -22,6 +22,7 @@
     "src/**/*.tsx",
     "src/**/*.js",
     "src/**/*.jsx",
-    "src/**/*.json" // Include all JSON files in src directory
+    "src/**/*.json", // Include all JSON files in src directory
+    "../../declarations.d.ts"
   ]
 }

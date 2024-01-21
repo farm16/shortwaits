@@ -1,11 +1,10 @@
-import { cloneDeep } from "lodash";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AvailableLanguagesType, CategoriesDtoType, ShortwaitsAdminDefaultDataPayloadType } from "@shortwaits/shared-utils";
-
-import { shortwaitsApi } from "../../../services";
-import type { RootState } from "../..";
+import { cloneDeep } from "lodash";
 import { Platform } from "react-native";
-import { getSupportedLanguageCode, languageCode } from "../../../utils";
+import type { RootState } from "../..";
+import { getSupportedLanguageCode, languageCode } from "../../../i18n";
+import { shortwaitsApi } from "../../../services";
 
 type GhostComponentProps = {
   [key: string]: string | boolean;

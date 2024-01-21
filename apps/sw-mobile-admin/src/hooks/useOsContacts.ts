@@ -1,7 +1,7 @@
+import { getUsersFromOsContacts } from "@shortwaits/shared-ui";
 import { useState } from "react";
 import { PermissionsAndroid, Platform } from "react-native";
 import Contacts from "react-native-contacts";
-import { getUsersFromOsContacts } from "../utils/getUsersFromOsContacts";
 
 export function useOsContacts() {
   const [isLoading, setIsLoading] = useState(false);

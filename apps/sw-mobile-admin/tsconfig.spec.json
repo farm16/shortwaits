@@ -16,6 +16,6 @@
     "src/**/*.test.jsx",
     "src/**/*.spec.jsx",
     "src/**/*.d.ts",
-    "src/components/emoji/emoji-types.ts"
+    "../../declarations.d.ts"
   ]
 }

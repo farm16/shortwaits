@@ -1,5 +1,5 @@
+import { ThemeColorName } from "@shortwaits/shared-ui";
 import { AvailableLanguagesType } from "@shortwaits/shared-utils";
-import { ThemeColorName } from "../../../theme/Colors";
 
 /**
  * - WRITE: Enable add/update capability.

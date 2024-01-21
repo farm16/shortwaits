@@ -1,4 +1,5 @@
 import { PortalProvider as GPortalProvider, enableLogging } from "@gorhom/portal";
+import { PremiumMembershipModal } from "@shortwaits/shared-ui";
 import React from "react";
 import { IntlProvider } from "react-intl";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -6,7 +7,6 @@ import { MD3LightTheme as DefaultTheme, Provider as PaperProvider } from "react-
 import { SafeAreaProvider, initialWindowMetrics } from "react-native-safe-area-context";
 import { Provider as ReduxProvider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
-import { Banner, FloatingActionButton, PremiumMembershipModal } from "./components";
 import copies from "./i18n/copies.json";
 import { AppNavigator } from "./navigation";
 import { persistor, store } from "./store";
@@ -16,8 +16,8 @@ enableLogging();
 export const App = () => {
   return (
     <WithProviders>
-      <Banner />
-      <FloatingActionButton />
+      {/* <Banner />
+      <FloatingActionButton /> */}
       <PremiumMembershipModal />
       <AppNavigator />
     </WithProviders>

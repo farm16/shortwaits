@@ -1,10 +1,10 @@
 import { BottomTabNavigationOptions, createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { useTheme } from "@shortwaits/shared-ui";
 import React, { useMemo } from "react";
 import { useIntl } from "react-intl";
 import { Platform } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { ClientsScreen, EventsScreen, MyBusinessScreen, SettingsScreen } from "../../screens";
-import { useTheme } from "../../theme";
 import { AUTHORIZED_TAB_SCREENS } from "../navigation-constants";
 
 const Tab = createBottomTabNavigator();

@@ -1,8 +1,8 @@
+import { AvailableLanguagesType } from "@shortwaits/shared-utils";
+import { useMemo } from "react";
 import * as RNLocalize from "react-native-localize";
 import { useMobileAdmin } from "../store";
-import copies from "../i18n/copies.json";
-import { useMemo } from "react";
-import { AvailableLanguagesType } from "@shortwaits/shared-utils";
+import copies from "./copies.json";
 
 export const getDeviceLocales = () => {
   const locales = RNLocalize.getLocales();

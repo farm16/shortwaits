@@ -1,6 +1,6 @@
+import { useTheme } from "@shortwaits/shared-ui";
 import { useRef } from "react";
 import { Theme } from "react-native-calendars/src/types";
-import { useTheme } from "../../theme";
 
 export function useCalendarTheme() {
   const { Colors } = useTheme();

@@ -1,17 +1,10 @@
-import Calendar from "../../../src/components/calendar/calendar";
-
 async function getBusiness(businessShortId: string, clientId: string) {
-  const res = await fetch(
-    `http://127.0.0.1:8080/v1/shortwaits/booking?businessShortId=${businessShortId}${
-      clientId ? `?clientId=${clientId}` : ""
-    }`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
+  const res = await fetch(`http://127.0.0.1:8080/v1/shortwaits/booking?businessShortId=${businessShortId}${clientId ? `?clientId=${clientId}` : ""}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 
   if (!res.ok) {
     return {
@@ -29,13 +22,7 @@ async function getBusiness(businessShortId: string, clientId: string) {
   };
 }
 
-export default async function Page({
-  params,
-  searchParams,
-}: {
-  params: { businessShortId: string };
-  searchParams?: { [key: string]: string | string[] | undefined };
-}) {
+export default async function Page({ params, searchParams }: { params: { businessShortId: string }; searchParams?: { [key: string]: string | string[] | undefined } }) {
   const { businessShortId } = params;
 
   const { data: response, error } = await getBusiness(businessShortId, "");
@@ -51,9 +38,7 @@ export default async function Page({
         <br />
         My error: {JSON.stringify(error)}
       </div>
-      <div>
-        <Calendar />
-      </div>
+      <div>{/* <Calendar /> */}</div>
     </div>
   );
 }

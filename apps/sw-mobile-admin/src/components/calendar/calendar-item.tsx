@@ -1,16 +1,24 @@
 import { useFocusEffect } from "@react-navigation/native";
+import {
+  CALENDAR_EVENT_HEIGHT,
+  EVENT_ITEM_BORDER_RADIUS,
+  Emoji,
+  EventStatusButtons,
+  Space,
+  Text,
+  statusDisplayMessages,
+  statusDisplayMessagesBackgroundColor,
+  statusDisplayMessagesColor,
+  useTheme,
+} from "@shortwaits/shared-ui";
 import { EventDtoType } from "@shortwaits/shared-utils";
 import { isEmpty, truncate } from "lodash";
 import React, { useCallback } from "react";
 import { useIntl } from "react-intl";
 import { Alert, Animated, Pressable, StyleSheet, View } from "react-native";
 import Swipeable from "react-native-gesture-handler/Swipeable";
-import { Emoji, EventStatusButtons, Space, Text } from "..";
 import { navigate } from "../../navigation";
 import { useService } from "../../store";
-import { useTheme } from "../../theme";
-import { CALENDAR_EVENT_HEIGHT, EVENT_ITEM_BORDER_RADIUS } from "../../utils";
-import { statusDisplayMessages, statusDisplayMessagesBackgroundColor, statusDisplayMessagesColor } from "../../utils/status-color";
 import { getEventTime } from "./calendar-utils";
 
 type AgendaItemProps = {

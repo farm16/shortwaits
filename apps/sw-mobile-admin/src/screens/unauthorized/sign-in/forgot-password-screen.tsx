@@ -1,16 +1,12 @@
 import { CompositeNavigationProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { Button, Container, Screen, Space, Text, TextFieldCard, onGoogleButtonPress, useTheme } from "@shortwaits/shared-ui";
 import React, { FC, useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { ActivityIndicator, Alert, AlertButton, StyleSheet, View } from "react-native";
-import Facebook from "../../../assets/icons/facebook.svg";
-import Google from "../../../assets/icons/google.svg";
-import { Button, Container, Screen, Space, Text, TextFieldCard } from "../../../components";
 import { useForm } from "../../../hooks";
 import { RootStackParamList, UnauthorizedStackParamList } from "../../../navigation";
 import { useLocalSignInMutation, useSocialSignInMutation } from "../../../services";
-import { useTheme } from "../../../theme";
-import { onGoogleButtonPress } from "../../../utils";
 
 export interface RegisterWithEmailScreenProps {
   navigation: CompositeNavigationProp<StackNavigationProp<UnauthorizedStackParamList, "sign-in-screen">, StackNavigationProp<RootStackParamList>>;
@@ -178,7 +174,7 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
       />
       <Space size="large" />
       <Button preset="social" onPress={handleFacebookSignIn}>
-        <Facebook width={30} height={30} style={{ position: "absolute", left: 0, margin: 16 }} />
+        {/* <Facebook width={30} height={30} style={{ position: "absolute", left: 0, margin: 16 }} /> */}
         <Container style={styles.buttonContainer}>
           <Text
             preset="social"
@@ -191,7 +187,7 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
       <Space size="small" />
       <Button preset="social" onPress={handleGoogleSignIn}>
         <Container style={styles.buttonContainer}>
-          <Google width={30} height={30} style={{ position: "absolute", left: 0, margin: 16 }} />
+          {/* <Google width={30} height={30} style={{ position: "absolute", left: 0, margin: 16 }} /> */}
           <Text
             preset="social"
             text={intl.formatMessage({
