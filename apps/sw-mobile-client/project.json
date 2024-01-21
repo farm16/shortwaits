@@ -8,7 +8,7 @@
       "executor": "@nx/react-native:start",
       "dependsOn": ["ensure-symlink", "sync-deps", "pod-install"],
       "options": {
-        "port": 8081
+        "port": 8082
       }
     },
     "serve": {

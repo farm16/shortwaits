@@ -182,7 +182,9 @@ yarn-error.log
 *.jsbundle
 
 # Ruby / CocoaPods
-/ios/Pods/
+apps/sw-mobile-client/ios/Pods/
+apps/sw-mobile-admin/ios/Pods/
+
 /vendor/bundle/
 
 # Temporary files created by Metro to check the health of the file watcher
@@ -190,6 +192,3 @@ yarn-error.log
 
 # testing
 /coverage
-
-
-apps/sw-mobile-client-e2e/artifacts
