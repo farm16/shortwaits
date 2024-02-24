@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AvailableLanguagesType, CategoriesDtoType, ShortwaitsAdminDefaultDataPayloadType } from "@shortwaits/shared-utils";
+import { AvailableLanguagesType, CategoriesDtoType, ShortwaitsAdminDefaultDataPayloadType } from "@shortwaits/shared-lib";
 import { cloneDeep } from "lodash";
 import { Platform } from "react-native";
 import type { RootState } from "../..";
-import { getSupportedLanguageCode, languageCode } from "../../../i18n";
+import { getSupportedDeviceLocale, languageCode } from "../../../i18n";
 import { shortwaitsApi } from "../../../services";
 
 type GhostComponentProps = {
@@ -34,7 +34,7 @@ export const mobileAdminInitialState: MobileAdminStateType = {
     osVersion: `${Platform.Version}`,
     language: languageCode,
   },
-  suggestedLanguage: getSupportedLanguageCode(),
+  suggestedLanguage: getSupportedDeviceLocale(),
   shortwaits: null,
   categories: null,
   components: {

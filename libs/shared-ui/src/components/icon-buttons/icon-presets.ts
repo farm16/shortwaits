@@ -1,4 +1,16 @@
-export const _circleIcons = {
+export const iconProps = {
+  "arrow-top-right": {
+    name: "arrow-top-right",
+    color: "brandSecondary",
+    backgroundColor: undefined,
+    size: 20,
+  },
+  "arrow-top-left": {
+    name: "arrow-top-left",
+    color: "brandSecondary",
+    backgroundColor: undefined,
+    size: 20,
+  },
   edit: {
     name: "pencil",
     color: "brandPrimary",
@@ -187,4 +199,4 @@ export const _circleIcons = {
   },
 } as const;
 
-export type CircleIconsKeys = keyof typeof _circleIcons;
+export type IconProps = keyof typeof iconProps;

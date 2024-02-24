@@ -1,5 +1,5 @@
+import { EventDtoType } from "@shortwaits/shared-lib";
 import { useTheme } from "@shortwaits/shared-ui";
-import { EventDtoType } from "@shortwaits/shared-utils";
 import React, { useCallback, useMemo, useState } from "react";
 import { useIntl } from "react-intl";
 import { Animated, Pressable, StyleSheet, View, useWindowDimensions } from "react-native";

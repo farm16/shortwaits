@@ -1,5 +1,5 @@
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
-import { BusinessHoursType, CommonResponseType } from "@shortwaits/shared-utils";
+import { BusinessHoursType, CommonResponseType } from "@shortwaits/shared-lib";
 import { shortwaitsApiEndpoints } from "../../../../configs";
 
 const { getBusinessHours } = shortwaitsApiEndpoints.BUSINESS;

@@ -1,11 +1,11 @@
+import { BusinessAvailableCurrenciesType } from "@shortwaits/shared-lib";
 import React, { useRef } from "react";
 import { Platform, Pressable, StyleSheet } from "react-native";
 import CurrencyInput, { CurrencyInputProps } from "react-native-currency-input";
-import { BusinessAvailableCurrenciesType } from "@shortwaits/shared-utils";
 
-import { Card, Text, CardProps, Space } from "../common";
 import { getDimensions, useTheme } from "../../theme";
 import { getCentsFromDollars, getCurrencySymbolFromCurrencyType, getDollarsFromCents } from "../../utils/currency";
+import { Card, CardProps, Space, Text } from "../common";
 
 type TextFieldCardType = Omit<CardProps, "mode"> & {
   title: string;

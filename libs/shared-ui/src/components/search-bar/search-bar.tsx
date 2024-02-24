@@ -1,9 +1,7 @@
 import React, { ComponentProps } from "react";
+import { StyleProp, TextStyle, ViewStyle } from "react-native";
 import { Searchbar as SearchBarPaper } from "react-native-paper";
-import { Dimensions, Platform, StyleProp, TextStyle, ViewStyle } from "react-native";
-
 import { useTheme } from "../../theme";
-import { DeepPartial } from "../..";
 
 type SearchBarProps = ComponentProps<typeof SearchBarPaper> & {
   iPlaceholder?: string;
@@ -11,15 +9,7 @@ type SearchBarProps = ComponentProps<typeof SearchBarPaper> & {
 };
 
 export const SearchBar = (props: SearchBarProps) => {
-  const {
-    iPlaceholder,
-    autoCapitalize = "none",
-    clearButtonMode = "while-editing",
-    style: styleOverride,
-    autoCorrect = false,
-    isAnimated = false,
-    ...rest
-  } = props;
+  const { iPlaceholder, autoCapitalize = "none", clearButtonMode = "while-editing", style: styleOverride, autoCorrect = false, isAnimated = false, ...rest } = props;
   const { Colors } = useTheme();
 
   const style: StyleProp<TextStyle> & StyleProp<ViewStyle> = {
@@ -27,7 +17,7 @@ export const SearchBar = (props: SearchBarProps) => {
   };
 
   const searchBarStyle = [style, styleOverride];
-  const SearchBarTheme: DeepPartial<ReactNativePaper.Theme> = {
+  const SearchBarTheme = {
     colors: {
       primary: Colors.brandSecondary,
       accent: Colors.brandAccent,

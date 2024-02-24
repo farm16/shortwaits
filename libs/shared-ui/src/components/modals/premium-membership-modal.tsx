@@ -4,7 +4,7 @@ import { View } from "react-native";
 import { Modal } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTheme } from "../../theme";
-import { getFontSize } from "../../utils";
+import { getResponsiveFontSize } from "../../utils";
 import { Button, Container, Space, Text } from "../common";
 
 const premiumAccountFeatures = [
@@ -25,7 +25,7 @@ const CheckedList = ({ text }: { text: string }) => {
         <Space direction="vertical" />
         <Text
           style={{
-            fontSize: getFontSize(16),
+            fontSize: getResponsiveFontSize(16),
             color: Colors.text,
           }}
         >
@@ -103,7 +103,7 @@ export const PremiumMembershipModal = (props: PremiumMembershipModalProps) => {
           <Button
             preset="link"
             textStyle={{
-              fontSize: getFontSize(14),
+              fontSize: getResponsiveFontSize(14),
               color: Colors.brandSecondary,
             }}
             text="Terms and Conditions"

@@ -1,4 +1,4 @@
-import { ServiceColorType, ServiceColorsType } from "@shortwaits/shared-utils";
+import { ServiceColorType, ServiceColorsType } from "@shortwaits/shared-lib";
 import React, { useCallback, useMemo } from "react";
 import { StyleSheet, View, ViewStyle } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";

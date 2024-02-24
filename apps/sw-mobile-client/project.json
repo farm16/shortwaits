@@ -6,9 +6,10 @@
   "targets": {
     "start": {
       "executor": "@nx/react-native:start",
-      "dependsOn": ["ensure-symlink", "sync-deps", "pod-install"],
+      "dependsOn": ["ensure-symlink", "sync-deps"],
       "options": {
-        "port": 8082
+        "port": 8081,
+        "reset-cache": true
       }
     },
     "serve": {

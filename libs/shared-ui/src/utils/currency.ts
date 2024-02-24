@@ -1,4 +1,4 @@
-import { BusinessAvailableCurrenciesType, CurrencyType } from "@shortwaits/shared-utils";
+import { BusinessAvailableCurrenciesType, CurrencyType } from "@shortwaits/shared-lib";
 
 const LOCALES = {
   en: "en-US",

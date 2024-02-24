@@ -1,4 +1,4 @@
-import { EventStatusName } from "@shortwaits/shared-utils";
+import { EventStatusName } from "@shortwaits/shared-lib";
 import { ThemeColorName } from "../theme/Colors";
 
 // these are the available/remaining statues for each event status

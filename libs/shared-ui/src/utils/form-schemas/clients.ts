@@ -1,4 +1,3 @@
-import { AddClientToBusinessDtoType, AddLocalClientDtoType, UpdateLocalClientDtoType } from "@shortwaits/shared-utils";
 import * as Yup from "yup";
 
 const deviceSettingSchema = Yup.object().shape({
@@ -79,54 +78,51 @@ const billingSchema = Yup.object().shape({
   faultyReason: Yup.array().of(Yup.string()),
 });
 
-export const addLocalClientSchema: (config: any) => Yup.SchemaOf<AddLocalClientDtoType> = config =>
-  Yup.object().shape({
-    shortId: Yup.string().optional(),
-    isSocialAccount: Yup.boolean().optional(),
-    socialAccount: socialAccountSchema.nullable(),
-    deviceSetting: deviceSettingSchema.nullable(),
-    accountSettings: accountSettingsSchema.nullable(),
-    clientType: Yup.mixed().required().oneOf(["local", "external"]).required(),
-    username: Yup.string().min(3, "a longer name is required").optional(),
-    alias: Yup.mixed().required().oneOf(["username", "familyName", "givenName", "middleName", "displayName"]),
-    displayName: Yup.string().min(3, "a longer name is required").required("this field is required"),
-    familyName: Yup.string().min(3, "need to add more characters").optional(),
-    givenName: Yup.string().min(3, "need to add more characters").optional(),
-    middleName: Yup.string().min(3, "need to add more characters").optional(),
-    accountImageUrl: Yup.string(),
-    email: Yup.string().email("email is not valid").optional(),
-    locale: localeSchema.optional(),
-    phoneNumbers: phoneNumbersSchema.optional(),
-    imAddresses: imAddressesSchema.optional(),
-    addresses: addressesSchema.optional(),
-    desiredCurrencies: Yup.array().of(Yup.string()),
-  });
+export const addLocalClientSchema = Yup.object().shape({
+  shortId: Yup.string().optional(),
+  isSocialAccount: Yup.boolean().optional(),
+  socialAccount: socialAccountSchema.nullable(),
+  deviceSetting: deviceSettingSchema.nullable(),
+  accountSettings: accountSettingsSchema.nullable(),
+  clientType: Yup.mixed().required().oneOf(["local", "external"]).required(),
+  username: Yup.string().min(3, "a longer name is required").optional(),
+  alias: Yup.mixed().required().oneOf(["username", "familyName", "givenName", "middleName", "displayName"]),
+  displayName: Yup.string().min(3, "a longer name is required").required("this field is required"),
+  familyName: Yup.string().min(3, "need to add more characters").optional(),
+  givenName: Yup.string().min(3, "need to add more characters").optional(),
+  middleName: Yup.string().min(3, "need to add more characters").optional(),
+  accountImageUrl: Yup.string(),
+  email: Yup.string().email("email is not valid").optional(),
+  locale: localeSchema.optional(),
+  phoneNumbers: phoneNumbersSchema.optional(),
+  imAddresses: imAddressesSchema.optional(),
+  addresses: addressesSchema.optional(),
+  desiredCurrencies: Yup.array().of(Yup.string()),
+});
 
-export const UpdateLocalClientSchema: (config: any) => Yup.SchemaOf<UpdateLocalClientDtoType> = config =>
-  Yup.object().shape({
-    shortId: Yup.string().optional(),
-    isSocialAccount: Yup.boolean().optional(),
-    socialAccount: socialAccountSchema.optional(),
-    deviceSetting: deviceSettingSchema.optional(),
-    accountSettings: accountSettingsSchema.optional(),
-    clientType: Yup.mixed().required().oneOf(["local", "external"]),
-    username: Yup.string().min(3, "a longer name is required").required(),
-    alias: Yup.mixed().required().oneOf(["username", "familyName", "givenName", "middleName", "displayName"]),
-    displayName: Yup.string().min(3, "a longer name is required").required("this field is required"),
-    familyName: Yup.string().min(3, "need to add more characters").optional(),
-    givenName: Yup.string().min(3, "need to add more characters").optional(),
-    middleName: Yup.string().min(3, "need to add more characters").optional(),
-    accountImageUrl: Yup.string(),
-    email: Yup.string().email("email is not valid").optional(),
-    locale: localeSchema.optional(),
-    phoneNumbers: phoneNumbersSchema.optional(),
-    imAddresses: imAddressesSchema.optional(),
-    addresses: addressesSchema.optional(),
-    socialAccounts: socialAccountsSchema.optional(),
-    desiredCurrencies: Yup.array().of(Yup.string()),
-  });
+export const UpdateLocalClientSchema = Yup.object().shape({
+  shortId: Yup.string().optional(),
+  isSocialAccount: Yup.boolean().optional(),
+  socialAccount: socialAccountSchema.optional(),
+  deviceSetting: deviceSettingSchema.optional(),
+  accountSettings: accountSettingsSchema.optional(),
+  clientType: Yup.mixed().required().oneOf(["local", "external"]),
+  username: Yup.string().min(3, "a longer name is required").required(),
+  alias: Yup.mixed().required().oneOf(["username", "familyName", "givenName", "middleName", "displayName"]),
+  displayName: Yup.string().min(3, "a longer name is required").required("this field is required"),
+  familyName: Yup.string().min(3, "need to add more characters").optional(),
+  givenName: Yup.string().min(3, "need to add more characters").optional(),
+  middleName: Yup.string().min(3, "need to add more characters").optional(),
+  accountImageUrl: Yup.string(),
+  email: Yup.string().email("email is not valid").optional(),
+  locale: localeSchema.optional(),
+  phoneNumbers: phoneNumbersSchema.optional(),
+  imAddresses: imAddressesSchema.optional(),
+  addresses: addressesSchema.optional(),
+  socialAccounts: socialAccountsSchema.optional(),
+  desiredCurrencies: Yup.array().of(Yup.string()),
+});
 
-export const addClientSchema: (config: any) => Yup.SchemaOf<AddClientToBusinessDtoType> = config =>
-  Yup.object().shape({
-    shortId: Yup.string().required("this field is required"),
-  });
+export const addClientSchema = Yup.object().shape({
+  shortId: Yup.string().required("this field is required"),
+});

@@ -1,6 +1,6 @@
 import GBottomSheet from "@gorhom/bottom-sheet";
+import { EventDtoType } from "@shortwaits/shared-lib";
 import { BottomSheet, ButtonCard, Text, useTheme } from "@shortwaits/shared-ui";
-import { EventDtoType } from "@shortwaits/shared-utils";
 import React, { ForwardedRef, forwardRef } from "react";
 import { View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";

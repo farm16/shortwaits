@@ -23,17 +23,17 @@ export default function ({ FontSize, Colors }: ThemeVariables): ThemeFonts {
       color: Colors.text,
     },
     titleSmall: {
-      fontSize: FontSize.small * 1.5,
+      fontSize: FontSize.small * 1.2,
       fontWeight: "600",
       color: Colors.text,
     },
     titleRegular: {
-      fontSize: FontSize.regular * 1.5,
+      fontSize: FontSize.regular * 1.2,
       fontWeight: "600",
       color: Colors.text,
     },
     titleLarge: {
-      fontSize: FontSize.large * 1.5,
+      fontSize: FontSize.large * 1.2,
       fontWeight: "600",
       color: Colors.text,
     },

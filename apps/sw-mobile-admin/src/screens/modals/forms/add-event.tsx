@@ -1,3 +1,4 @@
+import { CreateEventDtoType, ServiceDtoType, eventPaymentMethods } from "@shortwaits/shared-lib";
 import {
   BackButton,
   Button,
@@ -11,7 +12,6 @@ import {
   TimePickerFieldCard,
   getEmojiString,
 } from "@shortwaits/shared-ui";
-import { CreateEventDtoType, ServiceDtoType, eventPaymentMethods } from "@shortwaits/shared-utils";
 import { FormikErrors } from "formik";
 import { noop } from "lodash";
 import React, { FC, useEffect, useLayoutEffect, useMemo, useState } from "react";

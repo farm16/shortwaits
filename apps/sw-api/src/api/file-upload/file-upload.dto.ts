@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { UploadFileDtoType } from "@shortwaits/shared-utils";
+import { UploadFileDtoType } from "@shortwaits/shared-lib";
 import { IsBase64 } from "class-validator";
 
 export class UploadImageFile implements UploadFileDtoType {

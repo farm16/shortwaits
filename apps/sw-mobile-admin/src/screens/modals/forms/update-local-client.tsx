@@ -1,5 +1,5 @@
+import { ClientUserType, UpdateLocalClientDtoType } from "@shortwaits/shared-lib";
 import { BackButton, Button, ButtonCard, FormContainer, PhoneNumberCard, STATIC_FORM_USA_STATES, Space, Text, TextFieldCard, getCapitalizedString } from "@shortwaits/shared-ui";
-import { ClientUserType, UpdateLocalClientDtoType } from "@shortwaits/shared-utils";
 import { FormikErrors } from "formik";
 import { isEmpty, noop } from "lodash";
 import React, { FC, useEffect, useLayoutEffect } from "react";

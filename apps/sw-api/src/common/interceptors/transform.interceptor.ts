@@ -1,9 +1,9 @@
-import { Injectable, NestInterceptor, ExecutionContext, CallHandler } from "@nestjs/common";
-import { CommonResponseType } from "@shortwaits/shared-utils";
+import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { CommonResponseType } from "@shortwaits/shared-lib";
+import { version as appVersion } from "package.json";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { ConfigService } from "@nestjs/config";
-import { version as appVersion } from "package.json";
 
 @Injectable()
 export class TransformInterceptor<T> implements NestInterceptor<T, CommonResponseType<T>> {

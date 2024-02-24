@@ -1,7 +1,7 @@
-import { Schema, Prop, SchemaFactory, raw } from "@nestjs/mongoose";
-import { Document, Types } from "mongoose";
-import { BusinessAvailableCurrenciesType, BusinessHoursType, ObjectId, ServiceColorType, ServiceType } from "@shortwaits/shared-utils";
+import { Prop, Schema, SchemaFactory, raw } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
+import { BusinessAvailableCurrenciesType, BusinessHoursType, ObjectId, ServiceColorType, ServiceType } from "@shortwaits/shared-lib";
+import { Document, Types } from "mongoose";
 
 @Schema()
 export class Service extends Document implements ServiceType {

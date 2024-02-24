@@ -8,7 +8,7 @@ import {
   ServiceDtoType,
   ServicesDtoType,
   WeekDayTimeRangeType,
-} from "@shortwaits/shared-utils";
+} from "@shortwaits/shared-lib";
 import { cloneDeep } from "lodash";
 import { shortwaitsApi } from "../../../services";
 

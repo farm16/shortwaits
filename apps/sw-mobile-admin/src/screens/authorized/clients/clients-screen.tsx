@@ -1,5 +1,5 @@
 import { skipToken } from "@reduxjs/toolkit/dist/query";
-import { Container, IconButton, Logo3, Screen, Text, getFontSize, getResponsiveHeight, useTheme } from "@shortwaits/shared-ui";
+import { Container, IconButton, Logo3, Screen, Text, getResponsiveFontSize, getResponsiveHeight, useTheme } from "@shortwaits/shared-ui";
 import React, { FC, Fragment, useCallback, useLayoutEffect, useMemo, useState } from "react";
 import { useIntl } from "react-intl";
 import { Alert, Animated, Dimensions, Pressable, StyleSheet, View } from "react-native";
@@ -212,6 +212,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: getResponsiveHeight(4),
   },
   tabText: {
-    fontSize: getFontSize(16),
+    fontSize: getResponsiveFontSize(16),
   },
 });

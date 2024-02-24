@@ -34,7 +34,7 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
         });
       },
     },
-    "userLocalSignIn"
+    "adminAppLocalSignIn"
   );
   const handlePasswordVisibility = useCallback(() => {
     setIsVisible(visibility => !visibility);
@@ -202,7 +202,7 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
           preset="subLink"
           style={{ color: Colors.text }}
           text={intl.formatMessage({
-            id: "Sign_In_Screen.dontHaveAnAccount",
+            id: "Sign_In_Screen.doNotHaveAnAccount",
           })}
         />
         <Button

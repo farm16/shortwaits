@@ -1,5 +1,5 @@
+import { AddClientToBusinessDtoType } from "@shortwaits/shared-lib";
 import { BackButton, QRScanner, Text, WithPermission } from "@shortwaits/shared-ui";
-import { AddClientToBusinessDtoType } from "@shortwaits/shared-utils";
 import { noop } from "lodash";
 import React, { FC, useEffect, useLayoutEffect, useMemo } from "react";
 import { useIntl } from "react-intl";

@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Code, Camera as VisionCamera, useCameraDevice, useCodeScanner } from "react-native-vision-camera";
 import { Button, Space, Switch, Text, TextFieldCard } from "..";
-import { getFontSize, getResponsiveHeight, getResponsiveWidth } from "../../utils";
+import { getResponsiveFontSize, getResponsiveHeight, getResponsiveWidth } from "../../utils";
 
 /**
  * todo: https://github.com/mrousavy/react-native-vision-camera/issues/2257
@@ -124,7 +124,7 @@ export function QRScanner(props: CameraProps) {
         preset="subText"
         style={{
           fontWeight: "400",
-          fontSize: getFontSize(16),
+          fontSize: getResponsiveFontSize(16),
         }}
         text={`Note: ${isManual ? "Do not include blank spaces" : "Make sure the QR code is in the center of the screen"}`}
       />

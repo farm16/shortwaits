@@ -1,30 +1,37 @@
-import { onboarding1Schema, userLocalSignInSchema, userLocalSignUpSchema } from "./auth";
+import * as Yup from "yup";
+import { adminAppLocalSignInSchema, adminAppLocalSignUpSchema, clientAppLocalSignInSchema, clientAppLocalSignUpSchema, onboarding1Schema } from "./auth";
 import { addBusinessUserSchema } from "./business-users";
 import { UpdateLocalClientSchema, addClientSchema, addLocalClientSchema } from "./clients";
 import { createEventSchema, updateEventSchema } from "./events";
 import { updateBusinessSchema } from "./my-business";
 import { createServiceSchema, updateServiceSchema } from "./services";
 
-type FormSchemas = {
-  addService: typeof createServiceSchema;
-  updateService: typeof updateServiceSchema;
-  addLocalClient: typeof addLocalClientSchema;
-  updateLocalClient: typeof UpdateLocalClientSchema;
-  addStaff: typeof addBusinessUserSchema;
-  createEvent: typeof createEventSchema;
-  updateEvent: typeof updateEventSchema;
-  onboarding1: typeof onboarding1Schema;
-  userLocalSignIn: typeof userLocalSignInSchema;
-  userLocalSignUp: typeof userLocalSignUpSchema;
-  updateBusiness: typeof updateBusinessSchema;
-  addClient: typeof addClientSchema;
+export type FormSchemaTypes = {
+  addService: Yup.InferType<typeof createServiceSchema>;
+  updateService: Yup.InferType<typeof updateServiceSchema>;
+  addLocalClient: Yup.InferType<typeof addLocalClientSchema>;
+  updateLocalClient: Yup.InferType<typeof UpdateLocalClientSchema>;
+  addStaff: Yup.InferType<typeof addBusinessUserSchema>;
+  createEvent: Yup.InferType<typeof createEventSchema>;
+  updateEvent: Yup.InferType<typeof updateEventSchema>;
+  onboarding1: Yup.InferType<typeof onboarding1Schema>;
+  adminAppLocalSignIn: Yup.InferType<typeof adminAppLocalSignInSchema>;
+  adminAppLocalSignUp: Yup.InferType<typeof adminAppLocalSignUpSchema>;
+  clientAppLocalSignIn: Yup.InferType<typeof clientAppLocalSignInSchema>;
+  clientAppLocalSignUp: Yup.InferType<typeof clientAppLocalSignUpSchema>;
+  updateBusiness: Yup.InferType<typeof updateBusinessSchema>;
+  addClient: Yup.InferType<typeof addClientSchema>;
 };
 
-export const formSchemas: FormSchemas = {
+export type FormSchemaKeys = keyof typeof formSchemas;
+
+export const formSchemas = {
   //auth
   onboarding1: onboarding1Schema,
-  userLocalSignIn: userLocalSignInSchema,
-  userLocalSignUp: userLocalSignUpSchema,
+  adminAppLocalSignIn: adminAppLocalSignInSchema,
+  adminAppLocalSignUp: adminAppLocalSignUpSchema,
+  clientAppLocalSignIn: clientAppLocalSignInSchema,
+  clientAppLocalSignUp: clientAppLocalSignUpSchema,
 
   // My business
   updateBusiness: updateBusinessSchema,

@@ -1,16 +1,16 @@
-import { Schema, Prop, SchemaFactory, raw } from "@nestjs/mongoose";
+import { Prop, Schema, SchemaFactory, raw } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
-import { Document } from "mongoose";
 import {
+  AccountPermissions,
   BusinessHoursType,
   CurrencyType,
+  ObjectId,
   ServiceColorsType,
   ServiceType,
-  ShortwaitsAdminDefaultDataType,
-  ObjectId,
   ShortwaitsAdminBannersType,
-  AccountPermissions,
-} from "@shortwaits/shared-utils";
+  ShortwaitsAdminDefaultDataType,
+} from "@shortwaits/shared-lib";
+import { Document } from "mongoose";
 
 @Schema()
 export class Shortwaits extends Document implements ShortwaitsAdminDefaultDataType {

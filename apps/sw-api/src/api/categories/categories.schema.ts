@@ -1,7 +1,7 @@
-import { Schema, Prop, SchemaFactory, raw } from "@nestjs/mongoose";
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
+import { BusinessCategoryType } from "@shortwaits/shared-lib";
 import { Document } from "mongoose";
-import { BusinessCategoryType } from "@shortwaits/shared-utils";
 
 @Schema()
 export class Categories extends Document implements BusinessCategoryType {

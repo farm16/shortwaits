@@ -1,5 +1,5 @@
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
-import { EventsResponseType, endpoints } from "@shortwaits/shared-utils";
+import { EventsResponseType, endpoints } from "@shortwaits/shared-lib";
 
 export default (builder: EndpointBuilder<any, any, any>) =>
   builder.query<

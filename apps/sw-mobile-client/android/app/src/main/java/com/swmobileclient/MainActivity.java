@@ -27,6 +27,21 @@ public class MainActivity extends ReactActivity {
         this,
         getMainComponentName(),
         // If you opted-in for the New Architecture, we enable the Fabric Renderer.
-        DefaultNewArchitectureEntryPoint.getFabricEnabled());
+        DefaultNewArchitectureEntryPoint.getFabricEnabled()){
+          @Nullable
+          @Override
+          protected Bundle getLaunchOptions() {
+            Bundle initialProps = new Bundle();
+            Bundle brandColors = new Bundle();
+
+            brandColors.putString("primary", "#FF0000");
+            brandColors.putString("secondary", "#00FF00");
+            brandColors.putString("tertiary", "#0000FF");
+
+            initialProps.putBundle("brandColors", brandColors);
+            
+            return initialProps;
+          }
+        }
   }
 }

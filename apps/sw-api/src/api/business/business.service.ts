@@ -8,7 +8,7 @@ import {
   ClientUserUpdateDtoType,
   CreateBusinessUsersDtoType,
   CreateClientUsersDtoType,
-} from "@shortwaits/shared-utils";
+} from "@shortwaits/shared-lib";
 import { Model } from "mongoose";
 import { convertStringToObjectId } from "../../utils/converters";
 import { generateBusinessStaffUsers, generateClientUsers } from "../../utils/generateUserPayload";

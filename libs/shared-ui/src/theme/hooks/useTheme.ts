@@ -1,6 +1,5 @@
 import { useMemo } from "react";
 import { useColorScheme } from "react-native";
-import { useSelector } from "react-redux";
 import Common from "../Common";
 import Fonts from "../Fonts";
 import Gutters from "../Gutters";
@@ -19,7 +18,7 @@ export const useTheme = () => {
   // const currentTheme = useSelector(
   //   (state: { theme: IThemeState }) => state.theme.theme || "default"
   // )
-  const isDark = useSelector((state: { theme }) => state.theme.darkMode);
+  const isDark = false; //useSelector((state: { theme }) => state.theme.darkMode);
   const currentTheme = "default";
 
   const darkMode = isDark === null ? colorScheme === "dark" : isDark;

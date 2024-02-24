@@ -1,3 +1,4 @@
+import { ServiceDtoType } from "@shortwaits/shared-lib";
 import {
   Avatar,
   BackButton,
@@ -14,7 +15,6 @@ import {
   Text,
   TextFieldCard,
 } from "@shortwaits/shared-ui";
-import { ServiceDtoType } from "@shortwaits/shared-utils";
 import { FormikErrors } from "formik";
 import { noop } from "lodash";
 import React, { FC, useCallback, useEffect, useLayoutEffect } from "react";

@@ -1,6 +1,6 @@
 import { skipToken } from "@reduxjs/toolkit/dist/query";
+import { BusinessUsersDtoType } from "@shortwaits/shared-lib";
 import { AnimatedSearchBar, BackButton, Container, IconButton, NonIdealState, Screen, Text } from "@shortwaits/shared-ui";
-import { BusinessUsersDtoType } from "@shortwaits/shared-utils";
 import React, { FC, useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { Alert, FlatList, StyleSheet } from "react-native";
 import { ActivityIndicator } from "react-native-paper";

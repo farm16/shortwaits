@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { BusinessLabelsType, CreateEventDtoType, DiscountType, EventPaymentMethodType, eventPaymentMethodsKeys } from "@shortwaits/shared-utils";
+import { BusinessLabelsType, CreateEventDtoType, DiscountType, EventPaymentMethodType, eventPaymentMethodsKeys } from "@shortwaits/shared-lib";
 import { Type } from "class-transformer";
 import { IsArray, IsBoolean, IsDateString, IsIn, IsNumber, IsObject, IsString, ValidateNested } from "class-validator";
 

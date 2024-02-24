@@ -2,7 +2,7 @@ import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { CompositeNavigationProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { skipToken } from "@reduxjs/toolkit/dist/query/react";
-import { Button, Container, Logo2, Screen, ScrollView, Space, Text, WelcomeImage, getFontSize, getResponsiveHeight } from "@shortwaits/shared-ui";
+import { Button, Container, Logo2, Screen, ScrollView, Space, Text, WelcomeImage, getResponsiveFontSize, getResponsiveHeight } from "@shortwaits/shared-ui";
 import React, { FC, useEffect } from "react";
 import { useIntl } from "react-intl";
 import { StyleSheet, View } from "react-native";
@@ -39,7 +39,7 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation }) => {
   return (
     <Screen backgroundColor="white" statusBar="light-content">
       <Container alignItems="center" justifyContent="center">
-        <Logo2 height={getFontSize(80)} width={getFontSize(80)} />
+        <Logo2 height={getResponsiveFontSize(80)} width={getResponsiveFontSize(80)} />
       </Container>
       <Space size="large" />
       <View style={styles.box1}>

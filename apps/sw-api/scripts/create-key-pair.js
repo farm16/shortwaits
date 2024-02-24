@@ -24,10 +24,7 @@ function genKeyPair() {
   fs.writeFileSync(path.join(__dirname, "../../public.pem"), keyPair.publicKey);
 
   // Create the private key file
-  fs.writeFileSync(
-    path.join(__dirname, "../../private.pem"),
-    keyPair.privateKey
-  );
+  fs.writeFileSync(path.join(__dirname, "../../private.pem"), keyPair.privateKey);
 }
 
 // Generates the keypair

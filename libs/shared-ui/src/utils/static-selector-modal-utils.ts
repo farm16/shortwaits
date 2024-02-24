@@ -1,4 +1,4 @@
-import { EventsDtoType } from "@shortwaits/shared-utils";
+import { EventsDtoType } from "@shortwaits/shared-lib";
 
 // func to convert the static selector modal data to the format required by the static selector modal
 export function convertStaticSelectorModalData(data: EventsDtoType, type: "events"): { key: string; title: string; subTitle?: string; itemData?: any }[] {

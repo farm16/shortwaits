@@ -101,3 +101,11 @@ export const getDimensions = (percentage = 100, dim: "window" | "screen" = "scre
  * uses @getDimensions
  */
 export const getLogoDimensions = (percentage = 30) => getDimensions(percentage);
+
+export const initBrandColors = ({ brandPrimary, brandSecondary, brandAccent }: { brandPrimary: string; brandSecondary: string; brandAccent: string }) => {
+  (globalThis as any).BrandColors = {
+    primary: brandPrimary,
+    secondary: brandSecondary,
+    accent: brandAccent,
+  };
+};

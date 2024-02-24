@@ -1,7 +1,4 @@
-import { IsArray, IsBoolean, IsNotEmpty, IsPhoneNumber, IsString, MaxLength } from "class-validator";
-import { ApiProperty } from "@nestjs/swagger";
-import { Trim } from "class-sanitizer";
-import { AccountType, BusinessDtoType, BusinessHoursType, BusinessLabelType, BusinessLocationType, CurrencyType, ObjectId, UpdateBusinessDtoType } from "@shortwaits/shared-utils";
+import { BusinessHoursType, BusinessLabelType, BusinessLocationType, CurrencyType, ObjectId, UpdateBusinessDtoType } from "@shortwaits/shared-lib";
 
 export class UpdateBusinessDto implements UpdateBusinessDtoType {
   staff: string[];

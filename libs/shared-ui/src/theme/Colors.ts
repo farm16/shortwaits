@@ -1,7 +1,7 @@
+import { initialProps } from "@shortwaits/shared-lib";
 import { getPaletteWithContrast, getReversePalette } from "./utils";
-
 /**
- * Brand's Colors
+ * Additional Brand's Colors
  *
  * #F73859 primary
  * #63AE9D secondary
@@ -10,18 +10,17 @@ import { getPaletteWithContrast, getReversePalette } from "./utils";
  *
  */
 
-// #e5e5e5
-// hair color rgb(178, 178, 178)
-// rgb(240, 240, 239)
+// get brand colors from global variables if exists
+
+const brandPrimary = initialProps.brandColors.primary || "#030F26";
+const brandSecondary = initialProps.brandColors.secondary || "#595FD9";
+const brandAccent = initialProps.brandColors.tertiary || "#EB9B04";
 
 export const brandColors = {
-  primary: getPaletteWithContrast("brandPrimary", "#030F26"),
-  secondary: getPaletteWithContrast("brandSecondary", "#595FD9"),
-  accent: getPaletteWithContrast("brandAccent", "#EB9B04"),
+  primary: getPaletteWithContrast("brandPrimary", brandPrimary),
+  secondary: getPaletteWithContrast("brandSecondary", brandSecondary),
+  accent: getPaletteWithContrast("brandAccent", brandAccent),
 };
-
-// console.log(getPaletteWithContrast("brandAccent", "#E24939"))
-// console.log(getPaletteWithContrast("brandAccent", "#EB7084"))
 
 const basicColors = {
   red: getPaletteWithContrast("red", "#E24939"),
@@ -30,6 +29,7 @@ const basicColors = {
   violet: getPaletteWithContrast("violet", "#7f00ff"),
   yellow: getPaletteWithContrast("yellow", "#ffff00"),
   orange: getPaletteWithContrast("orange", "#ffa500"),
+  black: getPaletteWithContrast("black", "#202020"),
 };
 
 const staticColors = {
@@ -48,7 +48,6 @@ export const customDarkColors = {
   background: "#ffffff",
   lightBackground: "#f8f8f8",
   white: "#fffffc",
-  black: "#202020",
 
   //grays
   lightGray: "rgb(241,241,241)",
@@ -83,7 +82,6 @@ export const customColors = {
   background: "#ffffff",
   lightBackground: "#f8f8f8",
   white: "#fffffc",
-  black: "#202020",
 
   //grays
   lightGray: "rgb(241,241,241)",
@@ -122,6 +120,7 @@ export const palettes = {
   ...basicColors.violet,
   ...basicColors.yellow,
   ...basicColors.orange,
+  ...basicColors.black,
 };
 
 export const reversedPalettes = {

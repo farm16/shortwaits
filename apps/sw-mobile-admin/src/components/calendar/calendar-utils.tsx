@@ -1,6 +1,6 @@
+import { EventsDtoType } from "@shortwaits/shared-lib";
+import { formatDuration, intervalToDuration } from "date-fns";
 import { isEmpty } from "lodash";
-import { intervalToDuration, formatDuration } from "date-fns";
-import { EventsDtoType } from "@shortwaits/shared-utils";
 import { useMemo } from "react";
 
 export function milliSecondsToDuration(milliSeconds: number): Duration {

@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { BusinessAvailableCurrenciesType, ConvertToDtoType, CreateServiceDtoType, ServiceColorType, WeekHoursType } from "@shortwaits/shared-utils";
+import { BusinessAvailableCurrenciesType, ConvertToDtoType, CreateServiceDtoType, ServiceColorType, WeekHoursType } from "@shortwaits/shared-lib";
 import { IsArray, IsBoolean, IsNumber, IsObject, IsString } from "class-validator";
 
 export class CreateServiceDto implements CreateServiceDtoType {

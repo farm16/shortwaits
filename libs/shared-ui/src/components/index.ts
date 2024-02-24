@@ -24,6 +24,7 @@ export * from "./qr/qr-modal";
 export * from "./search-bar/search-bar";
 export * from "./selector-list-item/selector-list-item";
 export * from "./service-colors/service-colors";
+export * from "./tab-bar/tab-bar";
 export * from "./terms-and-conditions/terms-and-conditions";
 export * from "./time-range-text/time-range-text";
 export * from "./upload-profile-image/upload-profile-image";

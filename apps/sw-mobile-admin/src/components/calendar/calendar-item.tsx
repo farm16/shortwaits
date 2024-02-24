@@ -1,4 +1,5 @@
 import { useFocusEffect } from "@react-navigation/native";
+import { EventDtoType } from "@shortwaits/shared-lib";
 import {
   CALENDAR_EVENT_HEIGHT,
   EVENT_ITEM_BORDER_RADIUS,
@@ -11,7 +12,6 @@ import {
   statusDisplayMessagesColor,
   useTheme,
 } from "@shortwaits/shared-ui";
-import { EventDtoType } from "@shortwaits/shared-utils";
 import { isEmpty, truncate } from "lodash";
 import React, { useCallback } from "react";
 import { useIntl } from "react-intl";

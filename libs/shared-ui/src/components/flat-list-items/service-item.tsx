@@ -1,4 +1,4 @@
-import { ServiceDtoType } from "@shortwaits/shared-utils";
+import { ServiceDtoType } from "@shortwaits/shared-lib";
 import React, { FC } from "react";
 import { StyleSheet, View, ViewStyle } from "react-native";
 

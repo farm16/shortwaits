@@ -1,11 +1,9 @@
 import React, { FC } from "react";
 import { StyleProp, View, ViewStyle } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-
 import { useTheme } from "../../theme";
-import { ThemeColorName } from "../../theme/Colors";
 import { Button, ButtonProps, Spinner, Text } from "../common";
-import { CircleIconsKeys, _circleIcons } from "./icon-presets";
+import { IconProps, iconProps } from "./icon-presets";
 
 const disabledStates = ["loading", "disabled"];
 
@@ -119,17 +117,9 @@ export const BackButton: FC<
   );
 };
 
-type CircleIconsValues = {
-  name: string;
-  color: ThemeColorName;
-  backgroundColor: ThemeColorName;
-  size: number;
-};
-const circleIcons = _circleIcons as unknown as Record<CircleIconsKeys, CircleIconsValues>;
-
 export const IconButton: FC<
   ButtonProps & {
-    iconType: CircleIconsKeys;
+    iconType: IconProps;
     iconSize?: number;
     disabledAlertMessage?: string;
     withMarginLeft?: boolean;
@@ -141,10 +131,10 @@ export const IconButton: FC<
   const { state = "enabled", iconSize = 22, iconType = "default", style: styleOverride, text, textStyle, withMarginRight, withMarginLeft, ...rest } = props;
 
   const style: StyleProp<ViewStyle> = {
-    backgroundColor: Colors[circleIcons[iconType].backgroundColor ?? undefined],
-    width: circleIcons[iconType].size,
-    height: circleIcons[iconType].size,
-    borderRadius: circleIcons[iconType].size / 2,
+    backgroundColor: Colors[iconProps[iconType]?.backgroundColor ?? "white"],
+    width: iconProps[iconType]?.size,
+    height: iconProps[iconType]?.size,
+    borderRadius: iconProps[iconType]?.size / 2,
     justifyContent: "center",
     alignItems: "center",
     marginLeft: withMarginLeft ? 16 : undefined,
@@ -163,9 +153,9 @@ export const IconButton: FC<
         <Text preset="none" style={[{ color: Colors.brandSecondary7, fontWeight: "600" }, textStyle]} text={text} />
       ) : (
         <Icon
-          name={circleIcons[iconType] ? circleIcons[iconType].name : circleIcons.default.name}
-          color={props.disabled ? Colors.gray : Colors[circleIcons[iconType]["color"]]}
-          size={circleIcons[iconType].size || iconSize}
+          name={iconProps[iconType] ? iconProps[iconType].name : iconProps.default.name}
+          color={props.disabled ? Colors.gray : Colors[iconProps[iconType]?.color ?? "brandSecondary"]}
+          size={iconProps[iconType]?.size || iconSize}
         />
       )}
     </Button>

@@ -1,5 +1,5 @@
+import { BusinessLabelType } from "@shortwaits/shared-lib";
 import { Card, Emoji, Space, Text } from "@shortwaits/shared-ui";
-import { BusinessLabelType } from "@shortwaits/shared-utils";
 import { truncate } from "lodash";
 import React from "react";
 import { View } from "react-native";

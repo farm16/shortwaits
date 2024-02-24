@@ -1,4 +1,4 @@
-import { BusinessUserDtoType } from "@shortwaits/shared-utils";
+import { BusinessUserDtoType } from "@shortwaits/shared-lib";
 import { truncate } from "lodash";
 import React, { useCallback, useMemo } from "react";
 import { Animated, Pressable, StyleSheet, View } from "react-native";

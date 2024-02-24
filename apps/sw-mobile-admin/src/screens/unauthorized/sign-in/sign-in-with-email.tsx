@@ -37,7 +37,7 @@ export const SignInWithEmail: FC<SignInWithEmailScreenProps> = ({ navigation }) 
         });
       },
     },
-    "userLocalSignIn"
+    "adminAppLocalSignIn"
   );
   const handlePasswordVisibility = useCallback(() => {
     setIsVisible(visibility => !visibility);

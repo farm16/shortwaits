@@ -1,4 +1,4 @@
-import { AvailableLanguagesType } from "@shortwaits/shared-utils";
+import { AvailableLanguagesType } from "@shortwaits/shared-lib";
 import { useMemo } from "react";
 import * as RNLocalize from "react-native-localize";
 import { useShortwaitsAdmin } from "../store";
@@ -14,7 +14,7 @@ export const getDeviceCountry = () => {
   return locales[0].languageCode || "en";
 };
 
-export const getSupportedLanguageCode = () => {
+export const getSupportedDeviceLocale = () => {
   const regex = /es/;
   const supportedLanguages = Object.keys(JSON.parse(JSON.stringify(copies))) as AvailableLanguagesType[];
   let deviceLanguageCode = RNLocalize.getLocales()[0].languageCode as AvailableLanguagesType;

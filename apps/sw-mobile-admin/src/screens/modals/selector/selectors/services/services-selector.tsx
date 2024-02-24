@@ -1,7 +1,7 @@
 import { useFocusEffect } from "@react-navigation/native";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
+import { ServicesDtoType } from "@shortwaits/shared-lib";
 import { AnimatedSearchBar, BackButton, Container, IconButton, NonIdealState, Screen, ServiceItem, Space, Text } from "@shortwaits/shared-ui";
-import { ServicesDtoType } from "@shortwaits/shared-utils";
 import { noop } from "lodash";
 import React, { FC, useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { useIntl } from "react-intl";

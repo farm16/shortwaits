@@ -1,8 +1,8 @@
+import { BusinessAvailableCurrenciesType } from "@shortwaits/shared-lib";
 import React from "react";
-import { StyleSheet, View } from "react-native";
-import { TextFieldProps, Card, Text, CardIconsProps, Space } from "../common";
+import { StyleSheet } from "react-native";
 import CurrencyInput, { CurrencyInputProps } from "react-native-currency-input";
-import { BusinessAvailableCurrenciesType } from "@shortwaits/shared-utils";
+import { Card, Space, Text } from "../common";
 
 import { getDimensions, useTheme } from "../../theme";
 import { getCurrencySymbolFromCurrencyType } from "../../utils/currency";

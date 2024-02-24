@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
+import { ClientUserDtoType } from "@shortwaits/shared-lib";
 import { AnimatedSearchBar, Button, List, NonIdealState, RefreshControl, SelectorListItem, getResponsiveHeight, useTheme } from "@shortwaits/shared-ui";
-import { ClientUserDtoType } from "@shortwaits/shared-utils";
 import { isEmpty } from "lodash";
 import React, { Fragment, useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";

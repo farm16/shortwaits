@@ -1,5 +1,5 @@
-import { Container, Text, getFontSize, useTheme } from "@shortwaits/shared-ui";
-import { SubscriptionPlan } from "@shortwaits/shared-utils";
+import { SubscriptionPlan } from "@shortwaits/shared-lib";
+import { Container, Text, getResponsiveFontSize, useTheme } from "@shortwaits/shared-ui";
 import React, { useCallback } from "react";
 import { Dimensions, StyleSheet, TouchableOpacity, View } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
@@ -46,7 +46,7 @@ const PlanCard: React.FC<PlanCardProps> = ({ planData, isSelected, onPress }) =>
                 {
                   color: Colors.gray,
                   textDecorationLine: "line-through",
-                  fontSize: getFontSize(30, cardWidth),
+                  fontSize: getResponsiveFontSize(30, cardWidth),
                 },
               ]}
             >
@@ -160,11 +160,11 @@ const styles = StyleSheet.create({
   },
   price: {
     fontWeight: "800",
-    fontSize: getFontSize(42, cardWidth),
+    fontSize: getResponsiveFontSize(42, cardWidth),
   },
   dollarSign: {
     fontWeight: "800",
-    fontSize: getFontSize(22, cardWidth),
+    fontSize: getResponsiveFontSize(22, cardWidth),
   },
   priceDescription: {
     fontWeight: "400",

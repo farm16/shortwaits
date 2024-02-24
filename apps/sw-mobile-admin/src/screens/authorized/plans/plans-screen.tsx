@@ -1,5 +1,5 @@
-import { BackButton, Button, FormContainer, Text, getFontSize, useTheme } from "@shortwaits/shared-ui";
-import { SubscriptionPlans } from "@shortwaits/shared-utils";
+import { SubscriptionPlans } from "@shortwaits/shared-lib";
+import { BackButton, Button, FormContainer, Text, getResponsiveFontSize, useTheme } from "@shortwaits/shared-ui";
 import React, { useLayoutEffect, useState } from "react";
 import { useIntl } from "react-intl"; // Import the useIntl hook
 import { Platform, View } from "react-native";
@@ -93,7 +93,7 @@ export function PlansScreen({ navigation }: AuthorizedScreenProps<"plans-screen"
             flex: 1,
             textAlign: "center",
             fontWeight: "700",
-            fontSize: getFontSize(26),
+            fontSize: getResponsiveFontSize(26),
           }}
         >
           {intl.formatMessage({ id: "PlansScreen.choosePlan" })}

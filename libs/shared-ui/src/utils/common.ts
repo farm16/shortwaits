@@ -1,4 +1,4 @@
-import { ClientUsersDtoType, LocalClientsDtoType } from "@shortwaits/shared-utils";
+import { ClientUsersDtoType, LocalClientsDtoType } from "@shortwaits/shared-lib";
 import { isEqual, noop } from "lodash";
 import { Alert } from "react-native";
 

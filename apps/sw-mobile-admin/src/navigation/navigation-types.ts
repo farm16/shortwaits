@@ -1,6 +1,5 @@
 import { CompositeNavigationProp, NavigatorScreenParams, RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { NonIdealStateTypes } from "@shortwaits/shared-ui";
 import {
   BusinessDtoType,
   BusinessLabelType,
@@ -16,7 +15,8 @@ import {
   UpdateEventDtoType,
   UpdateLocalClientDtoType,
   WeekHoursType,
-} from "@shortwaits/shared-utils";
+} from "@shortwaits/shared-lib";
+import { NonIdealStateTypes } from "@shortwaits/shared-ui";
 import { selectorConfigs } from "../screens/modals/selector/selector-config";
 import { ThemeColorName } from "../theme/Colors";
 import { AUTHORIZED_SCREENS, AUTHORIZED_STACK_SCREENS, MODAL_SCREENS, NAVIGATION_STACKS, UNAUTHORIZED_SCREENS } from "./navigation-constants";

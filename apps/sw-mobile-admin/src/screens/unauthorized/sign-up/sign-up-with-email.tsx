@@ -43,7 +43,7 @@ export const SignUpWithEmail: FC<SignUpWithEmailScreenProps> = ({ navigation }) 
         });
       },
     },
-    "userLocalSignUp"
+    "adminAppLocalSignUp"
   );
 
   const handlePasswordVisibility = useCallback(() => {

@@ -5,7 +5,7 @@
  * That allows to change them more easily later on.
  */
 
-import { getFontSize, getResponsiveHeight } from "../utils";
+import { getResponsiveFontSize, getResponsiveHeight } from "../utils";
 import { getColors } from "./Colors";
 import { ThemeFontSize } from "./theme.type";
 
@@ -17,11 +17,11 @@ export const Colors = {
  * FontSize
  */
 export const FontSize: ThemeFontSize = {
-  tiny: getFontSize(12),
-  small: getFontSize(14),
-  regular: getFontSize(16),
-  large: getFontSize(18),
-  xLarge: getFontSize(21),
+  tiny: getResponsiveFontSize(12),
+  small: getResponsiveFontSize(14),
+  regular: getResponsiveFontSize(16),
+  large: getResponsiveFontSize(18),
+  xLarge: getResponsiveFontSize(21),
 };
 
 /**

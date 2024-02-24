@@ -1,5 +1,5 @@
-import { UpdateBusinessDtoType, BusinessResponseType, endpoints } from "@shortwaits/shared-utils";
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
+import { BusinessResponseType, UpdateBusinessDtoType, endpoints } from "@shortwaits/shared-lib";
 
 export default (builder: EndpointBuilder<any, any, any>) =>
   builder.mutation<

@@ -1,3 +1,4 @@
+import { BusinessLabelsType, EventDtoType } from "@shortwaits/shared-lib";
 import {
   Container,
   Emoji,
@@ -12,7 +13,6 @@ import {
   truncated,
   useTheme,
 } from "@shortwaits/shared-ui";
-import { BusinessLabelsType, EventDtoType } from "@shortwaits/shared-utils";
 import { isEmpty, truncate } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";

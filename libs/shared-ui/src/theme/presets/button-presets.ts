@@ -1,5 +1,5 @@
 import { StyleSheet, ViewStyle } from "react-native";
-import { getResponsiveWidth } from "../../utils";
+import { getResponsiveHeight, getResponsiveWidth } from "../../utils";
 import { ThemeCommonParams } from "../theme.type";
 import { getDimensions } from "../utils";
 
@@ -129,13 +129,11 @@ export const buttonPresets = ({
       backgroundColor: Colors.transparent,
     },
     social: {
-      ...VIEW_BASE,
+      height: 50,
+      width: 50,
+      padding: 8,
       borderRadius: 25,
       backgroundColor: Colors.lightBackground,
-      flexDirection: "row",
-      // backgroundColor: Colors.brandAccent,
-      // borderWidth: 2,
-      // borderColor: Colors.brandAccent4,
     },
     socialIcon: {
       position: "absolute",
@@ -162,10 +160,23 @@ export const buttonPresets = ({
       alignItems: "flex-start",
       justifyContent: "space-evenly",
     },
+    "client-tab-disabled": {
+      ...VIEW_BASE,
+      backgroundColor: undefined,
+      paddingHorizontal: getResponsiveWidth(20),
+      justifyContent: "center",
+    },
+    "client-tab": {
+      ...VIEW_BASE,
+      backgroundColor: undefined,
+      paddingHorizontal: getResponsiveWidth(20),
+      justifyContent: "center",
+    },
   });
   const TEXT_BASE = StyleSheet.flatten([
     {
-      ...Fonts.textRegular,
+      fontSize: getResponsiveHeight(16),
+      fontWeight: "400",
     },
   ]);
   const textPresets = StyleSheet.create({
@@ -223,7 +234,7 @@ export const buttonPresets = ({
     },
     link: {
       ...Fonts.textRegular,
-      color: Colors.brandSecondary,
+      color: Colors.brandAccent,
       fontWeight: "700",
     },
     subLink: {
@@ -247,6 +258,18 @@ export const buttonPresets = ({
     socialIcon: {},
     card: {},
     listItem: {},
+    "client-tab-disabled": {
+      ...TEXT_BASE,
+      fontSize: getResponsiveHeight(20),
+      color: Colors.black4,
+      fontWeight: "700",
+    },
+    "client-tab": {
+      ...TEXT_BASE,
+      fontSize: getResponsiveHeight(20),
+      color: Colors.black,
+      fontWeight: "700",
+    },
   });
   return {
     viewPresets,

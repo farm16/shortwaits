@@ -1,3 +1,4 @@
+import { ClientUserType, CreateBusinessUserDtoType } from "@shortwaits/shared-lib";
 import {
   BackButton,
   Button,
@@ -13,7 +14,6 @@ import {
   getCapitalizedString,
   getPrettyStringFromHours,
 } from "@shortwaits/shared-ui";
-import { ClientUserType, CreateBusinessUserDtoType } from "@shortwaits/shared-utils";
 import { FormikErrors } from "formik";
 import { noop } from "lodash";
 import React, { FC, useEffect, useLayoutEffect, useMemo } from "react";

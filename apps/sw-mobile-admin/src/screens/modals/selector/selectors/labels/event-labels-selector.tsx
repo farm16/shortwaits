@@ -1,6 +1,6 @@
 import { skipToken } from "@reduxjs/toolkit/dist/query";
+import { BusinessLabelType } from "@shortwaits/shared-lib";
 import { BackButton, Button, FormContainer, IconButton, Space, Text, compareFormObjectsBeforeAbort } from "@shortwaits/shared-ui";
-import { BusinessLabelType } from "@shortwaits/shared-utils";
 import React, { FC, useCallback, useLayoutEffect, useMemo, useState } from "react";
 import { FlatList, StyleSheet } from "react-native";
 import { useDispatch } from "react-redux";

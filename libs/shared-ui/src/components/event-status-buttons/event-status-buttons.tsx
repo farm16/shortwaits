@@ -1,4 +1,4 @@
-import { EventDtoType, EventStatusName } from "@shortwaits/shared-utils";
+import { EventDtoType, EventStatusName } from "@shortwaits/shared-lib";
 import React from "react";
 import { useIntl } from "react-intl";
 import { Dimensions, StyleSheet, View } from "react-native";
@@ -6,7 +6,7 @@ import { ActivityIndicator } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { Button, Text } from "..";
 import { useTheme } from "../../theme";
-import { CALENDAR_EVENT_HEIGHT, EVENT_ITEM_BORDER_RADIUS, eventStatusColors, eventStatusIconNames, eventStatusNames, getFontSize, nextEventStatuses } from "../../utils";
+import { CALENDAR_EVENT_HEIGHT, EVENT_ITEM_BORDER_RADIUS, eventStatusColors, eventStatusIconNames, eventStatusNames, getResponsiveFontSize, nextEventStatuses } from "../../utils";
 
 type EventStatusButtonsProps = {
   event: EventDtoType;
@@ -78,7 +78,7 @@ export const EventStatusButtons: React.FC<EventStatusButtonsProps> = ({ event, o
                     {
                       marginTop: 8,
                       fontWeight: "500",
-                      fontSize: getFontSize(16),
+                      fontSize: getResponsiveFontSize(16),
                       color: Colors[eventStatusColors[status].color],
                     },
                   ]}

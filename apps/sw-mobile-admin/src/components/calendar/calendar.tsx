@@ -1,6 +1,6 @@
 import { skipToken } from "@reduxjs/toolkit/dist/query";
+import { EventType } from "@shortwaits/shared-lib";
 import { Button, Colors, NonIdealState, Space, getResponsiveHeight } from "@shortwaits/shared-ui";
-import { EventType } from "@shortwaits/shared-utils";
 import React, { FC, memo, useCallback } from "react";
 import { useIntl } from "react-intl";
 import { RefreshControl, SectionListData, View } from "react-native";

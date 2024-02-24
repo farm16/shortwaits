@@ -9,7 +9,7 @@ import {
   ServiceType,
   ServicesDocType,
   WeekDayTimeRangeType,
-} from "@shortwaits/shared-utils";
+} from "@shortwaits/shared-lib";
 import { cloneDeep } from "lodash";
 
 export const businessReducers = {

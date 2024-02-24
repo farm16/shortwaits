@@ -1,4 +1,4 @@
-import { EmojiType } from "@shortwaits/shared-utils";
+import { EmojiType } from "@shortwaits/shared-lib";
 import EmojiData from "emoji-datasource/emoji.json";
 
 export function getEmojiString(name: EmojiType) {

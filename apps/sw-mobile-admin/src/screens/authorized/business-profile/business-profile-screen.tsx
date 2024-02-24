@@ -1,3 +1,4 @@
+import { UpdateBusinessDtoType } from "@shortwaits/shared-lib";
 import {
   Avatar,
   BackButton,
@@ -12,7 +13,6 @@ import {
   TextFieldCard,
   compareFormObjectsBeforeAbort,
 } from "@shortwaits/shared-ui";
-import { UpdateBusinessDtoType } from "@shortwaits/shared-utils";
 import React, { Fragment, useEffect, useLayoutEffect, useMemo } from "react";
 import { useIntl } from "react-intl";
 import { Alert } from "react-native";

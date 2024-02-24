@@ -1,5 +1,5 @@
+import { EventDtoType } from "@shortwaits/shared-lib";
 import { Messages, ServiceItem, Space, Switch, Text, UrlCard, UrlTypes, useTheme } from "@shortwaits/shared-ui";
-import { EventDtoType } from "@shortwaits/shared-utils";
 import React from "react";
 import { Alert, Platform, ScrollView, StyleSheet, View } from "react-native";
 import { useService } from "../../../../store";

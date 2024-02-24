@@ -9,7 +9,13 @@
   self.moduleName = @"SwMobileClient";
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.
-  self.initialProps = @{};
+  self.initialProps = @{
+    @"brandColors": @{
+      @"primary": @"#595FD9",
+      @"secondary": @"#030F26",
+      @"tertiary": @"#EB9B04"
+    }
+  };
 
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }

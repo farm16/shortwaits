@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { EventsDtoType } from "@shortwaits/shared-utils";
+import { EventsDtoType } from "@shortwaits/shared-lib";
 
-import { shortwaitsApi } from "../../../services";
 import type { RootState } from "../..";
+import { shortwaitsApi } from "../../../services";
 
 export const eventsInitialState: EventsDtoType = null;
 

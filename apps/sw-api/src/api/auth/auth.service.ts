@@ -4,7 +4,7 @@ import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundE
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import { InjectModel } from "@nestjs/mongoose";
-import { BusinessType, BusinessUserType, ClientUserType, ObjectId, WithDbProps } from "@shortwaits/shared-utils";
+import { BusinessType, BusinessUserType, ClientUserType, ObjectId, WithDbProps } from "@shortwaits/shared-lib";
 import bcrypt from "bcryptjs";
 import { OAuth2Client } from "google-auth-library";
 import { Model } from "mongoose";
