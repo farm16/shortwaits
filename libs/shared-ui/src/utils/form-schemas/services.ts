@@ -1,7 +1,7 @@
 import * as Yup from "yup";
 import { hoursOptional } from "./commons";
 
-export const createServiceSchema = Yup.object().shape({
+export const createServiceSchema = Yup.object({
   businessId: Yup.string(),
   name: Yup.string().min(3, "a longer name is required").required("this field is required"),
   description: Yup.string().optional(),
@@ -20,7 +20,7 @@ export const createServiceSchema = Yup.object().shape({
     })
     .optional(),
   isVideoConference: Yup.boolean().optional(),
-  serviceColor: Yup.object().shape({
+  serviceColor: Yup.object({
     colorId: Yup.string(),
     colorName: Yup.string(),
     hexCode: Yup.string(),
@@ -30,56 +30,56 @@ export const createServiceSchema = Yup.object().shape({
   imageUrl: Yup.string().optional(),
 });
 
-export const updateServiceSchema = Yup.object().shape({
+export const updateServiceSchema = Yup.object({
   businessId: Yup.string(),
   name: Yup.string().min(3, "a longer name is required").required("this field is required"),
   description: Yup.string().optional(),
   hours: Yup.object()
     .shape({
       mon: Yup.array().of(
-        Yup.object().shape({
+        Yup.object({
           startTime: Yup.number(),
           endTime: Yup.number(),
           isActive: Yup.boolean(),
         })
       ),
       tue: Yup.array().of(
-        Yup.object().shape({
+        Yup.object({
           startTime: Yup.number(),
           endTime: Yup.number(),
           isActive: Yup.boolean(),
         })
       ),
       wed: Yup.array().of(
-        Yup.object().shape({
+        Yup.object({
           startTime: Yup.number(),
           endTime: Yup.number(),
           isActive: Yup.boolean(),
         })
       ),
       thu: Yup.array().of(
-        Yup.object().shape({
+        Yup.object({
           startTime: Yup.number(),
           endTime: Yup.number(),
           isActive: Yup.boolean(),
         })
       ),
       fri: Yup.array().of(
-        Yup.object().shape({
+        Yup.object({
           startTime: Yup.number(),
           endTime: Yup.number(),
           isActive: Yup.boolean(),
         })
       ),
       sat: Yup.array().of(
-        Yup.object().shape({
+        Yup.object({
           startTime: Yup.number(),
           endTime: Yup.number(),
           isActive: Yup.boolean(),
         })
       ),
       sun: Yup.array().of(
-        Yup.object().shape({
+        Yup.object({
           startTime: Yup.number(),
           endTime: Yup.number(),
           isActive: Yup.boolean(),
@@ -101,7 +101,7 @@ export const updateServiceSchema = Yup.object().shape({
     })
     .optional(),
   isVideoConference: Yup.boolean().optional(),
-  serviceColor: Yup.object().shape({
+  serviceColor: Yup.object({
     colorId: Yup.string(),
     colorName: Yup.string(),
     hexCode: Yup.string(),

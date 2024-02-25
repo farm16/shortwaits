@@ -1,11 +1,9 @@
-import { AddClientToBusinessDtoType } from "@shortwaits/shared-lib";
-import { BackButton, QRScanner, Text, WithPermission } from "@shortwaits/shared-ui";
+import { BackButton, QRScanner, Text, WithPermission, useForm } from "@shortwaits/shared-ui";
 import { noop } from "lodash";
 import React, { FC, useEffect, useLayoutEffect, useMemo } from "react";
 import { useIntl } from "react-intl";
 import { Alert } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
-import { useForm } from "../../../hooks";
 import { ModalsScreenProps } from "../../../navigation";
 import { useAddClientToBusinessMutation } from "../../../services";
 import { useBusiness } from "../../../store";
@@ -18,7 +16,7 @@ export const AddClientModal: FC<ModalsScreenProps<"add-client-modal-screen">> = 
   const business = useBusiness();
   const [addClientToBusiness, addClientToBusinessStatus] = useAddClientToBusinessMutation();
   const initialValues = useMemo(() => {
-    const _initialValues: AddClientToBusinessDtoType = {
+    const _initialValues = {
       shortId: "",
     };
     return _initialValues;

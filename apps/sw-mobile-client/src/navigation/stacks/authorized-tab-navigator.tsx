@@ -1,11 +1,11 @@
 import { StackNavigationOptions, createStackNavigator } from "@react-navigation/stack";
 import React, { useMemo } from "react";
 import { ExploreScreen, HomeScreen, SettingsScreen } from "../../screens";
-import { AuthenticatedTabsParamList } from "../navigation-types";
+import { AuthorizedTabsParamList } from "../navigation-types";
 
-const Tab = createStackNavigator<AuthenticatedTabsParamList>();
+const Tab = createStackNavigator<AuthorizedTabsParamList>();
 
-export const AuthenticatedTabNavigator = () => {
+export const AuthorizedTabNavigator = () => {
   const navigatorScreenOptions = useMemo<StackNavigationOptions>(() => {
     return {
       unmountOnBlur: true,

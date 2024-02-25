@@ -1,55 +1,30 @@
-import { AuthenticatedScreens, AuthenticatedStackScreens, ModalScreens, Stacks, UnauthenticatedScreens, UnauthenticatedStackScreens } from './navigation-types';
-
-export const unauthenticated: Record<UnauthenticatedScreens, UnauthenticatedScreens> = {
-  'welcome-screen': 'welcome-screen',
-  'sign-in-screen': 'sign-in-screen',
-  'sign-up-screen': 'sign-up-screen',
-  'selector-modal-screen': 'selector-modal-screen',
-  'schedule-modal-screen': 'schedule-modal-screen',
-};
-
-export const authenticated: Record<AuthenticatedScreens, AuthenticatedScreens> = {
-  'selector-modal-screen': 'selector-modal-screen',
-  'schedule-modal-screen': 'schedule-modal-screen',
-  'home-screen': 'home-screen',
-  'explore-screen': 'explore-screen',
-  'settings-screen': 'settings-screen',
-  'event-screen': 'event-screen',
-  'plans-screen': 'plans-screen',
-};
-
-/**
- * This is a map of all the screens that are available to the app.
- * Also, lets keep in mind that there are 3 stacks in the app:
- * 1. Authenticated stack
- * 2. Unauthenticated stack
- * 3. Modals stack -- this is available to both authenticated and unauthenticated stacks
- */
-export const screens = {
-  authenticated,
-  unauthenticated,
+export const UNAUTHORIZED_SCREENS = {
+  WELCOME_SCREEN: "welcome-screen",
+  SIGN_IN_SCREEN: "sign-in-screen",
+  SIGN_UP_SCREEN: "sign-up-screen",
 } as const;
 
-// Stacks
-export const rootStack: Record<Stacks, Stacks> = {
-  'authenticated-stack': 'authenticated-stack',
-  'authenticated-tab': 'authenticated-tab',
-  'unauthenticated-stack': 'unauthenticated-stack',
-  'modals-stack': 'modals-stack',
-};
+export const AUTHORIZED_TAB_SCREENS = {
+  HOME_SCREEN: "home-screen",
+  EXPLORE_SCREEN: "explore-screen",
+  SETTINGS_SCREEN: "settings-screen",
+} as const;
 
-export const modalStack: Record<ModalScreens, ModalScreens> = {
-  'selector-modal-screen': 'selector-modal-screen',
-  'schedule-modal-screen': 'schedule-modal-screen',
-};
+export const AUTHORIZED_STACK_SCREENS = {} as const;
 
-export const authenticatedStack: Record<AuthenticatedStackScreens, AuthenticatedStackScreens> = {
-  'event-screen': 'event-screen',
-  'plans-screen': 'plans-screen',
-};
+export const AUTHORIZED_SCREENS = {
+  ...AUTHORIZED_TAB_SCREENS,
+  ...AUTHORIZED_STACK_SCREENS,
+} as const;
 
-export const unauthenticatedStack: Record<UnauthenticatedStackScreens, UnauthenticatedStackScreens> = {
-  'welcome-screen': 'welcome-screen',
-  'sign-in-screen': 'sign-in-screen',
-  'sign-up-screen': 'sign-up-screen',
-};
+export const MODAL_SCREENS = {
+  SCHEDULE_MODAL_SCREEN: "schedule-modal-screen",
+  SELECTOR_MODAL_SCREEN: "selector-modal-screen",
+} as const;
+
+export const NAVIGATION_STACKS = {
+  AUTHORIZED_TAB: "authorized-tab",
+  AUTHORIZED_STACK: "authorized-stack",
+  UNAUTHORIZED: "unauthorized",
+  MODALS: "modals",
+} as const;

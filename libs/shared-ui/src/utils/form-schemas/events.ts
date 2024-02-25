@@ -5,7 +5,7 @@ import * as Yup from "yup";
 // @ts-ignore
 const paymentMethodSchema: Yup.SchemaOf<EventPaymentMethodType> = Yup.string().required().oneOf(Object.keys(eventPaymentMethods));
 
-const discountCodeSchema = Yup.object().shape({
+const discountCodeSchema = Yup.object({
   code: Yup.string(),
   discount: Yup.number().nullable(),
   description: Yup.string().notRequired(),
@@ -27,7 +27,7 @@ const discountCodeSchema = Yup.object().shape({
     .notRequired(),
 });
 
-const paymentSchema = Yup.object().shape({
+const paymentSchema = Yup.object({
   paymentProcessedOn: Yup.string(),
   paymentMethodId: Yup.string(),
   amount: Yup.number(),
@@ -37,20 +37,20 @@ const paymentSchema = Yup.object().shape({
   metadata: Yup.object(),
 });
 
-export const createEventSchema = Yup.object().shape({
+export const createEventSchema = Yup.object({
   paymentMethod: paymentMethodSchema,
   participantsIds: Yup.array().of(Yup.string()),
   urls: Yup.array()
     .optional()
     .of(
-      Yup.object().shape({
+      Yup.object({
         type: Yup.string(),
         isSupported: Yup.boolean(),
         name: Yup.string(),
         url: Yup.string().url(),
       })
     ),
-  location: Yup.object().optional().shape({
+  location: Yup.object().optional({
     address: Yup.string(),
     latitude: Yup.number(),
     longitude: Yup.number(),
@@ -97,20 +97,20 @@ export const createEventSchema = Yup.object().shape({
   discountAmount: Yup.number().optional(),
 });
 
-export const updateEventSchema = Yup.object().shape({
+export const updateEventSchema = Yup.object({
   paymentMethod: paymentMethodSchema,
   participantsIds: Yup.array().of(Yup.string()),
   urls: Yup.array()
     .optional()
     .of(
-      Yup.object().shape({
+      Yup.object({
         type: Yup.string(),
         isSupported: Yup.boolean(),
         name: Yup.string(),
         url: Yup.string().url(),
       })
     ),
-  location: Yup.object().optional().shape({
+  location: Yup.object().optional({
     address: Yup.string(),
     latitude: Yup.number(),
     longitude: Yup.number(),

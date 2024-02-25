@@ -1,26 +1,22 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import { CompositeNavigationProp, NavigatorScreenParams, RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { AUTHORIZED_SCREENS, AUTHORIZED_TAB_SCREENS, MODAL_SCREENS, NAVIGATION_STACKS, UNAUTHORIZED_SCREENS } from "./navigation-constants";
+import { AUTHORIZED_SCREENS, MODAL_SCREENS, NAVIGATION_STACKS, UNAUTHORIZED_SCREENS } from "./navigation-constants";
 
 export type ModalStackParamList = {
-  [MODAL_SCREENS.SELECTOR_MODAL_SCREEN]: undefined;
-  [MODAL_SCREENS.SCHEDULE_MODAL_SCREEN]: undefined;
+  [MODAL_SCREENS.QR_SCANNER_MODAL_SCREEN]: {
+    onSubmit?(qrValue: string): void;
+    onDismiss?(): void;
+    title?: string;
+    description?: string;
+  };
 };
 
-export type AuthorizedTabsParamList = {
-  [AUTHORIZED_TAB_SCREENS.HOME_SCREEN]: undefined;
-  [AUTHORIZED_TAB_SCREENS.EXPLORE_SCREEN]: undefined;
-  [AUTHORIZED_TAB_SCREENS.SETTINGS_SCREEN]: undefined;
-};
+export type AuthorizedTabsParamList = {};
 
-// eslint-disable-next-line @typescript-eslint/ban-types
 export type AuthorizedStackParamList = {};
 
-export type UnauthorizedStackParamList = {
-  [UNAUTHORIZED_SCREENS.WELCOME_SCREEN]: undefined;
-  [UNAUTHORIZED_SCREENS.SIGN_IN_SCREEN]: undefined;
-  [UNAUTHORIZED_SCREENS.SIGN_UP_SCREEN]: undefined;
-};
+export type UnauthorizedStackParamList = {};
 
 export type RootStackParamList = {
   [NAVIGATION_STACKS.UNAUTHORIZED]: NavigatorScreenParams<UnauthorizedStackParamList>;

@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 
-export const addBusinessUserSchema = Yup.object().shape({
+export const addBusinessUserSchema = Yup.object({
   hours: Yup.object().required(),
   alias: Yup.mixed().required().oneOf(["familyName", "givenName", "middleName", "displayName"]).optional(),
   displayName: Yup.string().min(3, "a longer name is required").required("this field is required"),
@@ -10,7 +10,7 @@ export const addBusinessUserSchema = Yup.object().shape({
   accountImageUrl: Yup.string().optional(),
   phoneNumbers: Yup.array()
     .of(
-      Yup.object().shape({
+      Yup.object({
         label: Yup.string(),
         number: Yup.string(), // validations is done via Phon
       })
@@ -18,7 +18,7 @@ export const addBusinessUserSchema = Yup.object().shape({
     .optional(),
   imAddresses: Yup.array()
     .of(
-      Yup.object().shape({
+      Yup.object({
         username: Yup.string(),
         service: Yup.string(),
       })
@@ -26,7 +26,7 @@ export const addBusinessUserSchema = Yup.object().shape({
     .optional(),
   addresses: Yup.array()
     .of(
-      Yup.object().shape({
+      Yup.object({
         label: Yup.string(),
         address1: Yup.string(),
         address2: Yup.string(),
@@ -40,7 +40,7 @@ export const addBusinessUserSchema = Yup.object().shape({
     .optional(),
   socialAccounts: Yup.array()
     .of(
-      Yup.object().shape({
+      Yup.object({
         kind: Yup.string(),
         uid: Yup.string(),
         username: Yup.string(),

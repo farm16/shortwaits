@@ -1,12 +1,13 @@
+import { useFlipper } from "@react-navigation/devtools";
 import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
 import { useAuth } from "../store";
-import { rootStack } from "./navigation-constants";
+import { NAVIGATION_STACKS } from "./navigation-constants";
 import { RootStackParamList } from "./navigation-types";
 import { navigationRef, useBackButtonHandler } from "./navigation-utils";
-import { AuthenticatedTabNavigator, UnauthenticatedNavigator } from "./stacks";
-import { AuthenticatedStackNavigator } from "./stacks/authenticated-stack-navigator";
+import { AuthenticatedTabNavigator, ModalsNavigator, UnauthenticatedNavigator } from "./stacks";
+import { AuthenticatedStackNavigator } from "./stacks/authorized-stack-navigator";
 
 const RootStack = createStackNavigator<RootStackParamList>();
 
@@ -21,18 +22,26 @@ const AppStack = () => {
       {auth?.token ? (
         <>
           <RootStack.Screen
-            name={rootStack["authenticated-tab"]}
+            name={NAVIGATION_STACKS.AUTHORIZED_TAB}
             component={AuthenticatedTabNavigator}
             options={{
               headerShown: false,
               animationEnabled: false,
             }}
           />
-          <RootStack.Screen name={rootStack["authenticated-stack"]} component={AuthenticatedStackNavigator} />
+          <RootStack.Screen name={NAVIGATION_STACKS.AUTHORIZED_TAB} component={AuthenticatedStackNavigator} />
         </>
       ) : (
-        <RootStack.Screen name={rootStack["unauthenticated-stack"]} component={UnauthenticatedNavigator} />
+        <RootStack.Screen name={NAVIGATION_STACKS.UNAUTHORIZED} component={UnauthenticatedNavigator} />
       )}
+      <RootStack.Screen
+        options={{
+          presentation: "modal",
+          headerTitleAlign: "center",
+        }}
+        name={NAVIGATION_STACKS.MODALS}
+        component={ModalsNavigator}
+      />
     </RootStack.Navigator>
   );
 };
@@ -40,6 +49,7 @@ const AppStack = () => {
 type NavigationProps = Partial<React.ComponentProps<typeof NavigationContainer>>;
 
 export const AppNavigator = (props: NavigationProps): React.ReactElement => {
+  useFlipper(navigationRef);
   useBackButtonHandler(canExit);
   return (
     <NavigationContainer ref={navigationRef} theme={DefaultTheme} {...props}>

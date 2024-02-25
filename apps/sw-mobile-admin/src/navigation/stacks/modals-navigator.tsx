@@ -1,4 +1,5 @@
 import { createStackNavigator } from "@react-navigation/stack";
+import { QrScannerModal, MODAL_SCREENS as SHARED_MODAL_SCREENS } from "@shortwaits/shared-ui";
 import React from "react";
 import {
   AddClientModal,
@@ -15,6 +16,7 @@ import {
   WebViewModal,
 } from "../../screens";
 import { MODAL_SCREENS } from "../navigation-constants";
+
 import { ModalStackParamList } from "../navigation-types";
 
 const {
@@ -31,6 +33,8 @@ const {
   ADD_LOCAL_CLIENT_MODAL_SCREEN,
   WEBVIEW_MODAL_SCREEN,
 } = MODAL_SCREENS;
+
+const { QR_SCANNER_MODAL_SCREEN } = SHARED_MODAL_SCREENS;
 
 const Stack = createStackNavigator<ModalStackParamList>();
 
@@ -49,6 +53,7 @@ export const ModalsNavigator = (): React.ReactElement => {
       <Stack.Screen name={UPDATE_LOCAL_CLIENT_MODAL_SCREEN} component={UpdateLocalClientModal} />
       <Stack.Screen name={ADD_CLIENT_MODAL_SCREEN} component={AddClientModal} />
       <Stack.Screen name={WEBVIEW_MODAL_SCREEN} component={WebViewModal} />
+      <Stack.Screen name={QR_SCANNER_MODAL_SCREEN} component={QrScannerModal} />
     </Stack.Navigator>
   );
 };

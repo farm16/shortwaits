@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 
-const deviceSettingSchema = Yup.object().shape({
+const deviceSettingSchema = Yup.object({
   isEmailVerified: Yup.boolean(),
   isPhoneVerified: Yup.boolean(),
   isTwoFactorEnabled: Yup.boolean(),
@@ -12,7 +12,7 @@ const deviceSettingSchema = Yup.object().shape({
   isPasswordlessEnabled: Yup.boolean(),
 });
 
-const accountSettingsSchema = Yup.object().shape({
+const accountSettingsSchema = Yup.object({
   isDarkModeEnabled: Yup.boolean(),
   isNotificationsEnabled: Yup.boolean(),
   isLocationEnabled: Yup.boolean(),
@@ -20,13 +20,13 @@ const accountSettingsSchema = Yup.object().shape({
   isLocationSharedWithBusinesses: Yup.boolean(),
 });
 
-const socialAccountSchema = Yup.object().shape({
+const socialAccountSchema = Yup.object({
   kind: Yup.string(),
   uid: Yup.string(),
   username: Yup.string(),
 });
 
-const localeSchema = Yup.object().shape({
+const localeSchema = Yup.object({
   countryCode: Yup.string(),
   isRTL: Yup.boolean(),
   languageCode: Yup.string(),
@@ -34,21 +34,21 @@ const localeSchema = Yup.object().shape({
 });
 
 const phoneNumbersSchema = Yup.array().of(
-  Yup.object().shape({
+  Yup.object({
     label: Yup.string(),
     number: Yup.string(), // validations is done via PhoneInput component
   })
 );
 
 const imAddressesSchema = Yup.array().of(
-  Yup.object().shape({
+  Yup.object({
     username: Yup.string(),
     service: Yup.string(),
   })
 );
 
 const addressesSchema = Yup.array().of(
-  Yup.object().shape({
+  Yup.object({
     label: Yup.string(),
     address1: Yup.string(),
     address2: Yup.string(),
@@ -61,14 +61,14 @@ const addressesSchema = Yup.array().of(
 );
 
 const socialAccountsSchema = Yup.array().of(
-  Yup.object().shape({
+  Yup.object({
     kind: Yup.string(),
     uid: Yup.string(),
     username: Yup.string(),
   })
 );
 
-const billingSchema = Yup.object().shape({
+const billingSchema = Yup.object({
   membershipId: Yup.string(),
   membershipShortId: Yup.string(),
   membershipShortName: Yup.string(),
@@ -78,7 +78,7 @@ const billingSchema = Yup.object().shape({
   faultyReason: Yup.array().of(Yup.string()),
 });
 
-export const addLocalClientSchema = Yup.object().shape({
+export const addLocalClientSchema = Yup.object({
   shortId: Yup.string().optional(),
   isSocialAccount: Yup.boolean().optional(),
   socialAccount: socialAccountSchema.nullable(),
@@ -100,7 +100,7 @@ export const addLocalClientSchema = Yup.object().shape({
   desiredCurrencies: Yup.array().of(Yup.string()),
 });
 
-export const UpdateLocalClientSchema = Yup.object().shape({
+export const updateLocalClientSchema = Yup.object({
   shortId: Yup.string().optional(),
   isSocialAccount: Yup.boolean().optional(),
   socialAccount: socialAccountSchema.optional(),
@@ -123,6 +123,6 @@ export const UpdateLocalClientSchema = Yup.object().shape({
   desiredCurrencies: Yup.array().of(Yup.string()),
 });
 
-export const addClientSchema = Yup.object().shape({
+export const addClientSchema = Yup.object({
   shortId: Yup.string().required("this field is required"),
 });

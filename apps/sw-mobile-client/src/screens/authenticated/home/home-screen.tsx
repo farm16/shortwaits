@@ -10,12 +10,12 @@ import { useUser } from "../../../store";
 export function HomeScreen({ navigation, route }: AuthenticatedScreenProps<"home-screen">) {
   const user = useUser();
   const { Colors } = useTheme();
-  // const { hasPermission, requestPermission } = useCameraPermission();
-  const [isCameraOpen, setIsCameraOpen] = useState(false);
 
-  const handleOpenCamera = useCallback(() => {
-    setIsCameraOpen(true);
-  }, []);
+  const handleScanQrCode = useCallback(() => {
+    navigation.navigate("", {
+      screen: "",
+    });
+  }, [navigation]);
 
   // console.log('user', JSON.stringify(user, null, 2));
   const [screenBottomPadding, setScreenBottomPadding] = useState(0);
@@ -193,7 +193,7 @@ export function HomeScreen({ navigation, route }: AuthenticatedScreenProps<"home
                 backgroundColor: Colors.brandSecondary,
               }}
               text="Scan QR Code"
-              onPress={() => handleOpenCamera()}
+              onPress={() => handleScanQrCode()}
             />
           </View>
         </View>

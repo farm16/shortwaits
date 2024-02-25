@@ -1,92 +1,39 @@
-import { AddClientToBusinessDtoType } from "@shortwaits/shared-lib";
 import { noop } from "lodash";
-import React, { FC, useEffect, useLayoutEffect, useMemo } from "react";
-import { useIntl } from "react-intl";
-import { Alert } from "react-native";
-import { ActivityIndicator } from "react-native-paper";
+import React, { FC, useCallback, useLayoutEffect } from "react";
 import { BackButton, QRScanner, Text, WithPermission } from "../../";
-import { useForm } from "../../../hooks";
-import { ModalsScreenProps } from "../../../navigation";
-import { useAddClientToBusinessMutation } from "../../../services";
-import { useBusiness } from "../../../store";
+import { ModalsScreenProps } from "../../navigation";
 
-export const AddClientModal: FC<ModalsScreenProps<"add-client-modal-screen">> = ({ navigation, route }) => {
+export const QrScannerModal: FC<ModalsScreenProps<"qr-scanner-modal-screen">> = ({ navigation, route }) => {
   const params = route?.params;
   const onSubmit = params?.onSubmit ?? noop;
+  const onDismiss = params?.onDismiss ?? noop;
+  const title = params?.title ?? "";
+  const description = params?.description ?? "";
 
-  const intl = useIntl(); // Access the intl object
-  const business = useBusiness();
-  const [addClientToBusiness, addClientToBusinessStatus] = useAddClientToBusinessMutation();
-  const initialValues = useMemo(() => {
-    const _initialValues: AddClientToBusinessDtoType = {
-      shortId: "",
-    };
-    return _initialValues;
-  }, []);
+  const handleSubmit = useCallback(
+    (codeValue: string) => {
+      console.log("QR code value >>>", codeValue);
+      onSubmit && onSubmit();
+    },
+    [onSubmit]
+  );
+
+  const handleGoBack = useCallback(() => {
+    onDismiss && onDismiss();
+    navigation.goBack();
+  }, [navigation, onDismiss]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
-      headerTitle: () => <Text preset="text" text={intl.formatMessage({ id: "Common.addShortwaitsClient" })} />,
+      headerLeft: () => <BackButton onPress={handleGoBack} />,
+      headerTitle: () => <Text preset="text" text={title} />,
     });
-  }, [intl, navigation]);
-
-  const { touched, errors, values, validateField, setFieldTouched, handleChange, handleSubmit, setFieldError, setFieldValue } = useForm(
-    {
-      initialValues,
-      onSubmit: formData => {
-        addClientToBusiness({
-          businessId: business._id,
-          body: formData,
-        });
-      },
-    },
-    "addClient"
-  );
-
-  useEffect(() => {
-    if (addClientToBusinessStatus.isSuccess) {
-      navigation.goBack();
-    }
-  }, [addClientToBusinessStatus.isSuccess, navigation]);
-
-  useEffect(() => {
-    const cleanup = async () => {
-      if (onSubmit) {
-        try {
-          await onSubmit();
-        } catch (error) {
-          console.error("Error in onSubmit:", error);
-        }
-      }
-    };
-    return () => {
-      cleanup();
-    };
-  }, []);
-
-  if (addClientToBusinessStatus.isError) {
-    console.log("addClientToBusinessStatus.error >>>", addClientToBusinessStatus.error);
-    Alert.alert("Error", addClientToBusinessStatus.error.data.message);
-  }
-
-  if (addClientToBusinessStatus.isLoading) {
-    return <ActivityIndicator />;
-  }
+  }, [handleGoBack, navigation, title]);
 
   return (
-    <WithPermission permission="camera" onDenied={() => navigation.goBack()}>
-      <QRScanner
-        onCodeScanned={value => {
-          console.log("camera >>>", value);
-          addClientToBusiness({
-            businessId: business._id,
-            body: {
-              shortId: value,
-            },
-          });
-        }}
-      />
+    <WithPermission permission="camera" onDenied={handleGoBack}>
+      <Text preset="text" text={description} />
+      <QRScanner onCodeScanned={handleSubmit} />
     </WithPermission>
   );
 };

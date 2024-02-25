@@ -2,11 +2,11 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { useTheme } from "@shortwaits/shared-ui";
 import React from "react";
 import { EventScreen, PlansScreen } from "../../screens";
-import { AuthenticatedStackParamList } from "../navigation-types";
+import { AuthorizedStackParamList } from "../navigation-types";
 
-const Stack = createStackNavigator<AuthenticatedStackParamList>();
+const Stack = createStackNavigator<AuthorizedStackParamList>();
 
-export const AuthenticatedStackNavigator = () => {
+export const AuthorizedStackNavigator = () => {
   const { Colors } = useTheme();
 
   return (

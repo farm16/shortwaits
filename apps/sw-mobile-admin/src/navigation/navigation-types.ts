@@ -16,9 +16,8 @@ import {
   UpdateLocalClientDtoType,
   WeekHoursType,
 } from "@shortwaits/shared-lib";
-import { NonIdealStateTypes } from "@shortwaits/shared-ui";
+import { NonIdealStateTypes, MODAL_SCREENS as SHARED_MODAL_SCREENS, ModalStackParamList as SharedModalStackParamList, ThemeColorName } from "@shortwaits/shared-ui";
 import { selectorConfigs } from "../screens/modals/selector/selector-config";
-import { ThemeColorName } from "../theme/Colors";
 import { AUTHORIZED_SCREENS, AUTHORIZED_STACK_SCREENS, MODAL_SCREENS, NAVIGATION_STACKS, UNAUTHORIZED_SCREENS } from "./navigation-constants";
 
 export type FormData = {
@@ -44,8 +43,6 @@ export type SelectorModalData =
   | { key: string; title: string; subTitle?: string; itemData?: any };
 
 export type SelectorModalModeType = keyof typeof selectorConfigs;
-
-export type ScheduleModalModeType = "My-Business-Hours" | "Business-User-Hours" | "Client-User-Hours";
 
 export type ModalStackParamList = {
   [MODAL_SCREENS.SELECTOR_MODAL_SCREEN]: {
@@ -142,6 +139,7 @@ export type ModalStackParamList = {
     onLoad?(): void;
     onGoBack?(arg0): void;
   };
+  [SHARED_MODAL_SCREENS.QR_SCANNER_MODAL_SCREEN]: SharedModalStackParamList["qr-scanner-modal-screen"];
 };
 
 export type AuthorizedTabsParamList = {

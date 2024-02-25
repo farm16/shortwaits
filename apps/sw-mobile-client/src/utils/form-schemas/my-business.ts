@@ -1,11 +1,11 @@
-import { eventPaymentMethods, EventPaymentMethodType, UpdateBusinessDtoType } from '@shortwaits/shared-lib';
-import * as Yup from 'yup';
-import { hoursOptional } from './commons';
+import { eventPaymentMethods, EventPaymentMethodType, UpdateBusinessDtoType } from "@shortwaits/shared-lib";
+import * as Yup from "yup";
+import { hoursOptional } from "./commons";
 
 // @ts-ignore
 const paymentMethodSchema: Yup.Schema<EventPaymentMethodType> = Yup.string().required().oneOf(Object.keys(eventPaymentMethods));
 
-export const updateBusinessSchema: Yup.Schema<UpdateBusinessDtoType> = Yup.object().shape({
+export const updateBusinessSchema: Yup.Schema<UpdateBusinessDtoType> = Yup.object({
   shortName: Yup.string().optional().nullable(),
   description: Yup.string().optional().nullable(),
   events: Yup.array().optional().nullable(),
@@ -19,7 +19,7 @@ export const updateBusinessSchema: Yup.Schema<UpdateBusinessDtoType> = Yup.objec
   phone1: Yup.string().optional().nullable(),
   longName: Yup.string().optional().nullable(),
   hours: hoursOptional,
-  location: Yup.object().optional().nullable().shape({
+  location: Yup.object().optional().nullable({
     formattedAddress: Yup.string().optional().nullable(),
     streetAddress: Yup.string().optional().nullable(),
     city: Yup.string().optional().nullable(),
@@ -35,7 +35,7 @@ export const updateBusinessSchema: Yup.Schema<UpdateBusinessDtoType> = Yup.objec
   isAppNotificationEnabled: Yup.boolean().optional().nullable(),
   videoConference: Yup.array().optional().nullable(),
   isVideoConferenceEnabled: Yup.boolean().optional().nullable(),
-  web: Yup.object().optional().nullable().shape({
+  web: Yup.object().optional().nullable({
     isActive: Yup.boolean(),
     baseUrl: Yup.string().url(),
     bannerImageUrl: Yup.string().url(),
@@ -46,7 +46,7 @@ export const updateBusinessSchema: Yup.Schema<UpdateBusinessDtoType> = Yup.objec
     accentColor: Yup.string(),
     notificationMessage: Yup.string(),
   }),
-  booking: Yup.object().optional().nullable().shape({
+  booking: Yup.object().optional().nullable({
     allowBooking: Yup.boolean(),
     allowRescheduling: Yup.boolean(),
     allowCancellation: Yup.boolean(),

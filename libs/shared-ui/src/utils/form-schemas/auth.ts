@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 
-export const onboarding1Schema = Yup.object().shape({
+export const onboarding1Schema = Yup.object({
   longName: Yup.string().optional(),
   phone1: Yup.string().optional(),
   country: Yup.string().optional(),
@@ -8,12 +8,12 @@ export const onboarding1Schema = Yup.object().shape({
   description: Yup.string().max(140).required("this field is required"),
 });
 
-export const adminAppLocalSignInSchema = Yup.object().shape({
+export const adminAppLocalSignInSchema = Yup.object({
   email: Yup.string().email("Validation.email").required(),
   password: Yup.string().required("Validation.password").required(),
 });
 
-export const adminAppLocalSignUpSchema = Yup.object().shape({
+export const adminAppLocalSignUpSchema = Yup.object({
   email: Yup.string().email("invalid email").required(),
   username: Yup.string()
     .min(3)
@@ -33,12 +33,12 @@ export const adminAppLocalSignUpSchema = Yup.object().shape({
     .required("required"),
 });
 
-export const clientAppLocalSignInSchema = Yup.object().shape({
+export const clientAppLocalSignInSchema = Yup.object({
   email: Yup.string().email("Validation.email").required(),
   password: Yup.string().required("Validation.password"),
 });
 
-export const clientAppLocalSignUpSchema = Yup.object().shape({
+export const clientAppLocalSignUpSchema = Yup.object({
   email: Yup.string().email("invalid email").required(),
   username: Yup.string()
     .min(3)
