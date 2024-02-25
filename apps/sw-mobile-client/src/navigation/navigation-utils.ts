@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { createNavigationContainerRef, NavigationAction, NavigationState, PartialState } from '@react-navigation/native';
-import { useEffect, useRef, useState } from 'react';
-import { BackHandler } from 'react-native';
-import { Screens, ScreensPropsTypes, Stacks } from './navigation-types';
+import { createNavigationContainerRef, NavigationAction, NavigationState, PartialState } from "@react-navigation/native";
+import { useEffect, useRef, useState } from "react";
+import { BackHandler } from "react-native";
+import { ALL_SCREENS_TYPE, ScreenProps, STACKS_TYPES } from "./navigation-types";
 
 export const RootNavigation = {
   navigate(_name: string, _params?: any) {},
@@ -67,10 +67,10 @@ export function useBackButtonHandler(canExit: (routeName: string) => boolean) {
     };
 
     // Subscribe when we come to life
-    BackHandler.addEventListener('hardwareBackPress', onBackPress);
+    BackHandler.addEventListener("hardwareBackPress", onBackPress);
 
     // Unsubscribe when we're done
-    return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    return () => BackHandler.removeEventListener("hardwareBackPress", onBackPress);
   }, []);
 }
 
@@ -93,8 +93,8 @@ export function useNavigationPersistence(storage: any, persistenceKey: string) {
     const currentRouteName = getActiveRouteName(state);
 
     if (previousRouteName !== currentRouteName) {
-      // track screens.
-      __DEV__ && console.log('currentRouteName >>>', currentRouteName);
+      // track ALL_SCREENS_TYPE.
+      __DEV__ && console.log("currentRouteName >>>", currentRouteName);
     }
 
     // Save the current route name for later comparison
@@ -131,12 +131,12 @@ export function useNavigationPersistence(storage: any, persistenceKey: string) {
  * More info: https://reactnavigation.org/docs/navigating-without-navigation-prop/
  */
 
-export function navigate<T extends Screens>(
-  name: Stacks,
+export function navigate<T extends ALL_SCREENS_TYPE>(
+  name: STACKS_TYPES,
   params?: {
-    screen: Screens;
-    params?: ScreensPropsTypes[T];
-  },
+    screen: ALL_SCREENS_TYPE;
+    params?: ScreenProps[T];
+  }
 ) {
   if (navigationRef.isReady()) {
     navigationRef.navigate(name, params);

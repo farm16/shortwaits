@@ -1,10 +1,12 @@
 import { CompositeNavigationProp, NavigatorScreenParams, RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { MODAL_SCREENS as SHARED_MODAL_SCREENS, ModalStackParamList as SharedModalStackParamList } from "@shortwaits/shared-ui";
 import { AUTHORIZED_SCREENS, AUTHORIZED_TAB_SCREENS, MODAL_SCREENS, NAVIGATION_STACKS, UNAUTHORIZED_SCREENS } from "./navigation-constants";
 
 export type ModalStackParamList = {
   [MODAL_SCREENS.SELECTOR_MODAL_SCREEN]: undefined;
   [MODAL_SCREENS.SCHEDULE_MODAL_SCREEN]: undefined;
+  [SHARED_MODAL_SCREENS.QR_SCANNER_MODAL_SCREEN]: SharedModalStackParamList["qr-scanner-modal-screen"];
 };
 
 export type AuthorizedTabsParamList = {

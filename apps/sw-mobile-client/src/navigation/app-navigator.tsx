@@ -6,8 +6,8 @@ import { useAuth } from "../store";
 import { NAVIGATION_STACKS } from "./navigation-constants";
 import { RootStackParamList } from "./navigation-types";
 import { navigationRef, useBackButtonHandler } from "./navigation-utils";
-import { AuthenticatedTabNavigator, ModalsNavigator, UnauthenticatedNavigator } from "./stacks";
-import { AuthenticatedStackNavigator } from "./stacks/authorized-stack-navigator";
+import { AuthorizedTabNavigator, ModalsNavigator, UnauthorizedNavigator } from "./stacks";
+import { AuthorizedStackNavigator } from "./stacks/authorized-stack-navigator";
 
 const RootStack = createStackNavigator<RootStackParamList>();
 
@@ -23,16 +23,16 @@ const AppStack = () => {
         <>
           <RootStack.Screen
             name={NAVIGATION_STACKS.AUTHORIZED_TAB}
-            component={AuthenticatedTabNavigator}
+            component={AuthorizedTabNavigator}
             options={{
               headerShown: false,
               animationEnabled: false,
             }}
           />
-          <RootStack.Screen name={NAVIGATION_STACKS.AUTHORIZED_TAB} component={AuthenticatedStackNavigator} />
+          <RootStack.Screen name={NAVIGATION_STACKS.AUTHORIZED_STACK} component={AuthorizedStackNavigator} />
         </>
       ) : (
-        <RootStack.Screen name={NAVIGATION_STACKS.UNAUTHORIZED} component={UnauthenticatedNavigator} />
+        <RootStack.Screen name={NAVIGATION_STACKS.UNAUTHORIZED} component={UnauthorizedNavigator} />
       )}
       <RootStack.Screen
         options={{

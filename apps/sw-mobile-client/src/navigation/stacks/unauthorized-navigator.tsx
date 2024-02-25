@@ -2,11 +2,12 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { BackButton } from "@shortwaits/shared-ui";
 import React, { useCallback } from "react";
 import { SignInScreen, SignUpScreen, WelcomeScreen } from "../../screens";
-import { UnauthenticatedStackParamList } from "../navigation-types";
+import { UNAUTHORIZED_SCREENS } from "../navigation-constants";
+import { UnauthorizedStackParamList } from "../navigation-types";
 
-const Stack = createStackNavigator<UnauthenticatedStackParamList>();
+const Stack = createStackNavigator<UnauthorizedStackParamList>();
 
-export const UnauthenticatedNavigator = () => {
+export const UnauthorizedNavigator = () => {
   const renderButton = useCallback(({ navigation }: any) => {
     return <BackButton onPress={() => navigation.goBack()} />;
   }, []);
@@ -22,11 +23,11 @@ export const UnauthenticatedNavigator = () => {
           headerTransparent: true,
         };
       }}
-      initialRouteName={"welcome-screen"}
+      initialRouteName={UNAUTHORIZED_SCREENS.WELCOME_SCREEN}
     >
-      <Stack.Screen options={{ headerShown: false }} name={"welcome-screen"} component={WelcomeScreen} />
-      <Stack.Screen name={"sign-in-screen"} component={SignInScreen} />
-      <Stack.Screen name={"sign-up-screen"} component={SignUpScreen} />
+      <Stack.Screen options={{ headerShown: false }} name={UNAUTHORIZED_SCREENS.WELCOME_SCREEN} component={WelcomeScreen} />
+      <Stack.Screen name={UNAUTHORIZED_SCREENS.SIGN_IN_SCREEN} component={SignInScreen} />
+      <Stack.Screen name={UNAUTHORIZED_SCREENS.SIGN_UP_SCREEN} component={SignUpScreen} />
     </Stack.Navigator>
   );
 };
