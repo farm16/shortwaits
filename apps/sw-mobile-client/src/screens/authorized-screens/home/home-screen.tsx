@@ -1,24 +1,15 @@
-import { Avatar, Button, IconButton, NonIdealState, Screen, Space, TabBar, Text, getResponsiveFontSize, getResponsiveHeight, useTheme } from "@shortwaits/shared-ui";
-import React, { useCallback, useState } from "react";
+import { Avatar, IconButton, NonIdealState, Screen, Space, Text, getResponsiveFontSize, getResponsiveHeight, useTheme } from "@shortwaits/shared-ui";
+import React, { useCallback } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { Card } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { AuthenticatedScreenProps } from "../../../navigation";
+import { AuthorizedScreenProps } from "../../../navigation";
 import { useUser } from "../../../store";
 
-export function HomeScreen({ navigation, route }: AuthenticatedScreenProps<"home-screen">) {
+export function HomeScreen({ navigation, route }: AuthorizedScreenProps<"home-screen">) {
   const user = useUser();
   const { Colors } = useTheme();
-
-  const handleScanQrCode = useCallback(() => {
-    navigation.navigate("", {
-      screen: "",
-    });
-  }, [navigation]);
-
-  // console.log('user', JSON.stringify(user, null, 2));
-  const [screenBottomPadding, setScreenBottomPadding] = useState(0);
 
   const renderEventTitle = useCallback(() => {
     return (
@@ -54,7 +45,7 @@ export function HomeScreen({ navigation, route }: AuthenticatedScreenProps<"home
           style={[
             styles.square,
             {
-              backgroundColor: Colors.gray,
+              backgroundColor: Colors.lightBackground,
             },
           ]}
         >
@@ -83,7 +74,7 @@ export function HomeScreen({ navigation, route }: AuthenticatedScreenProps<"home
           style={[
             styles.square,
             {
-              backgroundColor: Colors.gray,
+              backgroundColor: Colors.lightBackground,
             },
           ]}
         >
@@ -111,10 +102,10 @@ export function HomeScreen({ navigation, route }: AuthenticatedScreenProps<"home
         </TouchableOpacity>
       </View>
     );
-  }, [Colors.brandSecondary, Colors.brandSecondary5, Colors.gray]);
+  }, [Colors.black, Colors.black5, Colors.lightBackground]);
 
   return (
-    <Screen backgroundColor="lightBackground" unsafeBottom>
+    <Screen backgroundColor="background" unsafeBottom>
       <Space size="large" />
       <View style={styles.greetingContainer}>
         <Text
@@ -135,8 +126,7 @@ export function HomeScreen({ navigation, route }: AuthenticatedScreenProps<"home
         style={[
           styles.bottomContainer,
           {
-            paddingBottom: screenBottomPadding,
-            backgroundColor: Colors.brandPrimary1,
+            backgroundColor: Colors.lightBackground,
           },
         ]}
       >
@@ -180,31 +170,7 @@ export function HomeScreen({ navigation, route }: AuthenticatedScreenProps<"home
               );
             }}
           />
-          <Space size="large" />
-          {/* <QRScanner /> */}
-          <View
-            style={{
-              paddingHorizontal: 16,
-            }}
-          >
-            <Button
-              preset="primary"
-              style={{
-                backgroundColor: Colors.brandSecondary,
-              }}
-              text="Scan QR Code"
-              onPress={() => handleScanQrCode()}
-            />
-          </View>
         </View>
-        <TabBar
-          navigation={navigation}
-          route={route}
-          onLayout={event => {
-            console.log("event.nativeEvent.layout.height", event.nativeEvent.layout.height);
-            setScreenBottomPadding(event.nativeEvent.layout.height);
-          }}
-        />
       </View>
     </Screen>
   );

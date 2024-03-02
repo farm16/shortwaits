@@ -2,9 +2,9 @@ import { Button, LogoWhite, Screen, Space, Text, getResponsiveHeight, useTheme }
 import React from "react";
 import { Image, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { UnauthenticatedScreenProps } from "../../../navigation";
+import { UnauthorizedScreenProps } from "../../../navigation";
 
-export function WelcomeScreen({ navigation }: UnauthenticatedScreenProps<"welcome-screen">) {
+export function WelcomeScreen({ navigation }: UnauthorizedScreenProps<"welcome-screen">) {
   const { Colors } = useTheme();
   const insets = useSafeAreaInsets();
   return (
@@ -34,7 +34,7 @@ export function WelcomeScreen({ navigation }: UnauthenticatedScreenProps<"welcom
           <Button
             text="Get Started"
             onPress={() => {
-              navigation.navigate("unauthenticated-stack", { screen: "sign-up-screen" });
+              navigation.navigate("unauthorized", { screen: "sign-up-screen" });
             }}
           />
           <Space />
@@ -51,7 +51,7 @@ export function WelcomeScreen({ navigation }: UnauthenticatedScreenProps<"welcom
                 color: Colors.brandAccent,
               }}
               onPress={() => {
-                navigation.navigate("unauthenticated-stack", { screen: "sign-in-screen" });
+                navigation.navigate("unauthorized", { screen: "sign-in-screen" });
               }}
               preset="link"
               text="Login"

@@ -1,8 +1,9 @@
 import React from "react";
 import { View, ViewStyle } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { Text } from "..";
-import { useTheme } from "../../theme";
+import { Space, Text } from "..";
+import { ThemeColorName, useTheme } from "../../theme";
+import { getResponsiveHeight } from "../../utils";
 
 const messageTypeToPreset = {
   error: "errorMessage",
@@ -15,18 +16,20 @@ const messageTypeToIconName = {
   success: "check-circle",
 } as const;
 const messageTypeToColor = {
-  error: "error",
+  error: "failed",
   warning: "warning",
   success: "success",
 } as const;
 
 type MessageProps = {
   type: keyof typeof messageTypeToPreset;
+  textColor?: ThemeColorName;
+  title?: string;
   message: string;
   style?: ViewStyle;
 };
 
-export function Messages({ type, message, style }: MessageProps) {
+export function Messages({ type, title, message, style, textColor = "text" }: MessageProps) {
   const { Colors } = useTheme();
 
   return (
@@ -35,12 +38,43 @@ export function Messages({ type, message, style }: MessageProps) {
         {
           flexDirection: "row",
           alignItems: "center",
+          backgroundColor: Colors.white,
+          padding: getResponsiveHeight(16),
+          borderRadius: getResponsiveHeight(8),
+          borderBottomWidth: 3,
+          borderBottomColor: Colors[messageTypeToColor[type]],
         },
         style,
       ]}
     >
-      <Icon name={messageTypeToIconName[type]} size={20} color={Colors[messageTypeToColor[type]]} />
-      <Text preset={messageTypeToPreset[type]} text={message} />
+      <Icon name={messageTypeToIconName[type]} size={26} color={Colors[messageTypeToColor[type]]} />
+      <Space direction="vertical" />
+      <View
+        style={{
+          flex: 1,
+        }}
+      >
+        {title ? (
+          <>
+            <Text
+              preset={"titleSmall"}
+              style={{
+                color: Colors[textColor],
+              }}
+              text={title}
+            />
+            <Space size="tiny" />
+          </>
+        ) : null}
+        <Text
+          preset={messageTypeToPreset[type]}
+          style={{
+            color: Colors[textColor],
+            flexShrink: 1,
+          }}
+          text={message}
+        />
+      </View>
     </View>
   );
 }

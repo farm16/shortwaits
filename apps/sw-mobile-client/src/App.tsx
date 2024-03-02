@@ -1,7 +1,9 @@
 import { PortalProvider as GPortalProvider } from "@gorhom/portal";
 import { InitialProps, setInitialProps } from "@shortwaits/shared-lib";
+import { Toast } from "@shortwaits/shared-ui";
 import React from "react";
 import { IntlProvider } from "react-intl";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Provider as PaperProvider } from "react-native-paper";
 import { SafeAreaProvider, initialWindowMetrics } from "react-native-safe-area-context";
 import { Provider as ReduxProvider } from "react-redux";
@@ -16,6 +18,7 @@ export function App(initialProps: InitialProps) {
   return (
     <WithProviders>
       <AppNavigator />
+      <Toast />
     </WithProviders>
   );
 }
@@ -37,9 +40,11 @@ function WithProviders({ children }: { children: React.ReactNode }) {
       <IntlProvider locale={"en"} messages={messages}>
         <PersistGate loading={null} persistor={persistor}>
           <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-            <GPortalProvider>
-              <PaperProvider>{children}</PaperProvider>
-            </GPortalProvider>
+            <GestureHandlerRootView style={{ flex: 1 }}>
+              <GPortalProvider>
+                <PaperProvider>{children}</PaperProvider>
+              </GPortalProvider>
+            </GestureHandlerRootView>
           </SafeAreaProvider>
         </PersistGate>
       </IntlProvider>

@@ -7,6 +7,8 @@ export const UNAUTHORIZED_SCREENS = {
 export const AUTHORIZED_TAB_SCREENS = {
   HOME_SCREEN: "home-screen",
   EXPLORE_SCREEN: "explore-screen",
+  SCAN_SCREEN: "scan-screen",
+  FAVORITES_SCREEN: "favorites-screen",
   SETTINGS_SCREEN: "settings-screen",
 } as const;
 

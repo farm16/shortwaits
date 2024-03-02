@@ -1,8 +1,8 @@
-import { BackButton, QRScanner, Text, WithPermission, useForm } from "@shortwaits/shared-ui";
+import { BackButton, Button, QRScanner, Space, Text, TextFieldCard, WithPermission, useForm } from "@shortwaits/shared-ui";
 import { noop } from "lodash";
 import React, { FC, useEffect, useLayoutEffect, useMemo } from "react";
 import { useIntl } from "react-intl";
-import { Alert } from "react-native";
+import { Alert, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import { ModalsScreenProps } from "../../../navigation";
 import { useAddClientToBusinessMutation } from "../../../services";
@@ -72,19 +72,31 @@ export const AddClientModal: FC<ModalsScreenProps<"add-client-modal-screen">> = 
     return <ActivityIndicator />;
   }
 
+  const handleCodeScanned = value => {
+    console.log("camera >>>", value);
+    addClientToBusiness({
+      businessId: business._id,
+      body: {
+        shortId: value,
+      },
+    });
+  };
+
   return (
     <WithPermission permission="camera" onDenied={() => navigation.goBack()}>
-      <QRScanner
-        onCodeScanned={value => {
-          console.log("camera >>>", value);
-          addClientToBusiness({
-            businessId: business._id,
-            body: {
-              shortId: value,
-            },
-          });
-        }}
-      />
+      <QRScanner onCodeScanned={handleCodeScanned}>
+        <View>
+          <TextFieldCard
+            title={"ID"}
+            placeholder="Enter the client's ID"
+            onChangeText={text => {
+              console.log("text >>>", text);
+            }}
+          />
+          <Space size="tiny" />
+          <Button text={"Submit"} preset={"primary"} onPress={handleCodeScanned} />
+        </View>
+      </QRScanner>
     </WithPermission>
   );
 };

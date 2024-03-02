@@ -17,7 +17,7 @@ export const ButtonCard = (props: ButtonCardProps) => {
   const { Colors } = useTheme();
   const { width } = getDimensions();
 
-  const withTopBorderStyle = withTopBorder ? { borderTopWidth: 1.5, borderTopColor: Colors.inputBackground } : {};
+  const withTopBorderStyle = withTopBorder ? { borderTopWidth: 1.5, borderTopColor: Colors.gray } : {};
 
   if (!isVisible) {
     return null;

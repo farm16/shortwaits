@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native";
 
+import { getResponsiveFontSize } from "../../utils";
 import { ThemeCommonParams } from "../theme.type";
 
 export type TextPresets = keyof ReturnType<typeof textPresets>;
@@ -9,8 +10,6 @@ export const textPresets = ({ FontSize, Fonts, Gutters, Colors }: ThemeCommonPar
     {
       ...Fonts.textRegular,
       letterSpacing: 0.6,
-      // lineHeight: 27,
-      textAlign: "left" as const,
       color: Colors.text,
     },
   ]);
@@ -66,7 +65,7 @@ export const textPresets = ({ FontSize, Fonts, Gutters, Colors }: ThemeCommonPar
       color: Colors.failed,
     },
     error: {
-      ...Fonts.textSmall,
+      fontSize: getResponsiveFontSize(14),
       alignSelf: "flex-start",
       textAlign: "right",
       color: Colors.failed,
@@ -74,9 +73,9 @@ export const textPresets = ({ FontSize, Fonts, Gutters, Colors }: ThemeCommonPar
       letterSpacing: 0.65,
     },
     warning: {
-      ...Fonts.textSmall,
-      alignSelf: "flex-start",
-      textAlign: "right",
+      fontSize: getResponsiveFontSize(14),
+      // alignSelf: "flex-start",
+      // textAlign: "right",
       color: Colors.warning,
       fontWeight: "400" as const,
       letterSpacing: 0.65,
@@ -99,46 +98,82 @@ export const textPresets = ({ FontSize, Fonts, Gutters, Colors }: ThemeCommonPar
       // fontWeight: "",
     },
     title: {
-      ...BASE,
-      ...Fonts.titleLarge,
-      // ...Gutters.largeVPadding
+      fontSize: getResponsiveFontSize(17),
+      fontWeight: "600",
+      color: Colors.text,
+      letterSpacing: 0.65,
     },
     title2: {
-      ...BASE,
-      ...Fonts.titleRegular,
-      // ...Gutters.largeVPadding
+      fontSize: getResponsiveFontSize(17),
+      fontWeight: "600",
+      color: Colors.text,
+      letterSpacing: 0.65,
     },
     title3: {
-      ...BASE,
-      textAlign: "left",
-      ...Fonts.titleSmall,
+      fontSize: getResponsiveFontSize(17),
+      fontWeight: "600",
       color: Colors.text,
-      fontWeight: "400" as const,
+      letterSpacing: 0.65,
+    },
+    titleSmall: {
+      fontSize: getResponsiveFontSize(17),
+      fontWeight: "600",
+      color: Colors.text,
+      letterSpacing: 0.65,
+    },
+    titleMedium: {
+      fontSize: getResponsiveFontSize(18),
+      fontWeight: "600",
+      color: Colors.text,
+      letterSpacing: 0.65,
+    },
+    titleLarge: {
+      fontSize: getResponsiveFontSize(19),
+      fontWeight: "600",
+      color: Colors.text,
       letterSpacing: 0.65,
     },
     textTiny: {
-      ...BASE,
-      ...Fonts.textTiny,
+      fontWeight: "400",
+      fontSize: getResponsiveFontSize(13),
+      color: Colors.text,
+      letterSpacing: 0.65,
     },
     textSmall: {
-      ...BASE,
-      ...Fonts.textSmall,
+      fontWeight: "400",
+      fontSize: getResponsiveFontSize(14),
+      color: Colors.text,
+      letterSpacing: 0.65,
+    },
+    textMedium: {
+      fontWeight: "400",
+      fontSize: getResponsiveFontSize(16),
+      color: Colors.text,
+      letterSpacing: 0.65,
     },
     textLarge: {
-      ...BASE,
-      ...Fonts.textLarge,
+      fontWeight: "400",
+      fontSize: getResponsiveFontSize(15),
+      color: Colors.text,
+      letterSpacing: 0.65,
     },
     errorMessage: {
-      ...Fonts.textSmall,
+      fontWeight: "400",
+      fontSize: getResponsiveFontSize(14),
       color: Colors.failed,
+      letterSpacing: 0.65,
     },
     warningMessage: {
-      ...Fonts.textSmall,
+      fontWeight: "400",
+      fontSize: getResponsiveFontSize(14),
       color: Colors.warning,
+      letterSpacing: 0.65,
     },
     successMessage: {
-      ...Fonts.textSmall,
+      fontWeight: "400",
+      fontSize: getResponsiveFontSize(14),
       color: Colors.success,
+      letterSpacing: 0.65,
     },
     fieldLabel: {
       ...BASE,
@@ -146,13 +181,13 @@ export const textPresets = ({ FontSize, Fonts, Gutters, Colors }: ThemeCommonPar
       fontWeight: "700",
     },
     cardTitle: {
-      ...Fonts.textSmall,
+      fontSize: getResponsiveFontSize(14),
       color: Colors.text,
       fontWeight: "400" as const,
       // letterSpacing: 0.65,
     },
     cardSubtitle: {
-      ...Fonts.textSmall,
+      fontSize: getResponsiveFontSize(14),
       fontWeight: "400" as const,
       // letterSpacing: 0.65,
       color: Colors.subText,

@@ -1,12 +1,26 @@
-import { Button, Container, Facebook, Google, Logo2, Screen, Space, Text, TextFieldCard, getResponsiveHeight, onGoogleButtonPress, useTheme } from "@shortwaits/shared-ui";
+import {
+  Button,
+  Container,
+  Facebook,
+  Google,
+  Logo2,
+  Screen,
+  Space,
+  Text,
+  TextFieldCard,
+  getResponsiveHeight,
+  onGoogleButtonPress,
+  useDefaultHeaderHeight,
+  useForm,
+  useTheme,
+} from "@shortwaits/shared-ui";
 import React, { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { Alert, AlertButton, StyleSheet, View } from "react-native";
-import { useDefaultHeaderHeight, useForm } from "../../../hooks";
-import { UnauthenticatedScreenProps } from "../../../navigation";
+import { UnauthorizedScreenProps } from "../../../navigation";
 import { useLocalSignInMutation, useSocialSignInMutation } from "../../../services";
 
-export function SignInScreen({ navigation }: UnauthenticatedScreenProps<"sign-in-screen">) {
+export function SignInScreen({ navigation }: UnauthorizedScreenProps<"sign-in-screen">) {
   const { Colors } = useTheme();
   const [isVisible, setIsVisible] = useState(false);
   const intl = useIntl(); // Access the intl object
@@ -86,7 +100,7 @@ export function SignInScreen({ navigation }: UnauthenticatedScreenProps<"sign-in
         buttons.push({
           text: "Register",
           onPress: () => {
-            navigation.navigate("unauthenticated-stack", {
+            navigation.navigate("unauthorized", {
               screen: "sign-up-screen",
             });
           },
@@ -228,7 +242,7 @@ export function SignInScreen({ navigation }: UnauthenticatedScreenProps<"sign-in
             id: "Sign_In_Screen.signUp",
           })}
           onPress={() => {
-            navigation.navigate("unauthenticated-stack", { screen: "sign-up-screen" });
+            navigation.navigate("unauthorized", { screen: "sign-up-screen" });
           }}
         />
       </View>

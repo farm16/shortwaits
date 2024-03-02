@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import { CompositeNavigationProp, NavigatorScreenParams, RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { QrScannerOptions } from "../screens";
 import { AUTHORIZED_SCREENS, MODAL_SCREENS, NAVIGATION_STACKS, UNAUTHORIZED_SCREENS } from "./navigation-constants";
 
 export type ModalStackParamList = {
@@ -9,6 +10,7 @@ export type ModalStackParamList = {
     onDismiss?(): void;
     title?: string;
     description?: string;
+    options?: QrScannerOptions[];
   };
 };
 

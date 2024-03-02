@@ -5,6 +5,8 @@
   "private": true,
   "scripts": {
     "postinstall": "patch-package",
+    "symlink": "nx symlink sw-mobile-client",
+    "mobile-client:nuke:pods": "rm -rf apps/sw-mobile-client/ios/Pods && rm -rf apps/sw-mobile-client/ios/Podfile.lock",
     "mobile-admin:react": "nx start sw-mobile-admin",
     "mobile-admin:pods": "nx run-pods sw-mobile-admin",
     "mobile-admin:ios": "nx run-ios sw-mobile-admin --install",
@@ -127,6 +129,7 @@
     "react-native-swipe-gestures": "^1.0.5",
     "react-native-tab-view": "^3.5.2",
     "react-native-timeline-flatlist": "^0.8.0",
+    "react-native-toast-message": "^2.2.0",
     "react-native-vector-icons": "10.0.0",
     "react-native-vision-camera": "^3.6.4",
     "react-native-webview": "13.6.4",

@@ -44,8 +44,8 @@ export const buttonPresets = ({
     "primary-disabled": {
       ...VIEW_BASE,
       backgroundColor: Colors.disabledBackground,
-      borderRightColor: Colors.lightGray,
-      borderBottomColor: Colors.lightGray,
+      borderRightColor: Colors.gray,
+      borderBottomColor: Colors.gray,
       borderBottomWidth: 3,
       borderRightWidth: 3,
       paddingHorizontal: getResponsiveWidth(20),

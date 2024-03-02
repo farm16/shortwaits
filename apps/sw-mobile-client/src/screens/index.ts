@@ -1,3 +1,3 @@
-export * from './authenticated';
-export * from './modals';
-export * from './unauthenticated';
+export * from "./authorized-screens";
+export * from "./modals-screens";
+export * from "./unauthorized-screens";

@@ -46,7 +46,7 @@ export const customDarkColors = {
 
   transparent: "rgba(0,0,0,0)",
   background: "#ffffff",
-  lightBackground: "#f8f8f8",
+  lightBackground: "#ecebe9",
   white: "#fffffc",
 
   //grays
@@ -80,7 +80,7 @@ export const customColors = {
 
   transparent: "rgba(0,0,0,0)",
   background: "#ffffff",
-  lightBackground: "#f8f8f8",
+  lightBackground: "#ecebe9",
   white: "#fffffc",
 
   //grays
