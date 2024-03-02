@@ -11,7 +11,7 @@ export type ModalStackParamList = {
 
 export type AuthorizedTabsParamList = {
   [AUTHORIZED_TAB_SCREENS.HOME_SCREEN]: undefined;
-  [AUTHORIZED_TAB_SCREENS.EXPLORE_SCREEN]: undefined;
+  [AUTHORIZED_TAB_SCREENS.HISTORY_SCREEN]: undefined;
   [AUTHORIZED_TAB_SCREENS.SCAN_SCREEN]: undefined;
   [AUTHORIZED_TAB_SCREENS.FAVORITES_SCREEN]: undefined;
   [AUTHORIZED_TAB_SCREENS.SETTINGS_SCREEN]: undefined;

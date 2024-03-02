@@ -1,9 +1,14 @@
 package com.swmobileclient;
 
+import android.os.Bundle;
+
+import androidx.annotation.Nullable;
+
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactActivityDelegate;
+import org.devio.rn.splashscreen.SplashScreen;
 
 public class MainActivity extends ReactActivity {
 
@@ -24,24 +29,30 @@ public class MainActivity extends ReactActivity {
   @Override
   protected ReactActivityDelegate createReactActivityDelegate() {
     return new DefaultReactActivityDelegate(
-        this,
-        getMainComponentName(),
-        // If you opted-in for the New Architecture, we enable the Fabric Renderer.
-        DefaultNewArchitectureEntryPoint.getFabricEnabled()){
-          @Nullable
-          @Override
-          protected Bundle getLaunchOptions() {
-            Bundle initialProps = new Bundle();
-            Bundle brandColors = new Bundle();
+      this,
+      getMainComponentName(),
+      // If you opted-in for the New Architecture, we enable the Fabric Renderer.
+      DefaultNewArchitectureEntryPoint.getFabricEnabled()) {
+      @Nullable
+      @Override
+      protected Bundle getLaunchOptions() {
+       Bundle initialProps = new Bundle();
+       Bundle brandColors = new Bundle();
 
-            brandColors.putString("primary", "#FF0000");
-            brandColors.putString("secondary", "#00FF00");
-            brandColors.putString("tertiary", "#0000FF");
+       brandColors.putString("primary", "#595FD9");
+       brandColors.putString("secondary", "#030F26");
+       brandColors.putString("tertiary", "#EB9B04");
 
-            initialProps.putBundle("brandColors", brandColors);
-            
-            return initialProps;
-          }
-        }
+       initialProps.putBundle("brandColors", brandColors);
+
+       return initialProps;
+     }
+   };
+  }
+
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    SplashScreen.show(this, R.style.SplashScreenTheme, true);
+    super.onCreate(savedInstanceState); // super.onCreate(null) with react-native-screens
   }
 }

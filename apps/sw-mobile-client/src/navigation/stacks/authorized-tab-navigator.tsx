@@ -1,7 +1,7 @@
 import { BottomTabNavigationOptions, createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { QrScannerModal, MODAL_SCREENS as SHARED_MODAL_SCREENS, useTheme } from "@shortwaits/shared-ui";
+import { QrScannerModal, MODAL_SCREENS as SHARED_MODAL_SCREENS, Text, useTheme } from "@shortwaits/shared-ui";
 import React, { useCallback, useMemo } from "react";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { Platform, StyleSheet, TouchableOpacity } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { ExploreScreen, HomeScreen, SettingsScreen } from "../../screens";
 import { AUTHORIZED_TAB_SCREENS } from "../navigation-constants";
@@ -33,7 +33,7 @@ export const AuthorizedTabNavigator = () => {
         <TouchableOpacity
           {...props}
           style={{
-            top: -20,
+            top: Platform.OS === "ios" ? -20 : -30,
             width: 75,
             height: 75,
             borderRadius: 75 / 2,
@@ -53,6 +53,17 @@ export const AuthorizedTabNavigator = () => {
           }}
         >
           <MaterialCommunityIcons name={"qrcode-scan"} color={Colors.black} size={25} />
+          <Text
+            preset="none"
+            style={{
+              color: Colors.black,
+              fontSize: 10,
+              fontWeight: "500",
+              position: "absolute",
+              bottom: 8,
+            }}
+            text="Scan"
+          />
         </TouchableOpacity>
       );
     },
@@ -70,14 +81,13 @@ export const AuthorizedTabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name={AUTHORIZED_TAB_SCREENS.EXPLORE_SCREEN}
+        name={AUTHORIZED_TAB_SCREENS.FAVORITES_SCREEN}
         component={ExploreScreen}
         options={{
-          tabBarLabel: "Explore",
-          tabBarIcon: ({ focused, color }) => <MaterialCommunityIcons name={focused ? "compass" : "compass-outline"} color={color} size={25} />,
+          tabBarLabel: "My Favorites",
+          tabBarIcon: ({ focused, color }) => <MaterialCommunityIcons name={focused ? "heart" : "heart-outline"} color={color} size={25} />,
         }}
       />
-
       <Tab.Screen
         name={AUTHORIZED_TAB_SCREENS.SCAN_SCREEN}
         component={QrScannerModal}
@@ -98,15 +108,15 @@ export const AuthorizedTabNavigator = () => {
           },
         })}
       />
-
       <Tab.Screen
-        name={AUTHORIZED_TAB_SCREENS.FAVORITES_SCREEN}
+        name={AUTHORIZED_TAB_SCREENS.HISTORY_SCREEN}
         component={ExploreScreen}
         options={{
-          tabBarLabel: "My Favorites",
-          tabBarIcon: ({ focused, color }) => <MaterialCommunityIcons name={focused ? "heart" : "heart-outline"} color={color} size={25} />,
+          tabBarLabel: "History",
+          tabBarIcon: ({ focused, color }) => <MaterialCommunityIcons name={focused ? "clock" : "clock-outline"} color={color} size={25} />,
         }}
       />
+
       <Tab.Screen
         name={AUTHORIZED_TAB_SCREENS.SETTINGS_SCREEN}
         component={SettingsScreen}

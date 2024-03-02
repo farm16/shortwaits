@@ -1,3 +1,6 @@
 <resources>
-    <string name="app_name">SwMobileClient</string>
+  <string name="app_name">Shortwaits</string>
+  <string name="CodePushDeploymentKey" moduleConfig="true">"4c288943-bb4d-4125-9f6b-765215a30507"</string>
+  <string name="facebook_app_id">693197073014015</string>
+  <string name="facebook_client_token">dd57316cd5b3272d9cd9da0aface6584</string>
 </resources>
