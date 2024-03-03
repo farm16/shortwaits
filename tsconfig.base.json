@@ -15,8 +15,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@shortwaits/shared-ui": ["libs/shared-ui/src/index.ts"],
-      "@shortwaits/shared-lib": ["libs/shared-lib/src/index.ts"]
+      "@shortwaits/shared-lib": ["libs/shared-lib/src/index.ts"],
+      "@shortwaits/shared-mobile": ["libs/shared-mobile/src/index.ts"],
+      "@shortwaits/shared-ui": ["libs/shared-ui/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -6,6 +6,7 @@ import * as fs from "fs";
 import helmet from "helmet";
 import { join } from "path";
 import { SwaggerTheme } from "swagger-themes";
+import { SwaggerThemeNameEnum } from "swagger-themes/build/enums/swagger-theme-name";
 import { AppModule } from "./app.module";
 
 const API_PREFIX = "v1";
@@ -33,8 +34,7 @@ async function bootstrap() {
   const HTTP_HOST = configService.get("HTTP_HOST");
 
   //swagger setup
-  const theme = new SwaggerTheme("v3");
-  const options = new DocumentBuilder()
+  const swaggerDocumentConfig = new DocumentBuilder()
     .setTitle("Shortwaits Admin - API")
     .setDescription(html)
     .addServer("http://127.0.0.1:8080", "Dev server")
@@ -43,12 +43,13 @@ async function bootstrap() {
     .setVersion("1.0")
     .build();
 
-  const document = SwaggerModule.createDocument(app, options);
-
-  SwaggerModule.setup(DOCS_PREFIX, app, document, {
+  const document = SwaggerModule.createDocument(app, swaggerDocumentConfig);
+  const theme = new SwaggerTheme();
+  const swaggerConfig = {
     explorer: true,
-    customCss: theme.getBuffer("dark"),
-  });
+    customCss: theme.getBuffer(SwaggerThemeNameEnum.DARK),
+  };
+  SwaggerModule.setup(DOCS_PREFIX, app, document, swaggerConfig);
 
   fs.writeFile("swagger.json", JSON.stringify(document), err => {
     if (err) throw err;
