@@ -12,7 +12,11 @@ export const AUTHORIZED_TAB_SCREENS = {
   SETTINGS_SCREEN: "settings-screen",
 } as const;
 
-export const AUTHORIZED_STACK_SCREENS = {} as const;
+export const AUTHORIZED_STACK_SCREENS = {
+  EVENT_DETAILS_SCREEN: "event-details-screen",
+  PLACE_DETAILS_SCREEN: "place-details-screen",
+  PROFILE_SCREEN: "user-profile-screen",
+} as const;
 
 export const AUTHORIZED_SCREENS = {
   ...AUTHORIZED_TAB_SCREENS,

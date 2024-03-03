@@ -59,6 +59,10 @@
     "Common.error.oops": "Oops!",
     "Common.error.somethingWentWrong": "Something went wrong. Please try again.",
 
+    "Common.greeting.morning": "Good Morning",
+    "Common.greeting.afternoon": "Good Afternoon",
+    "Common.greeting.evening": "Good Evening",
+
     "Onboarding_1_Screen.headerTitle": "Welcome {name}",
     "Onboarding_1_Screen.businessName": "Business Name",
     "Onboarding_1_Screen.businessName.placeholder": "The name of your business",
@@ -139,10 +143,8 @@
     "Event_Screen.eventScreenHeader.time": "Time",
     "Event_Screen.eventScreenHeader.notes": "Notes",
     "Event_Screen.eventScreenHeader.labels": "Labels",
-
     "Event_Screen.routes.title.people": "People",
     "Event_Screen.routes.title.more": "More",
-
     "Event_Screen.tab.more.service": "Service",
     "Event_Screen.tab.more.meetingPlatform": "Meeting Platform",
     "Event_Screen.tab.more.group": "Group",
@@ -394,6 +396,10 @@
 
     "Common.error.oops": "¡Ups!",
     "Common.error.somethingWentWrong": "Algo salió mal. Por favor, inténtalo de nuevo.",
+
+    "Common.greeting.morning": "Buenos días",
+    "Common.greeting.afternoon": "Buenas tardes",
+    "Common.greeting.evening": "Buenas noches",
 
     "Onboarding_1_Screen.headerTitle": "Bienvenido {name}",
     "Onboarding_1_Screen.businessName": "Nombre del Negocio",

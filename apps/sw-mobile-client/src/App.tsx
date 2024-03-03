@@ -1,5 +1,5 @@
 import { PortalProvider as GPortalProvider } from "@gorhom/portal";
-import { InitialProps, setInitialProps } from "@shortwaits/shared-lib";
+import { InitialStaticProps, getInitialStaticPropsFromNative } from "@shortwaits/shared-mobile";
 import { Toast } from "@shortwaits/shared-ui";
 import React from "react";
 import { IntlProvider } from "react-intl";
@@ -10,16 +10,18 @@ import { Provider as ReduxProvider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import copies from "./i18n/copies.json";
 import { AppNavigator } from "./navigation";
-import { persistor, store } from "./store";
+import { persistor, store, useDeviceInfo } from "./store";
 
-export function App(initialProps: InitialProps) {
-  setInitialProps(initialProps);
+export function App(initialStaticProps: InitialStaticProps) {
+  getInitialStaticPropsFromNative(initialStaticProps);
 
   return (
-    <WithProviders>
-      <AppNavigator />
-      <Toast />
-    </WithProviders>
+    <ReduxProvider store={store}>
+      <OtherProviders>
+        <AppNavigator />
+        <Toast />
+      </OtherProviders>
+    </ReduxProvider>
   );
 }
 
@@ -29,25 +31,30 @@ export function App(initialProps: InitialProps) {
  * - PaperProvider
  * - BottomSheetModalProvider
  * - SafeAreaProvider
+ * - GestureHandlerRootView
+ * - GPortalProvider
+ * - IntlProvider
+ * - PersistGate
+ *
  */
 
-function WithProviders({ children }: { children: React.ReactNode }) {
-  const messages = copies.en; //|| copies.en;
+function OtherProviders({ children }: { children: React.ReactNode }) {
+  const deviceInfo = useDeviceInfo();
+  console.log("deviceInfo >>>", deviceInfo);
+  const currentLanguage = deviceInfo.preferredLanguage ? deviceInfo.preferredLanguage : deviceInfo.language;
+  const messages = currentLanguage ? copies[currentLanguage] : copies.en;
 
-  console.log("store", store);
   return (
-    <ReduxProvider store={store}>
-      <IntlProvider locale={"en"} messages={messages}>
-        <PersistGate loading={null} persistor={persistor}>
-          <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-            <GestureHandlerRootView style={{ flex: 1 }}>
-              <GPortalProvider>
-                <PaperProvider>{children}</PaperProvider>
-              </GPortalProvider>
-            </GestureHandlerRootView>
-          </SafeAreaProvider>
-        </PersistGate>
-      </IntlProvider>
-    </ReduxProvider>
+    <IntlProvider locale={currentLanguage ?? "en"} messages={messages}>
+      <PersistGate loading={null} persistor={persistor}>
+        <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+          <GestureHandlerRootView style={{ flex: 1 }}>
+            <GPortalProvider>
+              <PaperProvider>{children}</PaperProvider>
+            </GPortalProvider>
+          </GestureHandlerRootView>
+        </SafeAreaProvider>
+      </PersistGate>
+    </IntlProvider>
   );
 }

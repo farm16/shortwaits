@@ -2,12 +2,12 @@ import React, { useCallback } from "react";
 import { StyleSheet, View, ViewStyle } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
-import { useTheme } from "../../theme";
-import { IconButton } from "../icon-buttons/icon-buttons";
+import { noop } from "lodash";
 import FastImage from "react-native-fast-image";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { noop } from "lodash";
 import Spinner from "react-native-spinkit";
+import { useTheme } from "../../theme";
+import { IconButton } from "../icon-buttons/icon-buttons";
 
 interface AvatarProps {
   url?: string;
@@ -17,7 +17,7 @@ interface AvatarProps {
   style?: ViewStyle;
   isLoading?: boolean;
   disabled?: boolean;
-  onPress: () => void;
+  onPress?: () => void;
 }
 
 const imageSizes = {

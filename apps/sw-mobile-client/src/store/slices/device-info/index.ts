@@ -1,37 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AvailableLanguagesType, languageCode } from "@shortwaits/shared-lib";
+import { AvailableLanguagesType } from "@shortwaits/shared-lib";
+import { deviceInfoInitialState } from "@shortwaits/shared-mobile";
 import { cloneDeep } from "lodash";
-import { Appearance, Platform } from "react-native";
-import DeviceInfo from "react-native-device-info";
 import type { RootState } from "../..";
 import { shortwaitsApi } from "../../../services";
 
-export interface MobileAdminStateType {
-  preferredLanguage: AvailableLanguagesType;
-  suggestedLanguage: AvailableLanguagesType;
-  language: string;
-  preferredTheme: string | null;
-  suggestedTheme: string | null;
-  theme: string | null;
-  os: string;
-  osVersion: string;
-  isTablet: boolean;
-  buildNumber?: string;
-  appVersion?: string;
-}
-export const deviceInfoInitialState: MobileAdminStateType = {
-  preferredLanguage: null,
-  os: Platform.OS,
-  osVersion: `${Platform.Version}`,
-  language: languageCode,
-  suggestedLanguage: "en", // getSupportedDeviceLocale(),
-  preferredTheme: null,
-  suggestedTheme: null,
-  theme: Appearance.getColorScheme() ?? null,
-  isTablet: DeviceInfo.isTablet(),
-  buildNumber: DeviceInfo.getBuildNumber(),
-  appVersion: DeviceInfo.getVersion(),
-};
 export const deviceInfoSlice = createSlice({
   name: "deviceInfo",
   initialState: deviceInfoInitialState,

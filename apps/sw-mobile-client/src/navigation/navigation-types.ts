@@ -1,7 +1,7 @@
 import { CompositeNavigationProp, NavigatorScreenParams, RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { MODAL_SCREENS as SHARED_MODAL_SCREENS, ModalStackParamList as SharedModalStackParamList } from "@shortwaits/shared-ui";
-import { AUTHORIZED_SCREENS, AUTHORIZED_TAB_SCREENS, MODAL_SCREENS, NAVIGATION_STACKS, UNAUTHORIZED_SCREENS } from "./navigation-constants";
+import { AUTHORIZED_SCREENS, AUTHORIZED_STACK_SCREENS, AUTHORIZED_TAB_SCREENS, MODAL_SCREENS, NAVIGATION_STACKS, UNAUTHORIZED_SCREENS } from "./navigation-constants";
 
 export type ModalStackParamList = {
   [MODAL_SCREENS.SELECTOR_MODAL_SCREEN]: undefined;
@@ -18,7 +18,11 @@ export type AuthorizedTabsParamList = {
 };
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-export type AuthorizedStackParamList = {};
+export type AuthorizedStackParamList = {
+  [AUTHORIZED_STACK_SCREENS.EVENT_DETAILS_SCREEN]: undefined;
+  [AUTHORIZED_STACK_SCREENS.PLACE_DETAILS_SCREEN]: undefined;
+  [AUTHORIZED_STACK_SCREENS.PROFILE_SCREEN]: undefined;
+};
 
 export type UnauthorizedStackParamList = {
   [UNAUTHORIZED_SCREENS.WELCOME_SCREEN]: undefined;

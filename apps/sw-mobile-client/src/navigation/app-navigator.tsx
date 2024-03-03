@@ -7,8 +7,7 @@ import { useAuth } from "../store";
 import { NAVIGATION_STACKS } from "./navigation-constants";
 import { RootStackParamList } from "./navigation-types";
 import { navigationRef, useBackButtonHandler } from "./navigation-utils";
-import { AuthorizedTabNavigator, ModalsNavigator, UnauthorizedNavigator } from "./stacks";
-import { AuthorizedStackNavigator } from "./stacks/authorized-stack-navigator";
+import { AuthorizedStackNavigator, AuthorizedTabNavigator, ModalsNavigator, UnauthorizedNavigator } from "./stacks";
 
 const RootStack = createStackNavigator<RootStackParamList>();
 

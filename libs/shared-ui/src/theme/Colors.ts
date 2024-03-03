@@ -1,4 +1,4 @@
-import { initialProps } from "@shortwaits/shared-lib";
+import { initialStaticProps } from "@shortwaits/shared-mobile";
 import { getPaletteWithContrast, getReversePalette } from "./utils";
 /**
  * Additional Brand's Colors
@@ -12,9 +12,9 @@ import { getPaletteWithContrast, getReversePalette } from "./utils";
 
 // get brand colors from global variables if exists
 
-const brandPrimary = initialProps.brandColors.primary || "#030F26";
-const brandSecondary = initialProps.brandColors.secondary || "#595FD9";
-const brandAccent = initialProps.brandColors.tertiary || "#EB9B04";
+const brandPrimary = initialStaticProps.brandColors.primary || "#030F26";
+const brandSecondary = initialStaticProps.brandColors.secondary || "#595FD9";
+const brandAccent = initialStaticProps.brandColors.tertiary || "#EB9B04";
 
 export const brandColors = {
   primary: getPaletteWithContrast("brandPrimary", brandPrimary),

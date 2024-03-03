@@ -4,6 +4,7 @@ export * from "./currency";
 export * from "./form-schemas";
 export * from "./getEmojiString";
 export * from "./getUsersFromOsContacts";
+export * from "./greetings";
 export * from "./handlePhoneUtils";
 export * from "./responsive";
 export * from "./share";

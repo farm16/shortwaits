@@ -1,5 +1,5 @@
 import { skipToken } from "@reduxjs/toolkit/dist/query";
-import { Container, IconButton, QrModal, Screen, Text, convertStaticSelectorModalData, useTheme } from "@shortwaits/shared-ui";
+import { Container, IconButton, QrModal, Screen, Text, convertStaticSelectorModalData, getUserGreeting, useTheme } from "@shortwaits/shared-ui";
 import React, { useLayoutEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { Calendar } from "../../../components";
@@ -19,18 +19,23 @@ export function EventsScreen({ navigation }: AuthorizedScreenProps<"events-scree
   useShowGhostComponent("floatingActionButton");
 
   useLayoutEffect(() => {
-    const getGreeting = () => {
-      const currentHour = new Date().getHours();
-      console.log("currentHour >>>", currentHour);
-      if (currentHour > 3 && currentHour < 12) {
-        return intl.formatMessage({ id: "Common.greeting.morning" });
-      }
-      if (currentHour > 12 && currentHour < 18) {
-        return intl.formatMessage({ id: "Common.greeting.afternoon" });
-      }
-      return intl.formatMessage({ id: "Common.greeting.evening" });
-    };
+    // const userGreeting () => {
+    //   const currentHour = new Date().getHours();
+    //   console.log("currentHour >>>", currentHour);
+    //   if (currentHour > 3 && currentHour < 12) {
+    //     return intl.formatMessage({ id: "Common.greeting.morning" });
+    //   }
+    //   if (currentHour > 12 && currentHour < 18) {
+    //     return intl.formatMessage({ id: "Common.greeting.afternoon" });
+    //   }
+    //   return intl.formatMessage({ id: "Common.greeting.evening" });
+    // };
 
+    const userGreeting = getUserGreeting({
+      morningMessage: intl.formatMessage({ id: "Common.greeting.morning" }),
+      afternoonMessage: intl.formatMessage({ id: "Common.greeting.afternoon" }),
+      eveningMessage: intl.formatMessage({ id: "Common.greeting.evening" }),
+    });
     navigation.setOptions({
       headerTitle: "",
       headerStyle: {
@@ -45,7 +50,7 @@ export function EventsScreen({ navigation }: AuthorizedScreenProps<"events-scree
                 fontWeight: "700",
                 paddingLeft: 16,
               }}
-              text={getGreeting()}
+              text={userGreeting}
             />
           </Container>
         );

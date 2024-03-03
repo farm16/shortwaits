@@ -1,125 +1,64 @@
-import { Avatar, IconButton, NonIdealState, Screen, Space, Text, getResponsiveFontSize, getResponsiveHeight, useTheme } from "@shortwaits/shared-ui";
+import { EventDtoType, EventsDtoType } from "@shortwaits/shared-lib";
+import { Avatar, NonIdealState, Screen, Space, Text, getResponsiveFontSize, getResponsiveHeight, getUserGreeting, useTheme } from "@shortwaits/shared-ui";
 import React, { useCallback } from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { useIntl } from "react-intl";
+import { ListRenderItemInfo, StyleSheet, TouchableOpacity, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
-import { Card } from "react-native-paper";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useUser } from "../../../store";
+import { EventItem, EventsTitle, TopTile } from "./helper";
 
 export function HomeScreen({ navigation, route }: AuthorizedScreenProps<"home-screen">) {
   const user = useUser();
   const { Colors } = useTheme();
+  const intl = useIntl();
+
+  const userGreeting = getUserGreeting({
+    morningMessage: intl.formatMessage({ id: "Common.greeting.morning" }),
+    afternoonMessage: intl.formatMessage({ id: "Common.greeting.afternoon" }),
+    eveningMessage: intl.formatMessage({ id: "Common.greeting.evening" }),
+  });
 
   const renderEventTitle = useCallback(() => {
-    return (
-      <View style={styles.eventTitleContainer}>
-        <Text
-          preset="none"
-          style={[
-            styles.eventTitle,
-            {
-              color: Colors.brandSecondary,
-            },
-          ]}
-          text="Today's "
-        />
-        <Text
-          preset="none"
-          style={[
-            styles.eventTitle,
-            {
-              color: Colors.brandSecondary,
-            },
-          ]}
-          text="Events"
-        />
-      </View>
-    );
-  }, [Colors.brandSecondary]);
+    return <EventsTitle />;
+  }, []);
 
-  const renderTopCards = useCallback(() => {
+  const renderTopTiles = useCallback(() => {
     return (
       <View style={styles.squareContainer}>
-        <TouchableOpacity
-          style={[
-            styles.square,
-            {
-              backgroundColor: Colors.lightBackground,
-            },
-          ]}
+        <TopTile
+          title="Events"
+          subTitle="History"
           onPress={() => {
             navigation.navigate("authorized-tab", {
               screen: "history-screen",
             });
           }}
-        >
-          <Text
-            preset="none"
-            style={{
-              color: Colors.black5,
-              fontSize: getResponsiveFontSize(14),
-              fontWeight: "500",
-            }}
-            text="Events"
-          />
-          <Text
-            preset="none"
-            style={{
-              color: Colors.black,
-              fontSize: getResponsiveFontSize(18),
-              fontWeight: "700",
-            }}
-            text="History"
-          />
-          <View style={styles.squareIcon}>{<IconButton iconType="arrow-top-right" />}</View>
-        </TouchableOpacity>
+        />
         <Space size="small" direction="vertical" />
-        <TouchableOpacity
-          style={[
-            styles.square,
-            {
-              backgroundColor: Colors.lightBackground,
-            },
-          ]}
+        <TopTile
+          title="Favorite"
+          subTitle="Places"
           onPress={() => {
             navigation.navigate("authorized-tab", {
               screen: "favorites-screen",
             });
           }}
-        >
-          <Text
-            preset="none"
-            style={{
-              color: Colors.black5,
-              fontSize: getResponsiveFontSize(14),
-              fontWeight: "500",
-            }}
-            text="Favorite"
-          />
-          <Text
-            preset="none"
-            style={{
-              color: Colors.black,
-              fontSize: getResponsiveFontSize(18),
-              fontWeight: "700",
-            }}
-            text="Places"
-          />
-          <View style={styles.squareIcon}>
-            <IconButton iconType="arrow-top-right" />
-          </View>
-        </TouchableOpacity>
+        />
       </View>
     );
-  }, [Colors.black, Colors.black5, Colors.lightBackground]);
+  }, [navigation]);
+
+  const renderEventItem = useCallback((props: ListRenderItemInfo<EventDtoType>) => {
+    return <EventItem {...props} />;
+  }, []);
 
   return (
     <Screen backgroundColor="background" unsafeBottom>
       <Space size="large" />
       <View style={styles.greetingContainer}>
         <Text
-          text="Good Morning"
+          text={userGreeting}
           style={[
             styles.greetingText,
             {
@@ -127,10 +66,18 @@ export function HomeScreen({ navigation, route }: AuthorizedScreenProps<"home-sc
             },
           ]}
         />
-        <Avatar size="small" url={user?.accountImageUrl} onPress={() => {}} />
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("authorized-stack", {
+              screen: "user-profile-screen",
+            });
+          }}
+        >
+          <Avatar size="small" mode="static" url={user?.accountImageUrl} />
+        </TouchableOpacity>
       </View>
       <Space size="large" />
-      {renderTopCards()}
+      {renderTopTiles()}
       <Space size="small" />
       <View
         style={[
@@ -141,13 +88,7 @@ export function HomeScreen({ navigation, route }: AuthorizedScreenProps<"home-sc
         ]}
       >
         <View style={styles.eventContainer}>
-          <View
-            style={{
-              paddingHorizontal: 16,
-            }}
-          >
-            {renderEventTitle()}
-          </View>
+          {renderEventTitle()}
           <Space />
           <FlatList
             contentContainerStyle={{
@@ -157,34 +98,227 @@ export function HomeScreen({ navigation, route }: AuthorizedScreenProps<"home-sc
             ListEmptyComponent={() => {
               return <NonIdealState type="noEvents" />;
             }}
-            data={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
+            data={mockData}
             ItemSeparatorComponent={() => {
               return <Space size="tiny" />;
             }}
             ListFooterComponent={() => {
               return <Space size="large" />;
             }}
-            renderItem={({ item }) => {
-              return (
-                <Card
-                  onPress={() => {
-                    console.log("d");
-                  }}
-                >
-                  <Card.Title title="Card Title" left={props => <Icon name="check" {...props} />} />
-                  <Card.Content>
-                    <Text>Card title</Text>
-                    <Text>Card content</Text>
-                  </Card.Content>
-                </Card>
-              );
-            }}
+            renderItem={renderEventItem}
           />
         </View>
       </View>
     </Screen>
   );
 }
+
+const mockData: EventsDtoType = [
+  {
+    _id: "6594ec9b9a070fe56e0b19f9",
+    //  todo: add category
+    expectedEndTime: "2024-01-03T05:26:46.896Z",
+    registrationDeadlineTime: "",
+    paymentMethod: "CASH",
+    participantsIds: [],
+    leadClientId: "",
+    urls: [],
+    location: {
+      address: "",
+      latitude: 0,
+      longitude: 0,
+    },
+    attendeeLimit: 0,
+    registrationFee: 0,
+    serviceId: "6593dd6646e04cf8fe017035",
+    staffIds: ["6593dd6646e04cf8fe017032"],
+    localClientsIds: [],
+    clientsIds: [],
+    hasDuration: true,
+    eventImage: "",
+    businessId: "6593dd6646e04cf8fe017034",
+    name: "sadads",
+    description: "",
+    createdBy: "6593dd6646e04cf8fe017032",
+    updatedBy: "6593dd6646e04cf8fe017032",
+    features: [],
+    status: {
+      statusCode: 0,
+      statusName: "CANCELED",
+    },
+    durationInMin: 15,
+    startTime: "2024-01-03T05:11:46.896Z",
+    endTime: null,
+    priceExpected: 1500,
+    priceFinal: 1500,
+    canceled: false,
+    cancellationReason: "",
+    isPublicEvent: true,
+    repeat: true,
+    payment: null,
+    notes: "",
+    labels: [],
+    deleted: false,
+    createdAt: "2024-01-03T05:11:55.534Z",
+    updatedAt: "2024-01-03T05:11:55.538Z",
+    discountAmount: 0,
+    availableDiscountCodes: [],
+    selectedDiscountCode: null,
+  },
+  {
+    _id: "6594ec9b9a070fe56e0b19f9",
+    //  todo: add category
+    expectedEndTime: "2024-01-03T05:26:46.896Z",
+    registrationDeadlineTime: "",
+    paymentMethod: "CASH",
+    participantsIds: [],
+    leadClientId: "",
+    urls: [],
+    location: {
+      address: "",
+      latitude: 0,
+      longitude: 0,
+    },
+    attendeeLimit: 0,
+    registrationFee: 0,
+    serviceId: "6593dd6646e04cf8fe017035",
+    staffIds: ["6593dd6646e04cf8fe017032"],
+    localClientsIds: [],
+    clientsIds: [],
+    hasDuration: true,
+    eventImage: "",
+    businessId: "6593dd6646e04cf8fe017034",
+    name: "sadads",
+    description: "",
+    createdBy: "6593dd6646e04cf8fe017032",
+    updatedBy: "6593dd6646e04cf8fe017032",
+    features: [],
+    status: {
+      statusCode: 0,
+      statusName: "CANCELED",
+    },
+    durationInMin: 15,
+    startTime: "2024-01-03T05:11:46.896Z",
+    endTime: null,
+    priceExpected: 1500,
+    discountAmount: 0,
+    availableDiscountCodes: [],
+    selectedDiscountCode: null,
+    priceFinal: 1500,
+    canceled: false,
+    cancellationReason: "",
+    isPublicEvent: true,
+    repeat: true,
+    payment: null,
+    notes: "",
+    labels: [],
+    deleted: false,
+    createdAt: "2024-01-03T05:11:55.534Z",
+    updatedAt: "2024-01-03T05:11:55.538Z",
+  },
+  {
+    _id: "6594ec9b9a070fe56e0b19f9",
+    //  todo: add category
+    expectedEndTime: "2024-01-03T05:26:46.896Z",
+    registrationDeadlineTime: "",
+    paymentMethod: "CASH",
+    participantsIds: [],
+    leadClientId: "",
+    urls: [],
+    location: {
+      address: "",
+      latitude: 0,
+      longitude: 0,
+    },
+    attendeeLimit: 0,
+    registrationFee: 0,
+    serviceId: "6593dd6646e04cf8fe017035",
+    staffIds: ["6593dd6646e04cf8fe017032"],
+    localClientsIds: [],
+    clientsIds: [],
+    hasDuration: true,
+    eventImage: "",
+    businessId: "6593dd6646e04cf8fe017034",
+    name: "sadads",
+    description: "",
+    createdBy: "6593dd6646e04cf8fe017032",
+    updatedBy: "6593dd6646e04cf8fe017032",
+    features: [],
+    status: {
+      statusCode: 0,
+      statusName: "CANCELED",
+    },
+    durationInMin: 15,
+    startTime: "2024-01-03T05:11:46.896Z",
+    endTime: null,
+    priceExpected: 1500,
+    priceFinal: 1500,
+    canceled: false,
+    cancellationReason: "",
+    isPublicEvent: true,
+    repeat: true,
+    payment: null,
+    notes: "",
+    labels: [],
+    deleted: false,
+    createdAt: "2024-01-03T05:11:55.534Z",
+    updatedAt: "2024-01-03T05:11:55.538Z",
+    discountAmount: 0,
+    availableDiscountCodes: [],
+    selectedDiscountCode: null,
+  },
+  {
+    _id: "6594ec9b9a070fe56e0b19f9",
+    //  todo: add category
+    expectedEndTime: "2024-01-03T05:26:46.896Z",
+    registrationDeadlineTime: "",
+    paymentMethod: "CASH",
+    participantsIds: [],
+    leadClientId: "",
+    urls: [],
+    location: {
+      address: "",
+      latitude: 0,
+      longitude: 0,
+    },
+    attendeeLimit: 0,
+    registrationFee: 0,
+    serviceId: "6593dd6646e04cf8fe017035",
+    staffIds: ["6593dd6646e04cf8fe017032"],
+    localClientsIds: [],
+    clientsIds: [],
+    hasDuration: true,
+    eventImage: "",
+    businessId: "6593dd6646e04cf8fe017034",
+    name: "sadads",
+    description: "",
+    createdBy: "6593dd6646e04cf8fe017032",
+    updatedBy: "6593dd6646e04cf8fe017032",
+    features: [],
+    status: {
+      statusCode: 0,
+      statusName: "CANCELED",
+    },
+    durationInMin: 15,
+    startTime: "2024-01-03T05:11:46.896Z",
+    endTime: null,
+    priceExpected: 1500,
+    priceFinal: 1500,
+    canceled: false,
+    cancellationReason: "",
+    isPublicEvent: true,
+    repeat: true,
+    payment: null,
+    notes: "",
+    labels: [],
+    deleted: false,
+    createdAt: "2024-01-03T05:11:55.534Z",
+    updatedAt: "2024-01-03T05:11:55.538Z",
+    discountAmount: 0,
+    availableDiscountCodes: [],
+    selectedDiscountCode: null,
+  },
+];
 
 const styles = StyleSheet.create({
   eventTitleContainer: {

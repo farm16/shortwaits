@@ -1,15 +1,13 @@
 import { AvailableLanguagesType } from "@shortwaits/shared-lib";
-import { useMemo } from "react";
 import * as RNLocalize from "react-native-localize";
 import copies from "../i18n/copies.json";
-import { useMobileAdmin } from "../store";
 
 export const getDeviceLocales = () => {
   const locales = RNLocalize.getLocales();
   return locales;
 };
 
-export const getDeviceCountry = () => {
+export const getDeviceLocale = () => {
   const locales = RNLocalize.getLocales();
   return locales[0].languageCode || "en";
 };
@@ -28,9 +26,3 @@ export const getSupportedDeviceLocale = () => {
 };
 
 export const languageCode = RNLocalize.getLocales()[0].languageCode;
-
-export const usePreferredLanguage = () => {
-  const { preferredLanguage } = useMobileAdmin();
-  console.log("PREFERRED_LANGUAGE >>> ", preferredLanguage);
-  return useMemo(() => preferredLanguage, [preferredLanguage]);
-};

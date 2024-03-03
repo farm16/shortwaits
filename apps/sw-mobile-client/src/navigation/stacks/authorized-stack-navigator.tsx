@@ -1,7 +1,7 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import { useTheme } from "@shortwaits/shared-ui";
 import React from "react";
-import { EventScreen, PlansScreen } from "../../screens";
+import { EventScreen, UserProfile } from "../../screens";
 import { AuthorizedStackParamList } from "../navigation-types";
 
 const Stack = createStackNavigator<AuthorizedStackParamList>();
@@ -17,8 +17,8 @@ export const AuthorizedStackNavigator = () => {
         },
       }}
     >
-      <Stack.Screen name={"event-screen"} component={EventScreen} />
-      <Stack.Screen name={"plans-screen"} component={PlansScreen} />
+      <Stack.Screen name={"event-details-screen"} component={EventScreen} />
+      <Stack.Screen name={"user-profile-screen"} component={UserProfile} />
     </Stack.Navigator>
   );
 };

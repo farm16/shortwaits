@@ -9,7 +9,7 @@ export const getDeviceLocales = () => {
   return locales;
 };
 
-export const getDeviceCountry = () => {
+export const getDeviceLocale = () => {
   const locales = RNLocalize.getLocales();
   return locales[0].languageCode || "en";
 };
