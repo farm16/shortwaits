@@ -1,8 +1,8 @@
 import { Screen, TabBar, Text } from "@shortwaits/shared-ui";
 import React from "react";
-import { AuthenticatedScreenProps } from "../../../navigation";
+import { AuthorizedScreenProps } from "../../../navigation";
 
-export function ExploreScreen({ navigation, route }: AuthenticatedScreenProps<"explore-screen">) {
+export function ExploreScreen({ navigation, route }: AuthorizedScreenProps<"history-screen">) {
   return (
     <Screen>
       <Text>Explore Screen</Text>

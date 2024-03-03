@@ -35,7 +35,7 @@ export function TabBar({ navigation, route, onLayout = noop }: TabBarProps) {
       ]}
     >
       <Button text="Home" preset={`client-tab${route.name === "home-screen" ? "" : "-disabled"}`} onPress={() => handlePress("home-screen")} />
-      <Button text="Explore" preset={`client-tab${route.name === "explore-screen" ? "" : "-disabled"}`} onPress={() => handlePress("explore-screen")} />
+      <Button text="Explore" preset={`client-tab${route.name === "history-screen" ? "" : "-disabled"}`} onPress={() => handlePress("history-screen")} />
       <Button text="Settings" preset={`client-tab${route.name === "settings-screen" ? "" : "-disabled"}`} onPress={() => handlePress("settings-screen")} />
     </View>
   );

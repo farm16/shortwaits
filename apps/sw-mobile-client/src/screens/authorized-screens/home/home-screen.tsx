@@ -48,6 +48,11 @@ export function HomeScreen({ navigation, route }: AuthorizedScreenProps<"home-sc
               backgroundColor: Colors.lightBackground,
             },
           ]}
+          onPress={() => {
+            navigation.navigate("authorized-tab", {
+              screen: "history-screen",
+            });
+          }}
         >
           <Text
             preset="none"
@@ -77,6 +82,11 @@ export function HomeScreen({ navigation, route }: AuthorizedScreenProps<"home-sc
               backgroundColor: Colors.lightBackground,
             },
           ]}
+          onPress={() => {
+            navigation.navigate("authorized-tab", {
+              screen: "favorites-screen",
+            });
+          }}
         >
           <Text
             preset="none"

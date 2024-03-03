@@ -16,6 +16,7 @@ export const AuthorizedTabNavigator = () => {
     () =>
       ({
         unmountOnBlur: true,
+        tabBarHideOnKeyboard: true,
         headerShown: true,
         headerTitleAlign: "center",
         headerStyle: {
@@ -38,7 +39,6 @@ export const AuthorizedTabNavigator = () => {
         tabBarLabelStyle: {
           paddingBottom: Platform.OS === "android" ? 4 : 0,
         },
-        tabBarIconStyle: {},
         tabBarStyle: {
           backgroundColor: Colors.white,
         },

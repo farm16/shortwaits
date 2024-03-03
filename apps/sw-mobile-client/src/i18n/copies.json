@@ -111,6 +111,8 @@
     "NonIdealState.noEvents.message": "No events found",
     "NonIdealState.noClientsInEvent.message": "No clients in event",
     "NonIdealState.noStaffInEvent.message": "No staff in event",
+    "NonIdealState.noFavorites.message": "No favorites found",
+    "NonIdealState.noHistory.message": "No history found",
 
     "CalendarItem.clients": "Clients",
     "CalendarItem.staff": "Staff",
@@ -446,6 +448,8 @@
     "NonIdealState.noEvents.message": "No se encontraron eventos",
     "NonIdealState.noClientsInEvent.message": "No hay clientes en el evento",
     "NonIdealState.noStaffInEvent.message": "No hay personal en el evento",
+    "NonIdealState.noFavorites.message": "No se encontraron favoritos",
+    "NonIdealState.noHistory.message": "No se encontró historial",
 
     "CalendarItem.clients": "Clientes",
     "CalendarItem.staff": "Personal",

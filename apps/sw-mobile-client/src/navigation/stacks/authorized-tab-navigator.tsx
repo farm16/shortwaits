@@ -1,9 +1,9 @@
-import { BottomTabNavigationOptions, createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { BottomTabBarButtonProps, BottomTabNavigationOptions, createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { QrScannerModal, MODAL_SCREENS as SHARED_MODAL_SCREENS, Text, useTheme } from "@shortwaits/shared-ui";
 import React, { useCallback, useMemo } from "react";
 import { Platform, StyleSheet, TouchableOpacity } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import { ExploreScreen, HomeScreen, SettingsScreen } from "../../screens";
+import { HistoryScreen, HomeScreen, MyFavorites, SettingsScreen } from "../../screens";
 import { AUTHORIZED_TAB_SCREENS } from "../navigation-constants";
 import { AuthorizedTabsParamList } from "../navigation-types";
 
@@ -18,6 +18,7 @@ export const AuthorizedTabNavigator = () => {
       unmountOnBlur: true,
       headerShown: false,
       animationEnabled: true,
+      tabBarHideOnKeyboard: true,
       tabBarStyle: {
         backgroundColor: Colors.brandSecondary,
       },
@@ -28,15 +29,15 @@ export const AuthorizedTabNavigator = () => {
   }, [Colors.brandSecondary, Colors.disabledText, Colors.white]);
 
   const scanButton = useCallback(
-    props => {
+    (props: BottomTabBarButtonProps) => {
       return (
         <TouchableOpacity
           {...props}
           style={{
-            top: Platform.OS === "ios" ? -20 : -30,
-            width: 75,
-            height: 75,
-            borderRadius: 75 / 2,
+            top: Platform.OS === "ios" ? -20 : -20,
+            width: 60,
+            height: 60,
+            borderRadius: 60 / 2,
             justifyContent: "center",
             alignItems: "center",
             backgroundColor: Colors.brandAccent,
@@ -60,7 +61,7 @@ export const AuthorizedTabNavigator = () => {
               fontSize: 10,
               fontWeight: "500",
               position: "absolute",
-              bottom: 8,
+              bottom: 4,
             }}
             text="Scan"
           />
@@ -81,10 +82,10 @@ export const AuthorizedTabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name={AUTHORIZED_TAB_SCREENS.FAVORITES_SCREEN}
-        component={ExploreScreen}
+        name={AUTHORIZED_TAB_SCREENS.MY_FAVORITES_SCREEN}
+        component={MyFavorites}
         options={{
-          tabBarLabel: "My Favorites",
+          tabBarLabel: "Favorites",
           tabBarIcon: ({ focused, color }) => <MaterialCommunityIcons name={focused ? "heart" : "heart-outline"} color={color} size={25} />,
         }}
       />
@@ -110,7 +111,7 @@ export const AuthorizedTabNavigator = () => {
       />
       <Tab.Screen
         name={AUTHORIZED_TAB_SCREENS.HISTORY_SCREEN}
-        component={ExploreScreen}
+        component={HistoryScreen}
         options={{
           tabBarLabel: "History",
           tabBarIcon: ({ focused, color }) => <MaterialCommunityIcons name={focused ? "clock" : "clock-outline"} color={color} size={25} />,

@@ -1,21 +1,76 @@
 import React, { Children, useMemo } from "react";
-import { Image, Dimensions, View } from "react-native";
+import { useIntl } from "react-intl";
+import { Dimensions, View } from "react-native";
 import { SvgProps } from "react-native-svg";
+import { NoClients, NoData, NoEvents, NoTransactions } from "../../assets";
 import { useTheme } from "../../theme";
 import { ThemeColorName } from "../../theme/Colors";
 import { Space, Text } from "../common";
-import { NoClients, NoEvents, NoTransactions, NoData } from "../../assets";
-import { useIntl } from "react-intl";
 
-export type NonIdealStateTypes =
-  | "noData"
-  | "noTransactions"
-  | "noServices"
-  | "noClients"
-  | "noStaff"
-  | "noEvents"
-  | "noClientsInEvent"
-  | "noStaffInEvent";
+const _NonIdealProps = {
+  noData: {
+    Image: (props: React.JSX.IntrinsicAttributes & SvgProps) => <NoData {...props} />,
+    message: "NonIdealState.noData.message",
+    intlMessageCode: "NonIdealState.noData.message",
+    messageColor: "brandAccent" as ThemeColorName,
+  },
+  noTransactions: {
+    Image: (props: React.JSX.IntrinsicAttributes & SvgProps) => <NoTransactions {...props} />,
+    message: "NonIdealState.noTransactions.message",
+    intlMessageCode: "NonIdealState.noTransactions.message",
+    messageColor: "brandAccent" as ThemeColorName,
+  },
+  noServices: {
+    Image: (props: React.JSX.IntrinsicAttributes & SvgProps) => <NoClients {...props} />,
+    message: "NonIdealState.noServices.message",
+    intlMessageCode: "NonIdealState.noServices.message",
+    messageColor: "brandAccent" as ThemeColorName,
+  },
+  noClients: {
+    Image: (props: React.JSX.IntrinsicAttributes & SvgProps) => <NoClients {...props} />,
+    message: "NonIdealState.noClients.message",
+    intlMessageCode: "NonIdealState.noClients.message",
+    messageColor: "brandAccent" as ThemeColorName,
+  },
+  noStaff: {
+    Image: (props: React.JSX.IntrinsicAttributes & SvgProps) => <NoClients {...props} />,
+    message: "NonIdealState.noStaff.message",
+    intlMessageCode: "NonIdealState.noStaff.message",
+    messageColor: "brandAccent" as ThemeColorName,
+  },
+  noClientsInEvent: {
+    Image: (props: React.JSX.IntrinsicAttributes & SvgProps) => <NoClients {...props} />,
+    message: "NonIdealState.noClientsInEvent.message",
+    intlMessageCode: "NonIdealState.noClientsInEvent.message",
+    messageColor: "brandAccent" as ThemeColorName,
+  },
+  noStaffInEvent: {
+    Image: (props: React.JSX.IntrinsicAttributes & SvgProps) => <NoClients {...props} />,
+    message: "NonIdealState.noStaffInEvent.message",
+    intlMessageCode: "NonIdealState.noStaffInEvent.message",
+    messageColor: "brandAccent" as ThemeColorName,
+  },
+  noEvents: {
+    Image: (props: React.JSX.IntrinsicAttributes & SvgProps) => <NoEvents {...props} />,
+    message: "NonIdealState.noEvents.message",
+    intlMessageCode: "NonIdealState.noEvents.message",
+    messageColor: "brandAccent" as ThemeColorName,
+  },
+  noFavorites: {
+    Image: (props: React.JSX.IntrinsicAttributes & SvgProps) => <NoClients {...props} />,
+    message: "NonIdealState.noFavorites.message",
+    intlMessageCode: "NonIdealState.noFavorites.message",
+    messageColor: "brandAccent" as ThemeColorName,
+  },
+  noHistory: {
+    Image: (props: React.JSX.IntrinsicAttributes & SvgProps) => <NoData {...props} />,
+    message: "NonIdealState.noHistory.message",
+    intlMessageCode: "NonIdealState.noHistory.message",
+    messageColor: "brandAccent" as ThemeColorName,
+  },
+} as const;
+
+export type NonIdealStateTypes = keyof typeof _NonIdealProps;
 
 interface NonIdealStateProps {
   type: NonIdealStateTypes;
@@ -36,49 +91,8 @@ export const NonIdealState = (props: NonIdealStateProps) => {
   const intl = useIntl();
 
   const nonIdealTypes = useMemo(() => {
-    return {
-      noData: {
-        Image: props => <NoData {...props} />,
-        message: intl.formatMessage({ id: "NonIdealState.noData.message" }),
-        messageColor: "brandAccent" as ThemeColorName,
-      },
-      noTransactions: {
-        Image: props => <NoTransactions {...props} />,
-        message: intl.formatMessage({ id: "NonIdealState.noTransactions.message" }),
-        messageColor: "brandAccent" as ThemeColorName,
-      },
-      noServices: {
-        Image: props => <NoClients {...props} />,
-        message: intl.formatMessage({ id: "NonIdealState.noServices.message" }),
-        messageColor: "brandAccent" as ThemeColorName,
-      },
-      noClients: {
-        Image: props => <NoClients {...props} />,
-        message: intl.formatMessage({ id: "NonIdealState.noClients.message" }),
-        messageColor: "brandAccent" as ThemeColorName,
-      },
-      noStaff: {
-        Image: props => <NoClients {...props} />,
-        message: intl.formatMessage({ id: "NonIdealState.noStaff.message" }),
-        messageColor: "brandAccent" as ThemeColorName,
-      },
-      noClientsInEvent: {
-        Image: props => <NoClients {...props} />,
-        message: intl.formatMessage({ id: "NonIdealState.noClientsInEvent.message" }),
-        messageColor: "brandAccent" as ThemeColorName,
-      },
-      noStaffInEvent: {
-        Image: props => <NoClients {...props} />,
-        message: intl.formatMessage({ id: "NonIdealState.noStaffInEvent.message" }),
-        messageColor: "brandAccent" as ThemeColorName,
-      },
-      noEvents: {
-        Image: props => <NoEvents {...props} />,
-        message: intl.formatMessage({ id: "NonIdealState.noEvents.message" }),
-        messageColor: "brandAccent" as ThemeColorName,
-      },
-    };
-  }, [intl]);
+    return _NonIdealProps;
+  }, []);
 
   const arrayChildren = Children.toArray(buttons);
 
@@ -100,7 +114,7 @@ export const NonIdealState = (props: NonIdealStateProps) => {
 
       {nonIdealTypes[type].message ? (
         <Text
-          text={nonIdealTypes[type].message}
+          text={intl.formatMessage({ id: nonIdealTypes[type].intlMessageCode })}
           preset="text"
           style={[
             {
