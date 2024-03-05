@@ -1,9 +1,10 @@
-import { BottomTabBarButtonProps, BottomTabNavigationOptions, createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { QrScannerModal, MODAL_SCREENS as SHARED_MODAL_SCREENS, Text, useTheme } from "@shortwaits/shared-ui";
+import { BottomTabNavigationOptions, createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { QrScannerModal, MODAL_SCREENS as SHARED_MODAL_SCREENS, useTheme } from "@shortwaits/shared-ui";
 import React, { useCallback, useMemo } from "react";
-import { Platform, StyleSheet, TouchableOpacity } from "react-native";
+import { TouchableOpacity } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { HistoryScreen, HomeScreen, MyFavorites, SettingsScreen } from "../../screens";
+import { getResponsiveHeight } from "../../utils";
 import { AUTHORIZED_TAB_SCREENS } from "../navigation-constants";
 import { AuthorizedTabsParamList } from "../navigation-types";
 
@@ -22,22 +23,24 @@ export const AuthorizedTabNavigator = () => {
       tabBarStyle: {
         backgroundColor: Colors.brandSecondary,
       },
-      tabBarInactiveBackgroundColor: Colors.brandSecondary,
+      // tabBarInactiveBackgroundColor: Colors.brandSecondary,
       tabBarActiveTintColor: Colors.white,
       tabBarInactiveTintColor: Colors.disabledText,
     };
   }, [Colors.brandSecondary, Colors.disabledText, Colors.white]);
 
   const scanButton = useCallback(
-    (props: BottomTabBarButtonProps) => {
+    (props: { focused: boolean; color: string; size: number }) => {
+      const { focused, color, size } = props;
+      const _size = getResponsiveHeight(size * 2);
       return (
         <TouchableOpacity
           {...props}
           style={{
-            top: Platform.OS === "ios" ? -20 : -20,
-            width: 60,
-            height: 60,
-            borderRadius: 60 / 2,
+            // top: Platform.OS === "ios" ? -20 : -20,
+            width: getResponsiveHeight(_size),
+            height: getResponsiveHeight(_size),
+            borderRadius: _size / 2,
             justifyContent: "center",
             alignItems: "center",
             backgroundColor: Colors.brandAccent,
@@ -49,22 +52,11 @@ export const AuthorizedTabNavigator = () => {
             shadowOpacity: 0.25,
             shadowRadius: 3.84,
             elevation: 5,
-            borderWidth: StyleSheet.hairlineWidth,
+            // borderWidth: StyleSheet.hairlineWidth,
             borderColor: Colors.white,
           }}
         >
-          <MaterialCommunityIcons name={"qrcode-scan"} color={Colors.black} size={25} />
-          <Text
-            preset="none"
-            style={{
-              color: Colors.black,
-              fontSize: 10,
-              fontWeight: "500",
-              position: "absolute",
-              bottom: 4,
-            }}
-            text="Scan"
-          />
+          <MaterialCommunityIcons name={"qrcode-scan"} color={Colors.black} size={getResponsiveHeight(size)} />
         </TouchableOpacity>
       );
     },
@@ -94,7 +86,8 @@ export const AuthorizedTabNavigator = () => {
         component={QrScannerModal}
         options={{
           tabBarLabel: "Scan",
-          tabBarButton: scanButton,
+          // tabBarButton: scanButton,
+          tabBarIcon: scanButton,
         }}
         listeners={({ navigation }) => ({
           tabPress: e => {

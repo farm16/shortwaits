@@ -1,3 +1,16 @@
+import { format, parseISO } from "date-fns";
+import { enUS, es } from "date-fns/locale";
+import React from "react";
+import { TextStyle } from "react-native";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { Text } from "../components";
+const locales = {
+  en: enUS,
+  "en-US": enUS,
+  es,
+} as const;
+type Locale = keyof typeof locales;
+
 const LOCALES = {
   en: "en-US",
   fr: "fr-FR",
@@ -45,19 +58,38 @@ export const getPrettyDateFromISO = (isoDateString: string, locale: string): str
 };
 
 // outputs string in "13:00 PM - 15:00 PM"
-export const getPrettyTimeRangeFromISO = (isoDateStartString: string, isoDateEndString: string | undefined, locale: string): string[] => {
-  const dateStart = new Date(isoDateStartString);
-  const options: Intl.DateTimeFormatOptions = {
-    hour: "numeric",
-    minute: "numeric",
-  };
-  const timeStart = dateStart.toLocaleTimeString("en-US", options);
+export const getTimesFromISO = (isoDateStartString: string, isoDateEndString?: string, overrideLocale?: Locale) => {
+  const locale = locales[overrideLocale ?? "en"];
+  const dateStart = parseISO(isoDateStartString);
+  const timeStart = format(dateStart, "h:mm a", { locale });
 
   if (isoDateEndString && isoDateEndString.trim() !== "") {
-    const dateEnd = new Date(isoDateEndString);
-    const timeEnd = dateEnd.toLocaleTimeString("en-US", options);
+    const dateEnd = parseISO(isoDateEndString);
+    const timeEnd = format(dateEnd, "h:mm a", { locale });
     return [timeStart, timeEnd];
   }
 
   return [timeStart];
+};
+
+type TimeRangeProps = {
+  startTime: string;
+  endTime?: string;
+  locale?: Locale;
+  style?: TextStyle;
+};
+export const TimeRange = ({ startTime, endTime, locale = "en", style }: TimeRangeProps) => {
+  const [start, end] = getTimesFromISO(startTime, endTime, locale);
+  return (
+    <Text style={style}>
+      {start}
+      {end ? (
+        <>
+          {" "}
+          <Icon name={"arrow-right"} color={"grey"} size={14} />{" "}
+        </>
+      ) : null}
+      {end}
+    </Text>
+  );
 };

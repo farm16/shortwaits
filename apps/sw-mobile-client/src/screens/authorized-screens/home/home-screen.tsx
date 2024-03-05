@@ -1,27 +1,23 @@
 import { EventDtoType, EventsDtoType } from "@shortwaits/shared-lib";
-import { Avatar, NonIdealState, Screen, Space, Text, getResponsiveFontSize, getResponsiveHeight, getUserGreeting, useTheme } from "@shortwaits/shared-ui";
-import React, { useCallback } from "react";
+import { AnimatedSearchBar, Avatar, IconButton, NonIdealState, Screen, Space, getResponsiveFontSize, getResponsiveHeight, getUserGreeting } from "@shortwaits/shared-ui";
+import React, { useCallback, useState } from "react";
 import { useIntl } from "react-intl";
-import { ListRenderItemInfo, StyleSheet, TouchableOpacity, View } from "react-native";
+import { ListRenderItemInfo, StyleSheet, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useUser } from "../../../store";
-import { EventItem, EventsTitle, TopTile } from "./helper";
+import { EventItem, HomeScreenTitle, TopTile } from "./helper";
 
 export function HomeScreen({ navigation, route }: AuthorizedScreenProps<"home-screen">) {
   const user = useUser();
-  const { Colors } = useTheme();
   const intl = useIntl();
+  const [isSearchBarVisible, setIsSearchBarVisible] = useState(false);
 
   const userGreeting = getUserGreeting({
     morningMessage: intl.formatMessage({ id: "Common.greeting.morning" }),
     afternoonMessage: intl.formatMessage({ id: "Common.greeting.afternoon" }),
     eveningMessage: intl.formatMessage({ id: "Common.greeting.evening" }),
   });
-
-  const renderEventTitle = useCallback(() => {
-    return <EventsTitle />;
-  }, []);
 
   const renderTopTiles = useCallback(() => {
     return (
@@ -53,47 +49,48 @@ export function HomeScreen({ navigation, route }: AuthorizedScreenProps<"home-sc
     return <EventItem {...props} />;
   }, []);
 
+  const renderLeftIcons = useCallback(() => {
+    return <IconButton iconType="search" iconColor="black" onPress={() => setIsSearchBarVisible(!isSearchBarVisible)} />;
+  }, [isSearchBarVisible]);
+
+  const renderProfileIcon = useCallback(() => {
+    return (
+      <Avatar
+        size="small"
+        mode="button"
+        url={user?.accountImageUrl}
+        onPress={() => {
+          navigation.navigate("authorized-stack", {
+            screen: "user-profile-screen",
+          });
+        }}
+      />
+    );
+  }, [navigation, user?.accountImageUrl]);
+
+  const displayName = user.displayName || user.familyName || user.givenName || user.email;
+
   return (
-    <Screen backgroundColor="background" unsafeBottom>
+    <Screen backgroundColor="background" unsafeBottom withHorizontalPadding>
       <Space size="large" />
       <View style={styles.greetingContainer}>
-        <Text
-          text={userGreeting}
-          style={[
-            styles.greetingText,
-            {
-              color: Colors.brandSecondary,
-            },
-          ]}
-        />
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("authorized-stack", {
-              screen: "user-profile-screen",
-            });
-          }}
-        >
-          <Avatar size="small" mode="static" url={user?.accountImageUrl} />
-        </TouchableOpacity>
+        <HomeScreenTitle title={displayName} subTitle={userGreeting} renderLeftComponent={renderProfileIcon} />
       </View>
       <Space size="large" />
       {renderTopTiles()}
-      <Space size="small" />
-      <View
-        style={[
-          styles.bottomContainer,
-          {
-            backgroundColor: Colors.lightBackground,
-          },
-        ]}
-      >
+      <Space size="large" />
+      <View style={[styles.bottomContainer]}>
         <View style={styles.eventContainer}>
-          {renderEventTitle()}
+          <HomeScreenTitle title="Upcoming events" renderLeftComponent={renderLeftIcons} />
+          <AnimatedSearchBar
+            isVisible={isSearchBarVisible}
+            onChangeText={txt => {
+              console.log(txt);
+            }}
+          />
           <Space />
           <FlatList
-            contentContainerStyle={{
-              paddingHorizontal: 16,
-            }}
+            contentContainerStyle={{}}
             showsVerticalScrollIndicator={false}
             ListEmptyComponent={() => {
               return <NonIdealState type="noEvents" />;
@@ -124,9 +121,14 @@ const mockData: EventsDtoType = [
     leadClientId: "",
     urls: [],
     location: {
-      address: "",
-      latitude: 0,
-      longitude: 0,
+      name: "Example Location",
+      address: "123 Main Street",
+      city: "Cityville",
+      state: "Stateville",
+      country: "Countryland",
+      postalCode: "12345",
+      latitude: 40.7128,
+      longitude: -74.006,
     },
     attendeeLimit: 0,
     registrationFee: 0,
@@ -175,9 +177,14 @@ const mockData: EventsDtoType = [
     leadClientId: "",
     urls: [],
     location: {
-      address: "",
-      latitude: 0,
-      longitude: 0,
+      name: "Example Location",
+      address: "123 Main Street",
+      city: "Cityville",
+      state: "Stateville",
+      country: "Countryland",
+      postalCode: "12345",
+      latitude: 40.7128,
+      longitude: -74.006,
     },
     attendeeLimit: 0,
     registrationFee: 0,
@@ -199,7 +206,7 @@ const mockData: EventsDtoType = [
     },
     durationInMin: 15,
     startTime: "2024-01-03T05:11:46.896Z",
-    endTime: null,
+    endTime: "2024-01-03T05:12:46.896Z",
     priceExpected: 1500,
     discountAmount: 0,
     availableDiscountCodes: [],
@@ -226,9 +233,14 @@ const mockData: EventsDtoType = [
     leadClientId: "",
     urls: [],
     location: {
-      address: "",
-      latitude: 0,
-      longitude: 0,
+      name: "Example Location",
+      address: "123 Main Street",
+      city: "Cityville",
+      state: "Stateville",
+      country: "Countryland",
+      postalCode: "12345",
+      latitude: 40.7128,
+      longitude: -74.006,
     },
     attendeeLimit: 0,
     registrationFee: 0,
@@ -277,9 +289,14 @@ const mockData: EventsDtoType = [
     leadClientId: "",
     urls: [],
     location: {
-      address: "",
-      latitude: 0,
-      longitude: 0,
+      name: "Example Location",
+      address: "123 Main Street",
+      city: "Cityville",
+      state: "Stateville",
+      country: "Countryland",
+      postalCode: "12345",
+      latitude: 40.7128,
+      longitude: -74.006,
     },
     attendeeLimit: 0,
     registrationFee: 0,
@@ -333,7 +350,6 @@ const styles = StyleSheet.create({
   },
   bottomContainer: {
     flex: 1,
-    paddingTop: getResponsiveHeight(41),
     borderTopRightRadius: 25,
     borderTopLeftRadius: 25,
   },
@@ -344,7 +360,7 @@ const styles = StyleSheet.create({
   greetingContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingHorizontal: 16,
+
     alignItems: "center",
   },
   greetingText: {
@@ -353,7 +369,6 @@ const styles = StyleSheet.create({
   },
   squareContainer: {
     flexDirection: "row",
-    paddingHorizontal: 16,
   },
   square: {
     flex: 1,

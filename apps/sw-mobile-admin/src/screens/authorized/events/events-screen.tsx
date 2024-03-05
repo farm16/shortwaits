@@ -19,18 +19,6 @@ export function EventsScreen({ navigation }: AuthorizedScreenProps<"events-scree
   useShowGhostComponent("floatingActionButton");
 
   useLayoutEffect(() => {
-    // const userGreeting () => {
-    //   const currentHour = new Date().getHours();
-    //   console.log("currentHour >>>", currentHour);
-    //   if (currentHour > 3 && currentHour < 12) {
-    //     return intl.formatMessage({ id: "Common.greeting.morning" });
-    //   }
-    //   if (currentHour > 12 && currentHour < 18) {
-    //     return intl.formatMessage({ id: "Common.greeting.afternoon" });
-    //   }
-    //   return intl.formatMessage({ id: "Common.greeting.evening" });
-    // };
-
     const userGreeting = getUserGreeting({
       morningMessage: intl.formatMessage({ id: "Common.greeting.morning" }),
       afternoonMessage: intl.formatMessage({ id: "Common.greeting.afternoon" }),

@@ -40,7 +40,6 @@ export function App(initialStaticProps: InitialStaticProps) {
 
 function OtherProviders({ children }: { children: React.ReactNode }) {
   const deviceInfo = useDeviceInfo();
-  console.log("deviceInfo >>>", deviceInfo);
   const currentLanguage = deviceInfo.preferredLanguage ? deviceInfo.preferredLanguage : deviceInfo.language;
   const messages = currentLanguage ? copies[currentLanguage] : copies.en;
 

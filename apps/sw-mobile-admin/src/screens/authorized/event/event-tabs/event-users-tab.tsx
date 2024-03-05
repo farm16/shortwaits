@@ -209,7 +209,7 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
             <IconButton
               iconType="add"
               disabled={isEventDisabled}
-              disabledAlertMessage="The event is no longer active"
+              withDisabledAlertMessage="The event is no longer active"
               onPress={() => {
                 const userType = title === "Staff" ? "staff" : "clients";
                 navigate("modals", {

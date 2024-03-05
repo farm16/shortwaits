@@ -1,7 +1,15 @@
+import { useNavigation } from "@react-navigation/native";
 import { EventDtoType } from "@shortwaits/shared-lib";
-import { IconButton, Text, getResponsiveFontSize, getResponsiveHeight, useTheme } from "@shortwaits/shared-ui";
-import React from "react";
+import { IconButton, Space, Text, TimeRange, getResponsiveFontSize, getResponsiveHeight, useTheme } from "@shortwaits/shared-ui";
+import { format } from "date-fns";
+import { enUS, es } from "date-fns/locale";
+import React, { FC } from "react";
 import { ListRenderItemInfo, StyleSheet, TouchableOpacity, View } from "react-native";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { AuthorizedScreenProps } from "../../../navigation";
+import { useDeviceInfo } from "../../../store";
+
+const locales = { en: enUS, es };
 
 export const TopTile = ({ title, subTitle, onPress }) => {
   const { Colors } = useTheme();
@@ -40,58 +48,205 @@ export const TopTile = ({ title, subTitle, onPress }) => {
   );
 };
 
-export const EventsTitle = () => {
+type HomeScreenTitleProps = {
+  title: string;
+  subTitle?: string;
+  renderLeftComponent?: () => React.ReactNode;
+};
+export const HomeScreenTitle: FC<HomeScreenTitleProps> = ({ title, renderLeftComponent: RenderLeftComponent, subTitle }) => {
   const { Colors } = useTheme();
   return (
-    <View style={styles.eventTitleContainer}>
-      <Text
-        preset="none"
-        style={[
-          styles.eventTitle,
-          {
-            color: Colors.brandSecondary,
-          },
-        ]}
-        text="Today's "
-      />
-      <Text
-        preset="none"
-        style={[
-          styles.eventTitle,
-          {
-            color: Colors.brandSecondary,
-          },
-        ]}
-        text="Events"
-      />
+    <View
+      style={{
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        width: "100%",
+      }}
+    >
+      <View>
+        {subTitle && (
+          <Text
+            preset="none"
+            style={{
+              color: Colors.black,
+              fontSize: getResponsiveFontSize(14),
+              fontWeight: "400",
+            }}
+            text={subTitle}
+          />
+        )}
+        <Text
+          preset="none"
+          style={{
+            color: Colors.black,
+            fontSize: getResponsiveFontSize(18),
+            fontWeight: "700",
+          }}
+          text={title}
+        />
+      </View>
+      {RenderLeftComponent && <RenderLeftComponent />}
     </View>
   );
 };
 
 export const EventItem = (props: ListRenderItemInfo<EventDtoType>) => {
-  // console.log("EventItem props >>>", props);
-  const date = new Date(props.item.startTime);
-  // get the month name
-  const month = date.toLocaleString("default", { month: "short" });
-  // get the day
-  const day = date.getDate();
+  const { Colors } = useTheme();
+  const { language, preferredLanguage } = useDeviceInfo();
+  const { navigate } = useNavigation<AuthorizedScreenProps<"home-screen">["navigation"]>();
+  const languageCode = language ?? preferredLanguage ?? "en";
+  const locale = locales[languageCode] ?? enUS;
 
-  console.log("date >>>", date);
-  console.log("month >>>", month);
-  console.log("day >>>", day);
+  const date = new Date(props.item.startTime);
+  const month = format(date, "MMM", { locale }).toUpperCase();
+  const day = format(date, "d");
+  const weekday = format(date, "EEE", { locale }).toUpperCase();
+
   return (
-    <View>
-      <IconButton iconType="qr" />
-    </View>
+    <TouchableOpacity
+      onPress={() => {
+        navigate("authorized-stack", {
+          screen: "event-details-screen",
+        });
+      }}
+      style={{
+        flexDirection: "row",
+        backgroundColor: Colors.lightBackground,
+        // justifyContent: "space-between",
+        alignItems: "center",
+        padding: getResponsiveHeight(16),
+        borderTopStartRadius: 6,
+        borderTopEndRadius: 6,
+        borderBottomStartRadius: 6,
+        borderBottomEndRadius: 6,
+      }}
+    >
+      <View
+        style={{
+          padding: getResponsiveHeight(3),
+          backgroundColor: Colors.white,
+          width: getResponsiveHeight(70),
+          borderRadius: 7,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <View
+          style={{
+            paddingVertical: 4,
+            backgroundColor: Colors.lightBackground,
+            borderTopLeftRadius: 7,
+            borderTopRightRadius: 7,
+            justifyContent: "center",
+            alignItems: "center",
+            width: "100%",
+          }}
+        >
+          <Text
+            preset="none"
+            style={{
+              fontSize: getResponsiveFontSize(10),
+              color: Colors.black,
+              fontWeight: "400",
+            }}
+            text={month}
+          />
+        </View>
+        <Text
+          preset="none"
+          style={{
+            fontSize: getResponsiveFontSize(14),
+            color: Colors.black,
+            fontWeight: "700",
+          }}
+          text={day}
+        />
+        <Text
+          preset="none"
+          style={{
+            fontSize: getResponsiveFontSize(10),
+            color: Colors.black,
+            fontWeight: "400",
+          }}
+          text={weekday}
+        />
+      </View>
+      <View
+        style={{
+          paddingHorizontal: getResponsiveHeight(16),
+        }}
+      >
+        <View
+          style={{
+            flexDirection: "row",
+          }}
+        >
+          <Text
+            text={props.item.name}
+            style={{
+              fontSize: getResponsiveFontSize(14),
+              fontWeight: "700",
+              color: Colors.black,
+              marginRight: getResponsiveHeight(16),
+            }}
+          />
+        </View>
+        <Space size="tiny" />
+        <View
+          style={{
+            flexDirection: "row",
+          }}
+        >
+          <Icon name="clock-outline" color={Colors.black} size={getResponsiveHeight(20)} />
+          <TimeRange
+            style={{
+              fontSize: getResponsiveFontSize(12),
+              fontWeight: "400",
+              color: Colors.black,
+              marginRight: getResponsiveHeight(16),
+              paddingLeft: getResponsiveHeight(4),
+            }}
+            startTime={props.item.startTime}
+            endTime={props.item.endTime}
+            locale={languageCode as "en" | "es"}
+          />
+        </View>
+        <Space size="tiny" />
+        <View
+          style={{
+            flexDirection: "row",
+          }}
+        >
+          <Icon name="map-marker-radius-outline" color={Colors.black} size={getResponsiveHeight(20)} />
+          <Text
+            text={props.item.location.city + ", " + props.item.location.state}
+            style={{
+              fontSize: getResponsiveFontSize(12),
+              fontWeight: "400",
+              color: Colors.black,
+              marginRight: getResponsiveHeight(16),
+              paddingLeft: getResponsiveHeight(4),
+            }}
+          />
+        </View>
+      </View>
+      <IconButton
+        iconType="three-dots"
+        iconColor="disabledText"
+        style={{
+          position: "absolute",
+          right: 16,
+        }}
+      />
+    </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   eventTitleContainer: {
-    paddingHorizontal: 16,
     flexDirection: "row",
-    alignItems: "flex-end",
-    alignSelf: "stretch",
+    alignItems: "center",
   },
   eventTitle: {
     fontSize: getResponsiveFontSize(21),
@@ -105,13 +260,12 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 25,
   },
   eventContainer: {
-    // paddingHorizontal: 16,
     flex: 1,
   },
   greetingContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingHorizontal: 16,
+
     alignItems: "center",
   },
   greetingText: {
@@ -120,7 +274,6 @@ const styles = StyleSheet.create({
   },
   squareContainer: {
     flexDirection: "row",
-    paddingHorizontal: 16,
   },
   square: {
     flex: 1,

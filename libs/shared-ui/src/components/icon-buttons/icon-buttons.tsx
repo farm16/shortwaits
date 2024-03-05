@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { StyleProp, View, ViewStyle } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { useTheme } from "../../theme";
+import { ThemeColorName, useTheme } from "../../theme";
 import { Button, ButtonProps, Spinner, Text } from "../common";
 import { IconProps, iconProps } from "./icon-presets";
 
@@ -120,18 +120,33 @@ export const BackButton: FC<
 export const IconButton: FC<
   ButtonProps & {
     iconType: IconProps;
+    backgroundColor?: ThemeColorName;
+    iconColor?: ThemeColorName;
     iconSize?: number;
-    disabledAlertMessage?: string;
+    withDisabledAlertMessage?: string;
     withMarginLeft?: boolean;
     withMarginRight?: boolean;
   }
 > = props => {
+  const {
+    state = "enabled",
+    iconSize: iconSizeOverride,
+    iconType = "default",
+    style: styleOverride,
+    iconColor: iconColorOverride,
+    text,
+    textStyle,
+    withMarginRight,
+    withMarginLeft,
+    disabled: disabledOverride,
+    ...rest
+  } = props;
+
   const { Colors } = useTheme();
 
-  const { state = "enabled", iconSize = 22, iconType = "default", style: styleOverride, text, textStyle, withMarginRight, withMarginLeft, ...rest } = props;
-
+  const backgroundColor = props.backgroundColor ?? (Colors.white as ThemeColorName);
   const style: StyleProp<ViewStyle> = {
-    backgroundColor: Colors[iconProps[iconType]?.backgroundColor ?? "white"],
+    backgroundColor: Colors[(iconProps[iconType]?.backgroundColor as ThemeColorName) ?? backgroundColor],
     width: iconProps[iconType]?.size,
     height: iconProps[iconType]?.size,
     borderRadius: iconProps[iconType]?.size / 2,
@@ -142,25 +157,25 @@ export const IconButton: FC<
   };
 
   const handleDisabledAlert = () => {
-    alert(props.disabledAlertMessage ?? "button is disabled");
+    alert(props.withDisabledAlertMessage ?? "button is disabled");
   };
-  const isDisabled = props.disabledAlertMessage ? false : props.disabled;
-  const onPress = props.disabledAlertMessage ? handleDisabledAlert : props.onPress;
+
+  const hasOnPress = !props.onPress;
+  const disabled = disabledOverride || hasOnPress || state === "disabled";
+  const isDisabled = props.withDisabledAlertMessage ? false : disabled;
+  const onPress = props.withDisabledAlertMessage ? handleDisabledAlert : props.onPress;
+
+  const iconColor = iconColorOverride || iconProps[iconType]?.color || "brandSecondary";
+  const iconSize = iconSizeOverride || iconProps[iconType]?.size || 22;
+  const iconName = iconProps[iconType]?.name || "plus";
 
   return (
     <Button preset="none" {...rest} onPress={onPress} disabled={isDisabled} style={[style, styleOverride]} state={state}>
-      {text ? (
-        <Text preset="none" style={[{ color: Colors.brandSecondary7, fontWeight: "600" }, textStyle]} text={text} />
-      ) : (
-        <Icon
-          name={iconProps[iconType] ? iconProps[iconType].name : iconProps.default.name}
-          color={props.disabled ? Colors.gray : Colors[iconProps[iconType]?.color ?? "brandSecondary"]}
-          size={iconProps[iconType]?.size || iconSize}
-        />
-      )}
+      <Icon name={iconName} color={Colors[iconColor]} size={iconSize} />
     </Button>
   );
 };
+
 export const SubmitHeaderIconButton: FC<ButtonProps> = props => {
   const {
     Colors: { brandSecondary, gray },

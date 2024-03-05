@@ -6,7 +6,7 @@ import {
   Text,
   getPrettyDateFromISO,
   getPrettyStringFromPriceWithSymbol,
-  getPrettyTimeRangeFromISO,
+  getTimesFromISO,
   statusDisplayMessages,
   statusDisplayMessagesBackgroundColor,
   statusDisplayMessagesColor,
@@ -168,9 +168,9 @@ export function EventScreenHeader({ event }: { event: EventDtoType }) {
                 fontSize: 14,
               }}
             >
-              {getPrettyTimeRangeFromISO(event?.startTime, event?.expectedEndTime, intl.locale)[0]}
-              {getPrettyTimeRangeFromISO(event?.startTime, event?.expectedEndTime, intl.locale)[1] ? <Icon name={"arrow-right"} color={"grey"} size={14} /> : null}
-              {getPrettyTimeRangeFromISO(event?.startTime, event?.expectedEndTime, intl.locale)[1]}
+              {getTimesFromISO(event?.startTime, event?.expectedEndTime, intl.locale)[0]}
+              {getTimesFromISO(event?.startTime, event?.expectedEndTime, intl.locale)[1] ? <Icon name={"arrow-right"} color={"grey"} size={14} /> : null}
+              {getTimesFromISO(event?.startTime, event?.expectedEndTime, intl.locale)[1]}
             </Text>
           }
         />

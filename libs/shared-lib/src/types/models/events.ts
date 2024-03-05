@@ -11,7 +11,13 @@ export type EventUrlsType = {
 };
 
 export type EventLocationType = {
-  address: string; // Full address of the location
+  name: string;
+  address: string;
+  address2?: string; // Full address of the location
+  city: string;
+  state: string;
+  country: string;
+  postalCode: string;
   latitude: number; // Latitude of the location
   longitude: number; // Longitude of the location
 };

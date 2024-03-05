@@ -191,6 +191,12 @@ export const iconProps = {
     color: "brandPrimary",
     size: 21,
   },
+  "three-dots": {
+    name: "dots-vertical",
+    backgroundColor: undefined,
+    color: "black",
+    size: 21,
+  },
   default: {
     name: "plus",
     backgroundColor: undefined,
@@ -198,5 +204,7 @@ export const iconProps = {
     size: 26,
   },
 } as const;
+
+export type IconPropsType = typeof iconProps;
 
 export type IconProps = keyof typeof iconProps;

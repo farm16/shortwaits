@@ -1,6 +1,5 @@
 export const getUserGreeting = ({ morningMessage = "Good morning", afternoonMessage = "Good afternoon", eveningMessage = "Good evening" }) => {
   const currentHour = new Date().getHours();
-  console.log("currentHour >>>", currentHour);
   if (currentHour > 3 && currentHour < 12) {
     return morningMessage;
   }

@@ -1,11 +1,10 @@
-import React, { useCallback } from "react";
-import { StyleSheet, View, ViewStyle } from "react-native";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-
 import { noop } from "lodash";
+import React, { useCallback } from "react";
+import { View, ViewStyle } from "react-native";
 import FastImage from "react-native-fast-image";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import Spinner from "react-native-spinkit";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTheme } from "../../theme";
 import { IconButton } from "../icon-buttons/icon-buttons";
 
@@ -13,14 +12,15 @@ interface AvatarProps {
   url?: string;
   size?: keyof typeof imageSizes;
   color?: string;
-  mode?: "static" | "upload";
   style?: ViewStyle;
   isLoading?: boolean;
   disabled?: boolean;
+  mode: "static" | "upload" | "button";
   onPress?: () => void;
 }
 
 const imageSizes = {
+  tiny: 40,
   small: 60,
   medium: 75,
   large: 100,
@@ -42,7 +42,6 @@ export function Avatar(props: AvatarProps) {
     borderWidth: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 7,
   } as ViewStyle;
 
   const renderCameraButton = useCallback(() => {
@@ -95,30 +94,17 @@ export function Avatar(props: AvatarProps) {
     );
   }
 
-  return <View style={[containerStyle, styleOverride]}>{renderImage()}</View>;
+  if (mode === "button") {
+    return (
+      <TouchableOpacity style={[containerStyle, styleOverride]} disabled={disabled} onPress={() => onPress()}>
+        {renderImage()}
+      </TouchableOpacity>
+    );
+  }
+
+  if (mode === "static") {
+    return <View style={[containerStyle, styleOverride]}>{renderImage()}</View>;
+  }
+
+  return null;
 }
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: "row",
-    borderLeftWidth: 5,
-    borderRadius: 5,
-    alignItems: "center",
-  },
-  IconButton: {
-    position: "absolute",
-    bottom: -7,
-    right: -6.5,
-  },
-  imageContainer: {
-    opacity: 0.8,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  image: {
-    width: 50,
-    height: 50,
-    borderRadius: 50,
-    resizeMode: "cover",
-    marginRight: 10,
-  },
-});

@@ -9,7 +9,7 @@ type SearchBarProps = ComponentProps<typeof SearchBarPaper> & {
 };
 
 export const SearchBar = (props: SearchBarProps) => {
-  const { iPlaceholder, autoCapitalize = "none", clearButtonMode = "while-editing", style: styleOverride, autoCorrect = false, isAnimated = false, ...rest } = props;
+  const { iPlaceholder, autoCapitalize = "none", clearButtonMode = "while-editing", style: styleOverride, autoCorrect = false, isAnimated = false, autoFocus, ...rest } = props;
   const { Colors } = useTheme();
 
   const style: StyleProp<TextStyle> & StyleProp<ViewStyle> = {
@@ -34,7 +34,7 @@ export const SearchBar = (props: SearchBarProps) => {
       autoCapitalize={autoCapitalize}
       clearButtonMode={clearButtonMode}
       placeholderTextColor={Colors.subText}
-      autoFocus={true}
+      autoFocus={autoFocus}
       placeholder={"Search"}
       style={searchBarStyle}
     />
