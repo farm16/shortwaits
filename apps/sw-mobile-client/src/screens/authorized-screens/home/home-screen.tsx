@@ -25,6 +25,7 @@ export function HomeScreen({ navigation, route }: AuthorizedScreenProps<"home-sc
         <TopTile
           title="Events"
           subTitle="History"
+          imageUrl="https://images.unsplash.com/photo-1593702288056-7927b442d0fa?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
           onPress={() => {
             navigation.navigate("authorized-tab", {
               screen: "history-screen",
@@ -35,6 +36,7 @@ export function HomeScreen({ navigation, route }: AuthorizedScreenProps<"home-sc
         <TopTile
           title="Favorite"
           subTitle="Places"
+          imageUrl="https://images.unsplash.com/photo-1589710751893-f9a6770ad71b?q=80&w=2187&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
           onPress={() => {
             navigation.navigate("authorized-tab", {
               screen: "favorites-screen",

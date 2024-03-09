@@ -1,5 +1,5 @@
 import { skipToken } from "@reduxjs/toolkit/dist/query";
-import { ClientUsersDtoType } from "@shortwaits/shared-lib";
+import { ClientsDtoType } from "@shortwaits/shared-lib";
 import { AnimatedSearchBar, BackButton, Container, IconButton, NonIdealState, Space, Text, useTheme } from "@shortwaits/shared-ui";
 import React, { FC, useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { ActivityIndicator, Alert, StyleSheet } from "react-native";
@@ -44,11 +44,11 @@ export const ClientsSelector: FC<ModalsScreenProps<"selector-modal-screen">> = (
   });
 
   const [searchText, setSearchText] = useState("");
-  const [filteredData, setFilteredData] = useState<ClientUsersDtoType>([]);
+  const [filteredData, setFilteredData] = useState<ClientsDtoType>([]);
   const [isListSearchable, setIsListSearchable] = useState(false);
   const [selectedItems, setSelectedItems] = useState(selectedData);
 
-  function filterClientUsers(searchText: string, users: ClientUsersDtoType) {
+  function filterClientUsers(searchText: string, users: ClientsDtoType) {
     return users.filter(item =>
       ["username", "email", "displayName", "familyName", "givenName", "middleName"].some(prop => item[prop] ?? "".toLowerCase().includes(searchText.toLowerCase()))
     );

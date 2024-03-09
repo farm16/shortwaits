@@ -1,8 +1,8 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { ConvertToDtoType, CreateClientUserDtoType } from "@shortwaits/shared-lib";
+import { AddClientDtoType, ConvertToDtoType } from "@shortwaits/shared-lib";
 import { IsNotEmpty, IsOptional } from "class-validator";
 
-export class CreateClientUserDto implements CreateClientUserDtoType {
+export class CreateClientUserDto implements AddClientDtoType {
   @ApiProperty()
   @IsNotEmpty()
   isSocialAccount: boolean;

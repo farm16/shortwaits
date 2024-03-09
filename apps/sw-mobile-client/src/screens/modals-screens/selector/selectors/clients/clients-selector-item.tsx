@@ -1,10 +1,10 @@
-import { ClientUserDtoType } from "@shortwaits/shared-lib";
+import { ClientDtoType } from "@shortwaits/shared-lib";
 import { SelectorListItem } from "@shortwaits/shared-ui";
 import React, { FC } from "react";
 
 type ClientsSelectorItemProps = {
   disabled?: boolean;
-  item: ClientUserDtoType;
+  item: ClientDtoType;
   onSelect: () => void;
   rightIconName?: string;
   leftIconName?: string;

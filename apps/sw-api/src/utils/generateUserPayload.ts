@@ -1,12 +1,12 @@
 import {
+  AddClientsDtoType,
   BusinessUserRoles,
   BusinessUserType,
-  ClientUserType,
+  ClientType,
   ConvertToDtoType,
   CreateBusinessUserDtoType,
   CreateBusinessUsersDtoType,
-  CreateClientUsersDtoType,
-  LocalClientUserType,
+  LocalClientType,
   generateAvatarUrl,
   generateShortId,
 } from "@shortwaits/shared-lib";
@@ -97,7 +97,7 @@ export const generateNewClientPayload = (user: ClientSignUpWithEmailDto) => {
   };
 };
 
-export const generateClientUsers = (users: CreateClientUsersDtoType) => {
+export const generateClientUsers = (users: AddClientsDtoType) => {
   const clientUsers = users.map(user => {
     return generateNewClientPayload(user);
   });
@@ -105,12 +105,12 @@ export const generateClientUsers = (users: CreateClientUsersDtoType) => {
 };
 
 type RequiredKeys = Pick<
-  ClientUserType | LocalClientUserType,
+  ClientType | LocalClientType,
   "username" | "email" | "displayName" | "familyName" | "givenName" | "middleName" | "businesses" | "password" | "hashedRt" | "clientType" | "locale"
 >;
 export const getNewClientPayload = (userPayloadOverride: RequiredKeys) => {
   const imageUrlIdentifier = userPayloadOverride.displayName || userPayloadOverride.familyName || userPayloadOverride.givenName || userPayloadOverride.email || "?";
-  const userPayload: Omit<ClientUserType | LocalClientUserType, "_id"> = {
+  const userPayload: Omit<ClientType | LocalClientType, "_id"> = {
     shortId: generateShortId(),
     alias: "email",
     accountImageUrl: generateAvatarUrl(imageUrlIdentifier),

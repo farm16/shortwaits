@@ -1,6 +1,6 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Put, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
-import { ClientUserDtoType } from "@shortwaits/shared-lib";
+import { ClientDtoType } from "@shortwaits/shared-lib";
 import { AtGuard } from "../../common/guards";
 import { ClientUserService } from "./client-user.service";
 import { CreateClientUserDto } from "./dto";
@@ -27,7 +27,7 @@ export class ClientUserController {
 
   @Put("business/:businessId")
   @HttpCode(HttpStatus.OK)
-  async updateBusinessClients(@Param("businessId") businessId: string, @Body() clientUser: ClientUserDtoType) {
+  async updateBusinessClients(@Param("businessId") businessId: string, @Body() clientUser: ClientDtoType) {
     return this.clientUsersService.updateClientUserForBusiness(businessId, clientUser);
   }
 

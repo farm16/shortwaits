@@ -1,13 +1,13 @@
-import { ClientUserUpdateDtoType, ClientUserResponseType, endpoints } from "@shortwaits/shared-lib";
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
+import { ClientResponseType, UpdateClientDtoType, endpoints } from "@shortwaits/shared-lib";
 
 type RequestType = {
   businessId: string;
-  body: ClientUserUpdateDtoType;
+  body: UpdateClientDtoType;
 };
 
 export default (builder: EndpointBuilder<any, any, any>) =>
-  builder.mutation<ClientUserResponseType, RequestType>({
+  builder.mutation<ClientResponseType, RequestType>({
     query: ({ businessId, body }) => ({
       ...endpoints.updateBusinessClient.getConfig([businessId], {}),
       body,

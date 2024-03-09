@@ -26,6 +26,7 @@ export const AUTHORIZED_SCREENS = {
 export const MODAL_SCREENS = {
   SCHEDULE_MODAL_SCREEN: "schedule-modal-screen",
   SELECTOR_MODAL_SCREEN: "selector-modal-screen",
+  UPDATE_USER_PROFILE_MODAL_SCREEN: "update-user-profile-modal-screen",
 } as const;
 
 export const NAVIGATION_STACKS = {

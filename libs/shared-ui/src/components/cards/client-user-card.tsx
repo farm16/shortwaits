@@ -1,4 +1,4 @@
-import { ClientUserDtoType } from "@shortwaits/shared-lib";
+import { ClientDtoType } from "@shortwaits/shared-lib";
 import { truncate } from "lodash";
 import React, { useCallback, useMemo } from "react";
 import { Alert, Animated, Pressable, StyleSheet, View } from "react-native";
@@ -11,7 +11,7 @@ import { generateAvatarUrl } from "../../utils/generateAvatarUrl";
 import { Button, ButtonProps, Text } from "../common";
 
 export type ClientUserCardProps = ButtonProps & {
-  user: ClientUserDtoType;
+  user: ClientDtoType;
 };
 
 export const ClientUserCard = (props: ClientUserCardProps) => {

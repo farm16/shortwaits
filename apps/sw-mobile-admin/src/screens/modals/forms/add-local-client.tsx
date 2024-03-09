@@ -1,4 +1,4 @@
-import { AddLocalClientDtoType, ClientUserType } from "@shortwaits/shared-lib";
+import { AddLocalClientDtoType, ClientType } from "@shortwaits/shared-lib";
 import {
   BackButton,
   Button,
@@ -234,27 +234,27 @@ export const AddLocalClientModal: FC<ModalsScreenProps<"add-local-client-modal-s
           value={values.addresses[0].address1}
           onChangeText={handleChange("addresses[0].address1")}
           isTouched={touched?.addresses ? touched.addresses[0]?.address1 ?? false : false}
-          errors={errors.addresses ? (errors.addresses[0] as FormikErrors<ClientUserType["addresses"][number]>)?.address1 ?? "" : ""}
+          errors={errors.addresses ? (errors.addresses[0] as FormikErrors<ClientType["addresses"][number]>)?.address1 ?? "" : ""}
         />
         <TextFieldCard
           title={intl.formatMessage({ id: "AddLocalClientModal.address2" })}
           value={values.addresses[0].address2}
           onChangeText={handleChange("addresses[0].address2")}
           isTouched={touched?.addresses ? touched.addresses[0]?.address2 ?? false : false}
-          errors={errors.addresses ? (errors.addresses[0] as FormikErrors<ClientUserType["addresses"][number]>)?.address2 ?? "" : ""}
+          errors={errors.addresses ? (errors.addresses[0] as FormikErrors<ClientType["addresses"][number]>)?.address2 ?? "" : ""}
         />
         <TextFieldCard
           title={intl.formatMessage({ id: "AddLocalClientModal.city" })}
           value={values.addresses[0].city}
           onChangeText={handleChange("addresses[0].city")}
           isTouched={touched?.addresses ? touched.addresses[0]?.city ?? false : false}
-          errors={errors.addresses ? (errors.addresses[0] as FormikErrors<ClientUserType["addresses"][number]>)?.city ?? "" : ""}
+          errors={errors.addresses ? (errors.addresses[0] as FormikErrors<ClientType["addresses"][number]>)?.city ?? "" : ""}
         />
         <ButtonCard
           title={intl.formatMessage({ id: "AddLocalClientModal.state" })}
           subTitle={STATIC_FORM_USA_STATES.find(state => state.key === values.addresses[0].state)?.title ?? "Select State"}
           isTouched={touched?.addresses ? touched.addresses[0]?.state ?? false : false}
-          errors={errors.addresses ? (errors.addresses[0] as FormikErrors<ClientUserType["addresses"][number]>)?.state ?? "" : ""}
+          errors={errors.addresses ? (errors.addresses[0] as FormikErrors<ClientType["addresses"][number]>)?.state ?? "" : ""}
           onPress={() =>
             navigation.navigate("modals", {
               screen: "selector-modal-screen",
@@ -278,7 +278,7 @@ export const AddLocalClientModal: FC<ModalsScreenProps<"add-local-client-modal-s
           maxLength={7}
           onChangeText={handleChange("addresses[0].postCode")}
           isTouched={touched?.addresses ? touched.addresses[0]?.postCode ?? false : false}
-          errors={errors.addresses ? (errors.addresses[0] as FormikErrors<ClientUserType["addresses"][number]>)?.postCode ?? "" : ""}
+          errors={errors.addresses ? (errors.addresses[0] as FormikErrors<ClientType["addresses"][number]>)?.postCode ?? "" : ""}
         />
       </ExpandableSection>
       <Space size="large" />

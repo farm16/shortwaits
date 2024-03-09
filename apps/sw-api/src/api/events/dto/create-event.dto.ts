@@ -38,7 +38,19 @@ class Discount implements DiscountType {
 }
 class LocationDto {
   @IsString()
-  address: string; // Full address of the location
+  name: string;
+  @IsString()
+  address: string;
+  @IsString()
+  address2?: string; // Full address of the location
+  @IsString()
+  city: string;
+  @IsString()
+  state: string;
+  @IsString()
+  country: string;
+  @IsString()
+  postalCode: string;
   @IsNumber()
   latitude: number; // Latitude of the location
   @IsNumber()

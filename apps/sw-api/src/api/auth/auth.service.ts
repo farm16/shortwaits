@@ -4,7 +4,7 @@ import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundE
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import { InjectModel } from "@nestjs/mongoose";
-import { BusinessType, BusinessUserType, ClientUserType, ObjectId, WithDbProps } from "@shortwaits/shared-lib";
+import { BusinessType, BusinessUserType, ClientType, ObjectId, WithDbProps } from "@shortwaits/shared-lib";
 import bcrypt from "bcryptjs";
 import { OAuth2Client } from "google-auth-library";
 import { Model } from "mongoose";
@@ -609,7 +609,7 @@ export class AuthService {
     };
   }
 
-  async createNewClient({ clientUser, businesses = [], locale = "es" }: { clientUser: Partial<ClientUserType>; businesses: ObjectId[]; locale: string }) {
+  async createNewClient({ clientUser, businesses = [], locale = "es" }: { clientUser: Partial<ClientType>; businesses: ObjectId[]; locale: string }) {
     const saltRounds = Number(this.configService.get("SALT_ROUNDS"));
     const salt = await bcrypt.genSalt(saltRounds);
 

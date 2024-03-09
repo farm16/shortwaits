@@ -1,15 +1,15 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ClientUserDtoType } from "@shortwaits/shared-lib";
+import { ClientDtoType } from "@shortwaits/shared-lib";
 import { shortwaitsApi } from "../../../services";
 import type { RootState } from "../../types";
 
-const initialState = null as unknown as ClientUserDtoType;
+const initialState = null as unknown as ClientDtoType;
 
 export const userSlice = createSlice({
   name: "user",
   initialState: initialState,
   reducers: {
-    setUser(state, action: PayloadAction<ClientUserDtoType>) {
+    setUser(state, action: PayloadAction<ClientDtoType>) {
       return { ...state, ...action.payload };
     },
     resetUser() {

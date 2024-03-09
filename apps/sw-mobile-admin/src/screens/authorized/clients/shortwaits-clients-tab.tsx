@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { ClientUserDtoType } from "@shortwaits/shared-lib";
+import { ClientDtoType } from "@shortwaits/shared-lib";
 import { AnimatedSearchBar, Button, List, NonIdealState, RefreshControl, SelectorListItem, getResponsiveHeight, useTheme } from "@shortwaits/shared-ui";
 import { isEmpty } from "lodash";
 import React, { Fragment, useCallback, useEffect, useState } from "react";
@@ -31,7 +31,7 @@ export function ShortwaitsClientsTab({ isLoading, refresh }: { isLoading: boolea
     }
   }, [currentClients]);
 
-  const _renderItem: ListRenderItem<ClientUserDtoType> = useCallback(
+  const _renderItem: ListRenderItem<ClientDtoType> = useCallback(
     ({ item }) => {
       const title = item.givenName || item.familyName || item.displayName || item.username;
       const subTitle = item.email || item.phoneNumbers?.[0]?.number;

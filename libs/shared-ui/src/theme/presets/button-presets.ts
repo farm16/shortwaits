@@ -21,10 +21,10 @@ export const buttonPresets = ({
   const VIEW_BASE = StyleSheet.flatten([
     {
       // ...Layout.center,
-      height: 50,
+      height: getResponsiveHeight(50),
       backgroundColor: Colors.brandPrimary,
       flexDirection: "row",
-      borderRadius: 25,
+      borderRadius: getResponsiveHeight(25),
       alignItems: "center",
     },
   ]) as ViewStyle;
@@ -53,7 +53,7 @@ export const buttonPresets = ({
     },
     primary2: {
       ...VIEW_BASE,
-      backgroundColor: Colors.brandSecondary1,
+      backgroundColor: Colors.brandSecondary,
       width: undefined,
       flex: 1,
     },
@@ -65,13 +65,25 @@ export const buttonPresets = ({
     },
     secondary: {
       ...VIEW_BASE,
-      backgroundColor: Colors.brandSecondary4,
+      backgroundColor: Colors.brandSecondary,
       justifyContent: "center",
     },
     "secondary-disabled": {
       ...VIEW_BASE,
       backgroundColor: Colors.gray,
       justifyContent: "center",
+    },
+    secondary2: {
+      ...VIEW_BASE,
+      justifyContent: "center",
+      alignSelf: "center",
+      backgroundColor: Colors.brandSecondary,
+    },
+    "secondary2-disabled": {
+      ...VIEW_BASE,
+      backgroundColor: Colors.gray,
+      width: undefined,
+      flex: 1,
     },
     accent: {
       ...VIEW_BASE,
@@ -207,6 +219,16 @@ export const buttonPresets = ({
       fontWeight: "700",
     },
     "secondary-disabled": {
+      ...TEXT_BASE,
+      color: Colors.white,
+      fontWeight: "700",
+    },
+    secondary2: {
+      ...TEXT_BASE,
+      color: Colors.white,
+      fontWeight: "700",
+    },
+    "secondary2-disabled": {
       ...TEXT_BASE,
       color: Colors.white,
       fontWeight: "700",

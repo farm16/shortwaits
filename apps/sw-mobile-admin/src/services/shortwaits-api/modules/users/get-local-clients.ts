@@ -1,7 +1,7 @@
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
-import { LocalClientUsersResponseType, endpoints } from "@shortwaits/shared-lib";
+import { LocalClientsResponseType, endpoints } from "@shortwaits/shared-lib";
 
 export default (builder: EndpointBuilder<any, any, any>) =>
-  builder.query<LocalClientUsersResponseType, string>({
+  builder.query<LocalClientsResponseType, string>({
     query: businessId => endpoints.getLocalClientUsers.getConfig([businessId], {}).url,
   });

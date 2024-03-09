@@ -1,23 +1,23 @@
 import { BusinessDtoType, CommonResponseType } from ".";
 import { ConvertToDtoType, WithDbProps } from "../common";
-import { LocalClientUserType } from "../models";
+import { LocalClientType } from "../models";
 
-export type LocalClientDtoType = ConvertToDtoType<WithDbProps<LocalClientUserType>>;
+export type LocalClientDtoType = ConvertToDtoType<WithDbProps<LocalClientType>>;
 export type LocalClientsDtoType = LocalClientDtoType[];
 
-export type LocalClientUserResponseType = CommonResponseType<LocalClientDtoType>;
-export type LocalClientUsersResponseType = CommonResponseType<LocalClientsDtoType>;
+export type LocalClientResponseType = CommonResponseType<LocalClientDtoType>;
+export type LocalClientsResponseType = CommonResponseType<LocalClientsDtoType>;
 
 export type AddLocalClientResponseType = CommonResponseType<{
-  localClientUser: LocalClientDtoType;
+  localClient: LocalClientDtoType;
   business: BusinessDtoType;
 }>;
 export type AddLocalClientsResponseType = CommonResponseType<{
-  localClientUsers: LocalClientsDtoType;
+  localClients: LocalClientsDtoType;
   business: BusinessDtoType;
 }>;
 
-type ForbidUpdateFields =
+type ForbidFields =
   | "_id"
   | "__v"
   | "billing"
@@ -32,7 +32,7 @@ type ForbidUpdateFields =
   | "currentMembership"
   | "password";
 
-type _UpdateLocalClientDtoType = Partial<ConvertToDtoType<Omit<LocalClientUserType, ForbidUpdateFields>>>;
+type _UpdateLocalClientDtoType = Partial<ConvertToDtoType<Omit<LocalClientType, ForbidFields>>>;
 
 export type AddLocalClientDtoType = _UpdateLocalClientDtoType;
 export type AddLocalClientsDtoType = AddLocalClientDtoType[];

@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory, raw } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
-import { BusinessLabelsType, DiscountType, EventLocationType, EventPaymentMethodType, EventType, EventUrlsType, ObjectId } from "@shortwaits/shared-lib";
+import { BusinessLabelsType, DiscountType, EventPaymentMethodType, EventType, EventUrlsType, ObjectId } from "@shortwaits/shared-lib";
+import { IsNumber, IsString } from "class-validator";
 import { Document, Schema as MongooseSchema, Types } from "mongoose";
 
 class EventUrls implements EventUrlsType {
@@ -10,9 +11,24 @@ class EventUrls implements EventUrlsType {
   url: string;
 }
 
-class EventLocation implements EventLocationType {
-  address: string; // Full address of the location
+class LocationDto {
+  @IsString()
+  name: string;
+  @IsString()
+  address: string;
+  @IsString()
+  address2?: string; // Full address of the location
+  @IsString()
+  city: string;
+  @IsString()
+  state: string;
+  @IsString()
+  country: string;
+  @IsString()
+  postalCode: string;
+  @IsNumber()
   latitude: number; // Latitude of the location
+  @IsNumber()
   longitude: number; // Longitude of the location
 }
 
@@ -76,7 +92,7 @@ export class Events extends Document implements EventType {
 
   @ApiProperty()
   @Prop()
-  location: EventLocation | null;
+  location: LocationDto | null;
 
   @ApiProperty()
   @Prop()

@@ -1,6 +1,6 @@
 import { Injectable, InternalServerErrorException, NotFoundException, PreconditionFailedException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { ClientUserDtoType } from "@shortwaits/shared-lib";
+import { ClientDtoType } from "@shortwaits/shared-lib";
 import { Model } from "mongoose";
 import { Business } from "../business/entities/business.entity";
 import { CreateClientUserDto } from "./dto";
@@ -32,18 +32,18 @@ export class ClientUserService {
     }
   }
 
-  async createClientUsersForBusiness(businessId: string, localClientUsers: CreateClientUserDto[]) {
+  async createClientUsersForBusiness(businessId: string, localClients: CreateClientUserDto[]) {
     try {
       // check business exists first else throw 404 then check if business has any users else throw 404 else return users
       const business = await this.businessModel.findById(businessId).exec();
       if (!business) {
         throw new NotFoundException(`Business #${businessId} not found`);
       }
-      if (localClientUsers?.length === 0) {
+      if (localClients?.length === 0) {
         throw new PreconditionFailedException(`No clients provided`);
       }
       // todo we might need to limit on the number of local clients that can be created at once or in total
-      const newLocalClientUsers = await this.clientUserModel.create(localClientUsers);
+      const newLocalClientUsers = await this.clientUserModel.create(localClients);
       return newLocalClientUsers;
     } catch (error) {
       console.log(error);
@@ -52,17 +52,17 @@ export class ClientUserService {
   }
 
   // updates a single local client user
-  async updateClientUserForBusiness(businessId: string, localClientUser: ClientUserDtoType) {
+  async updateClientUserForBusiness(businessId: string, localClient: ClientDtoType) {
     try {
       // check business exists first else throw 404 then check if business has any users else throw 404 else return users
       const business = await this.businessModel.findById(businessId).exec();
       if (!business) {
         throw new NotFoundException(`Business #${businessId} not found`);
       }
-      if (!localClientUser) {
+      if (!localClient) {
         throw new PreconditionFailedException(`No client provided`);
       }
-      const updatedLocalClientUser = await this.clientUserModel.findByIdAndUpdate(localClientUser._id, localClientUser, { new: true });
+      const updatedLocalClientUser = await this.clientUserModel.findByIdAndUpdate(localClient._id, localClient, { new: true });
       return updatedLocalClientUser;
     } catch (error) {
       console.log(error);

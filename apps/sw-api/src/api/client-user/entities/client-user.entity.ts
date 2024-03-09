@@ -1,10 +1,10 @@
 import { Prop, Schema, SchemaFactory, raw } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
-import { ClientUserType, ObjectId } from "@shortwaits/shared-lib";
+import { ClientType, ObjectId } from "@shortwaits/shared-lib";
 import { Document, Schema as MongooseSchema } from "mongoose";
 
 @Schema({ collection: "client-users" })
-export class ClientUser extends Document implements ClientUserType {
+export class ClientUser extends Document implements ClientType {
   @ApiProperty()
   @Prop()
   isSocialAccount: boolean;

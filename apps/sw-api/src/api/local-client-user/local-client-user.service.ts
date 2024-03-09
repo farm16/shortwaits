@@ -27,35 +27,35 @@ export class LocalClientUserService {
         return [];
       }
       // look for multiple ids in localClientUserModel
-      const localClientUsers = await this.localClientUserModel.find({ _id: { $in: business.localClients ?? [] } }).exec();
-      return localClientUsers;
+      const localClients = await this.localClientUserModel.find({ _id: { $in: business.localClients ?? [] } }).exec();
+      return localClients;
     } catch (error) {
       throw new InternalServerErrorException(error.message);
     }
   }
 
-  async createLocalClientUsersForBusiness(businessId: string, localClientUsers: CreateLocalClientUserDto[]) {
+  async createLocalClientUsersForBusiness(businessId: string, localClients: CreateLocalClientUserDto[]) {
     try {
       const business = await this.businessModel.findById(businessId);
       if (!business) {
         throw new NotFoundException(`Business #${businessId} not found`);
       }
 
-      if (localClientUsers?.length === 0) {
+      if (localClients?.length === 0) {
         return {
-          localClientUsers: [],
+          localClients: [],
           business: business,
         };
       }
 
-      const newLocalClientUsersPayload = localClientUsers.map(localClientUser => {
+      const newLocalClientUsersPayload = localClients.map(localClient => {
         return getNewClientPayload({
-          email: localClientUser.email,
-          username: localClientUser.username,
-          displayName: localClientUser.displayName,
-          familyName: localClientUser.familyName,
-          givenName: localClientUser.givenName,
-          middleName: localClientUser.middleName,
+          email: localClient.email,
+          username: localClient.username,
+          displayName: localClient.displayName,
+          familyName: localClient.familyName,
+          givenName: localClient.givenName,
+          middleName: localClient.middleName,
           businesses: [business._id],
           hashedRt: "",
           clientType: "local",
@@ -64,7 +64,7 @@ export class LocalClientUserService {
         });
       });
       const newLocalClientUsers = await this.localClientUserModel.create(newLocalClientUsersPayload);
-      const newLocalClientUserIds = newLocalClientUsers.map(localClientUser => localClientUser._id);
+      const newLocalClientUserIds = newLocalClientUsers.map(localClient => localClient._id);
 
       const uniqueLocalClientsIds = getUniqueIdArray([...newLocalClientUserIds, ...(business?.localClients ?? [])]);
       business.localClients = uniqueLocalClientsIds;
@@ -73,7 +73,7 @@ export class LocalClientUserService {
       const newLocalClients = await this.localClientUserModel.find({ _id: { $in: updatedBusiness?.localClients ?? [] } }).exec();
 
       return {
-        localClientUsers: newLocalClients,
+        localClients: newLocalClients,
         business: updatedBusiness,
       };
     } catch (error) {
@@ -82,17 +82,17 @@ export class LocalClientUserService {
   }
 
   // updates a single local client user
-  async updateLocalClientUserForBusiness(businessId: string, localClientUser: LocalClientDtoType) {
+  async updateLocalClientUserForBusiness(businessId: string, localClient: LocalClientDtoType) {
     try {
       // check business exists first else throw 404 then check if business has any users else throw 404 else return users
       const business = await this.businessModel.findById(businessId).exec();
       if (!business) {
         throw new NotFoundException(`Business #${businessId} not found`);
       }
-      if (!localClientUser) {
+      if (!localClient) {
         throw new PreconditionFailedException(`No local client provided`);
       }
-      const updatedLocalClientUser = await this.localClientUserModel.findByIdAndUpdate(localClientUser._id, localClientUser, { new: true });
+      const updatedLocalClientUser = await this.localClientUserModel.findByIdAndUpdate(localClient._id, localClient, { new: true });
       return updatedLocalClientUser;
     } catch (error) {
       throw new InternalServerErrorException(error.message);

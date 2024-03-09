@@ -1,24 +1,33 @@
-import { ClientType, UpdateLocalClientDtoType } from "@shortwaits/shared-lib";
-import { BackButton, Button, ButtonCard, FormContainer, PhoneNumberCard, STATIC_FORM_USA_STATES, Space, Text, TextFieldCard, getCapitalizedString } from "@shortwaits/shared-ui";
+import { ClientType, UpdateClientDtoType } from "@shortwaits/shared-lib";
+import {
+  BackButton,
+  Button,
+  ButtonCard,
+  FormContainer,
+  PhoneNumberCard,
+  STATIC_FORM_USA_STATES,
+  Space,
+  Text,
+  TextFieldCard,
+  getCapitalizedString,
+  useForm,
+} from "@shortwaits/shared-ui";
 import { FormikErrors } from "formik";
 import { isEmpty, noop } from "lodash";
 import React, { FC, useEffect, useLayoutEffect } from "react";
 import { useIntl } from "react-intl";
 import { Alert } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
-import { useForm } from "../../../hooks";
 import { ModalsScreenProps } from "../../../navigation";
-import { useCreateLocalClientsMutation } from "../../../services";
-import { useBusiness } from "../../../store";
 
-export const UpdateLocalClientModal: FC<ModalsScreenProps<"update-local-client-modal-screen">> = ({ navigation, route }) => {
+export const UpdateLocalClientModal: FC<ModalsScreenProps<"update-user-profile-modal-screen">> = ({ navigation, route }) => {
   const params = route?.params;
   const onSubmit = params?.onSubmit ?? noop;
   const onDone = params?.onDone ?? noop;
   const closeOnSubmit = params?.closeOnSubmit ?? true;
   const initialValues = params?.initialValues ?? {};
 
-  const _initialValues: UpdateLocalClientDtoType = {
+  const _initialValues: UpdateClientDtoType = {
     ...initialValues,
     displayName: initialValues.displayName ?? "",
     email: initialValues.email ?? "",
@@ -56,15 +65,14 @@ export const UpdateLocalClientModal: FC<ModalsScreenProps<"update-local-client-m
   };
 
   const intl = useIntl(); // Access the intl object
-  const business = useBusiness();
-  const [createLocalClients, createLocalClientsStatus] = useCreateLocalClientsMutation();
+  const [createLocalClients, createLocalClientsStatus] = [null, null];
 
   const { touched, errors, values, validateField, setFieldTouched, handleChange, handleSubmit, setFieldError, setFieldValue } = useForm(
     {
       initialValues: _initialValues,
       onSubmit: formData => {
         createLocalClients({
-          businessId: business._id,
+          businessId: "",
           body: [formData],
         });
         if (onSubmit) {

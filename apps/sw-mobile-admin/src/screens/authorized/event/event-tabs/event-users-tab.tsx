@@ -1,5 +1,5 @@
 import { skipToken } from "@reduxjs/toolkit/dist/query";
-import { AllClientsType, BusinessClientType, BusinessUserDtoType, BusinessUsersDtoType, ClientUserDtoType, ClientUsersDtoType, EventDtoType } from "@shortwaits/shared-lib";
+import { AllClientsType, BusinessClientType, BusinessUserDtoType, BusinessUsersDtoType, ClientDtoType, ClientsDtoType, EventDtoType } from "@shortwaits/shared-lib";
 import {
   BusinessUserCard,
   Button,
@@ -22,7 +22,7 @@ import { navigate } from "../../../../navigation";
 import { useGetPeopleInEventQuery, useUpdateEventMutation } from "../../../../services";
 import { useBusiness } from "../../../../store";
 
-type PeopleDtoType = BusinessUserDtoType | ClientUserDtoType;
+type PeopleDtoType = BusinessUserDtoType | ClientDtoType;
 
 export function EventUsersTab({ event }: { event: EventDtoType }) {
   const { Colors } = useTheme();
@@ -43,7 +43,7 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
 
   // console.log("peopleInEventData:", peopleInEventData);
 
-  const allClients = getCombinedClientTypes(peopleInEventData?.data?.clientUsers ?? [], peopleInEventData?.data?.localClientUsers ?? []);
+  const allClients = getCombinedClientTypes(peopleInEventData?.data?.clientUsers ?? [], peopleInEventData?.data?.localClients ?? []);
 
   const _data = useMemo(
     () => [
@@ -67,7 +67,7 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
     if (data.section.title === "Staff") {
       return <BusinessUserCard user={data.item as BusinessUserDtoType} />;
     } else {
-      return <ClientUserCard user={data.item as ClientUserDtoType} />;
+      return <ClientUserCard user={data.item as ClientDtoType} />;
     }
   };
 
@@ -161,7 +161,7 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
   );
 
   const handleStaffUpdateEvent = useCallback(
-    (staff: BusinessUsersDtoType & ClientUsersDtoType) => {
+    (staff: BusinessUsersDtoType & ClientsDtoType) => {
       const staffIds = event.staffIds;
       const newStaffIds = staff.map(user => user._id);
       const uniqueIds = [...new Set(newStaffIds)];

@@ -40,7 +40,7 @@ public class MainActivity extends ReactActivity {
        Bundle brandColors = new Bundle();
 
        brandColors.putString("primary", "#595FD9");
-       brandColors.putString("secondary", "#030F26");
+       brandColors.putString("secondary", "#0f0f0f");
        brandColors.putString("tertiary", "#EB9B04");
 
        initialProps.putBundle("brandColors", brandColors);

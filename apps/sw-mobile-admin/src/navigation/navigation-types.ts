@@ -1,14 +1,14 @@
 import { CompositeNavigationProp, NavigatorScreenParams, RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import {
+  AddClientDtoType,
   BusinessDtoType,
   BusinessLabelType,
   BusinessUserDtoType,
   BusinessWeekDaysType,
   CategoryDtoType,
-  ClientUserDtoType,
+  ClientDtoType,
   CreateBusinessUserDtoType,
-  CreateClientUserDtoType,
   CreateEventDtoType,
   EventDtoType,
   ServiceDtoType,
@@ -22,7 +22,7 @@ import { AUTHORIZED_SCREENS, AUTHORIZED_STACK_SCREENS, MODAL_SCREENS, NAVIGATION
 
 export type FormData = {
   addEvent: CreateEventDtoType;
-  addClient: CreateClientUserDtoType;
+  addClient: AddClientDtoType;
   addStaff: CreateBusinessUserDtoType;
   addService: ServiceDtoType;
   updateService: ServiceDtoType;
@@ -39,7 +39,7 @@ export type SelectorModalData =
   | BusinessLabelType
   | EventDtoType
   | BusinessUserDtoType
-  | ClientUserDtoType
+  | ClientDtoType
   | { key: string; title: string; subTitle?: string; itemData?: any };
 
 export type SelectorModalModeType = keyof typeof selectorConfigs;
@@ -83,7 +83,7 @@ export type ModalStackParamList = {
     closeOnSubmit?: boolean;
   };
   [MODAL_SCREENS.UPDATE_CLIENT_MODAL_SCREEN]: {
-    initialValues: ClientUserDtoType;
+    initialValues: ClientDtoType;
     onSubmit?<T extends keyof FormData>(arg: FormData[T]): void;
     onDone?(): void;
     onGoBack?(arg0): void;
@@ -158,7 +158,7 @@ export type AuthorizedStackParamList = {
     business?: BusinessDtoType;
   };
   [AUTHORIZED_STACK_SCREENS.BUSINESS_CLIENT_SCREEN]: {
-    client: ClientUserDtoType;
+    client: ClientDtoType;
   };
   [AUTHORIZED_STACK_SCREENS.BUSINESS_STAFF_SCREEN]: {
     staff: BusinessUserDtoType;

@@ -21,13 +21,13 @@ export class LocalClientUserController {
 
   @Post("business/:businessId")
   @HttpCode(HttpStatus.CREATED)
-  async createBusinessLocalClients(@Param("businessId") businessId: string, @Body() localClientUsers: CreateLocalClientUserDto[]) {
-    return this.clientUsersService.createLocalClientUsersForBusiness(businessId, localClientUsers);
+  async createBusinessLocalClients(@Param("businessId") businessId: string, @Body() localClients: CreateLocalClientUserDto[]) {
+    return this.clientUsersService.createLocalClientUsersForBusiness(businessId, localClients);
   }
 
   @Put("business/:businessId")
   @HttpCode(HttpStatus.OK)
-  async updateBusinessLocalClient(@Param("businessId") businessId: string, @Body() localClientUser: LocalClientDtoType) {
-    return this.clientUsersService.updateLocalClientUserForBusiness(businessId, localClientUser);
+  async updateBusinessLocalClient(@Param("businessId") businessId: string, @Body() localClient: LocalClientDtoType) {
+    return this.clientUsersService.updateLocalClientUserForBusiness(businessId, localClient);
   }
 }

@@ -1,21 +1,12 @@
-import {CreateClientUserDtoType} from '@shortwaits/shared-lib';
-import {Platform} from 'react-native';
-import {Contact} from 'react-native-contacts';
+import { AddClientDtoType } from "@shortwaits/shared-lib";
+import { Platform } from "react-native";
+import { Contact } from "react-native-contacts";
 
 export function getUsersFromOsContacts(contacts: Contact[]) {
   return contacts.map(contact => getUserFromOsContact(contact as Contact));
 }
 
-function getUserFromOsContact({
-  givenName,
-  familyName,
-  middleName,
-  displayName,
-  phoneNumbers,
-  postalAddresses,
-  imAddresses,
-  emailAddresses,
-}: Contact): CreateClientUserDtoType {
+function getUserFromOsContact({ givenName, familyName, middleName, displayName, phoneNumbers, postalAddresses, imAddresses, emailAddresses }: Contact): AddClientDtoType {
   const addresses = postalAddresses.map(postalAddress => {
     return {
       label: postalAddress.label,
@@ -28,11 +19,11 @@ function getUserFromOsContact({
       country: postalAddress.country,
     };
   });
-  if (Platform.OS === 'android') {
+  if (Platform.OS === "android") {
     const phoneNumber = phoneNumbers.length > 0 ? phoneNumbers[0].number : null;
     const email = emailAddresses.length > 0 ? emailAddresses[0].email : null;
 
-    const accountImageUrl = '';
+    const accountImageUrl = "";
     return {
       givenName,
       familyName,
@@ -42,9 +33,9 @@ function getUserFromOsContact({
       imAddresses,
       email: email,
       username: phoneNumber,
-      alias: 'givenName',
+      alias: "givenName",
       accountImageUrl,
-      clientType: 'local',
+      clientType: "local",
       locale: null,
       socialAccounts: null,
       desiredCurrencies: null,
@@ -62,9 +53,9 @@ function getUserFromOsContact({
     imAddresses,
     email: email,
     username: email,
-    alias: 'givenName',
+    alias: "givenName",
     accountImageUrl: null,
-    clientType: 'local',
+    clientType: "local",
     locale: null,
     socialAccounts: null,
     desiredCurrencies: null,

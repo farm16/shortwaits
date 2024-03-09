@@ -1,10 +1,10 @@
 import { Prop, Schema, SchemaFactory, raw } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
-import { LocalClientUserType, ObjectId } from "@shortwaits/shared-lib";
+import { LocalClientType, ObjectId } from "@shortwaits/shared-lib";
 import { Document, Schema as MongooseSchema } from "mongoose";
 
 @Schema({ collection: "local-client-users" })
-export class LocalClientUser extends Document implements LocalClientUserType {
+export class LocalClientUser extends Document implements LocalClientType {
   @ApiProperty()
   @Prop()
   shortId: string;

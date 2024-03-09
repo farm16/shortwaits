@@ -1,0 +1,10 @@
+{
+  "brandColors": {
+    "primary": "#595FD9",
+    "secondary": "#030F26",
+    "tertiary": "#EB9B04"
+  },
+  "endpoints": {
+    "api": "http://localhost:8080"
+  }
+}

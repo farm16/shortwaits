@@ -1,7 +1,7 @@
-import { CreateBusinessUserDtoType, CreateClientUserDtoType } from "@shortwaits/shared-lib";
+import { AddClientDtoType, CreateBusinessUserDtoType } from "@shortwaits/shared-lib";
 import * as Yup from "yup";
 
-export const createClientUserSchema: Yup.Schema<CreateClientUserDtoType> = Yup.object({
+export const createClientUserSchema: Yup.Schema<AddClientDtoType> = Yup.object({
   clientType: Yup.mixed().required().oneOf(["local", "external"]),
   username: Yup.string().min(3, "a longer name is required").optional(),
   alias: Yup.mixed().required().oneOf(["username", "familyName", "givenName", "middleName", "displayName"]),
@@ -113,7 +113,7 @@ export const createBusinessUserSchema: Yup.Schema<CreateBusinessUserDtoType> = Y
     .optional(),
 });
 
-export const updateClientUserSchema: Yup.Schema<CreateClientUserDtoType> = Yup.object({
+export const updateClientUserSchema: Yup.Schema<AddClientDtoType> = Yup.object({
   clientType: Yup.mixed().required().oneOf(["local", "external"]),
   username: Yup.string().min(3, "a longer name is required").required("this field is required"),
   alias: Yup.mixed().required().oneOf(["username", "familyName", "givenName", "middleName", "displayName"]),

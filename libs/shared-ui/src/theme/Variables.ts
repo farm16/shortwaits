@@ -54,4 +54,5 @@ export const IconSizes = {
   small: 20,
   regular: 25,
   large: 30,
+  xLarge: 35,
 } as const;

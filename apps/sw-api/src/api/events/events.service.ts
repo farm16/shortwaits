@@ -340,8 +340,8 @@ export class EventsService {
       return [];
     }
     try {
-      const localClientUsers = await this.localClientUserModel.find({ _id: { $in: userIds } }).exec();
-      return localClientUsers;
+      const localClients = await this.localClientUserModel.find({ _id: { $in: userIds } }).exec();
+      return localClients;
     } catch (error) {
       throw new InternalServerErrorException(error.message);
     }
@@ -393,13 +393,13 @@ export class EventsService {
         throw new ForbiddenException("You are not allowed to view this event");
       }
 
-      const [clientUsers, localClientUsers, businessUsers] = await Promise.all([
+      const [clientUsers, localClients, businessUsers] = await Promise.all([
         this.findClientUsers(event?.clientsIds as ObjectId[]),
         this.findLocalClientUsers(event?.localClientsIds as ObjectId[]),
         this.findBusinessUsers(event?.staffIds as ObjectId[]),
       ]);
 
-      return { clientUsers, localClientUsers, businessUsers, event };
+      return { clientUsers, localClients, businessUsers, event };
     } catch (error) {
       console.error(error);
       throw error;

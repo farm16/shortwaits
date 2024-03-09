@@ -1,13 +1,13 @@
 import { ForbiddenException, Injectable, NotFoundException, PreconditionFailedException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import {
+  AddClientsDtoType,
   BusinessDtoType,
   BusinessHoursType,
   BusinessType,
   BusinessUserUpdateDtoType,
-  ClientUserUpdateDtoType,
   CreateBusinessUsersDtoType,
-  CreateClientUsersDtoType,
+  UpdateClientDtoType,
 } from "@shortwaits/shared-lib";
 import { Model } from "mongoose";
 import { convertStringToObjectId } from "../../utils/converters";
@@ -193,7 +193,7 @@ export class BusinessService {
     }
   }
 
-  async createBusinessLocalClients(businessUserId: string, businessId: string, clients: CreateClientUsersDtoType) {
+  async createBusinessLocalClients(businessUserId: string, businessId: string, clients: AddClientsDtoType) {
     const businessData = await this.findBusinessById(businessId);
 
     const { isAdmin, isSuperAdmin } = this.isUserAdminType(businessData, businessUserId);
@@ -260,7 +260,7 @@ export class BusinessService {
     }
   }
 
-  async updateBusinessLocalClient(businessUserId: string, businessId: string, client: ClientUserUpdateDtoType) {
+  async updateBusinessLocalClient(businessUserId: string, businessId: string, client: UpdateClientDtoType) {
     const businessData = await this.findBusinessById(businessId);
     const { isAdmin, isSuperAdmin } = this.isUserAdminType(businessData, businessUserId);
 

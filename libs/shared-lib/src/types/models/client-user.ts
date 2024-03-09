@@ -21,7 +21,7 @@ export type ClientUserMethodsType = {
   matchPassword: (param1: string) => Promise<boolean>;
 };
 
-export type ClientUserType = {
+export type ClientType = {
   shortId: string;
   clientType: "external";
   alias: "username" | "familyName" | "givenName" | "middleName" | "displayName" | "email";
@@ -82,7 +82,7 @@ export type ClientUserType = {
     isLocationSharedWithBusinesses: boolean;
   };
   desiredCurrencies: string[];
-  // below are fields from the that are not in the CreateClientUserDtoType
+  // below are fields from the that are not in the AddClientDtoType
   billing: {
     invoiceId: ObjectId;
   };
@@ -113,4 +113,4 @@ export type ClientUserType = {
   };
 };
 
-export type ClientUserDocumentType = ClientUserType & Document;
+export type ClientUserDocumentType = ClientType & Document;

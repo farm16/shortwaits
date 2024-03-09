@@ -4,46 +4,33 @@ import { IconButton, Space, Text, TimeRange, getResponsiveFontSize, getResponsiv
 import { format } from "date-fns";
 import { enUS, es } from "date-fns/locale";
 import React, { FC } from "react";
-import { ListRenderItemInfo, StyleSheet, TouchableOpacity, View } from "react-native";
+import { ImageBackground, ListRenderItemInfo, StyleSheet, TouchableOpacity, View } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useDeviceInfo } from "../../../store";
 
 const locales = { en: enUS, es };
 
-export const TopTile = ({ title, subTitle, onPress }) => {
+export const TopTile = ({ title, subTitle, onPress, imageUrl }) => {
   const { Colors } = useTheme();
   return (
-    <TouchableOpacity
-      style={[
-        styles.square,
-        {
-          backgroundColor: Colors.lightBackground,
-        },
-      ]}
-      onPress={onPress}
-    >
-      <Text
-        preset="none"
-        style={{
-          color: Colors.black5,
-          fontSize: getResponsiveFontSize(14),
-          fontWeight: "500",
+    <TouchableOpacity style={styles.tileContainer} onPress={onPress}>
+      <ImageBackground
+        style={[styles.tile]}
+        imageStyle={styles.imageTile}
+        source={{
+          uri: imageUrl,
         }}
-        text={title}
-      />
-      <Text
-        preset="none"
-        style={{
-          color: Colors.black,
-          fontSize: getResponsiveFontSize(18),
-          fontWeight: "700",
-        }}
-        text={subTitle}
-      />
-      <View style={styles.squareIcon}>
-        <IconButton iconType="arrow-top-right" />
-      </View>
+        resizeMode="cover"
+      >
+        <View style={styles.opacityBackground}>
+          <Text preset="none" style={[styles.tileSubTitle, { color: Colors.white }]} text={title} />
+          <Text preset="none" style={[styles.tileTitle, { color: Colors.white }]} text={subTitle} />
+          <View style={styles.squareIcon}>
+            <IconButton iconType="arrow-top-right" />
+          </View>
+        </View>
+      </ImageBackground>
     </TouchableOpacity>
   );
 };
@@ -275,19 +262,35 @@ const styles = StyleSheet.create({
   squareContainer: {
     flexDirection: "row",
   },
-  square: {
+  tileContainer: {
     flex: 1,
-    justifyContent: "flex-end",
-    padding: 16,
-    backgroundColor: "blue",
     height: getResponsiveHeight(100),
+  },
+  tile: {
+    flex: 1,
+  },
+  imageTile: {
     borderRadius: 15,
+  },
+  opacityBackground: {
+    flex: 1,
+    borderRadius: 15,
+    padding: getResponsiveHeight(16),
+    backgroundColor: "rgba(0,0,0,0.55)",
+  },
+  tileTitle: {
+    fontSize: getResponsiveFontSize(18),
+    fontWeight: "700",
+  },
+  tileSubTitle: {
+    fontSize: getResponsiveFontSize(14),
+    fontWeight: "500",
   },
   squareIcon: {
     position: "absolute",
     top: 16,
     right: 16,
-    backgroundColor: "white",
+    backgroundColor: "rgba(255,255,255,0.85)",
     borderRadius: getResponsiveHeight(30) / 2,
     height: getResponsiveHeight(30),
     width: getResponsiveHeight(30),

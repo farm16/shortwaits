@@ -25,7 +25,7 @@ export const localClientsSlice = createSlice({
         return action.payload.data.localClients;
       })
       .addMatcher(shortwaitsApi.endpoints.createLocalClients.matchFulfilled, (state, action) => {
-        return action.payload.data.localClientUsers;
+        return action.payload.data.localClients;
       });
   },
 });

@@ -21,7 +21,7 @@ export type LocalClientUserMethodsType = {
   matchPassword: (param1: string) => Promise<boolean>;
 };
 
-export type LocalClientUserType = {
+export type LocalClientType = {
   shortId: string;
   clientType: "local"; // local means the user is created by the admin, external means the user is created by the client
   username: string;
@@ -82,7 +82,7 @@ export type LocalClientUserType = {
     isLocationSharedWithBusinesses: boolean;
   };
   desiredCurrencies: string[];
-  // below are fields from the that are not in the CreateClientUserDtoType
+  // below are fields from the that are not in the AddClientDtoType
   billing: {
     invoiceId: ObjectId;
   };
@@ -113,4 +113,4 @@ export type LocalClientUserType = {
   };
 };
 
-export type LocalClientUserDocumentType = LocalClientUserType & Document;
+export type LocalClientUserDocumentType = LocalClientType & Document;

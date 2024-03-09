@@ -1,4 +1,4 @@
-import { ClientUserDtoType } from ".";
+import { ClientDtoType } from ".";
 import { CommonResponseType } from "./helpers";
 
 export type ClientTokenPayloadType = {
@@ -8,14 +8,14 @@ export type ClientTokenPayloadType = {
 export type ClientAuthPayloadType = {
   auth: ClientTokenPayloadType;
   attributes?: {
-    currentUser: ClientUserDtoType;
+    currentUser: ClientDtoType;
   };
 };
 
 export type ClientAuthDtoType = {
   auth: ClientTokenPayloadType;
   attributes?: {
-    currentUser: ClientUserDtoType;
+    currentUser: ClientDtoType;
   };
 };
 
