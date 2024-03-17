@@ -1,34 +1,40 @@
 import { CompositeNavigationProp, NavigatorScreenParams, RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { UpdateClientDtoType } from "@shortwaits/shared-lib";
-import { MODAL_SCREENS as SHARED_MODAL_SCREENS, ModalStackParamList as SharedModalStackParamList } from "@shortwaits/shared-ui";
+import { EventDtoType, UpdateClientDtoType } from "@shortwaits/shared-lib";
+import { MODAL_SCREENS as SHARED_MODAL_SCREENS, SelectorModalScreenParams, ModalStackParamList as SharedModalStackParamList } from "@shortwaits/shared-ui";
 import { AUTHORIZED_SCREENS, AUTHORIZED_STACK_SCREENS, AUTHORIZED_TAB_SCREENS, MODAL_SCREENS, NAVIGATION_STACKS, UNAUTHORIZED_SCREENS } from "./navigation-constants";
 
+type SelectorModalScreenParamsType = "static";
+type SelectorModalData = { key: string; title: string; subTitle?: string; itemData?: any };
+
 export type ModalStackParamList = {
-  [MODAL_SCREENS.SELECTOR_MODAL_SCREEN]: undefined;
+  [MODAL_SCREENS.SELECTOR_MODAL_SCREEN]: SelectorModalScreenParams<SelectorModalScreenParamsType, SelectorModalData>;
   [MODAL_SCREENS.SCHEDULE_MODAL_SCREEN]: undefined;
-  [MODAL_SCREENS.UPDATE_USER_PROFILE_MODAL_SCREEN]: {
+  [MODAL_SCREENS.UPDATE_CLIENT_MODAL_SCREEN]: {
     onSubmit(): void;
     onDone(): void;
     closeOnSubmit(): void;
     initialValues: UpdateClientDtoType;
   };
   [SHARED_MODAL_SCREENS.QR_SCANNER_MODAL_SCREEN]: SharedModalStackParamList["qr-scanner-modal-screen"];
+  [MODAL_SCREENS.EVENT_TICKET_MODAL_SCREEN]: {
+    event: EventDtoType;
+  };
 };
 
 export type AuthorizedTabsParamList = {
   [AUTHORIZED_TAB_SCREENS.HOME_SCREEN]: undefined;
   [AUTHORIZED_TAB_SCREENS.HISTORY_SCREEN]: undefined;
   [AUTHORIZED_TAB_SCREENS.SCAN_SCREEN]: undefined;
-  [AUTHORIZED_TAB_SCREENS.MY_FAVORITES_SCREEN]: undefined;
+  [AUTHORIZED_TAB_SCREENS.FAVORITES_SCREEN]: undefined;
   [AUTHORIZED_TAB_SCREENS.SETTINGS_SCREEN]: undefined;
 };
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type AuthorizedStackParamList = {
-  [AUTHORIZED_STACK_SCREENS.EVENT_DETAILS_SCREEN]: undefined;
   [AUTHORIZED_STACK_SCREENS.PLACE_DETAILS_SCREEN]: undefined;
   [AUTHORIZED_STACK_SCREENS.PROFILE_SCREEN]: undefined;
+  [AUTHORIZED_STACK_SCREENS.EVENT_DETAIL_SCREEN]: undefined;
 };
 
 export type UnauthorizedStackParamList = {

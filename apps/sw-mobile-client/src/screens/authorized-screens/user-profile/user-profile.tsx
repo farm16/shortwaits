@@ -1,5 +1,5 @@
-import { Avatar, BackButton, Button, Container, IconButton, Screen, Space, Text, getResponsiveFontSize, useTheme } from "@shortwaits/shared-ui";
-import React, { useLayoutEffect } from "react";
+import { Avatar, BackButton, Container, IconButton, QrModal, Screen, Space, Switch, Text, getResponsiveFontSize, useTheme } from "@shortwaits/shared-ui";
+import React, { useLayoutEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { Divider, List } from "react-native-paper";
 import { AuthorizedScreenProps } from "../../../navigation";
@@ -7,6 +7,7 @@ import { Section } from "./helpers";
 
 export function UserProfile({ navigation, route }: AuthorizedScreenProps<"user-profile-screen">) {
   const { Colors } = useTheme();
+  const [isQrVisible, setIsQrVisible] = useState(false);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -23,17 +24,22 @@ export function UserProfile({ navigation, route }: AuthorizedScreenProps<"user-p
         return (
           <Container direction="row" alignItems="center">
             <IconButton
-              // onPress={() => {
-              //   navigation.navigate("modals", {
-              //     screen: "update-event-modal-screen",
-              //     params: {
-              //       initialValues: event,
-              //     },
-              //   });
-              // }}
+              onPress={() => {
+                setIsQrVisible(true);
+              }}
               iconColor={"brandSecondary"}
               withMarginRight
               iconType="qr"
+            />
+            <IconButton
+              onPress={() => {
+                navigation.navigate("modals", {
+                  screen: "update-client-modal-screen",
+                });
+              }}
+              iconColor={"brandSecondary"}
+              withMarginRight
+              iconType="edit"
             />
           </Container>
         );
@@ -42,14 +48,17 @@ export function UserProfile({ navigation, route }: AuthorizedScreenProps<"user-p
     });
   }, [navigation]);
   return (
-    <Screen preset="scroll" unsafe unsafeBottom backgroundColor="background">
+    <Screen preset="scroll" unsafe unsafeBottom backgroundColor="lightBackground">
       <Section
         containerStyle={{
           alignItems: "center",
         }}
       >
-        <Avatar mode={"static"} size="medium" />
         <Space size="large" />
+
+        <Avatar mode={"static"} size="medium" />
+        <Space />
+
         <Text
           preset="headerTitle"
           style={{
@@ -57,37 +66,36 @@ export function UserProfile({ navigation, route }: AuthorizedScreenProps<"user-p
           }}
           text={"John Doe"}
         />
-        <Space size="large" />
+        <Space size="tiny" />
         <Text preset="cardSubtitle" text={"JohnDoe@gmail.com"} />
-        <Space size="large" />
-        <Button
-          text="Edit Profile"
-          preset="secondary2"
-          rightIconName="pencil"
-          rightIconColor={Colors.white}
-          style={{
-            paddingHorizontal: 20,
-          }}
-          textStyle={{
-            paddingRight: 10,
-          }}
-        />
         <Space size="large" />
       </Section>
       <Section title="Overview">
-        <List.Item titleStyle={styles.itemText} title="Account" right={props => <List.Icon {...props} icon="folder" />} />
+        <List.Item titleStyle={styles.itemText} title="Account ID" description="1234567890" />
         <Divider />
-        <List.Item titleStyle={styles.itemText} title="Currency" right={props => <List.Icon {...props} icon="folder" />} />
+        <List.Item titleStyle={styles.itemText} title="Location" description="United States" />
         <Divider />
-        <List.Item titleStyle={styles.itemText} title="First Item" right={props => <List.Icon {...props} icon="folder" />} />
+        <List.Item titleStyle={styles.itemText} title="Currency" description="USD" />
       </Section>
       <Section title="Account">
-        <List.Item titleStyle={styles.itemText} title="Payment Methods" right={props => <List.Icon {...props} icon="folder" />} />
+        <List.Item titleStyle={styles.itemText} title="Payment Methods" right={props => <List.Icon {...props} icon="chevron-right" />} />
         <Divider />
-        <List.Item titleStyle={styles.itemText} title="Activity Log" right={props => <List.Icon {...props} icon="folder" />} />
+        <List.Item titleStyle={styles.itemText} title="Activity Log" right={props => <List.Icon {...props} icon="chevron-right" />} />
         <Divider />
-        <List.Item titleStyle={styles.itemText} title="Theme" right={props => <List.Icon {...props} icon="folder" />} />
+        <List.Item titleStyle={styles.itemText} title="Dark theme" right={props => <Switch />} />
       </Section>
+      <QrModal
+        isVisible={isQrVisible}
+        setIsVisible={setIsQrVisible}
+        value={"/booking"}
+        title={"QR Code"}
+        description={
+          <Text>
+            {"Add"} <Text style={{ fontWeight: "700" }}>{"John Doe"}</Text>
+          </Text>
+        }
+        description2={"Scan the code to add John Doe"}
+      />
     </Screen>
   );
 }

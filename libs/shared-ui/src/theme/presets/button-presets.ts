@@ -66,11 +66,21 @@ export const buttonPresets = ({
     secondary: {
       ...VIEW_BASE,
       backgroundColor: Colors.brandSecondary,
+      borderRightColor: Colors.brandAccent,
+      borderBottomColor: Colors.brandAccent,
+      borderBottomWidth: 3,
+      borderRightWidth: 3,
+      paddingHorizontal: getResponsiveWidth(20),
       justifyContent: "center",
     },
     "secondary-disabled": {
       ...VIEW_BASE,
-      backgroundColor: Colors.gray,
+      backgroundColor: Colors.disabledBackground,
+      borderRightColor: Colors.gray,
+      borderBottomColor: Colors.gray,
+      borderBottomWidth: 3,
+      borderRightWidth: 3,
+      paddingHorizontal: getResponsiveWidth(20),
       justifyContent: "center",
     },
     secondary2: {

@@ -81,7 +81,7 @@ export const UpdateLocalClientModal: FC<ModalsScreenProps<"update-local-client-m
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
-      headerTitle: () => <Text preset="text" text={intl.formatMessage({ id: "Common.updateClient" })} />,
+      headerTitle: () => <Text preset="headerTitle" text={intl.formatMessage({ id: "Common.updateClient" })} />,
     });
   }, [intl, navigation]);
 

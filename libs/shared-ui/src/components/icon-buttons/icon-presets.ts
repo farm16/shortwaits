@@ -197,6 +197,18 @@ export const iconProps = {
     color: "black",
     size: 21,
   },
+  "favorite-outline": {
+    name: "heart-outline",
+    backgroundColor: undefined,
+    color: "brandSecondary",
+    size: 21,
+  },
+  favorite: {
+    name: "heart",
+    backgroundColor: undefined,
+    color: "brandSecondary",
+    size: 21,
+  },
   default: {
     name: "plus",
     backgroundColor: undefined,

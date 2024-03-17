@@ -1,4 +1,5 @@
 import {
+  AddClientDtoType,
   AddClientsDtoType,
   BusinessUserRoles,
   BusinessUserType,
@@ -10,7 +11,6 @@ import {
   generateAvatarUrl,
   generateShortId,
 } from "@shortwaits/shared-lib";
-import { ClientSignUpWithEmailDto } from "../api/auth/dto/auth-client-user.dto";
 
 export const generateBusinessUser = (user: CreateBusinessUserDtoType, businessUserRoles: BusinessUserRoles) => {
   // if no accountImageUrl, insert a property with a generated avatar url to the user object
@@ -85,7 +85,7 @@ export const generateBusinessStaffUsers = (users: CreateBusinessUsersDtoType) =>
   return businessUsers;
 };
 
-export const generateNewClientPayload = (user: ClientSignUpWithEmailDto) => {
+export const generateNewClientPayload = (user: AddClientDtoType) => {
   const accountImageUrl = generateAvatarUrl(user.email || "?");
   return {
     email: user.email,

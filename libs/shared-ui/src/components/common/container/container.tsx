@@ -1,12 +1,7 @@
 import * as React from "react";
-import {
-  View as ReactNativeView,
-  StyleSheet,
-  ViewStyle,
-  ViewProps,
-} from "react-native";
+import { View as ReactNativeView, StyleSheet, ViewProps, ViewStyle } from "react-native";
 
-import { useTheme } from "../../../theme";
+import { getResponsiveHeight } from "libs/shared-ui/src/utils";
 // ctv5y
 /**
  * For your text displaying needs.
@@ -17,6 +12,7 @@ interface ContainerPropTypes {
   direction?: ViewStyle["flexDirection"];
   alignItems?: ViewStyle["alignItems"];
   justifyContent?: ViewStyle["justifyContent"];
+  withHorizontalPadding?: boolean;
 }
 export function Container(props: ContainerPropTypes & ViewProps) {
   // grab the props
@@ -39,6 +35,7 @@ export function Container(props: ContainerPropTypes & ViewProps) {
       flexDirection: direction,
       alignItems: alignItems,
       justifyContent: justifyContent,
+      paddingHorizontal: props.withHorizontalPadding ? getResponsiveHeight(16) : 0,
     },
   });
 

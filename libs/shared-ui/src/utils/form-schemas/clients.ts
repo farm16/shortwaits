@@ -123,6 +123,18 @@ export const updateLocalClientSchema = Yup.object({
   desiredCurrencies: Yup.array().of(Yup.string()),
 });
 
+export const updateClientSchema = Yup.object({
+  username: Yup.string().min(3, "a longer name is required").required(),
+  displayName: Yup.string().min(3, "a longer name is required").required("this field is required"),
+  givenName: Yup.string().min(3, "need to add more characters").optional(),
+  familyName: Yup.string().min(3, "need to add more characters").optional(),
+  phoneNumbers: phoneNumbersSchema.optional(),
+  email: Yup.string().email("email is not valid").optional(),
+  addresses: addressesSchema.optional(),
+  isSocialAccount: Yup.boolean().optional(),
+  socialAccount: socialAccountSchema.optional(),
+});
+
 export const addClientSchema = Yup.object({
   shortId: Yup.string().required("this field is required"),
 });

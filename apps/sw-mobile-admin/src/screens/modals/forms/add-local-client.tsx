@@ -112,7 +112,7 @@ export const AddLocalClientModal: FC<ModalsScreenProps<"add-local-client-modal-s
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
-      headerTitle: () => <Text preset="text" text={intl.formatMessage({ id: "Common.addClient" })} />,
+      headerTitle: () => <Text preset="headerTitle" text={intl.formatMessage({ id: "Common.addClient" })} />,
     });
   }, [intl, navigation]);
 

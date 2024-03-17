@@ -41,9 +41,10 @@
     "Common.services": "Services",
     "Common.service": "Service",
     "Common.events": "Events",
-    "Common.event": "Service Type",
+    "Common.event": "Event",
     "Common.clients": "Clients",
     "Common.client": "Client",
+    "Common.updateClient": "Update Client",
 
     "Common.staff": "Staff",
     "Common.showMore": "Show More",
@@ -335,7 +336,18 @@
     "BusinessProfile_screen.state.select": "Select State",
     "BusinessProfile_screen.city": "City",
     "BusinessProfile_screen.city.select": "Select City",
-    "BusinessProfile_screen.zipCode": "Zip Code"
+    "BusinessProfile_screen.zipCode": "Zip Code",
+
+    "UpdateClientModal.displayName": "Display Name",
+    "UpdateClientModal.firstName": "First Name",
+    "UpdateClientModal.lastName": "Last Name",
+    "UpdateClientModal.email": "Email",
+    "UpdateClientModal.phone": "Phone",
+    "UpdateClientModal.address1": "Address",
+    "UpdateClientModal.address2": "Address 2",
+    "UpdateClientModal.state": "State",
+    "UpdateClientModal.city": "City",
+    "UpdateClientModal.zipCode": "Zip Code"
   },
   "es": {
     "Navigation.tab.label.home": "Home",
@@ -393,6 +405,7 @@
     "Common.eventStatus.rejected": "Rechazado",
     "Common.eventStatus.canceled": "Cancelado",
     "Common.eventStatus.completed": "Completado",
+    "Common.updateClient": "Actualizar Cliente",
 
     "Common.error.oops": "¡Ups!",
     "Common.error.somethingWentWrong": "Algo salió mal. Por favor, inténtalo de nuevo.",
@@ -677,6 +690,17 @@
     "BusinessProfile_screen.state.select": "Seleccionar Estado",
     "BusinessProfile_screen.city": "Ciudad",
     "BusinessProfile_screen.city.select": "Seleccionar Ciudad",
-    "BusinessProfile_screen.zipCode": "Código Postal"
+    "BusinessProfile_screen.zipCode": "Código Postal",
+
+    "UpdateClientModal.displayName": "Nombre a Mostrar",
+    "UpdateClientModal.firstName": "Nombre",
+    "UpdateClientModal.lastName": "Apellido",
+    "UpdateClientModal.email": "Correo Electrónico",
+    "UpdateClientModal.phone": "Teléfono",
+    "UpdateClientModal.address1": "Dirección",
+    "UpdateClientModal.address2": "Dirección 2",
+    "UpdateClientModal.state": "Estado",
+    "UpdateClientModal.city": "Ciudad",
+    "UpdateClientModal.zipCode": "Código Postal"
   }
 }

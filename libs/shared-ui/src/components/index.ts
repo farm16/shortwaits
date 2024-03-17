@@ -23,6 +23,7 @@ export * from "./non-ideal-state/non-ideal-state";
 export * from "./qr-scanner/qr-scanner";
 export * from "./qr/qr-modal";
 export * from "./search-bar/search-bar";
+export * from "./section/section";
 export * from "./selector-list-item/selector-list-item";
 export * from "./service-colors/service-colors";
 export * from "./tab-bar/tab-bar";

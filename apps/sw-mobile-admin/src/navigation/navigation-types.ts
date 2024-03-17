@@ -16,7 +16,7 @@ import {
   UpdateLocalClientDtoType,
   WeekHoursType,
 } from "@shortwaits/shared-lib";
-import { NonIdealStateTypes, MODAL_SCREENS as SHARED_MODAL_SCREENS, ModalStackParamList as SharedModalStackParamList, ThemeColorName } from "@shortwaits/shared-ui";
+import { MODAL_SCREENS as SHARED_MODAL_SCREENS, SelectorModalScreenParams, ModalStackParamList as SharedModalStackParamList } from "@shortwaits/shared-ui";
 import { selectorConfigs } from "../screens/modals/selector/selector-config";
 import { AUTHORIZED_SCREENS, AUTHORIZED_STACK_SCREENS, MODAL_SCREENS, NAVIGATION_STACKS, UNAUTHORIZED_SCREENS } from "./navigation-constants";
 
@@ -45,24 +45,7 @@ export type SelectorModalData =
 export type SelectorModalModeType = keyof typeof selectorConfigs;
 
 export type ModalStackParamList = {
-  [MODAL_SCREENS.SELECTOR_MODAL_SCREEN]: {
-    type: SelectorModalModeType;
-    headerTitle?: string;
-    multiple?: boolean;
-    data?: SelectorModalData[];
-    selectedData?: string[];
-    onGoBack?(arg0): void;
-    onSelect?(arg0): void;
-    onSubmit?(arg0): void;
-    searchable?: boolean;
-    closeOnSelect?: boolean;
-    disableSelect?: boolean;
-    itemRightIconName?: string;
-    itemRightIconColor?: ThemeColorName;
-    minSelectedItems?: number;
-    maxSelectedItems?: number;
-    nonIdealStateType?: NonIdealStateTypes;
-  };
+  [MODAL_SCREENS.SELECTOR_MODAL_SCREEN]: SelectorModalScreenParams<SelectorModalModeType, SelectorModalData>;
   [MODAL_SCREENS.SCHEDULE_MODAL_SCREEN]: {
     hours: WeekHoursType;
     headerTitle?: string;
@@ -77,13 +60,6 @@ export type ModalStackParamList = {
     service?: ServiceDtoType;
   };
   [MODAL_SCREENS.ADD_CLIENT_MODAL_SCREEN]: {
-    onSubmit?<T extends keyof FormData>(arg: FormData[T]): void;
-    onDone?(): void;
-    onGoBack?(arg0): void;
-    closeOnSubmit?: boolean;
-  };
-  [MODAL_SCREENS.UPDATE_CLIENT_MODAL_SCREEN]: {
-    initialValues: ClientDtoType;
     onSubmit?<T extends keyof FormData>(arg: FormData[T]): void;
     onDone?(): void;
     onGoBack?(arg0): void;

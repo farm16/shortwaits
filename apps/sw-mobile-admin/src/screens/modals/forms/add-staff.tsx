@@ -115,7 +115,7 @@ export const AddStaffModal: FC<ModalsScreenProps<"add-staff-modal-screen">> = ({
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
-      headerTitle: () => <Text preset="text" text={intl.formatMessage({ id: "AddStaffModal.title" })} />,
+      headerTitle: () => <Text preset="headerTitle" text={intl.formatMessage({ id: "AddStaffModal.title" })} />,
     });
   }, [closeOnSubmit, handleSubmit, intl, navigation]);
 

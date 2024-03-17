@@ -1,9 +1,10 @@
-import { ClientType, UpdateClientDtoType } from "@shortwaits/shared-lib";
+import { ClientType } from "@shortwaits/shared-lib";
 import {
   BackButton,
   Button,
   ButtonCard,
   FormContainer,
+  FormSchemaTypes,
   PhoneNumberCard,
   STATIC_FORM_USA_STATES,
   Space,
@@ -16,18 +17,20 @@ import { FormikErrors } from "formik";
 import { isEmpty, noop } from "lodash";
 import React, { FC, useEffect, useLayoutEffect } from "react";
 import { useIntl } from "react-intl";
-import { Alert } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import { ModalsScreenProps } from "../../../navigation";
+import { useUser } from "../../../store";
 
-export const UpdateLocalClientModal: FC<ModalsScreenProps<"update-user-profile-modal-screen">> = ({ navigation, route }) => {
+export const UpdateClientModal: FC<ModalsScreenProps<"update-client-modal-screen">> = ({ navigation, route }) => {
   const params = route?.params;
   const onSubmit = params?.onSubmit ?? noop;
   const onDone = params?.onDone ?? noop;
   const closeOnSubmit = params?.closeOnSubmit ?? true;
-  const initialValues = params?.initialValues ?? {};
+  const initialValues = useUser();
+  const intl = useIntl(); // Access the intl object
+  const [createLocalClients, createLocalClientsStatus] = [null, null];
 
-  const _initialValues: UpdateClientDtoType = {
+  const _initialValues = {
     ...initialValues,
     displayName: initialValues.displayName ?? "",
     email: initialValues.email ?? "",
@@ -64,12 +67,9 @@ export const UpdateLocalClientModal: FC<ModalsScreenProps<"update-user-profile-m
       : initialValues.addresses,
   };
 
-  const intl = useIntl(); // Access the intl object
-  const [createLocalClients, createLocalClientsStatus] = [null, null];
-
   const { touched, errors, values, validateField, setFieldTouched, handleChange, handleSubmit, setFieldError, setFieldValue } = useForm(
     {
-      initialValues: _initialValues,
+      initialValues: _initialValues as FormSchemaTypes["updateClient"],
       onSubmit: formData => {
         createLocalClients({
           businessId: "",
@@ -80,7 +80,7 @@ export const UpdateLocalClientModal: FC<ModalsScreenProps<"update-user-profile-m
         }
       },
     },
-    "updateLocalClient"
+    "updateClient"
   );
 
   // console.log("errors", JSON.stringify(errors, null, 3));
@@ -89,15 +89,15 @@ export const UpdateLocalClientModal: FC<ModalsScreenProps<"update-user-profile-m
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
-      headerTitle: () => <Text preset="text" text={intl.formatMessage({ id: "Common.updateClient" })} />,
+      headerTitle: () => <Text preset="headerTitle" text={intl.formatMessage({ id: "Common.updateClient" })} />,
     });
   }, [intl, navigation]);
 
-  useEffect(() => {
-    if (createLocalClientsStatus.isSuccess && closeOnSubmit) {
-      navigation.goBack();
-    }
-  }, [closeOnSubmit, createLocalClientsStatus.isSuccess, navigation]);
+  // useEffect(() => {
+  //   if (createLocalClientsStatus.isSuccess && closeOnSubmit) {
+  //     navigation.goBack();
+  //   }
+  // }, [closeOnSubmit, createLocalClientsStatus.isSuccess, navigation]);
 
   useEffect(() => {
     const cleanup = async () => {
@@ -114,9 +114,9 @@ export const UpdateLocalClientModal: FC<ModalsScreenProps<"update-user-profile-m
     };
   }, []);
 
-  if (createLocalClientsStatus.isError) {
-    Alert.alert("Error", createLocalClientsStatus.error.message);
-  }
+  // if (createLocalClientsStatus.isError) {
+  //   Alert.alert("Error", createLocalClientsStatus.error.message);
+  // }
 
   const _renderSubmitButton = (
     <Button
@@ -127,26 +127,27 @@ export const UpdateLocalClientModal: FC<ModalsScreenProps<"update-user-profile-m
     />
   );
 
-  return createLocalClientsStatus.isLoading ? (
+  const tmp = false;
+  return tmp ? (
     <ActivityIndicator />
   ) : (
     <FormContainer footer={_renderSubmitButton}>
       <TextFieldCard
-        title={intl.formatMessage({ id: "AddLocalClientModal.nickname" })}
+        title={intl.formatMessage({ id: "UpdateClientModal.displayName" })}
         value={values.displayName}
         onChangeText={handleChange("displayName")}
         isTouched={touched.displayName}
         errors={errors.displayName}
       />
       <TextFieldCard
-        title={intl.formatMessage({ id: "AddLocalClientModal.firstName" })}
+        title={intl.formatMessage({ id: "UpdateClientModal.firstName" })}
         value={values.givenName}
         onChangeText={handleChange("givenName")}
         isTouched={touched.givenName}
         errors={errors.givenName}
       />
       <TextFieldCard
-        title={intl.formatMessage({ id: "AddLocalClientModal.lastName" })}
+        title={intl.formatMessage({ id: "UpdateClientModal.lastName" })}
         value={values.familyName}
         onChangeText={handleChange("familyName")}
         isTouched={touched.familyName}
@@ -197,21 +198,21 @@ export const UpdateLocalClientModal: FC<ModalsScreenProps<"update-user-profile-m
         errors={errors.phoneNumbers ? (errors.phoneNumbers[2] as FormikErrors<{ label: string; number: string }>)?.number ?? "" : ""}
       />
       <TextFieldCard
-        title={intl.formatMessage({ id: "AddLocalClientModal.address1" })}
+        title={intl.formatMessage({ id: "UpdateClientModal.address1" })}
         value={values.addresses[0].address1}
         onChangeText={handleChange("addresses[0].address1")}
         isTouched={touched?.addresses ? touched.addresses[0]?.address1 ?? false : false}
         errors={errors.addresses ? (errors.addresses[0] as FormikErrors<ClientType["addresses"][number]>)?.address1 ?? "" : ""}
       />
       <TextFieldCard
-        title={intl.formatMessage({ id: "AddLocalClientModal.address2" })}
+        title={intl.formatMessage({ id: "UpdateClientModal.address2" })}
         value={values.addresses[0].address2}
         onChangeText={handleChange("addresses[0].address2")}
         isTouched={touched?.addresses ? touched.addresses[0]?.address2 ?? false : false}
         errors={errors.addresses ? (errors.addresses[0] as FormikErrors<ClientType["addresses"][number]>)?.address2 ?? "" : ""}
       />
       <ButtonCard
-        title={intl.formatMessage({ id: "AddLocalClientModal.state" })}
+        title={intl.formatMessage({ id: "UpdateClientModal.state" })}
         subTitle={STATIC_FORM_USA_STATES.find(state => state.key === values.addresses[0].state)?.title ?? "Select State"}
         isTouched={touched?.addresses ? touched.addresses[0]?.state ?? false : false}
         errors={errors.addresses ? (errors.addresses[0] as FormikErrors<ClientType["addresses"][number]>)?.state ?? "" : ""}
@@ -231,7 +232,7 @@ export const UpdateLocalClientModal: FC<ModalsScreenProps<"update-user-profile-m
         }
       />
       <TextFieldCard
-        title={intl.formatMessage({ id: "AddLocalClientModal.postCode" })}
+        title={intl.formatMessage({ id: "UpdateClientModal.zipCode" })}
         value={values.addresses[0].postCode}
         keyboardType="number-pad"
         inputMode="numeric"

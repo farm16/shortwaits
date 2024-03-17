@@ -39,7 +39,6 @@ export const MODAL_SCREENS = {
   ADD_SERVICE_MODAL_SCREEN: "add-service-modal-screen",
   UPDATE_SERVICE_MODAL_SCREEN: "update-service-modal-screen",
   ADD_CLIENT_MODAL_SCREEN: "add-client-modal-screen",
-  UPDATE_CLIENT_MODAL_SCREEN: "update-client-modal-screen",
   ADD_LOCAL_CLIENT_MODAL_SCREEN: "add-local-client-modal-screen",
   UPDATE_LOCAL_CLIENT_MODAL_SCREEN: "update-local-client-modal-screen",
   ADD_STAFF_MODAL_SCREEN: "add-staff-modal-screen",

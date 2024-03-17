@@ -31,7 +31,7 @@ export const AppInfoScreen: FC<AuthorizedScreenProps<"app-info-screen">> = ({ na
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
-      headerTitle: () => <Text preset="text" text={"Add Information"} />,
+      headerTitle: () => <Text preset="headerTitle" text={"Add Information"} />,
     });
   }, [intl, navigation]);
 

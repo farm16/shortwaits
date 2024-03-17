@@ -23,7 +23,7 @@ export const WebViewModal: FC<ModalsScreenProps<"webview-modal-screen">> = ({ na
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => <BackButton onPress={handleGoBack} />,
-      headerTitle: () => <Text preset="text" text={header} />,
+      headerTitle: () => <Text preset="headerTitle" text={header} />,
     });
   }, [handleGoBack, header, navigation]);
 

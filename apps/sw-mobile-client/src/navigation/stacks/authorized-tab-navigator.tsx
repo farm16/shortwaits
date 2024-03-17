@@ -3,7 +3,7 @@ import { QrScannerModal, MODAL_SCREENS as SHARED_MODAL_SCREENS, useTheme } from 
 import React, { useCallback, useMemo } from "react";
 import { TouchableOpacity } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import { HistoryScreen, HomeScreen, MyFavorites, SettingsScreen } from "../../screens";
+import { FavoritesScreen, HistoryScreen, HomeScreen, SettingsScreen } from "../../screens";
 import { getResponsiveHeight } from "../../utils";
 import { AUTHORIZED_TAB_SCREENS } from "../navigation-constants";
 import { AuthorizedTabsParamList } from "../navigation-types";
@@ -31,11 +31,11 @@ export const AuthorizedTabNavigator = () => {
 
   const scanButton = useCallback(
     (props: { focused: boolean; color: string; size: number }) => {
-      const { focused, color, size } = props;
-      const _size = getResponsiveHeight(size * 2);
+      const { focused, color, size, ...rest } = props;
+      const _size = getResponsiveHeight(size * 1.5);
       return (
         <TouchableOpacity
-          {...props}
+          {...rest}
           style={{
             // top: Platform.OS === "ios" ? -20 : -20,
             width: getResponsiveHeight(_size),
@@ -56,7 +56,7 @@ export const AuthorizedTabNavigator = () => {
             borderColor: Colors.white,
           }}
         >
-          <MaterialCommunityIcons name={"qrcode-scan"} color={Colors.black} size={getResponsiveHeight(size)} />
+          <MaterialCommunityIcons name={"qrcode-scan"} color={Colors.black} size={size} />
         </TouchableOpacity>
       );
     },
@@ -74,8 +74,8 @@ export const AuthorizedTabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name={AUTHORIZED_TAB_SCREENS.MY_FAVORITES_SCREEN}
-        component={MyFavorites}
+        name={AUTHORIZED_TAB_SCREENS.FAVORITES_SCREEN}
+        component={FavoritesScreen}
         options={{
           tabBarLabel: "Favorites",
           tabBarIcon: ({ focused, color }) => <MaterialCommunityIcons name={focused ? "heart" : "heart-outline"} color={color} size={25} />,
@@ -86,8 +86,11 @@ export const AuthorizedTabNavigator = () => {
         component={QrScannerModal}
         options={{
           tabBarLabel: "Scan",
+          tabBarLabelStyle: {
+            color: Colors.brandAccent,
+          },
           // tabBarButton: scanButton,
-          tabBarIcon: scanButton,
+          tabBarIcon: ({ focused, color }) => <MaterialCommunityIcons name={"qrcode-scan"} color={Colors.brandAccent} size={25} />,
         }}
         listeners={({ navigation }) => ({
           tabPress: e => {
@@ -110,7 +113,6 @@ export const AuthorizedTabNavigator = () => {
           tabBarIcon: ({ focused, color }) => <MaterialCommunityIcons name={focused ? "clock" : "clock-outline"} color={color} size={25} />,
         }}
       />
-
       <Tab.Screen
         name={AUTHORIZED_TAB_SCREENS.SETTINGS_SCREEN}
         component={SettingsScreen}

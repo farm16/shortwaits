@@ -119,7 +119,7 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
           iconType="delete"
         />
       ),
-      headerTitle: () => <Text preset="text" text="Update Event" />,
+      headerTitle: () => <Text preset="headerTitle" text="Update Event" />,
     });
   }, [handleOnGoBack, isEventDisabled, navigation]);
 

@@ -1,3 +1,4 @@
+import { truncate } from "lodash";
 import * as React from "react";
 import { Text as ReactNativeText } from "react-native";
 import { useTheme } from "../../../theme";
@@ -17,6 +18,7 @@ export function Text(props: TextProps) {
     text,
     children,
     style: styleOverride,
+    length,
     ...rest
   } = props;
   const {
@@ -25,10 +27,14 @@ export function Text(props: TextProps) {
   // figure out which content to use
   // const i18nText = tx && translate(tx, txOptions);
   // const content = i18nText || text || children;
-  const content = text || children;
+  let content = text || children;
 
   const style = textPresets[preset] || textPresets.default;
   const textStyle = [style, styleOverride];
+
+  if (length && typeof content === "string" && content.length > length) {
+    content = truncate(content, { length });
+  }
 
   return (
     <ReactNativeText {...rest} style={textStyle}>

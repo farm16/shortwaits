@@ -11,6 +11,7 @@ export const AUTHORIZED_SCREENS = {
 
 export const MODAL_SCREENS = {
   QR_SCANNER_MODAL_SCREEN: "qr-scanner-modal-screen",
+  SELECTOR_MODAL_SCREEN: "selector-modal-screen",
 } as const;
 
 export const NAVIGATION_STACKS = {

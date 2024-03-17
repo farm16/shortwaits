@@ -1,7 +1,8 @@
 import React, { FC } from "react";
-import { StyleProp, View, ViewStyle } from "react-native";
+import { Platform, StyleProp, View, ViewStyle } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { ThemeColorName, useTheme } from "../../theme";
+import { getResponsiveFontSize, getResponsiveHeight } from "../../utils";
 import { Button, ButtonProps, Spinner, Text } from "../common";
 import { IconProps, iconProps } from "./icon-presets";
 
@@ -78,6 +79,7 @@ export const RightChevronButton: FC<ButtonProps> = props => {
     </Button>
   );
 };
+
 export const BackButton: FC<
   ButtonProps & {
     counter?: string;
@@ -87,6 +89,7 @@ export const BackButton: FC<
     Colors: { brandAccent, brandSecondary, lightBackground },
   } = useTheme();
   const { state = "enabled", ...rest } = props;
+
   return (
     <Button
       state={state}
@@ -98,7 +101,11 @@ export const BackButton: FC<
       }}
       {...rest}
     >
-      <Icon name="chevron-left" color={disabledStates.includes(state) ? lightBackground : brandSecondary} size={35} />
+      <Icon
+        name={Platform.OS === "ios" ? "chevron-back" : "arrow-left"}
+        color={disabledStates.includes(state) ? lightBackground : brandSecondary}
+        size={getResponsiveFontSize(Platform.OS === "ios" ? 30 : 24)}
+      />
       {props.counter ? (
         <Text
           preset="none"
@@ -147,13 +154,13 @@ export const IconButton: FC<
   const backgroundColor = props.backgroundColor ?? (Colors.white as ThemeColorName);
   const style: StyleProp<ViewStyle> = {
     backgroundColor: Colors[(iconProps[iconType]?.backgroundColor as ThemeColorName) ?? backgroundColor],
-    width: iconProps[iconType]?.size,
-    height: iconProps[iconType]?.size,
+    width: getResponsiveHeight(iconProps[iconType]?.size),
+    height: getResponsiveHeight(iconProps[iconType]?.size),
     borderRadius: iconProps[iconType]?.size / 2,
     justifyContent: "center",
     alignItems: "center",
-    marginLeft: withMarginLeft ? 16 : undefined,
-    marginRight: withMarginRight ? 16 : undefined,
+    marginLeft: withMarginLeft ? getResponsiveHeight(16) : undefined,
+    marginRight: withMarginRight ? getResponsiveHeight(16) : undefined,
   };
 
   const handleDisabledAlert = () => {
@@ -171,7 +178,7 @@ export const IconButton: FC<
 
   return (
     <Button preset="none" {...rest} onPress={onPress} disabled={isDisabled} style={[style, styleOverride]} state={state}>
-      <Icon name={iconName} color={Colors[iconColor]} size={iconSize} />
+      <Icon name={iconName} color={Colors[iconColor]} size={getResponsiveHeight(iconSize)} />
     </Button>
   );
 };

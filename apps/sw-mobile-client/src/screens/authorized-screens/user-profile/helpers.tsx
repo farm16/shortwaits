@@ -45,7 +45,7 @@ export const Section = ({ children, title, containerStyle }: SectionProps) => {
 
 const styles = StyleSheet.create({
   sectionContainer: {
-    paddingHorizontal: getResponsiveHeight(16),
+    // paddingHorizontal: getResponsiveHeight(16),
     backgroundColor: "white",
   },
   titleContainer: {

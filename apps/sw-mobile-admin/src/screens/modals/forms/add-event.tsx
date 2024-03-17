@@ -67,6 +67,11 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
         address: "",
         latitude: 0,
         longitude: 0,
+        name: "",
+        city: "",
+        state: "",
+        country: "",
+        postalCode: "",
       },
       attendeeLimit: 0,
       registrationDeadlineTime: "",
@@ -129,7 +134,7 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
-      headerTitle: () => <Text preset="text" text={intl.formatMessage({ id: "AddEventModal.title" })} />,
+      headerTitle: () => <Text preset="headerTitle" text={intl.formatMessage({ id: "AddEventModal.title" })} />,
     });
   }, [handleSubmit, navigation, intl]);
 

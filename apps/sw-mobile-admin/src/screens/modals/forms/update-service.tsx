@@ -57,7 +57,7 @@ export const UpdateServicesModal: FC<ModalsScreenProps<"update-service-modal-scr
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
-      headerTitle: () => <Text preset="text" text={service.name} />,
+      headerTitle: () => <Text preset="headerTitle" text={service.name} />,
       headerRight: () => (
         <IconButton
           iconType="delete"

@@ -52,7 +52,7 @@ export const QrScannerModal: FC<ModalsScreenProps<"qr-scanner-modal-screen">> = 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => <BackButton onPress={handleGoBack} />,
-      headerTitle: () => <Text preset="text" text={title ?? ""} />,
+      headerTitle: () => <Text preset="headerTitle" text={title ?? ""} />,
     });
   }, [handleGoBack, navigation, title]);
 

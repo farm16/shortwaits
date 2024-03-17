@@ -93,14 +93,16 @@ export const EventItem = (props: ListRenderItemInfo<EventDtoType>) => {
   return (
     <TouchableOpacity
       onPress={() => {
-        navigate("authorized-stack", {
-          screen: "event-details-screen",
+        navigate("modals", {
+          screen: "event-ticket-modal-screen",
+          params: {
+            event: props.item,
+          },
         });
       }}
       style={{
         flexDirection: "row",
         backgroundColor: Colors.lightBackground,
-        // justifyContent: "space-between",
         alignItems: "center",
         padding: getResponsiveHeight(16),
         borderTopStartRadius: 6,

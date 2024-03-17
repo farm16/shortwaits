@@ -25,7 +25,7 @@ export const AddClientModal: FC<ModalsScreenProps<"add-client-modal-screen">> = 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
-      headerTitle: () => <Text preset="text" text={intl.formatMessage({ id: "Common.addShortwaitsClient" })} />,
+      headerTitle: () => <Text preset="headerTitle" text={intl.formatMessage({ id: "Common.addShortwaitsClient" })} />,
     });
   }, [intl, navigation]);
 

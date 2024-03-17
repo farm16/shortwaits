@@ -27,9 +27,10 @@ export type AddClientToBusinessDtoType = {
   shortId: string;
 };
 
-type _UpdateClientDtoType = Partial<ConvertToDtoType<Omit<ClientType, ForbidFields>>>;
+type _AddClientDtoType = Partial<ConvertToDtoType<Omit<ClientType, ForbidFields>>>;
+type _UpdateClientDtoType = Partial<ClientDtoType>;
 
-export type AddClientDtoType = _UpdateClientDtoType;
+export type AddClientDtoType = _AddClientDtoType;
 export type AddClientsDtoType = AddClientDtoType[];
 
 export type UpdateClientDtoType = _UpdateClientDtoType;

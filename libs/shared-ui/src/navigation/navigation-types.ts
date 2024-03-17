@@ -1,8 +1,32 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import { CompositeNavigationProp, NavigatorScreenParams, RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { NonIdealStateTypes } from "../components";
 import { QrScannerOptions } from "../screens";
+import { ThemeColorName } from "../theme";
 import { AUTHORIZED_SCREENS, MODAL_SCREENS, NAVIGATION_STACKS, UNAUTHORIZED_SCREENS } from "./navigation-constants";
+
+export type SelectorModalScreenParams<Type, Data> = {
+  type: Type;
+  headerTitle?: string;
+  multiple?: boolean;
+  data?: Data[];
+  selectedData?: string[];
+  onGoBack?(arg0: any): void;
+  onSelect?(arg0: any): void;
+  onSubmit?(arg0: any): void;
+  searchable?: boolean;
+  closeOnSelect?: boolean;
+  disableSelect?: boolean;
+  itemRightIconName?: string;
+  itemRightIconColor?: ThemeColorName;
+  minSelectedItems?: number;
+  maxSelectedItems?: number;
+  nonIdealStateType?: NonIdealStateTypes;
+};
+
+type SelectorModalScreenParamsType = "static";
+type SelectorModalScreenParamsData = { key: string; title: string; subTitle?: string; itemData?: any };
 
 export type ModalStackParamList = {
   [MODAL_SCREENS.QR_SCANNER_MODAL_SCREEN]: {
@@ -12,6 +36,7 @@ export type ModalStackParamList = {
     description?: string;
     options?: QrScannerOptions[];
   };
+  [MODAL_SCREENS.SELECTOR_MODAL_SCREEN]: SelectorModalScreenParams<SelectorModalScreenParamsType, SelectorModalScreenParamsData>;
 };
 
 export type AuthorizedTabsParamList = {};
