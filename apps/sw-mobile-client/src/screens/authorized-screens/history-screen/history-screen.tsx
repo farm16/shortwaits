@@ -1,6 +1,7 @@
 import { NonIdealState, Screen, SearchBar, Space, Text } from "@shortwaits/shared-ui";
 import React from "react";
 import { FlatList } from "react-native-gesture-handler";
+import { FloatingActionButton } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
 
 export function HistoryScreen({ navigation, route }: AuthorizedScreenProps<"history-screen">) {
@@ -11,6 +12,7 @@ export function HistoryScreen({ navigation, route }: AuthorizedScreenProps<"hist
       <Space size="large" />
       <SearchBar placeholder="Search" value={""} />
       <FlatList data={[]} renderItem={() => null} ListEmptyComponent={<NonIdealState type="noHistory" />} />
+      <FloatingActionButton />
     </Screen>
   );
 }

@@ -1,5 +1,6 @@
 import { EventDtoType, EventsDtoType } from "@shortwaits/shared-lib";
 import { AnimatedSearchBar, Avatar, IconButton, NonIdealState, Screen, Space, getResponsiveFontSize, getResponsiveHeight, getUserGreeting } from "@shortwaits/shared-ui";
+import { FloatingActionButton } from "apps/sw-mobile-client/src/components";
 import React, { useCallback, useState } from "react";
 import { useIntl } from "react-intl";
 import { ListRenderItemInfo, StyleSheet, View } from "react-native";
@@ -108,6 +109,7 @@ export function HomeScreen({ navigation, route }: AuthorizedScreenProps<"home-sc
           />
         </View>
       </View>
+      <FloatingActionButton />
     </Screen>
   );
 }

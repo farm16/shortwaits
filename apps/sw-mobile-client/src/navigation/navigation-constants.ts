@@ -7,15 +7,14 @@ export const UNAUTHORIZED_SCREENS = {
 export const AUTHORIZED_TAB_SCREENS = {
   HOME_SCREEN: "home-screen",
   HISTORY_SCREEN: "history-screen",
-  SCAN_SCREEN: "scan-screen",
   FAVORITES_SCREEN: "favorites-screen",
   SETTINGS_SCREEN: "settings-screen",
 } as const;
 
 export const AUTHORIZED_STACK_SCREENS = {
-  EVENT_DETAIL_SCREEN: "event-detail-screen",
-  PLACE_DETAILS_SCREEN: "place-details-screen",
-  PROFILE_SCREEN: "user-profile-screen",
+  EVENT_DETAILS_SCREEN: "event-details-screen",
+  BUSINESS_DETAILS_SCREEN: "business-details-screen",
+  USER_PROFILE_SCREEN: "user-profile-screen",
 } as const;
 
 export const AUTHORIZED_SCREENS = {
@@ -27,6 +26,7 @@ export const MODAL_SCREENS = {
   EVENT_TICKET_MODAL_SCREEN: "event-ticket-modal-screen",
   SCHEDULE_MODAL_SCREEN: "schedule-modal-screen",
   SELECTOR_MODAL_SCREEN: "selector-modal-screen",
+  QR_SCANNER_MODAL_SCREEN: "qr-scanner-modal-screen",
   UPDATE_CLIENT_MODAL_SCREEN: "update-client-modal-screen",
 } as const;
 

@@ -1,5 +1,5 @@
 import { BottomTabNavigationOptions, createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { QrScannerModal, MODAL_SCREENS as SHARED_MODAL_SCREENS, useTheme } from "@shortwaits/shared-ui";
+import { MODAL_SCREENS as SHARED_MODAL_SCREENS, useTheme } from "@shortwaits/shared-ui";
 import React, { useCallback, useMemo } from "react";
 import { TouchableOpacity } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
@@ -81,30 +81,7 @@ export const AuthorizedTabNavigator = () => {
           tabBarIcon: ({ focused, color }) => <MaterialCommunityIcons name={focused ? "heart" : "heart-outline"} color={color} size={25} />,
         }}
       />
-      <Tab.Screen
-        name={AUTHORIZED_TAB_SCREENS.SCAN_SCREEN}
-        component={QrScannerModal}
-        options={{
-          tabBarLabel: "Scan",
-          tabBarLabelStyle: {
-            color: Colors.brandAccent,
-          },
-          // tabBarButton: scanButton,
-          tabBarIcon: ({ focused, color }) => <MaterialCommunityIcons name={"qrcode-scan"} color={Colors.brandAccent} size={25} />,
-        }}
-        listeners={({ navigation }) => ({
-          tabPress: e => {
-            e.preventDefault();
-            navigation.navigate("modals", {
-              screen: QR_SCANNER_MODAL_SCREEN,
-              params: {
-                title: "Scan QR Code",
-                options: ["scanEventQr", "scanBusinessQr"],
-              },
-            });
-          },
-        })}
-      />
+
       <Tab.Screen
         name={AUTHORIZED_TAB_SCREENS.HISTORY_SCREEN}
         component={HistoryScreen}

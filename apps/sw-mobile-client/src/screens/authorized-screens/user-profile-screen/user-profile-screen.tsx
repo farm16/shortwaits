@@ -5,7 +5,7 @@ import { Divider, List } from "react-native-paper";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { Section } from "./helpers";
 
-export function UserProfile({ navigation, route }: AuthorizedScreenProps<"user-profile-screen">) {
+export function UserProfileScreen({ navigation, route }: AuthorizedScreenProps<"user-profile-screen">) {
   const { Colors } = useTheme();
   const [isQrVisible, setIsQrVisible] = useState(false);
 

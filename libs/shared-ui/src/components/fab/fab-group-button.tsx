@@ -13,13 +13,12 @@ type FloatingActionButtonProps = {
   isVisible?: boolean;
 };
 
-export const FloatingActionButton = (props: FloatingActionButtonProps) => {
-  const { icon = "plus", pressedIcon = "plus", isVisible = true, actions, ...rest } = props;
+export const FabGroupButton = (props: FloatingActionButtonProps) => {
+  const { icon = "plus", pressedIcon = "plus", isVisible = true, onPress, actions, ...rest } = props;
 
   const { Colors } = useTheme();
   const insets = useSafeAreaInsets();
   const [isOpen, setIsOpen] = useState(false);
-
   const onStateChange = useCallback(({ open }: { open: boolean }) => setIsOpen(open), []);
 
   return (
@@ -34,14 +33,13 @@ export const FloatingActionButton = (props: FloatingActionButtonProps) => {
         fabStyle={{
           backgroundColor: Colors.brandSecondary,
         }}
-        // backdropColor={"rgba(0, 0, 0, 0.65)"}
         icon={isOpen ? pressedIcon : icon}
         color={Colors.white}
-        actions={ac}
+        actions={actions}
         onStateChange={onStateChange}
         onPress={() => {
-          if (isOpen) {
-            // do something if the speed dial is open
+          if (isOpen && onPress) {
+            onPress();
           }
         }}
         {...rest}

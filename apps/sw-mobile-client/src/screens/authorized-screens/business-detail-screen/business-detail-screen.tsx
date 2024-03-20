@@ -3,7 +3,7 @@ import React, { useLayoutEffect } from "react";
 import { useIntl } from "react-intl";
 import { AuthorizedScreenProps } from "../../../navigation";
 
-export function EventDetailsScreen({ navigation, route }: AuthorizedScreenProps<"event-detail-screen">) {
+export function BusinessDetailsScreen({ navigation, route }: AuthorizedScreenProps<"event-details-screen">) {
   const intl = useIntl();
 
   useLayoutEffect(() => {
@@ -15,7 +15,7 @@ export function EventDetailsScreen({ navigation, route }: AuthorizedScreenProps<
 
   return (
     <Screen preset="fixed" unsafe unsafeBottom backgroundColor="background">
-      <Text>Event Screen</Text>
+      <Text>Business Details Screen</Text>
     </Screen>
   );
 }

@@ -1,6 +1,6 @@
 import { noop } from "lodash";
 import React, { FC, useCallback, useLayoutEffect } from "react";
-import { BackButton, QRScanner, Text, WithPermission, useTheme } from "../../..";
+import { IconButton, QRScanner, Text, WithPermission, useTheme } from "../../..";
 import { ModalsScreenProps } from "../../../navigation";
 
 const _options = {
@@ -51,7 +51,7 @@ export const QrScannerModal: FC<ModalsScreenProps<"qr-scanner-modal-screen">> = 
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerLeft: () => <BackButton onPress={handleGoBack} />,
+      headerRight: () => <IconButton withMarginRight iconType="close" onPress={handleGoBack} />,
       headerTitle: () => <Text preset="headerTitle" text={title ?? ""} />,
     });
   }, [handleGoBack, navigation, title]);

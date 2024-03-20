@@ -1,7 +1,7 @@
 import { CompositeNavigationProp, NavigatorScreenParams, RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { EventDtoType, UpdateClientDtoType } from "@shortwaits/shared-lib";
-import { MODAL_SCREENS as SHARED_MODAL_SCREENS, SelectorModalScreenParams, ModalStackParamList as SharedModalStackParamList } from "@shortwaits/shared-ui";
+import { SelectorModalScreenParams, ModalStackParamList as SharedModalStackParamList } from "@shortwaits/shared-ui";
 import { AUTHORIZED_SCREENS, AUTHORIZED_STACK_SCREENS, AUTHORIZED_TAB_SCREENS, MODAL_SCREENS, NAVIGATION_STACKS, UNAUTHORIZED_SCREENS } from "./navigation-constants";
 
 type SelectorModalScreenParamsType = "static";
@@ -16,7 +16,7 @@ export type ModalStackParamList = {
     closeOnSubmit(): void;
     initialValues: UpdateClientDtoType;
   };
-  [SHARED_MODAL_SCREENS.QR_SCANNER_MODAL_SCREEN]: SharedModalStackParamList["qr-scanner-modal-screen"];
+  [MODAL_SCREENS.QR_SCANNER_MODAL_SCREEN]: SharedModalStackParamList["qr-scanner-modal-screen"];
   [MODAL_SCREENS.EVENT_TICKET_MODAL_SCREEN]: {
     event: EventDtoType;
   };
@@ -25,16 +25,15 @@ export type ModalStackParamList = {
 export type AuthorizedTabsParamList = {
   [AUTHORIZED_TAB_SCREENS.HOME_SCREEN]: undefined;
   [AUTHORIZED_TAB_SCREENS.HISTORY_SCREEN]: undefined;
-  [AUTHORIZED_TAB_SCREENS.SCAN_SCREEN]: undefined;
   [AUTHORIZED_TAB_SCREENS.FAVORITES_SCREEN]: undefined;
   [AUTHORIZED_TAB_SCREENS.SETTINGS_SCREEN]: undefined;
 };
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type AuthorizedStackParamList = {
-  [AUTHORIZED_STACK_SCREENS.PLACE_DETAILS_SCREEN]: undefined;
-  [AUTHORIZED_STACK_SCREENS.PROFILE_SCREEN]: undefined;
-  [AUTHORIZED_STACK_SCREENS.EVENT_DETAIL_SCREEN]: undefined;
+  [AUTHORIZED_STACK_SCREENS.USER_PROFILE_SCREEN]: undefined;
+  [AUTHORIZED_STACK_SCREENS.EVENT_DETAILS_SCREEN]: undefined;
+  [AUTHORIZED_STACK_SCREENS.BUSINESS_DETAILS_SCREEN]: undefined;
 };
 
 export type UnauthorizedStackParamList = {

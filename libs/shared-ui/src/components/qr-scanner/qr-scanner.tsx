@@ -1,5 +1,5 @@
 import { noop } from "lodash";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Divider } from "react-native-paper";
 import { Code, Camera as VisionCamera, useCameraDevice, useCodeScanner } from "react-native-vision-camera";
@@ -43,7 +43,7 @@ export function QRScanner(props: CameraProps) {
   const { onCodeScanned, options } = props;
   const [manualValue, setManualValue] = useState<string>("");
   const [isManual, setIsManual] = useState(false);
-  const [isCameraActive, setIsCameraActive] = useState(true);
+  const [isCameraActive, setIsCameraActive] = useState(false);
   const [isCameraWarningVisible, setIsCameraWarningVisible] = useState(false);
   const [codeType, setCodeType] = useState<keyof typeof _options>("scanEventQr");
 
@@ -66,21 +66,20 @@ export function QRScanner(props: CameraProps) {
     onCodeScanned: handleCodeScanned,
   });
 
-  useEffect(() => {
-    return () => {
-      if (device) {
-        setIsCameraActive(false);
-      }
-    };
-  }, [device]);
-
-  useEffect(() => {
-    console.log("device >>>", device);
+  useLayoutEffect(() => {
+    if (device) {
+      setIsCameraActive(true);
+    }
     if (!device) {
       setIsManual(true);
       setIsCameraActive(false);
       setIsCameraWarningVisible(true);
     }
+    return () => {
+      if (device) {
+        setIsCameraActive(false);
+      }
+    };
   }, [device]);
 
   const renderCamera = useCallback(() => {

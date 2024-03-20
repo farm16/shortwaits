@@ -3,6 +3,7 @@ import React, { useCallback, useMemo, useState } from "react";
 import { useIntl } from "react-intl";
 import { Animated, Pressable, StyleSheet, View, useWindowDimensions } from "react-native";
 import { SceneMap, TabBarProps, TabView } from "react-native-tab-view";
+import { FloatingActionButton } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { BusinessTab } from "./business-tab";
 import { EventsTab } from "./events-tab";
@@ -100,6 +101,7 @@ export function FavoritesScreen({ navigation, route }: AuthorizedScreenProps<"fa
         <Space />
       </Container>
       <TabView renderTabBar={_renderTabBar} navigationState={{ index, routes }} renderScene={renderScene} onIndexChange={setIndex} initialLayout={{ width: layout.width }} />
+      <FloatingActionButton />
     </Screen>
   );
 }
@@ -137,6 +139,7 @@ type FavoriteEvent = {
   description: string;
   image: string;
 };
+
 const favoriteEventsMock: FavoriteEvent[] = [
   {
     id: "1",

@@ -1,4 +1,4 @@
-import { Button, Screen, TabBar, Text } from "@shortwaits/shared-ui";
+import { Button, Screen, Text } from "@shortwaits/shared-ui";
 import React from "react";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useLocalSignOutMutation } from "../../../services";
@@ -14,7 +14,6 @@ export function SettingsScreen({ navigation, route }: AuthorizedScreenProps<"set
           signOut(undefined);
         }}
       />
-      <TabBar navigation={navigation} route={route} />
     </Screen>
   );
 }
