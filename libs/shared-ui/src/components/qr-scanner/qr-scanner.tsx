@@ -106,7 +106,7 @@ export function QRScanner(props: CameraProps) {
       {renderWarningMessage()}
 
       <Space />
-      <Text preset="title2" text={isManual ? "Enter code manually" : "Scan QR"} />
+      <Text preset="title" text={isManual ? "Enter code manually" : "Scan QR"} />
 
       {isManual ? (
         <View>
@@ -186,7 +186,7 @@ export function QRScanner(props: CameraProps) {
           }}
         >
           <Text
-            preset="titleMedium"
+            preset="title"
             style={{
               alignSelf: "center",
             }}

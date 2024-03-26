@@ -112,40 +112,23 @@ export const textPresets = ({ FontSize, Fonts, Gutters, Colors }: ThemeCommonPar
       color: Colors.brandSecondary,
       fontWeight: "400",
     },
+    titleSmall: {
+      ...BASE,
+      fontSize: getResponsiveFontSize(16),
+      fontWeight: "600",
+      color: Colors.black,
+    },
     title: {
       ...BASE,
       fontSize: getResponsiveFontSize(18),
       fontWeight: "600",
-      color: Colors.text,
-    },
-    title2: {
-      ...BASE,
-      fontSize: getResponsiveFontSize(17),
-      fontWeight: "600",
-      color: Colors.text,
-    },
-    title3: {
-      ...BASE,
-      fontWeight: "600",
-      color: Colors.text,
-    },
-    titleSmall: {
-      ...BASE,
-      fontSize: getResponsiveFontSize(15),
-      fontWeight: "600",
-      color: Colors.text,
-    },
-    titleMedium: {
-      ...BASE,
-      fontSize: getResponsiveFontSize(18),
-      fontWeight: "600",
-      color: Colors.text,
+      color: Colors.black,
     },
     titleLarge: {
       ...BASE,
       fontSize: getResponsiveFontSize(19),
       fontWeight: "600",
-      color: Colors.text,
+      color: Colors.black,
     },
     subTitle: {
       ...BASE,
@@ -173,7 +156,7 @@ export const textPresets = ({ FontSize, Fonts, Gutters, Colors }: ThemeCommonPar
     },
     fieldLabel: {
       ...BASE,
-      fontSize: FontSize.regular,
+      fontSize: FontSize.normal,
       fontWeight: "700",
     },
     cardTitle: {

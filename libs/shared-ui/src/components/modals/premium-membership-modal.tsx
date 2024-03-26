@@ -75,13 +75,13 @@ export const PremiumMembershipModal = (props: PremiumMembershipModalProps) => {
           }}
         >
           <Space />
-          <Text preset="title2" style={{ fontWeight: "bold", textAlign: "center" }}>
+          <Text preset="title" style={{ fontWeight: "bold", textAlign: "center" }}>
             {"Shortwaits\nPremium"}
           </Text>
           <Space size="small" />
           <Container direction="row" justifyContent="center" alignItems="flex-end">
-            <Text preset="title2">{"$1.50/"}</Text>
-            <Text preset="title3">{"month"}</Text>
+            <Text preset="title">{"$1.50/"}</Text>
+            <Text preset="titleSmall">{"month"}</Text>
           </Container>
           <Space size="small" />
           <View>

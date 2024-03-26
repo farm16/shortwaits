@@ -18,7 +18,7 @@ export function EventTicketScreen({ navigation, route }: AuthorizedScreenProps<"
       headerStyle: {
         backgroundColor: "transparent",
       },
-      headerShadowVisible: false,
+      headerLeft: () => null,
       headerRight: () => <IconButton iconColor="brandSecondary" iconType="close" withMarginRight onPress={() => navigation.goBack()} />,
       headerTitle: () => <Text preset="headerTitle" text={intl.formatMessage({ id: "Common.event" })} />,
     });

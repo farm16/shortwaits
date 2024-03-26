@@ -1,10 +1,10 @@
 import { EventDtoType, EventsDtoType } from "@shortwaits/shared-lib";
 import { AnimatedSearchBar, Avatar, IconButton, NonIdealState, Screen, Space, getResponsiveFontSize, getResponsiveHeight, getUserGreeting } from "@shortwaits/shared-ui";
-import { FloatingActionButton } from "apps/sw-mobile-client/src/components";
 import React, { useCallback, useState } from "react";
 import { useIntl } from "react-intl";
 import { ListRenderItemInfo, StyleSheet, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
+import { FloatingActionButton } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useUser } from "../../../store";
 import { EventItem, HomeScreenTitle, TopTile } from "./helper";

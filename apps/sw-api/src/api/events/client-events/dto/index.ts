@@ -1,7 +1,12 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty, PartialType } from "@nestjs/swagger";
 import { BusinessLabelsType, CreateEventDtoType, DiscountType, EventPaymentMethodType, eventPaymentMethodsKeys } from "@shortwaits/shared-lib";
 import { Type } from "class-transformer";
-import { IsArray, IsBoolean, IsDateString, IsIn, IsNumber, IsObject, IsString, ValidateNested } from "class-validator";
+import { IsArray, IsBoolean, IsDateString, IsEnum, IsIn, IsNumber, IsObject, IsOptional, IsString, ValidateNested } from "class-validator";
+
+export class DeleteEventsDto {
+  @IsArray()
+  eventIds: string[];
+}
 
 class UrlDto {
   @IsString()
@@ -36,6 +41,7 @@ class Discount implements DiscountType {
     maxDiscount: number;
   };
 }
+
 class LocationDto {
   @IsString()
   name: string;
@@ -212,3 +218,36 @@ export class CreateEventsDto implements CreateEventDtoType {
   @IsString({ each: true })
   labels: BusinessLabelsType;
 }
+
+export class EventsQueryDto {
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsNumber()
+  page?: number;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsNumber()
+  limit?: number;
+
+  @ApiProperty({ required: false, default: new Date().toISOString() })
+  @IsOptional()
+  @IsDateString()
+  date?: string;
+
+  @ApiProperty({
+    required: false,
+    enum: ["day", "month", "year"],
+    default: "year",
+  })
+  @IsOptional()
+  @IsEnum(["day", "month", "year"])
+  filterBy?: "day" | "month" | "year";
+}
+
+export class CreateEventByClientDto {
+  @IsString()
+  serviceId: string;
+}
+
+export class UpdateEventsDto extends PartialType(CreateEventsDto) {}

@@ -46,9 +46,9 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation }) => {
         <WelcomeImage height={getResponsiveHeight(200)} width={getResponsiveHeight(200)} />
         <View style={{ flex: 1 }}>
           <ScrollView>
-            <Text preset="title2" style={styles.box2Text} text={intl.formatMessage({ id: "Welcome_Screen.title" })} />
+            <Text preset="title" style={styles.box2Text} text={intl.formatMessage({ id: "Welcome_Screen.title" })} />
             <Space size="tiny" />
-            <Text preset="title3" text={intl.formatMessage({ id: "Welcome_Screen.description" })} />
+            <Text preset="titleSmall" text={intl.formatMessage({ id: "Welcome_Screen.description" })} />
           </ScrollView>
         </View>
       </View>

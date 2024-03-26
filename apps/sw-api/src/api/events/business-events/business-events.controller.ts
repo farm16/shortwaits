@@ -1,21 +1,19 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, InternalServerErrorException, NotFoundException, Param, Post, Put, Query, Req, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
-
 import { EventDtoType } from "@shortwaits/shared-lib";
-import { AtGuard } from "../../common/guards";
-import { CreateEventsDto } from "./dto/create-event.dto";
-import { GetEventsByBusinessDto } from "./dto/get-events-by-business.dto";
-import { Events } from "./entities/events.entity";
-import { EventsService } from "./events.service";
+import { AtGuard } from "../../../common/guards";
+import { Events } from "../entities/events.entity";
+import { EventsService } from "./business-events.service";
+import { CreateEventsDto, EventsQueryDto } from "./dto";
 
 @UseGuards(AtGuard)
-@ApiTags("events")
+@ApiTags("events/business")
 @ApiBearerAuth("bearer")
-@Controller("events")
+@Controller("events/business")
 export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
 
-  @Get("business/summary/:businessId")
+  @Get("summary/:businessId")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
@@ -26,13 +24,13 @@ export class EventsController {
   }
 
   // todo will validate if user in Business has permission to view events
-  @Get("business/:businessId")
+  @Get(":businessId")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
     description: "Get all events in a business (business is NOT a user!!!)",
   })
-  async getEventsByBusiness(@Param("businessId") businessId: string, @Query() query: GetEventsByBusinessDto) {
+  async getEventsByBusiness(@Param("businessId") businessId: string, @Query() query: EventsQueryDto) {
     const { page = 1, limit = 10, date = new Date().toISOString(), filterBy = "year" } = query;
     console.log(page, limit, date, filterBy);
 
@@ -49,30 +47,7 @@ export class EventsController {
     );
   }
 
-  @Get("client/:clientId")
-  @HttpCode(HttpStatus.OK)
-  @ApiCreatedResponse({
-    status: HttpStatus.OK,
-    description: "Get all events in a business (business is NOT a user!!!)",
-  })
-  async getEventsByClientId(@Param("clientId") businessId: string, @Query() query: GetEventsByBusinessDto) {
-    const { page = 1, limit = 10, date = new Date().toISOString(), filterBy = "year" } = query;
-    console.log(page, limit, date, filterBy);
-
-    return this.eventsService.getEventsByClientId(
-      businessId,
-      {
-        page,
-        limit,
-      },
-      {
-        date,
-        filterBy,
-      }
-    );
-  }
-
-  @Post("business/:businessId")
+  @Post(":businessId")
   @HttpCode(HttpStatus.ACCEPTED)
   @ApiCreatedResponse({
     status: HttpStatus.ACCEPTED,
@@ -84,7 +59,7 @@ export class EventsController {
     return this.eventsService.createEvent(event, request.user.sub);
   }
 
-  @Put("business/:businessId")
+  @Put(":businessId")
   @HttpCode(HttpStatus.ACCEPTED)
   @ApiCreatedResponse({
     status: HttpStatus.ACCEPTED,

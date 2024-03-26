@@ -51,6 +51,7 @@ export const QrScannerModal: FC<ModalsScreenProps<"qr-scanner-modal-screen">> = 
 
   useLayoutEffect(() => {
     navigation.setOptions({
+      headerLeft: () => null,
       headerRight: () => <IconButton withMarginRight iconType="close" onPress={handleGoBack} />,
       headerTitle: () => <Text preset="headerTitle" text={title ?? ""} />,
     });
@@ -61,7 +62,7 @@ export const QrScannerModal: FC<ModalsScreenProps<"qr-scanner-modal-screen">> = 
       <Text preset="text" text={description} />
       {/* {isMultipleOptions && (
         <Text
-          preset="titleMedium"
+          preset="title"
           style={{
             alignSelf: "center",
           }}

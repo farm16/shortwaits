@@ -63,7 +63,7 @@ export const SelectTimeRange: FC<SelectTimeRangeProps> = props => {
       }}
     >
       <Space />
-      <Text text={getFullDayString(day)} preset="title2" />
+      <Text text={getFullDayString(day)} preset="title" />
       <Space />
       <TimeRangeText preset="title" startTime={timeRange[0]} endTime={timeRange[1]} />
       <Space size="large" />

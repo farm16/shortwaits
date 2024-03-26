@@ -51,16 +51,16 @@ export const RightArrowButton: FC<ButtonProps> = props => {
 
 export const LeftArrowButton: FC<ButtonProps> = props => {
   const { Colors } = useTheme();
-  const { state = "enable", ...rest } = props;
+  const { state = "enabled", ...rest } = props;
 
   const stateIcons = {
     disabled: { name: "exclamation-thick", color: "darkGray" },
-    enable: { name: "chevron-right", color: "brandSecondary" },
+    enabled: { name: "chevron-right", color: "brandSecondary" },
   };
   if (state === "loading") return <Spinner />;
   return (
     <Button {...rest} preset="headerLink">
-      <Icon name={stateIcons[state].name} color={Colors[stateIcons[state].color]} size={22} />
+      <Icon name={stateIcons[state].name} color={Colors[stateIcons[state].color as ThemeColorName]} size={22} />
     </Button>
   );
 };
@@ -75,7 +75,7 @@ export const RightChevronButton: FC<ButtonProps> = props => {
   if (state === "loading") return <Spinner />;
   return (
     <Button {...rest} state={state} preset="icon">
-      <Icon name={stateIcons[state].name} color={Colors[stateIcons[state].color]} size={stateIcons[state].size} />
+      <Icon name={stateIcons[state].name} color={Colors[stateIcons[state].color as ThemeColorName]} size={stateIcons[state].size} />
     </Button>
   );
 };
@@ -102,9 +102,9 @@ export const BackButton: FC<
       {...rest}
     >
       <Icon
-        name={Platform.OS === "ios" ? "chevron-back" : "arrow-left"}
+        name={Platform.OS === "ios" ? "chevron-left" : "arrow-left"}
         color={disabledStates.includes(state) ? lightBackground : brandSecondary}
-        size={getResponsiveFontSize(Platform.OS === "ios" ? 30 : 24)}
+        size={getResponsiveFontSize(Platform.OS === "ios" ? 35 : 24)}
       />
       {props.counter ? (
         <Text

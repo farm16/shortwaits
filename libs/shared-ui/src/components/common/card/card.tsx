@@ -1,19 +1,19 @@
 import React from "react";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { Pressable, StyleSheet, View } from "react-native";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
-import { Button, ButtonProps } from "../button/button";
 import { useTheme } from "../../../theme";
-import { IconSizes } from "../../../theme/Variables";
+import { iconSizes } from "../../../theme/Variables";
+import { Button, ButtonProps } from "../button/button";
 import { Text } from "../text/text";
 
 export type CardProps = ButtonProps & {
   leftIconName?: string;
   rightIconOnPress?: () => void;
   rightIconName?: string;
-  rightIconSize?: keyof typeof IconSizes;
+  rightIconSize?: keyof typeof iconSizes;
   leftIconOnPress?: () => void;
-  leftIconSize?: keyof typeof IconSizes;
+  leftIconSize?: keyof typeof iconSizes;
   rightIconColor?: string;
   leftIconColor?: string;
   mode: "text-field" | "listItem" | "button" | "static";
@@ -30,8 +30,8 @@ export const Card = (props: CardProps) => {
     leftIconName,
     rightIconColor: rightIconColorOverride = Colors.brandPrimary,
     leftIconColor: leftIconColorOverride = Colors.brandPrimary,
-    rightIconSize = "regular",
-    leftIconSize = "regular",
+    rightIconSize = "normal",
+    leftIconSize = "normal",
     children,
     text,
     leftIconOnPress,
@@ -75,14 +75,14 @@ export const Card = (props: CardProps) => {
                 },
               ]}
             >
-              <Icon style={styles.leftIcon} name={leftIconName} size={IconSizes[leftIconSize]} color={leftIconColor} />
+              <Icon style={styles.leftIcon} name={leftIconName} size={iconSizes[leftIconSize]} color={leftIconColor} />
             </Pressable>
           ))}
         <View style={styles.childrenContainer}>{content}</View>
         {rightIconName &&
           (mode === "static" || rightIconName === "none" ? null : (
             <Pressable onPress={rightIconOnPress} style={styles.iconContainer}>
-              <Icon style={styles.rightIcon} name={rightIconName} size={IconSizes[rightIconSize]} color={rightIconColor} />
+              <Icon style={styles.rightIcon} name={rightIconName} size={iconSizes[rightIconSize]} color={rightIconColor} />
             </Pressable>
           ))}
       </View>
@@ -91,9 +91,9 @@ export const Card = (props: CardProps) => {
 
   return (
     <Button preset="card" {...rest} disabled={disabled} style={[disabledStyles]}>
-      {leftIconName && (leftIconName === "none" ? null : <Icon style={styles.leftIcon} name={leftIconName} size={IconSizes[leftIconSize]} color={leftIconColor} />)}
+      {leftIconName && (leftIconName === "none" ? null : <Icon style={styles.leftIcon} name={leftIconName} size={iconSizes[leftIconSize]} color={leftIconColor} />)}
       <View style={styles.childrenContainer}>{children}</View>
-      {rightIconName && (rightIconName === "none" ? null : <Icon style={styles.rightIcon} name={rightIconName} size={IconSizes[rightIconSize]} color={rightIconColor} />)}
+      {rightIconName && (rightIconName === "none" ? null : <Icon style={styles.rightIcon} name={rightIconName} size={iconSizes[rightIconSize]} color={rightIconColor} />)}
     </Button>
   );
 };

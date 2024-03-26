@@ -3,15 +3,15 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Model, ObjectId, Types } from "mongoose";
 
 import { EventDtoType } from "@shortwaits/shared-lib";
-import { convertArrayToObjectId } from "../../utils/converters";
-import { getFilteredNewEvent } from "../../utils/filtersForDtos";
-import { BusinessUser } from "../business-staff/entities/business-staff.entity";
-import { Business } from "../business/entities/business.entity";
-import { ClientUser } from "../client-user/entities/client-user.entity";
-import { LocalClientUser } from "../local-client-user/entities/local-client-user.entity";
-import { Service } from "../services/entities/service.entity";
-import { CreateEventsDto } from "./dto/create-event.dto";
-import { Events } from "./entities/events.entity";
+import { convertArrayToObjectId } from "../../../utils/converters";
+import { getFilteredNewEvent } from "../../../utils/filtersForDtos";
+import { BusinessUser } from "../../business-staff/entities/business-staff.entity";
+import { Business } from "../../business/entities/business.entity";
+import { ClientUser } from "../../client-user/entities/client-user.entity";
+import { LocalClientUser } from "../../local-client-user/entities/local-client-user.entity";
+import { Service } from "../../services/entities/service.entity";
+import { Events } from "../entities/events.entity";
+import { CreateEventsDto } from "./dto";
 
 const WEEK_DAY = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 

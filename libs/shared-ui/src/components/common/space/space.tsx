@@ -1,10 +1,10 @@
 import React from "react";
 import { View, ViewStyle } from "react-native";
-import { MetricsSizes } from "../../../theme/Variables";
+import { metricsSizes } from "../../../theme/Variables";
 
-export const Space = ({ direction = "horizontal", size = "regular", extra = 0 }: { direction?: "horizontal" | "vertical"; size?: keyof typeof MetricsSizes; extra?: number }) => {
-  const height = MetricsSizes[size] + extra;
-  const width = MetricsSizes[size] + extra;
+export const Space = ({ direction = "horizontal", size = "normal", extra = 0 }: { direction?: "horizontal" | "vertical"; size?: keyof typeof metricsSizes; extra?: number }) => {
+  const height = metricsSizes[size] + extra;
+  const width = metricsSizes[size] + extra;
 
   const horizontalStyle = {
     width: "100%",

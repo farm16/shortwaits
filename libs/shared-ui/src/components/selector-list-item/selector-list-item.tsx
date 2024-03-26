@@ -2,7 +2,7 @@ import React, { FC, useMemo } from "react";
 import { StyleSheet, TextStyle, View } from "react-native";
 import FastImage from "react-native-fast-image";
 import { Button, ButtonProps, Space, Text } from "..";
-import { IconSizes, useTheme } from "../../theme";
+import { iconSizes, useTheme } from "../../theme";
 import { generateAvatarUrl } from "../../utils/generateAvatarUrl";
 
 type SelectorListItemProps = {
@@ -11,8 +11,8 @@ type SelectorListItemProps = {
   leftIconName?: string;
   rightIconColor?: string;
   leftIconColor?: string;
-  rightIconSize?: keyof typeof IconSizes;
-  leftIconSize?: keyof typeof IconSizes;
+  rightIconSize?: keyof typeof iconSizes;
+  leftIconSize?: keyof typeof iconSizes;
   title: string;
   subTitle?: string;
   textStyle?: TextStyle;
@@ -29,8 +29,8 @@ export const SelectorListItem: FC<SelectorListItemProps> = props => {
     leftIconName,
     rightIconColor = Colors.brandPrimary,
     leftIconColor = Colors.brandPrimary,
-    rightIconSize = "regular",
-    leftIconSize = "regular",
+    rightIconSize = "normal",
+    leftIconSize = "normal",
     title,
     subTitle,
     textStyle,
@@ -53,10 +53,10 @@ export const SelectorListItem: FC<SelectorListItemProps> = props => {
       onPress={handlePress}
       leftIconName={leftIconName}
       leftIconColor={leftIconColor}
-      leftIconSize={IconSizes[leftIconSize]}
+      leftIconSize={iconSizes[leftIconSize]}
       rightIconName={rightIconName}
       rightIconColor={rightIconColor}
-      rightIconSize={IconSizes[rightIconSize]}
+      rightIconSize={iconSizes[rightIconSize]}
       {...rest}
     >
       <FastImage

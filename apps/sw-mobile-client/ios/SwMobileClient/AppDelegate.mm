@@ -12,7 +12,7 @@
   self.initialProps = @{
     @"brandColors": @{
       @"primary": @"#595FD9",
-      @"secondary": @"#030F26",
+      @"secondary": @"#0f0f0f",
       @"tertiary": @"#EB9B04"
     }
   };

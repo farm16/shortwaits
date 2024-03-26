@@ -1,12 +1,12 @@
 import { BackButton, Button, Checkbox, Container, Facebook, Google, Logo2, Screen, Space, Text, TextFieldCard, getResponsiveHeight, useTheme } from "@shortwaits/shared-ui";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useLayoutEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { Alert, StyleSheet, View } from "react-native";
 import { useDefaultHeaderHeight, useForm } from "../../../hooks";
-import { UnauthenticatedScreenProps } from "../../../navigation";
+import { UnauthorizedScreenProps } from "../../../navigation";
 import { useLocalSignUpMutation, useSocialSignUpMutation } from "../../../services";
 
-export function SignUpScreen({ navigation }: UnauthenticatedScreenProps<"sign-up-screen">) {
+export function SignUpScreen({ navigation }: UnauthorizedScreenProps<"sign-up-screen">) {
   const { Colors } = useTheme();
   const intl = useIntl(); // Access the intl object
   const [isVisible, setIsVisible] = useState(false);
@@ -26,6 +26,12 @@ export function SignUpScreen({ navigation }: UnauthenticatedScreenProps<"sign-up
       console.log("Error during Google sign-up:", error);
     }
   }, []);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
+    });
+  }, [navigation]);
 
   const handleFacebookSignUp = useCallback(async () => {
     try {
@@ -189,7 +195,7 @@ export function SignUpScreen({ navigation }: UnauthenticatedScreenProps<"sign-up
             id: "Common.signIn",
           })}
           onPress={() =>
-            navigation.navigate("unauthenticated-stack", {
+            navigation.navigate("unauthorized", {
               screen: "sign-in-screen",
             })
           }

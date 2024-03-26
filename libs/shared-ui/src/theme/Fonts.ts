@@ -15,7 +15,7 @@ export default function ({ FontSize, Colors }: ThemeVariables): ThemeFonts {
       color: Colors.text,
     },
     textRegular: {
-      fontSize: FontSize.regular,
+      fontSize: FontSize.normal,
       color: Colors.text,
     },
     textLarge: {
@@ -28,7 +28,7 @@ export default function ({ FontSize, Colors }: ThemeVariables): ThemeFonts {
       color: Colors.text,
     },
     titleRegular: {
-      fontSize: FontSize.regular * 1.2,
+      fontSize: FontSize.normal * 1.2,
       fontWeight: "600",
       color: Colors.text,
     },

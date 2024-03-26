@@ -1,4 +1,5 @@
 import {
+  BackButton,
   Button,
   Container,
   Facebook,
@@ -14,7 +15,7 @@ import {
   useForm,
   useTheme,
 } from "@shortwaits/shared-ui";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { Alert, AlertButton, StyleSheet, View } from "react-native";
 import { UnauthorizedScreenProps } from "../../../navigation";
@@ -47,6 +48,12 @@ export function SignInScreen({ navigation }: UnauthorizedScreenProps<"sign-in-sc
       console.log("Error during Google sign-up:", error);
     }
   }, [intl, socialSignUp]);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
+    });
+  }, [navigation]);
 
   const handleFacebookSignIn = useCallback(async () => {
     try {

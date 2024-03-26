@@ -130,8 +130,19 @@ export const buttonPresets = ({
       ...VIEW_BASE,
       borderRadius: 25,
       backgroundColor: Colors.transparent,
-      borderWidth: 2,
+      borderWidth: 2.5,
+      justifyContent: "center",
+      alignItems: "center",
       borderColor: Colors.brandPrimary,
+    },
+    "outline-secondary": {
+      ...VIEW_BASE,
+      borderRadius: 25,
+      backgroundColor: Colors.transparent,
+      borderWidth: 2.5,
+      justifyContent: "center",
+      alignItems: "center",
+      borderColor: Colors.brandSecondary,
     },
     flat: {
       ...VIEW_BASE,
@@ -256,8 +267,14 @@ export const buttonPresets = ({
       fontWeight: "500",
     },
     outline: {
-      ...TEXT_BASE,
-      color: Colors.brandPrimary6,
+      fontSize: getResponsiveHeight(16),
+      fontWeight: "700",
+      color: Colors.brandPrimary,
+    },
+    "outline-secondary": {
+      fontSize: getResponsiveHeight(16),
+      fontWeight: "700",
+      color: Colors.brandSecondary,
     },
     flat: {
       ...TEXT_BASE,
