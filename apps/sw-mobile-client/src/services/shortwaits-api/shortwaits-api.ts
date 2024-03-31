@@ -1,6 +1,20 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithInterceptor } from "./interceptor";
-import { GetAdminMobile, PostLocalSignIn, PostLocalSignOut, PostLocalSignUp, PostSocialSignIn, PostSocialSignUp, UploadImageFile } from "./modules";
+import {
+  GetAdminMobile,
+  PostLocalSignIn,
+  PostLocalSignOut,
+  PostLocalSignUp,
+  PostSocialSignIn,
+  PostSocialSignUp,
+  UploadImageFile,
+  createEventForClient,
+  getEventDetailsForClient,
+  getEventsDetailsForClient,
+  getServiceByIdForClient,
+  getServicesByBusinessIdsForClient,
+  updateEventForClient,
+} from "./modules";
 
 export const shortwaitsApi = createApi({
   reducerPath: "shortwaitsApi",
@@ -8,14 +22,24 @@ export const shortwaitsApi = createApi({
   endpoints: builder => ({
     //default mobile data
     getAdminMobile: GetAdminMobile(builder),
+
     //auth
     localSignUp: PostLocalSignUp(builder),
     localSignIn: PostLocalSignIn(builder),
     localSignOut: PostLocalSignOut(builder),
     socialSignIn: PostSocialSignIn(builder),
     socialSignUp: PostSocialSignUp(builder),
+
     //file uploads
     uploadImageFile: UploadImageFile(builder),
+
+    //client events
+    getEventDetailsForClient: getEventDetailsForClient(builder),
+    getEventsDetailsForClient: getEventsDetailsForClient(builder),
+    getServiceByIdForClient: getServiceByIdForClient(builder),
+    getServicesByBusinessIdsForClient: getServicesByBusinessIdsForClient(builder),
+    updateEventForClient: updateEventForClient(builder),
+    createEventForClient: createEventForClient(builder),
 
     // >>>>> business
     // getBusiness: GetBusiness(builder),

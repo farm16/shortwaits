@@ -116,8 +116,9 @@ export const EventItem = (props: ListRenderItemInfo<EventDtoType>) => {
           padding: getResponsiveHeight(3),
           backgroundColor: Colors.white,
           width: getResponsiveHeight(70),
+          height: getResponsiveHeight(80),
           borderRadius: 7,
-          justifyContent: "center",
+          justifyContent: "space-between",
           alignItems: "center",
         }}
       >
@@ -135,7 +136,7 @@ export const EventItem = (props: ListRenderItemInfo<EventDtoType>) => {
           <Text
             preset="none"
             style={{
-              fontSize: getResponsiveFontSize(10),
+              fontSize: getResponsiveFontSize(12),
               color: Colors.black,
               fontWeight: "400",
             }}
@@ -145,7 +146,7 @@ export const EventItem = (props: ListRenderItemInfo<EventDtoType>) => {
         <Text
           preset="none"
           style={{
-            fontSize: getResponsiveFontSize(14),
+            fontSize: getResponsiveFontSize(16),
             color: Colors.black,
             fontWeight: "700",
           }}
@@ -154,7 +155,7 @@ export const EventItem = (props: ListRenderItemInfo<EventDtoType>) => {
         <Text
           preset="none"
           style={{
-            fontSize: getResponsiveFontSize(10),
+            fontSize: getResponsiveFontSize(13),
             color: Colors.black,
             fontWeight: "400",
           }}
@@ -185,6 +186,7 @@ export const EventItem = (props: ListRenderItemInfo<EventDtoType>) => {
         <View
           style={{
             flexDirection: "row",
+            alignItems: "center",
           }}
         >
           <Icon name="clock-outline" color={Colors.black} size={getResponsiveHeight(20)} />
@@ -205,6 +207,7 @@ export const EventItem = (props: ListRenderItemInfo<EventDtoType>) => {
         <View
           style={{
             flexDirection: "row",
+            alignItems: "center",
           }}
         >
           <Icon name="map-marker-radius-outline" color={Colors.black} size={getResponsiveHeight(20)} />

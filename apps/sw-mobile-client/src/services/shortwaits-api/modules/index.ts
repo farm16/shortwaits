@@ -1,5 +1,6 @@
 export * from "./admin-mobile";
 export * from "./auth";
+export * from "./events";
 export * from "./upload-files";
 // export * from './business';
 // export * from './categories';

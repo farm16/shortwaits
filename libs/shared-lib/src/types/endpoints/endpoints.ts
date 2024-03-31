@@ -25,6 +25,8 @@ type Endpoint =
   | `business/${string}/staff`
   | "business/registration/complete"
   | "shortwaits/admin/mobile"
+  | "shortwaits/client/mobile" // todo: add this
+  | "shortwaits/client/web" // todo: add this
   | `events/business/summary/${string}`
   | `events/business/${string}`
   | "events/people"
@@ -44,25 +46,81 @@ type Endpoint =
   | `business-staff`
   | `business-staff/business/${string}`
   | `local-client-user/${string}`
-  | `local-client-user/business/${string}`;
+  | `local-client-user/business/${string}`
+  | `client-events/event/${string}`
+  | `client-events/event/join`
+  | `client-events/details/event/${string}`
+  | `client-events/details/events`
+  | `client-events/details/service/${string}`
+  | `client-events/details/services/${string}`;
 
+type QueryConfigParams<T> = {
+  pathVars?: string[];
+  queryParams?: T;
+};
+type MutationConfigParams<T> = {
+  pathVars?: string[];
+  queryParams?: T;
+  body: any;
+};
 export const createEndpoint = <T = any>(endpoint: Endpoint, method: HttpMethod) => {
   return {
-    getConfig: (pathVars: string[], queryParams: T) => {
+    /**
+     *
+     * @deprecated use getQueryConfig or getMutationConfig instead
+     */
+    getConfig: (pathVars: string[] = [], queryParams: T = {} as T, body = {}) => {
       const url = endpoint
         .split("/")
         .map(part => (part.startsWith(":") ? pathVars.shift() : part))
         .join("/");
 
-      const queryString = queryParams ? new URLSearchParams(queryParams ?? {}).toString() : undefined;
+      const queryString = queryParams ? new URLSearchParams(queryParams ?? {}).toString() : null;
       const urlWithQuery = queryString ? `${url}?${queryString}` : url;
-      if (process.env["NODE_ENV"] !== "production") {
-        console.log(`${method} - ${urlWithQuery}`);
-      }
       console.log(`${method} - ${urlWithQuery}`);
       return {
         method,
         url: urlWithQuery,
+        body,
+      };
+    },
+    getQueryConfig: (params?: QueryConfigParams<T>) => {
+      const { pathVars = [], queryParams = {} } = params ?? {
+        pathVars: [],
+        queryParams: {},
+      };
+      const url = endpoint
+        .split("/")
+        .map(part => (part.startsWith(":") ? pathVars.shift() : part))
+        .join("/");
+
+      const queryString = queryParams ? new URLSearchParams(queryParams ?? {}).toString() : null;
+      const urlWithQuery = queryString ? `${url}?${queryString}` : url;
+
+      console.log(`${method} - ${urlWithQuery}`);
+      return urlWithQuery;
+    },
+    getMutationConfig: (params?: MutationConfigParams<T>) => {
+      const {
+        pathVars = [],
+        queryParams = {},
+        body,
+      } = params ?? {
+        pathVars: [],
+        queryParams: {},
+      };
+      const url = endpoint
+        .split("/")
+        .map(part => (part.startsWith(":") ? pathVars.shift() : part))
+        .join("/");
+
+      const queryString = queryParams ? new URLSearchParams(queryParams ?? {}).toString() : null;
+      const urlWithQuery = queryString ? `${url}?${queryString}` : url;
+      console.log(`${method} - ${urlWithQuery}`);
+      return {
+        method,
+        url: urlWithQuery,
+        body,
       };
     },
   };
@@ -108,34 +166,29 @@ export const endpoints = {
 
   //events
   getEventsBusinessSummary: createEndpoint(`events/business/summary/:businessId`, "GET"),
-  getEventsForBusiness: createEndpoint<{
-    page?: number;
-    limit?: number;
-    date?: string;
-    filterBy?: string;
-  }>(`events/business/:businessId`, "GET"),
+  getEventsForBusiness: createEndpoint<PaginationQuery>(`events/business/:businessId`, "GET"),
   createEventForBusiness: createEndpoint(`events/business/:businessId`, "POST"),
   getEvents: createEndpoint("events", "GET"),
   getEvent: createEndpoint(`events/:eventId`, "GET"),
   updateEvents: createEndpoint(`events/business/:businessId`, "PUT"),
   deleteEvent: createEndpoint(`events/delete/:eventId`, "PUT"),
   deleteEvents: createEndpoint("events/delete", "PUT"),
-  getPeopleInEvent: createEndpoint<{
-    eventId: string;
-  }>(`events/people`, "GET"),
+  getPeopleInEvent: createEndpoint<EventIdQuery>(`events/people`, "GET"),
+
+  //client-events
+  updateEventForClient: createEndpoint(`client-events/event/:eventId`, "PUT"),
+  createEventForClient: createEndpoint(`client-events/event/join`, "POST"),
+  getEventDetailsForClient: createEndpoint(`client-events/details/event/:eventId`, "GET"),
+  getEventsDetailsForClient: createEndpoint(`client-events/details/events`, "GET"),
+  getServiceByIdForClient: createEndpoint(`client-events/details/service/:serviceId`, "GET"),
+  getServicesByBusinessIdsForClient: createEndpoint(`client-events/details/services/:businessId`, "GET"),
 
   //services
-  getService: createEndpoint<{
-    serviceId: string;
-  }>("services", "GET"),
-  getServices: createEndpoint<{
-    businessId: string;
-  }>("services", "GET"),
+  getService: createEndpoint<ServiceIdQuery>("services", "GET"),
+  getServices: createEndpoint<BusinessIdQuery>("services", "GET"),
   updateService: createEndpoint(`services/:businessId`, "PUT"),
   createService: createEndpoint(`services/:businessId`, "POST"),
-  deleteService: createEndpoint<{
-    businessId: string;
-  }>(`services/:serviceId`, "DELETE"),
+  deleteService: createEndpoint<BusinessIdQuery>(`services/:serviceId`, "DELETE"),
 
   // Client Users
   getClientUsers: createEndpoint("client-user/business/:businessId", "GET"),
@@ -154,4 +207,26 @@ export const endpoints = {
 
   // upload file
   uploadImageFile: createEndpoint("upload-file/image", "POST"),
+};
+
+type BusinessIdQuery = {
+  businessId: string;
+};
+type ClientIdQuery = {
+  clientId: string;
+};
+type StaffIdQuery = {
+  staffId: string;
+};
+type ServiceIdQuery = {
+  serviceId: string;
+};
+type EventIdQuery = {
+  eventId: string;
+};
+type PaginationQuery = {
+  page?: number;
+  limit?: number;
+  date?: string;
+  filterBy?: string;
 };
