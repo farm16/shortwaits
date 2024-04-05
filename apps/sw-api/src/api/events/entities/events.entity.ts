@@ -56,6 +56,10 @@ class Discount implements DiscountType {
 export class Events extends Document implements EventType {
   @ApiProperty()
   @Prop()
+  shortId: string;
+
+  @ApiProperty()
+  @Prop()
   selectedDiscountCode: Discount;
 
   @ApiProperty()

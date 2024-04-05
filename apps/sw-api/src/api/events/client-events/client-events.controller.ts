@@ -12,17 +12,7 @@ import { EventsQueryDto } from "./dto";
 export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
 
-  @Put("event/:eventId")
-  @HttpCode(HttpStatus.OK)
-  @ApiCreatedResponse({
-    status: HttpStatus.OK,
-    description: "Update events",
-  })
-  async updateEventsByClientId(@Req() request, @Body() body: EventDtoType, @Param("eventId") eventId: string) {
-    return this.eventsService.updateEventByClient(eventId, request.user.sub, body);
-  }
-
-  @Post("event/join")
+  @Post()
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
@@ -32,21 +22,41 @@ export class EventsController {
     return this.eventsService.createEventByClient(request.user.sub, body);
   }
 
-  @Get("details/event/:eventId")
+  @Put("withdraw/:shortEventId")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
-    description: "Get all services in a business",
+    description: "Withdraw from event by event id",
   })
-  async getEventDetails(@Req() request, @Param("serviceId") clientId: string) {
-    return this.eventsService.getServicesByBusinessId(clientId);
+  async updateEventsByClientId(@Req() request, @Body() body: EventDtoType, @Param("eventId") eventId: string) {
+    return this.eventsService.updateEventByClient(eventId, request.user.sub, body);
   }
 
-  @Get("details/events")
+  @Put("join/:shortEventId")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
-    description: "Get all events in a business (business is NOT a user!!!)",
+    description: "Join event by event id",
+  })
+  async joinEventByEventId(@Req() request, @Body() body: EventDtoType) {
+    return this.eventsService.createEventByClient(request.user.sub, body);
+  }
+
+  @Get("details/event/:shortEventId")
+  @HttpCode(HttpStatus.OK)
+  @ApiCreatedResponse({
+    status: HttpStatus.OK,
+    description: "Get details of an event",
+  })
+  async getEventDetails(@Req() request, @Param("shortEventId") shortEventId: string) {
+    return this.eventsService.getEventByShortEventId(shortEventId);
+  }
+
+  @Get("details/events/:clientId")
+  @HttpCode(HttpStatus.OK)
+  @ApiCreatedResponse({
+    status: HttpStatus.OK,
+    description: "Get all events in a business",
   })
   async getEventsByClientId(@Req() request, @Query() query: EventsQueryDto) {
     const { page = 1, limit = 10, date = new Date().toISOString(), filterBy = "year" } = query;

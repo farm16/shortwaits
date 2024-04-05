@@ -54,7 +54,7 @@ export class EventsController {
     type: Events,
     description: "Create new event record by Business User (not client user or business)",
   })
-  createEventByBusiness(@Req() request, @Param("businessId") businessId: string, @Body() event: CreateEventsDto) {
+  createEventByBusiness(@Req() request, @Body() event: CreateEventsDto) {
     // todo: validate permission with business
     return this.eventsService.createEvent(event, request.user.sub);
   }
@@ -67,7 +67,7 @@ export class EventsController {
     type: CreateEventsDto,
   })
   updateEventByBusiness(@Req() request, @Param("businessId") businessId: string, @Body() event: EventDtoType) {
-    // validate permission
+    // todo validate permission
     return this.eventsService.updateEvent(event, businessId, request.user.sub);
   }
 
@@ -79,7 +79,7 @@ export class EventsController {
     type: CreateEventsDto,
   })
   updateEventByUser(@Req() request, @Body() event: EventDtoType) {
-    // validate permission
+    // todo validate permission
     return this.eventsService.updateEvent(event, request.user.sub, request.user.sub);
   }
 

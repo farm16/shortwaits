@@ -1,65 +1,75 @@
-import { noop } from "lodash";
-import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
+import React, { FC, Fragment, useCallback, useLayoutEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { Divider } from "react-native-paper";
 import { Code, Camera as VisionCamera, useCameraDevice, useCodeScanner } from "react-native-vision-camera";
-import { BottomSheet, BottomSheetType, Button, ButtonCard, Messages, Space, Switch, Text, TextFieldCard, useBottomSheet } from "..";
+import { Button, Messages, Space, Switch, Text, TextFieldCard, WithPermission } from "../../components";
 import { getResponsiveFontSize, getResponsiveHeight, getResponsiveWidth } from "../../utils";
+
+const scanTypes = {
+  scanEventQr: {
+    iconName: "calendar",
+    title: "Add event",
+    instructions: {
+      manually: "Enter event code",
+      manuallyButtonText: "Submit",
+      scan: "Scan event QR code",
+    },
+    regexp: /event/i,
+  },
+  scanClientQr: {
+    iconName: "user",
+    title: "Add client",
+    instructions: {
+      manually: "Enter client code",
+      scan: "Scan client QR code",
+    },
+    regexp: /client/i,
+  },
+  scanBusinessQr: {
+    iconName: "store",
+    title: "Add Business",
+    instructions: {
+      manually: "Enter business code",
+      scan: "Scan business QR code",
+    },
+    regexp: /business/i,
+  },
+} as const;
+
+export type QrScannerTypes = keyof typeof scanTypes;
+
+type QrScannerModalProps = {
+  preset: QrScannerTypes;
+  title?: string;
+  onDismiss?: () => void;
+  onSubmit?: (qrCode: Code) => void;
+};
 
 /**
  * todo: https://github.com/mrousavy/react-native-vision-camera/issues/2257
  */
+export const QrScanner: FC<QrScannerModalProps> = props => {
+  const { onDismiss, onSubmit, title, preset } = props;
 
-type CameraProps = {
-  onCodeScanned?: (codes: string) => void;
-  options?: (keyof typeof _options)[];
-};
-
-const _options = {
-  scanEventQr: {
-    iconName: "calendar",
-    title: "Event",
-    description: "Add event to your calendar",
-    regexp: /event/i,
-    onScanBusinessEvent: noop,
-  },
-  scanClientQr: {
-    iconName: "user",
-    title: "Client",
-    description: "Add client to your contacts",
-    regexp: /client/i,
-    onScanClient: noop,
-  },
-  scanBusinessQr: {
-    iconName: "store",
-    title: "Business",
-    description: "Add business to your contacts",
-    regexp: /business/i,
-    onScanBusinessQr: noop,
-  },
-} as const;
-
-export function QRScanner(props: CameraProps) {
-  const { onCodeScanned, options } = props;
   const [manualValue, setManualValue] = useState<string>("");
   const [isManual, setIsManual] = useState(false);
   const [isCameraActive, setIsCameraActive] = useState(false);
   const [isCameraWarningVisible, setIsCameraWarningVisible] = useState(false);
-  const [codeType, setCodeType] = useState<keyof typeof _options>("scanEventQr");
-
   const device = useCameraDevice("back");
-  const bottomSheetRef = useRef<BottomSheetType>(null);
-  const handleBottomSheet = useBottomSheet(bottomSheetRef);
 
   const handleCodeScanned = useCallback(
-    (codes: Code[]) => {
+    async (codes: Code[]) => {
+      console.log("QR codes received >>>", codes);
       for (const code of codes) {
-        console.log(`Code value: ${code.value}`);
+        console.log("QR code value >>>", code);
+        onSubmit && onSubmit(code);
       }
-      onCodeScanned && onCodeScanned(codes[0].value ?? "");
     },
-    [onCodeScanned]
+    [onSubmit]
   );
+
+  const handleGoBack = useCallback(() => {
+    onDismiss && onDismiss();
+  }, [onDismiss]);
 
   const codeScanner = useCodeScanner({
     codeTypes: ["qr", "ean-13"],
@@ -82,6 +92,8 @@ export function QRScanner(props: CameraProps) {
     };
   }, [device]);
 
+  console.log("QR Scanner Modal type >>>", preset);
+
   const renderCamera = useCallback(() => {
     if (!device) {
       return null;
@@ -90,51 +102,46 @@ export function QRScanner(props: CameraProps) {
       <View style={styles.cameraViewContainer}>
         <VisionCamera style={styles.visionCamera} device={device} isActive={isCameraActive} codeScanner={codeScanner} />
         <Space />
+        <Text preset="text" style={styles.noteText} text={`Note: ${isManual ? "Do not include blank spaces" : "Make sure the QR code is in the center of the screen"}`} />
       </View>
     );
-  }, [codeScanner, device, isCameraActive]);
+  }, [codeScanner, device, isCameraActive, isManual]);
 
   const renderWarningMessage = useCallback(() => {
     if (isCameraWarningVisible) {
-      return <Messages title="Camera Access Denied" message={"Enable camera access in your device settings."} type={"warning"} />;
+      return (
+        <Fragment>
+          <Messages title="Camera Access Denied" message={"Enable camera access in your device settings."} type={"warning"} />
+          <Space />
+        </Fragment>
+      );
     }
     return null;
   }, [isCameraWarningVisible]);
 
+  if (!preset) {
+    return null;
+  }
+
   return (
-    <View style={styles.viewContainer}>
+    <WithPermission permission="camera" onDenied={handleGoBack} style={styles.viewContainer}>
       {renderWarningMessage()}
-
-      <Space />
-      <Text preset="title" text={isManual ? "Enter code manually" : "Scan QR"} />
-
+      <Text preset="title" text={title ?? ""} />
       {isManual ? (
         <View>
           <TextFieldCard
             title={"Code"}
-            placeholder="e.g. ABC-1234567"
+            placeholder="e.g. ABC123"
             onChangeText={text => {
               setManualValue(text);
             }}
           />
-          <ButtonCard
-            title={"Type"}
-            rightIconName="dots-vertical"
-            subTitle={_options[codeType].title}
-            // errors={!Array.isArray(business?.categories) || !business?.categories.length ? "this field is required" : undefined}
-            // isTouched={isCategoriesTouched}
-            onPress={() => {
-              handleBottomSheet.expand();
-            }}
-          />
-
+          <Text preset="text" style={styles.noteText} text={`Note: ${isManual ? "Do not include blank spaces" : "Make sure the QR code is in the center of the screen"}`} />
           <Button
             text={"Submit"}
             preset={manualValue ? "primary" : "primary-disabled"}
             disabled={manualValue ? false : true}
-            style={{
-              marginTop: getResponsiveHeight(24),
-            }}
+            style={styles.noteButton}
             onPress={() => {
               handleCodeScanned([
                 {
@@ -149,77 +156,21 @@ export function QRScanner(props: CameraProps) {
         renderCamera()
       )}
       <Space />
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <Text
-          style={{
-            fontWeight: "600",
-          }}
-          text={isManual ? "Disable manual input" : "Enable manual input"}
-        />
-        <Switch
-          disabled={!isCameraActive}
-          value={isManual}
-          onValueChange={() => {
-            setIsManual(s => !s);
-          }}
-        />
-      </View>
-      <Space />
-      <Text
-        preset="text"
-        style={{
-          fontWeight: "400",
-          fontSize: getResponsiveFontSize(16),
-        }}
-        text={`Note: ${isManual ? "Do not include blank spaces" : "Make sure the QR code is in the center of the screen"}`}
-      />
-      <BottomSheet ref={bottomSheetRef}>
-        <View
-          style={{
-            padding: getResponsiveWidth(16),
-          }}
-        >
-          <Text
-            preset="title"
-            style={{
-              alignSelf: "center",
+      {isCameraActive ? (
+        <View style={styles.disableManualInputContainer}>
+          <Text style={styles.disableText} text={isManual ? "Disable manual input" : "Enable manual input"} />
+          <Switch
+            disabled={!isCameraActive}
+            value={isManual}
+            onValueChange={() => {
+              setIsManual(s => !s);
             }}
-            text="Select an option to add"
           />
-          <Space size="small" />
-          <Divider />
-          <Space size="small" />
-          {options?.map(option => {
-            return (
-              <View key={option}>
-                <ButtonCard
-                  withTopBorder={true}
-                  rightIconName="none"
-                  preset="subLink"
-                  title={_options[option].title}
-                  subTitle={_options[option].description}
-                  onPress={() => {
-                    setCodeType(option);
-                    handleBottomSheet.close();
-                  }}
-                />
-                <Space size="small" />
-                <Divider />
-                <Space size="small" />
-              </View>
-            );
-          })}
         </View>
-      </BottomSheet>
-    </View>
+      ) : null}
+    </WithPermission>
   );
-}
+};
 
 const styles = StyleSheet.create({
   viewContainer: {
@@ -229,9 +180,22 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   cameraViewContainer: {
-    // flex: 1,
-    // width: getResponsiveHeight(300),
     height: getResponsiveHeight(300),
     borderRadius: 15,
+  },
+  disableManualInputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  disableText: {
+    fontWeight: "600",
+  },
+  noteText: {
+    fontWeight: "400",
+    fontSize: getResponsiveFontSize(12),
+  },
+  noteButton: {
+    marginTop: getResponsiveHeight(24),
   },
 });

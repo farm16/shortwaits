@@ -110,6 +110,25 @@ export class EventsService {
     }
   }
 
+  async getEventByShortEventId(shortEventId: string) {
+    try {
+      console.log(shortEventId);
+      if (!shortEventId) {
+        throw new NotFoundException("Event not found");
+      }
+      const event = await this.eventsModel.findOne({ shortId: shortEventId }).exec();
+      console.log(JSON.stringify(event, null, 2));
+      if (!event) {
+        throw new NotFoundException("Event not found");
+      }
+
+      return event;
+    } catch (error) {
+      console.error(error);
+      throw new InternalServerErrorException("Failed to get event");
+    }
+  }
+
   async getEventsByClientId(clientId: string, paginateOptions?: { page?: number; limit?: number }, filterOptions?: { date: string; filterBy: "day" | "month" | "year" }) {
     try {
       const { page, limit } = paginateOptions ?? {};

@@ -1,7 +1,7 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import { QrScannerModal, useTheme } from "@shortwaits/shared-ui";
+import { useTheme } from "@shortwaits/shared-ui";
 import React from "react";
-import { EventTicketScreen, SelectorScreenModal, UpdateClientModal } from "../../screens";
+import { EventTicketScreen, QrScannerModal, SelectorScreenModal, UpdateClientModal } from "../../screens";
 import { MODAL_SCREENS } from "../navigation-constants";
 import { ModalStackParamList } from "../navigation-types";
 

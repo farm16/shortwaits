@@ -6,6 +6,7 @@ import { ListRenderItemInfo, StyleSheet, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { FloatingActionButton } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
+import { useGetEventsDetailsForClientQuery } from "../../../services";
 import { useUser } from "../../../store";
 import { EventItem, HomeScreenTitle, TopTile } from "./helper";
 
@@ -13,6 +14,8 @@ export function HomeScreen({ navigation, route }: AuthorizedScreenProps<"home-sc
   const user = useUser();
   const intl = useIntl();
   const [isSearchBarVisible, setIsSearchBarVisible] = useState(false);
+  const { data: eventsDetails, error: eventsDetailsError, isLoading: eventsDetailsIsLoading, isFetching: eventsDetailsIsFetching } = useGetEventsDetailsForClientQuery(undefined);
+  console.log("eventsDetails >>>", eventsDetails);
 
   const userGreeting = getUserGreeting({
     morningMessage: intl.formatMessage({ id: "Common.greeting.morning" }),
@@ -117,6 +120,7 @@ export function HomeScreen({ navigation, route }: AuthorizedScreenProps<"home-sc
 const mockData: EventsDtoType = [
   {
     _id: "6594ec9b9a070fe56e0b19f9",
+    shortId: "6594ec9",
     //  todo: add category
     expectedEndTime: "2024-01-03T05:26:46.896Z",
     registrationDeadlineTime: "",
@@ -173,6 +177,7 @@ const mockData: EventsDtoType = [
   },
   {
     _id: "6594ec9b9a070fe56e0b19f9",
+    shortId: "6594ec9",
     //  todo: add category
     expectedEndTime: "2024-01-03T05:26:46.896Z",
     registrationDeadlineTime: "",
@@ -229,6 +234,7 @@ const mockData: EventsDtoType = [
   },
   {
     _id: "6594ec9b9a070fe56e0b19f9",
+    shortId: "6594ec9",
     //  todo: add category
     expectedEndTime: "2024-01-03T05:26:46.896Z",
     registrationDeadlineTime: "",
@@ -285,6 +291,7 @@ const mockData: EventsDtoType = [
   },
   {
     _id: "6594ec9b9a070fe56e0b19f9",
+    shortId: "6594ec9",
     //  todo: add category
     expectedEndTime: "2024-01-03T05:26:46.896Z",
     registrationDeadlineTime: "",

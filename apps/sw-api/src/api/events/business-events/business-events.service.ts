@@ -4,7 +4,7 @@ import { Model, ObjectId, Types } from "mongoose";
 
 import { EventDtoType } from "@shortwaits/shared-lib";
 import { convertArrayToObjectId } from "../../../utils/converters";
-import { getFilteredNewEvent } from "../../../utils/filtersForDtos";
+import { generateNewEvent } from "../../../utils/filtersForDtos";
 import { BusinessUser } from "../../business-staff/entities/business-staff.entity";
 import { Business } from "../../business/entities/business.entity";
 import { ClientUser } from "../../client-user/entities/client-user.entity";
@@ -47,11 +47,9 @@ export class EventsService {
         // do something
       }
 
-      const _newEvent = getFilteredNewEvent(event, userId);
-      console.log("New Event >>>", JSON.stringify(_newEvent, null, 2));
-
-      const newEvent = await this.eventsModel.create(_newEvent);
-
+      const filteredNewEvent = generateNewEvent(event, userId);
+      console.log("New Event >>>", JSON.stringify(filteredNewEvent, null, 2));
+      const newEvent = await this.eventsModel.create(filteredNewEvent);
       await businessRecord.updateOne({ $push: { events: newEvent._id } }).exec();
 
       return newEvent;

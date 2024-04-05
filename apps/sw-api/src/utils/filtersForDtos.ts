@@ -1,4 +1,4 @@
-import { AddClientDtoType, BusinessUserType, EventDtoType } from "@shortwaits/shared-lib";
+import { AddClientDtoType, BusinessUserType, EventDtoType, generateShortId } from "@shortwaits/shared-lib";
 import { SignUpWithEmailDto } from "../api/auth/dto";
 import { CreateBusinessUserDto } from "../api/business-staff/dto";
 import { CreateEventsDto } from "../api/events/business-events/dto";
@@ -49,9 +49,10 @@ export const getFilteredBusinessUser = (createCustomerDto: CreateBusinessUserDto
   return filteredBusinessUser;
 };
 
-export const getFilteredNewEvent = (event: CreateEventsDto, userId: string) => {
+export const generateNewEvent = (event: CreateEventsDto, userId: string) => {
   const filteredEvent: Partial<EventDtoType> = {
     createdBy: userId,
+    shortId: generateShortId(8), // generate shortId with 8 characters
     updatedBy: userId,
     priceFinal: event.priceExpected,
     deleted: false,

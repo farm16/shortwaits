@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Platform, View } from "react-native";
+import { Platform, StyleProp, View, ViewStyle } from "react-native";
 import { PERMISSIONS, PermissionStatus, check, request } from "react-native-permissions";
 
 const permissions = {
@@ -13,10 +13,11 @@ const permissions = {
 type WithPermissionProps = {
   children: React.ReactNode;
   permission: keyof typeof permissions;
+  style?: StyleProp<ViewStyle>;
   onDenied?: () => void;
 };
 
-export function WithPermission({ children, permission, onDenied }: WithPermissionProps) {
+export function WithPermission({ children, permission, style, onDenied }: WithPermissionProps) {
   const [isPermissionGranted, setIsPermissionGranted] = useState(false);
 
   useEffect(() => {
@@ -54,5 +55,5 @@ export function WithPermission({ children, permission, onDenied }: WithPermissio
     return null;
   }
 
-  return <View>{children}</View>;
+  return <View style={style}>{children}</View>;
 }

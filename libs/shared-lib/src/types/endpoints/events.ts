@@ -1,7 +1,7 @@
 import { BusinessUsersDtoType, ClientsDtoType, CommonResponseType, LocalClientsDtoType } from ".";
 import { ConvertToDtoType, EventType, WithDbProps } from "..";
 
-export type FilteredEvent = Omit<EventType, "deleted" | "createdBy" | "updatedBy" | "updatedBy" | "__v" | "_id" | "status">;
+export type FilteredEvent = Omit<EventType, "deleted" | "createdBy" | "updatedBy" | "updatedBy" | "__v" | "_id" | "shortId" | "status">;
 
 export type CreateEventDtoType = ConvertToDtoType<FilteredEvent>;
 export type UpdateEventDtoType = ConvertToDtoType<FilteredEvent>;

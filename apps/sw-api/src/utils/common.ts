@@ -1,8 +1,8 @@
 import { Types } from "mongoose";
 import { customAlphabet } from "nanoid";
 
-export function generateUniqueId(size = 16) {
-  const generateShortId = customAlphabet("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", size);
+export function generateUniqueId(idLength = 16) {
+  const generateShortId = customAlphabet("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", idLength);
   const shortId = generateShortId();
   return shortId;
 }

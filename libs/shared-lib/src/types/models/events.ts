@@ -45,6 +45,7 @@ export const eventPaymentMethodsKeys = Object.keys(eventPaymentMethods);
 export type EventPaymentMethodType = keyof typeof eventPaymentMethods;
 
 export type EventType = {
+  shortId: string; // Short ID for the event
   participantsIds: ObjectId[]; // Array of participant IDs // can be invites by client
   staffIds: ObjectId[]; // Array of business user IDs
   clientsIds: ObjectId[]; // Array of client user IDs

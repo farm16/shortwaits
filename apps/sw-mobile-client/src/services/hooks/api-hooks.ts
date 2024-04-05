@@ -1,4 +1,4 @@
-import { shortwaitsApi } from '../shortwaits-api';
+import { shortwaitsApi } from "../shortwaits-api";
 
 export const {
   //Mutations hooks
@@ -9,9 +9,20 @@ export const {
   useLocalSignOutMutation,
   useUploadImageFileMutation,
 
-  //Query hooks
+  // events - mutations
+  useCreateEventForClientMutation,
+  useUpdateEventForClientMutation,
+
+  // events - queries
+  useGetEventDetailsForClientQuery,
+  useGetEventsDetailsForClientQuery,
+  useGetServiceByIdForClientQuery,
+  useGetServicesByBusinessIdsForClientQuery,
+
+  // shortwaits admin - queries
   useGetAdminMobileQuery,
 
   //Lazy Query hooks
   useLazyGetAdminMobileQuery,
+  useLazyGetEventDetailsForClientQuery,
 } = shortwaitsApi;

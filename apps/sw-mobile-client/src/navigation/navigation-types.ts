@@ -1,7 +1,7 @@
 import { CompositeNavigationProp, NavigatorScreenParams, RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { EventDtoType, UpdateClientDtoType } from "@shortwaits/shared-lib";
-import { SelectorModalScreenParams, ModalStackParamList as SharedModalStackParamList } from "@shortwaits/shared-ui";
+import { QrScannerTypes, SelectorModalScreenParams } from "@shortwaits/shared-ui";
 import { AUTHORIZED_SCREENS, AUTHORIZED_STACK_SCREENS, AUTHORIZED_TAB_SCREENS, MODAL_SCREENS, NAVIGATION_STACKS, UNAUTHORIZED_SCREENS } from "./navigation-constants";
 
 type SelectorModalScreenParamsType = "static";
@@ -16,7 +16,13 @@ export type ModalStackParamList = {
     closeOnSubmit(): void;
     initialValues: UpdateClientDtoType;
   };
-  [MODAL_SCREENS.QR_SCANNER_MODAL_SCREEN]: SharedModalStackParamList["qr-scanner-modal-screen"];
+  [MODAL_SCREENS.QR_SCANNER_MODAL_SCREEN]: {
+    onSubmit?(qrValue: string): void;
+    onDismiss?(): void;
+    title?: string;
+    description?: string;
+    type: QrScannerTypes;
+  };
   [MODAL_SCREENS.EVENT_TICKET_MODAL_SCREEN]: {
     event: EventDtoType;
   };
