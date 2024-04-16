@@ -2,7 +2,7 @@ import { EventDtoType, EventsDtoType } from "@shortwaits/shared-lib";
 import { AnimatedSearchBar, Avatar, IconButton, NonIdealState, Screen, Space, getResponsiveFontSize, getResponsiveHeight, getUserGreeting } from "@shortwaits/shared-ui";
 import React, { useCallback, useState } from "react";
 import { useIntl } from "react-intl";
-import { ListRenderItemInfo, StyleSheet, View } from "react-native";
+import { ListRenderItemInfo, RefreshControl, StyleSheet, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { FloatingActionButton } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
@@ -14,8 +14,14 @@ export function HomeScreen({ navigation, route }: AuthorizedScreenProps<"home-sc
   const user = useUser();
   const intl = useIntl();
   const [isSearchBarVisible, setIsSearchBarVisible] = useState(false);
-  const { data: eventsDetails, error: eventsDetailsError, isLoading: eventsDetailsIsLoading, isFetching: eventsDetailsIsFetching } = useGetEventsDetailsForClientQuery(undefined);
-  console.log("eventsDetails >>>", eventsDetails);
+  const {
+    data: eventsDetails,
+    error: eventsDetailsError,
+    isLoading: eventsDetailsIsLoading,
+    isFetching: eventsDetailsIsFetching,
+    refetch,
+  } = useGetEventsDetailsForClientQuery(undefined);
+  console.log("eventsDetails HOME SCREEN >>>", eventsDetails);
 
   const userGreeting = getUserGreeting({
     morningMessage: intl.formatMessage({ id: "Common.greeting.morning" }),
@@ -97,11 +103,13 @@ export function HomeScreen({ navigation, route }: AuthorizedScreenProps<"home-sc
           <Space />
           <FlatList
             contentContainerStyle={{}}
+            refreshControl={<RefreshControl refreshing={eventsDetailsIsFetching} onRefresh={refetch} tintColor="black" />}
+            onRefresh={refetch}
             showsVerticalScrollIndicator={false}
             ListEmptyComponent={() => {
               return <NonIdealState type="noEvents" />;
             }}
-            data={mockData}
+            data={eventsDetails?.data ?? []}
             ItemSeparatorComponent={() => {
               return <Space size="tiny" />;
             }}
@@ -116,6 +124,60 @@ export function HomeScreen({ navigation, route }: AuthorizedScreenProps<"home-sc
     </Screen>
   );
 }
+
+const styles = StyleSheet.create({
+  eventTitleContainer: {
+    flexDirection: "row",
+    alignItems: "flex-end",
+    alignSelf: "stretch",
+  },
+  eventTitle: {
+    fontSize: getResponsiveFontSize(21),
+    fontWeight: "700",
+    textTransform: "uppercase",
+  },
+  bottomContainer: {
+    flex: 1,
+    borderTopRightRadius: 25,
+    borderTopLeftRadius: 25,
+  },
+  eventContainer: {
+    // paddingHorizontal: 16,
+    flex: 1,
+  },
+  greetingContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+
+    alignItems: "center",
+  },
+  greetingText: {
+    fontSize: getResponsiveHeight(21),
+    fontWeight: "700",
+  },
+  squareContainer: {
+    flexDirection: "row",
+  },
+  square: {
+    flex: 1,
+    justifyContent: "flex-end",
+    padding: 16,
+    backgroundColor: "blue",
+    height: getResponsiveHeight(100),
+    borderRadius: 15,
+  },
+  squareIcon: {
+    position: "absolute",
+    top: 16,
+    right: 16,
+    backgroundColor: "white",
+    borderRadius: getResponsiveHeight(30) / 2,
+    height: getResponsiveHeight(30),
+    width: getResponsiveHeight(30),
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});
 
 const mockData: EventsDtoType = [
   {
@@ -347,57 +409,3 @@ const mockData: EventsDtoType = [
     selectedDiscountCode: null,
   },
 ];
-
-const styles = StyleSheet.create({
-  eventTitleContainer: {
-    flexDirection: "row",
-    alignItems: "flex-end",
-    alignSelf: "stretch",
-  },
-  eventTitle: {
-    fontSize: getResponsiveFontSize(21),
-    fontWeight: "700",
-    textTransform: "uppercase",
-  },
-  bottomContainer: {
-    flex: 1,
-    borderTopRightRadius: 25,
-    borderTopLeftRadius: 25,
-  },
-  eventContainer: {
-    // paddingHorizontal: 16,
-    flex: 1,
-  },
-  greetingContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-
-    alignItems: "center",
-  },
-  greetingText: {
-    fontSize: getResponsiveHeight(21),
-    fontWeight: "700",
-  },
-  squareContainer: {
-    flexDirection: "row",
-  },
-  square: {
-    flex: 1,
-    justifyContent: "flex-end",
-    padding: 16,
-    backgroundColor: "blue",
-    height: getResponsiveHeight(100),
-    borderRadius: 15,
-  },
-  squareIcon: {
-    position: "absolute",
-    top: 16,
-    right: 16,
-    backgroundColor: "white",
-    borderRadius: getResponsiveHeight(30) / 2,
-    height: getResponsiveHeight(30),
-    width: getResponsiveHeight(30),
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});

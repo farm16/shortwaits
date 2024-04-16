@@ -8,7 +8,7 @@ import { EventImage, TicketBreak } from "./helpers";
 
 //https://dribbble.com/shots/19828369-Toket-com-Event-Mobile-Apps
 
-export function EventTicketScreen({ navigation, route }: AuthorizedScreenProps<"event-ticket-modal-screen">) {
+export function EventTicketModal({ navigation, route }: AuthorizedScreenProps<"event-ticket-modal-screen">) {
   const intl = useIntl();
   const event = route?.params?.event;
 
@@ -17,6 +17,8 @@ export function EventTicketScreen({ navigation, route }: AuthorizedScreenProps<"
       headerTitleAlign: "center",
       headerStyle: {
         backgroundColor: "transparent",
+        elevation: 0,
+        shadowColor: "transparent",
       },
       headerLeft: () => null,
       headerRight: () => <IconButton iconColor="brandSecondary" iconType="close" withMarginRight onPress={() => navigation.goBack()} />,
@@ -28,7 +30,6 @@ export function EventTicketScreen({ navigation, route }: AuthorizedScreenProps<"
   );
   return (
     <FormContainer footer={renderSubmitButton}>
-      <Space size="large" />
       <Section>
         <EventImage eventImage={""} />
         <Space />

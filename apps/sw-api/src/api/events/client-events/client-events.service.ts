@@ -95,6 +95,40 @@ export class EventsService {
     }
   }
 
+  async registerClientToEvent(clientId: string, eventId: string) {
+    try {
+      console.log("registerClientToEvent >>>", clientId, eventId);
+
+      const eventRecord = await this.eventsModel.findOne({ _id: eventId, deleted: false }).exec();
+
+      if (!eventRecord) {
+        throw new NotFoundException("Event not found");
+      }
+
+      const clientRecord = await this.clientUserModel.findOne({ _id: clientId, deleted: false }).exec();
+      const isClientAlreadyRegistered = eventRecord.clientsIds.includes(clientRecord._id);
+
+      if (!clientRecord) {
+        throw new NotFoundException("Client not found");
+      }
+
+      if (isClientAlreadyRegistered) {
+        return await this.eventsModel.find({ clientsIds: { $in: [clientRecord._id] }, deleted: false }).exec();
+      }
+
+      eventRecord.clientsIds.push(clientRecord._id);
+
+      await eventRecord.save();
+
+      const updatedClientEvents = await this.eventsModel.find({ clientsIds: { $in: [clientRecord._id] }, deleted: false }).exec();
+
+      return updatedClientEvents;
+    } catch (error) {
+      console.error(error);
+      throw new InternalServerErrorException("Failed to register client to event");
+    }
+  }
+
   async updateEventByClient(eventId: string, updatedBy: string, event: EventDtoType) {
     try {
       const updatedEvent = await this.eventsModel.findOneAndUpdate({ _id: eventId, deleted: false }, { ...event, updatedBy }, { new: true });
@@ -137,40 +171,48 @@ export class EventsService {
       const { date, filterBy } = filterOptions ?? {};
       const _date = new Date(date);
 
+      const clientRecord = await this.clientUserModel.findOne({ _id: clientId, deleted: false }).exec();
+
+      if (!clientRecord) {
+        throw new UnauthorizedException("Client not found");
+      }
+
       const filter: {
         clientsIds: { $in: string[] };
         deleted: boolean;
         startTime?: { $gte: Date; $lte: Date };
       } = {
-        clientsIds: { $in: [clientId] },
+        clientsIds: { $in: [clientRecord._id] },
         deleted: false,
       };
 
-      if (_date && filterBy === "day") {
-        console.log({
-          $gte: _date,
-          $lte: new Date(_date.getTime() + 24 * 60 * 60 * 1000),
-        });
-        filter.startTime = {
-          $gte: _date,
-          $lte: new Date(_date.getTime() + 24 * 60 * 60 * 1000),
-        };
-      } else if (_date && filterBy === "month") {
-        const startDate = new Date(_date.getFullYear(), _date.getMonth(), 1);
-        const endDate = new Date(_date.getFullYear(), _date.getMonth() + 1, 0);
-        filter.startTime = {
-          $gte: startDate,
-          $lte: endDate,
-        };
-      } else if (_date && filterBy === "year") {
-        const startDate = new Date(_date.getFullYear(), 0, 1);
-        const endDate = new Date(_date.getFullYear(), 11, 31);
-        filter.startTime = {
-          $gte: startDate,
-          $lte: endDate,
-        };
-      }
+      // if (_date && filterBy === "day") {
+      //   console.log({
+      //     $gte: _date,
+      //     $lte: new Date(_date.getTime() + 24 * 60 * 60 * 1000),
+      //   });
+      //   filter.startTime = {
+      //     $gte: _date,
+      //     $lte: new Date(_date.getTime() + 24 * 60 * 60 * 1000),
+      //   };
+      // } else if (_date && filterBy === "month") {
+      //   const startDate = new Date(_date.getFullYear(), _date.getMonth(), 1);
+      //   const endDate = new Date(_date.getFullYear(), _date.getMonth() + 1, 0);
+      //   filter.startTime = {
+      //     $gte: startDate,
+      //     $lte: endDate,
+      //   };
+      // } else if (_date && filterBy === "year") {
+      //   const startDate = new Date(_date.getFullYear(), 0, 1);
+      //   const endDate = new Date(_date.getFullYear(), 11, 31);
+      //   filter.startTime = {
+      //     $gte: startDate,
+      //     $lte: endDate,
+      //   };
+      // }
+      console.log(filter);
       const events = await this.eventsModel.find(filter).skip(skip).limit(limit).exec();
+      console.log(events);
       return events;
     } catch (error) {
       console.error(error);

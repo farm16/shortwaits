@@ -47,23 +47,40 @@ export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
         />
       </View>
       <View style={styles.formContainer}>
-        <Button preset="social" onPress={handleGoogleAuth}>
+        <Button
+          style={{
+            width: "100%",
+            justifyContent: "center",
+          }}
+          preset="social"
+          onPress={handleGoogleAuth}
+        >
           <FacebookIcon width={30} height={30} style={{ position: "absolute", left: 0, margin: 16 }} />
           <Container style={styles.buttonContainer}>
             <Text preset="social">{intl.formatMessage({ id: "Sign_Up_Screen.facebook" })}</Text>
           </Container>
         </Button>
         <Space size="small" />
-        <Button preset="social" onPress={handleGoogleAuth}>
+        <Button
+          style={{
+            width: "100%",
+            justifyContent: "center",
+          }}
+          preset="social"
+          onPress={handleGoogleAuth}
+        >
           <GoogleIcon width={30} height={30} style={{ position: "absolute", left: 0, margin: 16 }} />
           <Container style={styles.buttonContainer}>
             <Text preset="social">{intl.formatMessage({ id: "Sign_Up_Screen.google" })}</Text>
           </Container>
         </Button>
-
         <Space size="small" />
         <Button
           preset="social"
+          style={{
+            width: "100%",
+            justifyContent: "center",
+          }}
           onPress={() =>
             navigation.navigate("unauthorized", {
               screen: "sign-up-with-email-screen",

@@ -1,5 +1,5 @@
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
-import { EventResponseType, ServiceResponseType, endpoints } from "@shortwaits/shared-lib";
+import { EventResponseType, EventsResponseType, ServiceResponseType, endpoints } from "@shortwaits/shared-lib";
 
 type GetEventDetailsForClientRequest = {
   shortEventId: string;
@@ -10,7 +10,7 @@ export const getEventDetailsForClient = (builder: EndpointBuilder<any, any, any>
   });
 
 export const getEventsDetailsForClient = (builder: EndpointBuilder<any, any, any>) =>
-  builder.query<EventResponseType, never>({
+  builder.query<EventsResponseType, never>({
     query: () => endpoints.getEventsDetailsForClient.getQueryConfig(),
   });
 

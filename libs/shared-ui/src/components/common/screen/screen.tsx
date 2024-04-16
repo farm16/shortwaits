@@ -9,7 +9,17 @@ import { ScreenProps } from "./screen.props";
 const isIos = Platform.OS === "ios";
 
 function ScreenWithoutScrolling(props: ScreenProps) {
-  const { backgroundColor: overrideBackgroundColor, keyboardOffset, statusBar, children, style: styleOverride, unsafe, unsafeBottom, withHorizontalPadding } = props;
+  const {
+    backgroundColor: overrideBackgroundColor,
+    statusBarBackgroundColor: overrideStatusBarBackgroundColor,
+    keyboardOffset,
+    statusBarStyle,
+    children,
+    style: styleOverride,
+    unsafe,
+    unsafeBottom,
+    withHorizontalPadding,
+  } = props;
 
   const insets = useSafeAreaInsets();
   const preset = presets.fixed;
@@ -17,6 +27,7 @@ function ScreenWithoutScrolling(props: ScreenProps) {
   const { Colors } = useTheme();
 
   const backgroundColor = overrideBackgroundColor ? Colors[overrideBackgroundColor] : style?.backgroundColor ? style.backgroundColor : Colors.white;
+  const statusBarBackgroundColor = overrideStatusBarBackgroundColor ? Colors[overrideStatusBarBackgroundColor] : backgroundColor;
 
   const insetStyle = {
     paddingTop: unsafe ? 0 : insets.top,
@@ -26,7 +37,7 @@ function ScreenWithoutScrolling(props: ScreenProps) {
 
   return (
     <KeyboardAvoidingView style={[preset.outer, { backgroundColor }]} behavior={isIos ? "padding" : undefined} keyboardVerticalOffset={offsets[keyboardOffset || "none"]}>
-      <StatusBar barStyle={statusBar || "dark-content"} backgroundColor={backgroundColor} />
+      <StatusBar barStyle={statusBarStyle || "dark-content"} backgroundColor={statusBarBackgroundColor} />
       <View style={[preset.inner, style, insetStyle]}>{children}</View>
     </KeyboardAvoidingView>
   );
@@ -35,9 +46,10 @@ function ScreenWithoutScrolling(props: ScreenProps) {
 function ScreenWithScrolling(props: ScreenProps) {
   const {
     backgroundColor: overrideBackgroundColor,
+    statusBarBackgroundColor: overrideStatusBarBackgroundColor,
     keyboardOffset,
     keyboardShouldPersistTaps,
-    statusBar,
+    statusBarStyle,
     children,
     style: styleOverride,
     unsafe,
@@ -52,6 +64,7 @@ function ScreenWithScrolling(props: ScreenProps) {
   const { Colors } = useTheme();
 
   const backgroundColor = overrideBackgroundColor ? Colors[overrideBackgroundColor] : style?.backgroundColor ? style.backgroundColor : Colors.white;
+  const statusBarBackgroundColor = overrideStatusBarBackgroundColor ? Colors[overrideStatusBarBackgroundColor] : backgroundColor;
 
   const insetStyle = {
     paddingTop: unsafe ? 0 : insets.top,
@@ -60,7 +73,7 @@ function ScreenWithScrolling(props: ScreenProps) {
 
   return (
     <KeyboardAvoidingView style={[preset.outer, { backgroundColor }]} behavior={isIos ? "padding" : undefined} keyboardVerticalOffset={offsets[keyboardOffset || "none"]}>
-      <StatusBar barStyle={statusBar || "dark-content"} backgroundColor={backgroundColor} />
+      <StatusBar barStyle={statusBarStyle || "dark-content"} backgroundColor={statusBarBackgroundColor} />
       <View style={[preset.outer, { backgroundColor }, insetStyle]}>
         <ScrollView
           stickyHeaderIndices={stickyHeaderIndices}

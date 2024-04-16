@@ -1,8 +1,11 @@
+// import { Portal } from "@gorhom/portal";
 import { Portal } from "@gorhom/portal";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import React, { useCallback, useState } from "react";
+import { StyleSheet } from "react-native";
 import { FAB, FABGroupProps } from "react-native-paper";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useTheme } from "../../theme";
+import { ThemeColorName, useTheme } from "../../theme";
+import { getResponsiveHeight } from "../../utils";
 
 type FloatingActionButtonProps = {
   actions: FABGroupProps["actions"];
@@ -10,31 +13,31 @@ type FloatingActionButtonProps = {
   onPress?(): null;
   icon?: string;
   pressedIcon?: string;
+  backgroundColor?: ThemeColorName;
   isVisible?: boolean;
 };
 
 export const FabGroupButton = (props: FloatingActionButtonProps) => {
-  const { icon = "plus", pressedIcon = "plus", isVisible = true, onPress, actions, ...rest } = props;
+  const { backgroundColor, icon = "plus", pressedIcon = "plus", isVisible = true, onPress, actions, ...rest } = props;
 
   const { Colors } = useTheme();
-  const insets = useSafeAreaInsets();
   const [isOpen, setIsOpen] = useState(false);
   const onStateChange = useCallback(({ open }: { open: boolean }) => setIsOpen(open), []);
+  const tabBarHeight = useBottomTabBarHeight();
 
   return (
-    <Portal>
+    <Portal hostName="root">
       <FAB.Group
         visible={isVisible}
         open={isOpen}
-        style={{
-          paddingBottom: insets.bottom + 70,
-          paddingRight: insets.right + 8,
-        }}
-        fabStyle={{
-          backgroundColor: Colors.brandSecondary,
-        }}
+        fabStyle={[
+          {
+            marginBottom: tabBarHeight + getResponsiveHeight(16),
+            backgroundColor: backgroundColor ? Colors[backgroundColor] : Colors.brandAccent,
+          },
+        ]}
         icon={isOpen ? pressedIcon : icon}
-        color={Colors.white}
+        color={Colors.brandSecondary}
         actions={actions}
         onStateChange={onStateChange}
         onPress={() => {
@@ -47,3 +50,9 @@ export const FabGroupButton = (props: FloatingActionButtonProps) => {
     </Portal>
   );
 };
+
+const styles = StyleSheet.create({
+  fab: {
+    position: "absolute",
+  },
+});

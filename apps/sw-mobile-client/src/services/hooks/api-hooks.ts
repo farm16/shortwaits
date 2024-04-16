@@ -10,7 +10,7 @@ export const {
   useUploadImageFileMutation,
 
   // events - mutations
-  useCreateEventForClientMutation,
+  useRegisterEventByIdForClientMutation,
   useUpdateEventForClientMutation,
 
   // events - queries

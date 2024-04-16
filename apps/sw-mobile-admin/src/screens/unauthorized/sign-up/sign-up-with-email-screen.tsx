@@ -1,10 +1,9 @@
 import { CompositeNavigationProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { Button, Screen, Space, Text, TextFieldCard, useTheme } from "@shortwaits/shared-ui";
+import { Button, Screen, Space, Text, TextFieldCard, useForm, useTheme } from "@shortwaits/shared-ui";
 import React, { FC, useCallback, useLayoutEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { StyleSheet, View } from "react-native";
-import { useForm } from "../../../hooks";
 import { RootStackParamList, UnauthorizedStackParamList } from "../../../navigation";
 import { useLocalSignUpMutation } from "../../../services";
 
@@ -21,7 +20,6 @@ export const SignUpWithEmail: FC<SignUpWithEmailScreenProps> = ({ navigation }) 
     });
   }, [intl, navigation]);
 
-  console.log("heellooo!!!");
   const { Colors } = useTheme();
   const [isVisible, setIsVisible] = useState(false);
   const [localSignUp, { isLoading }] = useLocalSignUpMutation();
@@ -31,7 +29,7 @@ export const SignUpWithEmail: FC<SignUpWithEmailScreenProps> = ({ navigation }) 
     password: "",
     passwordConfirmation: "",
   };
-  const { touched, errors, values, handleChange, handleSubmit, dirty } = useForm(
+  const { touched, errors, values, handleChange, handleSubmit, dirty, isValid } = useForm(
     {
       initialValues,
       onSubmit: formData => {
@@ -87,7 +85,12 @@ export const SignUpWithEmail: FC<SignUpWithEmailScreenProps> = ({ navigation }) 
         errors={errors.passwordConfirmation}
       />
       <Space />
-      <Button onPress={() => handleSubmit()} preset="primary" text={intl.formatMessage({ id: "Common.signUp" })} state={!dirty ? "disabled" : isLoading ? "loading" : "enabled"} />
+      <Button
+        onPress={() => handleSubmit()}
+        // preset={`primary${isValid ? "" : "-disabled"}`}
+        text={intl.formatMessage({ id: "Common.signUp" })}
+        state={!dirty ? "disabled" : isLoading ? "loading" : "enabled"}
+      />
       <Space />
       <View style={styles.signInRow}>
         <Text

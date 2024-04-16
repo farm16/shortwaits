@@ -6,11 +6,7 @@
   "targets": {
     "start": {
       "executor": "@nx/react-native:start",
-      "dependsOn": ["ensure-symlink", "sync-deps"],
-      "options": {
-        "port": 8081,
-        "reset-cache": true
-      }
+      "dependsOn": ["ensure-symlink", "sync-deps"]
     },
     "serve": {
       "executor": "nx:run-commands",

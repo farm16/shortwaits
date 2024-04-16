@@ -1,14 +1,23 @@
 import { CompositeNavigationProp, NavigatorScreenParams, RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { EventDtoType, UpdateClientDtoType } from "@shortwaits/shared-lib";
-import { QrScannerTypes, SelectorModalScreenParams } from "@shortwaits/shared-ui";
+import { QrScannerTypes } from "@shortwaits/shared-ui";
 import { AUTHORIZED_SCREENS, AUTHORIZED_STACK_SCREENS, AUTHORIZED_TAB_SCREENS, MODAL_SCREENS, NAVIGATION_STACKS, UNAUTHORIZED_SCREENS } from "./navigation-constants";
 
 type SelectorModalScreenParamsType = "static";
 type SelectorModalData = { key: string; title: string; subTitle?: string; itemData?: any };
 
 export type ModalStackParamList = {
-  [MODAL_SCREENS.SELECTOR_MODAL_SCREEN]: SelectorModalScreenParams<SelectorModalScreenParamsType, SelectorModalData>;
+  [MODAL_SCREENS.SELECTOR_MODAL_SCREEN]: {
+    mode: SelectorModalData;
+    data: SelectorModalData;
+    onSubmit?(arg: SelectorModalData): void;
+    onDismiss?(): void;
+    title?: string;
+    description?: string;
+    multiple?: boolean;
+    closeOnSubmit?: boolean;
+  };
   [MODAL_SCREENS.SCHEDULE_MODAL_SCREEN]: undefined;
   [MODAL_SCREENS.UPDATE_CLIENT_MODAL_SCREEN]: {
     onSubmit(): void;
@@ -38,7 +47,10 @@ export type AuthorizedTabsParamList = {
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type AuthorizedStackParamList = {
   [AUTHORIZED_STACK_SCREENS.USER_PROFILE_SCREEN]: undefined;
-  [AUTHORIZED_STACK_SCREENS.EVENT_DETAILS_SCREEN]: undefined;
+  [AUTHORIZED_STACK_SCREENS.EVENT_DETAILS_SCREEN]: {
+    eventId?: string;
+    event?: EventDtoType;
+  };
   [AUTHORIZED_STACK_SCREENS.BUSINESS_DETAILS_SCREEN]: undefined;
 };
 

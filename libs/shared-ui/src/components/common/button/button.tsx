@@ -3,8 +3,9 @@ import { Pressable, StyleSheet, TouchableOpacity } from "react-native";
 import Spinner from "react-native-spinkit";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTheme } from "../../../theme";
+import { getResponsiveHeight } from "../../../utils";
 import { Text } from "../text/text";
-import { ButtonProps } from "./button-types";
+import { ButtonPresets, ButtonProps } from "./button-types";
 
 export const Button: FC<ButtonProps> = props => {
   const {
@@ -28,15 +29,23 @@ export const Button: FC<ButtonProps> = props => {
     ...rest
   } = props;
 
+  let presetOverride = preset;
+
   const {
     Colors,
     Common: { buttonTextPresets, buttonViewPresets },
   } = useTheme();
 
-  if (state === "loading") return <Spinner style={styles.spinner} size={40} type={"ThreeBounce"} color={Colors.text} />;
+  if (state === "loading") return <Spinner style={styles.spinner} size={40} type={"ThreeBounce"} color={Colors.white} />;
 
-  const defaultStyle = buttonViewPresets[preset] || buttonViewPresets.primary;
-  const textStyle = buttonTextPresets[preset] || buttonTextPresets.primary;
+  const isDisabledPresetPresent = (preset: string, presets: Record<string, object>) => presets[`${preset}-disabled`] !== undefined;
+
+  if (state === "disabled" && isDisabledPresetPresent(preset, buttonViewPresets)) {
+    presetOverride = `${preset}-disabled` as ButtonPresets;
+  }
+
+  const defaultStyle = buttonViewPresets[presetOverride] || buttonViewPresets.primary;
+  const textStyle = buttonTextPresets[presetOverride] || buttonTextPresets.primary;
   const textStyles = [textStyle, textStyleOverride];
 
   const content = children || <Text iText={iText} text={text} style={textStyles} />;
@@ -62,8 +71,6 @@ export const Button: FC<ButtonProps> = props => {
 
 const styles = StyleSheet.create({
   spinner: {
-    marginBottom: 5,
+    marginBottom: getResponsiveHeight(5),
   },
 });
-
-export * from "./button-types";

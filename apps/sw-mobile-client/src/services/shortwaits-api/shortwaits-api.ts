@@ -8,12 +8,12 @@ import {
   PostSocialSignIn,
   PostSocialSignUp,
   UploadImageFile,
-  createEventForClient,
   getEventDetailsForClient,
   getEventsDetailsForClient,
   getServiceByIdForClient,
   getServicesByBusinessIdsForClient,
-  updateEventForClient,
+  registerEventByIdForClient,
+  withdrawEventForClient,
 } from "./modules";
 
 export const shortwaitsApi = createApi({
@@ -38,8 +38,8 @@ export const shortwaitsApi = createApi({
     getEventsDetailsForClient: getEventsDetailsForClient(builder),
     getServiceByIdForClient: getServiceByIdForClient(builder),
     getServicesByBusinessIdsForClient: getServicesByBusinessIdsForClient(builder),
-    updateEventForClient: updateEventForClient(builder),
-    createEventForClient: createEventForClient(builder),
+    withdrawEventForClient: withdrawEventForClient(builder),
+    registerEventByIdForClient: registerEventByIdForClient(builder),
 
     // >>>>> business
     // getBusiness: GetBusiness(builder),

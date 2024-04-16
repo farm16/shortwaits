@@ -149,9 +149,9 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
         })}
       />
       <Space size="large" />
-      <Button preset="social" onPress={handleGoogleAuth}>
-        <FacebookIcon width={30} height={30} style={{ position: "absolute", left: 0, margin: 16 }} />
-        <Container style={styles.socialButtonContainer}>
+      <Button preset="social" onPress={handleGoogleAuth} style={styles.socialButton}>
+        <Container style={styles.socialButtonText}>
+          <FacebookIcon width={30} height={30} style={styles.socialIcon} />
           <Text
             preset="social"
             text={intl.formatMessage({
@@ -161,9 +161,9 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
         </Container>
       </Button>
       <Space size="small" />
-      <Button preset="social" onPress={handleGoogleAuth}>
-        <Container style={styles.socialButtonContainer}>
-          <GoogleIcon width={30} height={30} style={{ position: "absolute", left: 0, margin: 16 }} />
+      <Button preset="social" onPress={handleGoogleAuth} style={styles.socialButton}>
+        <Container style={styles.socialButtonText}>
+          <GoogleIcon width={30} height={30} style={styles.socialIcon} />
           <Text
             preset="social"
             text={intl.formatMessage({
@@ -175,8 +175,7 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
       <Space />
       <View style={styles.footer}>
         <Text
-          preset="subLink"
-          style={{ color: Colors.text }}
+          preset="text"
           text={intl.formatMessage({
             id: "Sign_In_Screen.doNotHaveAnAccount",
           })}
@@ -206,10 +205,18 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     alignItems: "center",
   },
-  socialButtonContainer: {
+  socialButton: {
+    width: "100%",
+    justifyContent: "center",
+  },
+  socialButtonText: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     flex: 1,
+  },
+  socialIcon: {
+    position: "absolute",
+    left: 0,
   },
 });

@@ -1,5 +1,5 @@
 import React from "react";
-import { ColorValue, ScrollViewProps, ViewStyle } from "react-native";
+import { ScrollViewProps, StatusBarStyle, ViewStyle } from "react-native";
 import { ThemeColorName } from "../../../theme/Colors";
 import { KeyboardOffsets, ScreenPresets } from "./screen.presets";
 
@@ -14,7 +14,6 @@ export interface ScreenProps extends ScrollViewProps {
    * Children components.
    */
   children?: React.ReactNode;
-  statusBarBackgroundColor?: ColorValue;
   /**
    * An optional style override useful for padding & margin.
    */
@@ -33,7 +32,7 @@ export interface ScreenProps extends ScrollViewProps {
   /**
    * An optional status bar setting. Defaults to light-content.
    */
-  statusBar?: "light-content" | "dark-content";
+  statusBarStyle?: StatusBarStyle | null | undefined;
 
   /**
    * Should we not wrap in SafeAreaView? Defaults to false.
@@ -56,4 +55,6 @@ export interface ScreenProps extends ScrollViewProps {
   withHorizontalPadding?: boolean;
 
   withVerticalPadding?: boolean;
+
+  statusBarBackgroundColor?: ThemeColorName;
 }

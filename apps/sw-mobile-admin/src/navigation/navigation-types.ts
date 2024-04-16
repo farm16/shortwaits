@@ -16,8 +16,8 @@ import {
   UpdateLocalClientDtoType,
   WeekHoursType,
 } from "@shortwaits/shared-lib";
-import { MODAL_SCREENS as SHARED_MODAL_SCREENS, SelectorModalScreenParams, ModalStackParamList as SharedModalStackParamList } from "@shortwaits/shared-ui";
-import { selectorConfigs } from "../screens/modals/selector/selector-config";
+import { QrScannerTypes } from "@shortwaits/shared-ui";
+import { selectorConfigs } from "../screens/modals/selector-modal/selector-config";
 import { AUTHORIZED_SCREENS, AUTHORIZED_STACK_SCREENS, MODAL_SCREENS, NAVIGATION_STACKS, UNAUTHORIZED_SCREENS } from "./navigation-constants";
 
 export type FormData = {
@@ -45,7 +45,16 @@ export type SelectorModalData =
 export type SelectorModalModeType = keyof typeof selectorConfigs;
 
 export type ModalStackParamList = {
-  [MODAL_SCREENS.SELECTOR_MODAL_SCREEN]: SelectorModalScreenParams<SelectorModalModeType, SelectorModalData>;
+  [MODAL_SCREENS.SELECTOR_MODAL_SCREEN]: {
+    mode: SelectorModalModeType;
+    data: SelectorModalData;
+    onSubmit?(arg: SelectorModalData): void;
+    onDismiss?(): void;
+    title?: string;
+    description?: string;
+    multiple?: boolean;
+    closeOnSubmit?: boolean;
+  };
   [MODAL_SCREENS.SCHEDULE_MODAL_SCREEN]: {
     hours: WeekHoursType;
     headerTitle?: string;
@@ -115,7 +124,13 @@ export type ModalStackParamList = {
     onLoad?(): void;
     onGoBack?(arg0): void;
   };
-  [SHARED_MODAL_SCREENS.QR_SCANNER_MODAL_SCREEN]: SharedModalStackParamList["qr-scanner-modal-screen"];
+  [MODAL_SCREENS.QR_SCANNER_MODAL_SCREEN]: {
+    onSubmit?(qrValue: string): void;
+    onDismiss?(): void;
+    title?: string;
+    description?: string;
+    type: QrScannerTypes;
+  };
 };
 
 export type AuthorizedTabsParamList = {

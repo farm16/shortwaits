@@ -1,7 +1,7 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import { useTheme } from "@shortwaits/shared-ui";
 import React from "react";
-import { EventTicketScreen, QrScannerModal, SelectorScreenModal, UpdateClientModal } from "../../screens";
+import { EventTicketModal, QrScannerModal, SelectorScreenModal, UpdateClientModal } from "../../screens";
 import { MODAL_SCREENS } from "../navigation-constants";
 import { ModalStackParamList } from "../navigation-types";
 
@@ -23,7 +23,7 @@ export const ModalsNavigator = () => {
       <Stack.Screen name={SELECTOR_MODAL_SCREEN} component={SelectorScreenModal} />
       <Stack.Screen name={QR_SCANNER_MODAL_SCREEN} component={QrScannerModal} />
       <Stack.Screen name={UPDATE_CLIENT_MODAL_SCREEN} component={UpdateClientModal} />
-      <Stack.Screen name={EVENT_TICKET_MODAL_SCREEN} component={EventTicketScreen} />
+      <Stack.Screen name={EVENT_TICKET_MODAL_SCREEN} component={EventTicketModal} />
     </Stack.Navigator>
   );
 };

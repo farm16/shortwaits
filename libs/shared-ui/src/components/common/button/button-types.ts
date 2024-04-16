@@ -31,7 +31,7 @@ export interface ButtonProps extends TouchableOpacityProps {
   /**
    * One of the different types of text presets.
    */
-  preset?: keyof ButtonViewType;
+  preset?: ButtonPresets;
 
   /**
    * One of the different types of text presets.
@@ -50,3 +50,5 @@ export interface ButtonProps extends TouchableOpacityProps {
 
   state?: "loading" | "disabled" | "enabled";
 }
+
+export type ButtonPresets = keyof ButtonViewType;

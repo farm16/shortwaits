@@ -22,33 +22,28 @@ export const FontSize = {
   small: getResponsiveFontSize(14),
   normal: getResponsiveFontSize(16),
   large: getResponsiveFontSize(18),
-  xLarge: getResponsiveFontSize(21),
-} as { [key in Sizes]: number };
+  xLarge: getResponsiveFontSize(20),
+} as const;
 
 /**
  * Metrics Sizes
  */
-const tiny = getResponsiveHeight(12);
-const small = getResponsiveHeight(14);
-const normal = getResponsiveHeight(16);
-const large = getResponsiveHeight(18);
-const xLarge = getResponsiveHeight(21);
-
-console.log({
-  tiny,
-  small,
-  normal,
-  large,
-  xLarge,
-});
 
 export const metricsSizes = {
-  tiny,
-  small,
-  normal,
-  large,
-  xLarge,
-} as { [key in Sizes]: number };
+  tiny: getResponsiveHeight(12),
+  small: getResponsiveHeight(14),
+  normal: getResponsiveHeight(16),
+  large: getResponsiveHeight(18),
+  xLarge: getResponsiveHeight(20),
+} as const;
+
+export const gutters = {
+  tiny: getResponsiveHeight(5),
+  small: getResponsiveHeight(10),
+  normal: getResponsiveHeight(16),
+  large: getResponsiveHeight(20),
+  xLarge: getResponsiveHeight(25),
+} as const;
 
 export const iconSizes = {
   tiny: getResponsiveHeight(15),
@@ -56,4 +51,4 @@ export const iconSizes = {
   normal: getResponsiveHeight(25),
   large: getResponsiveHeight(30),
   xLarge: getResponsiveHeight(35),
-} as { [key in Sizes]: number };
+} as const;

@@ -203,9 +203,11 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
 
   const emojis = values.labels.map(label => getEmojiString(label.emojiShortName)).join(" ");
 
-  return createEventStatus.isLoading ? (
-    <ActivityIndicator />
-  ) : (
+  if (createEventStatus.isLoading) {
+    return <ActivityIndicator />;
+  }
+
+  return (
     <FormContainer footer={renderSubmitButton}>
       <TextFieldCard
         title={intl.formatMessage({ id: "AddEventModal.name" })}

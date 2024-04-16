@@ -1,4 +1,5 @@
 import { PortalProvider as GPortalProvider, enableLogging } from "@gorhom/portal";
+import { InitialStaticProps, getInitialStaticPropsFromNative } from "@shortwaits/shared-mobile";
 import { PremiumMembershipModal } from "@shortwaits/shared-ui";
 import React from "react";
 import { IntlProvider } from "react-intl";
@@ -13,7 +14,9 @@ import { persistor, store } from "./store";
 
 enableLogging();
 
-export const App = () => {
+export const App = (initialStaticProps: InitialStaticProps) => {
+  getInitialStaticPropsFromNative(initialStaticProps);
+
   return (
     <WithProviders>
       {/* <Banner />

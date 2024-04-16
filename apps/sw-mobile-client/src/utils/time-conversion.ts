@@ -45,7 +45,7 @@ export const getPrettyDateFromISO = (isoDateString: string, locale: string): str
 };
 
 // outputs string in "13:00 PM - 15:00 PM"
-export const getTimesFromISO = (isoDateStartString: string, isoDateEndString: string | undefined, locale: string): string => {
+export const getPrettyTimesFromISO = (isoDateStartString: string, isoDateEndString: string | undefined, locale: string): string => {
   const dateStart = new Date(isoDateStartString);
   const options: Intl.DateTimeFormatOptions = {
     hour: "numeric",

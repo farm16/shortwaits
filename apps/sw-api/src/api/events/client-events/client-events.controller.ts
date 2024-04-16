@@ -32,14 +32,15 @@ export class EventsController {
     return this.eventsService.updateEventByClient(eventId, request.user.sub, body);
   }
 
-  @Put("join/:shortEventId")
+  @Put("register/:eventId")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
     description: "Join event by event id",
   })
-  async joinEventByEventId(@Req() request, @Body() body: EventDtoType) {
-    return this.eventsService.createEventByClient(request.user.sub, body);
+  async registerEventByEventId(@Req() request, @Param("eventId") eventId: string) {
+    console.log("registerEventByEventId >>>>");
+    return this.eventsService.registerClientToEvent(request.user.sub, eventId);
   }
 
   @Get("details/event/:shortEventId")
@@ -52,7 +53,7 @@ export class EventsController {
     return this.eventsService.getEventByShortEventId(shortEventId);
   }
 
-  @Get("details/events/:clientId")
+  @Get("details/events")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,

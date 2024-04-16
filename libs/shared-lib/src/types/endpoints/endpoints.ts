@@ -48,7 +48,8 @@ type Endpoint =
   | `local-client-user/${string}`
   | `local-client-user/business/${string}`
   | `client-events/event/${string}`
-  | `client-events/event/join`
+  | `client-events/register/${string}`
+  | `client-events/withdraw/${string}`
   | `client-events/details/event/${string}`
   | `client-events/details/events`
   | `client-events/details/service/${string}`
@@ -176,8 +177,9 @@ export const endpoints = {
   getPeopleInEvent: createEndpoint<EventIdQuery>(`events/people`, "GET"),
 
   //client-events
-  updateEventForClient: createEndpoint(`client-events/event/:eventId`, "PUT"),
-  createEventForClient: createEndpoint(`client-events/event/join`, "POST"),
+  withdrawEventForClient: createEndpoint(`client-events/withdraw/:eventId`, "PUT"),
+  registerEventByIdForClient: createEndpoint(`client-events/register/:eventId`, "PUT"),
+
   getEventDetailsForClient: createEndpoint(`client-events/details/event/:eventId`, "GET"),
   getEventsDetailsForClient: createEndpoint(`client-events/details/events`, "GET"),
   getServiceByIdForClient: createEndpoint(`client-events/details/service/:serviceId`, "GET"),

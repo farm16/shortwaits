@@ -21,6 +21,9 @@ const customConfig = {
     // unstable_enableSymlinks: true,
     // unstable_enablePackageExports: true,
   },
+  server: {
+    port: 8082,
+  },
 };
 
 module.exports = withNxMetro(mergeConfig(defaultConfig, customConfig), {

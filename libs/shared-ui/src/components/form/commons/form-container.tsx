@@ -4,8 +4,9 @@ import { Banner } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Spinner from "react-native-spinkit";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { Screen, Text } from "../..";
+import { Screen, Space, Text } from "../..";
 import { useTheme } from "../../../theme";
+import { getResponsiveHeight } from "../../../utils";
 import { ScreenProps } from "../../common/screen/screen.props";
 
 type FormContainerProps = {
@@ -37,6 +38,7 @@ export const FormContainer = (props: FormContainerProps) => {
   const clonedFooter = footer ? React.cloneElement(footer) : null;
   const { Colors } = useTheme();
   const backgroundColor = "lightBackground";
+  const statusBarBackgroundColor = "white";
 
   // todo: work in progress
   const renderStatusBanner = useCallback(() => {
@@ -95,20 +97,26 @@ export const FormContainer = (props: FormContainerProps) => {
   if (preset === "fixed") {
     return (
       <>
-        <Screen preset="fixed" unsafe {...rest} withHorizontalPadding={withHorizontalPadding} backgroundColor={backgroundColor}>
+        <Screen preset="fixed" unsafe {...rest} withHorizontalPadding={withHorizontalPadding} backgroundColor={backgroundColor} statusBarBackgroundColor={statusBarBackgroundColor}>
+          <Space size="large" />
           {children}
         </Screen>
-        {clonedFooter ? <View style={[styles.footer, { backgroundColor: Colors[backgroundColor], paddingBottom: insets.bottom + 16 }]}>{clonedFooter}</View> : null}
+        {clonedFooter ? (
+          <View style={[styles.footer, { backgroundColor: Colors[backgroundColor], paddingBottom: insets.bottom + getResponsiveHeight(16) }]}>{clonedFooter}</View>
+        ) : null}
       </>
     );
   }
 
   return (
     <>
-      <Screen preset="scroll" unsafe {...rest} withHorizontalPadding={withHorizontalPadding} backgroundColor={backgroundColor}>
+      <Screen preset="scroll" unsafe {...rest} withHorizontalPadding={withHorizontalPadding} backgroundColor={backgroundColor} statusBarBackgroundColor={statusBarBackgroundColor}>
+        <Space size="large" />
         {children}
       </Screen>
-      {clonedFooter ? <View style={[styles.footer, { backgroundColor: Colors[backgroundColor], paddingBottom: insets.bottom + 16 }]}>{clonedFooter}</View> : null}
+      {clonedFooter ? (
+        <View style={[styles.footer, { backgroundColor: Colors[backgroundColor], paddingBottom: insets.bottom + getResponsiveHeight(16) }]}>{clonedFooter}</View>
+      ) : null}
     </>
   );
 };
@@ -120,7 +128,6 @@ const styles = StyleSheet.create({
   },
   scrollView: {},
   footer: {
-    paddingTop: 22,
-    paddingHorizontal: 16,
+    paddingHorizontal: getResponsiveHeight(16),
   },
 });

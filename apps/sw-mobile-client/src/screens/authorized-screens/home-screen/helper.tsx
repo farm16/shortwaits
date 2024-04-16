@@ -90,6 +90,8 @@ export const EventItem = (props: ListRenderItemInfo<EventDtoType>) => {
   const day = format(date, "d");
   const weekday = format(date, "EEE", { locale }).toUpperCase();
 
+  const location = props.item.location.city ? props.item.location.city + ", " + props.item.location.state : "USA";
+
   return (
     <TouchableOpacity
       onPress={() => {
@@ -189,12 +191,12 @@ export const EventItem = (props: ListRenderItemInfo<EventDtoType>) => {
             alignItems: "center",
           }}
         >
-          <Icon name="clock-outline" color={Colors.black} size={getResponsiveHeight(20)} />
+          <Icon name="clock-outline" color={Colors.text} size={getResponsiveHeight(20)} />
           <TimeRange
             style={{
               fontSize: getResponsiveFontSize(12),
               fontWeight: "400",
-              color: Colors.black,
+              color: Colors.text,
               marginRight: getResponsiveHeight(16),
               paddingLeft: getResponsiveHeight(4),
             }}
@@ -210,9 +212,9 @@ export const EventItem = (props: ListRenderItemInfo<EventDtoType>) => {
             alignItems: "center",
           }}
         >
-          <Icon name="map-marker-radius-outline" color={Colors.black} size={getResponsiveHeight(20)} />
+          <Icon name="map-marker-radius-outline" color={Colors.text} size={getResponsiveHeight(20)} />
           <Text
-            text={props.item.location.city + ", " + props.item.location.state}
+            text={location}
             style={{
               fontSize: getResponsiveFontSize(12),
               fontWeight: "400",

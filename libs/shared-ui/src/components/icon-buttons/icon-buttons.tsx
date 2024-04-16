@@ -83,27 +83,22 @@ export const RightChevronButton: FC<ButtonProps> = props => {
 export const BackButton: FC<
   ButtonProps & {
     counter?: string;
+    iconColor?: string;
   }
 > = props => {
+  const { state = "enabled", iconColor, style: styleOverride, ...rest } = props;
   const {
-    Colors: { brandAccent, brandSecondary, lightBackground },
+    Colors: { brandSecondary, lightBackground },
   } = useTheme();
-  const { state = "enabled", ...rest } = props;
+
+  const color = iconColor ? iconColor : brandSecondary;
+  const style = [{ marginLeft: 16, flexDirection: "row", alignItems: "center" } as ViewStyle, styleOverride];
 
   return (
-    <Button
-      state={state}
-      preset="none"
-      style={{
-        marginLeft: 16,
-        flexDirection: "row",
-        alignItems: "center",
-      }}
-      {...rest}
-    >
+    <Button state={state} preset="none" style={style} {...rest}>
       <Icon
         name={Platform.OS === "ios" ? "chevron-left" : "arrow-left"}
-        color={disabledStates.includes(state) ? lightBackground : brandSecondary}
+        color={disabledStates.includes(state) ? lightBackground : color}
         size={getResponsiveFontSize(Platform.OS === "ios" ? 35 : 24)}
       />
       {props.counter ? (

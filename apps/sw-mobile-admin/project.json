@@ -6,9 +6,9 @@
   "targets": {
     "start": {
       "executor": "@nx/react-native:start",
-      "dependsOn": ["ensure-symlink", "sync-deps", "pod-install"],
+      "dependsOn": ["ensure-symlink"],
       "options": {
-        "port": 8081,
+        "port": 8082,
         "reset-cache": true
       }
     },
@@ -16,7 +16,15 @@
       "executor": "@nx/react-native:run-ios",
       "dependsOn": ["ensure-symlink", "sync-deps", "pod-install"],
       "options": {
-        "install": true,
+        "port": 8082,
+        "resetCache": true
+      }
+    },
+    "run-android": {
+      "executor": "@nx/react-native:run-android",
+      "dependsOn": ["ensure-symlink", "sync-deps"],
+      "options": {
+        "port": 8082,
         "resetCache": true
       }
     },
@@ -32,11 +40,6 @@
         "platform": "ios",
         "bundleOutput": "dist/apps/sw-mobile-admin/ios/main.jsbundle"
       }
-    },
-    "run-android": {
-      "executor": "@nx/react-native:run-android",
-      "dependsOn": ["ensure-symlink", "sync-deps"],
-      "options": {}
     },
     "build-android": {
       "executor": "@nx/react-native:build-android",

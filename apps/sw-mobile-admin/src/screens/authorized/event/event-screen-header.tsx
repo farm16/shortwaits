@@ -6,7 +6,7 @@ import {
   Text,
   getPrettyDateFromISO,
   getPrettyStringFromPriceWithSymbol,
-  getTimesFromISO,
+  getPrettyTimesFromISO,
   statusDisplayMessages,
   statusDisplayMessagesBackgroundColor,
   statusDisplayMessagesColor,
@@ -20,7 +20,7 @@ import { Pressable, StyleSheet, View } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useService } from "../../../store";
 
-const IconNames = {
+const iconNames = {
   date: "calendar-month-outline",
   time: "clock-outline",
   status: "list-status",
@@ -34,7 +34,7 @@ const IconNames = {
 type InfoItemProps = {
   title: string;
   value: string | BusinessLabelsType;
-  iconName: keyof typeof IconNames;
+  iconName: keyof typeof iconNames;
   onPress?: () => void;
 };
 
@@ -49,7 +49,7 @@ function InfoItem({ title, value, onPress, iconName }: InfoItemProps) {
       }}
     >
       <Container direction="row" style={{ alignItems: "center", marginBottom: 4 }}>
-        <Icon name={IconNames[iconName]} color={Colors.disabledText} size={20} />
+        <Icon name={iconNames[iconName]} color={Colors.disabledText} size={20} />
         <Text
           style={{
             color: Colors.disabledText,
@@ -168,9 +168,9 @@ export function EventScreenHeader({ event }: { event: EventDtoType }) {
                 fontSize: 14,
               }}
             >
-              {getTimesFromISO(event?.startTime, event?.expectedEndTime, intl.locale)[0]}
-              {getTimesFromISO(event?.startTime, event?.expectedEndTime, intl.locale)[1] ? <Icon name={"arrow-right"} color={"grey"} size={14} /> : null}
-              {getTimesFromISO(event?.startTime, event?.expectedEndTime, intl.locale)[1]}
+              {getPrettyTimesFromISO(event?.startTime, event?.expectedEndTime, intl.locale)[0]}
+              {getPrettyTimesFromISO(event?.startTime, event?.expectedEndTime, intl.locale)[1] ? <Icon name={"arrow-right"} color={"grey"} size={14} /> : null}
+              {getPrettyTimesFromISO(event?.startTime, event?.expectedEndTime, intl.locale)[1]}
             </Text>
           }
         />

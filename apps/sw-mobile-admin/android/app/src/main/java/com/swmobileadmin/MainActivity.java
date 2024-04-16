@@ -2,6 +2,8 @@ package com.swmobileadmin;
 
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
+
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
@@ -27,12 +29,27 @@ public class MainActivity extends ReactActivity {
   @Override
   protected ReactActivityDelegate createReactActivityDelegate() {
     return new DefaultReactActivityDelegate(
-        this,
-        getMainComponentName(),
-        // If you opted-in for the New Architecture, we enable the Fabric Renderer.
-        DefaultNewArchitectureEntryPoint.getFabricEnabled());
-  }
+      this,
+      getMainComponentName(),
+      // If you opted-in for the New Architecture, we enable the Fabric Renderer.
+      DefaultNewArchitectureEntryPoint.getFabricEnabled()) {
+      @Nullable
+      @Override
+      protected Bundle getLaunchOptions() {
+       Bundle initialProps = new Bundle();
+       Bundle brandColors = new Bundle();
 
+       brandColors.putString("primary", "#595FD9");
+       brandColors.putString("secondary", "#0f0f0f");
+       brandColors.putString("tertiary", "#EB9B04");
+
+       initialProps.putBundle("brandColors", brandColors);
+
+       return initialProps;
+     }
+   };
+  }
+  
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     SplashScreen.show(this, R.style.SplashScreenTheme, true);

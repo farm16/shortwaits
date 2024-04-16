@@ -37,18 +37,18 @@ const scanTypes = {
 
 export type QrScannerTypes = keyof typeof scanTypes;
 
-type QrScannerModalProps = {
+export type QrScannerModalProps = {
   preset: QrScannerTypes;
   title?: string;
-  onDismiss?: () => void;
-  onSubmit?: (qrCode: Code) => void;
+  onDenied?: () => void;
+  onSubmit?: (codeString?: string) => void;
 };
 
 /**
  * todo: https://github.com/mrousavy/react-native-vision-camera/issues/2257
  */
 export const QrScanner: FC<QrScannerModalProps> = props => {
-  const { onDismiss, onSubmit, title, preset } = props;
+  const { onSubmit, onDenied, title, preset } = props;
 
   const [manualValue, setManualValue] = useState<string>("");
   const [isManual, setIsManual] = useState(false);
@@ -56,24 +56,28 @@ export const QrScanner: FC<QrScannerModalProps> = props => {
   const [isCameraWarningVisible, setIsCameraWarningVisible] = useState(false);
   const device = useCameraDevice("back");
 
-  const handleCodeScanned = useCallback(
+  const handleCode = useCallback(
     async (codes: Code[]) => {
       console.log("QR codes received >>>", codes);
       for (const code of codes) {
         console.log("QR code value >>>", code);
-        onSubmit && onSubmit(code);
+        // todo: check if the code matches the regexp
+        // if this is a manual input, we need to check for manual regexp
+        // else if this comes from the camera, we need to check for camera regexp which handles a url
+        const codeString = code?.value; // will always return a string ex. "ABC123" or undefined
+        onSubmit && onSubmit(codeString);
       }
     },
     [onSubmit]
   );
 
-  const handleGoBack = useCallback(() => {
-    onDismiss && onDismiss();
-  }, [onDismiss]);
+  const handleDenied = useCallback(() => {
+    onDenied && onDenied();
+  }, [onDenied]);
 
   const codeScanner = useCodeScanner({
     codeTypes: ["qr", "ean-13"],
-    onCodeScanned: handleCodeScanned,
+    onCodeScanned: handleCode,
   });
 
   useLayoutEffect(() => {
@@ -119,12 +123,21 @@ export const QrScanner: FC<QrScannerModalProps> = props => {
     return null;
   }, [isCameraWarningVisible]);
 
+  const handleManualSubmit = useCallback(() => {
+    handleCode([
+      {
+        value: manualValue,
+        type: "qr",
+      },
+    ]);
+  }, [handleCode, manualValue]);
+
   if (!preset) {
     return null;
   }
 
   return (
-    <WithPermission permission="camera" onDenied={handleGoBack} style={styles.viewContainer}>
+    <WithPermission permission="camera" onDenied={handleDenied} style={styles.viewContainer}>
       {renderWarningMessage()}
       <Text preset="title" text={title ?? ""} />
       {isManual ? (
@@ -142,14 +155,7 @@ export const QrScanner: FC<QrScannerModalProps> = props => {
             preset={manualValue ? "primary" : "primary-disabled"}
             disabled={manualValue ? false : true}
             style={styles.noteButton}
-            onPress={() => {
-              handleCodeScanned([
-                {
-                  value: manualValue,
-                  type: "qr",
-                },
-              ]);
-            }}
+            onPress={handleManualSubmit}
           />
         </View>
       ) : (

@@ -169,5 +169,10 @@ export const textPresets = ({ FontSize, Fonts, Gutters, Colors }: ThemeCommonPar
       fontWeight: "400",
       color: Colors.subText,
     },
+    priceTag: {
+      fontSize: getResponsiveFontSize(16),
+      fontWeight: "700",
+      color: Colors.white,
+    },
   });
 };

@@ -43,6 +43,7 @@ export const MODAL_SCREENS = {
   UPDATE_LOCAL_CLIENT_MODAL_SCREEN: "update-local-client-modal-screen",
   ADD_STAFF_MODAL_SCREEN: "add-staff-modal-screen",
   WEBVIEW_MODAL_SCREEN: "webview-modal-screen",
+  QR_SCANNER_MODAL_SCREEN: "qr-scanner-modal-screen",
 } as const;
 
 export const NAVIGATION_STACKS = {

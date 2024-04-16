@@ -58,7 +58,7 @@ export const getPrettyDateFromISO = (isoDateString: string, locale: string): str
 };
 
 // outputs string in "13:00 PM - 15:00 PM"
-export const getTimesFromISO = (isoDateStartString: string, isoDateEndString?: string, overrideLocale?: Locale) => {
+export const getPrettyTimesFromISO = (isoDateStartString: string, isoDateEndString?: string, overrideLocale?: Locale) => {
   const locale = locales[overrideLocale ?? "en"];
   const dateStart = parseISO(isoDateStartString);
   const timeStart = format(dateStart, "h:mm a", { locale });
@@ -79,7 +79,7 @@ type TimeRangeProps = {
   style?: TextStyle;
 };
 export const TimeRange = ({ startTime, endTime, locale = "en", style }: TimeRangeProps) => {
-  const [start, end] = getTimesFromISO(startTime, endTime, locale);
+  const [start, end] = getPrettyTimesFromISO(startTime, endTime, locale);
   return (
     <Text style={style}>
       {start}

@@ -37,7 +37,7 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation }) => {
   if (isAdminMobileLoading) return <Text>Loading ...</Text>;
 
   return (
-    <Screen backgroundColor="white" statusBar="light-content">
+    <Screen backgroundColor="white">
       <Container alignItems="center" justifyContent="center">
         <Logo2 height={getResponsiveFontSize(80)} width={getResponsiveFontSize(80)} />
       </Container>
@@ -46,9 +46,9 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation }) => {
         <WelcomeImage height={getResponsiveHeight(200)} width={getResponsiveHeight(200)} />
         <View style={{ flex: 1 }}>
           <ScrollView>
-            <Text preset="title" style={styles.box2Text} text={intl.formatMessage({ id: "Welcome_Screen.title" })} />
+            <Text preset="titleLarge" text={intl.formatMessage({ id: "Welcome_Screen.title" })} />
             <Space size="tiny" />
-            <Text preset="titleSmall" text={intl.formatMessage({ id: "Welcome_Screen.description" })} />
+            <Text preset="textLarge" text={intl.formatMessage({ id: "Welcome_Screen.description" })} />
           </ScrollView>
         </View>
       </View>

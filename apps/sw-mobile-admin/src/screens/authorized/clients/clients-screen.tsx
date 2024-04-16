@@ -5,6 +5,7 @@ import { useIntl } from "react-intl";
 import { Alert, Animated, Dimensions, Pressable, StyleSheet, View } from "react-native";
 import { SceneMap, TabBarProps, TabView } from "react-native-tab-view";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { FloatingGroupActionButton } from "../../../components";
 import { useOsContacts } from "../../../hooks";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useCreateLocalClientsMutation, useGetAllBusinessClientsQuery } from "../../../services";
@@ -194,6 +195,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
         onIndexChange={setTabIndex}
         initialLayout={{ width: Dimensions.get("window").width }}
       />
+      <FloatingGroupActionButton />
     </Screen>
   );
 };

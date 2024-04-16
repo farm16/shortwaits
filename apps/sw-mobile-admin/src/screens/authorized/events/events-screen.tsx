@@ -2,10 +2,10 @@ import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { Container, IconButton, QrModal, Screen, Text, convertStaticSelectorModalData, getUserGreeting, useTheme } from "@shortwaits/shared-ui";
 import React, { useLayoutEffect, useState } from "react";
 import { useIntl } from "react-intl";
-import { Calendar } from "../../../components";
+import { Calendar, FloatingGroupActionButton } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useGetServicesQuery } from "../../../services";
-import { useBusiness, useEvents, useShowGhostComponent } from "../../../store";
+import { useBusiness, useEvents } from "../../../store";
 
 export function EventsScreen({ navigation }: AuthorizedScreenProps<"events-screen">) {
   const [isQrVisible, setIsQrVisible] = useState(false);
@@ -16,7 +16,6 @@ export function EventsScreen({ navigation }: AuthorizedScreenProps<"events-scree
   const intl = useIntl();
 
   useGetServicesQuery(currentBusiness._id ?? skipToken);
-  useShowGhostComponent("floatingActionButton");
 
   useLayoutEffect(() => {
     const userGreeting = getUserGreeting({
@@ -100,6 +99,7 @@ export function EventsScreen({ navigation }: AuthorizedScreenProps<"events-scree
         description2={intl.formatMessage({ id: "Events_Screen.qrCodeModal.description2" })}
       />
       <Calendar />
+      <FloatingGroupActionButton />
     </Screen>
   );
 }

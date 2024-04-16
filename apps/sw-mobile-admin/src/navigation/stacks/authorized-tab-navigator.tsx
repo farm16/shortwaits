@@ -33,7 +33,7 @@ export const AuthorizedTabNavigator = () => {
             },
           }),
         },
-        tabBarActiveTintColor: Colors.brandPrimary,
+        tabBarActiveTintColor: Colors.brandSecondary,
         tabBarInactiveTintColor: Colors.disabledText,
         tabBarAllowFontScaling: true,
         tabBarLabelStyle: {
