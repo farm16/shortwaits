@@ -1,9 +1,9 @@
 import { skipToken } from "@reduxjs/toolkit/dist/query";
-import { EventType } from "@shortwaits/shared-lib";
+import { EventDtoType, EventType } from "@shortwaits/shared-lib";
 import { Button, Colors, NonIdealState, Space, getResponsiveHeight } from "@shortwaits/shared-ui";
 import React, { FC, memo, useCallback } from "react";
 import { useIntl } from "react-intl";
-import { RefreshControl, SectionListData, View } from "react-native";
+import { RefreshControl, SectionListData, SectionListRenderItem, View } from "react-native";
 import { AgendaList, CalendarProvider, ExpandableCalendar } from "react-native-calendars";
 import { ActivityIndicator } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
@@ -13,7 +13,7 @@ import { useBusiness, useEvents } from "../../store";
 import { useCalendarTheme } from "./calendar-hooks";
 import { AgendaItem } from "./calendar-item";
 import { LocaleConfig } from "./calendar-locales";
-import { useAgendaData, useClosestDateFromAgendaData } from "./calendar-utils";
+import { AgendaItemType, useAgendaData, useClosestDateFromAgendaData } from "./calendar-utils";
 
 type CalendarSectionData = EventType;
 type Sections = {
@@ -60,15 +60,34 @@ export const Calendar: FC<CalendarProps> = memo(props => {
     } ?? skipToken
   );
 
-  const renderItem = useCallback(({ item, index }) => {
-    const triggerTick = index === 0;
+  let hasBeenTicked = true;
+  const renderItem: SectionListRenderItem<EventDtoType, AgendaItemType> = useCallback(({ section, item, index }) => {
+    const triggerTick = hasBeenTicked && index === 0;
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- we need this to reset
+    hasBeenTicked = false;
     return <AgendaItem item={item} triggerTick={triggerTick} />;
   }, []);
+
   const renderSeparatorItem = useCallback(() => <Space size="tiny" direction="horizontal" />, []);
+
   const handleRefresh = useCallback(() => {
     if (!isEventsLoading) refetchEvents();
   }, [isEventsLoading, refetchEvents]);
+
   const renderNonIdealState = useCallback(() => {
+    const handleNonIdealStateOnDone = () => {
+      if (!isEventsLoading) {
+        refetchEvents();
+      }
+    };
+    const handleNonIdealStateButtonPress = () => {
+      navigate("modals", {
+        screen: "add-event-modal-screen",
+        params: {
+          onDone: handleNonIdealStateOnDone,
+        },
+      });
+    };
     return (
       <View
         style={{
@@ -76,26 +95,7 @@ export const Calendar: FC<CalendarProps> = memo(props => {
           marginHorizontal: getResponsiveHeight(32),
         }}
       >
-        <NonIdealState
-          type={"noEvents"}
-          buttons={
-            <Button
-              text={intl.formatMessage({ id: "Events_Screen.nonIdealState.button" })}
-              onPress={() => {
-                navigate("modals", {
-                  screen: "add-event-modal-screen",
-                  params: {
-                    onDone: () => {
-                      if (!isEventsLoading) {
-                        refetchEvents();
-                      }
-                    },
-                  },
-                });
-              }}
-            />
-          }
-        />
+        <NonIdealState type={"noEvents"} buttons={<Button text={intl.formatMessage({ id: "Events_Screen.nonIdealState.button" })} onPress={handleNonIdealStateButtonPress} />} />
       </View>
     );
   }, [intl, isEventsLoading, refetchEvents]);

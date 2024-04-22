@@ -80,15 +80,7 @@ export const FormContainer = (props: FormContainerProps) => {
 
   if (isLoading) {
     return (
-      <View
-        style={[
-          styles.fixedView,
-          {
-            justifyContent: "center",
-            alignItems: "center",
-          },
-        ]}
-      >
+      <View style={[styles.loadingView]}>
         <Spinner isVisible={true} size={50} type="ThreeBounce" color={Colors.brandSecondary} />
       </View>
     );
@@ -96,38 +88,55 @@ export const FormContainer = (props: FormContainerProps) => {
 
   if (preset === "fixed") {
     return (
-      <>
-        <Screen preset="fixed" unsafe {...rest} withHorizontalPadding={withHorizontalPadding} backgroundColor={backgroundColor} statusBarBackgroundColor={statusBarBackgroundColor}>
-          <Space size="large" />
-          {children}
-        </Screen>
+      <Screen unsafe preset="fixed" {...rest} withHorizontalPadding={withHorizontalPadding} backgroundColor={backgroundColor} statusBarBackgroundColor={statusBarBackgroundColor}>
+        <Space size="large" />
+        {children}
         {clonedFooter ? (
-          <View style={[styles.footer, { backgroundColor: Colors[backgroundColor], paddingBottom: insets.bottom + getResponsiveHeight(16) }]}>{clonedFooter}</View>
+          <View
+            style={[
+              styles.footer,
+              {
+                paddingBottom: insets.bottom + getResponsiveHeight(16),
+                paddingTop: getResponsiveHeight(16),
+              },
+            ]}
+          >
+            {clonedFooter}
+          </View>
         ) : null}
-      </>
+      </Screen>
     );
   }
 
   return (
-    <>
-      <Screen preset="scroll" unsafe {...rest} withHorizontalPadding={withHorizontalPadding} backgroundColor={backgroundColor} statusBarBackgroundColor={statusBarBackgroundColor}>
-        <Space size="large" />
-        {children}
-      </Screen>
+    <Screen unsafe preset="scroll" {...rest} withHorizontalPadding={withHorizontalPadding} backgroundColor={backgroundColor} statusBarBackgroundColor={statusBarBackgroundColor}>
+      <Space size="large" />
+      {children}
       {clonedFooter ? (
-        <View style={[styles.footer, { backgroundColor: Colors[backgroundColor], paddingBottom: insets.bottom + getResponsiveHeight(16) }]}>{clonedFooter}</View>
+        <View
+          style={[
+            styles.footer,
+            {
+              paddingBottom: getResponsiveHeight(16),
+              paddingTop: getResponsiveHeight(16),
+            },
+          ]}
+        >
+          {clonedFooter}
+        </View>
       ) : null}
-    </>
+    </Screen>
   );
 };
 
 const styles = StyleSheet.create({
-  root: {},
-  fixedView: {
+  loadingView: {
     flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
-  scrollView: {},
   footer: {
-    paddingHorizontal: getResponsiveHeight(16),
+    flex: 1,
+    justifyContent: "flex-end",
   },
 });

@@ -58,7 +58,7 @@ export const FabButton = (props: FloatingActionButtonProps) => {
   }, [Colors, backgroundColor, icon, iconColor, insets.bottom, insets.right, isVisible, label, onPress, withPortal]);
 
   if (withPortal) {
-    return <Portal>{floatingActionButton()}</Portal>;
+    return <Portal hostName="root">{floatingActionButton()}</Portal>;
   }
   return floatingActionButton();
 };

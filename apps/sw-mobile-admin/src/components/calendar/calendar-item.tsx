@@ -56,19 +56,21 @@ export const AgendaItem = (props: AgendaItemProps) => {
     Alert.alert(item.name);
   }, [item.name]);
 
-  const eventServiceColor = useCallback(
-    () => (
+  const eventServiceColor = useCallback(() => {
+    if (!service?.serviceColor?.hexCode) {
+      return null;
+    }
+    return (
       <View
         style={[
           styles.eventServiceColor,
           {
-            backgroundColor: service?.serviceColor?.hexCode ?? Colors.brandAccent1,
+            backgroundColor: service?.serviceColor?.hexCode,
           },
         ]}
       />
-    ),
-    [Colors.brandAccent1, service?.serviceColor?.hexCode]
-  );
+    );
+  }, [service?.serviceColor?.hexCode]);
   const renderRightActions = (_progress: Animated.AnimatedInterpolation<any>, dragX: Animated.AnimatedInterpolation<any>) => {
     return <EventStatusButtons event={item} size="small" />;
   };
@@ -230,13 +232,9 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   eventNameFloatingLabels: {
-    // right: 5,
-    // top: 0,
-    // position: "absolute",
     flexDirection: "row",
   },
   eventDescription: {
-    // backgroundColor: "red",
     flexGrow: 1,
     height: "100%",
     alignItems: "flex-start",

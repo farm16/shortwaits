@@ -3,22 +3,26 @@ import { View, ViewStyle } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { Space, Text } from "..";
 import { ThemeColorName, useTheme } from "../../theme";
+import { TextPresets } from "../../theme/presets";
 import { getResponsiveHeight } from "../../utils";
 
 const messageTypeToPreset = {
   error: "errorMessage",
   warning: "warningMessage",
   success: "successMessage",
+  info: "infoMessage",
 } as const;
 const messageTypeToIconName = {
   error: "alert-circle",
   warning: "alert",
   success: "check-circle",
+  info: "information",
 } as const;
 const messageTypeToColor = {
   error: "failed",
   warning: "warning",
   success: "success",
+  info: "info",
 } as const;
 
 type MessageProps = {
@@ -39,16 +43,17 @@ export function Messages({ type, title, message, style, textColor = "text" }: Me
           flexDirection: "row",
           alignItems: "center",
           backgroundColor: Colors.white,
-          padding: getResponsiveHeight(16),
+          paddingHorizontal: getResponsiveHeight(12),
+          paddingVertical: getResponsiveHeight(12),
           borderRadius: getResponsiveHeight(8),
-          borderBottomWidth: 3,
-          borderBottomColor: Colors[messageTypeToColor[type]],
+          borderWidth: 1.5,
+          borderColor: Colors[messageTypeToColor[type]],
         },
         style,
       ]}
     >
       <Icon name={messageTypeToIconName[type]} size={26} color={Colors[messageTypeToColor[type]]} />
-      <Space direction="vertical" />
+      <Space direction="vertical" size="small" />
       <View
         style={{
           flex: 1,
@@ -67,7 +72,7 @@ export function Messages({ type, title, message, style, textColor = "text" }: Me
           </>
         ) : null}
         <Text
-          preset={messageTypeToPreset[type]}
+          preset={messageTypeToPreset[type] as TextPresets}
           style={{
             color: Colors[textColor],
             flexShrink: 1,

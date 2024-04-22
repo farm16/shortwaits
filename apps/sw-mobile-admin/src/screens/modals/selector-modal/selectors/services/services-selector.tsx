@@ -148,6 +148,7 @@ export const ServicesSelector: FC<ModalsScreenProps<"selector-modal-screen">> = 
   if (isSuccess) {
     return (
       <Screen preset="fixed" withHorizontalPadding unsafe>
+        <Space />
         <AnimatedSearchBar onChangeText={handleOnChangeText} isVisible={isListSearchable} />
         <FlatList
           refreshControl={

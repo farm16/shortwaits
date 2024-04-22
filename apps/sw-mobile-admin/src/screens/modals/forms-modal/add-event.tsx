@@ -6,7 +6,7 @@ import {
   CurrencyFieldCard,
   ExpandableSection,
   FormContainer,
-  Space,
+  IconButton,
   Text,
   TextFieldCard,
   TimePickerFieldCard,
@@ -14,7 +14,7 @@ import {
 } from "@shortwaits/shared-ui";
 import { FormikErrors } from "formik";
 import { noop } from "lodash";
-import React, { FC, useEffect, useLayoutEffect, useMemo, useState } from "react";
+import React, { FC, useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { useIntl } from "react-intl";
 import { Alert } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
@@ -28,18 +28,12 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
   const onSubmit = params?.onSubmit ?? noop;
   const onDone = params?.onDone ?? noop;
   const closeOnSubmit = params?.closeOnSubmit ?? true;
-
   const intl = useIntl(); // Access the intl object
-
   const [selectedService, setSelectedService] = useState<ServiceDtoType | null>(null);
   const [isFree, setIsFree] = useState<boolean>(true);
   const business = useBusiness();
   const user = useUser();
   const [createEvent, createEventStatus] = useCreateEventMutation();
-
-  // useGetServicesQuery(business?._id ? business._id : skipToken, {
-  //   refetchOnMountOrArgChange: true,
-  // });
 
   const validateDates = (formData: CreateEventDtoType): FormikErrors<CreateEventDtoType> => {
     const errors: FormikErrors<CreateEventDtoType> = {};
@@ -132,11 +126,15 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
   console.log("errors", errors);
 
   useLayoutEffect(() => {
+    const handleReset = () => {
+      setValues(initialValues, false);
+    };
     navigation.setOptions({
       headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
+      headerRight: () => <IconButton iconType="reset" onPress={handleReset} withMarginRight />,
       headerTitle: () => <Text preset="headerTitle" text={intl.formatMessage({ id: "AddEventModal.title" })} />,
     });
-  }, [handleSubmit, navigation, intl]);
+  }, [navigation, intl, setValues, initialValues]);
 
   useEffect(() => {
     if (createEventStatus.isSuccess && closeOnSubmit) {
@@ -192,7 +190,7 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
     Alert.alert(intl.formatMessage({ id: "AddEventModal.errorTitle" }), createEventStatus.error.message);
   }
 
-  const renderSubmitButton = (
+  const submitButton = (
     <Button
       text={intl.formatMessage({ id: "AddEventModal.createEventButton" })}
       onPress={() => {
@@ -203,12 +201,112 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
 
   const emojis = values.labels.map(label => getEmojiString(label.emojiShortName)).join(" ");
 
+  const handleIsFreePress = useCallback(() => {
+    setIsFree(isFree => {
+      if (!isFree) {
+        setFieldValue("priceExpected", 0);
+      }
+      return !isFree;
+    });
+  }, [setFieldValue]);
+
+  const handleServicePress = useCallback(() => {
+    navigation.navigate("modals", {
+      screen: "selector-modal-screen",
+      params: {
+        type: "services",
+        searchable: true,
+        selectedData: selectedService ? [selectedService._id] : [],
+        onSelect: (service: ServiceDtoType) => {
+          if (service._id === values.serviceId) {
+            setFieldValue("serviceId", "");
+            setSelectedService(null);
+          } else {
+            setSelectedService(service);
+            setFieldValue("serviceId", service._id);
+          }
+        },
+      },
+    });
+  }, [navigation, selectedService, setFieldValue, values.serviceId]);
+
+  const handleClientPress = useCallback(() => {
+    navigation.navigate("modals", {
+      screen: "selector-modal-screen",
+      params: {
+        type: "clients",
+        headerTitle: intl.formatMessage({ id: "AddEventModal.client.selector.headerTitle" }),
+        selectedData: values.clientsIds,
+        multiple: true,
+        minSelectedItems: 1,
+        onGoBack: clients => {
+          if (clients) {
+            console.log("selected clients:", clients);
+            const clientsIds = clients.map(s => s._id);
+            setFieldValue("clientsIds", clientsIds);
+          }
+        },
+      },
+    });
+  }, [navigation, setFieldValue, intl, values.clientsIds]);
+
+  const handleStaffPress = useCallback(() => {
+    navigation.navigate("modals", {
+      screen: "selector-modal-screen",
+      params: {
+        type: "staff",
+        headerTitle: intl.formatMessage({ id: "AddEventModal.staff.selector.headerTitle" }),
+        selectedData: values.staffIds,
+        multiple: true,
+        minSelectedItems: 1,
+        onGoBack: staff => {
+          console.log("selected staff:", staff);
+          const staffIds = staff.map(s => s._id);
+          setFieldValue("staffIds", staffIds);
+        },
+      },
+    });
+  }, [navigation, setFieldValue, intl, values.staffIds]);
+
+  const handleLabelPress = useCallback(() => {
+    navigation.navigate("modals", {
+      screen: "selector-modal-screen",
+      params: {
+        type: "eventLabels",
+        data: values.labels,
+        multiple: true,
+        onGoBack: labels => {
+          setFieldValue("labels", labels);
+        },
+      },
+    });
+  }, [navigation, setFieldValue, values.labels]);
+
+  const handlePaymentMethodPress = useCallback(() => {
+    navigation.navigate("modals", {
+      screen: "selector-modal-screen",
+      params: {
+        type: "static",
+        headerTitle: intl.formatMessage({ id: "AddEventModal.paymentMethod" }),
+        data: Object.keys(eventPaymentMethods).map(key => {
+          return {
+            key,
+            title: eventPaymentMethods[key],
+          };
+        }),
+        onSelect: paymentMethod => {
+          setFieldValue("paymentMethod", paymentMethod.key);
+        },
+      },
+    });
+  }, [navigation, setFieldValue, intl]);
+
   if (createEventStatus.isLoading) {
     return <ActivityIndicator />;
   }
 
   return (
-    <FormContainer footer={renderSubmitButton}>
+    <FormContainer footer={submitButton}>
       <TextFieldCard
         title={intl.formatMessage({ id: "AddEventModal.name" })}
         placeholder={intl.formatMessage({ id: "AddEventModal.name" })}
@@ -222,27 +320,17 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
         subTitle={selectedService ? selectedService.name : intl.formatMessage({ id: "AddEventModal.service.description" })}
         leftIconName={selectedService ? "circle" : "circle-outline"}
         leftIconColor={selectedService?.serviceColor?.hexCode ?? "grey"}
-        onPress={() =>
-          navigation.navigate("modals", {
-            screen: "selector-modal-screen",
-            params: {
-              type: "services",
-              searchable: true,
-              selectedData: selectedService ? [selectedService._id] : [],
-              onSelect: (service: ServiceDtoType) => {
-                if (service._id === values.serviceId) {
-                  setFieldValue("serviceId", "");
-                  setSelectedService(null);
-                } else {
-                  setSelectedService(service);
-                  setFieldValue("serviceId", service._id);
-                }
-              },
-            },
-          })
-        }
+        onPress={handleServicePress}
         isTouched={touched.serviceId}
         errors={errors.serviceId}
+      />
+      <TextFieldCard
+        title={intl.formatMessage({ id: "AddEventModal.description" })}
+        placeholder={intl.formatMessage({ id: "AddEventModal.enterDescription" })}
+        value={values.description}
+        onChangeText={handleChange("description")}
+        isTouched={touched.description}
+        errors={errors.description}
       />
       <ButtonCard
         isVisible={!selectedService}
@@ -259,7 +347,6 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
         isTouched={touched.startTime}
         errors={errors.startTime}
       />
-
       <TimePickerFieldCard
         disabled={values?.hasDuration}
         title={intl.formatMessage({ id: "AddEventModal.endTime" })}
@@ -274,40 +361,15 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
           rightIconName={isFree ? "checkbox-outline" : "checkbox-blank-outline"}
           title={intl.formatMessage({ id: "AddEventModal.free" })}
           isVisible={!selectedService}
-          onPress={() => {
-            setIsFree(isFree => {
-              if (!isFree) {
-                setFieldValue("priceExpected", 0);
-              }
-              return !isFree;
-            });
-          }}
+          onPress={handleIsFreePress}
         />
       )}
-
       {isFree ? null : (
         <>
           <ButtonCard
             title={intl.formatMessage({ id: "AddEventModal.paymentMethod" })}
             subTitle={values.paymentMethod ? eventPaymentMethods[values.paymentMethod] : intl.formatMessage({ id: "AddEventModal.selectPaymentMethod" })}
-            onPress={() =>
-              navigation.navigate("modals", {
-                screen: "selector-modal-screen",
-                params: {
-                  type: "static",
-                  headerTitle: intl.formatMessage({ id: "AddEventModal.paymentMethod" }),
-                  data: Object.keys(eventPaymentMethods).map(key => {
-                    return {
-                      key,
-                      title: eventPaymentMethods[key],
-                    };
-                  }),
-                  onSelect: paymentMethod => {
-                    setFieldValue("paymentMethod", paymentMethod.key);
-                  },
-                },
-              })
-            }
+            onPress={handlePaymentMethodPress}
           />
           <CurrencyFieldCard
             disabled={!!selectedService}
@@ -340,25 +402,7 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
               ? `${intl.formatMessage({ id: "AddEventModal.client.description" })}: ${values.clientsIds.length}`
               : intl.formatMessage({ id: "AddEventModal.client.emptyDescription" })
           }
-          onPress={() =>
-            navigation.navigate("modals", {
-              screen: "selector-modal-screen",
-              params: {
-                type: "clients",
-                headerTitle: intl.formatMessage({ id: "AddEventModal.client.selector.headerTitle" }),
-                selectedData: values.clientsIds,
-                multiple: true,
-                minSelectedItems: 1,
-                onGoBack: clients => {
-                  if (clients) {
-                    console.log("selected clients:", clients);
-                    const clientsIds = clients.map(s => s._id);
-                    setFieldValue("clientsIds", clientsIds);
-                  }
-                },
-              },
-            })
-          }
+          onPress={handleClientPress}
         />
         <ButtonCard
           title={intl.formatMessage({ id: "AddEventModal.staff.title" })}
@@ -367,48 +411,12 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
               ? `${intl.formatMessage({ id: "AddEventModal.staff.description" })}: ${values.staffIds.length}`
               : intl.formatMessage({ id: "AddEventModal.staff.emptyDescription" })
           }
-          onPress={() =>
-            navigation.navigate("modals", {
-              screen: "selector-modal-screen",
-              params: {
-                type: "staff",
-                headerTitle: intl.formatMessage({ id: "AddEventModal.staff.selector.headerTitle" }),
-                selectedData: values.staffIds,
-                multiple: true,
-                minSelectedItems: 1,
-                onGoBack: staff => {
-                  console.log("selected staff:", staff);
-                  const staffIds = staff.map(s => s._id);
-                  setFieldValue("staffIds", staffIds);
-                },
-              },
-            })
-          }
+          onPress={handleStaffPress}
         />
         <ButtonCard
           title={intl.formatMessage({ id: "AddEventModal.labels" })}
           subTitle={values.labels.length > 0 ? `${emojis}` : intl.formatMessage({ id: "AddEventModal.selectLabels" })}
-          onPress={() =>
-            navigation.navigate("modals", {
-              screen: "selector-modal-screen",
-              params: {
-                type: "eventLabels",
-                data: values.labels,
-                multiple: true,
-                onGoBack: labels => {
-                  setFieldValue("labels", labels);
-                },
-              },
-            })
-          }
-        />
-        <TextFieldCard
-          title={intl.formatMessage({ id: "AddEventModal.description" })}
-          placeholder={intl.formatMessage({ id: "AddEventModal.enterDescription" })}
-          value={values.description}
-          onChangeText={handleChange("description")}
-          isTouched={touched.description}
-          errors={errors.description}
+          onPress={handleLabelPress}
         />
         <TextFieldCard
           title={intl.formatMessage({ id: "AddEventModal.notes" })}
@@ -420,7 +428,6 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
           errors={errors.notes}
         />
       </ExpandableSection>
-      <Space size="large" />
     </FormContainer>
   );
 };

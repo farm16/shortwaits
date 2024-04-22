@@ -1,5 +1,6 @@
 import React, { Fragment, ReactNode, useState } from "react";
 import { useIntl } from "react-intl";
+import { StyleSheet } from "react-native";
 import { AnimatedHiddenView, Button } from "..";
 import { useTheme } from "../../theme";
 
@@ -17,14 +18,11 @@ export const ExpandableSection: React.FC<ExpandableSectionProps> = ({ children }
     <Fragment>
       <Button
         preset="link"
+        textStyle={{ color: Colors.text, fontWeight: "500" }}
         leftIconName={isWithMoreInfo ? "chevron-up" : "chevron-down"}
-        leftIconColor={Colors.brandSecondary}
+        leftIconColor={Colors.brandPrimary}
         leftIconSize={24}
-        style={{
-          flexDirection: "row",
-          marginTop: 8,
-          marginBottom: 16,
-        }}
+        style={styles.container}
         text={buttonText}
         onPress={() => {
           setIsWithMoreInfo(prevState => !prevState);
@@ -34,3 +32,9 @@ export const ExpandableSection: React.FC<ExpandableSectionProps> = ({ children }
     </Fragment>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: "row",
+  },
+});

@@ -1,11 +1,10 @@
-import { Portal } from "@gorhom/portal";
 import React, { FC } from "react";
-import { View } from "react-native";
-import { Modal } from "react-native-paper";
+import { StyleSheet, View } from "react-native";
+import { Modal, Portal } from "react-native-paper";
 import QRCode from "react-native-qrcode-svg";
-import { IconButton } from "..";
+import { IconButton, Messages } from "..";
 import { useTheme } from "../../theme";
-import { getResponsiveFontSize } from "../../utils";
+import { getResponsiveFontSize, getResponsiveHeight, getResponsiveWidth } from "../../utils";
 import { Space, Text } from "../common";
 
 type QrModalProps = {
@@ -13,82 +12,81 @@ type QrModalProps = {
   value: string;
   title: string;
   description?: JSX.Element | string;
-  description2?: string;
+  warningMessage?: string;
   setIsVisible: (isVisible: boolean) => void;
 };
+
 export const QrModal: FC<QrModalProps> = props => {
-  const { isVisible, setIsVisible, value, title, description, description2 } = props;
+  const { isVisible, setIsVisible, value, title, description, warningMessage } = props;
   const { Colors } = useTheme();
 
   return (
     <Portal>
       <Modal visible={isVisible} dismissable={false}>
         <View
-          style={{
-            backgroundColor: Colors.lightBackground,
-            width: "90%",
-            alignSelf: "center",
-            justifyContent: "flex-start",
-            alignItems: "center",
-            borderRadius: 15,
-          }}
+          style={[
+            {
+              backgroundColor: Colors.lightBackground,
+            },
+            styles.modal,
+          ]}
         >
-          <IconButton
-            style={{
-              position: "absolute",
-              top: 12,
-              right: 12,
-              zIndex: 10,
-            }}
-            iconType="close"
-            onPress={() => {
-              setIsVisible(false);
-            }}
-          />
+          <View style={styles.exit}>
+            <IconButton
+              iconColor="brandSecondary"
+              iconType="close"
+              onPress={() => {
+                setIsVisible(false);
+              }}
+            />
+          </View>
+          {warningMessage && (
+            <Messages
+              style={{
+                marginTop: getResponsiveHeight(12),
+                marginBottom: getResponsiveHeight(12),
+              }}
+              type="info"
+              message={warningMessage}
+            />
+          )}
           <Text
-            preset="none"
-            style={{
-              color: Colors.text,
-              fontWeight: "600",
-              marginTop: 20,
-              marginBottom: 20,
-              width: "90%",
-              textAlign: "center",
-              fontSize: getResponsiveFontSize(18),
-            }}
+            preset="title"
+            style={[
+              {
+                color: Colors.text,
+              },
+              styles.title,
+            ]}
           >
             {title}
           </Text>
-          <QRCode value={value} size={200} />
-          <Space size="large" />
-          <Text
-            preset="none"
-            style={{
-              color: Colors.text,
-              fontWeight: "400",
-              textAlign: "center",
-              paddingHorizontal: 16,
-              fontSize: getResponsiveFontSize(16),
-            }}
-          >
-            {description}
-          </Text>
-          <Space size="large" />
-          <Text
-            preset="none"
-            style={{
-              color: Colors.subText,
-              fontWeight: "400",
-              textAlign: "center",
-              paddingHorizontal: 16,
-              fontSize: getResponsiveFontSize(14),
-            }}
-          >
-            {description2}
-          </Text>
-          <Space size="xLarge" />
+          <View style={{ alignSelf: "center" }}>
+            <QRCode value={value} size={200} />
+          </View>
+          <Space />
+          <Text preset="titleSmall">{description}</Text>
+          <Space />
         </View>
       </Modal>
     </Portal>
   );
 };
+
+const styles = StyleSheet.create({
+  modal: {
+    marginHorizontal: getResponsiveWidth(16),
+    alignSelf: "center",
+    borderRadius: getResponsiveHeight(16),
+    padding: getResponsiveHeight(16),
+  },
+  exit: {
+    alignItems: "flex-end",
+    justifyContent: "center",
+  },
+  title: {
+    marginBottom: getResponsiveHeight(16),
+    fontSize: getResponsiveFontSize(18),
+    alignSelf: "center",
+  },
+});

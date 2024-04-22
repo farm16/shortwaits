@@ -95,6 +95,7 @@
     "react-native-webview": "*",
     "react-native-code-push": "*",
     "react-native-fbsdk-next": "*",
-    "react-native-toast-message": "*"
+    "react-native-toast-message": "*",
+    "react-native-walkthrough-tooltip": "*"
   }
 }

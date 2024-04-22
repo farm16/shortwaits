@@ -7,7 +7,7 @@ import { persistedReducer } from "./rootReducer";
 
 const middlewares = [shortwaitsApi.middleware];
 
-if (__DEV__ && !process.env.JEST_WORKER_ID) {
+if (__DEV__) {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const createDebugger = require("redux-flipper").default;
   middlewares.push(createDebugger());

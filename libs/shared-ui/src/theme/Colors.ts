@@ -65,10 +65,14 @@ export const customDarkColors = {
   pending: "#f39c12",
   failed: "#e74c3c",
   cancel: "#34495e",
-  successBackground: "#eaf9f2",
-  failedBackground: "#fcf2f2",
+  info: "#3498db",
+
   warningBackground: "#fdf5e7",
+  successBackground: "#eaf9f2",
+  pendingBackground: "#fef5e7",
+  failedBackground: "#fcf2f2",
   cancelBackground: "#eaecee",
+  infoBackground: "#e8f4fb",
 
   inputBackground: "rgb(218,226,226)",
 
@@ -99,10 +103,14 @@ export const customColors = {
   failed: "#e74c3c",
   cancel: "#34495e",
   warning: "#f1c40f",
-  successBackground: "#eaf9f2",
-  failedBackground: "#fcf2f2",
+  info: "#3498db",
+
   warningBackground: "#fdf5e7",
+  successBackground: "#eaf9f2",
+  pendingBackground: "#fef5e7",
+  failedBackground: "#fcf2f2",
   cancelBackground: "#eaecee",
+  infoBackground: "#e8f4fb",
 
   inputBackground: "rgb(218,226,226)",
 

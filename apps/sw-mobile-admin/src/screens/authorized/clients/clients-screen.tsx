@@ -5,6 +5,7 @@ import { useIntl } from "react-intl";
 import { Alert, Animated, Dimensions, Pressable, StyleSheet, View } from "react-native";
 import { SceneMap, TabBarProps, TabView } from "react-native-tab-view";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import Tooltip from "react-native-walkthrough-tooltip";
 import { FloatingGroupActionButton } from "../../../components";
 import { useOsContacts } from "../../../hooks";
 import { AuthorizedScreenProps } from "../../../navigation";
@@ -27,6 +28,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
   const currentClients = useLocalClients();
   const [tabIndex, setTabIndex] = useState(0);
   const [isListSearchable, setIsListSearchable] = useState(false);
+  const [swClientToolTipVisible, setSwClientToolTipVisible] = useState(false);
 
   const handleAddClient = useCallback(() => {
     navigation.navigate("modals", {
@@ -99,15 +101,48 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
       headerTitle: "",
       headerLeft: () => {
         return (
-          <Container direction="row" justifyContent="center">
+          <Container direction="row" justifyContent="center" alignItems="center">
             <Text
               preset="headerTitle"
               style={{
-                fontWeight: "700",
-                paddingLeft: 16,
+                paddingLeft: getResponsiveHeight(16),
+                marginRight: getResponsiveHeight(4),
               }}
-              text={tabIndex === 0 ? "Shortwaits Clients" : "Internal Clients"}
+              text={tabIndex === 0 ? "Shortwaits Clients" : "Address book"}
             />
+            <Tooltip
+              isVisible={swClientToolTipVisible}
+              closeOnChildInteraction
+              contentStyle={{ justifyContent: "center", alignItems: "center" }}
+              content={
+                <View>
+                  {tabIndex === 0 ? (
+                    <Text>
+                      <Text text={"Shortwaits clients holds all your clients that were added using the "} />
+                      <Text
+                        preset="textLinkLarge"
+                        text="Shortwaits App"
+                        onPress={() => {
+                          Alert.alert("Shortwaits App");
+                        }}
+                      />
+                      <Text text="." />
+                    </Text>
+                  ) : (
+                    <Text>The Address book holds your local clients that were added manually using the Shortwaits Admin App.</Text>
+                  )}
+                </View>
+              }
+              placement="bottom"
+              onClose={() => setSwClientToolTipVisible(false)}
+            >
+              <IconButton
+                iconType="information"
+                onPress={() => {
+                  setSwClientToolTipVisible(true);
+                }}
+              />
+            </Tooltip>
           </Container>
         );
       },
@@ -123,7 +158,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
               }}
             />
             {tabIndex === 0 ? (
-              <IconButton iconType="scan-qr" withMarginRight onPress={() => handleAddClient()} />
+              <IconButton iconType="add" withMarginRight onPress={() => handleAddClient()} />
             ) : (
               <Fragment>
                 <IconButton iconType="contactSync" withMarginRight onPress={() => handleSyncContacts()} />
@@ -134,7 +169,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
         );
       },
     });
-  }, [handleAddClient, handleAddLocalClient, handleSyncContacts, isListSearchable, isLoading, navigation, tabIndex]);
+  }, [handleAddClient, handleAddLocalClient, handleSyncContacts, intl, isListSearchable, isLoading, navigation, tabIndex, swClientToolTipVisible]);
 
   const routes = useMemo(() => {
     return [

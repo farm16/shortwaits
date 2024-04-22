@@ -1,4 +1,3 @@
-// import { Portal } from "@gorhom/portal";
 import { Portal } from "@gorhom/portal";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import React, { useCallback, useState } from "react";

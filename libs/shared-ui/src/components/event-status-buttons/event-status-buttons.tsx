@@ -83,7 +83,22 @@ export const EventStatusButtons: React.FC<EventStatusButtonsProps> = ({ event, o
                     },
                   ]}
                 />
-              ) : null}
+              ) : (
+                <Text
+                  text={intl.formatMessage({
+                    id: `Event_Screen.eventStatusButton.status.${eventStatusNames[status]}`,
+                  })}
+                  preset="none"
+                  style={[
+                    {
+                      marginTop: 4,
+                      fontWeight: "500",
+                      fontSize: getResponsiveFontSize(10),
+                      color: Colors[eventStatusColors[status].color],
+                    },
+                  ]}
+                />
+              )}
               {/* {nextEventStatuses[event?.status?.statusName ?? ""].length - 1 !== index ? (
               <View style={[styles.separator]} />
             ) : null} */}

@@ -33,6 +33,8 @@ export const AddServicesModal: FC<ModalsScreenProps<"add-service-modal-screen">>
   const business = useBusiness();
   const [createService, createServiceStatus] = useCreateServiceMutation();
 
+  console.log(mobileAdminData.shortwaits.serviceColors);
+
   const defaultService = useMemo(() => {
     const defaultServiceColor = Object.keys(mobileAdminData.shortwaits.serviceColors)[0];
     return {
@@ -117,7 +119,7 @@ export const AddServicesModal: FC<ModalsScreenProps<"add-service-modal-screen">>
         handleSubmit();
       }}
       text={intl.formatMessage({
-        id: "Common.add",
+        id: "Common.submit",
       })}
     />
   );
@@ -158,7 +160,7 @@ export const AddServicesModal: FC<ModalsScreenProps<"add-service-modal-screen">>
           })}
         />
         <Space size="small" />
-        <ServiceColors selectedColor={values?.serviceColor} onSelect={handleServiceColorChange} />
+        <ServiceColors selectedColor={values?.serviceColor} onSelect={handleServiceColorChange} serviceColors={mobileAdminData.shortwaits.serviceColors} />
         <Space size="small" />
       </Card>
       <TextFieldCard
@@ -179,8 +181,8 @@ export const AddServicesModal: FC<ModalsScreenProps<"add-service-modal-screen">>
         })}
         keyboardType="number-pad"
         placeholder={"0.00"}
-        value={values.price / 100}
-        onChangeValue={price => setFieldValue("price", price * 100)}
+        value={values.price}
+        onChangeValue={price => setFieldValue("price", price)}
         isTouched={touched.price}
         errors={errors.price}
         currencyType={"USD"}

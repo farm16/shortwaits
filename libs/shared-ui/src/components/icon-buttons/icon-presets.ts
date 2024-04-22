@@ -209,6 +209,18 @@ export const iconProps = {
     color: "brandSecondary",
     size: 21,
   },
+  information: {
+    name: "information-outline",
+    backgroundColor: undefined,
+    color: "brandPrimary",
+    size: 21,
+  },
+  reset: {
+    name: "reload",
+    backgroundColor: undefined,
+    color: "brandPrimary",
+    size: 25,
+  },
   default: {
     name: "plus",
     backgroundColor: undefined,

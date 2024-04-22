@@ -22,12 +22,12 @@ const MAX = 10000;
 
 export function CurrencyFieldCard(props: TextFieldCardType) {
   const {
-    value,
+    value = 0,
     style,
     errors,
     isTouched,
     onChangeValue,
-    currencyType,
+    currencyType = "USD",
     rightIconColor,
     rightIconName,
     rightIconSize = "large",
@@ -52,7 +52,7 @@ export function CurrencyFieldCard(props: TextFieldCardType) {
   };
 
   const handleOnChangeValue = (value: number) => {
-    onChangeValue(getCentsFromDollars(value));
+    onChangeValue && onChangeValue(getCentsFromDollars(value));
   };
 
   return (
@@ -86,7 +86,7 @@ export function CurrencyFieldCard(props: TextFieldCardType) {
           precision={2}
           separator="."
           onChangeValue={handleOnChangeValue}
-          value={getDollarsFromCents(value)}
+          value={getDollarsFromCents(value as number)}
           maxValue={MAX}
           editable={!disabled}
         />

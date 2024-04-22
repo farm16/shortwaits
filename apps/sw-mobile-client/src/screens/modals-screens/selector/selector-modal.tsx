@@ -1,7 +1,6 @@
 import { SelectorTypes } from "@/navigation/navigation-screen-props";
+import { Screen, Space } from "@shortwaits/shared-ui";
 import React, { FC } from "react";
-
-import { Screen } from "@shortwaits/shared-ui";
 import { ModalsScreenProps } from "../../../navigation";
 import { CategoriesSelector } from "./selectors/categories/categories-selector";
 import { ClientsSelector } from "./selectors/clients/clients-selector";
@@ -26,6 +25,7 @@ export function SelectorScreenModal(props: ModalsScreenProps<"selector-modal-scr
 
   return (
     <Screen preset="fixed" unsafe withHorizontalPadding>
+      <Space />
       <Selector {...props} />
     </Screen>
   );

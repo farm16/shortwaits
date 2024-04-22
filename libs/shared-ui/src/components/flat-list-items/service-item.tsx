@@ -33,6 +33,7 @@ export const ServiceItem: FC<ServiceCardProps> = props => {
       } as ViewStyle)
     : {};
 
+  console.log(">>> ", service.price);
   return (
     <Button
       onPress={() => onPress(service)}
@@ -56,7 +57,7 @@ export const ServiceItem: FC<ServiceCardProps> = props => {
         <Text text={getPrettyStringFromDurationInMin(service.durationInMin)} style={[styles.textItem2, { color: Colors.subText }]} />
         <Text text={getPrettyStringFromPrice(service.currency, service.price)} style={[styles.textItem3, { color: service.serviceColor?.hexCode || Colors.text }]} />
       </View>
-      <Avatar url={service.imageUrl} size={"default"} color={Colors.gray} onPress={noop} />
+      <Avatar url={service.imageUrl} size={"default"} color={Colors.gray} mode={"static"} />
       <Space size="tiny" direction="vertical" />
     </Button>
   );

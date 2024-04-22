@@ -1,11 +1,11 @@
-import React, { useCallback, useState } from "react";
-import { Pressable, StyleSheet, TouchableOpacity } from "react-native";
-import { DefaultTheme, Provider as PaperProvider } from "react-native-paper";
-import { DatePickerModal, registerTranslation, TimePickerModal } from "react-native-paper-dates";
 import format from "date-fns/format";
+import React, { useCallback, useState } from "react";
+import { StyleSheet, TouchableOpacity } from "react-native";
+import { DefaultTheme, Provider as PaperProvider } from "react-native-paper";
+import { DatePickerModal, TimePickerModal, registerTranslation } from "react-native-paper-dates";
 
-import { Card, Container, Space, Text } from "../common";
 import { getDimensions, useTheme } from "../../theme";
+import { Card, Container, Space, Text } from "../common";
 
 interface TimePickerInputProps {
   withTime?: boolean;
@@ -86,6 +86,7 @@ export function TimePickerFieldCard(props: TimePickerInputProps) {
         <Space size="tiny" />
         <Container direction="row" justifyContent="space-between">
           <TouchableOpacity
+            disabled={disabled}
             style={{
               flex: 1,
             }}
@@ -95,6 +96,7 @@ export function TimePickerFieldCard(props: TimePickerInputProps) {
           </TouchableOpacity>
           {withTime ? (
             <TouchableOpacity
+              disabled={disabled}
               style={{
                 flex: 1,
                 alignItems: "flex-end",
@@ -133,15 +135,7 @@ export function TimePickerFieldCard(props: TimePickerInputProps) {
           // keyboardIcon="keyboard-outline" // optional, default is "keyboard-outline"
           // clockIcon="clock-outline" // optional, default is "clock-outline"
         />
-        <DatePickerModal
-          date={date}
-          mode="single"
-          visible={isDatePickerOpen}
-          onDismiss={onDismiss}
-          onConfirm={onConfirmDatePicker}
-          locale={"en"}
-          dateMode={"start"}
-        />
+        <DatePickerModal date={date} mode="single" visible={isDatePickerOpen} onDismiss={onDismiss} onConfirm={onConfirmDatePicker} locale={"en"} dateMode={"start"} />
       </PaperProvider>
     </>
   );

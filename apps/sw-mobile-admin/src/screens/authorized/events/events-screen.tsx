@@ -91,12 +91,8 @@ export function EventsScreen({ navigation }: AuthorizedScreenProps<"events-scree
         setIsVisible={setIsQrVisible}
         value={currentBusiness.web.baseUrl + "/booking"}
         title={intl.formatMessage({ id: "Events_Screen.qrCodeModal.title" })}
-        description={
-          <Text>
-            {intl.formatMessage({ id: "Events_Screen.qrCodeModal.description" })} <Text style={{ fontWeight: "700" }}>{currentBusiness.shortName}</Text>
-          </Text>
-        }
-        description2={intl.formatMessage({ id: "Events_Screen.qrCodeModal.description2" })}
+        description={<Text>{intl.formatMessage({ id: "Events_Screen.qrCodeModal.description" })}</Text>}
+        warningMessage={intl.formatMessage({ id: "Events_Screen.qrCodeModal.warningMessage" })}
       />
       <Calendar />
       <FloatingGroupActionButton />

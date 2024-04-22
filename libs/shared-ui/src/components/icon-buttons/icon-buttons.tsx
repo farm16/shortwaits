@@ -145,13 +145,12 @@ export const IconButton: FC<
   } = props;
 
   const { Colors } = useTheme();
-
   const backgroundColor = props.backgroundColor ?? (Colors.white as ThemeColorName);
+
   const style: StyleProp<ViewStyle> = {
     backgroundColor: Colors[(iconProps[iconType]?.backgroundColor as ThemeColorName) ?? backgroundColor],
-    width: getResponsiveHeight(iconProps[iconType]?.size),
-    height: getResponsiveHeight(iconProps[iconType]?.size),
-    borderRadius: iconProps[iconType]?.size / 2,
+    width: getResponsiveHeight(iconProps[iconType]?.size + 2),
+    height: getResponsiveHeight(iconProps[iconType]?.size + 2),
     justifyContent: "center",
     alignItems: "center",
     marginLeft: withMarginLeft ? getResponsiveHeight(16) : undefined,

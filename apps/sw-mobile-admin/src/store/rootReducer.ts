@@ -1,8 +1,6 @@
 import { combineReducers } from "redux";
 import { persistReducer } from "redux-persist";
 import { shortwaitsApi } from "../services";
-
-//reducers
 import { persistRootConfig } from "./redux-persist";
 import { authSlice, businessSlice, clientsSlice, eventsSlice, localClientsSlice, mobileAdminSlice, servicesSlice, staffSlice, themeSlice, userSlice } from "./slices";
 

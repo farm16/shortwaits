@@ -44,7 +44,7 @@ export function getUniqueDatesFromEvents(events: EventsDtoType) {
   return Array.from(uniqueDates);
 }
 
-export const useAgendaData = (events: EventsDtoType): agendaItems => {
+export const useAgendaData = (events: EventsDtoType): AgendaItems => {
   const uniqueDatesSet = new Set(events.map(item => item.startTime.split("T")[0]));
   const uniqueDates = Array.from(uniqueDatesSet);
 
@@ -66,12 +66,13 @@ export const useAgendaData = (events: EventsDtoType): agendaItems => {
   return useMemo(() => agendaData, [agendaData]);
 };
 
-type agendaItems = {
+export type AgendaItemType = {
   title: string;
   data: EventsDtoType;
-}[];
+};
+export type AgendaItems = AgendaItemType[];
 
-export function useClosestDateFromAgendaData(data: agendaItems) {
+export function useClosestDateFromAgendaData(data: AgendaItems) {
   // Find the title closest to today's date
   const closestTitle = useMemo(() => {
     const today = new Date();

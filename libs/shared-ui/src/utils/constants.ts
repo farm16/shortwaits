@@ -12,8 +12,8 @@ export const nextEventStatuses: Record<EventStatusName, EventStatusName[]> = {
 
 export const eventStatusIconNames: Record<EventStatusName, string> = {
   PENDING: "clock-outline",
-  APPROVED: "thumb-up-outline",
-  REJECTED: "thumb-down-outline",
+  APPROVED: "check-circle-outline",
+  REJECTED: "close-circle-outline",
   CANCELED: "cancel",
   COMPLETED: "check-circle-outline",
 };

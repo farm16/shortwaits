@@ -89,6 +89,7 @@ function ScreenWithScrolling(props: ScreenProps) {
             style,
             {
               paddingHorizontal: withHorizontalPadding ? 16 : 0,
+              flexGrow: 1,
             },
           ]}
           keyboardShouldPersistTaps={keyboardShouldPersistTaps || "handled"}

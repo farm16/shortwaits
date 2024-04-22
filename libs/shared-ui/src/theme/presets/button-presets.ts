@@ -1,5 +1,5 @@
 import { StyleSheet, ViewStyle } from "react-native";
-import { getResponsiveHeight, getResponsiveWidth } from "../../utils";
+import { getResponsiveFontSize, getResponsiveHeight, getResponsiveWidth } from "../../utils";
 import { ThemeCommonParams } from "../theme.type";
 import { getDimensions } from "../utils";
 
@@ -103,6 +103,11 @@ export const buttonPresets = ({
     headerLink: {
       margin: 15,
       backgroundColor: Colors.transparent,
+    },
+    textLinkLarge: {
+      borderBottomColor: Colors.black,
+      borderBottomWidth: 1,
+      alignSelf: "flex-start",
     },
     icon: {
       height: 55,
@@ -318,6 +323,12 @@ export const buttonPresets = ({
       fontSize: getResponsiveHeight(20),
       color: Colors.black,
       fontWeight: "700",
+    },
+    textLinkLarge: {
+      letterSpacing: 0.65,
+      fontWeight: "700",
+      fontSize: getResponsiveFontSize(15),
+      color: Colors.black,
     },
   });
   return {

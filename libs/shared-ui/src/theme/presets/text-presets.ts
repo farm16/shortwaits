@@ -174,5 +174,12 @@ export const textPresets = ({ FontSize, Fonts, Gutters, Colors }: ThemeCommonPar
       fontWeight: "700",
       color: Colors.white,
     },
+    textLinkLarge: {
+      letterSpacing: 0.65,
+      fontWeight: "700",
+      fontSize: getResponsiveFontSize(15),
+      color: Colors.black,
+      textDecorationLine: "underline",
+    },
   });
 };
