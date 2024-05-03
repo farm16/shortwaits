@@ -11,9 +11,9 @@ import { selectorConfigs } from "../../selector-config";
 import { LabelSelectorItem } from "./labels-selector-item";
 
 export const EventLabelsSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ navigation, route }) => {
-  const { type, onSelect, onGoBack, onSubmit, data, multiple = false } = route.params;
+  const { mode, onSelect, onGoBack, onSubmit, data, multiple = false } = route.params;
 
-  const { headerTitle } = useMemo(() => selectorConfigs[type], [type]);
+  const { headerTitle } = useMemo(() => selectorConfigs[mode], [mode]);
 
   const dispatch = useDispatch();
   const handleAddLabels = useCallback(() => {

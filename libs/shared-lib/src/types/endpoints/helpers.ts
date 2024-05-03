@@ -57,20 +57,13 @@ export const ERROR_CODES = {
   28: { code: 28, description: "authorization error signup" },
 } as const;
 
-export interface CommonResponseType<DataPayload = any, MetaPayload = any> {
+export interface CommonResponseType<DataPayload = unknown, MetaPayload = unknown> {
   statusCode: number;
   data: DataPayload;
   message?: string;
   meta?: MetaPayload;
   errorCode?: ErrorCodeType;
 }
-
-// } "meta": {
-//   "page": 1,
-//   "per_page": 2,
-//   "total_pages": 7,
-//   "total_count": 14
-// }
 
 export type HttpMethod = "GET" | "DELETE" | "PUT" | "POST" | "PATCH";
 

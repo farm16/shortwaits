@@ -1,3 +1,4 @@
+export * from "./clients-selector-modal";
 export * from "./forms-modal";
 export * from "./qr-scanner-modal";
 export * from "./schedule-modal";

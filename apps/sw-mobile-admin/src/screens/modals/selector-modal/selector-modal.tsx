@@ -1,7 +1,6 @@
 import React, { FC } from "react";
 import { ModalsScreenProps, SelectorModalModeType } from "../../../navigation";
 import { CategoriesSelector } from "./selectors/categories/categories-selector";
-import { ClientsSelector } from "./selectors/clients/clients-selector";
 import { EventsSelector } from "./selectors/events/events-selector";
 import { EventLabelsSelector } from "./selectors/labels/event-labels-selector";
 import { LabelsSelector } from "./selectors/labels/labels-selector";
@@ -11,7 +10,6 @@ import { StaticSelector } from "./selectors/static/static-selector";
 
 const selectorsComponents: Record<SelectorModalModeType, FC<ModalsScreenProps<"selector-modal-screen">>> = {
   staff: StaffSelector,
-  clients: ClientsSelector,
   categories: CategoriesSelector,
   services: ServicesSelector,
   static: StaticSelector,
@@ -21,7 +19,7 @@ const selectorsComponents: Record<SelectorModalModeType, FC<ModalsScreenProps<"s
 };
 
 export const SelectorScreenModal: FC<ModalsScreenProps<"selector-modal-screen">> = props => {
-  const type = props.route.params.type;
+  const type = props.route.params.mode;
   const Selector = selectorsComponents[type];
 
   return <Selector {...props} />;

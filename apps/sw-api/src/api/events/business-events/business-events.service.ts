@@ -381,21 +381,29 @@ export class EventsService {
       }
 
       // check if event.clientIds or event.staffIds is not empty and is a valid array else return empty arrays
-      if ((!event.clientsIds || !event.clientsIds.length) && (!event.staffIds || !event.staffIds.length)) {
-        return { clientUsers: [], businessUsers: [] };
+      if ((!event.clientsIds || !event.clientsIds.length) && (!event.staffIds || !event.staffIds.length) && (!event.localClientsIds || !event.localClientsIds.length)) {
+        return { clientUsers: [], businessUsers: [], localClients: [], event };
       }
-      // turn all ids to string and push only unique ids
-      const eligibleUsers = [...new Set([...event.clientsIds.map(id => id?.toString()), ...event.staffIds.map(id => id?.toString())])];
+      // turn all ids to string and push only unique ids - only staffIds/business are allowed to view this event
+      const eligibleUsers = [...new Set([...event.staffIds.map(id => id?.toString())])];
 
       if (!eligibleUsers.includes(requestedBy)) {
         throw new ForbiddenException("You are not allowed to view this event");
       }
+
+      console.log("clientIds >>>", event.clientsIds);
+      console.log("localClientsIds >>>", event.localClientsIds);
+      console.log("businessUsersIds >>>", event.staffIds);
 
       const [clientUsers, localClients, businessUsers] = await Promise.all([
         this.findClientUsers(event?.clientsIds as ObjectId[]),
         this.findLocalClientUsers(event?.localClientsIds as ObjectId[]),
         this.findBusinessUsers(event?.staffIds as ObjectId[]),
       ]);
+
+      console.log("clientUsers found >>>", clientUsers);
+      console.log("localClients found >>>", localClients);
+      console.log("businessUsers found >>>", businessUsers);
 
       return { clientUsers, localClients, businessUsers, event };
     } catch (error) {

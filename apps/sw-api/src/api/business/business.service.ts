@@ -223,7 +223,7 @@ export class BusinessService {
     }
   }
 
-  async getAllBusinessClientsService(businessUserId: string, businessId: string) {
+  async getClients(businessUserId: string, businessId: string) {
     if (!businessId || !businessUserId) {
       throw new ForbiddenException("Unrecognized business or user");
     }
@@ -249,11 +249,9 @@ export class BusinessService {
         .select("-__v -hashedRt");
 
       //create new array with all clients without mutating the original arrays
-      const allClients = [...localClients, ...clients];
       return {
         localClients,
         clients,
-        allClients,
       };
     } else {
       throw new ForbiddenException("Not enough permissions");

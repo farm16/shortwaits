@@ -17,7 +17,7 @@ import {
   WeekHoursType,
 } from "@shortwaits/shared-lib";
 import { QrScannerTypes } from "@shortwaits/shared-ui";
-import { selectorConfigs } from "../screens/modals/selector-modal/selector-config";
+import { SelectedClients } from "../screens/modals";
 import { AUTHORIZED_SCREENS, AUTHORIZED_STACK_SCREENS, MODAL_SCREENS, NAVIGATION_STACKS, UNAUTHORIZED_SCREENS } from "./navigation-constants";
 
 export type FormData = {
@@ -31,29 +31,40 @@ export type FormData = {
 
 export type FormType = keyof FormData;
 export type FormDataType = FormData[FormType];
-
-export type SelectorModalData =
-  | string
-  | CategoryDtoType
-  | ServiceDtoType
-  | BusinessLabelType
-  | EventDtoType
-  | BusinessUserDtoType
-  | ClientDtoType
-  | { key: string; title: string; subTitle?: string; itemData?: any };
-
-export type SelectorModalModeType = keyof typeof selectorConfigs;
+export type SelectorModalModeType = "staff" | "categories" | "services" | "labels" | "static" | "eventLabels" | "events";
+export type GenericModalData<T = unknown> = {
+  key: string;
+  title: string;
+  subTitle?: string;
+  itemData?: T;
+};
+export type SelectorModalData = BusinessLabelType | CategoryDtoType | ServiceDtoType | BusinessLabelType | EventDtoType | BusinessUserDtoType | GenericModalData;
+export type SelectedData = string[]; // this should be the id of the selected data only
 
 export type ModalStackParamList = {
   [MODAL_SCREENS.SELECTOR_MODAL_SCREEN]: {
     mode: SelectorModalModeType;
-    data: SelectorModalData;
-    onSubmit?(arg: SelectorModalData): void;
-    onDismiss?(): void;
-    title?: string;
-    description?: string;
-    multiple?: boolean;
-    closeOnSubmit?: boolean;
+    headerTitle?: string;
+    selectedData?: SelectedData; // <--- Array of selected data ids
+    data?: SelectorModalData[]; // <--- Array of data to be displayed
+    multiple?: boolean; // default is false
+    minSelectedItems?: number;
+    maxSelectedItems?: number;
+    searchable?: boolean;
+    onSelect?(arg: SelectorModalData[]): void; // <--- Array of selected data. Note: if multiple is false, this will array will only have 1 item
+    onSubmit?(arg: SelectorModalData[]): void; // ditto
+    onGoBack?(arg: SelectorModalData[]): void; // ditto
+  };
+  [MODAL_SCREENS.CLIENTS_SELECTOR_MODAL_SCREEN]: {
+    mode: "clients" | "localClients" | "clientsAndLocalClients";
+    headerTitle?: string;
+    selectedData?: SelectedClients;
+    minSelectedItems?: number;
+    maxSelectedItems?: number;
+    searchable?: boolean;
+    onSelect?(arg: SelectedClients): void;
+    onSubmit?(arg: SelectedClients): void;
+    onGoBack?(arg: SelectedClients): void;
   };
   [MODAL_SCREENS.SCHEDULE_MODAL_SCREEN]: {
     hours: WeekHoursType;

@@ -92,8 +92,8 @@ export class BusinessController {
     status: HttpStatus.OK,
     description: "Returns business clients",
   })
-  async getAllBusinessClientsController(@Param("businessId") businessId: string, @Req() request) {
-    return this.businessService.getAllBusinessClientsService(request.user.sub, businessId);
+  async getClients(@Param("businessId") businessId: string, @Req() request) {
+    return this.businessService.getClients(request.user.sub, businessId);
   }
 
   @Post(":businessId/local-clients")

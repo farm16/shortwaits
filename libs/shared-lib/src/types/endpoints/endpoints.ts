@@ -29,7 +29,7 @@ type Endpoint =
   | "shortwaits/client/web" // todo: add this
   | `events/business/summary/${string}`
   | `events/business/${string}`
-  | "events/people"
+  | "events/business/people"
   | `events/${string}`
   | "events"
   | `events/delete/${string}`
@@ -174,7 +174,7 @@ export const endpoints = {
   updateEvents: createEndpoint(`events/business/:businessId`, "PUT"),
   deleteEvent: createEndpoint(`events/delete/:eventId`, "PUT"),
   deleteEvents: createEndpoint("events/delete", "PUT"),
-  getPeopleInEvent: createEndpoint<EventIdQuery>(`events/people`, "GET"),
+  getPeopleInEvent: createEndpoint<EventIdQuery>("events/business/people", "GET"),
 
   //client-events
   withdrawEventForClient: createEndpoint(`client-events/withdraw/:eventId`, "PUT"),

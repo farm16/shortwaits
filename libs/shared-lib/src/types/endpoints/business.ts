@@ -1,4 +1,4 @@
-import { ClientsDtoType, CommonResponseType, LocalClientsDtoType } from ".";
+import { BusinessUsersDtoType, ClientsDtoType, CommonResponseType, EventDtoType, LocalClientsDtoType } from ".";
 import { BusinessType, ConvertToDtoType, WithDbProps } from "..";
 
 export type BusinessDtoType = ConvertToDtoType<WithDbProps<BusinessType>>;
@@ -12,10 +12,16 @@ export type UpdateBusinessDtoType = Partial<
   >
 >;
 
-export type AllBusinessClientsType = {
-  localClients: LocalClientsDtoType;
+export type PeopleInEvent = {
+  businessUsers: BusinessUsersDtoType;
   clients: ClientsDtoType;
-  allClients: ClientsDtoType & LocalClientsDtoType;
+  localClients: LocalClientsDtoType;
+  event: EventDtoType;
 };
 
-export type AllBusinessClientsResponseType = CommonResponseType<AllBusinessClientsType>;
+export type BusinessClients = {
+  clients: ClientsDtoType;
+  localClients: LocalClientsDtoType;
+};
+
+export type BusinessClientsResponseType = CommonResponseType<BusinessClients>;

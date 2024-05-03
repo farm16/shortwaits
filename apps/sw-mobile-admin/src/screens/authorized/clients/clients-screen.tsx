@@ -2,7 +2,7 @@ import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { Container, IconButton, Logo3, Screen, Text, getResponsiveFontSize, getResponsiveHeight, useTheme } from "@shortwaits/shared-ui";
 import React, { FC, Fragment, useCallback, useLayoutEffect, useMemo, useState } from "react";
 import { useIntl } from "react-intl";
-import { Alert, Animated, Dimensions, Pressable, StyleSheet, View } from "react-native";
+import { Alert, Animated, Dimensions, StyleSheet, TouchableOpacity, View } from "react-native";
 import { SceneMap, TabBarProps, TabView } from "react-native-tab-view";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import Tooltip from "react-native-walkthrough-tooltip";
@@ -97,7 +97,6 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerShadowVisible: false,
       headerTitle: "",
       headerLeft: () => {
         return (
@@ -108,7 +107,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
                 paddingLeft: getResponsiveHeight(16),
                 marginRight: getResponsiveHeight(4),
               }}
-              text={tabIndex === 0 ? "Shortwaits Clients" : "Address book"}
+              text={tabIndex === 0 ? "Shortwaits" : "Address book"}
             />
             <Tooltip
               isVisible={swClientToolTipVisible}
@@ -191,38 +190,45 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
 
   const _renderTabBar = useCallback(
     (tabBarProps: TabBarProps<Route>) => {
+      const backgroundColor = Colors.brandPrimary1;
+      const indicatorColor = Colors.brandAccent2;
+      const iconColor = Colors.brandPrimary;
+      const iconDisabledColor = Colors.disabledText;
+      const disabledBackgroundColor = Colors.disabledBackground;
+      const disabledIndicatorColor = Colors.disabledBackground;
+
       return (
         <View style={styles.tabBar}>
           {tabBarProps.navigationState.routes.map((route, i) => {
             const isSelected = tabIndex === i;
             return (
-              <Pressable key={route.key} style={styles.tabContainer} onPress={() => setTabIndex(i)}>
+              <TouchableOpacity key={route.key} style={styles.tabContainer} onPress={() => setTabIndex(i)}>
                 <Animated.View
                   style={[
                     styles.tabView,
                     {
-                      backgroundColor: isSelected ? "#dddff7" : Colors.disabledBackground,
-                      borderBottomColor: isSelected ? Colors.brandSecondary : Colors.disabledBackground,
+                      backgroundColor: isSelected ? backgroundColor : disabledBackgroundColor,
+                      borderBottomColor: isSelected ? indicatorColor : disabledIndicatorColor,
                     },
                   ]}
                 >
                   {i === 0 ? (
-                    <Logo3 height={getResponsiveHeight(40)} color3={isSelected ? Colors.brandPrimary : "#8e8e93"} />
+                    <Logo3 height={getResponsiveHeight(40)} color3={isSelected ? iconColor : iconDisabledColor} />
                   ) : (
-                    <Icon name={"card-account-details"} size={getResponsiveHeight(23)} color={isSelected ? Colors.brandPrimary : "#8e8e93"} />
+                    <Icon name={"card-account-details"} size={getResponsiveHeight(23)} color={isSelected ? iconColor : iconDisabledColor} />
                   )}
                 </Animated.View>
-              </Pressable>
+              </TouchableOpacity>
             );
           })}
         </View>
       );
     },
-    [Colors.brandPrimary, Colors.brandSecondary, Colors.disabledBackground, tabIndex]
+    [Colors.brandAccent2, Colors.brandPrimary, Colors.brandPrimary1, Colors.disabledBackground, Colors.disabledText, tabIndex]
   );
 
   return (
-    <Screen preset="fixed" unsafe>
+    <Screen preset="fixed" unsafe unsafeBottom>
       <TabView
         renderTabBar={_renderTabBar}
         navigationState={{ index: tabIndex, routes }}

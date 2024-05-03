@@ -1,4 +1,4 @@
-import { CreateEventDtoType, ServiceDtoType, eventPaymentMethods } from "@shortwaits/shared-lib";
+import { BusinessLabelType, BusinessUsersDtoType, CreateEventDtoType, ServiceDtoType, eventPaymentMethods } from "@shortwaits/shared-lib";
 import {
   BackButton,
   Button,
@@ -13,13 +13,13 @@ import {
   getEmojiString,
 } from "@shortwaits/shared-ui";
 import { FormikErrors } from "formik";
-import { noop } from "lodash";
+import { isEmpty, noop } from "lodash";
 import React, { FC, useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { useIntl } from "react-intl";
 import { Alert } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import { useForm } from "../../../hooks";
-import { ModalsScreenProps } from "../../../navigation";
+import { GenericModalData, ModalsScreenProps } from "../../../navigation";
 import { useCreateEventMutation } from "../../../services";
 import { useBusiness, useUser } from "../../../store";
 
@@ -214,10 +214,12 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
     navigation.navigate("modals", {
       screen: "selector-modal-screen",
       params: {
-        type: "services",
+        mode: "services",
         searchable: true,
         selectedData: selectedService ? [selectedService._id] : [],
-        onSelect: (service: ServiceDtoType) => {
+        onSelect: services => {
+          const service = services[0] as ServiceDtoType;
+
           if (service._id === values.serviceId) {
             setFieldValue("serviceId", "");
             setSelectedService(null);
@@ -232,36 +234,37 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
 
   const handleClientPress = useCallback(() => {
     navigation.navigate("modals", {
-      screen: "selector-modal-screen",
+      screen: "clients-selector-modal-screen",
       params: {
-        type: "clients",
+        mode: "clientsAndLocalClients",
         headerTitle: intl.formatMessage({ id: "AddEventModal.client.selector.headerTitle" }),
-        selectedData: values.clientsIds,
-        multiple: true,
-        minSelectedItems: 1,
-        onGoBack: clients => {
-          if (clients) {
-            console.log("selected clients:", clients);
-            const clientsIds = clients.map(s => s._id);
-            setFieldValue("clientsIds", clientsIds);
+        selectedData: {
+          clients: values.clientsIds,
+          localClients: values.localClientsIds,
+        },
+        onSubmit: selectedClients => {
+          if (!isEmpty(selectedClients)) {
+            console.log("selected clients >>>", selectedClients);
+            // const clientsIds = clients.map(s => s._id);
+            // setFieldValue("clientsIds", clientsIds);
           }
         },
       },
     });
-  }, [navigation, setFieldValue, intl, values.clientsIds]);
+  }, [intl, navigation, values.clientsIds, values.localClientsIds]);
 
   const handleStaffPress = useCallback(() => {
     navigation.navigate("modals", {
       screen: "selector-modal-screen",
       params: {
-        type: "staff",
+        mode: "staff",
         headerTitle: intl.formatMessage({ id: "AddEventModal.staff.selector.headerTitle" }),
         selectedData: values.staffIds,
         multiple: true,
         minSelectedItems: 1,
         onGoBack: staff => {
           console.log("selected staff:", staff);
-          const staffIds = staff.map(s => s._id);
+          const staffIds = (staff as BusinessUsersDtoType).map(s => s._id);
           setFieldValue("staffIds", staffIds);
         },
       },
@@ -272,11 +275,11 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
     navigation.navigate("modals", {
       screen: "selector-modal-screen",
       params: {
-        type: "eventLabels",
+        mode: "eventLabels",
         data: values.labels,
         multiple: true,
         onGoBack: labels => {
-          setFieldValue("labels", labels);
+          setFieldValue("labels", labels as BusinessLabelType[]);
         },
       },
     });
@@ -286,7 +289,7 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
     navigation.navigate("modals", {
       screen: "selector-modal-screen",
       params: {
-        type: "static",
+        mode: "static",
         headerTitle: intl.formatMessage({ id: "AddEventModal.paymentMethod" }),
         data: Object.keys(eventPaymentMethods).map(key => {
           return {
@@ -294,7 +297,8 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
             title: eventPaymentMethods[key],
           };
         }),
-        onSelect: paymentMethod => {
+        onSelect: selectedData => {
+          const paymentMethod = selectedData[0] as GenericModalData;
           setFieldValue("paymentMethod", paymentMethod.key);
         },
       },

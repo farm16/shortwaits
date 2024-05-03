@@ -41,8 +41,6 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
     refetchOnMountOrArgChange: true,
   });
 
-  // console.log("peopleInEventData:", peopleInEventData);
-
   const allClients = getCombinedClientTypes(peopleInEventData?.data?.clientUsers ?? [], peopleInEventData?.data?.localClients ?? []);
 
   const _data = useMemo(
@@ -58,6 +56,8 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
     ],
     [allClients, peopleInEventData?.data?.businessUsers]
   );
+
+  console.log("peopleInEventData >>>", JSON.stringify(peopleInEventData, null, 2));
 
   const handleRefresh = useCallback(() => {
     refetchPeopleInEventQuery();
