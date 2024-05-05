@@ -1,7 +1,9 @@
-import { BackButton, Container, EventStatusButtons, IconButton, Screen, Space, Text, useShareUrlWithMessage } from "@shortwaits/shared-ui";
+import { EventStatusName } from "@shortwaits/shared-lib";
+import { ActivityIndicator, BackButton, Container, EventStatusButtons, IconButton, Screen, Space, Text, useShareUrlWithMessage } from "@shortwaits/shared-ui";
 import { truncate } from "lodash";
-import React, { useLayoutEffect } from "react";
+import React, { useCallback, useLayoutEffect } from "react";
 import { AuthorizedScreenProps } from "../../../navigation";
+import { useUpdateEventMutation } from "../../../services";
 import { useEvent } from "../../../store";
 import { EventScreenTabs } from "./event-tabs";
 
@@ -11,6 +13,7 @@ export function EventScreen({ navigation, route }: AuthorizedScreenProps<"event-
   const { eventId } = route.params;
   const event = useEvent(eventId);
   const { share, data: shareData, loading: shareLoading, error: shareError } = useShareUrlWithMessage();
+  const [updateEvent, updateEventStatus] = useUpdateEventMutation();
 
   useLayoutEffect(() => {
     const handleShare = async () => {
@@ -53,10 +56,30 @@ export function EventScreen({ navigation, route }: AuthorizedScreenProps<"event-
     });
   }, [event, navigation, share]);
 
+  const handleUpdateEvent = useCallback(
+    (status: EventStatusName) => {
+      updateEvent({
+        body: {
+          ...event,
+          status: {
+            statusName: status,
+            statusCode: event.status?.statusCode,
+          },
+        },
+        businessId: event.businessId,
+      });
+    },
+    [event, updateEvent]
+  );
+
+  if (updateEventStatus.isLoading) {
+    return <ActivityIndicator />;
+  }
+
   return (
     <Screen preset="fixed" unsafe unsafeBottom backgroundColor="lightBackground">
       <Space size="tiny" />
-      <EventStatusButtons event={event} />
+      <EventStatusButtons event={event} onPress={handleUpdateEvent} />
       <Space size="small" />
       <EventScreenTabs event={event} />
     </Screen>

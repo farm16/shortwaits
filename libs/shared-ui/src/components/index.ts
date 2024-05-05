@@ -1,4 +1,5 @@
 export * from "./accordion";
+export * from "./activity-indicator/activity-indicator";
 export * from "./animated";
 export * from "./avatar/avatar";
 export * from "./banners/banner";

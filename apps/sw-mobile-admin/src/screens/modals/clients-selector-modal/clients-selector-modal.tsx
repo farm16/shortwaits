@@ -1,17 +1,13 @@
 import { skipToken } from "@reduxjs/toolkit/dist/query";
-import { BackButton, Container, IconButton, Logo3, NonIdealState, Screen, Space, Text, getResponsiveFontSize, getResponsiveHeight, useTheme } from "@shortwaits/shared-ui";
-import { isEqual } from "lodash";
-import React, { FC, useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
-import { useIntl } from "react-intl";
-import { Animated, Dimensions, FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
-import { SceneMap, TabBarProps, TabView } from "react-native-tab-view";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { BackButton, Container, IconButton, NonIdealState, Screen, Space, getResponsiveFontSize, getResponsiveHeight } from "@shortwaits/shared-ui";
+import React, { FC, useCallback, useLayoutEffect, useRef, useState } from "react";
+import { FlatList, StyleSheet } from "react-native";
 import { useDispatch } from "react-redux";
+import { ClientsTabs } from "../../../components";
 import { ModalsScreenProps } from "../../../navigation";
 import { useGetAllBusinessClientsQuery } from "../../../services";
 import { showPremiumMembershipModal, useBusiness } from "../../../store";
 import { ClientsSelectorItem } from "./clients-selector-item";
-import { Clients, Route } from "./clients-selector-modal-types";
 
 const MIN_SELECTED_ITEMS_DEFAULT = 0; // Define your minimum selected items here
 const MAX_SELECTED_ITEMS_DEFAULT = 1000; // Define your maximum selected items here
@@ -20,7 +16,7 @@ export const ClientsSelectorModal: FC<ModalsScreenProps<"clients-selector-modal-
   const {
     searchable = false,
     headerTitle = "Clients",
-    selectedData: data = {
+    selectedData: initialSelectedIds = {
       clients: [],
       localClients: [],
     },
@@ -31,48 +27,40 @@ export const ClientsSelectorModal: FC<ModalsScreenProps<"clients-selector-modal-
   } = route.params;
 
   const business = useBusiness();
-  const intl = useIntl();
   const dispatch = useDispatch();
-  const { Colors } = useTheme();
-  const [tabIndex, setTabIndex] = useState<number>(0);
-  const [searchText, setSearchText] = useState<string>("");
-  const [filteredData, setFilteredData] = useState<Clients>(null);
+  const [totalCount, setTotalCount] = useState(initialSelectedIds.clients.length + initialSelectedIds.localClients.length);
   const [isListSearchable, setIsListSearchable] = useState<boolean>(false);
-  const [originalData] = useState(data);
-  const [selectedData, setSelectedItems] = useState(data);
 
-  const [clients, setClients] = useState<Clients>({});
-  const [dataHasChanged, setDataHasChanged] = useState(false);
+  const _initialSelectedLocalClientIds = useRef(initialSelectedIds.localClients);
+  const _initialSelectedClientIds = useRef(initialSelectedIds.clients);
+  const _selectedLocalClientIds = useRef(initialSelectedIds.localClients);
+  const _selectedClientIds = useRef(initialSelectedIds.clients);
 
   const {
-    isLoading: isAllClientsQueryLoading,
-    isSuccess: isAllClientsQuerySuccess,
-    refetch: refetchAllClientsQuery,
-    error: isAllClientsQueryError,
     data: allClientsData,
-  } = useGetAllBusinessClientsQuery(business?._id ?? skipToken);
+    // error: isAllClientsQueryError,
+    // isLoading: isAllClientsQueryLoading,
+    // isSuccess: isAllClientsQuerySuccess,
+  } = useGetAllBusinessClientsQuery(business._id ?? skipToken);
 
-  useEffect(() => {
-    if (isEqual(originalData, selectedData)) {
-      setDataHasChanged(true);
-    }
-  }, [originalData, selectedData]);
-
-  console.log("\n >>>> rendering clients selector modal");
+  // useEffect(() => {
+  //   if (isEqual(originalData, selectedData)) {
+  //     setDataHasChanged(true);
+  //   }
+  // }, [originalData, selectedData]);
 
   const handleAddClientPress = useCallback(() => {
     dispatch(showPremiumMembershipModal());
   }, [dispatch]);
 
-  function filterSelectedData(data: Clients) {
-    const clientIds = data.clients.map(client => client._id);
-    const localClientIds = data.localClients.map(localClient => localClient._id);
-    return {
-      clients: clientIds,
-      localClients: localClientIds,
-    };
-  }
-
+  // function filterSelectedData(data: Clients) {
+  //   const clientIds = data.clients.map(client => client._id);
+  //   const localClientIds = data.localClients.map(localClient => localClient._id);
+  //   return {
+  //     clients: clientIds,
+  //     localClients: localClientIds,
+  //   };
+  // }
   // useEffect(() => {
   //   if (isAllClientsQuerySuccess) {
   //     const initialFilteredData = allClientsData?.data;
@@ -83,15 +71,16 @@ export const ClientsSelectorModal: FC<ModalsScreenProps<"clients-selector-modal-
   useLayoutEffect(() => {
     const handleOnGoBack = () => {
       if (onGoBack) {
-        onGoBack(selectedData);
+        onGoBack({
+          clients: _selectedClientIds.current,
+          localClients: _selectedLocalClientIds.current,
+        });
       }
       navigation.goBack();
     };
 
-    const totalClientsSelected = selectedData?.clients.length + selectedData?.localClients.length;
-
     navigation.setOptions({
-      headerTitle: totalClientsSelected > 0 ? `${headerTitle} (${totalClientsSelected})` : headerTitle,
+      headerTitle: totalCount > 0 ? `${headerTitle} (${totalCount})` : headerTitle,
       headerLeft: () => (
         <Container direction="row" alignItems="center">
           <BackButton onPress={() => handleOnGoBack()} />
@@ -112,123 +101,32 @@ export const ClientsSelectorModal: FC<ModalsScreenProps<"clients-selector-modal-
         </Container>
       ),
     });
-  }, [handleAddClientPress, headerTitle, isListSearchable, navigation, onGoBack, searchable, selectedData]);
+  }, [handleAddClientPress, headerTitle, isListSearchable, navigation, onGoBack, searchable, totalCount]);
 
-  const handleOnChangeText = (text: string) => {
-    setSearchText(text);
-    setFilteredData(allClientsData?.data);
-  };
-
-  const handleClientOnSelect = useCallback(client => {
-    setSelectedItems(selectedData => {
-      return {
-        clients: selectedData.clients.includes(client._id) ? selectedData.clients.filter(id => id !== client._id) : [...selectedData.clients, client._id],
-        localClients: selectedData.localClients,
-      };
-    });
-  }, []);
-
-  const handleLocalClientOnSelect = useCallback(localClient => {
-    setSelectedItems(selectedData => {
-      return {
-        clients: selectedData.clients,
-        localClients: selectedData.localClients.includes(localClient._id)
-          ? selectedData.localClients.filter(id => id !== localClient._id)
-          : [...selectedData.localClients, localClient._id],
-      };
-    });
-  }, []);
-
-  const renderClientItem = useCallback(
-    ({ item }) => {
-      const rightIconName = selectedData.clients.includes(item._id) ? "checkbox-outline" : "checkbox-blank-outline";
+  // shortwaits clients
+  const renderClient = useCallback(() => {
+    const handleClientOnSelect = item => {
+      if (_selectedClientIds.current.includes(item._id)) {
+        _selectedClientIds.current = _selectedClientIds.current.filter(id => id !== item._id);
+      } else {
+        _selectedClientIds.current = [..._selectedClientIds.current, item._id];
+      }
+      setTotalCount(_selectedClientIds.current.length + _selectedLocalClientIds.current.length);
+    };
+    const renderClientItem = ({ item }) => {
       return (
         <ClientsSelectorItem
-          rightIconName={rightIconName}
           item={item}
+          initialIsSelected={_selectedClientIds?.current?.includes(item._id)}
           onSelect={() => {
             handleClientOnSelect(item);
           }}
         />
       );
-    },
-    [handleClientOnSelect, selectedData.clients]
-  );
-
-  const renderLocalClientItem = useCallback(
-    ({ item }) => {
-      const rightIconName = selectedData.localClients.includes(item._id) ? "checkbox-outline" : "checkbox-blank-outline";
-      return (
-        <ClientsSelectorItem
-          rightIconName={rightIconName}
-          item={item}
-          onSelect={() => {
-            handleLocalClientOnSelect(item);
-          }}
-        />
-      );
-    },
-    [handleLocalClientOnSelect]
-  );
-
-  const _renderTabBar = useCallback(
-    (tabBarProps: TabBarProps<Route>) => {
-      const backgroundColor = Colors.brandPrimary1;
-      const indicatorColor = Colors.brandAccent2;
-      const iconColor = Colors.brandPrimary;
-      const iconDisabledColor = Colors.disabledText;
-      const disabledBackgroundColor = Colors.disabledBackground;
-      const disabledIndicatorColor = Colors.disabledBackground;
-
-      return (
-        <View style={styles.tabBar}>
-          {tabBarProps.navigationState.routes.map((route, i) => {
-            const isSelected = tabIndex === i;
-            return (
-              <TouchableOpacity key={route.key} style={styles.tabContainer} onPress={() => setTabIndex(i)}>
-                <Animated.View
-                  style={[
-                    styles.tabView,
-                    {
-                      backgroundColor: isSelected ? backgroundColor : disabledBackgroundColor,
-                      borderBottomColor: isSelected ? indicatorColor : disabledIndicatorColor,
-                    },
-                  ]}
-                >
-                  {i === 0 ? (
-                    <Logo3 height={getResponsiveHeight(40)} color3={isSelected ? iconColor : iconDisabledColor} />
-                  ) : (
-                    <Icon name={"card-account-details"} size={getResponsiveHeight(23)} color={isSelected ? iconColor : iconDisabledColor} />
-                  )}
-                </Animated.View>
-              </TouchableOpacity>
-            );
-          })}
-        </View>
-      );
-    },
-    [Colors.brandAccent2, Colors.brandPrimary, Colors.brandPrimary1, Colors.disabledBackground, Colors.disabledText, tabIndex]
-  );
-
-  const routes = useMemo(() => {
-    return [
-      {
-        key: "shortwaits",
-        title: intl.formatMessage({ id: "Clients_screen.tab.shortwaits" }),
-      },
-      {
-        key: "local",
-        title: intl.formatMessage({ id: "Clients_screen.tab.devices" }),
-      },
-    ];
-  }, [intl]);
-
-  const renderClient = useCallback(() => {
+    };
     return (
       <FlatList
         style={styles.container}
-        // refreshing={isAllClientsQueryLoading}
-        // refreshControl={<RefreshControl refreshing={isAllClientsQueryLoading} onRefresh={refetchAllClientsQuery} />}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.flatList}
         data={allClientsData?.data?.clients}
@@ -237,14 +135,33 @@ export const ClientsSelectorModal: FC<ModalsScreenProps<"clients-selector-modal-
         ListFooterComponent={<Space size="large" />}
       />
     );
-  }, [allClientsData?.data?.clients, renderClientItem]);
+  }, [allClientsData?.data?.clients]);
 
-  const renderLocalClient = () => {
+  // local clients
+  const renderLocalClient = useCallback(() => {
+    const handleLocalClientOnSelect = item => {
+      if (_selectedLocalClientIds.current.includes(item._id)) {
+        _selectedLocalClientIds.current = _selectedLocalClientIds.current.filter(id => id !== item._id);
+      } else {
+        _selectedLocalClientIds.current = [..._selectedLocalClientIds.current, item._id];
+      }
+      setTotalCount(_selectedLocalClientIds.current.length + _selectedClientIds.current.length);
+    };
+    const renderLocalClientItem = ({ item }) => {
+      return (
+        <ClientsSelectorItem
+          item={item}
+          initialIsSelected={_selectedLocalClientIds?.current?.includes(item._id)}
+          onSelect={() => {
+            handleLocalClientOnSelect(item);
+          }}
+        />
+      );
+    };
     return (
       <FlatList
         style={styles.container}
-        // refreshing={isAllClientsQueryLoading}
-        // refreshControl={<RefreshControl refreshing={isAllClientsQueryLoading} onRefresh={refetchAllClientsQuery} />}
+        keyExtractor={item => item._id}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.flatList}
         data={allClientsData?.data?.localClients}
@@ -253,27 +170,35 @@ export const ClientsSelectorModal: FC<ModalsScreenProps<"clients-selector-modal-
         ListFooterComponent={<Space size="large" />}
       />
     );
-  };
+  }, [allClientsData?.data?.localClients]);
 
-  const _renderScene = SceneMap({
-    shortwaits: renderClient,
-    local: renderLocalClient,
-  });
+  const hasDataChanged = useCallback(() => {
+    if (_selectedClientIds.current.length !== _initialSelectedClientIds.current.length) {
+      return true;
+    }
+    if (_selectedLocalClientIds.current.length !== _initialSelectedLocalClientIds.current.length) {
+      return true;
+    }
+    const sortedSelectedClientIds = _selectedClientIds.current.sort();
+    const sortedInitialSelectedClientIds = _initialSelectedClientIds.current.sort();
+    const sortedInitialSelectedLocalClientIds = initialSelectedIds.localClients.sort();
+    const sortedSelectedLocalClientIds = _selectedLocalClientIds.current.sort();
+    const selectedData = {
+      clients: sortedSelectedClientIds,
+      localClients: sortedSelectedLocalClientIds,
+    };
+    const initialSelectedData = {
+      clients: sortedInitialSelectedClientIds,
+      localClients: sortedInitialSelectedLocalClientIds,
+    };
+    return JSON.stringify(initialSelectedData) !== JSON.stringify(selectedData);
+  }, [initialSelectedIds]);
 
-  if (isAllClientsQueryError) {
-    return <Text>Error</Text>;
-  }
+  console.log("hasDataChanged >>>", hasDataChanged());
 
   return (
     <Screen preset="fixed" unsafe unsafeBottom>
-      <TabView
-        renderTabBar={_renderTabBar}
-        navigationState={{ index: tabIndex, routes }}
-        renderScene={_renderScene}
-        onIndexChange={setTabIndex}
-        initialLayout={{ width: Dimensions.get("window").width }}
-      />
-      {/* {onSubmit ? <Button onPress={() => onSubmit(selectedData)} disabled={!dataHasChanged} style={{ margin: 20 }} text={"Submit"} /> : null} */}
+      <ClientsTabs renderLocalClientsTab={renderLocalClient} renderShortwaitsClientsTab={renderClient} />
     </Screen>
   );
 };

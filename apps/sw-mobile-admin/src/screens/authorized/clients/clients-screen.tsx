@@ -1,12 +1,9 @@
 import { skipToken } from "@reduxjs/toolkit/dist/query";
-import { Container, IconButton, Logo3, Screen, Text, getResponsiveFontSize, getResponsiveHeight, useTheme } from "@shortwaits/shared-ui";
-import React, { FC, Fragment, useCallback, useLayoutEffect, useMemo, useState } from "react";
+import { Container, IconButton, Screen, Text, getResponsiveHeight } from "@shortwaits/shared-ui";
+import React, { FC, Fragment, useCallback, useLayoutEffect, useState } from "react";
 import { useIntl } from "react-intl";
-import { Alert, Animated, Dimensions, StyleSheet, TouchableOpacity, View } from "react-native";
-import { SceneMap, TabBarProps, TabView } from "react-native-tab-view";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import Tooltip from "react-native-walkthrough-tooltip";
-import { FloatingGroupActionButton } from "../../../components";
+import { Alert } from "react-native";
+import { ClientsTabs, FloatingGroupActionButton } from "../../../components";
 import { useOsContacts } from "../../../hooks";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useCreateLocalClientsMutation, useGetAllBusinessClientsQuery } from "../../../services";
@@ -14,21 +11,14 @@ import { useBusiness, useLocalClients, useShowGhostComponent } from "../../../st
 import { LocalClientsTab } from "./local-clients-tab";
 import { ShortwaitsClientsTab } from "./shortwaits-clients-tab";
 
-type Route = {
-  key: string;
-  title: string;
-};
-
 export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ navigation }) => {
   useShowGhostComponent("floatingActionButton");
 
   const intl = useIntl();
-  const { Colors } = useTheme();
   const business = useBusiness();
   const currentClients = useLocalClients();
   const [tabIndex, setTabIndex] = useState(0);
   const [isListSearchable, setIsListSearchable] = useState(false);
-  const [swClientToolTipVisible, setSwClientToolTipVisible] = useState(false);
 
   const handleAddClient = useCallback(() => {
     navigation.navigate("modals", {
@@ -109,39 +99,6 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
               }}
               text={tabIndex === 0 ? "Shortwaits" : "Address book"}
             />
-            <Tooltip
-              isVisible={swClientToolTipVisible}
-              closeOnChildInteraction
-              contentStyle={{ justifyContent: "center", alignItems: "center" }}
-              content={
-                <View>
-                  {tabIndex === 0 ? (
-                    <Text>
-                      <Text text={"Shortwaits clients holds all your clients that were added using the "} />
-                      <Text
-                        preset="textLinkLarge"
-                        text="Shortwaits App"
-                        onPress={() => {
-                          Alert.alert("Shortwaits App");
-                        }}
-                      />
-                      <Text text="." />
-                    </Text>
-                  ) : (
-                    <Text>The Address book holds your local clients that were added manually using the Shortwaits Admin App.</Text>
-                  )}
-                </View>
-              }
-              placement="bottom"
-              onClose={() => setSwClientToolTipVisible(false)}
-            >
-              <IconButton
-                iconType="information"
-                onPress={() => {
-                  setSwClientToolTipVisible(true);
-                }}
-              />
-            </Tooltip>
           </Container>
         );
       },
@@ -168,93 +125,12 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
         );
       },
     });
-  }, [handleAddClient, handleAddLocalClient, handleSyncContacts, intl, isListSearchable, isLoading, navigation, tabIndex, swClientToolTipVisible]);
-
-  const routes = useMemo(() => {
-    return [
-      {
-        key: "shortwaits",
-        title: intl.formatMessage({ id: "Clients_screen.tab.shortwaits" }),
-      },
-      {
-        key: "local",
-        title: intl.formatMessage({ id: "Clients_screen.tab.devices" }),
-      },
-    ];
-  }, [intl]);
-
-  const _renderScene = SceneMap({
-    shortwaits: renderShortwaitsClientsTab,
-    local: renderLocalClientsTab,
-  });
-
-  const _renderTabBar = useCallback(
-    (tabBarProps: TabBarProps<Route>) => {
-      const backgroundColor = Colors.brandPrimary1;
-      const indicatorColor = Colors.brandAccent2;
-      const iconColor = Colors.brandPrimary;
-      const iconDisabledColor = Colors.disabledText;
-      const disabledBackgroundColor = Colors.disabledBackground;
-      const disabledIndicatorColor = Colors.disabledBackground;
-
-      return (
-        <View style={styles.tabBar}>
-          {tabBarProps.navigationState.routes.map((route, i) => {
-            const isSelected = tabIndex === i;
-            return (
-              <TouchableOpacity key={route.key} style={styles.tabContainer} onPress={() => setTabIndex(i)}>
-                <Animated.View
-                  style={[
-                    styles.tabView,
-                    {
-                      backgroundColor: isSelected ? backgroundColor : disabledBackgroundColor,
-                      borderBottomColor: isSelected ? indicatorColor : disabledIndicatorColor,
-                    },
-                  ]}
-                >
-                  {i === 0 ? (
-                    <Logo3 height={getResponsiveHeight(40)} color3={isSelected ? iconColor : iconDisabledColor} />
-                  ) : (
-                    <Icon name={"card-account-details"} size={getResponsiveHeight(23)} color={isSelected ? iconColor : iconDisabledColor} />
-                  )}
-                </Animated.View>
-              </TouchableOpacity>
-            );
-          })}
-        </View>
-      );
-    },
-    [Colors.brandAccent2, Colors.brandPrimary, Colors.brandPrimary1, Colors.disabledBackground, Colors.disabledText, tabIndex]
-  );
+  }, [handleAddClient, handleAddLocalClient, handleSyncContacts, intl, isListSearchable, isLoading, navigation, tabIndex]);
 
   return (
     <Screen preset="fixed" unsafe unsafeBottom>
-      <TabView
-        renderTabBar={_renderTabBar}
-        navigationState={{ index: tabIndex, routes }}
-        renderScene={_renderScene}
-        onIndexChange={setTabIndex}
-        initialLayout={{ width: Dimensions.get("window").width }}
-      />
+      <ClientsTabs onTabChange={index => setTabIndex(index)} renderLocalClientsTab={renderLocalClientsTab} renderShortwaitsClientsTab={renderShortwaitsClientsTab} />
       <FloatingGroupActionButton />
     </Screen>
   );
 };
-
-const styles = StyleSheet.create({
-  tabBar: {
-    flexDirection: "row",
-  },
-  tabContainer: {
-    flex: 1,
-  },
-  tabView: {
-    justifyContent: "center",
-    alignItems: "center",
-    height: getResponsiveHeight(50),
-    borderBottomWidth: getResponsiveHeight(4),
-  },
-  tabText: {
-    fontSize: getResponsiveFontSize(16),
-  },
-});

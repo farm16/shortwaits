@@ -53,6 +53,7 @@ const AppStack = () => {
         options={{
           presentation: "modal",
           headerTitleAlign: "center",
+          gestureEnabled: false,
         }}
         name={NAVIGATION_STACKS.MODALS}
         component={ModalsNavigator}

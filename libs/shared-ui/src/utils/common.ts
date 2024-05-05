@@ -31,6 +31,15 @@ export const getCombinedClientTypes = (clients: ClientsDtoType, localClients: Lo
   return combinedClients;
 };
 
+export const getSelectedClients = (clients: ClientsDtoType, localClients: LocalClientsDtoType) => {
+  const selectedClientsIds = clients.map(client => client._id);
+  const selectedLocalClientsIds = localClients.map(client => client._id);
+  return {
+    clients: selectedClientsIds,
+    localClients: selectedLocalClientsIds,
+  };
+};
+
 // this converts id to asdd-asdas-asdds every 4 characters
 export const getFriendlyShortId = (inputId: string) => {
   // Check if the inputId is a valid string

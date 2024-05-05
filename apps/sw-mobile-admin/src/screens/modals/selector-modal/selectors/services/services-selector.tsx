@@ -1,11 +1,10 @@
 import { useFocusEffect } from "@react-navigation/native";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
-import { ServicesDtoType } from "@shortwaits/shared-lib";
+import { ServiceDtoType, ServicesDtoType } from "@shortwaits/shared-lib";
 import { AnimatedSearchBar, BackButton, Container, IconButton, NonIdealState, Screen, ServiceItem, Space, Text } from "@shortwaits/shared-ui";
-import { noop } from "lodash";
 import React, { FC, useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { useIntl } from "react-intl";
-import { StyleSheet } from "react-native";
+import { ListRenderItem, StyleSheet } from "react-native";
 import { FlatList, RefreshControl } from "react-native-gesture-handler";
 import { ActivityIndicator } from "react-native-paper";
 import { ModalsScreenProps } from "../../../../../navigation";
@@ -17,19 +16,14 @@ import { useBusiness } from "../../../../../store";
  */
 export const ServicesSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ navigation, route }) => {
   const {
-    onSelect = noop,
-    closeOnSelect = true,
+    onSelect,
     selectedData = [],
-    onGoBack = noop,
+    onGoBack,
     searchable,
     multiple = false, // there is no case where multiple is needed
   } = route.params;
-
-  // const dispatch = useDispatch();
-
   const business = useBusiness();
   const intl = useIntl();
-
   const { data: services, isLoading, isSuccess, isError, refetch: refetchServices } = useGetServicesQuery(business?._id ?? skipToken);
 
   useFocusEffect(
@@ -106,20 +100,18 @@ export const ServicesSelector: FC<ModalsScreenProps<"selector-modal-screen">> = 
   };
 
   const handleOnSelect = useCallback(
-    item => {
-      if (closeOnSelect && onSelect) {
-        onSelect(item);
+    (item: ServiceDtoType) => {
+      if (onSelect) {
+        onSelect([item]);
         navigation.goBack();
-      } else if (onSelect) {
-        onSelect(item);
       } else {
         navigation.goBack();
       }
     },
-    [closeOnSelect, navigation, onSelect]
+    [navigation, onSelect]
   );
 
-  const renderItem = useCallback(
+  const renderItem: ListRenderItem<ServiceDtoType> = useCallback(
     ({ item }) => {
       return (
         <ServiceItem

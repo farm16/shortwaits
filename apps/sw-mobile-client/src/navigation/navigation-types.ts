@@ -4,12 +4,12 @@ import { EventDtoType, UpdateClientDtoType } from "@shortwaits/shared-lib";
 import { QrScannerTypes } from "@shortwaits/shared-ui";
 import { AUTHORIZED_SCREENS, AUTHORIZED_STACK_SCREENS, AUTHORIZED_TAB_SCREENS, MODAL_SCREENS, NAVIGATION_STACKS, UNAUTHORIZED_SCREENS } from "./navigation-constants";
 
-type SelectorModalScreenParamsType = "static";
+export type SelectorModalModeType = "staff" | "categories" | "services" | "labels" | "static" | "eventLabels" | "events";
 type SelectorModalData = { key: string; title: string; subTitle?: string; itemData?: any };
 
 export type ModalStackParamList = {
   [MODAL_SCREENS.SELECTOR_MODAL_SCREEN]: {
-    mode: SelectorModalData;
+    mode: SelectorModalModeType;
     data: SelectorModalData;
     onSubmit?(arg: SelectorModalData): void;
     onDismiss?(): void;

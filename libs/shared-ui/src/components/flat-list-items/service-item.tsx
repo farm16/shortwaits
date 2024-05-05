@@ -1,27 +1,25 @@
 import { ServiceDtoType } from "@shortwaits/shared-lib";
 import React, { FC } from "react";
 import { StyleSheet, View, ViewStyle } from "react-native";
-
-import { noop } from "lodash";
 import { getDimensions, useTheme } from "../../theme";
 import { getPrettyStringFromPrice } from "../../utils/currency";
 import { getPrettyStringFromDurationInMin } from "../../utils/time";
 import { Avatar } from "../avatar/avatar";
-import { Button, ButtonProps, Space, Text } from "../common";
+import { Button, Space, Text } from "../common";
 
 const CARD_HEIGH = 90;
 
-type ServiceCardProps = ButtonProps & {
+interface ServiceCardProps {
   onPress(arg: ServiceDtoType): void;
   onLongPress?(arg: ServiceDtoType): void;
   service: ServiceDtoType;
   style?: ViewStyle;
   isSelected?: boolean;
-};
+}
 
 export const ServiceItem: FC<ServiceCardProps> = props => {
   const { Colors } = useTheme();
-  const { service, onPress, onLongPress = noop, style: styleOverride, isSelected, ...rest } = props;
+  const { service, onPress, onLongPress, style: styleOverride, isSelected, ...rest } = props;
   const { width } = getDimensions();
 
   const selectedStyle = isSelected
@@ -33,11 +31,22 @@ export const ServiceItem: FC<ServiceCardProps> = props => {
       } as ViewStyle)
     : {};
 
-  console.log(">>> ", service.price);
+  const handlePress = () => {
+    if (onPress) {
+      onPress(service);
+    }
+  };
+
+  const handleLongPress = () => {
+    if (onLongPress) {
+      onLongPress(service);
+    }
+  };
+
   return (
     <Button
-      onPress={() => onPress(service)}
-      onLongPress={onLongPress}
+      onPress={handlePress}
+      onLongPress={handleLongPress}
       preset="none"
       style={[
         styles.container,

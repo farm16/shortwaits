@@ -218,6 +218,7 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
         searchable: true,
         selectedData: selectedService ? [selectedService._id] : [],
         onSelect: services => {
+          console.log("selected service >>>", services);
           const service = services[0] as ServiceDtoType;
 
           if (service._id === values.serviceId) {

@@ -119,17 +119,18 @@ export const BackButton: FC<
   );
 };
 
-export const IconButton: FC<
-  ButtonProps & {
-    iconType: IconProps;
-    backgroundColor?: ThemeColorName;
-    iconColor?: ThemeColorName;
-    iconSize?: number;
-    withDisabledAlertMessage?: string;
-    withMarginLeft?: boolean;
-    withMarginRight?: boolean;
-  }
-> = props => {
+interface IconButtonProps extends ButtonProps {
+  iconType: IconProps;
+  backgroundColor?: ThemeColorName;
+  iconColor?: ThemeColorName;
+  iconSize?: number;
+  disabledAlertMessage?: string;
+  withMarginLeft?: boolean;
+  withMarginRight?: boolean;
+  onPress?(): void;
+}
+
+export const IconButton: FC<IconButtonProps> = props => {
   const {
     state = "enabled",
     iconSize: iconSizeOverride,
@@ -141,6 +142,7 @@ export const IconButton: FC<
     withMarginRight,
     withMarginLeft,
     disabled: disabledOverride,
+    onPress,
     ...rest
   } = props;
 
@@ -157,21 +159,22 @@ export const IconButton: FC<
     marginRight: withMarginRight ? getResponsiveHeight(16) : undefined,
   };
 
-  const handleDisabledAlert = () => {
-    alert(props.withDisabledAlertMessage ?? "button is disabled");
-  };
-
-  const hasOnPress = !props.onPress;
-  const disabled = disabledOverride || hasOnPress || state === "disabled";
-  const isDisabled = props.withDisabledAlertMessage ? false : disabled;
-  const onPress = props.withDisabledAlertMessage ? handleDisabledAlert : props.onPress;
-
+  const disabled = disabledOverride || state === "disabled";
+  const isDisabled = props.disabledAlertMessage ? false : disabled;
   const iconColor = iconColorOverride || iconProps[iconType]?.color || "brandSecondary";
   const iconSize = iconSizeOverride || iconProps[iconType]?.size || 22;
   const iconName = iconProps[iconType]?.name || "plus";
 
+  const handlePress = () => {
+    if (disabled) {
+      alert(props.disabledAlertMessage ?? "button is disabled");
+    } else if (onPress) {
+      onPress();
+    }
+  };
+
   return (
-    <Button preset="none" {...rest} onPress={onPress} disabled={isDisabled} style={[style, styleOverride]} state={state}>
+    <Button preset="none" {...rest} onPress={handlePress} disabled={isDisabled} style={[style, styleOverride]} state={state}>
       <Icon name={iconName} color={Colors[iconColor]} size={getResponsiveHeight(iconSize)} />
     </Button>
   );

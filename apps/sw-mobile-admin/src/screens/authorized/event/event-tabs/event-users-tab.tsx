@@ -1,5 +1,5 @@
 import { skipToken } from "@reduxjs/toolkit/dist/query";
-import { AllClientsType, BusinessClientType, BusinessUserDtoType, BusinessUsersDtoType, ClientDtoType, ClientsDtoType, EventDtoType } from "@shortwaits/shared-lib";
+import { BusinessUserDtoType, BusinessUsersDtoType, ClientDtoType, EventDtoType } from "@shortwaits/shared-lib";
 import {
   BusinessUserCard,
   Button,
@@ -10,6 +10,7 @@ import {
   Space,
   Text,
   getCombinedClientTypes,
+  getSelectedClients,
   nextEventStatuses,
   useTheme,
 } from "@shortwaits/shared-ui";
@@ -18,6 +19,7 @@ import React, { Fragment, useCallback, useMemo } from "react";
 import { useIntl } from "react-intl";
 import { RefreshControl, SectionList, SectionListData, SectionListRenderItem, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
+import { SelectedClients } from "../../..";
 import { navigate } from "../../../../navigation";
 import { useGetPeopleInEventQuery, useUpdateEventMutation } from "../../../../services";
 import { useBusiness } from "../../../../store";
@@ -29,7 +31,8 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
   const business = useBusiness();
   const intl = useIntl();
   const [updateEvent, updateEventStatus] = useUpdateEventMutation();
-  const isEventDisabled = (nextEventStatuses[event?.status?.statusName] ?? []).length === 0;
+  const isEventDisabled = nextEventStatuses[event.status.statusName].length === 0;
+  console.log("isEventDisabled >>>", isEventDisabled);
 
   const {
     data: peopleInEventData,
@@ -78,25 +81,26 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
         <NonIdealState
           type={"noClientsInEvent"}
           buttons={[
-            <Button
-              disabled={isEventDisabled}
-              style={{
-                width: "auto",
-                paddingHorizontal: 28,
-              }}
-              text={intl.formatMessage({ id: "Common.addClient" })}
-              onPress={() => {
-                navigate("modals", {
-                  screen: "selector-modal-screen",
-                  params: {
-                    type: title === "Staff" ? "staff" : "clients",
-                    onSelect: user => {
-                      console.log("selected user:", user);
+            !isEventDisabled ? (
+              <Button
+                style={{
+                  width: "auto",
+                  paddingHorizontal: 28,
+                }}
+                text={intl.formatMessage({ id: "Common.addClient" })}
+                onPress={() => {
+                  navigate("modals", {
+                    screen: "selector-modal-screen",
+                    params: {
+                      mode: title === "Staff" ? "staff" : "clients",
+                      onSelect: user => {
+                        console.log("selected user:", user);
+                      },
                     },
-                  },
-                });
-              }}
-            />,
+                  });
+                }}
+              />
+            ) : null,
           ]}
         />
       ) : (
@@ -114,7 +118,7 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
                 navigate("modals", {
                   screen: "selector-modal-screen",
                   params: {
-                    type: title === "Staff" ? "staff" : "clients",
+                    mode: title === "Staff" ? "staff" : "clients",
                     onSelect: user => {
                       console.log("selected user:", user);
                     },
@@ -130,22 +134,18 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
   );
 
   const handleClientsUpdateEvent = useCallback(
-    (users: AllClientsType) => {
-      const clientsIds = event.clientsIds;
-      const localClientsIds = event.localClientsIds;
-      const mapAllClientsToIds = (user: AllClientsType, type: BusinessClientType) => (user.filter(u => u.clientType === type) ?? []).map(u => u._id);
-
-      const newClientUserIds = mapAllClientsToIds(users, "external");
-      const newLocalClientIds = mapAllClientsToIds(users, "local");
+    (users: SelectedClients) => {
+      const newClientUserIds = users.clients;
+      const newLocalClientIds = users.localClients;
 
       const uniqueClientIds = [...new Set(newClientUserIds)];
       const uniqueLocalClientIds = [...new Set(newLocalClientIds)];
 
-      const isClientEqual = JSON.stringify(uniqueClientIds) === JSON.stringify(clientsIds);
-      const isLocalClientEqual = JSON.stringify(uniqueLocalClientIds) === JSON.stringify(localClientsIds);
+      const isClientEqual = JSON.stringify(uniqueClientIds) === JSON.stringify(event.clientsIds);
+      const isLocalClientEqual = JSON.stringify(uniqueLocalClientIds) === JSON.stringify(event.localClientsIds);
 
       if (isClientEqual && isLocalClientEqual) {
-        console.log("equal");
+        console.log("no changes");
         return;
       }
 
@@ -161,7 +161,7 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
   );
 
   const handleStaffUpdateEvent = useCallback(
-    (staff: BusinessUsersDtoType & ClientsDtoType) => {
+    (staff: BusinessUsersDtoType) => {
       const staffIds = event.staffIds;
       const newStaffIds = staff.map(user => user._id);
       const uniqueIds = [...new Set(newStaffIds)];
@@ -209,24 +209,34 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
             <IconButton
               iconType="add"
               disabled={isEventDisabled}
-              withDisabledAlertMessage="The event is no longer active"
+              disabledAlertMessage="The event is no longer active"
               onPress={() => {
-                const userType = title === "Staff" ? "staff" : "clients";
-                navigate("modals", {
-                  screen: "selector-modal-screen",
-                  params: {
-                    type: userType,
-                    multiple: true,
-                    selectedData: title === "Staff" ? event.staffIds : allClients.map(client => client._id),
-                    onGoBack: users => {
-                      if (title === "Staff") {
-                        handleStaffUpdateEvent(users);
-                      } else {
-                        handleClientsUpdateEvent(users);
-                      }
+                const isStaff = title === "Staff";
+                if (isStaff) {
+                  navigate("modals", {
+                    screen: "selector-modal-screen",
+                    params: {
+                      mode: "staff",
+                      multiple: true,
+                      selectedData: event.staffIds,
+                      onGoBack: users => {
+                        handleStaffUpdateEvent(users as BusinessUsersDtoType);
+                      },
                     },
-                  },
-                });
+                  });
+                } else {
+                  navigate("modals", {
+                    screen: "clients-selector-modal-screen",
+                    params: {
+                      mode: "clientsAndLocalClients",
+                      selectedData: getSelectedClients(peopleInEventData?.data?.clientUsers ?? [], peopleInEventData?.data?.localClients ?? []),
+                      onGoBack: selectedUsers => {
+                        console.log("selectedUsers >>>", selectedUsers);
+                        handleClientsUpdateEvent(selectedUsers);
+                      },
+                    },
+                  });
+                }
               }}
             />
           </Container>
@@ -234,7 +244,19 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
         </Fragment>
       );
     },
-    [Colors.lightBackground, Colors.text, _data, allClients, event.staffIds, handleClientsUpdateEvent, handleStaffUpdateEvent, intl, isEventDisabled, nonIdealState]
+    [
+      Colors.lightBackground,
+      Colors.text,
+      _data,
+      event.staffIds,
+      handleClientsUpdateEvent,
+      handleStaffUpdateEvent,
+      intl,
+      isEventDisabled,
+      nonIdealState,
+      peopleInEventData?.data?.clientUsers,
+      peopleInEventData?.data?.localClients,
+    ]
   );
 
   const _renderListEmptyComponent = useCallback(() => {

@@ -14,6 +14,7 @@ type EventStatusButtonsProps = {
   onPress?(status: EventStatusName): void;
   isLoading?: boolean;
 };
+
 export const EventStatusButtons: React.FC<EventStatusButtonsProps> = ({ event, onPress, isLoading, size = "large" }) => {
   const { Colors } = useTheme();
   const intl = useIntl();

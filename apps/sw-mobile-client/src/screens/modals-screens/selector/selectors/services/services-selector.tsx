@@ -1,10 +1,10 @@
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 import React, { FC, useCallback, useEffect, useLayoutEffect, useState } from "react";
-import { StyleSheet } from "react-native";
+import { ListRenderItem, StyleSheet } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 
 import { useFocusEffect } from "@react-navigation/native";
-import { ServicesDtoType } from "@shortwaits/shared-lib";
+import { ServiceDtoType, ServicesDtoType } from "@shortwaits/shared-lib";
 import { AnimatedSearchBar, BackButton, Container, IconButton, NonIdealState, ServiceItem, Space, Text } from "@shortwaits/shared-ui";
 import { noop } from "lodash";
 import { useIntl } from "react-intl";
@@ -18,8 +18,7 @@ import { useBusiness } from "../../../../../store";
  */
 export const ServicesSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ navigation, route }) => {
   const {
-    onSelect = noop,
-    closeOnSelect = true,
+    onSelect,
     selectedData = [],
     onGoBack = noop,
     searchable,
@@ -107,20 +106,18 @@ export const ServicesSelector: FC<ModalsScreenProps<"selector-modal-screen">> = 
   };
 
   const handleOnSelect = useCallback(
-    item => {
-      if (closeOnSelect && onSelect) {
-        onSelect(item);
+    (item: ServiceDtoType) => {
+      if (onSelect) {
+        onSelect([item]);
         navigation.goBack();
-      } else if (onSelect) {
-        onSelect(item);
       } else {
         navigation.goBack();
       }
     },
-    [closeOnSelect, navigation, onSelect]
+    [navigation, onSelect]
   );
 
-  const renderItem = useCallback(
+  const renderItem: ListRenderItem<ServiceDtoType> = useCallback(
     ({ item }) => {
       return (
         <ServiceItem

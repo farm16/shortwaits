@@ -23,9 +23,9 @@ export const Button: FC<ButtonProps> = props => {
     leftIconName,
     leftIconSize = 20,
     leftIconColor,
-    disabled = false,
-    state = "enabled",
+    disabled: disabledOverride,
     isTouchableOpacity = true,
+
     ...rest
   } = props;
 
@@ -36,11 +36,11 @@ export const Button: FC<ButtonProps> = props => {
     Common: { buttonTextPresets, buttonViewPresets },
   } = useTheme();
 
-  if (state === "loading") return <Spinner style={styles.spinner} size={40} type={"ThreeBounce"} color={Colors.white} />;
+  if (isLoading) return <Spinner style={styles.spinner} size={40} type={"ThreeBounce"} color={Colors.white} />;
 
   const isDisabledPresetPresent = (preset: string, presets: Record<string, object>) => presets[`${preset}-disabled`] !== undefined;
 
-  if (state === "disabled" && isDisabledPresetPresent(preset, buttonViewPresets)) {
+  if (isDisabledPresetPresent(preset, buttonViewPresets) && disabledOverride) {
     presetOverride = `${preset}-disabled` as ButtonPresets;
   }
 
@@ -52,7 +52,7 @@ export const Button: FC<ButtonProps> = props => {
 
   if (isTouchableOpacity) {
     return (
-      <TouchableOpacity {...rest} style={[defaultStyle, styleOverride]} disabled={disabled || state === "disabled"}>
+      <TouchableOpacity {...rest} style={[defaultStyle, styleOverride]} disabled={disabledOverride}>
         {leftIconName && (leftIconName === "none" ? null : <Icon name={leftIconName} size={leftIconSize} color={leftIconColor} />)}
         {content}
         {rightIconName && (rightIconName === "none" ? null : <Icon name={rightIconName} size={rightIconSize as number} color={rightIconColor} />)}
@@ -61,7 +61,7 @@ export const Button: FC<ButtonProps> = props => {
   }
 
   return (
-    <Pressable {...rest} style={[defaultStyle, styleOverride]} disabled={disabled || state === "disabled"}>
+    <Pressable {...rest} style={[defaultStyle, styleOverride]} disabled={disabledOverride}>
       {leftIconName && (leftIconName === "none" ? null : <Icon name={leftIconName} size={leftIconSize} color={leftIconColor} />)}
       {content}
       {rightIconName && (rightIconName === "none" ? null : <Icon name={rightIconName} size={rightIconSize as number} color={rightIconColor} />)}

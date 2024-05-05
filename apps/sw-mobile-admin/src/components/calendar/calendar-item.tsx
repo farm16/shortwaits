@@ -18,6 +18,7 @@ import { useIntl } from "react-intl";
 import { Alert, Animated, Pressable, StyleSheet, View } from "react-native";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import { navigate } from "../../navigation";
+import { useUpdateEventMutation } from "../../services";
 import { useService } from "../../store";
 import { getEventTime } from "./calendar-utils";
 
@@ -32,6 +33,7 @@ export const AgendaItem = (props: AgendaItemProps) => {
   const { Colors } = useTheme();
   const intl = useIntl();
   const service = useService(item?.serviceId ?? "");
+  const [updateEvent, updateEventStatus] = useUpdateEventMutation();
 
   useFocusEffect(() => {
     if (triggerTick) {
@@ -71,8 +73,27 @@ export const AgendaItem = (props: AgendaItemProps) => {
       />
     );
   }, [service?.serviceColor?.hexCode]);
+
   const renderRightActions = (_progress: Animated.AnimatedInterpolation<any>, dragX: Animated.AnimatedInterpolation<any>) => {
-    return <EventStatusButtons event={item} size="small" />;
+    return (
+      <EventStatusButtons
+        event={item}
+        size="small"
+        onPress={status => {
+          console.log("status", status);
+          updateEvent({
+            body: {
+              ...item,
+              status: {
+                statusName: status,
+                statusCode: item.status?.statusCode,
+              },
+            },
+            businessId: item.businessId,
+          });
+        }}
+      />
+    );
   };
 
   const eventTime = useCallback(
@@ -94,6 +115,10 @@ export const AgendaItem = (props: AgendaItemProps) => {
 
   const eventDescription = useCallback(() => {
     const hasLabels = !isEmpty(item.labels);
+    const clientsCount = item?.clientsIds?.length ?? 0;
+    const localClientsCount = item?.localClientsIds?.length ?? 0;
+    const totalClients = clientsCount + localClientsCount;
+
     return (
       <View style={styles.eventDescription}>
         <View
@@ -126,14 +151,12 @@ export const AgendaItem = (props: AgendaItemProps) => {
             alignSelf: "stretch",
           }}
         >
-          <Text style={{ color: Colors.subText, fontSize: 12, textAlign: "center" }}>
-            {`${intl.formatMessage({ id: "CalendarItem.clients" })}: ${item?.clientsIds?.length ?? 0}`}
-          </Text>
+          <Text style={{ color: Colors.subText, fontSize: 12, textAlign: "center" }}>{`${intl.formatMessage({ id: "CalendarItem.clients" })}: ${totalClients}`}</Text>
           <Text style={{ color: Colors.subText, fontSize: 12, textAlign: "center" }}>{`${intl.formatMessage({ id: "CalendarItem.staff" })}: ${item?.staffIds?.length ?? 0}`}</Text>
         </View>
       </View>
     );
-  }, [Colors.subText, Colors.text, intl, item?.clientsIds?.length, item.labels, item?.name, item?.staffIds?.length]);
+  }, [Colors.subText, Colors.text, intl, item?.clientsIds?.length, item.labels, item?.localClientsIds?.length, item?.name, item?.staffIds?.length]);
 
   const eventStatus = useCallback(() => {
     const isPublicEvent = item.isPublicEvent;

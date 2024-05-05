@@ -17,7 +17,6 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
   const {
     searchable = true,
     onSelect,
-    closeOnSelect = true,
     headerTitle = "Staff",
     selectedData = [],
     multiple,
@@ -118,11 +117,9 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
             setSelectedItems(selectedItems => [...selectedItems, item._id]);
           }
         }
-      } else if (closeOnSelect && onSelect) {
-        onSelect(item);
-        navigation.goBack();
       } else if (onSelect) {
         onSelect(item);
+        navigation.goBack();
       } else {
         navigation.navigate("authorized-stack", {
           screen: "business-staff-screen",
@@ -132,7 +129,7 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
         });
       }
     },
-    [closeOnSelect, maxSelectedItems, minSelectedItems, multiple, navigation, onSelect, selectedItems]
+    [maxSelectedItems, minSelectedItems, multiple, navigation, onSelect, selectedItems]
   );
 
   const renderItem = useCallback(

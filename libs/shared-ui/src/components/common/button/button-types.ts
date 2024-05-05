@@ -47,8 +47,6 @@ export interface ButtonProps extends TouchableOpacityProps {
   iconSize?: number;
   isTouchableOpacity?: boolean;
   isPressable?: boolean;
-
-  state?: "loading" | "disabled" | "enabled";
 }
 
 export type ButtonPresets = keyof ButtonViewType;
