@@ -121,6 +121,7 @@
     "NonIdealState.noEvents.message": "No events found",
     "NonIdealState.noClientsInEvent.message": "No clients in event",
     "NonIdealState.noStaffInEvent.message": "No staff in event",
+    "NonIdealState.noHistory.message": "No client history found",
 
     "CalendarItem.clients": "Clients",
     "CalendarItem.staff": "Staff",
@@ -474,6 +475,7 @@
     "NonIdealState.noEvents.message": "No se encontraron eventos",
     "NonIdealState.noClientsInEvent.message": "No hay clientes en el evento",
     "NonIdealState.noStaffInEvent.message": "No hay personal en el evento",
+    "NonIdealState.noHistory.message": "No hay historial del cliente",
 
     "CalendarItem.clients": "Clientes",
     "CalendarItem.staff": "Personal",

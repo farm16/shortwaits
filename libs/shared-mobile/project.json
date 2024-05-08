@@ -18,12 +18,6 @@
       "options": {
         "jestConfig": "libs/shared-mobile/jest.config.ts",
         "passWithNoTests": true
-      },
-      "configurations": {
-        "ci": {
-          "ci": true,
-          "codeCoverage": true
-        }
       }
     }
   }

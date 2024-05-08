@@ -1,65 +1,80 @@
-import { ClientDtoType } from "@shortwaits/shared-lib";
+import { ClientDtoType, LocalClientDtoType } from "@shortwaits/shared-lib";
 import { truncate } from "lodash";
-import React, { useCallback, useMemo } from "react";
+import React, { useMemo } from "react";
 import { Alert, Animated, Pressable, StyleSheet, View } from "react-native";
 import FastImage from "react-native-fast-image";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTheme } from "../../theme";
-import { handleEmail, handlePhoneCall, handleSms } from "../../utils";
 import { generateAvatarUrl } from "../../utils/generateAvatarUrl";
 import { Button, ButtonProps, Text } from "../common";
 
 export type ClientUserCardProps = ButtonProps & {
-  user: ClientDtoType;
+  user: ClientDtoType | LocalClientDtoType;
+  onPress?: () => void;
+  onLongPress?: () => void;
+  onClientRemove?: () => void;
+  clientRemoveMessage?: string;
 };
+const defaultClientRemoveMessage = "Are you sure you want to remove this client from event?";
 
 export const ClientUserCard = (props: ClientUserCardProps) => {
   const { Colors } = useTheme();
-
-  const { user } = props;
-
-  const handlePhoneCallPress = useCallback(phoneNumber => {
-    handlePhoneCall(phoneNumber);
-  }, []);
-  const handleSmsCallPress = useCallback(phoneNumber => {
-    handleSms(phoneNumber);
-  }, []);
-  const handleEmailPress = useCallback(email => {
-    handleEmail(email);
-  }, []);
+  const { user, clientRemoveMessage = defaultClientRemoveMessage, onPress, onLongPress, onClientRemove } = props;
 
   const title = useMemo(() => {
-    const fullName = user.givenName || user.familyName || user.middleName || null;
-    return fullName || user.username || user.email;
-  }, [user.email, user.familyName, user.givenName, user.middleName, user.username]);
+    const title = user.givenName || user.familyName || user.middleName || user.displayName || truncate(user.username || user.email, { length: 20 });
+    return title || "";
+  }, [user.displayName, user.email, user.familyName, user.givenName, user.middleName, user.username]);
+
+  const clientType = user.clientType || "local";
+  const isSwClient = clientType === "external";
+
+  console.log(JSON.stringify(user, null, 2));
 
   const avatarUrl = useMemo(() => {
     return generateAvatarUrl(title);
   }, [title]);
 
-  const handlePress = useCallback(() => {
-    Alert.alert("Pressed");
-  }, []);
+  const handlePress = () => {
+    if (onPress) {
+      onPress();
+    }
+  };
+  const handleLongPress = () => {
+    if (onLongPress) {
+      onLongPress();
+    }
+  };
 
-  const handleOnLongPress = useCallback(() => {
-    Alert.alert("Long Pressed");
-  }, []);
+  const handleRemove = () => {
+    Alert.alert("Remove Client", clientRemoveMessage, [
+      {
+        text: "Cancel",
+        onPress: () => {
+          // Do nothing
+        },
+        style: "cancel",
+      },
+      {
+        text: "Remove",
+        onPress: () => {
+          if (onClientRemove) {
+            onClientRemove();
+          }
+        },
+        style: "destructive",
+      },
+    ]);
+  };
 
-  const renderRightActions = (_progress: Animated.AnimatedInterpolation<any>, dragX: Animated.AnimatedInterpolation<any>) => {
+  const renderRightActions = (_progress: Animated.AnimatedInterpolation<any>, _dragX: Animated.AnimatedInterpolation<any>) => {
     return (
       <Pressable
         onPress={() => {
-          alert("pressed");
+          handleRemove();
         }}
-        style={{
-          backgroundColor: Colors.failedBackground,
-          justifyContent: "center",
-          alignItems: "center",
-          width: 75,
-          marginBottom: 10,
-          // borderRadius: EVENT_ITEM_BORDER_RADIUS,
-        }}
+        style={[{ backgroundColor: Colors.failedBackground }, styles.rightAction]}
       >
         <Icon name="minus-circle-outline" color={Colors.failed} size={32} />
       </Pressable>
@@ -70,17 +85,48 @@ export const ClientUserCard = (props: ClientUserCardProps) => {
     <Swipeable renderRightActions={renderRightActions}>
       <Button
         preset="card"
-        isTouchableOpacity={false}
-        style={[
-          {
-            backgroundColor: Colors.lightBackground,
-            zIndex: 10,
-          },
-        ]}
+        style={{ backgroundColor: Colors.lightBackground, zIndex: 10 }}
+        onLongPress={() => {
+          handleLongPress();
+        }}
         onPress={() => {
-          alert("pressed");
+          handlePress();
         }}
       >
+        {isSwClient ? (
+          <View
+            style={{
+              position: "absolute",
+              left: -85,
+              top: 8,
+              width: 200,
+              justifyContent: "center",
+              alignItems: "center",
+              transform: [{ rotate: "310deg" }],
+              backgroundColor: Colors.brandPrimary,
+              paddingVertical: 2,
+              zIndex: 1,
+              elevation: 1,
+              shadowColor: Colors.darkGray,
+              shadowOffset: {
+                width: 0,
+                height: 1,
+              },
+              shadowOpacity: 0.22,
+              shadowRadius: 2.22,
+              borderRadius: 4,
+            }}
+          >
+            <Text
+              style={{
+                color: "white",
+                fontSize: 12,
+              }}
+              preset="none"
+              text="SW"
+            />
+          </View>
+        ) : null}
         <FastImage
           source={{
             uri: user.accountImageUrl || avatarUrl,
@@ -103,6 +149,12 @@ export const ClientUserCard = (props: ClientUserCardProps) => {
 };
 
 const styles = StyleSheet.create({
+  rightAction: {
+    justifyContent: "center",
+    alignItems: "center",
+    width: 75,
+    marginBottom: 10,
+  },
   container: {
     flexDirection: "row",
     alignItems: "center",

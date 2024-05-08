@@ -2,14 +2,15 @@ import { AnimatedSearchBar, BackButton, Container, IconButton, NonIdealState, No
 import React, { FC, useCallback, useLayoutEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
-import { ModalsScreenProps } from "../../../../../navigation";
+import { GenericModalData, ModalsScreenProps } from "../../../../../navigation";
 import { StaticSelectorItem } from "./static-selector-item";
 
 export const StaticSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ navigation, route }) => {
-  const { headerTitle, data, onSelect, closeOnSelect = true, multiple = false, searchable, itemRightIconName, itemRightIconColor, nonIdealStateType = "noData" } = route.params;
+  const { headerTitle, onGoBack, onSubmit, data, onSelect, searchable, nonIdealStateType = "noData" } = route.params;
 
+  const _data = data as GenericModalData[];
   const [searchText, setSearchText] = useState("");
-  const [filteredData, setFilteredData] = useState(data);
+  const [filteredData, setFilteredData] = useState(_data);
   const [isListSearchable, setIsListSearchable] = useState(searchable ?? false);
 
   useLayoutEffect(() => {
@@ -34,32 +35,24 @@ export const StaticSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({
 
   const handleOnChangeText = (text: string) => {
     setSearchText(text);
-    const filteredItems = data.filter(item => {
+    const filteredItems = _data.filter(item => {
       // Adjust the filtering logic based on your data structure
-      if (typeof item === "string") {
-        return item.toLowerCase().includes(text.toLowerCase());
-      } else {
-        return item?.title?.toLowerCase().includes(text.toLowerCase()) || item?.subTitle?.toLowerCase().includes(text.toLowerCase());
-      }
+      return item?.title?.toLowerCase().includes(text.toLowerCase()) || item?.subTitle?.toLowerCase().includes(text.toLowerCase());
     });
     setFilteredData(filteredItems);
   };
 
   const renderItem = useCallback(
-    ({ item }) => {
+    ({ item }: { item: GenericModalData }) => {
       const handleOnSelect = _item => {
-        if (closeOnSelect) {
-          onSelect(_item);
-          navigation.goBack();
-        } else {
-          onSelect(_item);
-        }
+        onSelect && onSelect([_item]);
+        navigation.goBack();
       };
       return (
         <StaticSelectorItem
-          itemRightIconName={itemRightIconName}
-          itemRightIconColor={itemRightIconColor}
-          multiple={multiple}
+          // itemRightIconName={itemRightIconName}
+          // itemRightIconColor={itemRightIconColor}
+          // multiple={multiple}
           item={item}
           onSelectItem={() => {
             handleOnSelect(item);
@@ -67,7 +60,7 @@ export const StaticSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({
         />
       );
     },
-    [itemRightIconName, itemRightIconColor, multiple, closeOnSelect, onSelect, navigation]
+    [onSelect, navigation]
   );
 
   return (

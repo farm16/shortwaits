@@ -1,24 +1,40 @@
 import { ClientsDtoType, LocalClientsDtoType } from "@shortwaits/shared-lib";
-import { isEqual, noop } from "lodash";
+import { isEqual } from "lodash";
 import { Alert } from "react-native";
 
-export const getArrCount = (arr: string[] | null) => arr?.length ?? 0;
+export const getArrCount = (arr: string[] | null) => {
+  //check if array is null or undefined or empty
+  if (!arr || arr.length === 0) {
+    return 0;
+  } else {
+    return arr.length;
+  }
+};
 
 export const isObjsEqual = (obj1: any, obj2: any) => {
   return isEqual(obj1, obj2);
 };
 
-export const compareFormObjectsBeforeAbort = ({ obj1, obj2, onAbort = noop }) => {
-  console.log("obj1", obj1);
-  console.log("obj2", obj2);
+type CompareFormObjectsBeforeAbortType = {
+  obj1: object;
+  obj2: object;
+  onAbort?: () => void;
+};
+export const compareFormObjectsBeforeAbort = ({ obj1, obj2, onAbort }: CompareFormObjectsBeforeAbortType) => {
+  console.log("obj1 >>>", obj1);
+  console.log("obj2 >>>", obj2);
 
   if (isEqual(obj1, obj2)) {
-    onAbort();
+    console.log("isEqual");
+    onAbort && onAbort();
   } else {
+    console.log("not equal");
     Alert.alert("Changes detected", "You have unsaved changes. Are you sure you want to leave?", [
       {
         text: "Yes",
-        onPress: () => onAbort(),
+        onPress: () => {
+          onAbort && onAbort();
+        },
       },
       { text: "No", onPress: () => console.log("No Pressed") },
     ]);

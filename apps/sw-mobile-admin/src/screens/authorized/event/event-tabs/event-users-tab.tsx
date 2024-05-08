@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { BusinessUserDtoType, BusinessUsersDtoType, ClientDtoType, EventDtoType } from "@shortwaits/shared-lib";
 import {
@@ -20,7 +21,7 @@ import { useIntl } from "react-intl";
 import { RefreshControl, SectionList, SectionListData, SectionListRenderItem, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import { SelectedClients } from "../../..";
-import { navigate } from "../../../../navigation";
+import { AuthorizedScreenProps } from "../../../../navigation";
 import { useGetPeopleInEventQuery, useUpdateEventMutation } from "../../../../services";
 import { useBusiness } from "../../../../store";
 
@@ -30,9 +31,9 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
   const { Colors } = useTheme();
   const business = useBusiness();
   const intl = useIntl();
+  const { navigate } = useNavigation<AuthorizedScreenProps<"event-screen">["navigation"]>();
   const [updateEvent, updateEventStatus] = useUpdateEventMutation();
   const isEventDisabled = nextEventStatuses[event.status.statusName].length === 0;
-  console.log("isEventDisabled >>>", isEventDisabled);
 
   const {
     data: peopleInEventData,
@@ -60,8 +61,6 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
     [allClients, peopleInEventData?.data?.businessUsers]
   );
 
-  console.log("peopleInEventData >>>", JSON.stringify(peopleInEventData, null, 2));
-
   const handleRefresh = useCallback(() => {
     refetchPeopleInEventQuery();
   }, [refetchPeopleInEventQuery]);
@@ -70,7 +69,22 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
     if (data.section.title === "Staff") {
       return <BusinessUserCard user={data.item as BusinessUserDtoType} />;
     } else {
-      return <ClientUserCard user={data.item as ClientDtoType} />;
+      return (
+        <ClientUserCard
+          onPress={() => {
+            navigate("authorized-stack", {
+              screen: "business-client-screen",
+              params: {
+                client: data.item as ClientDtoType,
+                onClientRemove: client => {
+                  console.log("client >>>", client);
+                },
+              },
+            });
+          }}
+          user={data.item as ClientDtoType}
+        />
+      );
     }
   };
 
@@ -130,13 +144,13 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
         />
       );
     },
-    [intl]
+    [intl, isEventDisabled, navigate]
   );
 
   const handleClientsUpdateEvent = useCallback(
-    (users: SelectedClients) => {
-      const newClientUserIds = users.clients;
-      const newLocalClientIds = users.localClients;
+    (selectedClientIds: SelectedClients) => {
+      const newClientUserIds = selectedClientIds.clients;
+      const newLocalClientIds = selectedClientIds.localClients;
 
       const uniqueClientIds = [...new Set(newClientUserIds)];
       const uniqueLocalClientIds = [...new Set(newLocalClientIds)];
@@ -219,8 +233,8 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
                       mode: "staff",
                       multiple: true,
                       selectedData: event.staffIds,
-                      onGoBack: users => {
-                        handleStaffUpdateEvent(users as BusinessUsersDtoType);
+                      onGoBack: selectedClientIds => {
+                        handleStaffUpdateEvent(selectedClientIds as BusinessUsersDtoType);
                       },
                     },
                   });
@@ -253,6 +267,7 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
       handleStaffUpdateEvent,
       intl,
       isEventDisabled,
+      navigate,
       nonIdealState,
       peopleInEventData?.data?.clientUsers,
       peopleInEventData?.data?.localClients,
@@ -261,12 +276,7 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
 
   const _renderListEmptyComponent = useCallback(() => {
     return (
-      <View
-        style={{
-          marginTop: 16,
-          padding: 16,
-        }}
-      >
+      <View style={{ marginTop: 16, padding: 16 }}>
         <NonIdealState type={"noClients"} buttons={[<Button text="Sync contacts" onPress={() => null} />]} />
       </View>
     );

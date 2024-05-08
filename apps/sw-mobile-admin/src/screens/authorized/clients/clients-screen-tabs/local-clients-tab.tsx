@@ -6,8 +6,8 @@ import React, { Fragment, useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { ListRenderItem, View } from "react-native";
 import { RefreshControl } from "react-native-gesture-handler";
-import { AuthorizedScreenProps } from "../../../navigation";
-import { useLocalClients } from "../../../store";
+import { AuthorizedScreenProps } from "../../../../navigation";
+import { useLocalClients } from "../../../../store";
 
 export function LocalClientsTab({ isLoading, refresh }: { isLoading: boolean; refresh: () => void }) {
   const intl = useIntl();

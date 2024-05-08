@@ -18,8 +18,6 @@ const customConfig = {
     assetExts: assetExts.filter(ext => ext !== "svg"),
     sourceExts: [...sourceExts, "svg"],
     blockList: exclusionList([/^(?!.*node_modules).*\/dist\/.*/]),
-    // unstable_enableSymlinks: true,
-    // unstable_enablePackageExports: true,
   },
   // server: {
   //   port: 8082,

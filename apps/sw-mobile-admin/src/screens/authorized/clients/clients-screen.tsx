@@ -8,8 +8,8 @@ import { useOsContacts } from "../../../hooks";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useCreateLocalClientsMutation, useGetAllBusinessClientsQuery } from "../../../services";
 import { useBusiness, useLocalClients, useShowGhostComponent } from "../../../store";
-import { LocalClientsTab } from "./local-clients-tab";
-import { ShortwaitsClientsTab } from "./shortwaits-clients-tab";
+import { LocalClientsTab } from "./clients-screen-tabs/local-clients-tab";
+import { ShortwaitsClientsTab } from "./clients-screen-tabs/shortwaits-clients-tab";
 
 export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ navigation }) => {
   useShowGhostComponent("floatingActionButton");

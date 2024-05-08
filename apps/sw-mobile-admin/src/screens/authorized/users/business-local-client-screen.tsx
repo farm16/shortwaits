@@ -1,5 +1,5 @@
 import { BackButton, Button, Container, IconButton, NonIdealState, Screen, Space, Text, handleEmail, handlePhoneCall, handleSms, useTheme } from "@shortwaits/shared-ui";
-import React, { useCallback, useLayoutEffect } from "react";
+import React, { Fragment, useCallback, useLayoutEffect } from "react";
 import { Image, StyleSheet, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { AgendaItem } from "../../../components";
@@ -7,45 +7,40 @@ import { AuthorizedScreenProps } from "../../../navigation";
 import { useEvents } from "../../../store";
 
 export function BusinessClientScreen({ navigation, route }: AuthorizedScreenProps<"business-client-screen">) {
-  const { client, onClientRemove } = route.params;
+  const { client } = route.params;
   const { Colors } = useTheme();
   const events = useEvents();
 
-  console.log("client >>>", JSON.stringify(client, null, 2));
-
   const clientName = client.displayName || client.familyName || client.givenName || client.middleName || client.email || "";
   const hasPhoneNumbers = client.phoneNumbers && client.phoneNumbers.length > 0;
-  const phoneNumber = hasPhoneNumbers ? client.phoneNumbers[0]?.number : "";
-  const hasEmail = client.email && client.email.length > 0;
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitleAlign: "center",
       headerTitle: () => {
         return (
-          <Container direction="row" alignItems="center" justifyContent="center">
-            {/* <Text preset="headerTitle" text={"Client Profile"} /> */}
+          <Container direction="row" justifyContent="center">
+            <Text preset="headerTitle" text={"Client Profile"} />
           </Container>
         );
       },
       headerLeft: () => {
         return (
-          <Container direction="row" alignItems="center" justifyContent="center">
+          <Container direction="row" alignItems="center">
             <BackButton onPress={() => navigation.goBack()} />
           </Container>
         );
       },
       headerRight: () => {
         return (
-          <Container direction="row" alignItems="center" justifyContent="center">
+          <Container direction="row" alignItems="center">
             <IconButton
               withMarginRight
-              iconType="edit"
+              iconType="delete"
               onPress={() => {
                 navigation.goBack();
               }}
             />
-
             {/* <IconButton withMarginRight iconType="calendar"  /> */}
           </Container>
         );
@@ -69,7 +64,7 @@ export function BusinessClientScreen({ navigation, route }: AuthorizedScreenProp
   const renderNonIdealState = useCallback(() => {
     return (
       <NonIdealState
-        type={"noHistory"}
+        type={"noEvents"}
         buttons={
           <Button
             text="Add Event"
@@ -86,78 +81,108 @@ export function BusinessClientScreen({ navigation, route }: AuthorizedScreenProp
   }, [navigation]);
 
   return (
-    <Screen preset="fixed" unsafe unsafeBottom>
-      <View style={styles.headerContainer}>
+    <Screen preset="fixed" unsafe unsafeBottom backgroundColor="lightBackground">
+      <View
+        style={[
+          styles.headerContainer,
+          {
+            backgroundColor: Colors.lightBackground,
+          },
+        ]}
+      >
         <Space size="small" />
         <Container direction="row" style={styles.clientInfoContainer}>
           <Image source={{ uri: client.accountImageUrl ? client.accountImageUrl : "https://picsum.photos/200" }} style={styles.clientImage} />
           <View style={styles.clientDetails}>
-            {clientName ? <Text style={[styles.clientName, { color: Colors.text }]} text={clientName} /> : null}
-            {hasEmail ? <Text style={[styles.clientEmail, { color: Colors.subText }]} text={client.email} /> : null}
-            {hasPhoneNumbers ? <Text style={[styles.phoneNumber, { color: Colors.subText }]} text={`${client.phoneNumbers[0].label}: ${client.phoneNumbers[0].number}`} /> : null}
+            {clientName ? (
+              <Text
+                style={[
+                  styles.clientName,
+                  {
+                    color: Colors.text,
+                  },
+                ]}
+                text={clientName}
+              />
+            ) : null}
+            {client.email ? (
+              <Text
+                style={[
+                  styles.clientEmail,
+                  {
+                    color: Colors.subText,
+                  },
+                ]}
+                text={client.email}
+              />
+            ) : null}
+            {client.phoneNumbers[0]?.label && client.phoneNumbers[0]?.number ? (
+              <Text
+                style={[
+                  styles.phoneNumber,
+                  {
+                    color: Colors.subText,
+                  },
+                ]}
+                text={`${client.phoneNumbers[0].label}: ${client.phoneNumbers[0].number}`}
+              />
+            ) : null}
           </View>
         </Container>
         <Space />
         <View style={styles.headerActions}>
           <Button
-            leftIconSize={25}
-            leftIconColor={hasEmail ? Colors.brandPrimary : Colors.disabledBackground}
-            preset={"icon2"}
-            disabled={!hasEmail}
+            leftIconColor={Colors.darkGray}
+            preset="icon2"
             leftIconName="email-outline"
+            leftIconSize={25}
             onPress={() => {
               handleEmail(client.email);
             }}
           />
-          <Button
-            leftIconSize={25}
-            leftIconColor={hasPhoneNumbers ? Colors.brandPrimary : Colors.disabledBackground}
-            preset={"icon2"}
-            disabled={!hasPhoneNumbers}
-            leftIconName={"phone-outline"}
-            onPress={() => {
-              if (hasPhoneNumbers) {
-                handlePhoneCall(phoneNumber);
-              }
-            }}
-          />
-          <Button
-            leftIconSize={25}
-            leftIconColor={hasPhoneNumbers ? Colors.brandPrimary : Colors.disabledBackground}
-            preset={"icon2"}
-            disabled={!hasPhoneNumbers}
-            leftIconName={"message-outline"}
-            onPress={() => {
-              if (hasPhoneNumbers) {
-                handleSms(phoneNumber);
-              }
-            }}
-          />
-          <Button
-            leftIconSize={25}
-            leftIconColor={Colors.brandPrimary}
-            preset={"icon2"}
-            disabled={false}
-            leftIconName={"share-variant"}
-            onPress={() => {
-              console.log("share");
-            }}
-          />
-          {onClientRemove ? (
-            <Button
-              leftIconSize={25}
-              leftIconColor={Colors.failed}
-              style={{
-                backgroundColor: Colors.failedBackground,
-              }}
-              preset={"icon2"}
-              leftIconName={"delete"}
-              onPress={() => {
-                if (onClientRemove) {
-                  onClientRemove(client);
-                }
-              }}
-            />
+          {hasPhoneNumbers ? (
+            <Fragment>
+              <Button
+                leftIconSize={25}
+                leftIconColor={Colors.darkGray}
+                preset={client.phoneNumbers[0]?.number ? "icon2" : "icon2-disabled"}
+                disabled={!client.phoneNumbers[0]?.number}
+                leftIconName={"whatsapp"}
+                onPress={() => {
+                  handlePhoneCall(client.phoneNumbers[0]?.number);
+                }}
+              />
+              <Button
+                leftIconSize={25}
+                leftIconColor={Colors.darkGray}
+                preset={client.phoneNumbers[0].number ? "icon2" : "icon2-disabled"}
+                disabled={!client.phoneNumbers[0].number}
+                leftIconName={"phone-outline"}
+                onPress={() => {
+                  handlePhoneCall(client.phoneNumbers[0].number);
+                }}
+              />
+              <Button
+                leftIconSize={25}
+                leftIconColor={Colors.darkGray}
+                preset={client.phoneNumbers[0].number ? "icon2" : "icon2-disabled"}
+                disabled={!client.phoneNumbers[0].number}
+                leftIconName={"message-outline"}
+                onPress={() => {
+                  handleSms(client.phoneNumbers[0].number);
+                }}
+              />
+              <Button
+                leftIconSize={25}
+                leftIconColor={Colors.darkGray}
+                preset={"icon2"}
+                disabled={false}
+                leftIconName={"share-variant"}
+                onPress={() => {
+                  console.log("share");
+                }}
+              />
+            </Fragment>
           ) : null}
         </View>
         <Space />
@@ -165,8 +190,8 @@ export function BusinessClientScreen({ navigation, route }: AuthorizedScreenProp
       <View style={styles.eventBox}>
         <Space size="small" />
         <Container direction="row" style={[styles.eventBoxHeader]}>
-          {/* <Text preset="none" style={[styles.eventBoxHeaderTitle, { color: Colors.text }]}>
-            {`History`}
+          <Text preset="none" style={[styles.eventBoxHeaderTitle, { color: Colors.text }]}>
+            {`Events (${getEventsWithClient().length})`}
           </Text>
           <IconButton
             iconType="add"
@@ -175,7 +200,7 @@ export function BusinessClientScreen({ navigation, route }: AuthorizedScreenProp
                 screen: "add-event-modal-screen",
               });
             }}
-          /> */}
+          />
         </Container>
         <FlatList
           data={getEventsWithClient()}
@@ -207,7 +232,6 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
   },
   headerContainer: {
-    backgroundColor: "#fff",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -216,8 +240,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    // borderBottomLeftRadius: 50,
-    // borderBottomRightRadius: 50,
+    borderBottomLeftRadius: 50,
+    borderBottomRightRadius: 50,
     paddingHorizontal: 16,
     paddingBottom: 4,
   },

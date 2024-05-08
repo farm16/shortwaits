@@ -1,15 +1,16 @@
-import { AnimatedSearchBar, BackButton, Container, IconButton, NonIdealState, NonIdealStateTypes, Screen, Space } from "@shortwaits/shared-ui";
+import { EventDtoType } from "@shortwaits/shared-lib";
+import { BackButton, Container, IconButton, NonIdealState, NonIdealStateTypes, Screen, Space } from "@shortwaits/shared-ui";
 import React, { FC, useCallback, useLayoutEffect, useState } from "react";
-import { StyleSheet } from "react-native";
+import { ListRenderItemInfo, StyleSheet } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { ModalsScreenProps } from "../../../../../navigation";
 import { EventsSelectorItem } from "./events-selector-item";
 
 export const EventsSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ navigation, route }) => {
-  const { headerTitle, data, onSelect, closeOnSelect = true, multiple = false, searchable, itemRightIconName, itemRightIconColor, nonIdealStateType = "noData" } = route.params;
+  const { headerTitle, data, searchable, nonIdealStateType = "noData" } = route.params;
 
   const [searchText, setSearchText] = useState("");
-  const [filteredData, setFilteredData] = useState(data);
+  const [filteredData, setFilteredData] = useState<EventDtoType[]>((data as EventDtoType[]) ?? []);
   const [isListSearchable, setIsListSearchable] = useState(searchable ?? false);
 
   useLayoutEffect(() => {
@@ -32,47 +33,13 @@ export const EventsSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({
     });
   }, [navigation, headerTitle, isListSearchable, searchable]);
 
-  const handleOnChangeText = (text: string) => {
-    setSearchText(text);
-    const filteredItems = data.filter(item => {
-      // Adjust the filtering logic based on your data structure
-      if (typeof item === "string") {
-        return item.toLowerCase().includes(text.toLowerCase());
-      } else {
-        return item?.title?.toLowerCase().includes(text.toLowerCase()) || item?.subTitle?.toLowerCase().includes(text.toLowerCase());
-      }
-    });
-    setFilteredData(filteredItems);
-  };
-
-  const renderItem = useCallback(
-    ({ item }) => {
-      const handleOnSelect = _item => {
-        if (closeOnSelect) {
-          onSelect(_item);
-          navigation.goBack();
-        } else {
-          onSelect(_item);
-        }
-      };
-      return (
-        <EventsSelectorItem
-          itemRightIconName={itemRightIconName}
-          itemRightIconColor={itemRightIconColor}
-          multiple={multiple}
-          item={item}
-          onSelectItem={() => {
-            handleOnSelect(item);
-          }}
-        />
-      );
-    },
-    [itemRightIconName, itemRightIconColor, multiple, closeOnSelect, onSelect, navigation]
-  );
+  const renderItem = useCallback(({ item }: ListRenderItemInfo<EventDtoType>) => {
+    return <EventsSelectorItem item={item} />;
+  }, []);
 
   return (
     <Screen preset="fixed" withHorizontalPadding unsafe>
-      <AnimatedSearchBar onChangeText={handleOnChangeText} isVisible={isListSearchable} />
+      {/* <AnimatedSearchBar onChangeText={handleOnChangeText} isVisible={isListSearchable} /> */}
       <Space />
       <FlatList
         style={styles.container}

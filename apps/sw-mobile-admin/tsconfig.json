@@ -7,7 +7,7 @@
     "moduleResolution": "node",
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "composite": true
+    "declaration": true
   },
   "files": [],
   "include": [],

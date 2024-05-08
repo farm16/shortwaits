@@ -1,16 +1,17 @@
 import { EventsDtoType } from "@shortwaits/shared-lib";
+import { GenericModalData } from "../navigation/navigation-types";
 
-// func to convert the static selector modal data to the format required by the static selector modal
-export function convertStaticSelectorModalData(data: EventsDtoType, type: "events"): { key: string; title: string; subTitle?: string; itemData?: any }[] {
+export function convertStaticSelectorModalData(data: EventsDtoType, type: "events") {
   if (type === "events") {
     const convertedData = (data as EventsDtoType).map(item => {
       return {
-        key: item._id,
+        _id: item._id,
         title: item.name,
         subTitle: item.description,
         itemData: item,
-      };
+      } as GenericModalData;
     });
     return convertedData;
   }
+  return null;
 }

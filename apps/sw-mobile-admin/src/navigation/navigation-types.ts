@@ -16,7 +16,7 @@ import {
   UpdateLocalClientDtoType,
   WeekHoursType,
 } from "@shortwaits/shared-lib";
-import { QrScannerTypes } from "@shortwaits/shared-ui";
+import { NonIdealStateTypes, QrScannerTypes } from "@shortwaits/shared-ui";
 import { SelectedClients } from "../screens/modals";
 import { AUTHORIZED_SCREENS, AUTHORIZED_STACK_SCREENS, MODAL_SCREENS, NAVIGATION_STACKS, UNAUTHORIZED_SCREENS } from "./navigation-constants";
 
@@ -33,7 +33,7 @@ export type FormType = keyof FormData;
 export type FormDataType = FormData[FormType];
 export type SelectorModalModeType = "staff" | "categories" | "services" | "labels" | "static" | "eventLabels" | "events";
 export type GenericModalData<T = unknown> = {
-  key: string;
+  _id: string; // selected data will look for this id
   title: string;
   subTitle?: string;
   itemData?: T;
@@ -45,13 +45,14 @@ export type ModalStackParamList = {
   [MODAL_SCREENS.SELECTOR_MODAL_SCREEN]: {
     mode: SelectorModalModeType;
     headerTitle?: string;
-    selectedData?: SelectedData; // <--- Array of selected data ids
+    selectedData?: SelectedData; // <--- Array of selected data ids (_id)
     data?: SelectorModalData[]; // <--- Array of data to be displayed
-    multiple?: boolean; // default is false
     minSelectedItems?: number;
     maxSelectedItems?: number;
     searchable?: boolean;
-    onSelect?(arg: SelectorModalData[]): void; // <--- Array of selected data. Note: if multiple is false, this will array will only have 1 item
+    nonIdealStateType?: NonIdealStateTypes;
+    // multiple?: boolean; will not be used since onSelect is provided, else the modal will always be multiple
+    onSelect?(arg: SelectorModalData[]): void; // <--- if onSelect is provided, the modal will always return an array length of 1
     onSubmit?(arg: SelectorModalData[]): void; // ditto
     onGoBack?(arg: SelectorModalData[]): void; // ditto
   };
@@ -161,6 +162,7 @@ export type AuthorizedStackParamList = {
   };
   [AUTHORIZED_STACK_SCREENS.BUSINESS_CLIENT_SCREEN]: {
     client: ClientDtoType;
+    onClientRemove?(arg: ClientDtoType): void;
   };
   [AUTHORIZED_STACK_SCREENS.BUSINESS_STAFF_SCREEN]: {
     staff: BusinessUserDtoType;

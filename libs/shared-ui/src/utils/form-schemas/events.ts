@@ -50,11 +50,13 @@ export const createEventSchema = Yup.object({
         url: Yup.string().url(),
       })
     ),
-  location: Yup.object().optional({
+  location: Yup.object({
     address: Yup.string(),
     latitude: Yup.number(),
     longitude: Yup.number(),
-  }),
+  })
+    .nullable()
+    .optional(),
   attendeeLimit: Yup.number(),
   registrationFee: Yup.number(),
   hasDuration: Yup.boolean(),
@@ -110,7 +112,7 @@ export const updateEventSchema = Yup.object({
         url: Yup.string().url(),
       })
     ),
-  location: Yup.object().optional({
+  location: Yup.object({
     address: Yup.string(),
     latitude: Yup.number(),
     longitude: Yup.number(),
@@ -134,10 +136,10 @@ export const updateEventSchema = Yup.object({
   businessId: Yup.string(),
   clientsIds: Yup.array().of(Yup.string()),
   staffIds: Yup.array().of(Yup.string()),
-  startTime: Yup.string(),
   expectedEndTime: Yup.string(),
   localClientsIds: Yup.array().of(Yup.string()),
-  endTime: Yup.string(),
+  startTime: Yup.string(),
+  endTime: Yup.string().optional().nullable(),
   canceled: Yup.boolean(),
   priceFinal: Yup.number(),
   payment: Yup.object()
@@ -150,7 +152,8 @@ export const updateEventSchema = Yup.object({
       statementDescriptor: Yup.string(),
       metadata: Yup.object(),
     })
-    .optional(),
+    .optional()
+    .nullable(),
   cancellationReason: Yup.string().optional(),
   availableDiscountCodes: Yup.array().of(discountCodeSchema).optional(),
   selectedDiscountCode: discountCodeSchema.optional(),

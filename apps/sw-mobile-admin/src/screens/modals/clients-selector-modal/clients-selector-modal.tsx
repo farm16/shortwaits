@@ -1,5 +1,6 @@
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { BackButton, Container, IconButton, NonIdealState, Screen, Space, getResponsiveFontSize, getResponsiveHeight } from "@shortwaits/shared-ui";
+import { cloneDeep } from "lodash";
 import React, { FC, useCallback, useLayoutEffect, useRef, useState } from "react";
 import { FlatList, StyleSheet } from "react-native";
 import { useDispatch } from "react-redux";
@@ -179,20 +180,30 @@ export const ClientsSelectorModal: FC<ModalsScreenProps<"clients-selector-modal-
     if (_selectedLocalClientIds.current.length !== _initialSelectedLocalClientIds.current.length) {
       return true;
     }
-    const sortedSelectedClientIds = _selectedClientIds.current.sort();
-    const sortedInitialSelectedClientIds = _initialSelectedClientIds.current.sort();
-    const sortedInitialSelectedLocalClientIds = initialSelectedIds.localClients.sort();
-    const sortedSelectedLocalClientIds = _selectedLocalClientIds.current.sort();
-    const selectedData = {
-      clients: sortedSelectedClientIds,
-      localClients: sortedSelectedLocalClientIds,
-    };
+
+    const clonedInitialSelectedClientIds = cloneDeep(_initialSelectedClientIds.current);
+    const clonedInitialSelectedLocalClientIds = cloneDeep(_initialSelectedLocalClientIds.current);
+    const clonedSelectedClientIds = cloneDeep(_selectedClientIds.current);
+    const clonedSelectedLocalClientIds = cloneDeep(_selectedLocalClientIds.current);
+
+    // initial selected data
+    const sortedInitialSelectedClientIds = clonedInitialSelectedClientIds.sort();
+    const sortedInitialSelectedLocalClientIds = clonedInitialSelectedLocalClientIds.sort();
+    // selected data
+    const sortedSelectedClientIds = clonedSelectedClientIds.sort();
+    const sortedSelectedLocalClientIds = clonedSelectedLocalClientIds.sort();
+
     const initialSelectedData = {
       clients: sortedInitialSelectedClientIds,
       localClients: sortedInitialSelectedLocalClientIds,
     };
+    const selectedData = {
+      clients: sortedSelectedClientIds,
+      localClients: sortedSelectedLocalClientIds,
+    };
+
     return JSON.stringify(initialSelectedData) !== JSON.stringify(selectedData);
-  }, [initialSelectedIds]);
+  }, []);
 
   console.log("hasDataChanged >>>", hasDataChanged());
 

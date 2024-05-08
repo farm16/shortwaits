@@ -20,7 +20,7 @@ export const updateBusinessSchema = Yup.object({
   phone1: Yup.string().optional().nullable(),
   longName: Yup.string().optional().nullable(),
   hours: hoursOptional,
-  location: Yup.object().optional().nullable({
+  location: Yup.object({
     formattedAddress: Yup.string().optional().nullable(),
     streetAddress: Yup.string().optional().nullable(),
     city: Yup.string().optional().nullable(),
@@ -28,7 +28,9 @@ export const updateBusinessSchema = Yup.object({
     postalCode: Yup.string().optional().nullable(),
     country: Yup.string().optional().nullable(),
     coordinates: Yup.array(),
-  }),
+  })
+    .optional()
+    .nullable(),
   clients: Yup.array().optional().nullable(),
   taggedClients: Yup.array().optional().nullable(),
   isWebBookingEnabled: Yup.boolean().optional().nullable(),
@@ -36,7 +38,7 @@ export const updateBusinessSchema = Yup.object({
   isAppNotificationEnabled: Yup.boolean().optional().nullable(),
   videoConference: Yup.array().optional().nullable(),
   isVideoConferenceEnabled: Yup.boolean().optional().nullable(),
-  web: Yup.object().optional().nullable({
+  web: Yup.object({
     isActive: Yup.boolean(),
     baseUrl: Yup.string().url(),
     bannerImageUrl: Yup.string().url(),
@@ -46,8 +48,10 @@ export const updateBusinessSchema = Yup.object({
     secondaryColor: Yup.string(),
     accentColor: Yup.string(),
     notificationMessage: Yup.string(),
-  }),
-  booking: Yup.object().optional().nullable({
+  })
+    .nullable()
+    .optional(),
+  booking: Yup.object({
     allowBooking: Yup.boolean(),
     allowRescheduling: Yup.boolean(),
     allowCancellation: Yup.boolean(),
@@ -56,7 +60,9 @@ export const updateBusinessSchema = Yup.object({
     allowCheckOut: Yup.boolean(),
     allowNoShow: Yup.boolean(),
     allowWaitlist: Yup.boolean(),
-  }),
+  })
+    .optional()
+    .nullable(),
   supportEmail: Yup.string().optional().nullable(),
   supportPhone: Yup.string().optional().nullable(),
   deliveryInfo: Yup.string().optional().nullable(),

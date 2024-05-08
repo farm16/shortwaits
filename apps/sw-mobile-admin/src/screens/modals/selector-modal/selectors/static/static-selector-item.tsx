@@ -1,9 +1,9 @@
 import { ButtonCard, useTheme } from "@shortwaits/shared-ui";
 import React from "react";
-import { SelectorModalData } from "../../../../../navigation";
+import { GenericModalData } from "../../../../../navigation";
 import { SelectorItemProps } from "../../selector-types";
 
-export function StaticSelectorItem(props: SelectorItemProps<SelectorModalData>) {
+export function StaticSelectorItem(props: SelectorItemProps<GenericModalData>) {
   const { item, onSelectItem, disabled = false, multiple = false, isSelected, itemRightIconColor, itemRightIconName } = props;
 
   const isString = typeof item === "string";

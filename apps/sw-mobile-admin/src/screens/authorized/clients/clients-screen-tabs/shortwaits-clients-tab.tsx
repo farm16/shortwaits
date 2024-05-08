@@ -5,8 +5,8 @@ import { isEmpty } from "lodash";
 import React, { Fragment, useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { ListRenderItem, View } from "react-native";
-import { AuthorizedScreenProps } from "../../../navigation";
-import { useBusiness, useClients } from "../../../store";
+import { AuthorizedScreenProps } from "../../../../navigation";
+import { useBusiness, useClients } from "../../../../store";
 
 export function ShortwaitsClientsTab({ isLoading, refresh }: { isLoading: boolean; refresh: () => void }) {
   const business = useBusiness();

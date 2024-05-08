@@ -186,7 +186,7 @@ export const ClientsTabs: FC<ClientsTabsProps> = props => {
 const styles = StyleSheet.create({
   tabBarRoot: {
     flexDirection: "row",
-    height: getResponsiveHeight(42),
+    height: getResponsiveHeight(47),
   },
   tab: {
     flex: 1,

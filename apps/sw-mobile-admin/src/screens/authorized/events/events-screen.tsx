@@ -1,5 +1,5 @@
 import { skipToken } from "@reduxjs/toolkit/dist/query";
-import { Container, IconButton, QrModal, Screen, Text, convertStaticSelectorModalData, getUserGreeting, useTheme } from "@shortwaits/shared-ui";
+import { Container, IconButton, QrModal, Screen, Text, getUserGreeting, useTheme } from "@shortwaits/shared-ui";
 import React, { useLayoutEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { Calendar, FloatingGroupActionButton } from "../../../components";
@@ -59,18 +59,9 @@ export function EventsScreen({ navigation }: AuthorizedScreenProps<"events-scree
                 navigation.navigate("modals", {
                   screen: "selector-modal-screen",
                   params: {
-                    type: "events",
-                    closeOnSelect: false,
+                    mode: "events",
                     headerTitle: intl.formatMessage({ id: "Events_Screen.allEvents.headerTitle" }),
-                    itemRightIconColor: "brandSecondary",
-                    itemRightIconName: "dots-vertical",
-                    data: convertStaticSelectorModalData(currentsEvents ?? [], "events"),
-                    onSelect: item => {
-                      navigation.navigate("authorized-stack", {
-                        screen: "event-screen",
-                        params: { eventId: item.key },
-                      });
-                    },
+                    data: currentsEvents,
                   },
                 })
               }
