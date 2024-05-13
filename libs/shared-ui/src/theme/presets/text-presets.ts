@@ -63,6 +63,12 @@ export const textPresets = ({ FontSize, Fonts, Gutters, Colors }: ThemeCommonPar
       fontSize: getResponsiveFontSize(15),
       color: Colors.text,
     },
+    textLargeBold: {
+      ...BASE,
+      fontWeight: "700",
+      fontSize: getResponsiveFontSize(15),
+      color: Colors.text,
+    },
     social: {
       ...BASE,
       color: Colors.subText,

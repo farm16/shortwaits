@@ -82,12 +82,12 @@ export type EventType = {
   paymentMethod: EventPaymentMethodType;
   payment: {
     paymentProcessedOn: string; // Date when the payment was processed ISO 8601 format
-    paymentMethodId?: string; // Stripe payment method ID
+    paymentMethodId: string; // Stripe payment method ID
     amount: number; // Payment amount
     currency: string; // Payment currency (e.g., "USD", "EUR", "GBP")
-    description?: string; // Payment description or purpose
-    statementDescriptor?: string; // Statement descriptor for the payment (appears on the customer's credit card statement)
-    metadata?: { [key: string]: string }; // Metadata associated with the payment (optional)
+    description: string; // Payment description or purpose
+    statementDescriptor: string; // Statement descriptor for the payment (appears on the customer's credit card statement)
+    metadata: any; // Metadata associated with the payment (optional)
     // Additional Stripe-specific properties as needed
   };
 

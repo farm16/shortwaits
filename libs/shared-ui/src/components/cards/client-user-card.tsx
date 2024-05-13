@@ -1,6 +1,6 @@
 import { ClientDtoType, LocalClientDtoType } from "@shortwaits/shared-lib";
 import { truncate } from "lodash";
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { Alert, Animated, Pressable, StyleSheet, View } from "react-native";
 import FastImage from "react-native-fast-image";
 import Swipeable from "react-native-gesture-handler/Swipeable";

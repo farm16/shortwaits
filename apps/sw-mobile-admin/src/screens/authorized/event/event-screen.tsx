@@ -78,9 +78,9 @@ export function EventScreen({ navigation, route }: AuthorizedScreenProps<"event-
 
   return (
     <Screen preset="fixed" unsafe unsafeBottom backgroundColor="lightBackground">
-      <Space size="tiny" />
+      <Space size="normal" />
       <EventStatusButtons event={event} onPress={handleUpdateEvent} />
-      <Space size="small" />
+      <Space size="normal" />
       <EventScreenTabs event={event} />
     </Screen>
   );

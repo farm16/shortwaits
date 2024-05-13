@@ -1,8 +1,8 @@
 import { skipToken } from "@reduxjs/toolkit/dist/query";
-import { BackButton, Container, IconButton, NonIdealState, Screen, Space, getResponsiveFontSize, getResponsiveHeight } from "@shortwaits/shared-ui";
+import { BackButton, Button, Container, IconButton, NonIdealState, Screen, Space, getResponsiveFontSize, getResponsiveHeight, useTheme } from "@shortwaits/shared-ui";
 import { cloneDeep } from "lodash";
 import React, { FC, useCallback, useLayoutEffect, useRef, useState } from "react";
-import { FlatList, StyleSheet } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import { useDispatch } from "react-redux";
 import { ClientsTabs } from "../../../components";
 import { ModalsScreenProps } from "../../../navigation";
@@ -11,7 +11,7 @@ import { showPremiumMembershipModal, useBusiness } from "../../../store";
 import { ClientsSelectorItem } from "./clients-selector-item";
 
 const MIN_SELECTED_ITEMS_DEFAULT = 0; // Define your minimum selected items here
-const MAX_SELECTED_ITEMS_DEFAULT = 1000; // Define your maximum selected items here
+const MAX_SELECTED_ITEMS_DEFAULT = 100; // Define your maximum selected items here
 
 export const ClientsSelectorModal: FC<ModalsScreenProps<"clients-selector-modal-screen">> = ({ navigation, route }) => {
   const {
@@ -29,6 +29,7 @@ export const ClientsSelectorModal: FC<ModalsScreenProps<"clients-selector-modal-
 
   const business = useBusiness();
   const dispatch = useDispatch();
+  const { Colors } = useTheme();
   const [totalCount, setTotalCount] = useState(initialSelectedIds.clients.length + initialSelectedIds.localClients.length);
   const [isListSearchable, setIsListSearchable] = useState<boolean>(false);
 
@@ -205,11 +206,23 @@ export const ClientsSelectorModal: FC<ModalsScreenProps<"clients-selector-modal-
     return JSON.stringify(initialSelectedData) !== JSON.stringify(selectedData);
   }, []);
 
+  const handleSubmit = useCallback(() => {
+    if (onSubmit) {
+      onSubmit({ clients: _selectedClientIds.current, localClients: _selectedLocalClientIds.current });
+    }
+    navigation.goBack();
+  }, [navigation, onSubmit]);
   console.log("hasDataChanged >>>", hasDataChanged());
 
+  const backgroundColor = Colors.background;
   return (
-    <Screen preset="fixed" unsafe unsafeBottom>
+    <Screen preset="fixed" unsafe backgroundColor="background">
       <ClientsTabs renderLocalClientsTab={renderLocalClient} renderShortwaitsClientsTab={renderClient} />
+      {onSubmit ? (
+        <View style={[styles.submitButton, { backgroundColor }]}>
+          <Button disabled={totalCount < minSelectedItems || totalCount > maxSelectedItems || !hasDataChanged()} onPress={handleSubmit} text="Done" />
+        </View>
+      ) : null}
     </Screen>
   );
 };
@@ -217,6 +230,12 @@ export const ClientsSelectorModal: FC<ModalsScreenProps<"clients-selector-modal-
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: getResponsiveHeight(16),
+  },
+  submitButton: {
+    paddingTop: getResponsiveHeight(16),
+    paddingHorizontal: getResponsiveHeight(16),
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: "#E5E5E5",
   },
   searchBar: {},
   flatList: {},

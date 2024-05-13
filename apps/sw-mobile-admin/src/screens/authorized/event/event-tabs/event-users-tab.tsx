@@ -88,65 +88,6 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
     }
   };
 
-  const nonIdealState = useCallback(
-    section => {
-      const { title } = section;
-      return !isEmpty(section.data) ? null : title === "Clients" ? (
-        <NonIdealState
-          type={"noClientsInEvent"}
-          buttons={[
-            !isEventDisabled ? (
-              <Button
-                style={{
-                  width: "auto",
-                  paddingHorizontal: 28,
-                }}
-                text={intl.formatMessage({ id: "Common.addClient" })}
-                onPress={() => {
-                  navigate("modals", {
-                    screen: "selector-modal-screen",
-                    params: {
-                      mode: title === "Staff" ? "staff" : "clients",
-                      onSelect: user => {
-                        console.log("selected user:", user);
-                      },
-                    },
-                  });
-                }}
-              />
-            ) : null,
-          ]}
-        />
-      ) : (
-        <NonIdealState
-          type={"noStaffInEvent"}
-          buttons={[
-            <Button
-              disabled={isEventDisabled}
-              style={{
-                width: "auto",
-                paddingHorizontal: 28,
-              }}
-              text={intl.formatMessage({ id: "Common.addStaff" })}
-              onPress={() => {
-                navigate("modals", {
-                  screen: "selector-modal-screen",
-                  params: {
-                    mode: title === "Staff" ? "staff" : "clients",
-                    onSelect: user => {
-                      console.log("selected user:", user);
-                    },
-                  },
-                });
-              }}
-            />,
-          ]}
-        />
-      );
-    },
-    [intl, isEventDisabled, navigate]
-  );
-
   const handleClientsUpdateEvent = useCallback(
     (selectedClientIds: SelectedClients) => {
       const newClientUserIds = selectedClientIds.clients;
@@ -172,6 +113,67 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
       updateEvent({ body: updatedEvent, businessId: business._id });
     },
     [business._id, event, updateEvent]
+  );
+
+  const nonIdealState = useCallback(
+    section => {
+      const { title } = section;
+      return !isEmpty(section.data) ? null : title === "Clients" ? (
+        <NonIdealState
+          type={"noClientsInEvent"}
+          buttons={[
+            !isEventDisabled ? (
+              <Button
+                style={{
+                  width: "auto",
+                  paddingHorizontal: 28,
+                }}
+                text={intl.formatMessage({ id: "Common.addClient" })}
+                onPress={() => {
+                  navigate("modals", {
+                    screen: "clients-selector-modal-screen",
+                    params: {
+                      mode: "clientsAndLocalClients",
+                      selectedData: getSelectedClients(peopleInEventData?.data?.clientUsers ?? [], peopleInEventData?.data?.localClients ?? []),
+                      onSubmit: selectedUsers => {
+                        console.log("selectedUsers >>>", selectedUsers);
+                        handleClientsUpdateEvent(selectedUsers);
+                      },
+                    },
+                  });
+                }}
+              />
+            ) : null,
+          ]}
+        />
+      ) : (
+        <NonIdealState
+          type={"noStaffInEvent"}
+          buttons={[
+            <Button
+              disabled={isEventDisabled}
+              style={{
+                width: "auto",
+                paddingHorizontal: 28,
+              }}
+              text={intl.formatMessage({ id: "Common.addStaff" })}
+              onPress={() => {
+                navigate("modals", {
+                  screen: "selector-modal-screen",
+                  params: {
+                    mode: "staff",
+                    onSelect: user => {
+                      console.log("selected user:", user);
+                    },
+                  },
+                });
+              }}
+            />,
+          ]}
+        />
+      );
+    },
+    [handleClientsUpdateEvent, intl, isEventDisabled, navigate, peopleInEventData?.data?.clientUsers, peopleInEventData?.data?.localClients]
   );
 
   const handleStaffUpdateEvent = useCallback(
@@ -231,7 +233,6 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
                     screen: "selector-modal-screen",
                     params: {
                       mode: "staff",
-                      multiple: true,
                       selectedData: event.staffIds,
                       onGoBack: selectedClientIds => {
                         handleStaffUpdateEvent(selectedClientIds as BusinessUsersDtoType);
@@ -244,7 +245,7 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
                     params: {
                       mode: "clientsAndLocalClients",
                       selectedData: getSelectedClients(peopleInEventData?.data?.clientUsers ?? [], peopleInEventData?.data?.localClients ?? []),
-                      onGoBack: selectedUsers => {
+                      onSubmit: selectedUsers => {
                         console.log("selectedUsers >>>", selectedUsers);
                         handleClientsUpdateEvent(selectedUsers);
                       },

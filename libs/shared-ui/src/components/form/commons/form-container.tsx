@@ -1,10 +1,8 @@
 import React, { ReactElement, ReactNode, useCallback, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Banner } from "react-native-paper";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import Spinner from "react-native-spinkit";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { Screen, Space, Text } from "../..";
+import { ActivityIndicator, Screen, Space, Text } from "../..";
 import { useTheme } from "../../../theme";
 import { getResponsiveHeight } from "../../../utils";
 import { ScreenProps } from "../../common/screen/screen.props";
@@ -76,67 +74,38 @@ export const FormContainer = (props: FormContainerProps) => {
     );
   }, [Colors.failed, Colors.failedBackground, Colors.success, Colors.successBackground, Colors.text, errorMessage, isStatusBannerVisible, retry, status, successMessage]);
 
-  const insets = useSafeAreaInsets();
-
   if (isLoading) {
-    return (
-      <View style={[styles.loadingView]}>
-        <Spinner isVisible={true} size={50} type="ThreeBounce" color={Colors.brandSecondary} />
-      </View>
-    );
+    return <ActivityIndicator />;
   }
 
   if (preset === "fixed") {
     return (
-      <Screen unsafe preset="fixed" {...rest} withHorizontalPadding={withHorizontalPadding} backgroundColor={backgroundColor} statusBarBackgroundColor={statusBarBackgroundColor}>
-        <Space size="large" />
-        {children}
-        {clonedFooter ? (
-          <View
-            style={[
-              styles.footer,
-              {
-                paddingBottom: insets.bottom + getResponsiveHeight(16),
-                paddingTop: getResponsiveHeight(16),
-              },
-            ]}
-          >
-            {clonedFooter}
-          </View>
-        ) : null}
+      <Screen unsafe preset="fixed" {...rest} withHorizontalPadding={false} backgroundColor={backgroundColor} statusBarBackgroundColor={statusBarBackgroundColor}>
+        <View style={{ flex: 1, paddingHorizontal: withHorizontalPadding ? 16 : 0 }}>
+          <Space size="large" />
+          {children}
+        </View>
+        {clonedFooter ? <View style={styles.footer}>{clonedFooter}</View> : null}
       </Screen>
     );
   }
 
   return (
-    <Screen unsafe preset="scroll" {...rest} withHorizontalPadding={withHorizontalPadding} backgroundColor={backgroundColor} statusBarBackgroundColor={statusBarBackgroundColor}>
-      <Space size="large" />
-      {children}
-      {clonedFooter ? (
-        <View
-          style={[
-            styles.footer,
-            {
-              paddingBottom: getResponsiveHeight(16),
-              paddingTop: getResponsiveHeight(16),
-            },
-          ]}
-        >
-          {clonedFooter}
-        </View>
-      ) : null}
+    <Screen unsafe preset="scroll" {...rest} withHorizontalPadding={false} backgroundColor={backgroundColor} statusBarBackgroundColor={statusBarBackgroundColor}>
+      <View style={{ flex: 1, paddingHorizontal: withHorizontalPadding ? 16 : 0 }}>
+        <Space size="large" />
+        {children}
+      </View>
+      {clonedFooter ? <View style={styles.footer}>{clonedFooter}</View> : null}
     </Screen>
   );
 };
 
 const styles = StyleSheet.create({
-  loadingView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
   footer: {
-    flex: 1,
-    justifyContent: "flex-end",
+    paddingTop: getResponsiveHeight(16),
+    borderTopColor: "#E5E5E5",
+    borderTopWidth: StyleSheet.hairlineWidth,
+    paddingHorizontal: getResponsiveHeight(16),
   },
 });

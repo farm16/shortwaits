@@ -37,26 +37,32 @@ const paymentSchema = Yup.object({
   metadata: Yup.object(),
 });
 
+const locationSchema = Yup.object({
+  name: Yup.string(),
+  address: Yup.string(),
+  address2: Yup.string().nullable().notRequired(),
+  city: Yup.string(),
+  state: Yup.string(),
+  country: Yup.string(),
+  postalCode: Yup.string(),
+  latitude: Yup.number(),
+  longitude: Yup.number(),
+});
+
+const urlSchema = Yup.object({
+  type: Yup.string(),
+  isSupported: Yup.boolean(),
+  name: Yup.string(),
+  url: Yup.string().url(),
+});
+
 export const createEventSchema = Yup.object({
   paymentMethod: paymentMethodSchema,
   participantsIds: Yup.array().of(Yup.string()),
-  urls: Yup.array()
-    .optional()
-    .of(
-      Yup.object({
-        type: Yup.string(),
-        isSupported: Yup.boolean(),
-        name: Yup.string(),
-        url: Yup.string().url(),
-      })
-    ),
-  location: Yup.object({
-    address: Yup.string(),
-    latitude: Yup.number(),
-    longitude: Yup.number(),
-  })
-    .nullable()
-    .optional(),
+  staffIds: Yup.array().of(Yup.string()),
+  clientsIds: Yup.array().of(Yup.string()),
+  localClientsIds: Yup.array().of(Yup.string()),
+  location: locationSchema.nullable().optional(),
   attendeeLimit: Yup.number(),
   registrationFee: Yup.number(),
   hasDuration: Yup.boolean(),
@@ -68,94 +74,80 @@ export const createEventSchema = Yup.object({
   priceExpected: Yup.number().notRequired(),
   isPublicEvent: Yup.boolean().notRequired(),
   repeat: Yup.boolean().notRequired(),
-  notes: Yup.string().notRequired(),
-  labels: Yup.array().of(Yup.object()).optional(),
   registrationDeadlineTime: Yup.string().optional(),
   leadClientId: Yup.string().notRequired(),
   serviceId: Yup.string(),
   businessId: Yup.string(),
-  clientsIds: Yup.array().of(Yup.string()),
-  staffIds: Yup.array().of(Yup.string()),
   startTime: Yup.string(),
   expectedEndTime: Yup.string(),
-  localClientsIds: Yup.array().of(Yup.string()),
   endTime: Yup.string(),
   canceled: Yup.boolean(),
   priceFinal: Yup.number(),
-  payment: Yup.object()
-    .shape({
-      paymentProcessedOn: Yup.string(),
-      paymentMethodId: Yup.string(),
-      amount: Yup.number(),
-      currency: Yup.string(),
-      description: Yup.string(),
-      statementDescriptor: Yup.string(),
-      metadata: Yup.object(),
-    })
-    .nullable(),
+  payment: paymentSchema.nullable().optional(),
+  notes: Yup.string().notRequired(),
+  labels: Yup.array().of(Yup.object()).optional(),
+  urls: Yup.array().of(urlSchema).optional(),
   cancellationReason: Yup.string().optional(),
   availableDiscountCodes: Yup.array().of(discountCodeSchema).optional(),
-  selectedDiscountCode: discountCodeSchema.nullable(),
   discountAmount: Yup.number().optional(),
+  selectedDiscountCode: discountCodeSchema.nullable(),
 });
 
 export const updateEventSchema = Yup.object({
-  paymentMethod: paymentMethodSchema,
+  _id: Yup.string().nullable().notRequired(),
+  createdAt: Yup.string().nullable().notRequired(),
+  updatedAt: Yup.string().nullable().notRequired(),
+  __v: Yup.number().nullable().notRequired(),
+
+  shortId: Yup.string().nullable().notRequired(),
   participantsIds: Yup.array().of(Yup.string()),
-  urls: Yup.array()
-    .optional()
-    .of(
-      Yup.object({
-        type: Yup.string(),
-        isSupported: Yup.boolean(),
-        name: Yup.string(),
-        url: Yup.string().url(),
-      })
-    ),
-  location: Yup.object({
-    address: Yup.string(),
-    latitude: Yup.number(),
-    longitude: Yup.number(),
-  }),
-  attendeeLimit: Yup.number(),
-  registrationFee: Yup.number(),
-  hasDuration: Yup.boolean(),
-  eventImage: Yup.string().url(),
+  staffIds: Yup.array().of(Yup.string()),
+  clientsIds: Yup.array().of(Yup.string()),
+  localClientsIds: Yup.array().of(Yup.string()),
+  businessId: Yup.string(),
+  createdBy: Yup.string().nullable().notRequired(), // ID of the user who created the event
+  updatedBy: Yup.string().nullable().notRequired(), // ID of the user who last updated the event
+  leadClientId: Yup.string().nullable().notRequired(),
+
   name: Yup.string(),
   description: Yup.string(),
-  features: Yup.array().of(Yup.string()),
-  durationInMin: Yup.number(),
-  priceExpected: Yup.number().notRequired(),
-  isPublicEvent: Yup.boolean().notRequired(),
-  repeat: Yup.boolean().notRequired(),
-  notes: Yup.string().notRequired(),
-  labels: Yup.array().of(Yup.object()).optional(),
-  registrationDeadlineTime: Yup.string().optional(),
-  leadClientId: Yup.string().notRequired(),
+  eventImage: Yup.string().url(),
   serviceId: Yup.string(),
-  businessId: Yup.string(),
-  clientsIds: Yup.array().of(Yup.string()),
-  staffIds: Yup.array().of(Yup.string()),
-  expectedEndTime: Yup.string(),
-  localClientsIds: Yup.array().of(Yup.string()),
+  features: Yup.array().of(Yup.string()),
+
+  status: Yup.object({
+    statusCode: Yup.number(),
+    statusName: Yup.string(),
+  }),
+
+  hasDuration: Yup.boolean(),
+  durationInMin: Yup.number(),
+
   startTime: Yup.string(),
   endTime: Yup.string().optional().nullable(),
+  expectedEndTime: Yup.string(),
   canceled: Yup.boolean(),
-  priceFinal: Yup.number(),
-  payment: Yup.object()
-    .shape({
-      paymentProcessedOn: Yup.string(),
-      paymentMethodId: Yup.string(),
-      amount: Yup.number(),
-      currency: Yup.string(),
-      description: Yup.string(),
-      statementDescriptor: Yup.string(),
-      metadata: Yup.object(),
-    })
-    .optional()
-    .nullable(),
   cancellationReason: Yup.string().optional(),
+  priceExpected: Yup.number().notRequired(),
+  priceFinal: Yup.number(),
+  isPublicEvent: Yup.boolean().notRequired(),
+  repeat: Yup.boolean().notRequired(),
+  paymentMethod: paymentMethodSchema,
+  payment: paymentSchema.optional().nullable(),
+
+  notes: Yup.string().notRequired(),
+  labels: Yup.array().of(Yup.object()).optional(),
+
+  urls: Yup.array().of(urlSchema).optional(),
+
+  deleted: Yup.boolean(),
+
+  location: locationSchema.nullable().optional(),
+
+  attendeeLimit: Yup.number(),
+  registrationDeadlineTime: Yup.string().optional(),
+  registrationFee: Yup.number(),
+  discountAmount: Yup.number().optional(),
   availableDiscountCodes: Yup.array().of(discountCodeSchema).optional(),
   selectedDiscountCode: discountCodeSchema.optional(),
-  discountAmount: Yup.number().optional(),
 });

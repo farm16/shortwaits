@@ -1,9 +1,9 @@
 import format from "date-fns/format";
-import React, { useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { DefaultTheme, Provider as PaperProvider } from "react-native-paper";
 import { DatePickerModal, TimePickerModal, registerTranslation } from "react-native-paper-dates";
-
+import { CalendarDate } from "react-native-paper-dates/lib/typescript/Date/Calendar";
 import { getDimensions, useTheme } from "../../theme";
 import { Card, Container, Space, Text } from "../common";
 
@@ -46,9 +46,10 @@ export function TimePickerFieldCard(props: TimePickerInputProps) {
   }, [setIsDatePickerOpen]);
 
   const onConfirmDatePicker = useCallback(
-    ({ date: datePickerModalDate }) => {
+    ({ date }: { date: CalendarDate }) => {
       setIsDatePickerOpen(false);
-      onChange(datePickerModalDate.toISOString());
+      const _date = date ? date.toISOString() : "";
+      onChange && onChange(_date);
     },
     [onChange]
   );
@@ -59,7 +60,7 @@ export function TimePickerFieldCard(props: TimePickerInputProps) {
       const newDate = date;
       newDate.setHours(hours);
       newDate.setMinutes(minutes);
-      onChange(newDate.toISOString());
+      onChange && onChange(newDate.toISOString());
     },
     [date, onChange]
   );
@@ -92,7 +93,7 @@ export function TimePickerFieldCard(props: TimePickerInputProps) {
             }}
             onPress={() => setIsDatePickerOpen(true)}
           >
-            <Text preset="cardSubtitle" text={format(date, "MM/dd/yyyy")} />
+            <Text preset="cardSubtitle" style={{ color: disabled ? Colors.subText : Colors.brandPrimary }} text={format(date, "MM/dd/yyyy")} />
           </TouchableOpacity>
           {withTime ? (
             <TouchableOpacity
@@ -103,7 +104,7 @@ export function TimePickerFieldCard(props: TimePickerInputProps) {
               }}
               onPress={() => setIsTimePickerOpen(true)}
             >
-              <Text preset="cardSubtitle" text={format(date, "hh:mm aa")} />
+              <Text preset="cardSubtitle" style={{ color: disabled ? Colors.subText : Colors.brandPrimary }} text={format(date, "hh:mm aa")} />
             </TouchableOpacity>
           ) : null}
         </Container>

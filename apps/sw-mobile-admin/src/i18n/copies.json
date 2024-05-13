@@ -150,7 +150,7 @@
     "Event_Screen.eventScreenHeader.labels": "Labels",
 
     "Event_Screen.routes.title.people": "People",
-    "Event_Screen.routes.title.more": "Details",
+    "Event_Screen.routes.title.more": "More",
 
     "Event_Screen.tab.more.service": "Service",
     "Event_Screen.tab.more.meetingPlatform": "Meeting Platform",
@@ -208,6 +208,9 @@
     "PlansScreen.plan.6months.offerDescription": "One month free",
     "PlansScreen.plan.6months.priceDescription": "per one time",
     "PlansScreen.plan.6months.description": "Billed every 6 months\n14-day money back guarantee",
+
+    "UpdateEventModal.title": "Update Event",
+    "UpdateEventModal.updateEventButton": "Update",
 
     "AddEventModal.title": "Create Event",
     "AddEventModal.name": "Name",
@@ -504,7 +507,7 @@
     "Event_Screen.eventScreenHeader.labels": "Etiquetas",
 
     "Event_Screen.routes.title.people": "Personas",
-    "Event_Screen.routes.title.more": "Detalles",
+    "Event_Screen.routes.title.more": "Más",
 
     "Event_Screen.tab.more.service": "Servicio",
     "Event_Screen.tab.more.meetingPlatform": "Plataforma de reunión",
@@ -562,6 +565,9 @@
     "PlansScreen.plan.6months.offerDescription": "Un mes gratis",
     "PlansScreen.plan.6months.priceDescription": "por una vez",
     "PlansScreen.plan.6months.description": "Facturado cada 6 meses\nGarantía de devolución de dinero de 14 días",
+
+    "UpdateEventModal.title": "Actualizar Evento",
+    "UpdateEventModal.updateEventButton": "Actualizar",
 
     "AddEventModal.title": "Crear Evento",
     "AddEventModal.name": "Nombre",

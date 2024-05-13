@@ -1,5 +1,5 @@
 import fromPairs from "lodash/fromPairs";
-import { Dimensions } from "react-native";
+import { Dimensions, Platform } from "react-native";
 import { Palette } from "./Colors";
 
 export function getPaletteWithContrast<Key extends string>(baseName: Key, baseColor: string): Palette<Key> {
@@ -27,6 +27,7 @@ export const getHueAndSaturationFromHex = (hex: string) => {
   r /= 255;
   g /= 255;
   b /= 255;
+
   const cmin = Math.min(r, g, b);
   const cmax = Math.max(r, g, b);
   const delta = cmax - cmin;
@@ -61,14 +62,14 @@ export const getTints = (hex: string) => {
   return hslColors;
 };
 
-export const getPaletteBaseKey = palette => {
+export const getPaletteBaseKey = (palette: object) => {
   const keys = Object.keys(palette);
   const baseKey = keys.find(key => key.match(/^[a-z]+$/));
 
   return baseKey;
 };
 
-export const getReversePalette = palette => {
+export const getReversePalette = (palette: Record<string, string>) => {
   const reversedPalette = { ...palette };
   const baseKey = getPaletteBaseKey(palette);
   const lastNumber = 9; /*(keys.length / 2 - 1)*/
@@ -108,4 +109,18 @@ export const initBrandColors = ({ brandPrimary, brandSecondary, brandAccent }: {
     secondary: brandSecondary,
     accent: brandAccent,
   };
+};
+
+export const shadow = {
+  ...Platform.select({
+    ios: {
+      shadowColor: "#000000",
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.3,
+      shadowRadius: 4,
+    },
+    android: {
+      elevation: 4,
+    },
+  }),
 };

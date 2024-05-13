@@ -100,17 +100,15 @@ export type ModalStackParamList = {
     closeOnSubmit?: boolean;
   };
   [MODAL_SCREENS.ADD_EVENT_MODAL_SCREEN]: {
-    initialValues?: FormData[FormType];
-    onSubmit?<T extends keyof FormData>(arg: FormData[T]): void;
-    onDone?(): void;
-    onGoBack?(arg0): void;
-    closeOnSubmit?: boolean;
+    onSubmit?(): void;
+    onGoBack?(): void;
+    onSuccess?(arg0: EventDtoType): void;
   };
   [MODAL_SCREENS.UPDATE_EVENT_MODAL_SCREEN]: {
     initialValues: EventDtoType;
-    onSubmit?<T extends keyof FormData>(arg: FormData[T]): void;
-    onGoBack?(arg0): void;
-    closeOnSubmit?: boolean;
+    onSubmit?(): void;
+    onGoBack?(): void;
+    onSuccess?(arg0: EventDtoType): void;
   };
   [MODAL_SCREENS.ADD_STAFF_MODAL_SCREEN]: {
     initialValues?: FormData[FormType];

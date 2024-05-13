@@ -1,38 +1,41 @@
-import { BusinessLabelType, BusinessUsersDtoType, CreateEventDtoType, ServiceDtoType, eventPaymentMethods } from "@shortwaits/shared-lib";
+import { BusinessUsersDtoType, CreateEventDtoType, ServiceDtoType, eventPaymentMethods } from "@shortwaits/shared-lib";
 import {
+  ActivityIndicator,
   BackButton,
   Button,
   ButtonCard,
   CurrencyFieldCard,
   ExpandableSection,
   FormContainer,
+  FormSchemaTypes,
   IconButton,
   Text,
   TextFieldCard,
   TimePickerFieldCard,
+  compareFormObjectsBeforeAbort,
   getEmojiString,
+  useForm,
 } from "@shortwaits/shared-ui";
 import { FormikErrors } from "formik";
-import { isEmpty, noop } from "lodash";
 import React, { FC, useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { useIntl } from "react-intl";
 import { Alert } from "react-native";
-import { ActivityIndicator } from "react-native-paper";
-import { useForm } from "../../../hooks";
 import { GenericModalData, ModalsScreenProps } from "../../../navigation";
 import { useCreateEventMutation } from "../../../services";
 import { useBusiness, useUser } from "../../../store";
 
 export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({ navigation, route }) => {
   const params = route?.params;
-  const onSubmit = params?.onSubmit ?? noop;
-  const onDone = params?.onDone ?? noop;
-  const closeOnSubmit = params?.closeOnSubmit ?? true;
+  const onSubmit = params?.onSubmit;
+  const onGoBack = params?.onGoBack;
+  const onSuccess = params?.onSuccess;
+
   const intl = useIntl(); // Access the intl object
   const [selectedService, setSelectedService] = useState<ServiceDtoType | null>(null);
   const [isFree, setIsFree] = useState<boolean>(true);
-  const business = useBusiness();
   const user = useUser();
+  const business = useBusiness();
+
   const [createEvent, createEventStatus] = useCreateEventMutation();
 
   const validateDates = (formData: CreateEventDtoType): FormikErrors<CreateEventDtoType> => {
@@ -53,19 +56,20 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
   const initialValues = useMemo(() => {
     const currentDate = new Date();
     const futureDate = new Date(currentDate.getTime() + 15 * 60000);
-    const _initialValues: CreateEventDtoType = {
+    const _initialValues: FormSchemaTypes["createEvent"] = {
       participantsIds: [],
       leadClientId: "",
       urls: [],
       location: {
-        address: "",
-        latitude: 0,
-        longitude: 0,
         name: "",
+        address: "",
+        address2: "",
         city: "",
         state: "",
         country: "",
         postalCode: "",
+        latitude: 0,
+        longitude: 0,
       },
       attendeeLimit: 0,
       registrationDeadlineTime: "",
@@ -111,12 +115,12 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
 
   const { touched, errors, values, handleChange, handleSubmit, setFieldValue, setValues } = useForm(
     {
-      initialValues,
+      initialValues: initialValues,
       validate: validateDates,
       onSubmit: formData => {
         createEvent({ businessId: business._id, body: formData });
         if (onSubmit) {
-          onSubmit(formData);
+          onSubmit();
         }
       },
     },
@@ -126,71 +130,72 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
   console.log("errors", errors);
 
   useLayoutEffect(() => {
+    const handleOnGoBack = () => {
+      const onAbort = () => {
+        navigation.goBack();
+      };
+      if (onGoBack) {
+        onGoBack();
+      }
+      compareFormObjectsBeforeAbort({ obj1: initialValues, obj2: values, onAbort });
+    };
+
     const handleReset = () => {
       setValues(initialValues, false);
     };
     navigation.setOptions({
-      headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
+      headerLeft: () => <BackButton onPress={handleOnGoBack} />,
       headerRight: () => <IconButton iconType="reset" onPress={handleReset} withMarginRight />,
       headerTitle: () => <Text preset="headerTitle" text={intl.formatMessage({ id: "AddEventModal.title" })} />,
     });
-  }, [navigation, intl, setValues, initialValues]);
+  }, [navigation, intl, setValues, initialValues, onGoBack, values]);
 
   useEffect(() => {
-    if (createEventStatus.isSuccess && closeOnSubmit) {
+    if (createEventStatus.isSuccess) {
+      if (onSuccess) {
+        onSuccess(createEventStatus?.data?.data);
+      }
       navigation.goBack();
     }
-  }, [closeOnSubmit, createEventStatus.isSuccess, navigation]);
+  }, [onSuccess, createEventStatus.isSuccess, navigation, createEventStatus.data]);
 
-  useEffect(() => {
-    const cleanup = async () => {
-      if (onDone) {
-        try {
-          await onDone();
-        } catch (error) {
-          console.error("Error in onDone:", error);
-        }
+  // useEffect(() => {
+  //   if (!selectedService) {
+  //     setValues(initialValues, false);
+  //   } else return;
+  // }, [initialValues, selectedService, setValues]);
+
+  const handleServiceUpdate = useCallback(
+    (selectedService: ServiceDtoType) => {
+      if (selectedService) {
+        const hasDuration = selectedService.durationInMin > 0;
+        const startTime = new Date(values.startTime);
+        const expectedEndTime = new Date(startTime.getTime() + selectedService.durationInMin * 60000).toISOString();
+        setIsFree(selectedService.price === 0 ? true : false);
+        setValues(
+          {
+            ...values,
+            name: values.name,
+            startTime: values.startTime,
+            priceExpected: selectedService.price === 0 ? 0 : selectedService.price,
+            serviceId: selectedService._id,
+            isPublicEvent: !selectedService.isPrivate,
+            durationInMin: selectedService.durationInMin,
+            hasDuration: hasDuration,
+            expectedEndTime: expectedEndTime,
+          },
+          false
+        );
       }
-    };
-    return () => {
-      cleanup();
-    };
-  }, [onDone]);
-
-  useEffect(() => {
-    if (!selectedService) {
-      setValues(initialValues, false);
-    } else return;
-  }, [initialValues, selectedService, setValues]);
-
-  useEffect(() => {
-    if (selectedService) {
-      const hasDuration = selectedService.durationInMin > 0;
-      const startTime = new Date(values.startTime);
-      const expectedEndTime = new Date(startTime.getTime() + selectedService.durationInMin * 60000).toISOString();
-      setIsFree(selectedService.price === 0 ? true : false);
-      setValues(
-        {
-          ...initialValues,
-          name: values.name,
-          startTime: values.startTime,
-          priceExpected: selectedService.price === 0 ? 0 : selectedService.price,
-          serviceId: selectedService._id,
-          isPublicEvent: selectedService.isPrivate,
-          durationInMin: selectedService.durationInMin,
-          hasDuration: hasDuration,
-          expectedEndTime: expectedEndTime,
-        },
-        false
-      );
-    } else return;
-  }, [initialValues, selectedService, setValues, values.name, values.startTime]);
+    },
+    [setValues, values]
+  );
 
   if (createEventStatus.isError) {
     Alert.alert(intl.formatMessage({ id: "AddEventModal.errorTitle" }), createEventStatus.error.message);
   }
 
-  const submitButton = (
+  const renderSubmitButton = (
     <Button
       text={intl.formatMessage({ id: "AddEventModal.createEventButton" })}
       onPress={() => {
@@ -222,16 +227,16 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
           const service = services[0] as ServiceDtoType;
 
           if (service._id === values.serviceId) {
-            setFieldValue("serviceId", "");
             setSelectedService(null);
+            setFieldValue("serviceId", "");
           } else {
             setSelectedService(service);
-            setFieldValue("serviceId", service._id);
+            handleServiceUpdate(service);
           }
         },
       },
     });
-  }, [navigation, selectedService, setFieldValue, values.serviceId]);
+  }, [handleServiceUpdate, navigation, selectedService, setFieldValue, values.serviceId]);
 
   const handleClientPress = useCallback(() => {
     navigation.navigate("modals", {
@@ -244,15 +249,14 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
           localClients: values.localClientsIds,
         },
         onSubmit: selectedClients => {
-          if (!isEmpty(selectedClients)) {
-            console.log("selected clients >>>", selectedClients);
-            // const clientsIds = clients.map(s => s._id);
-            // setFieldValue("clientsIds", clientsIds);
-          }
+          console.log("selected clients >>>", selectedClients);
+          const { clients: clientIds, localClients: localClientIds } = selectedClients;
+          setFieldValue("clientsIds", clientIds);
+          setFieldValue("localClientsIds", localClientIds);
         },
       },
     });
-  }, [intl, navigation, values.clientsIds, values.localClientsIds]);
+  }, [intl, navigation, setFieldValue, values.clientsIds, values.localClientsIds]);
 
   const handleStaffPress = useCallback(() => {
     navigation.navigate("modals", {
@@ -261,7 +265,6 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
         mode: "staff",
         headerTitle: intl.formatMessage({ id: "AddEventModal.staff.selector.headerTitle" }),
         selectedData: values.staffIds,
-        multiple: true,
         minSelectedItems: 1,
         onGoBack: staff => {
           console.log("selected staff:", staff);
@@ -273,14 +276,17 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
   }, [navigation, setFieldValue, intl, values.staffIds]);
 
   const handleLabelPress = useCallback(() => {
+    const selectedData = values.labels.map(label => {
+      return label.emojiShortName;
+    });
     navigation.navigate("modals", {
       screen: "selector-modal-screen",
       params: {
         mode: "eventLabels",
-        data: values.labels,
-        multiple: true,
-        onGoBack: labels => {
-          setFieldValue("labels", labels as BusinessLabelType[]);
+        selectedData: selectedData,
+        onSubmit: labels => {
+          console.log("selected labels >>>", labels);
+          setFieldValue("labels", labels);
         },
       },
     });
@@ -292,15 +298,15 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
       params: {
         mode: "static",
         headerTitle: intl.formatMessage({ id: "AddEventModal.paymentMethod" }),
-        data: Object.keys(eventPaymentMethods).map(key => {
+        data: Object.keys(eventPaymentMethods).map(_id => {
           return {
-            key,
-            title: eventPaymentMethods[key],
+            _id,
+            title: eventPaymentMethods[_id],
           };
         }),
         onSelect: selectedData => {
           const paymentMethod = selectedData[0] as GenericModalData;
-          setFieldValue("paymentMethod", paymentMethod.key);
+          setFieldValue("paymentMethod", paymentMethod._id);
         },
       },
     });
@@ -311,7 +317,7 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
   }
 
   return (
-    <FormContainer footer={submitButton}>
+    <FormContainer footer={renderSubmitButton}>
       <TextFieldCard
         title={intl.formatMessage({ id: "AddEventModal.name" })}
         placeholder={intl.formatMessage({ id: "AddEventModal.name" })}
@@ -403,8 +409,8 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
           disabled={values?.isPublicEvent ? true : false}
           title={intl.formatMessage({ id: "AddEventModal.client.title" })}
           subTitle={
-            values.clientsIds.length > 0
-              ? `${intl.formatMessage({ id: "AddEventModal.client.description" })}: ${values.clientsIds.length}`
+            values.clientsIds.length + values.localClientsIds.length > 0
+              ? `${intl.formatMessage({ id: "AddEventModal.client.description" })}: ${values.clientsIds.length + values.localClientsIds.length}`
               : intl.formatMessage({ id: "AddEventModal.client.emptyDescription" })
           }
           onPress={handleClientPress}
