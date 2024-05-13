@@ -8,7 +8,7 @@ import { AuthorizedScreenProps } from "../../../navigation";
 import { useEvents } from "../../../store";
 
 export function BusinessStaffScreen({ navigation, route }: AuthorizedScreenProps<"business-staff-screen">) {
-  const { staff } = route.params;
+  const { staff, onUserRemove } = route.params;
   const { Colors } = useTheme();
   const events = useEvents();
 
@@ -38,13 +38,13 @@ export function BusinessStaffScreen({ navigation, route }: AuthorizedScreenProps
       headerRight: () => {
         return (
           <Container direction="row" alignItems="center">
-            <IconButton
+            {/* <IconButton
               withMarginRight
               iconType="delete"
               onPress={() => {
                 navigation.goBack();
               }}
-            />
+            /> */}
             {/* <IconButton withMarginRight iconType="calendar"  /> */}
           </Container>
         );
@@ -129,6 +129,22 @@ export function BusinessStaffScreen({ navigation, route }: AuthorizedScreenProps
             }}
           />
           <Button leftIconSize={25} leftIconColor={Colors.brandPrimary} preset={"icon2"} disabled={false} leftIconName={"share-variant"} onPress={() => {}} />
+          {onUserRemove ? (
+            <Button
+              leftIconSize={25}
+              leftIconColor={Colors.failed}
+              style={{
+                backgroundColor: Colors.failedBackground,
+              }}
+              preset={"icon2"}
+              leftIconName={"delete"}
+              onPress={() => {
+                if (onUserRemove) {
+                  onUserRemove(staff);
+                }
+              }}
+            />
+          ) : null}
         </View>
         <Space />
       </View>

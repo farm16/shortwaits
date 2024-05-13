@@ -7,7 +7,7 @@ import { AuthorizedScreenProps } from "../../../navigation";
 import { useEvents } from "../../../store";
 
 export function BusinessClientScreen({ navigation, route }: AuthorizedScreenProps<"business-client-screen">) {
-  const { client, onClientRemove } = route.params;
+  const { client, onUserRemove } = route.params;
   const { Colors } = useTheme();
   const events = useEvents();
 
@@ -143,7 +143,7 @@ export function BusinessClientScreen({ navigation, route }: AuthorizedScreenProp
               console.log("share");
             }}
           />
-          {onClientRemove ? (
+          {onUserRemove ? (
             <Button
               leftIconSize={25}
               leftIconColor={Colors.failed}
@@ -153,8 +153,8 @@ export function BusinessClientScreen({ navigation, route }: AuthorizedScreenProp
               preset={"icon2"}
               leftIconName={"delete"}
               onPress={() => {
-                if (onClientRemove) {
-                  onClientRemove(client);
+                if (onUserRemove) {
+                  onUserRemove(client);
                 }
               }}
             />

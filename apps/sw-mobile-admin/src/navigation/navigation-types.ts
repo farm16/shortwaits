@@ -160,10 +160,11 @@ export type AuthorizedStackParamList = {
   };
   [AUTHORIZED_STACK_SCREENS.BUSINESS_CLIENT_SCREEN]: {
     client: ClientDtoType;
-    onClientRemove?(arg: ClientDtoType): void;
+    onUserRemove?(arg: ClientDtoType): void;
   };
   [AUTHORIZED_STACK_SCREENS.BUSINESS_STAFF_SCREEN]: {
     staff: BusinessUserDtoType;
+    onUserRemove?(arg: BusinessUserDtoType): void;
   };
   [AUTHORIZED_STACK_SCREENS.BUSINESS_PROFILE_SCREEN]: undefined;
   [AUTHORIZED_STACK_SCREENS.APP_INFO_SCREEN]: undefined;

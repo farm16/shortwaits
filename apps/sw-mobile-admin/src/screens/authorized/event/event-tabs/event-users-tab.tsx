@@ -75,6 +75,9 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
               screen: "business-staff-screen",
               params: {
                 staff: data.item as BusinessUserDtoType,
+                onUserRemove: staff => {
+                  console.log("staff >>>", staff);
+                },
               },
             });
           }}
@@ -88,7 +91,7 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
               screen: "business-client-screen",
               params: {
                 client: data.item as ClientDtoType,
-                onClientRemove: client => {
+                onUserRemove: client => {
                   console.log("client >>>", client);
                 },
               },

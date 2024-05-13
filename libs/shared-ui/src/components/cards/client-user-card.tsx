@@ -13,14 +13,14 @@ export type ClientUserCardProps = ButtonProps & {
   user: ClientDtoType | LocalClientDtoType;
   onPress?: () => void;
   onLongPress?: () => void;
-  onClientRemove?: () => void;
+  onUserRemove?: () => void;
   clientRemoveMessage?: string;
 };
 const defaultClientRemoveMessage = "Are you sure you want to remove this client from event?";
 
 export const ClientUserCard = (props: ClientUserCardProps) => {
   const { Colors } = useTheme();
-  const { user, clientRemoveMessage = defaultClientRemoveMessage, onPress, onLongPress, onClientRemove } = props;
+  const { user, clientRemoveMessage = defaultClientRemoveMessage, onPress, onLongPress, onUserRemove } = props;
 
   const title = useMemo(() => {
     const title = user.givenName || user.familyName || user.middleName || user.displayName || truncate(user.username || user.email, { length: 20 });
@@ -59,8 +59,8 @@ export const ClientUserCard = (props: ClientUserCardProps) => {
       {
         text: "Remove",
         onPress: () => {
-          if (onClientRemove) {
-            onClientRemove();
+          if (onUserRemove) {
+            onUserRemove();
           }
         },
         style: "destructive",
