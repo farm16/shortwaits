@@ -24,7 +24,7 @@ export function BusinessStaffScreen({ navigation, route }: AuthorizedScreenProps
       headerTitle: () => {
         return (
           <Container direction="row" justifyContent="center">
-            <Text preset="headerTitle" text={"Client Profile"} />
+            <Text preset="headerTitle" text={"Staff"} />
           </Container>
         );
       },
@@ -85,79 +85,33 @@ export function BusinessStaffScreen({ navigation, route }: AuthorizedScreenProps
   }, [navigation]);
 
   return (
-    <Screen preset="fixed" unsafe unsafeBottom backgroundColor="lightBackground">
-      <View
-        style={[
-          styles.headerContainer,
-          {
-            backgroundColor: Colors.lightBackground,
-          },
-        ]}
-      >
+    <Screen preset="fixed" unsafe unsafeBottom>
+      <View style={styles.headerContainer}>
         <Space size="small" />
         <Container direction="row" style={styles.staffInfoContainer}>
           <Image source={{ uri: staff.accountImageUrl ? staff.accountImageUrl : "https://picsum.photos/200" }} style={styles.staffImage} />
           <View style={styles.staffDetails}>
-            {staffName ? (
-              <Text
-                style={[
-                  styles.staffName,
-                  {
-                    color: Colors.text,
-                  },
-                ]}
-                text={staffName}
-              />
-            ) : null}
-            {staff.email ? (
-              <Text
-                style={[
-                  styles.staffEmail,
-                  {
-                    color: Colors.subText,
-                  },
-                ]}
-                text={staff.email}
-              />
-            ) : null}
-            {phoneNumber && phoneNumberLabel ? (
-              <Text
-                style={[
-                  styles.phoneNumber,
-                  {
-                    color: Colors.subText,
-                  },
-                ]}
-                text={`${phoneNumberLabel}: ${phoneNumber}`}
-              />
-            ) : null}
+            {staffName ? <Text style={[styles.staffName, { color: Colors.text }]} text={staffName} /> : null}
+            {staff.email ? <Text style={[styles.staffEmail, { color: Colors.subText }]} text={staff.email} /> : null}
+            {phoneNumber && phoneNumberLabel ? <Text style={[styles.phoneNumber, { color: Colors.subText }]} text={`${phoneNumberLabel}: ${phoneNumber}`} /> : null}
           </View>
         </Container>
         <Space />
         <View style={styles.headerActions}>
           <Button
-            leftIconColor={Colors.darkGray}
-            preset="icon2"
-            leftIconName="email-outline"
             leftIconSize={25}
+            leftIconColor={staff.email ? Colors.brandPrimary : Colors.disabledBackground}
+            preset="icon2"
+            disabled={!staff.email}
+            leftIconName="email-outline"
             onPress={() => {
               handleEmail(staff.email);
             }}
           />
           <Button
             leftIconSize={25}
-            leftIconColor={Colors.darkGray}
-            preset={phoneNumber ? "icon2" : "icon2-disabled"}
-            disabled={!phoneNumber}
-            leftIconName={"whatsapp"}
-            onPress={() => {
-              handlePhoneCall(phoneNumber);
-            }}
-          />
-          <Button
-            leftIconSize={25}
-            leftIconColor={Colors.darkGray}
-            preset={phoneNumber ? "icon2" : "icon2-disabled"}
+            leftIconColor={phoneNumber ? Colors.brandPrimary : Colors.disabledBackground}
+            preset="icon2"
             disabled={!phoneNumber}
             leftIconName={"phone-outline"}
             onPress={() => {
@@ -166,15 +120,15 @@ export function BusinessStaffScreen({ navigation, route }: AuthorizedScreenProps
           />
           <Button
             leftIconSize={25}
-            leftIconColor={Colors.darkGray}
-            preset={phoneNumber ? "icon2" : "icon2-disabled"}
+            leftIconColor={phoneNumber ? Colors.brandPrimary : Colors.disabledBackground}
+            preset="icon2"
             disabled={!phoneNumber}
             leftIconName={"message-outline"}
             onPress={() => {
               handleSms(phoneNumber);
             }}
           />
-          <Button leftIconSize={25} leftIconColor={Colors.darkGray} preset={"icon2"} disabled={false} leftIconName={"share-variant"} onPress={() => {}} />
+          <Button leftIconSize={25} leftIconColor={Colors.brandPrimary} preset={"icon2"} disabled={false} leftIconName={"share-variant"} onPress={() => {}} />
         </View>
         <Space />
       </View>
@@ -223,6 +177,7 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
   },
   headerContainer: {
+    backgroundColor: "#fff",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -231,8 +186,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    borderBottomLeftRadius: 50,
-    borderBottomRightRadius: 50,
     paddingHorizontal: 16,
     paddingBottom: 4,
   },

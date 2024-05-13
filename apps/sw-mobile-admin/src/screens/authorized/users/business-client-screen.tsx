@@ -216,8 +216,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    // borderBottomLeftRadius: 50,
-    // borderBottomRightRadius: 50,
     paddingHorizontal: 16,
     paddingBottom: 4,
   },

@@ -1,23 +1,25 @@
 import { BusinessUserDtoType } from "@shortwaits/shared-lib";
 import { truncate } from "lodash";
-import React, { useCallback, useMemo } from "react";
-import { Animated, Pressable, StyleSheet, View } from "react-native";
+import { useCallback, useMemo } from "react";
+import { Animated, Pressable, StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import FastImage from "react-native-fast-image";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTheme } from "../../theme";
 import { handleEmail, handlePhoneCall, handleSms } from "../../utils";
 import { generateAvatarUrl } from "../../utils/generateAvatarUrl";
-import { Button, ButtonProps, Text } from "../common";
+import { Button, Text } from "../common";
 
-export type BusinessUserCardProps = ButtonProps & {
+export type BusinessUserCardProps = {
   user: BusinessUserDtoType;
+  style?: StyleProp<ViewStyle>;
+  onPress(): void;
 };
 
 export const BusinessUserCard = (props: BusinessUserCardProps) => {
   const { Colors } = useTheme();
 
-  const { user } = props;
+  const { user, onPress, style: styleOverrides } = props;
 
   const handlePhoneCallPress = useCallback(phoneNumber => {
     handlePhoneCall(phoneNumber);
@@ -28,6 +30,12 @@ export const BusinessUserCard = (props: BusinessUserCardProps) => {
   const handleEmailPress = useCallback(email => {
     handleEmail(email);
   }, []);
+
+  const handlePress = useCallback(() => {
+    if (onPress) {
+      onPress();
+    }
+  }, [onPress]);
 
   const title = useMemo(() => {
     const fullName = user.givenName || user.familyName || user.middleName || null;
@@ -50,7 +58,6 @@ export const BusinessUserCard = (props: BusinessUserCardProps) => {
           alignItems: "center",
           width: 75,
           marginBottom: 10,
-          // borderRadius: EVENT_ITEM_BORDER_RADIUS,
         }}
       >
         <Icon name="minus-circle-outline" color={Colors.failed} size={32} />
@@ -68,10 +75,9 @@ export const BusinessUserCard = (props: BusinessUserCardProps) => {
             backgroundColor: Colors.lightBackground,
             zIndex: 10,
           },
+          styleOverrides,
         ]}
-        onPress={() => {
-          alert("pressed");
-        }}
+        onPress={handlePress}
       >
         <FastImage
           source={{

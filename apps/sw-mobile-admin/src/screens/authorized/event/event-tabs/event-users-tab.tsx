@@ -67,7 +67,19 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
 
   const _renderItem: SectionListRenderItem<PeopleDtoType> = data => {
     if (data.section.title === "Staff") {
-      return <BusinessUserCard user={data.item as BusinessUserDtoType} />;
+      return (
+        <BusinessUserCard
+          user={data.item as BusinessUserDtoType}
+          onPress={() => {
+            navigate("authorized-stack", {
+              screen: "business-staff-screen",
+              params: {
+                staff: data.item as BusinessUserDtoType,
+              },
+            });
+          }}
+        />
+      );
     } else {
       return (
         <ClientUserCard

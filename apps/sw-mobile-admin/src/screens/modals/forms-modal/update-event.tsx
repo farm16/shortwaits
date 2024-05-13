@@ -135,7 +135,7 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
     }
   }, [onSuccess, updateEventStatus.isSuccess, navigation, updateEventStatus.data]);
 
-  const handleServiceUpdate = useCallback(
+  const updateEventService = useCallback(
     (selectedService: ServiceDtoType) => {
       const validService = services.find(service => service._id === selectedService._id);
       if (validService) {
@@ -178,6 +178,130 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
   const emojis = values.labels.map(label => getEmojiString(label.emojiShortName)).join(" ");
   const clientsCount = getArrCount(values.clientsIds) + getArrCount(values.localClientsIds);
 
+  const handleLabelUpdate = useCallback(() => {
+    const selectedData = values.labels.map(label => {
+      return label.emojiShortName;
+    });
+
+    navigation.navigate("modals", {
+      screen: "selector-modal-screen",
+      params: {
+        mode: "eventLabels",
+        selectedData: selectedData,
+        onSubmit: labels => {
+          console.log("selected labels:", JSON.stringify(labels, null, 2));
+          setFieldValue("labels", labels);
+        },
+      },
+    });
+  }, [navigation, setFieldValue, values.labels]);
+
+  const handleServiceUpdate = useCallback(() => {
+    navigation.navigate("modals", {
+      screen: "selector-modal-screen",
+      params: {
+        mode: "services",
+        searchable: true,
+        selectedData: selectedService ? [selectedService._id] : [],
+        onSelect: (service: ServiceDtoType[]) => {
+          const selectedService = service[0];
+          if (selectedService._id === values.serviceId) {
+            setSelectedService(null);
+            setFieldValue("serviceId", "");
+          } else {
+            setSelectedService(selectedService);
+            updateEventService(selectedService);
+          }
+        },
+      },
+    });
+  }, [navigation, selectedService, setFieldValue, updateEventService, values.serviceId]);
+
+  const handlePaymentMethodUpdate = useCallback(() => {
+    navigation.navigate("modals", {
+      screen: "selector-modal-screen",
+      params: {
+        mode: "static",
+        headerTitle: intl.formatMessage({ id: "AddEventModal.paymentMethod" }),
+        data: Object.keys(eventPaymentMethods).map(key => {
+          return {
+            _id: key,
+            title: eventPaymentMethods[key],
+          };
+        }),
+        onSelect: paymentMethods => {
+          const paymentMethod = paymentMethods[0] as GenericModalData;
+          setFieldValue("paymentMethod", paymentMethod._id);
+        },
+      },
+    });
+  }, [intl, navigation, setFieldValue]);
+
+  const handleDiscountCodeUpdate = useCallback(() => {
+    navigation.navigate("modals", {
+      screen: "selector-modal-screen",
+      params: {
+        mode: "static",
+        headerTitle: intl.formatMessage({ id: "AddEventModal.availableDiscountCodes.addAvailableDiscountCode" }),
+        data: [
+          {
+            code: "MANUAL",
+            discount: null,
+            description: "Manual Discount",
+          },
+        ].map(key => {
+          return {
+            _id: key.code,
+            title: key.code,
+            subTitle: key.description,
+            itemData: key,
+          };
+        }),
+        onSelect: selectedDiscountCodes => {
+          const selectedDiscountCode = selectedDiscountCodes[0] as GenericModalData;
+          setFieldValue("selectedDiscountCode", selectedDiscountCode.itemData);
+        },
+      },
+    });
+  }, [intl, navigation, setFieldValue]);
+
+  const handleStaffUpdate = useCallback(() => {
+    navigation.navigate("modals", {
+      screen: "selector-modal-screen",
+      params: {
+        mode: "staff",
+        headerTitle: intl.formatMessage({ id: "AddEventModal.staff.selector.headerTitle" }),
+        selectedData: values.staffIds,
+        minSelectedItems: 1,
+        onGoBack: staff => {
+          const staffIds = (staff as BusinessUsersDtoType).map(s => s._id);
+          setFieldValue("staffIds", staffIds);
+        },
+      },
+    });
+  }, [intl, navigation, setFieldValue, values.staffIds]);
+
+  const handleClientsUpdate = useCallback(() => {
+    navigation.navigate("modals", {
+      screen: "clients-selector-modal-screen",
+      params: {
+        mode: "clientsAndLocalClients",
+        headerTitle: intl.formatMessage({ id: "AddEventModal.client.selector.headerTitle" }),
+        selectedData: {
+          clients: values.clientsIds,
+          localClients: values.localClientsIds,
+        },
+        onSubmit: clients => {
+          console.log("selected clients:", JSON.stringify(clients, null, 2));
+          const clientsIds = clients.clients ?? [];
+          const localClientsIds = clients.localClients ?? [];
+          setFieldValue("clientsIds", clientsIds);
+          setFieldValue("localClientsIds", localClientsIds);
+        },
+      },
+    });
+  }, [intl, navigation, setFieldValue, values.clientsIds, values.localClientsIds]);
+
   const renderErrorMessage = useCallback(() => {
     if (isEventDisabled) {
       return <Messages type="warning" message="This event is no longer active." />;
@@ -212,54 +336,14 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
         isTouched={touched.notes}
         errors={errors.notes}
       />
-      <ButtonCard
-        title="Labels"
-        disabled={isEventDisabled}
-        subTitle={values.labels.length > 0 ? `${emojis}` : "Select labels"}
-        onPress={() => {
-          const selectedData = values.labels.map(label => {
-            return label.emojiShortName;
-          });
-
-          navigation.navigate("modals", {
-            screen: "selector-modal-screen",
-            params: {
-              mode: "eventLabels",
-              selectedData: selectedData,
-              onSubmit: labels => {
-                console.log("selected labels:", JSON.stringify(labels, null, 2));
-                setFieldValue("labels", labels);
-              },
-            },
-          });
-        }}
-      />
+      <ButtonCard title="Labels" disabled={isEventDisabled} subTitle={values.labels.length > 0 ? `${emojis}` : "Select labels"} onPress={handleLabelUpdate} />
       <ButtonCard
         disabled={isEventDisabled}
         title={intl.formatMessage({ id: "AddEventModal.service.title" })}
         subTitle={selectedService ? selectedService.name : intl.formatMessage({ id: "AddEventModal.service.description" })}
         leftIconName={selectedService ? "circle" : "circle-outline"}
         leftIconColor={selectedService?.serviceColor?.hexCode ?? "grey"}
-        onPress={() =>
-          navigation.navigate("modals", {
-            screen: "selector-modal-screen",
-            params: {
-              mode: "services",
-              searchable: true,
-              selectedData: selectedService ? [selectedService._id] : [],
-              onSelect: (service: ServiceDtoType[]) => {
-                const selectedService = service[0];
-                if (selectedService._id === values.serviceId) {
-                  setSelectedService(null);
-                  setFieldValue("serviceId", "");
-                } else {
-                  setSelectedService(selectedService);
-                  handleServiceUpdate(selectedService);
-                }
-              },
-            },
-          })
-        }
+        onPress={handleServiceUpdate}
       />
       <ButtonCard
         disabled={isEventDisabled}
@@ -307,25 +391,7 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
         disabled={isEventDisabled}
         title={intl.formatMessage({ id: "AddEventModal.paymentMethod" })}
         subTitle={values.paymentMethod ? eventPaymentMethods[values.paymentMethod] : intl.formatMessage({ id: "AddEventModal.selectPaymentMethod" })}
-        onPress={() =>
-          navigation.navigate("modals", {
-            screen: "selector-modal-screen",
-            params: {
-              mode: "static",
-              headerTitle: intl.formatMessage({ id: "AddEventModal.paymentMethod" }),
-              data: Object.keys(eventPaymentMethods).map(key => {
-                return {
-                  _id: key,
-                  title: eventPaymentMethods[key],
-                };
-              }),
-              onSelect: paymentMethods => {
-                const paymentMethod = paymentMethods[0] as GenericModalData;
-                setFieldValue("paymentMethod", paymentMethod._id);
-              },
-            },
-          })
-        }
+        onPress={handlePaymentMethodUpdate}
       />
       <CurrencyFieldCard
         disabled={!!selectedService || isEventDisabled}
@@ -342,33 +408,7 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
         disabled={isEventDisabled}
         title={intl.formatMessage({ id: "AddEventModal.availableDiscountCodes.title" })}
         subTitle={values.selectedDiscountCode ? values.selectedDiscountCode.code : intl.formatMessage({ id: "AddEventModal.availableDiscountCodes.subTitle" })}
-        onPress={() =>
-          navigation.navigate("modals", {
-            screen: "selector-modal-screen",
-            params: {
-              mode: "static",
-              headerTitle: intl.formatMessage({ id: "AddEventModal.availableDiscountCodes.addAvailableDiscountCode" }),
-              data: [
-                {
-                  code: "MANUAL",
-                  discount: null,
-                  description: "Manual Discount",
-                },
-              ].map(key => {
-                return {
-                  _id: key.code,
-                  title: key.code,
-                  subTitle: key.description,
-                  itemData: key,
-                };
-              }),
-              onSelect: selectedDiscountCodes => {
-                const selectedDiscountCode = selectedDiscountCodes[0] as GenericModalData;
-                setFieldValue("selectedDiscountCode", selectedDiscountCode.itemData);
-              },
-            },
-          })
-        }
+        onPress={handleDiscountCodeUpdate}
       />
       {values?.selectedDiscountCode?.code === "MANUAL" ? (
         <CurrencyFieldCard
@@ -398,21 +438,7 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
             ? `${intl.formatMessage({ id: "AddEventModal.staff.description" })}: ${values.staffIds.length}`
             : intl.formatMessage({ id: "AddEventModal.staff.emptyDescription" })
         }
-        onPress={() =>
-          navigation.navigate("modals", {
-            screen: "selector-modal-screen",
-            params: {
-              mode: "staff",
-              headerTitle: intl.formatMessage({ id: "AddEventModal.staff.selector.headerTitle" }),
-              selectedData: values.staffIds,
-              minSelectedItems: 1,
-              onGoBack: staff => {
-                const staffIds = (staff as BusinessUsersDtoType).map(s => s._id);
-                setFieldValue("staffIds", staffIds);
-              },
-            },
-          })
-        }
+        onPress={handleStaffUpdate}
       />
       <ButtonCard
         disabled={!values?.isPublicEvent || isEventDisabled}
@@ -422,26 +448,7 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
             ? `${intl.formatMessage({ id: "AddEventModal.client.description" })}: ${clientsCount}`
             : intl.formatMessage({ id: "AddEventModal.client.emptyDescription" })
         }
-        onPress={() =>
-          navigation.navigate("modals", {
-            screen: "clients-selector-modal-screen",
-            params: {
-              mode: "clientsAndLocalClients",
-              headerTitle: intl.formatMessage({ id: "AddEventModal.client.selector.headerTitle" }),
-              selectedData: {
-                clients: values.clientsIds,
-                localClients: values.localClientsIds,
-              },
-              onSubmit: clients => {
-                console.log("selected clients:", JSON.stringify(clients, null, 2));
-                const clientsIds = clients.clients ?? [];
-                const localClientsIds = clients.localClients ?? [];
-                setFieldValue("clientsIds", clientsIds);
-                setFieldValue("localClientsIds", localClientsIds);
-              },
-            },
-          })
-        }
+        onPress={handleClientsUpdate}
       />
       <Space size="large" />
     </FormContainer>

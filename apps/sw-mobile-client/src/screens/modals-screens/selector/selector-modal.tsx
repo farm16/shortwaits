@@ -6,11 +6,11 @@ import { ClientsSelector } from "./selectors/clients/clients-selector";
 import { EventLabelsSelector } from "./selectors/labels/event-labels-selector";
 import { LabelsSelector } from "./selectors/labels/labels-selector";
 import { ServicesSelector } from "./selectors/services/services-selector";
-import { StaffSelector } from "./selectors/staff/staff-selector";
+// import { StaffSelector } from "./selectors/staff/staff-selector";
 import { StaticSelector } from "./selectors/static/static-selector";
 
 const selectorsComponents: Record<string, FC<ModalsScreenProps<"selector-modal-screen">>> = {
-  staff: StaffSelector,
+  // staff: StaffSelector,
   clients: ClientsSelector,
   categories: CategoriesSelector,
   services: ServicesSelector,
