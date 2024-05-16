@@ -7,13 +7,15 @@ import {
   getPrettyDateFromISO,
   getPrettyStringFromPriceWithSymbol,
   getPrettyTimesFromISO,
+  isSameDate,
+  isSameDateAndTime,
   statusDisplayMessages,
   statusDisplayMessagesBackgroundColor,
   statusDisplayMessagesColor,
   truncated,
   useTheme,
 } from "@shortwaits/shared-ui";
-import { isEmpty, truncate } from "lodash";
+import { isEmpty } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import { Pressable, StyleSheet, View } from "react-native";
@@ -33,7 +35,7 @@ const iconNames = {
 
 type InfoItemProps = {
   title: string;
-  value: string | BusinessLabelsType;
+  value: string | BusinessLabelsType | JSX.Element;
   iconName: keyof typeof iconNames;
   onPress?: () => void;
 };
@@ -48,7 +50,13 @@ function InfoItem({ title, value, onPress, iconName }: InfoItemProps) {
         flex: 1,
       }}
     >
-      <Container direction="row" style={{ alignItems: "center", marginBottom: 4 }}>
+      <Container
+        direction="row"
+        style={{
+          alignItems: "center",
+          marginBottom: 4,
+        }}
+      >
         <Icon name={iconNames[iconName]} color={Colors.disabledText} size={20} />
         <Text
           style={{
@@ -73,11 +81,11 @@ function InfoItem({ title, value, onPress, iconName }: InfoItemProps) {
               ? {
                   backgroundColor: statusDisplayMessagesBackgroundColor[value as string],
                   paddingHorizontal: 10,
-                  paddingVertical: 5,
+                  paddingVertical: 2,
                   borderRadius: 5,
                   alignSelf: "flex-start",
                 }
-              : undefined
+              : {}
           }
         >
           <Text
@@ -102,6 +110,10 @@ function InfoItem({ title, value, onPress, iconName }: InfoItemProps) {
 export function EventScreenHeader({ event }: { event: EventDtoType }) {
   const currentService = useService(event?.serviceId);
   const intl = useIntl();
+  const hasSameEndDate = isSameDate(event.startTime, event.expectedEndTime);
+  const hasDifferentEndDate = !hasSameEndDate;
+  const hasSameDateAndTime = isSameDateAndTime(event.startTime, event.expectedEndTime);
+  const showEndTime = !hasDifferentEndDate && !hasSameDateAndTime;
   return (
     <View style={styles.root}>
       <Container direction="row">
@@ -114,13 +126,13 @@ export function EventScreenHeader({ event }: { event: EventDtoType }) {
             value={currentService?.name ?? ""}
           />
         ) : null}
-        {event?.description ? (
+        {event?.labels && event?.labels.length > 0 ? (
           <InfoItem
             title={intl.formatMessage({
-              id: "Event_Screen.eventScreenHeader.description",
+              id: "Event_Screen.eventScreenHeader.labels",
             })}
-            iconName="description"
-            value={event.description}
+            iconName="labels"
+            value={event?.labels}
           />
         ) : null}
       </Container>
@@ -151,14 +163,14 @@ export function EventScreenHeader({ event }: { event: EventDtoType }) {
       <Container direction="row">
         <InfoItem
           title={intl.formatMessage({
-            id: "Event_Screen.eventScreenHeader.date",
+            id: showEndTime ? "Event_Screen.eventScreenHeader.date" : "Event_Screen.eventScreenHeader.endDate",
           })}
           iconName="date"
           value={getPrettyDateFromISO(event?.startTime, intl.locale)}
         />
         <InfoItem
           title={intl.formatMessage({
-            id: "Event_Screen.eventScreenHeader.time",
+            id: showEndTime ? "Event_Screen.eventScreenHeader.time" : "Event_Screen.eventScreenHeader.startTime",
           })}
           iconName="time"
           value={
@@ -169,33 +181,40 @@ export function EventScreenHeader({ event }: { event: EventDtoType }) {
               }}
             >
               {getPrettyTimesFromISO(event?.startTime, event?.expectedEndTime, intl.locale)[0]}
-              {getPrettyTimesFromISO(event?.startTime, event?.expectedEndTime, intl.locale)[1] ? <Icon name={"arrow-right"} color={"grey"} size={14} /> : null}
-              {getPrettyTimesFromISO(event?.startTime, event?.expectedEndTime, intl.locale)[1]}
+              {showEndTime ? <Icon name={"arrow-right"} color={"grey"} size={14} /> : null}
+              {showEndTime ? getPrettyTimesFromISO(event?.startTime, event?.expectedEndTime, intl.locale)[1] : null}
             </Text>
           }
         />
       </Container>
-      {event?.notes && event?.labels && event?.labels.length > 0 ? <Space direction="horizontal" size="tiny" /> : null}
-      <Container direction="row">
-        {event?.notes ? (
+      {hasDifferentEndDate ? <Space direction="horizontal" size="tiny" /> : null}
+      {hasDifferentEndDate ? (
+        <Container direction="row">
           <InfoItem
             title={intl.formatMessage({
-              id: "Event_Screen.eventScreenHeader.notes",
+              id: "Event_Screen.eventScreenHeader.endDate",
             })}
-            iconName="notes"
-            value={truncate(event?.notes, { length: 30 })}
+            iconName="date"
+            value={getPrettyDateFromISO(event?.expectedEndTime, intl.locale)}
           />
-        ) : null}
-        {event?.labels && event?.labels.length > 0 ? (
           <InfoItem
             title={intl.formatMessage({
-              id: "Event_Screen.eventScreenHeader.labels",
+              id: "Event_Screen.eventScreenHeader.endTime",
             })}
-            iconName="labels"
-            value={event?.labels}
+            iconName="time"
+            value={
+              <Text
+                style={{
+                  fontWeight: "500",
+                  fontSize: 14,
+                }}
+              >
+                {getPrettyTimesFromISO(event?.startTime, event?.expectedEndTime, intl.locale)[1]}
+              </Text>
+            }
           />
-        ) : null}
-      </Container>
+        </Container>
+      ) : null}
     </View>
   );
 }

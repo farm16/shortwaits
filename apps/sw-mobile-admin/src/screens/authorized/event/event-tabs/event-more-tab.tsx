@@ -14,7 +14,7 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
   const PaymentMethod = () => {
     const paymentMethod = event.paymentMethod || "Cash";
     return (
-      <View style={styles.detail}>
+      <View style={styles.rowDetail}>
         <Text preset="textLargeBold" text="Payment method" />
         <Text text={paymentMethod} />
       </View>
@@ -24,7 +24,7 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
   const EventLabels = () => {
     const hasLabels = event?.labels?.length > 0;
     return hasLabels ? null : (
-      <View>
+      <View style={styles.detail}>
         <Text preset="textLargeBold" text="Labels" />
         <Space size="small" />
         <Messages type={"warning"} message={"This event has no labels"} />
@@ -35,11 +35,37 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
 
   const EventDescription = () => {
     const hasDescription = event?.description;
-    return hasDescription ? null : (
-      <View>
+    return hasDescription ? (
+      <View style={styles.detail}>
+        <Text preset="textLargeBold" text="Description" />
+        <Space size="small" />
+        <Text text={event.description} />
+        <Space />
+      </View>
+    ) : (
+      <View style={styles.detail}>
         <Text preset="textLargeBold" text="Description" />
         <Space size="small" />
         <Messages type={"warning"} message={"This event has no description"} />
+        <Space />
+      </View>
+    );
+  };
+
+  const EventNotes = () => {
+    const hasNotes = event?.notes;
+    return hasNotes ? (
+      <View style={styles.detail}>
+        <Text preset="textLargeBold" text="Description" />
+        <Space size="small" />
+        <Text text={event.notes} />
+        <Space />
+      </View>
+    ) : (
+      <View style={styles.detail}>
+        <Text preset="textLargeBold" text="Description" />
+        <Space size="small" />
+        <Messages type={"warning"} message={"This event has no notes"} />
         <Space />
       </View>
     );
@@ -106,7 +132,7 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
     };
 
     return (
-      <View style={styles.detail}>
+      <View style={styles.rowDetail}>
         <Text preset="textLargeBold" text="Public event" />
         <Switch
           trackColor={{ false: Colors.red1, true: Colors.brandSecondary1 }}
@@ -130,7 +156,7 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
     };
 
     return (
-      <View style={styles.detail}>
+      <View style={styles.rowDetail}>
         <Text preset="textLargeBold" text="Repeat" />
         <Switch
           disabled
@@ -148,7 +174,7 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
     event.attendeeLimit = 0;
     const attendeeLimit = event.attendeeLimit === 0 || event.attendeeLimit === null || event.attendeeLimit === undefined ? "No limit" : event.attendeeLimit.toString();
     return (
-      <View style={styles.detail}>
+      <View style={styles.rowDetail}>
         <Text preset="textLargeBold" text="Attendee limit" />
         <Text text={attendeeLimit} />
       </View>
@@ -169,6 +195,7 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
       showsVerticalScrollIndicator={false}
     >
       <Space size="xLarge" />
+      <EventNotes />
       <EventDescription />
       <PaymentMethod />
       <EventLabels />
@@ -185,12 +212,18 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
 
 const styles = StyleSheet.create({
   detail: {
+    borderBottomColor: "rgb(226,226,226)",
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    miHeight: getResponsiveHeight(50),
+    marginBottom: getResponsiveHeight(16),
+  },
+  rowDetail: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     borderBottomColor: "rgb(226,226,226)",
     borderBottomWidth: StyleSheet.hairlineWidth,
-    height: getResponsiveHeight(50),
+    minHeight: getResponsiveHeight(50),
     marginBottom: getResponsiveHeight(16),
   },
 });

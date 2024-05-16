@@ -1,6 +1,5 @@
 import { format, parseISO } from "date-fns";
 import { enUS, es } from "date-fns/locale";
-import React from "react";
 import { TextStyle } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { Text } from "../components";
@@ -9,7 +8,7 @@ const locales = {
   "en-US": enUS,
   es,
 } as const;
-type Locale = keyof typeof locales;
+type Locale = keyof typeof locales | string;
 
 const LOCALES = {
   en: "en-US",
@@ -45,6 +44,18 @@ export const getTimeDurationsFromMins = mins => {
   return "";
 };
 
+export const isSameDate = (date1: string, date2: string): boolean => {
+  const d1 = new Date(date1);
+  const d2 = new Date(date2);
+  return d1.toISOString().slice(0, 10) === d2.toISOString().slice(0, 10);
+};
+
+export const isSameDateAndTime = (date1: string, date2: string): boolean => {
+  const d1 = new Date(date1);
+  const d2 = new Date(date2);
+  return d1.toISOString() === d2.toISOString();
+};
+
 // outputs string in "Wednesday, 24 Aug"
 export const getPrettyDateFromISO = (isoDateString: string, locale: string): string => {
   const date = new Date(isoDateString);
@@ -59,6 +70,9 @@ export const getPrettyDateFromISO = (isoDateString: string, locale: string): str
 
 // outputs string in "13:00 PM - 15:00 PM"
 export const getPrettyTimesFromISO = (isoDateStartString: string, isoDateEndString?: string, overrideLocale?: Locale) => {
+  console.log("isoDateStartString", isoDateStartString);
+  console.log("isoDateEndString", isoDateEndString);
+
   const locale = locales[overrideLocale ?? "en"];
   const dateStart = parseISO(isoDateStartString);
   const timeStart = format(dateStart, "h:mm a", { locale });

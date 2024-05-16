@@ -1,7 +1,5 @@
-import * as React from "react";
+import { getResponsiveHeight } from "@shortwaits/shared-ui";
 import { View as ReactNativeView, StyleSheet, ViewProps, ViewStyle } from "react-native";
-
-import { getResponsiveHeight } from "libs/shared-ui/src/utils";
 // ctv5y
 /**
  * For your text displaying needs.

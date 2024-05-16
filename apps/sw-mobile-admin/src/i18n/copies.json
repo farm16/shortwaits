@@ -146,6 +146,10 @@
     "Event_Screen.eventScreenHeader.cost": "Cost",
     "Event_Screen.eventScreenHeader.date": "Date",
     "Event_Screen.eventScreenHeader.time": "Time",
+    "Event_Screen.eventScreenHeader.startDate": "Start Date",
+    "Event_Screen.eventScreenHeader.endDate": "End Date",
+    "Event_Screen.eventScreenHeader.startTime": "Start Time",
+    "Event_Screen.eventScreenHeader.endTime": "End Time",
     "Event_Screen.eventScreenHeader.notes": "Notes",
     "Event_Screen.eventScreenHeader.labels": "Labels",
 
@@ -505,6 +509,10 @@
     "Event_Screen.eventScreenHeader.time": "Hora",
     "Event_Screen.eventScreenHeader.notes": "Notas",
     "Event_Screen.eventScreenHeader.labels": "Etiquetas",
+    "Event_Screen.eventScreenHeader.startDate": "Fecha de Inicio",
+    "Event_Screen.eventScreenHeader.endDate": "Fecha de Finalización",
+    "Event_Screen.eventScreenHeader.startTime": "Hora de Inicio",
+    "Event_Screen.eventScreenHeader.endTime": "Hora de Finalización",
 
     "Event_Screen.routes.title.people": "Personas",
     "Event_Screen.routes.title.more": "Más",
