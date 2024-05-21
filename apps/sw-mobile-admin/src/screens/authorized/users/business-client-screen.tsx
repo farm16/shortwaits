@@ -1,5 +1,5 @@
 import { BackButton, Button, Container, IconButton, NonIdealState, Screen, Space, Text, handleEmail, handlePhoneCall, handleSms, useTheme } from "@shortwaits/shared-ui";
-import React, { useCallback, useLayoutEffect } from "react";
+import React, { useCallback, useLayoutEffect, useMemo } from "react";
 import { Image, StyleSheet, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { AgendaItem } from "../../../components";
@@ -40,7 +40,7 @@ export function BusinessClientScreen({ navigation, route }: AuthorizedScreenProp
           <Container direction="row" alignItems="center" justifyContent="center">
             <IconButton
               withMarginRight
-              iconType="edit"
+              iconType="delete"
               onPress={() => {
                 navigation.goBack();
               }}
@@ -54,13 +54,17 @@ export function BusinessClientScreen({ navigation, route }: AuthorizedScreenProp
     });
   }, [navigation]);
 
-  const getEventsWithClient = () => {
-    return events.filter(event => {
+  const { clientData, hasClients } = useMemo(() => {
+    const _clientData = events.filter(event => {
       return event.clientsIds.includes(client._id);
     });
-  };
+    return {
+      hasClients: _clientData.length > 0,
+      clientData: _clientData,
+    };
+  }, [events, client]);
 
-  console.log("events >>>", getEventsWithClient());
+  console.log("events >>>", clientData);
   console.log("client", JSON.stringify(client, null, 2));
   const renderItem = useCallback(({ item }) => {
     return <AgendaItem item={item} />;
@@ -164,8 +168,12 @@ export function BusinessClientScreen({ navigation, route }: AuthorizedScreenProp
       </View>
       <View style={styles.eventBox}>
         <Space size="small" />
-        <Container direction="row" style={[styles.eventBoxHeader]}>
-          {/* <Text preset="none" style={[styles.eventBoxHeaderTitle, { color: Colors.text }]}>
+        {hasClients ? (
+          <Container direction="row" style={[styles.eventBoxHeader]}>
+            <Text preset="none" style={[styles.eventBoxHeaderTitle, { color: Colors.text }]}>
+              {`Events (${clientData.length})`}
+            </Text>
+            {/* <Text preset="none" style={[styles.eventBoxHeaderTitle, { color: Colors.text }]}>
             {`History`}
           </Text>
           <IconButton
@@ -176,9 +184,10 @@ export function BusinessClientScreen({ navigation, route }: AuthorizedScreenProp
               });
             }}
           /> */}
-        </Container>
+          </Container>
+        ) : null}
         <FlatList
-          data={getEventsWithClient()}
+          data={clientData}
           renderItem={renderItem}
           keyExtractor={item => item._id}
           ListEmptyComponent={renderNonIdealState}

@@ -7,5 +7,4 @@ export * from "./my-business/my-business-screen";
 export * from "./plans/plans-screen";
 export * from "./settings/app-info-screen";
 export * from "./settings/settings-screen";
-export * from "./users/business-client-screen";
-export * from "./users/business-staff-screen";
+export * from "./users";

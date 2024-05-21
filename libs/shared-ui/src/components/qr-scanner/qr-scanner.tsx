@@ -1,4 +1,4 @@
-import React, { FC, Fragment, useCallback, useLayoutEffect, useState } from "react";
+import { FC, Fragment, useCallback, useLayoutEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Code, Camera as VisionCamera, useCameraDevice, useCodeScanner } from "react-native-vision-camera";
 import { Button, Messages, Space, Switch, Text, TextFieldCard, WithPermission } from "../../components";
@@ -115,8 +115,8 @@ export const QrScanner: FC<QrScannerModalProps> = props => {
     if (isCameraWarningVisible) {
       return (
         <Fragment>
-          <Messages title="Camera Access Denied" message={"Enable camera access in your device settings."} type={"warning"} />
           <Space />
+          <Messages title="Camera Access Denied" message={"Enable camera access in your device settings."} type={"warning"} />
         </Fragment>
       );
     }

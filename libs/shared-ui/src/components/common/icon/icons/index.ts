@@ -1,6 +1,3 @@
-export const icons = {
-  back: require("./arrow-left.png"),
-  bullet: require("./bullet.png"),
-}
+export const customIcons = {};
 
-export type IconTypes = keyof typeof icons
+export type CustomIconTypes = keyof typeof customIcons;

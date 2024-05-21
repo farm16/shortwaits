@@ -1,13 +1,12 @@
-import React from "react";
 import { Pressable, StyleSheet, View } from "react-native";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-
 import { useTheme } from "../../../theme";
 import { iconSizes } from "../../../theme/Variables";
-import { Button, ButtonProps } from "../button/button";
-import { Text } from "../text/text";
+import { Button, ButtonProps } from "../button";
+import { Icon } from "../icon";
+import { Text } from "../text";
 
-export type CardProps = ButtonProps & {
+type ParentProps = Omit<ButtonProps, "leftIconSize" | "rightIconSize" | "leftIconColor" | "rightIconColor" | "leftIconOnPress" | "rightIconOnPress">;
+export interface CardProps extends ParentProps {
   leftIconName?: string;
   rightIconOnPress?: () => void;
   rightIconName?: string;
@@ -17,7 +16,7 @@ export type CardProps = ButtonProps & {
   rightIconColor?: string;
   leftIconColor?: string;
   mode: "text-field" | "listItem" | "button" | "static";
-};
+}
 
 export const Card = (props: CardProps) => {
   const {

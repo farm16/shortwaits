@@ -50,10 +50,10 @@
     "Common.client": "Client",
 
     "Common.staff": "Staff",
-    "Common.showMore": "Show More",
-    "Common.showLess": "Show Less",
-    "Common.showMoreFields": "Show more",
-    "Common.showLessFields": "Show less",
+    "Common.showMore": "show More",
+    "Common.showLess": "show Less",
+    "Common.showMoreFields": "show more",
+    "Common.showLessFields": "show less",
     "Common.eventStatus.pending": "Pending",
     "Common.eventStatus.approved": "Approved",
     "Common.eventStatus.rejected": "Rejected",
@@ -413,8 +413,9 @@
     "Common.clients": "Clientes",
     "Common.client": "Cliente",
 
-    "Common.showMoreFields": "Mostrar Más Campos",
-    "Common.showLessFields": "Mostrar Menos Campos",
+    "Common.showMoreFields": "mostrar más campos",
+    "Common.showLessFields": "mostrar menos campos",
+
     "Common.eventStatus.pending": "Pendiente",
     "Common.eventStatus.approved": "Aceptado",
     "Common.eventStatus.rejected": "Rechazado",

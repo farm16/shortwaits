@@ -11,6 +11,7 @@ import {
   CreateBusinessUserDtoType,
   CreateEventDtoType,
   EventDtoType,
+  LocalClientDtoType,
   ServiceDtoType,
   UpdateEventDtoType,
   UpdateLocalClientDtoType,
@@ -161,6 +162,10 @@ export type AuthorizedStackParamList = {
   [AUTHORIZED_STACK_SCREENS.BUSINESS_CLIENT_SCREEN]: {
     client: ClientDtoType;
     onUserRemove?(arg: ClientDtoType): void;
+  };
+  [AUTHORIZED_STACK_SCREENS.BUSINESS_LOCAL_CLIENT_SCREEN]: {
+    localClient: LocalClientDtoType;
+    onUserRemove?(arg: LocalClientDtoType): void;
   };
   [AUTHORIZED_STACK_SCREENS.BUSINESS_STAFF_SCREEN]: {
     staff: BusinessUserDtoType;

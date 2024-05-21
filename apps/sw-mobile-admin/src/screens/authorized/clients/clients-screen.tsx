@@ -28,8 +28,12 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
 
   const handleAddLocalClient = useCallback(() => {
     navigation.navigate("modals", {
-      screen: "add-local-client-modal-screen",
+      screen: "add-client-modal-screen",
     });
+    // will use "add-client-modal-screen" instead of "add-local-client-modal-screen" - it will handle both local and shortwaits clients
+    // navigation.navigate("modals", {
+    //   screen: "add-local-client-modal-screen",
+    // });
   }, [navigation]);
 
   const { error: osContactsError, isLoading: isOsContactsLoading, getContacts: getOsContacts } = useOsContacts();
@@ -97,7 +101,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
                 paddingLeft: getResponsiveHeight(16),
                 marginRight: getResponsiveHeight(4),
               }}
-              text={tabIndex === 0 ? "Shortwaits" : "Address book"}
+              text={tabIndex === 0 ? "Shortwaits clients" : "Address book"}
             />
           </Container>
         );

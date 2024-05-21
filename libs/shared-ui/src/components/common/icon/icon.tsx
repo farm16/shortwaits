@@ -1,19 +1,13 @@
-// import * as React from "react"
-// import { View, ImageStyle } from "react-native"
-// import { AutoImage as Image } from "../auto-image/auto-image"
-// import { IconProps } from "./icon.props"
-// import { icons } from "./icons"
+import { IconProps as RNVectorIconProps } from "react-native-vector-icons/Icon";
+import RNVectorIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import { CustomIconTypes } from "./icons";
 
-// const ROOT: ImageStyle = {
-//   resizeMode: "contain",
-// }
+export interface IconProps extends RNVectorIconProps {
+  customName?: CustomIconTypes;
+}
 
-// export function Icon(props: IconProps) {
-//   const { style: styleOverride, icon, containerStyle } = props
+export function Icon(props: IconProps) {
+  const { ...rest } = props;
 
-//   return (
-//     <View style={containerStyle}>
-//       <Image style={[ROOT, styleOverride]} source={icons[icon]} />
-//     </View>
-//   )
-// }
+  return <RNVectorIcon {...rest} />;
+}

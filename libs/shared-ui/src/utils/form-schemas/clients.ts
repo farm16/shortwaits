@@ -79,25 +79,25 @@ const billingSchema = Yup.object({
 });
 
 export const addLocalClientSchema = Yup.object({
-  shortId: Yup.string().optional(),
-  isSocialAccount: Yup.boolean().optional(),
-  socialAccount: socialAccountSchema.nullable(),
-  deviceSetting: deviceSettingSchema.nullable(),
-  accountSettings: accountSettingsSchema.nullable(),
-  clientType: Yup.mixed().required().oneOf(["local", "external"]).required(),
+  clientType: Yup.mixed().required().required(),
   username: Yup.string().min(3, "a longer name is required").optional(),
   alias: Yup.mixed().required().oneOf(["username", "familyName", "givenName", "middleName", "displayName"]),
   displayName: Yup.string().min(3, "a longer name is required").required("this field is required"),
   familyName: Yup.string().min(3, "need to add more characters").optional(),
   givenName: Yup.string().min(3, "need to add more characters").optional(),
   middleName: Yup.string().min(3, "need to add more characters").optional(),
-  accountImageUrl: Yup.string(),
+  accountImageUrl: Yup.string().optional(),
   email: Yup.string().email("email is not valid").optional(),
+  imAddresses: imAddressesSchema.optional(),
+  desiredCurrencies: Yup.array().of(Yup.string()).optional(),
   locale: localeSchema.optional(),
   phoneNumbers: phoneNumbersSchema.optional(),
-  imAddresses: imAddressesSchema.optional(),
   addresses: addressesSchema.optional(),
-  desiredCurrencies: Yup.array().of(Yup.string()),
+
+  isSocialAccount: Yup.boolean().optional(),
+  socialAccount: socialAccountSchema.optional().nullable(),
+  deviceSetting: deviceSettingSchema.optional().nullable(),
+  accountSettings: accountSettingsSchema.optional().nullable(),
 });
 
 export const updateLocalClientSchema = Yup.object({

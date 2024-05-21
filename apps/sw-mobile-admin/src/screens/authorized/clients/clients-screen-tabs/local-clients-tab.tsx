@@ -40,10 +40,10 @@ export function LocalClientsTab({ isLoading, refresh }: { isLoading: boolean; re
         <SelectorListItem
           imageUrl={item.accountImageUrl}
           onPress={() => {
-            navigate("modals", {
-              screen: "update-local-client-modal-screen",
+            navigate("authorized-stack", {
+              screen: "business-local-client-screen",
               params: {
-                initialValues: item,
+                localClient: item,
               },
             });
           }}

@@ -1,11 +1,30 @@
-import { BackButton, Text, WithPermission, useForm } from "@shortwaits/shared-ui";
+import { ClientType } from "@shortwaits/shared-lib";
+import {
+  BackButton,
+  Button,
+  ButtonCard,
+  Container,
+  ExpandableSection,
+  Icon,
+  PhoneNumberCard,
+  QrScanner,
+  STATIC_FORM_USA_STATES,
+  Space,
+  Text,
+  TextFieldCard,
+  getCapitalizedString,
+  useForm,
+  useTheme,
+} from "@shortwaits/shared-ui";
+import { FormikErrors } from "formik";
 import { noop } from "lodash";
-import React, { FC, useEffect, useLayoutEffect, useMemo } from "react";
+import React, { FC, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { useIntl } from "react-intl";
-import { Alert } from "react-native";
+import { Alert, TouchableOpacity, View } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 import { ActivityIndicator } from "react-native-paper";
-import { ModalsScreenProps } from "../../../navigation";
-import { useAddClientToBusinessMutation } from "../../../services";
+import { GenericModalData, ModalsScreenProps } from "../../../navigation";
+import { useAddClientToBusinessMutation, useCreateLocalClientsMutation } from "../../../services";
 import { useBusiness } from "../../../store";
 
 export const AddClientModal: FC<ModalsScreenProps<"add-client-modal-screen">> = ({ navigation, route }) => {
@@ -13,40 +32,37 @@ export const AddClientModal: FC<ModalsScreenProps<"add-client-modal-screen">> = 
   const onSubmit = params?.onSubmit ?? noop;
 
   const intl = useIntl(); // Access the intl object
+  const { Colors } = useTheme();
   const business = useBusiness();
-  const [addClientToBusiness, addClientToBusinessStatus] = useAddClientToBusinessMutation();
-  const initialValues = useMemo(() => {
-    const _initialValues = {
-      shortId: "",
-    };
-    return _initialValues;
-  }, []);
+  const [addClient, addClientStatus] = useAddClientToBusinessMutation();
+  const [addLocalClients, addLocalClientsStatus] = useCreateLocalClientsMutation();
+
+  const [clientType, setClientType] = useState<"shortwaits" | "local">("shortwaits"); // ["shortwaits", "local"
+  // const initialValues = useMemo(() => {
+  //   const _initialValues = {
+  //     shortId: "",
+  //   };
+  //   return _initialValues;
+  // }, []);
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
-      headerTitle: () => <Text preset="headerTitle" text={intl.formatMessage({ id: "Common.addShortwaitsClient" })} />,
+      headerTitle: () => <Text preset="headerTitle" text={"Add Client"} />,
     });
   }, [intl, navigation]);
 
-  const { touched, errors, values, validateField, setFieldTouched, handleChange, handleSubmit, setFieldError, setFieldValue } = useForm(
-    {
-      initialValues,
-      onSubmit: formData => {
-        addClientToBusiness({
-          businessId: business._id,
-          body: formData,
-        });
-      },
-    },
-    "addClient"
-  );
-
   useEffect(() => {
-    if (addClientToBusinessStatus.isSuccess) {
+    if (addClientStatus.isSuccess) {
       navigation.goBack();
     }
-  }, [addClientToBusinessStatus.isSuccess, navigation]);
+  }, [addClientStatus.isSuccess, navigation]);
+
+  useEffect(() => {
+    if (addLocalClientsStatus.isSuccess) {
+      navigation.goBack();
+    }
+  }, [addLocalClientsStatus.isSuccess, navigation]);
 
   useEffect(() => {
     const cleanup = async () => {
@@ -63,18 +79,19 @@ export const AddClientModal: FC<ModalsScreenProps<"add-client-modal-screen">> = 
     };
   }, []);
 
-  if (addClientToBusinessStatus.isError) {
-    console.log("addClientToBusinessStatus.error >>>", addClientToBusinessStatus.error);
-    Alert.alert("Error", addClientToBusinessStatus.error.data.message);
+  if (addClientStatus.isError) {
+    console.log("addClientStatus.error >>>", addClientStatus.error);
+    Alert.alert("Error", addClientStatus.error.data.message);
   }
 
-  if (addClientToBusinessStatus.isLoading) {
-    return <ActivityIndicator />;
+  if (addLocalClientsStatus.isError) {
+    console.log("addLocalClientsStatus.error >>>", addLocalClientsStatus.error);
+    Alert.alert("Error", addLocalClientsStatus.error.data.message);
   }
 
   const handleCodeScanned = value => {
     console.log("camera >>>", value);
-    addClientToBusiness({
+    addClient({
       businessId: business._id,
       body: {
         shortId: value,
@@ -82,23 +99,264 @@ export const AddClientModal: FC<ModalsScreenProps<"add-client-modal-screen">> = 
     });
   };
 
+  const initialValues = useMemo(() => {
+    const _initialValues = {
+      clientType: "local",
+      username: "",
+      alias: "displayName",
+      displayName: "",
+      familyName: "",
+      givenName: "",
+      middleName: "",
+      accountImageUrl: "",
+      email: "",
+      imAddresses: [],
+      desiredCurrencies: ["USD"],
+      // set to US for now
+      locale: {
+        countryCode: "US",
+        isRTL: false,
+        languageCode: "en",
+        languageTag: "en-US",
+      },
+      phoneNumbers: [
+        {
+          label: "mobile",
+          number: "",
+        },
+        {
+          label: "home",
+          number: "",
+        },
+        {
+          label: "work",
+          number: "",
+        },
+      ],
+      addresses: [
+        {
+          label: "home",
+          address1: "",
+          address2: "",
+          city: "",
+          region: "",
+          state: "",
+          postCode: "",
+          country: "",
+        },
+      ],
+      isSocialAccount: false,
+      socialAccount: null,
+      deviceSetting: null,
+      accountSettings: null,
+    };
+    return _initialValues;
+  }, []);
+
+  const { touched, errors, values, validateField, setFieldTouched, handleChange, handleSubmit, setFieldError, setFieldValue } = useForm(
+    {
+      initialValues,
+      onSubmit: formData => {
+        addLocalClients({
+          businessId: business._id,
+          body: [formData], // needs to be an array to support multiple clients
+        });
+        if (onSubmit) {
+          onSubmit(formData);
+        }
+      },
+    },
+    "addLocalClient"
+  );
+
+  console.log("errors >>>", errors);
+
+  if (addClientStatus.isLoading) {
+    return <ActivityIndicator />;
+  }
+
   return (
-    <WithPermission permission="camera" onDenied={() => navigation.goBack()}>
-      {/* 
-    todo use qr scanner modal!!!
-    <QRScanner onCodeScanned={handleCodeScanned}>
-      <View>
-        <TextFieldCard
-          title={"ID"}
-          placeholder="Enter the client's ID"
-          onChangeText={text => {
-            console.log("text >>>", text);
+    <ScrollView style={{ flex: 1, backgroundColor: Colors.background }}>
+      <View style={{ paddingHorizontal: 16 }}>
+        <Space />
+        <Text text={"Save new client to:"} preset="textLargeBold" />
+        <Space size="large" />
+        {/* <ButtonCard
+          leftIconName={clientType === "shortwaits" ? "radiobox-marked" : "radiobox-blank"}
+          leftIconColor={Colors.brandPrimary}
+          rightIconName="none"
+          // disabled={disabled}
+          title="Shortwaits Clients"
+          onPress={() => {
+            setClientType("shortwaits");
+          }}
+        /> */}
+        <TouchableOpacity onPress={() => setClientType("shortwaits")}>
+          <Container
+            direction="row"
+            alignItems="center"
+            style={{
+              paddingHorizontal: 8,
+            }}
+          >
+            <Icon name={clientType === "shortwaits" ? "radiobox-marked" : "radiobox-blank"} color={Colors.brandPrimary} size={26} />
+            <Space direction="vertical" size="small" />
+            <Text text={"Shortwaits Clients"} preset="cardTitle" />
+          </Container>
+        </TouchableOpacity>
+        <ButtonCard
+          leftIconName={clientType === "local" ? "radiobox-marked" : "radiobox-blank"}
+          leftIconColor={Colors.brandPrimary}
+          rightIconName="none"
+          // disabled={disabled}
+          title="Address Book"
+          onPress={() => {
+            setClientType("local");
           }}
         />
-        <Space size="tiny" />
-        <Button text={"Submit"} preset={"primary"} onPress={handleCodeScanned} />
       </View>
-    </QRScanner> */}
-    </WithPermission>
+      {clientType === "shortwaits" ? (
+        <QrScanner preset="scanClientQr" />
+      ) : (
+        <View style={{ paddingHorizontal: 16 }}>
+          <TextFieldCard
+            title={intl.formatMessage({ id: "AddLocalClientModal.nickname" })}
+            placeholder={intl.formatMessage({ id: "AddLocalClientModal.nickname.placeholder" })}
+            value={values.displayName}
+            onChangeText={handleChange("displayName")}
+            isTouched={touched.displayName}
+            errors={errors.displayName}
+          />
+          <TextFieldCard
+            title={intl.formatMessage({ id: "AddLocalClientModal.email" })}
+            placeholder={intl.formatMessage({ id: "AddLocalClientModal.email.placeholder" })}
+            value={values.email}
+            onChangeText={handleChange("email")}
+            isTouched={touched.email}
+            errors={errors.email}
+          />
+          <PhoneNumberCard
+            title={getCapitalizedString(values.phoneNumbers[0].label)}
+            onChangeText={handleChange(`phoneNumbers[0].number`)}
+            isValid={async isValid => {
+              await setFieldTouched(`phoneNumbers[0].number`, true);
+              if (isValid) {
+                await validateField(`phoneNumbers[0].number`);
+              } else {
+                await setFieldError(`phoneNumbers[0].number`, "Invalid phone number");
+              }
+            }}
+            isTouched={touched?.phoneNumbers ? touched.phoneNumbers[0]?.number ?? false : false}
+            errors={errors.phoneNumbers ? (errors.phoneNumbers[0] as FormikErrors<{ label: string; number: string }>)?.number ?? "" : ""}
+          />
+          <ExpandableSection>
+            <TextFieldCard
+              title={intl.formatMessage({ id: "AddLocalClientModal.firstName" })}
+              placeholder={intl.formatMessage({ id: "AddLocalClientModal.firstName.placeholder" })}
+              value={values.givenName}
+              onChangeText={handleChange("givenName")}
+              isTouched={touched.givenName}
+              errors={errors.givenName}
+            />
+            <TextFieldCard
+              title={intl.formatMessage({ id: "AddLocalClientModal.lastName" })}
+              placeholder={intl.formatMessage({ id: "AddLocalClientModal.lastName.placeholder" })}
+              value={values.familyName}
+              onChangeText={handleChange("familyName")}
+              isTouched={touched.familyName}
+              errors={errors.familyName}
+            />
+            <PhoneNumberCard
+              title={getCapitalizedString(values.phoneNumbers[1].label)}
+              onChangeText={handleChange(`phoneNumbers[1].number`)}
+              isValid={async isValid => {
+                await setFieldTouched(`phoneNumbers[1].number`, true);
+                if (isValid) {
+                  await validateField(`phoneNumbers[1].number`);
+                } else {
+                  await setFieldError(`phoneNumbers[1].number`, "Invalid phone number");
+                }
+              }}
+              isTouched={touched?.phoneNumbers ? touched.phoneNumbers[1]?.number ?? false : false}
+              errors={errors.phoneNumbers ? (errors.phoneNumbers[1] as FormikErrors<{ label: string; number: string }>)?.number ?? "" : ""}
+            />
+            <PhoneNumberCard
+              title={getCapitalizedString(values.phoneNumbers[2].label)}
+              onChangeText={handleChange(`phoneNumbers[2].number`)}
+              isValid={async isValid => {
+                await setFieldTouched(`phoneNumbers[2].number`, true);
+                if (isValid) {
+                  await validateField(`phoneNumbers[2].number`);
+                } else {
+                  await setFieldError(`phoneNumbers[2].number`, "Invalid phone number");
+                }
+              }}
+              isTouched={touched?.phoneNumbers ? touched.phoneNumbers[2]?.number ?? false : false}
+              errors={errors.phoneNumbers ? (errors.phoneNumbers[2] as FormikErrors<{ label: string; number: string }>)?.number ?? "" : ""}
+            />
+            <TextFieldCard
+              title={intl.formatMessage({ id: "AddLocalClientModal.address1" })}
+              value={values.addresses[0].address1}
+              onChangeText={handleChange("addresses[0].address1")}
+              isTouched={touched?.addresses ? touched.addresses[0]?.address1 ?? false : false}
+              errors={errors.addresses ? (errors.addresses[0] as FormikErrors<ClientType["addresses"][number]>)?.address1 ?? "" : ""}
+            />
+            <TextFieldCard
+              title={intl.formatMessage({ id: "AddLocalClientModal.address2" })}
+              value={values.addresses[0].address2}
+              onChangeText={handleChange("addresses[0].address2")}
+              isTouched={touched?.addresses ? touched.addresses[0]?.address2 ?? false : false}
+              errors={errors.addresses ? (errors.addresses[0] as FormikErrors<ClientType["addresses"][number]>)?.address2 ?? "" : ""}
+            />
+            <TextFieldCard
+              title={intl.formatMessage({ id: "AddLocalClientModal.city" })}
+              value={values.addresses[0].city}
+              onChangeText={handleChange("addresses[0].city")}
+              isTouched={touched?.addresses ? touched.addresses[0]?.city ?? false : false}
+              errors={errors.addresses ? (errors.addresses[0] as FormikErrors<ClientType["addresses"][number]>)?.city ?? "" : ""}
+            />
+            <ButtonCard
+              title={intl.formatMessage({ id: "AddLocalClientModal.state" })}
+              subTitle={STATIC_FORM_USA_STATES.find(state => state._id === values.addresses[0].state)?.title ?? "Select State"}
+              isTouched={touched?.addresses ? touched.addresses[0]?.state ?? false : false}
+              errors={errors.addresses ? (errors.addresses[0] as FormikErrors<ClientType["addresses"][number]>)?.state ?? "" : ""}
+              onPress={() =>
+                navigation.navigate("modals", {
+                  screen: "selector-modal-screen",
+                  params: {
+                    mode: "static",
+                    headerTitle: "Select State",
+                    data: STATIC_FORM_USA_STATES,
+                    onSelect: data => {
+                      const state = data[0] as GenericModalData;
+                      setFieldValue("addresses[0].state", state._id);
+                    },
+                  },
+                })
+              }
+            />
+            <TextFieldCard
+              title={intl.formatMessage({ id: "AddLocalClientModal.postCode" })}
+              value={values.addresses[0].postCode}
+              keyboardType="number-pad"
+              inputMode="numeric"
+              maxLength={7}
+              onChangeText={handleChange("addresses[0].postCode")}
+              isTouched={touched?.addresses ? touched.addresses[0]?.postCode ?? false : false}
+              errors={errors.addresses ? (errors.addresses[0] as FormikErrors<ClientType["addresses"][number]>)?.postCode ?? "" : ""}
+            />
+          </ExpandableSection>
+          <Space size="large" />
+          <Button
+            text="Submit"
+            disabled={errors && Object.keys(errors).length > 0}
+            onPress={() => {
+              handleSubmit();
+            }}
+          />
+          <Space size="large" />
+        </View>
+      )}
+    </ScrollView>
   );
 };
