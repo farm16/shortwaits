@@ -326,6 +326,7 @@
 
     "MyBusiness_screen.totalIncome": "{period, select, Yesterday {Yesterday's total income: } Week {Week's total income: } Month {Month's total income: } Year {Year's total income: } other {}}",
     "MyBusiness_screen.schedule": "Schedule",
+    "MyBusiness_screen.scheduleTitle": "Business Schedule",
     "MyBusiness_screen.transactions": "Transactions",
     "MyBusiness_screen.services": "Services",
     "MyBusiness_screen.staff": "Staff",
@@ -689,6 +690,7 @@
 
     "MyBusiness_screen.totalIncome": "{period, select, Yesterday {Ingresos totales de ayer: } Week {Ingresos totales de la semana: } Month {Ingresos totales del mes: } Year {Ingresos totales del año: } other {}}",
     "MyBusiness_screen.schedule": "Horario",
+    "MyBusiness_screen.scheduleTitle": "Horario del Negocio",
     "MyBusiness_screen.transactions": "Transacciones",
     "MyBusiness_screen.services": "Servicios",
     "MyBusiness_screen.staff": "Personal",

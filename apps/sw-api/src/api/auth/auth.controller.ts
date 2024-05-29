@@ -73,13 +73,18 @@ export class AuthController {
   }
 
   @UseGuards(RtGuard)
+  @ApiBearerAuth()
   @Post("business/refresh-token/local-auth")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
     description: "Returns refreshed token",
   })
-  async businessRefreshToken(@GetCurrentUserId() userId: string, @GetCurrentUser("refreshToken") refreshToken: string): Promise<AuthRefreshSuccessResponse> {
+  async businessRefreshToken(@Req() request) {
+    const userId = request.user.sub;
+    const refreshToken = request.user.refreshToken;
+    //console.log("request refresh token", refreshToken);
+    //console.log("request user id", userId);
     return this.authService.businessRefreshToken(userId, refreshToken);
   }
 

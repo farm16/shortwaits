@@ -129,6 +129,14 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
 
   console.log("errors", errors);
 
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("blur", () => {
+      alert("blur");
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
   useLayoutEffect(() => {
     const handleOnGoBack = () => {
       const onAbort = () => {
@@ -139,7 +147,6 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
       }
       compareFormObjectsBeforeAbort({ obj1: initialValues, obj2: values, onAbort });
     };
-
     const handleReset = () => {
       setValues(initialValues, false);
     };

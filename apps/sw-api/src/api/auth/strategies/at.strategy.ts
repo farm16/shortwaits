@@ -21,7 +21,7 @@ export class AtStrategy extends PassportStrategy(Strategy, "jwt") {
   }
 
   validate(payload: JwtPayload) {
-    console.log("validate/payload >>>", payload);
+    console.log("\n\nvalidate/payload >>>", payload);
     // const user = await this.businessUserModal.findById(payload.sub);
     // delete user.password;
     // return user;

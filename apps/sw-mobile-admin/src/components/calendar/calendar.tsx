@@ -1,11 +1,10 @@
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { EventDtoType, EventType } from "@shortwaits/shared-lib";
-import { Button, Colors, NonIdealState, Space, getResponsiveHeight } from "@shortwaits/shared-ui";
+import { ActivityIndicator, Button, Colors, NonIdealState, Space, getResponsiveHeight } from "@shortwaits/shared-ui";
 import React, { FC, memo, useCallback } from "react";
 import { useIntl } from "react-intl";
 import { RefreshControl, SectionListData, SectionListRenderItem, View } from "react-native";
 import { AgendaList, CalendarProvider, ExpandableCalendar } from "react-native-calendars";
-import { ActivityIndicator } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { navigate } from "../../navigation/navigation-utils";
 import { useGetEventsByBusinessQuery } from "../../services";

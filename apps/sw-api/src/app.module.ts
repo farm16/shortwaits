@@ -1,12 +1,9 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
-import { APP_GUARD, APP_INTERCEPTOR } from "@nestjs/core";
+import { APP_INTERCEPTOR } from "@nestjs/core";
 import { MongooseModule } from "@nestjs/mongoose";
 import { ApiModule } from "./api/api.module";
-import { AppController } from "./app.controller";
-import { AppService } from "./app.service";
 import { getEnvPath } from "./common/env.helper";
-import { AtGuard } from "./common/guards";
 import { TransformInterceptor } from "./common/interceptors/transform.interceptor";
 import { MongooseConfigService } from "./shared/mongoose/mongoose.service";
 
@@ -24,17 +21,11 @@ const envFilePath = getEnvPath();
     ApiModule,
   ],
   providers: [
-    AppService,
-    {
-      provide: APP_GUARD,
-      useClass: AtGuard,
-    },
     {
       provide: APP_INTERCEPTOR,
       useClass: TransformInterceptor,
     },
   ],
-  controllers: [AppController],
 })
 export class AppModule {
   constructor() {

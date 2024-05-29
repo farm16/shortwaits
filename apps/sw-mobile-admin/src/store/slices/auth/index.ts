@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { TokenPayloadType } from "@shortwaits/shared-lib";
+import { AuthResponseType, TokenPayloadType } from "@shortwaits/shared-lib";
 
 import { shortwaitsApi } from "../../../services";
 import type { RootState } from "../../types";
@@ -12,10 +12,11 @@ export const authSlice = createSlice({
   name: "auth",
   initialState: initialState,
   reducers: {
-    setCredentials(state, action: PayloadAction<TokenPayloadType>) {
+    setCredentials(state, action: PayloadAction<AuthResponseType>) {
+      console.log(">>> setting credentials  ");
       return {
         ...state,
-        ...action.payload,
+        ...action.payload.data.auth,
       };
     },
     resetAuth() {

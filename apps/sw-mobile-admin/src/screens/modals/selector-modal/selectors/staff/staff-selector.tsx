@@ -1,9 +1,8 @@
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { BusinessUsersDtoType } from "@shortwaits/shared-lib";
-import { AnimatedSearchBar, BackButton, Container, IconButton, NonIdealState, Screen, Text } from "@shortwaits/shared-ui";
+import { ActivityIndicator, AnimatedSearchBar, BackButton, Container, IconButton, NonIdealState, Screen, Text } from "@shortwaits/shared-ui";
 import React, { FC, useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { Alert, FlatList, StyleSheet } from "react-native";
-import { ActivityIndicator } from "react-native-paper";
 import { useDispatch } from "react-redux";
 import { ModalsScreenProps } from "../../../../../navigation";
 import { useGetBusinessStaffQuery } from "../../../../../services";
@@ -19,7 +18,6 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
     onSelect,
     headerTitle = "Staff",
     selectedData = [],
-    multiple,
     onGoBack,
     minSelectedItems = MIN_SELECTED_ITEMS_DEFAULT,
     maxSelectedItems = MAX_SELECTED_ITEMS_DEFAULT,
@@ -60,22 +58,18 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
 
   useLayoutEffect(() => {
     const handleOnGoBack = () => {
-      if (multiple) {
-        const items = payload?.data?.filter(item => selectedItems.includes(item._id)) || null;
-        if (onGoBack) {
-          onGoBack(items);
-        }
-        navigation.goBack();
-      } else {
-        navigation.goBack();
+      const items = payload?.data?.filter(item => selectedItems.includes(item._id)) || null;
+      if (onGoBack) {
+        onGoBack(items);
       }
+      navigation.goBack();
     };
 
     navigation.setOptions({
       headerTitle: headerTitle,
       headerLeft: () => (
         <Container direction="row" alignItems="center">
-          <BackButton onPress={() => handleOnGoBack()} counter={multiple && selectedItems?.length > 0 ? `(${selectedItems.length})` : ""} />
+          <BackButton onPress={() => handleOnGoBack()} />
         </Container>
       ),
       headerRight: () => (
@@ -93,7 +87,7 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
         </Container>
       ),
     });
-  }, [handleAddStaffPress, headerTitle, isListSearchable, multiple, navigation, onGoBack, payload?.data, searchable, selectedItems]);
+  }, [handleAddStaffPress, headerTitle, isListSearchable, navigation, onGoBack, payload?.data, searchable, selectedItems]);
 
   const handleOnChangeText = (text: string) => {
     setSearchText(text);
@@ -103,21 +97,12 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
 
   const handleOnSelect = useCallback(
     item => {
-      if (multiple) {
-        if (selectedItems?.includes(item._id)) {
-          if (minSelectedItems && selectedItems.length <= minSelectedItems) {
-            Alert.alert("Warning", `You must select at least ${minSelectedItems}`);
-          } else {
-            setSelectedItems(selectedItems.filter(i => i !== item._id));
-          }
-        } else {
-          if (maxSelectedItems && selectedItems.length >= maxSelectedItems) {
-            Alert.alert("Warning", `You can only select ${maxSelectedItems}`);
-          } else {
-            setSelectedItems(selectedItems => [...selectedItems, item._id]);
-          }
-        }
-      } else if (onSelect) {
+      if (maxSelectedItems && selectedItems.length >= maxSelectedItems) {
+        Alert.alert("Warning", `You can only select ${maxSelectedItems}`);
+      } else {
+        setSelectedItems(selectedItems => [...selectedItems, item._id]);
+      }
+      if (onSelect) {
         onSelect(item);
         navigation.goBack();
       } else {
@@ -129,14 +114,13 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
         });
       }
     },
-    [maxSelectedItems, minSelectedItems, multiple, navigation, onSelect, selectedItems]
+    [maxSelectedItems, navigation, onSelect, selectedItems]
   );
 
   const renderItem = useCallback(
     ({ item }) => {
       return (
         <StaffSelectorItem
-          rightIconName={multiple && selectedItems?.includes(item._id) ? "check" : "none"}
           item={item}
           onSelect={() => {
             handleOnSelect(item);
@@ -144,7 +128,7 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
         />
       );
     },
-    [handleOnSelect, multiple, selectedItems]
+    [handleOnSelect]
   );
 
   const keyExtractor = useCallback(item => item._id, []);

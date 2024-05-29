@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 import { JwtModule } from "@nestjs/jwt";
 import { MongooseModule } from "@nestjs/mongoose";
-
+import { PassportModule } from "@nestjs/passport";
 import { BusinessUser, BusinessUserSchema } from "../business-staff/entities/business-staff.entity";
 import { Business, BusinessSchema } from "../business/entities/business.entity";
 import { ClientUser, ClientUserSchema } from "../client-user/entities/client-user.entity";
@@ -13,6 +13,7 @@ import { RtStrategy } from "./strategies/rt.strategy";
 
 @Module({
   imports: [
+    PassportModule.register({}),
     JwtModule.register({}),
     MongooseModule.forFeature([
       { name: BusinessUser.name, schema: BusinessUserSchema },
@@ -23,5 +24,6 @@ import { RtStrategy } from "./strategies/rt.strategy";
   ],
   controllers: [AuthController],
   providers: [AuthService, AtStrategy, RtStrategy],
+  exports: [AtStrategy, RtStrategy, PassportModule],
 })
 export class AuthModule {}

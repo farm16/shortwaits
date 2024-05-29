@@ -13,13 +13,13 @@ import {
   Space,
   Text,
   TextFieldCard,
+  useForm,
 } from "@shortwaits/shared-ui";
 import { FormikErrors } from "formik";
 import { noop } from "lodash";
 import React, { FC, useCallback, useEffect, useLayoutEffect, useMemo } from "react";
 import { useIntl } from "react-intl";
 import { Alert } from "react-native";
-import { useForm } from "../../../hooks";
 import { ModalsScreenProps } from "../../../navigation";
 import { useCreateServiceMutation } from "../../../services";
 import { useBusiness, useShortwaitsAdmin } from "../../../store";
@@ -94,14 +94,7 @@ export const AddServicesModal: FC<ModalsScreenProps<"add-service-modal-screen">>
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
-      headerTitle: () => (
-        <Text
-          preset="text"
-          text={intl.formatMessage({
-            id: "Common.addService",
-          })}
-        />
-      ),
+      headerTitle: () => <Text preset="headerTitle" text={intl.formatMessage({ id: "Common.addService" })} />,
     });
   }, [intl, navigation]);
 

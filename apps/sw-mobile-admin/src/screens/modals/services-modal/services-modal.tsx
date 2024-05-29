@@ -36,7 +36,7 @@ export const ServicesModal: FC<ModalsScreenProps<"service-modal-screen">> = ({ n
       ),
       headerTitle: () => (
         <Text
-          preset="text"
+          preset="headerTitle"
           text={intl.formatMessage({
             id: "Common.services",
           })}

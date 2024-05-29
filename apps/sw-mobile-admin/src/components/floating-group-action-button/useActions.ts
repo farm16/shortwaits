@@ -40,7 +40,7 @@ export const useActions = () => {
         icon: "account-tie-outline",
         onPress: () => {
           navigate("modals", {
-            screen: "add-client-modal-screen",
+            screen: "add-staff-modal-screen",
           });
         },
       },

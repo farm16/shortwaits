@@ -135,7 +135,7 @@ export const endpoints = {
   signUpSocial: createEndpoint("auth/business/sign-up/social", "POST"),
   signInSocial: createEndpoint("auth/business/sign-in/social", "POST"),
   forgotPasswordLocal: createEndpoint("auth/admin/local/forgot-password", "POST"),
-  refreshLocal: createEndpoint("auth/business/refresh-token/local-auth", "PUT"),
+  refreshLocal: createEndpoint("auth/business/refresh-token/local-auth", "POST"),
 
   // auth client
   signInClientLocal: createEndpoint("auth/client/local/sign-in", "POST"),

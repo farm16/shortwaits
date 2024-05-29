@@ -1,5 +1,5 @@
 import { BusinessWeekDaysType, WEEKDAYS_ARR, WeekHoursType } from "@shortwaits/shared-lib";
-import { BackButton, BottomSheet, BottomSheetType, Button, FormContainer, IconButton, useBottomSheet } from "@shortwaits/shared-ui";
+import { BackButton, BottomSheet, BottomSheetType, Button, FormContainer, IconButton, Text, useBottomSheet } from "@shortwaits/shared-ui";
 import { cloneDeep } from "lodash";
 import React, { FC, useCallback, useEffect, useRef, useState } from "react";
 import { Alert, View } from "react-native";
@@ -52,7 +52,7 @@ export const ScheduleModal: FC<ModalsScreenProps<"schedule-modal-screen">> = ({ 
       ]);
     };
     navigation.setOptions({
-      headerTitle: headerTitle,
+      headerTitle: () => <Text preset="headerTitle">{headerTitle}</Text>,
       headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
       headerRight: () => (
         <View style={{ flexDirection: "row", justifyContent: "flex-end", alignItems: "flex-end" }}>

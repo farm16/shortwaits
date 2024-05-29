@@ -1,12 +1,11 @@
 import { useIsFocused } from "@react-navigation/native";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
-import { BusinessIncomeInfo, ButtonCard, Container, IconButton, Screen, Text, useShareUrlWithMessage, useTheme } from "@shortwaits/shared-ui";
+import { ActivityIndicator, BusinessIncomeInfo, ButtonCard, Container, IconButton, Screen, Text, useShareUrlWithMessage, useTheme } from "@shortwaits/shared-ui";
 import { truncate } from "lodash";
 import React, { FC, useCallback, useLayoutEffect } from "react";
 import { useIntl } from "react-intl";
 import { Alert } from "react-native";
 import FastImage from "react-native-fast-image";
-import { ActivityIndicator } from "react-native-paper";
 import { useDispatch } from "react-redux";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useGetEventsSummaryByBusinessQuery, useUpdateBusinessMutation } from "../../../services";
@@ -132,7 +131,7 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
         );
       },
     });
-  }, [business.shortName, business.web.logoImageUrl, navigation]);
+  }, [business._id, business.longName, business.shortName, business.web.logoImageUrl, navigation, share]);
 
   // console.log("eventSummary", eventSummary?.data?.listData);
 
@@ -149,7 +148,9 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
           onPress={() =>
             navigation.navigate("modals", {
               screen: "schedule-modal-screen",
+
               params: {
+                headerTitle: intl.formatMessage({ id: "MyBusiness_screen.scheduleTitle" }),
                 hours: business.hours,
                 onSubmit: hours => {
                   handleUpdateBusinessHours(hours);
@@ -166,7 +167,7 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
             navigation.navigate("modals", {
               screen: "selector-modal-screen",
               params: {
-                type: "static",
+                mode: "static",
                 onSelect: item => {
                   console.log(item);
                 },
@@ -194,7 +195,7 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
             navigation.navigate("modals", {
               screen: "selector-modal-screen",
               params: {
-                type: "staff",
+                mode: "staff",
               },
             })
           }
