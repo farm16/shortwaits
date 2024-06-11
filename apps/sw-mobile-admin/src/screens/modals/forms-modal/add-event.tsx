@@ -131,7 +131,8 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("blur", () => {
-      alert("blur");
+      // to-do: do something when the screen is blurred
+      console.log("AddEventModal: blur");
     });
 
     return unsubscribe;

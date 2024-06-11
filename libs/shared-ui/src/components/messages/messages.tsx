@@ -1,9 +1,7 @@
-import React from "react";
 import { View, ViewStyle } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { Space, Text } from "..";
 import { ThemeColorName, useTheme } from "../../theme";
-import { TextPresets } from "../../theme/presets";
 import { getResponsiveHeight } from "../../utils";
 
 const messageTypeToPreset = {
@@ -42,12 +40,21 @@ export function Messages({ type, title, message, style, textColor = "text" }: Me
         {
           flexDirection: "row",
           alignItems: "center",
-          backgroundColor: Colors.white,
+          backgroundColor: Colors[`${messageTypeToColor[type]}Background`],
           paddingHorizontal: getResponsiveHeight(12),
           paddingVertical: getResponsiveHeight(12),
           borderRadius: getResponsiveHeight(8),
-          borderWidth: 1.5,
-          borderColor: Colors[messageTypeToColor[type]],
+          // apply shadow
+          shadowColor: "#000",
+          shadowOffset: {
+            width: 0,
+            height: 2,
+          },
+          shadowOpacity: 0.25,
+          shadowRadius: 3.84,
+          elevation: 5,
+          // borderWidth: 1.5,
+          // borderColor: Colors[messageTypeToColor[type]],
         },
         style,
       ]}
@@ -61,20 +68,13 @@ export function Messages({ type, title, message, style, textColor = "text" }: Me
       >
         {title ? (
           <>
-            <Text
-              preset={"titleSmall"}
-              style={{
-                color: Colors[textColor],
-              }}
-              text={title}
-            />
+            <Text preset={"titleSmall"} text={title} />
             <Space size="tiny" />
           </>
         ) : null}
         <Text
-          preset={messageTypeToPreset[type] as TextPresets}
+          preset="textLarge"
           style={{
-            color: Colors[textColor],
             flexShrink: 1,
           }}
           text={message}
