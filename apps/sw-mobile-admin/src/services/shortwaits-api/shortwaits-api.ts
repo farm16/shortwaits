@@ -80,6 +80,7 @@ export const shortwaitsApi = createApi({
     //services
     getService: GetService(builder),
     getServices: GetServices(builder),
+
     updateService: UpdateService(builder),
     createService: CreateService(builder),
     deleteService: DeleteService(builder),

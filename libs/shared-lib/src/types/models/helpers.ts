@@ -5,7 +5,7 @@ import "mongoose-paginate-v2";
 export type PaginatedModel<T extends Document> = mongoose.PaginateModel<T>;
 
 export type ServiceColorType = {
-  colorId: string | number;
+  colorId: string;
   colorName: string;
   hexCode: string;
   isSelected: boolean | null;

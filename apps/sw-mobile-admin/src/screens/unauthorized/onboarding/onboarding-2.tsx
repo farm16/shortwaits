@@ -1,7 +1,7 @@
 import { CompositeNavigationProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
-import { BackButton, Button, FormContainer, IconButton, ServiceItem, Space } from "@shortwaits/shared-ui";
+import { BackButton, Button, FormContainer, IconButton, Messages, ServiceItem, Space, Text } from "@shortwaits/shared-ui";
 import React, { useCallback, useLayoutEffect } from "react";
 import { useIntl } from "react-intl";
 import { FlatList, RefreshControl, StyleSheet } from "react-native";
@@ -45,9 +45,13 @@ export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: intl.formatMessage({
-        id: "Onboarding_2_Screen.headerTitle",
-      }),
+      headerTitle: () => (
+        <Text preset="headerTitle">
+          {intl.formatMessage({
+            id: "Onboarding_2_Screen.headerTitle",
+          })}
+        </Text>
+      ),
       headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
       headerRight: () => (
         <IconButton
@@ -67,41 +71,40 @@ export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
     return <ActivityIndicator />;
   }
 
-  if (isSuccess) {
-    return (
-      <FormContainer
-        preset="fixed"
-        footer={
-          <Button
-            preset={"primary"}
-            text={intl.formatMessage({
-              id: "Onboarding_2_Screen.registerButton",
-            })}
-            onPress={e => handleBusinessRegistration()}
+  return (
+    <FormContainer
+      preset="fixed"
+      footer={
+        <Button
+          preset={"primary"}
+          text={intl.formatMessage({
+            id: "Onboarding_2_Screen.registerButton",
+          })}
+          onPress={e => handleBusinessRegistration()}
+        />
+      }
+    >
+      <Messages type={"info"} message={intl.formatMessage({ id: "Onboarding_2_Screen.infoMessage" })} />
+      <Space />
+      <FlatList
+        refreshControl={
+          <RefreshControl
+            refreshing={isLoading}
+            onRefresh={async () => {
+              await refetch();
+            }}
           />
         }
-      >
-        <Space size="small" />
-        <FlatList
-          refreshControl={
-            <RefreshControl
-              refreshing={isLoading}
-              onRefresh={async () => {
-                await refetch();
-              }}
-            />
-          }
-          ItemSeparatorComponent={() => <Space size="tiny" />}
-          contentContainerStyle={styles.contentContainer}
-          data={services.data}
-          renderItem={({ item }) => {
-            return <ServiceItem service={item} onPress={() => handleCardOnPress(item)} />;
-          }}
-          keyExtractor={item => String(item._id)}
-        />
-      </FormContainer>
-    );
-  }
+        ItemSeparatorComponent={() => <Space size="tiny" />}
+        contentContainerStyle={styles.contentContainer}
+        data={services.data}
+        renderItem={({ item }) => {
+          return <ServiceItem service={item} onPress={() => handleCardOnPress(item)} />;
+        }}
+        keyExtractor={item => String(item._id)}
+      />
+    </FormContainer>
+  );
 };
 const styles = StyleSheet.create({
   contentContainer: {

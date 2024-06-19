@@ -6,8 +6,13 @@ type RequestType = {
   body: CreateServiceDtoType;
 };
 
+type ResponseType = CommonResponseType<{
+  service: ServiceDtoType;
+  services: ServiceDtoType[];
+}>;
+
 export default (builder: EndpointBuilder<any, any, any>) =>
-  builder.mutation<CommonResponseType<ServiceDtoType>, RequestType>({
+  builder.mutation<ResponseType, RequestType>({
     query: ({ businessId, body }) => ({
       ...endpoints.createService.getConfig([businessId], {}),
       body,

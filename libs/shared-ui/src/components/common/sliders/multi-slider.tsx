@@ -1,8 +1,8 @@
-import React, { useMemo, useState } from "react";
-import { StyleSheet, View, ViewStyle } from "react-native";
 import PMultiSlider, { MultiSliderProps as PMultiSliderProps } from "@ptomasroos/react-native-multi-slider";
+import { useState } from "react";
+import { StyleSheet, View, ViewStyle } from "react-native";
 import { useTheme } from "../../../theme";
-import { getPrettyStringFromDurationInMin, get12hrTimeFromDecimal } from "../../../utils";
+import { get12hrTimeFromDecimal, getPrettyStringFromDurationInMin } from "../../../utils";
 import { Text } from "../text/text";
 interface MultiSliderProps extends PMultiSliderProps {
   style?: ViewStyle;
@@ -33,21 +33,11 @@ const rangeModes = {
 } as const;
 
 export const MultiSlider = (props: MultiSliderProps) => {
-  const {
-    onValuesChange,
-    style: styleOverride,
-    step,
-    min,
-    max,
-    allowOverlap = false,
-    values,
-    timeRange = "day",
-    rangeMode = "duration",
-  } = props;
+  const { onValuesChange, style: styleOverride, step, min, max, allowOverlap = false, values, timeRange = "day", rangeMode = "duration" } = props;
   const { Colors } = useTheme();
 
   const containerStyle = StyleSheet.flatten([styles.container, styleOverride]);
-  const markerStyle = StyleSheet.flatten([styles.marker, { backgroundColor: Colors.brandSecondary }]);
+  const markerStyle = StyleSheet.flatten([styles.marker, { backgroundColor: Colors.brandPrimary }]);
   const [isLabelEnabled, setIsLabelEnabled] = useState(false);
   return (
     <PMultiSlider
@@ -66,7 +56,7 @@ export const MultiSlider = (props: MultiSliderProps) => {
         return (
           <View
             style={{
-              backgroundColor: Colors.brandSecondary,
+              backgroundColor: Colors.brandPrimary,
               borderRadius: 5,
               minWidth: 150,
               paddingHorizontal: 10,
@@ -80,7 +70,7 @@ export const MultiSlider = (props: MultiSliderProps) => {
           >
             <Text
               preset="none"
-              text={rangeModes[rangeMode].getString(value)}
+              text={rangeModes[rangeMode].getString(value ?? 0)}
               style={{
                 color: Colors.white,
                 fontSize: 18,
@@ -90,8 +80,8 @@ export const MultiSlider = (props: MultiSliderProps) => {
         );
       }}
       pressedMarkerStyle={styles.pressedMarker}
-      selectedStyle={{ backgroundColor: Colors.brandSecondary3 }}
-      unselectedStyle={{ backgroundColor: Colors.lightGray }}
+      selectedStyle={{ backgroundColor: Colors.brandPrimary }}
+      unselectedStyle={{ backgroundColor: Colors.disabledText }}
       onValuesChangeFinish={values => {
         setIsLabelEnabled(false);
         onValuesChange && onValuesChange(values);

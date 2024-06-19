@@ -89,19 +89,24 @@ export const SignUpWithEmail: FC<SignUpWithEmailScreenProps> = ({ navigation }) 
         onPress={() => handleSubmit()}
         // preset={`primary${isValid ? "" : "-disabled"}`}
         text={intl.formatMessage({ id: "Common.signUp" })}
-        state={!dirty ? "disabled" : isLoading ? "loading" : "enabled"}
       />
       <Space />
       <View style={styles.signInRow}>
         <Text
-          preset="subLink"
+          preset="textLarge"
           style={{ color: Colors.text }}
           text={intl.formatMessage({
             id: "Sign_Up_With_Email_Screen.alreadyHaveAnAccount",
           })}
         />
-        <Button
-          preset="link"
+        <Text
+          preset="textLarge"
+          style={{
+            color: Colors.brandAccent,
+            marginLeft: 5,
+            fontWeight: "700",
+            textDecorationLine: "underline",
+          }}
           text={intl.formatMessage({ id: "Common.signIn" })}
           onPress={() => {
             navigation.navigate("unauthorized", { screen: "sign-in-screen" });
@@ -121,7 +126,7 @@ const styles = StyleSheet.create({
   signInRow: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-end",
   },
   subLink: {
     fontWeight: "bold",

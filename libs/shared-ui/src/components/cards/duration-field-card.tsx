@@ -1,9 +1,7 @@
-import React from "react";
-import { StyleSheet } from "react-native";
 import { noop } from "lodash";
-
-import { Card, Container, MultiSlider, Space, Text } from "../common";
+import { StyleSheet } from "react-native";
 import { getPrettyStringFromDurationInMin } from "../../utils/time";
+import { Card, Container, MultiSlider, Space, Text } from "../common";
 
 export interface TimeDurationCardProps {
   title: string;
@@ -20,13 +18,7 @@ export const DurationFieldCard = (props: TimeDurationCardProps) => {
         <Text preset="cardTitle" text={title} />
         <Text preset="cardTitle" text={getPrettyStringFromDurationInMin(values ? values[0] : 0)} />
       </Container>
-      <MultiSlider
-        style={styles.multiSlider}
-        values={values}
-        timeRange="day"
-        rangeMode="duration"
-        onValuesChange={onValuesChange}
-      />
+      <MultiSlider style={styles.multiSlider} values={values} timeRange="day" rangeMode="duration" onValuesChange={onValuesChange} />
       <Space size="tiny" />
     </Card>
   );

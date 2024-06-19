@@ -5,6 +5,6 @@ import { shortwaitsApiEndpoints } from "../../../../configs";
 const { getCategories } = shortwaitsApiEndpoints.CATEGORIES;
 
 export default (build: EndpointBuilder<any, any, any>) =>
-  build.query<CategoriesResponseType, never>({
+  build.query<CategoriesResponseType, void>({
     query: () => getCategories.getPath(),
   });

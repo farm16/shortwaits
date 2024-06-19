@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import { Pressable, StyleSheet, TouchableOpacity } from "react-native";
 import Spinner from "react-native-spinkit";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";

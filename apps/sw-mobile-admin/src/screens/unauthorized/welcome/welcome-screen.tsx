@@ -1,15 +1,13 @@
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { CompositeNavigationProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { skipToken } from "@reduxjs/toolkit/dist/query/react";
 import { Button, Container, Logo2, Screen, ScrollView, Space, Text, WelcomeImage, getResponsiveFontSize, getResponsiveHeight } from "@shortwaits/shared-ui";
 import React, { FC, useEffect } from "react";
 import { useIntl } from "react-intl";
 import { StyleSheet, View } from "react-native";
 import { Settings as FacebookSettings } from "react-native-fbsdk-next";
 import { RootStackParamList, UnauthorizedStackParamList } from "../../../navigation";
-import { useGetAdminMobileQuery } from "../../../services";
-import { useBusiness, useShortwaitsAdmin } from "../../../store";
+import { useBusiness } from "../../../store";
 
 GoogleSignin.configure({
   webClientId: "805426205047-fcegaam9bmap1dagccindjh0ko7oro68.apps.googleusercontent.com",
@@ -23,18 +21,13 @@ export interface WelcomeScreenProps {
 
 export const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation }) => {
   const business = useBusiness();
-  const mobileAdminData = useShortwaitsAdmin();
   const intl = useIntl(); // Access the intl object
-
-  const { isLoading: isAdminMobileLoading } = useGetAdminMobileQuery(mobileAdminData.shortwaits && skipToken);
 
   useEffect(() => {
     if (business?.isRegistrationCompleted === false) {
       navigation.navigate("onboarding-1-screen");
     }
   }, [navigation, business?.isRegistrationCompleted]);
-
-  if (isAdminMobileLoading) return <Text>Loading ...</Text>;
 
   return (
     <Screen backgroundColor="white">

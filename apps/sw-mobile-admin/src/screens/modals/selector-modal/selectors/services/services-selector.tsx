@@ -15,13 +15,7 @@ import { useBusiness } from "../../../../../store";
  * TODO: handle error to non ideal state
  */
 export const ServicesSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ navigation, route }) => {
-  const {
-    onSelect,
-    selectedData = [],
-    onGoBack,
-    searchable,
-    multiple = false, // there is no case where multiple is needed
-  } = route.params;
+  const { onSelect, selectedData = [], onGoBack, searchable } = route.params;
   const business = useBusiness();
   const intl = useIntl();
   const { data: services, isLoading, isSuccess, isError, refetch: refetchServices } = useGetServicesQuery(business?._id ?? skipToken);
@@ -31,8 +25,6 @@ export const ServicesSelector: FC<ModalsScreenProps<"selector-modal-screen">> = 
       refetchServices();
     }, [refetchServices])
   );
-
-  console.log("isLoading", isLoading);
 
   const [searchText, setSearchText] = useState("");
   const [filteredData, setFilteredData] = useState<ServicesDtoType>([]);
@@ -63,15 +55,11 @@ export const ServicesSelector: FC<ModalsScreenProps<"selector-modal-screen">> = 
       });
     };
     const handleOnGoBack = () => {
-      if (multiple) {
-        const items = services?.data?.filter(item => selectedItems.includes(item._id)) || null;
-        if (onGoBack) {
-          onGoBack(items);
-        }
-        navigation.goBack();
-      } else {
-        navigation.goBack();
+      const items = services?.data?.filter(item => selectedItems.includes(item._id)) || null;
+      if (onGoBack) {
+        onGoBack(items);
       }
+      navigation.goBack();
     };
     navigation.setOptions({
       headerTitle: intl.formatMessage({ id: "Selectors.services.headerTitle" }),
@@ -91,7 +79,7 @@ export const ServicesSelector: FC<ModalsScreenProps<"selector-modal-screen">> = 
         </Container>
       ),
     });
-  }, [intl, isListSearchable, multiple, navigation, onGoBack, refetchServices, searchable, selectedItems, services?.data]);
+  }, [intl, isListSearchable, navigation, onGoBack, refetchServices, searchable, selectedItems, services?.data]);
 
   const handleOnChangeText = (text: string) => {
     setSearchText(text);

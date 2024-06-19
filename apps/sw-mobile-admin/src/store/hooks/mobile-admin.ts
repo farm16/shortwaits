@@ -7,7 +7,7 @@ import { changeFloatingActionButtonVisibility, mobileAdminInitialState, selectCu
  *
  * @returns returns element 0 which is `short_id: 0001`
  */
-export const useShortwaitsAdmin = () => {
+export const useMobileAdmin = () => {
   const mobileAdmin = useSelector(selectCurrentMobileAdminState);
   return useMemo(() => {
     return mobileAdmin ? mobileAdmin : null;
@@ -17,6 +17,7 @@ export const useShortwaitsAdmin = () => {
 export const useMobileDefaultData = () => {
   const mobileAdmin = useSelector(selectCurrentMobileAdminState);
   return useMemo(() => {
+    s;
     return mobileAdmin ? mobileAdmin.shortwaits : null;
   }, [mobileAdmin]);
 };

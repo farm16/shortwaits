@@ -2,12 +2,12 @@ import { Accordion, AccordionDataItemType } from "@shortwaits/shared-ui";
 import React from "react";
 import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
-import { updatePreferredLanguage, useShortwaitsAdmin } from "../../../../store";
+import { updatePreferredLanguage, useMobileAdmin } from "../../../../store";
 
 export const AppLanguage = () => {
   const intl = useIntl();
 
-  const { suggestedLanguage, preferredLanguage } = useShortwaitsAdmin();
+  const { suggestedLanguage, preferredLanguage } = useMobileAdmin();
   const dispatch = useDispatch();
   const selectedLanguage = preferredLanguage || suggestedLanguage;
   const accordionData: AccordionDataItemType[] = [

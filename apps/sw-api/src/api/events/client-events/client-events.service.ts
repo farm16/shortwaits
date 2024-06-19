@@ -46,7 +46,7 @@ export class EventsService {
     }
   }
 
-  async getServicesByBusinessId(businessId: string) {
+  async getBusinessRecord(businessId: string) {
     try {
       const businessRecord = await this.businessModel.findOne({ _id: businessId, deleted: false }).exec();
 
@@ -54,16 +54,31 @@ export class EventsService {
         throw new UnauthorizedException("Business not found");
       }
 
-      const services = await this.servicesModel.find({ businessId, deleted: false }).exec();
+      return businessRecord;
+    } catch (error) {
+      console.error("getBusinessRecord >>>", error);
+      throw new InternalServerErrorException("Failed to retrieve business");
+    }
+  }
 
-      if (services.length === 0) {
-        return {
-          message: "No services found",
-        };
-      }
+  async getAllActiveServicesByBusinessId(businessId: string) {
+    try {
+      const businessRecord = await this.getBusinessRecord(businessId);
+      const services = await this.servicesModel.find({ businessId: businessRecord._id, deleted: false }).exec();
+
       return services;
     } catch (error) {
       console.error(error);
+      throw new InternalServerErrorException("Failed to retrieve active services");
+    }
+  }
+
+  async getServicesByBusinessId(businessId: string) {
+    try {
+      const activeServices = await this.getAllActiveServicesByBusinessId(businessId);
+      return activeServices;
+    } catch (error) {
+      console.error("getServicesByBusinessId >>>", error);
       throw new InternalServerErrorException("Failed to retrieve services");
     }
   }

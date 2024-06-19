@@ -1,12 +1,10 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import { Platform, StyleProp, View, ViewStyle } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { ThemeColorName, useTheme } from "../../theme";
-import { getResponsiveFontSize, getResponsiveHeight } from "../../utils";
-import { Button, ButtonProps, Spinner, Text } from "../common";
+import { getResponsiveHeight } from "../../utils";
+import { Button, ButtonProps, Text } from "../common";
 import { IconProps, iconProps } from "./icon-presets";
-
-const disabledStates = ["loading", "disabled"];
 
 export const ForwardButton: FC<ButtonProps> = props => (
   <Button {...props} preset="icon">
@@ -39,43 +37,29 @@ export const TextHeaderButton: FC<ButtonProps> = props => {
 
 export const RightArrowButton: FC<ButtonProps> = props => {
   const {
-    Colors: { brandSecondary, inputBackground },
+    Colors: { brandSecondary },
   } = useTheme();
-  const { state = "enable", ...rest } = props;
   return (
-    <Button {...rest} preset="headerLink">
-      <Icon name="arrow-right-bold" color={disabledStates.includes(state) ? inputBackground : brandSecondary} size={22} />
+    <Button {...props} preset="headerLink">
+      <Icon name="arrow-right-bold" color={brandSecondary} size={22} />
     </Button>
   );
 };
 
 export const LeftArrowButton: FC<ButtonProps> = props => {
   const { Colors } = useTheme();
-  const { state = "enabled", ...rest } = props;
-
-  const stateIcons = {
-    disabled: { name: "exclamation-thick", color: "darkGray" },
-    enabled: { name: "chevron-right", color: "brandSecondary" },
-  };
-  if (state === "loading") return <Spinner />;
   return (
-    <Button {...rest} preset="headerLink">
-      <Icon name={stateIcons[state].name} color={Colors[stateIcons[state].color as ThemeColorName]} size={22} />
+    <Button {...props} preset="headerLink">
+      <Icon name={"chevron-right"} color={Colors["brandSecondary"]} size={22} />
     </Button>
   );
 };
 
 export const RightChevronButton: FC<ButtonProps> = props => {
   const { Colors } = useTheme();
-  const { state = "enabled", ...rest } = props;
-  const stateIcons = {
-    disabled: { name: "chevron-right", color: "lightGray", size: 35 },
-    enabled: { name: "chevron-right", color: "brandSecondary", size: 35 },
-  };
-  if (state === "loading") return <Spinner />;
   return (
-    <Button {...rest} state={state} preset="icon">
-      <Icon name={stateIcons[state].name} color={Colors[stateIcons[state].color as ThemeColorName]} size={stateIcons[state].size} />
+    <Button {...props} preset="icon">
+      <Icon name={"chevron-right"} color={Colors["brandSecondary"]} size={35} />
     </Button>
   );
 };
@@ -86,21 +70,18 @@ export const BackButton: FC<
     iconColor?: string;
   }
 > = props => {
-  const { state = "enabled", iconColor, style: styleOverride, ...rest } = props;
+  const { iconColor, style: styleOverride, ...rest } = props;
   const {
-    Colors: { brandSecondary, lightBackground },
+    Colors: { brandSecondary },
   } = useTheme();
 
   const color = iconColor ? iconColor : brandSecondary;
-  const style = [{ marginLeft: 16, flexDirection: "row", alignItems: "center" } as ViewStyle, styleOverride];
+  const style = { marginLeft: 16 };
+  const size = Platform.OS === "ios" ? 37 : 24;
 
   return (
-    <Button state={state} preset="none" style={style} {...rest}>
-      <Icon
-        name={Platform.OS === "ios" ? "chevron-left" : "arrow-left"}
-        color={disabledStates.includes(state) ? lightBackground : color}
-        size={getResponsiveFontSize(Platform.OS === "ios" ? 35 : 24)}
-      />
+    <Button {...rest} preset="icon-wrapper" style={[style, styleOverride]}>
+      <Icon name={Platform.OS === "ios" ? "chevron-left" : "arrow-left"} color={color} size={size} />
       {props.counter ? (
         <Text
           preset="none"
@@ -132,7 +113,6 @@ interface IconButtonProps extends ButtonProps {
 
 export const IconButton: FC<IconButtonProps> = props => {
   const {
-    state = "enabled",
     iconSize: iconSizeOverride,
     iconType = "default",
     style: styleOverride,
@@ -151,15 +131,11 @@ export const IconButton: FC<IconButtonProps> = props => {
 
   const style: StyleProp<ViewStyle> = {
     backgroundColor: Colors[(iconProps[iconType]?.backgroundColor as ThemeColorName) ?? backgroundColor],
-    width: getResponsiveHeight(iconProps[iconType]?.size + 2),
-    height: getResponsiveHeight(iconProps[iconType]?.size + 2),
-    justifyContent: "center",
-    alignItems: "center",
     marginLeft: withMarginLeft ? getResponsiveHeight(16) : undefined,
     marginRight: withMarginRight ? getResponsiveHeight(16) : undefined,
   };
 
-  const disabled = disabledOverride || state === "disabled";
+  const disabled = disabledOverride;
   const isDisabled = props.disabledAlertMessage ? false : disabled;
   const iconColor = iconColorOverride || iconProps[iconType]?.color || "brandSecondary";
   const iconSize = iconSizeOverride || iconProps[iconType]?.size || 22;
@@ -174,7 +150,7 @@ export const IconButton: FC<IconButtonProps> = props => {
   };
 
   return (
-    <Button preset="none" {...rest} onPress={handlePress} disabled={isDisabled} style={[style, styleOverride]} state={state}>
+    <Button preset="icon-wrapper" {...rest} onPress={handlePress} disabled={isDisabled} style={[style, styleOverride]}>
       <Icon name={iconName} color={Colors[iconColor]} size={getResponsiveHeight(iconSize)} />
     </Button>
   );
@@ -201,6 +177,6 @@ export const CancelAndLogOutHeaderButton: FC<ButtonProps> = props => {
   );
 };
 
-export const MultipleHeaderButtons = ({ children }) => {
+export const MultipleHeaderButtons = ({ children }: { children: JSX.Element | JSX.Element[] }) => {
   return <View style={{ flexDirection: "row" }}>{children}</View>;
 };

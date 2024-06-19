@@ -3,7 +3,6 @@ import { ObjectId } from "../common";
 import { BusinessAvailableCurrenciesType, BusinessHoursType, PaginatedModel, ServiceColorType } from "./helpers";
 
 export type ServiceType = {
-  businessId: ObjectId;
   name: string;
   description: string;
   hours: BusinessHoursType;
@@ -19,9 +18,10 @@ export type ServiceType = {
     other2?: string;
   };
   isVideoConference: boolean;
-  deleted: boolean;
   serviceColor: ServiceColorType;
   imageUrl: string;
+  businessId: ObjectId;
+  deleted: boolean;
   createdBy: ObjectId;
   updatedBy: ObjectId;
 };

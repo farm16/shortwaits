@@ -1,4 +1,4 @@
-import { AddClientDtoType, BusinessUserType, EventDtoType, generateShortId } from "@shortwaits/shared-lib";
+import { AddClientDtoType, BusinessUserType, EventDtoType, UpdateServiceDtoType, generateAvatarUrl, generateShortId } from "@shortwaits/shared-lib";
 import { SignUpWithEmailDto } from "../api/auth/dto";
 import { CreateBusinessUserDto } from "../api/business-staff/dto";
 import { CreateEventsDto } from "../api/events/business-events/dto";
@@ -201,8 +201,8 @@ export const filterBusinessOwnerPayload_socialAuth = (ownerSignupDto: SignUpWith
  * @description
  * This function is used to filter out unwanted keys from the payload
  */
-export const getFilteredRecord = payload => {
-  const unwantedKeys = ["_id", "createdAt", "updatedAt", "__v"];
+export const filterServiceRecord = payload => {
+  const unwantedKeys = ["_id", "businessId", "createdAt", "updatedAt", "__v"];
   const filteredPayload = Object.keys(payload).reduce((acc, key) => {
     if (!unwantedKeys.includes(key)) {
       acc[key] = payload[key];
@@ -210,4 +210,36 @@ export const getFilteredRecord = payload => {
     return acc;
   }, {});
   return filteredPayload;
+};
+
+export const initServiceRecord = (userId: string, businessId: string, updateServiceDto: UpdateServiceDtoType) => {
+  const servicePayload: UpdateServiceDtoType = {
+    businessId: businessId,
+    name: updateServiceDto.name,
+    description: updateServiceDto.description,
+    hours: updateServiceDto.hours,
+    applicableCategories: updateServiceDto.applicableCategories,
+    staff: updateServiceDto.staff,
+    durationInMin: updateServiceDto.durationInMin,
+    price: updateServiceDto.price ?? 0,
+    currency: "USD", // this is a default value for now todo: change this to a dynamic value
+    isPrivate: updateServiceDto.isPrivate,
+    urls: updateServiceDto.urls ?? null,
+    isVideoConference: updateServiceDto.isVideoConference ?? false,
+    deleted: false,
+    serviceColor: updateServiceDto.serviceColor ?? null,
+    imageUrl: generateAvatarUrl(updateServiceDto.name ?? "service"),
+    createdBy: userId,
+    updatedBy: userId,
+  };
+  return servicePayload;
+};
+
+export const updateServiceRecord = (userId: string, businessId: string, updateServiceDto: UpdateServiceDtoType) => {
+  const filetedServiceRecord = filterServiceRecord(updateServiceDto);
+  const servicePayload: UpdateServiceDtoType = {
+    ...filetedServiceRecord,
+    updatedBy: userId,
+  };
+  return servicePayload;
 };

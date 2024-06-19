@@ -6,7 +6,6 @@ import {
   BusinessLabelType,
   BusinessUserDtoType,
   BusinessWeekDaysType,
-  CategoryDtoType,
   ClientDtoType,
   CreateBusinessUserDtoType,
   CreateEventDtoType,
@@ -39,7 +38,7 @@ export type GenericModalData<T = unknown> = {
   subTitle?: string;
   itemData?: T;
 };
-export type SelectorModalData = BusinessLabelType | CategoryDtoType | ServiceDtoType | BusinessLabelType | EventDtoType | BusinessUserDtoType | GenericModalData;
+export type SelectorModalData = BusinessLabelType | CategoryType | ServiceDtoType | BusinessLabelType | EventDtoType | BusinessUserDtoType | GenericModalData;
 export type SelectedData = string[]; // this should be the id of the selected data only
 
 export type ModalStackParamList = {
@@ -52,8 +51,11 @@ export type ModalStackParamList = {
     maxSelectedItems?: number;
     searchable?: boolean;
     nonIdealStateType?: NonIdealStateTypes;
-    // multiple?: boolean; will not be used since onSelect is provided, else the modal will always be multiple
-    onSelect?(arg: SelectorModalData[]): void; // <--- if onSelect is provided, the modal will always return an array length of 1
+    /**
+     * multiple?: boolean; will not be used since onSelect is provided, else the modal will always be multiple
+     * if onSelect is provided, the modal will always return an array length of 1
+     **/
+    onSelect?(arg: SelectorModalData[]): void; //
     onSubmit?(arg: SelectorModalData[]): void; // ditto
     onGoBack?(arg: SelectorModalData[]): void; // ditto
   };

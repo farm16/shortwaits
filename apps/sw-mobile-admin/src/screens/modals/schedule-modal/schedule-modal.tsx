@@ -95,7 +95,8 @@ export const ScheduleModal: FC<ModalsScreenProps<"schedule-modal-screen">> = ({ 
       <FormContainer
         footer={
           <Button
-            text="Save"
+            text={"Done"}
+            preset="secondary"
             onPress={() => {
               onSubmit(currentWeekHours);
               if (closeOnSubmit) navigation.goBack();

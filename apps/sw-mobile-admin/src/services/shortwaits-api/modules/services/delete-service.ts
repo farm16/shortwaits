@@ -6,11 +6,18 @@ type RequestType = {
   serviceId: string;
 };
 
+type ResponseType = CommonResponseType<{
+  service: ServiceDtoType;
+  services: ServiceDtoType[];
+}>;
+
 export default (builder: EndpointBuilder<any, any, any>) =>
-  builder.mutation<CommonResponseType<ServiceDtoType>, RequestType>({
-    query: ({ businessId, serviceId }) => ({
-      ...endpoints.deleteService.getConfig([serviceId], {
-        businessId,
+  builder.mutation<ResponseType, RequestType>({
+    query: ({ businessId, serviceId }) =>
+      endpoints.deleteService.getMutationConfig({
+        pathVars: [businessId],
+        body: {
+          serviceId: serviceId,
+        },
       }),
-    }),
   });

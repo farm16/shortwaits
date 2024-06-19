@@ -190,7 +190,7 @@ export const endpoints = {
   getServices: createEndpoint<BusinessIdQuery>("services", "GET"),
   updateService: createEndpoint(`services/:businessId`, "PUT"),
   createService: createEndpoint(`services/:businessId`, "POST"),
-  deleteService: createEndpoint<BusinessIdQuery>(`services/:serviceId`, "DELETE"),
+  deleteService: createEndpoint(`services/:businessId`, "DELETE"),
 
   // Client Users
   getClientUsers: createEndpoint("client-user/business/:businessId", "GET"),

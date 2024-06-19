@@ -4,15 +4,14 @@ import React from "react";
 import { SelectorItemProps } from "../../selector-types";
 
 export function CategoriesSelectorItem(props: SelectorItemProps<CategoryDtoType>) {
-  const { item, onSelectItem, disabled = false, multiple = false, isSelected, language } = props;
+  const { item, onSelectItem, disabled = false, isSelected, language } = props;
 
   const title = language === "en" ? item.name : item.translations?.find(translation => translation?.languageCode === language)?.translation || item.name;
-
-  const getCheckIcon = () => (isSelected ? "checkbox-outline" : "checkbox-blank-outline");
+  const rightIconName = isSelected ? "checkbox-outline" : "checkbox-blank-outline";
 
   return (
     <ButtonCard
-      rightIconName={multiple ? getCheckIcon() : "none"}
+      rightIconName={rightIconName}
       disabled={disabled}
       title={title}
       onPress={() => {

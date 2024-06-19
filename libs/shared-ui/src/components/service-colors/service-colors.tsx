@@ -1,5 +1,5 @@
 import { ServiceColorType, ServiceColorsType } from "@shortwaits/shared-lib";
-import React, { useCallback, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { StyleSheet, View, ViewStyle } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { getDimensions } from "../../theme";
@@ -27,6 +27,7 @@ function Circle({ width: circleDiameter, color, isSelected, onSelect }: CirclePr
     justifyContent: "center",
     alignItems: "center",
   };
+  console.log("isSelected >>>", isSelected);
   return (
     <Button preset="none" style={style} onPress={onSelect}>
       {isSelected && <Icon name="check-bold" size={circleDiameter - 5} color="white" />}
@@ -42,20 +43,27 @@ export function ServiceColors({ selectedColor, onSelect, serviceColors }: Servic
     [onSelect]
   );
 
+  //console.log("serviceColors >>>", serviceColors);
+
   const circles = useMemo(() => {
     const { width } = getDimensions(87);
     const colorsCount = serviceColors ? Object.keys(serviceColors).length : 0;
     const circleWidth = width / (colorsCount * 1.9);
 
-    return Object.keys(serviceColors).map(elem => (
-      <Circle
-        key={serviceColors[elem].colorId}
-        onSelect={() => handleOnSelect(serviceColors[elem])}
-        width={circleWidth}
-        color={serviceColors[elem].hexCode ?? "#ffffff"}
-        isSelected={serviceColors[elem].colorId === selectedColor?.colorId}
-      />
-    ));
+    return Object.keys(serviceColors).map(elem => {
+      console.log("serviceColors[elem] >>>", serviceColors[elem]);
+      console.log("selectedColor >>>", selectedColor);
+      console.log("circleWidth >>>", serviceColors[elem].colorId === selectedColor?.colorId);
+      return (
+        <Circle
+          key={serviceColors[elem].colorId}
+          onSelect={() => handleOnSelect(serviceColors[elem])}
+          width={circleWidth}
+          color={serviceColors[elem].hexCode ?? "#ffffff"}
+          isSelected={serviceColors[elem].colorId === selectedColor?.colorId}
+        />
+      );
+    });
   }, [handleOnSelect, selectedColor?.colorId, serviceColors]);
 
   if (!serviceColors) return null;

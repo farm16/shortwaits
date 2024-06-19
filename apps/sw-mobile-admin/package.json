@@ -96,6 +96,7 @@
     "react-native-code-push": "*",
     "react-native-fbsdk-next": "*",
     "react-native-toast-message": "*",
-    "react-native-walkthrough-tooltip": "*"
+    "react-native-walkthrough-tooltip": "*",
+    "@react-native-community/netinfo": "*"
   }
 }

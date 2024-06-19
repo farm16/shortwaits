@@ -23,14 +23,16 @@ import { Alert } from "react-native";
 import { useForm } from "../../../hooks";
 import { ModalsScreenProps } from "../../../navigation";
 import { useDeleteServiceMutation, useUpdateServiceMutation } from "../../../services";
-import { useBusiness, useShortwaitsAdmin } from "../../../store";
+import { useBusiness, useMobileAdmin } from "../../../store";
 
 export const UpdateServicesModal: FC<ModalsScreenProps<"update-service-modal-screen">> = ({ navigation, route }) => {
   const service = route?.params?.initialValues as ServiceDtoType;
 
+  console.log("service >>>", JSON.stringify(service, null, 2));
+
   const intl = useIntl();
   const business = useBusiness();
-  const shortwaitsAdmin = useShortwaitsAdmin();
+  const shortwaitsAdmin = useMobileAdmin();
   const [deleteService, deleteServiceStatus] = useDeleteServiceMutation();
   const [updateService, updateServiceStatus] = useUpdateServiceMutation();
 
@@ -102,7 +104,7 @@ export const UpdateServicesModal: FC<ModalsScreenProps<"update-service-modal-scr
     return <DurationFieldCard title={intl.formatMessage({ id: "UpdateServiceModal.duration" })} values={[values.durationInMin]} onValuesChange={handleDurationTimeChange} />;
   }, [intl, setFieldValue, values.durationInMin]);
 
-  console.log("values", values?.serviceColor);
+  console.log("form values >>>", values?.serviceColor);
 
   return (
     <FormContainer footer={renderFooter}>
@@ -134,8 +136,8 @@ export const UpdateServicesModal: FC<ModalsScreenProps<"update-service-modal-scr
         title={intl.formatMessage({ id: "UpdateServiceModal.price" })}
         keyboardType="number-pad"
         placeholder={"0.00"}
-        value={values.price / 100}
-        onChangeValue={price => setFieldValue("price", price * 100)}
+        value={values.price}
+        onChangeValue={price => setFieldValue("price", price)}
         isTouched={touched.price}
         errors={errors.price}
         currencyType={"USD"}

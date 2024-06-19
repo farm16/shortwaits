@@ -1,5 +1,6 @@
 import { StackActions } from "@react-navigation/native";
-import { Button, ButtonCard, FormContainer, IconButton, Space, TextFieldCard, getArrCount, getPrettyStringFromHours, truncated } from "@shortwaits/shared-ui";
+import { CategoriesDtoType } from "@shortwaits/shared-lib";
+import { Button, ButtonCard, FormContainer, IconButton, Text, TextFieldCard, getArrCount, getPrettyStringFromHours, truncated } from "@shortwaits/shared-ui";
 import React, { FC, useEffect, useLayoutEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
@@ -15,6 +16,8 @@ export const Onboarding1Screen: FC<UnauthorizedScreenProps<"onboarding-1-screen"
   const business = useBusiness();
   const user = useUser();
   const auth = useAuth();
+
+  console.log("business", business.categories);
 
   useEffect(() => {
     if (auth.token === null) {
@@ -44,17 +47,22 @@ export const Onboarding1Screen: FC<UnauthorizedScreenProps<"onboarding-1-screen"
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: intl.formatMessage(
-        {
-          id: "Onboarding_1_Screen.headerTitle",
-        },
-        {
-          name: truncated(user?.username, 16) || "",
-        }
+      headerTitle: () => (
+        <Text preset="headerTitle">
+          {intl.formatMessage(
+            {
+              id: "Onboarding_1_Screen.headerTitle",
+            },
+            {
+              name: truncated(user?.username, 16) || "",
+            }
+          )}
+        </Text>
       ),
       headerLeft: () => (
         <IconButton
           withMarginLeft
+          iconColor="failed"
           iconType="account-cancel"
           onPress={() => {
             signOut();
@@ -68,7 +76,7 @@ export const Onboarding1Screen: FC<UnauthorizedScreenProps<"onboarding-1-screen"
     <FormContainer
       footer={
         <Button
-          preset="secondary"
+          preset="primary"
           text={intl.formatMessage({
             id: "Common.continue",
           })}
@@ -81,7 +89,6 @@ export const Onboarding1Screen: FC<UnauthorizedScreenProps<"onboarding-1-screen"
         />
       }
     >
-      <Space />
       {/**
        * @todo UploadProfileImage needs to connect to
        * aws for images
@@ -118,25 +125,18 @@ export const Onboarding1Screen: FC<UnauthorizedScreenProps<"onboarding-1-screen"
         title={intl.formatMessage({
           id: "Onboarding_1_Screen.businessCategories",
         })}
-        subTitle={intl.formatMessage(
-          {
-            id: "Common.count",
-          },
-          {
-            count: getArrCount(business?.categories ?? []),
-          }
-        )}
+        subTitle={intl.formatMessage({ id: "Common.count" }, { count: getArrCount(business?.categories ?? []) })}
         errors={!Array.isArray(business?.categories) || !business?.categories.length ? "this field is required" : undefined}
         isTouched={isCategoriesTouched}
         onPress={() => {
           navigation.navigate("modals", {
             screen: "selector-modal-screen",
             params: {
-              type: "categories",
-              multiple: true,
-              closeOnSelect: true,
-              onSelect: (categories: string[]) => {
-                dispatch(setBusinessCategories(categories));
+              mode: "categories",
+              selectedData: business.categories,
+              onSubmit: (categories: CategoriesDtoType) => {
+                const categoryId = categories.map(category => category._id);
+                dispatch(setBusinessCategories(categoryId));
               },
             },
           });
@@ -165,32 +165,6 @@ export const Onboarding1Screen: FC<UnauthorizedScreenProps<"onboarding-1-screen"
               onSubmit: hours => {
                 console.log("hours", hours);
                 dispatch(setBusiness({ hours }));
-              },
-            },
-          })
-        }
-      />
-      <ButtonCard
-        title={intl.formatMessage({
-          id: "Onboarding_1_Screen.businessStaff",
-        })}
-        // subTitle={getArrCount(business?.staff ?? [])}
-        subTitle={intl.formatMessage(
-          {
-            id: "Common.count",
-          },
-          {
-            count: getArrCount(business?.staff ?? []),
-          }
-        )}
-        onPress={() =>
-          navigation.navigate("modals", {
-            screen: "selector-modal-screen",
-            params: {
-              type: "staff",
-              closeOnSelect: false,
-              onSelect: staff => {
-                console.log("staff", staff);
               },
             },
           })

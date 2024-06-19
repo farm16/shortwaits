@@ -131,6 +131,10 @@ export const buttonPresets = ({
       justifyContent: "center",
       alignItems: "center",
     },
+    "icon-wrapper": {
+      justifyContent: "center",
+      alignItems: "center",
+    },
     outline: {
       ...VIEW_BASE,
       borderRadius: 25,
@@ -221,6 +225,7 @@ export const buttonPresets = ({
     none: {},
     primary: {
       ...TEXT_BASE,
+      fontSize: getResponsiveHeight(16),
       color: Colors.white,
       fontWeight: "700",
     },

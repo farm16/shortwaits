@@ -22,14 +22,14 @@ import { useIntl } from "react-intl";
 import { Alert } from "react-native";
 import { ModalsScreenProps } from "../../../navigation";
 import { useCreateServiceMutation } from "../../../services";
-import { useBusiness, useShortwaitsAdmin } from "../../../store";
+import { useBusiness, useMobileAdmin } from "../../../store";
 
 export const AddServicesModal: FC<ModalsScreenProps<"add-service-modal-screen">> = ({ navigation, route }) => {
   const params = route?.params;
   const onSubmit = params?.onSubmit ?? noop;
 
   const intl = useIntl();
-  const mobileAdminData = useShortwaitsAdmin();
+  const mobileAdminData = useMobileAdmin();
   const business = useBusiness();
   const [createService, createServiceStatus] = useCreateServiceMutation();
 

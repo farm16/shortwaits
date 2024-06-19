@@ -1,69 +1,68 @@
 import {
   BackButton,
+  Button,
   // SearchBar,
   Screen,
   Space,
   Text,
   useTheme,
 } from "@shortwaits/shared-ui";
-import { noop } from "lodash";
 import React, { FC, useCallback, useLayoutEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { FlatList, StyleSheet } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import { ModalsScreenProps } from "../../../../../navigation";
 import { useGetCategoriesQuery } from "../../../../../services";
-import { useBusiness, useShortwaitsAdmin } from "../../../../../store";
+import { useMobileAdmin } from "../../../../../store";
 import { CategoriesSelectorItem } from "./categories-selector-item";
 
 export const CategoriesSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ navigation, route }) => {
-  const { onSelect = noop, onGoBack = noop, selectedData = [], searchable = false, multiple = false } = route.params;
+  const { onSelect, onSubmit, onGoBack, selectedData = [], searchable = false } = route.params;
 
-  const business = useBusiness();
+  const { Colors } = useTheme();
   const intl = useIntl();
-  const [selectedItems, setSelectedItems] = useState(business.categories ?? []);
-
-  const handleOnGoBack = useCallback(
-    payload => {
-      onGoBack(payload);
-      onSelect(payload);
-      navigation.goBack();
-    },
-    [navigation, onGoBack, onSelect]
-  );
+  const [selectedItems, setSelectedItems] = useState<string[]>(selectedData ?? []);
+  const { data: categories, isError, isLoading } = useGetCategoriesQuery();
+  const { preferredLanguage, suggestedLanguage } = useMobileAdmin();
+  const language = preferredLanguage || suggestedLanguage;
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: intl.formatMessage({ id: "Common.categories" }),
-      headerLeft: () => <BackButton onPress={() => handleOnGoBack(selectedItems)} counter={selectedItems?.length > 0 ? `(${selectedItems.length})` : ""} />,
+      headerLeft: () => (
+        <BackButton
+          onPress={() => {
+            if (onGoBack) {
+              const _categories = categories?.data ? categories.data.filter(category => selectedItems.includes(category._id)) : [];
+              onGoBack(_categories);
+            }
+            navigation.goBack();
+          }}
+        />
+      ),
     });
-  }, [handleOnGoBack, intl, navigation, selectedItems]);
+  }, [categories, categories?.data, intl, navigation, onGoBack, selectedItems]);
 
-  const { Colors } = useTheme();
-
-  const { data: categories, isError, isLoading, isSuccess } = useGetCategoriesQuery(undefined);
-  const { preferredLanguage, suggestedLanguage } = useShortwaitsAdmin();
-  const language = preferredLanguage || suggestedLanguage;
   /**
    * TODO: handle error to non ideal state
    */
-
   const renderItem = useCallback(
     ({ item }) => {
       const handleOnSelect = item => {
-        if (multiple) {
+        if (onSelect) {
+          onSelect([item]);
+          navigation.goBack();
+        } else {
           if (selectedItems.includes(item._id)) {
             setSelectedItems(selectedItems.filter(id => id !== item._id));
           } else {
             setSelectedItems([...selectedItems, item._id]);
           }
-        } else {
-          handleOnGoBack(item);
         }
       };
-      return <CategoriesSelectorItem language={language} item={item} onSelectItem={handleOnSelect} isSelected={selectedItems.includes(item._id)} multiple={multiple} />;
+      return <CategoriesSelectorItem language={language} item={item} onSelectItem={handleOnSelect} isSelected={selectedItems.includes(item._id)} />;
     },
-    [handleOnGoBack, language, multiple, selectedItems]
+    [language, navigation, onSelect, selectedItems]
   );
 
   const keyExtractor = useCallback(item => item._id, []);
@@ -75,23 +74,33 @@ export const CategoriesSelector: FC<ModalsScreenProps<"selector-modal-screen">> 
     return <ActivityIndicator />;
   }
 
-  if (isSuccess) {
-    return (
-      <Screen preset="fixed" withHorizontalPadding unsafe>
-        <FlatList
-          style={{
-            backgroundColor: Colors.lightBackground,
+  return (
+    <Screen preset="fixed" withHorizontalPadding unsafe>
+      <FlatList
+        style={{
+          backgroundColor: Colors.lightBackground,
+        }}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.flatList}
+        data={categories.data}
+        ItemSeparatorComponent={() => <Space size="small" />}
+        renderItem={renderItem}
+        keyExtractor={keyExtractor}
+      />
+      {onSubmit && (
+        <Button
+          preset="secondary"
+          text={intl.formatMessage({
+            id: "Common.done",
+          })}
+          onPress={() => {
+            onSubmit(categories.data.filter(category => selectedItems.includes(category._id)));
+            navigation.goBack();
           }}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.flatList}
-          data={categories.data}
-          ItemSeparatorComponent={() => <Space size="small" />}
-          renderItem={renderItem}
-          keyExtractor={keyExtractor}
         />
-      </Screen>
-    );
-  }
+      )}
+    </Screen>
+  );
 };
 
 const styles = StyleSheet.create({

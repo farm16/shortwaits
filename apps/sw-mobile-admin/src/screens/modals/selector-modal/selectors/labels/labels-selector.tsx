@@ -12,9 +12,9 @@ import { LabelSelectorItem } from "./labels-selector-item";
 export const LabelsSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ navigation, route }) => {
   const dispatch = useDispatch();
 
-  const { type, onSelect, multiple = false } = route.params;
+  const { mode, onSelect } = route.params;
 
-  const { headerTitle, searchPlaceholder, isReadOnly } = useMemo(() => selectorConfigs[type], [type]);
+  const { headerTitle, searchPlaceholder, isReadOnly } = useMemo(() => selectorConfigs[mode], [mode]);
 
   const handleAddLabels = useCallback(() => {
     dispatch(showPremiumMembershipModal());

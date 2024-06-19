@@ -131,22 +131,29 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
       />
 
       <Space />
-      <Button preset="primary" onPress={() => handleSubmit()}>
-        <Text
-          style={{ color: "white" }}
-          preset="social"
-          text={intl.formatMessage({
-            id: "Common.signIn",
-          })}
-        />
-      </Button>
-      <Space size="tiny" />
       <Button
-        style={{ marginLeft: "auto" }}
-        preset="link"
+        preset="primary"
+        onPress={() => handleSubmit()}
+        text={intl.formatMessage({
+          id: "Common.signIn",
+        })}
+      />
+      <Space size="tiny" />
+      <Text
+        preset="textLarge"
+        style={{
+          alignSelf: "flex-end",
+          color: Colors.brandAccent,
+          marginTop: 5,
+          fontWeight: "700",
+          textDecorationLine: "underline",
+        }}
         text={intl.formatMessage({
           id: "Sign_In_Screen.forgotPassword",
         })}
+        onPress={() => {
+          alert("Forgot password");
+        }}
       />
       <Space size="large" />
       <Button preset="social" onPress={handleGoogleAuth} style={styles.socialButton}>
@@ -175,13 +182,19 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
       <Space />
       <View style={styles.footer}>
         <Text
-          preset="text"
+          preset="textLarge"
           text={intl.formatMessage({
             id: "Sign_In_Screen.doNotHaveAnAccount",
           })}
         />
-        <Button
-          preset="link"
+        <Text
+          preset="textLarge"
+          style={{
+            color: Colors.brandAccent,
+            marginLeft: 5,
+            fontWeight: "700",
+            textDecorationLine: "underline",
+          }}
           text={intl.formatMessage({
             id: "Sign_In_Screen.signUp",
           })}

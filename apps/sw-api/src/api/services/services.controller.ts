@@ -1,25 +1,11 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  UseGuards,
-  UseInterceptors,
-  Put,
-  ParseBoolPipe,
-  Query,
-  NotAcceptableException,
-} from "@nestjs/common";
-import { ServicesService } from "./services.service";
-import { CreateServiceDto } from "./dto/create-service.dto";
-import { UpdateServiceDto } from "./dto/update-service.dto";
+import { Body, Controller, Delete, Get, NotAcceptableException, Param, Post, Put, Query, Req, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { AtGuard } from "../../common/guards";
+import { CreateServiceDto } from "./dto/create-service.dto";
+import { UpdateServiceDto } from "./dto/update-service.dto";
+import { ServicesService } from "./services.service";
 
-import { GetServicesDto, GetServicesQuery } from "./dto/getServiceQuery";
+import { GetServicesQuery } from "./dto/getServiceQuery";
 
 /**
  * TODO:
@@ -35,9 +21,9 @@ export class ServicesController {
   constructor(private readonly servicesService: ServicesService) {}
 
   @Get()
-  getServices(@Query() query: GetServicesQuery) {
+  getServices(@Query() query: GetServicesQuery, @Req() request) {
     if (query.businessId) {
-      return this.servicesService.findAllByBusiness(query.businessId);
+      return this.servicesService.findAllActiveServicesByBusiness(query.businessId);
     }
     if (query.serviceId) {
       return this.servicesService.findOne(query.serviceId);
@@ -46,17 +32,17 @@ export class ServicesController {
   }
 
   @Put(":businessId")
-  update(@Param("businessId") businessId: string, @Body() updateServiceDto: UpdateServiceDto) {
-    return this.servicesService.update(businessId, updateServiceDto);
+  update(@Param("businessId") businessId: string, @Body() updateServiceDto: UpdateServiceDto, @Req() request) {
+    return this.servicesService.update(businessId, request.user.sub, updateServiceDto);
   }
 
   @Post(":businessId")
-  create(@Param("businessId") businessId: string, @Body() createServiceDto: CreateServiceDto) {
-    return this.servicesService.create(businessId, createServiceDto);
+  create(@Param("businessId") businessId: string, @Req() request, @Body() createServiceDto: CreateServiceDto) {
+    return this.servicesService.create(businessId, request.user.sub, createServiceDto);
   }
 
-  @Delete(":businessId/:serviceId")
-  remove(@Param("serviceId") serviceId: string, @Param("businessId") businessId: string) {
-    return this.servicesService.remove(serviceId, businessId);
+  @Delete(":businessId")
+  delete(@Param("businessId") businessId: string, @Body("serviceId") serviceId: string) {
+    return this.servicesService.delete(serviceId, businessId);
   }
 }
