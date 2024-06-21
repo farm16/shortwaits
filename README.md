@@ -1,4 +1,6 @@
 # Shortwaits
+A Free scheduling software.
+Organize your business with 24/7 automated online booking, reminders, payments, and more!
 
 ## User permissions vs Account permissions
 
