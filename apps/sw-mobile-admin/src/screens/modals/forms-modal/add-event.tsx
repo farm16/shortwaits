@@ -205,6 +205,7 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
 
   const renderSubmitButton = (
     <Button
+      preset="secondary"
       text={intl.formatMessage({ id: "AddEventModal.createEventButton" })}
       onPress={() => {
         handleSubmit();

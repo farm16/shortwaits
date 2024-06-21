@@ -106,10 +106,10 @@ export const QrScanner: FC<QrScannerModalProps> = props => {
       <View style={styles.cameraViewContainer}>
         <VisionCamera style={styles.visionCamera} device={device} isActive={isCameraActive} codeScanner={codeScanner} />
         <Space />
-        <Text preset="text" style={styles.noteText} text={`Note: ${isManual ? "Do not include blank spaces" : "Make sure the QR code is in the center of the screen"}`} />
+        <Text preset="text" style={styles.noteText} text={"Make sure the QR code is in the center of the screen"} />
       </View>
     );
-  }, [codeScanner, device, isCameraActive, isManual]);
+  }, [codeScanner, device, isCameraActive]);
 
   const renderWarningMessage = useCallback(() => {
     if (isCameraWarningVisible) {
@@ -117,6 +117,7 @@ export const QrScanner: FC<QrScannerModalProps> = props => {
         <Fragment>
           <Space />
           <Messages title="Camera Access Denied" message={"Enable camera access in your device settings."} type={"warning"} />
+          <Space />
         </Fragment>
       );
     }
@@ -139,20 +140,21 @@ export const QrScanner: FC<QrScannerModalProps> = props => {
   return (
     <WithPermission permission="camera" onDenied={handleDenied} style={styles.viewContainer}>
       {renderWarningMessage()}
-      <Text preset="title" text={title ?? ""} />
       {isManual ? (
         <View>
           <TextFieldCard
             title={"Code"}
-            placeholder="e.g. ABC123"
+            placeholder="Enter QR code value"
             onChangeText={text => {
               setManualValue(text);
             }}
           />
-          <Text preset="text" style={styles.noteText} text={`Note: ${isManual ? "Do not include blank spaces" : "Make sure the QR code is in the center of the screen"}`} />
+          <Text preset="text" style={styles.noteText}>
+            <Text preset="bold">Note: </Text>Code value should be located at the bottom of the QR code
+          </Text>
           <Button
             text={"Submit"}
-            preset={manualValue ? "primary" : "primary-disabled"}
+            preset={manualValue ? "secondary" : "secondary-disabled"}
             disabled={manualValue ? false : true}
             style={styles.noteButton}
             onPress={handleManualSubmit}

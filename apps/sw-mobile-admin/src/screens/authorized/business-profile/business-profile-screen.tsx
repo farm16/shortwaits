@@ -77,7 +77,7 @@ export function BusinessProfileScreen({ navigation }: AuthorizedScreenProps<"bus
       headerTitleAlign: "center",
       headerTitle: () => (
         <Text
-          preset="text"
+          preset="headerTitle"
           text={intl.formatMessage({
             id: "BusinessProfile_screen.headerTitle",
           })}
@@ -106,7 +106,7 @@ export function BusinessProfileScreen({ navigation }: AuthorizedScreenProps<"bus
 
   const renderSubmitButton = (
     <Button
-      preset={isLoading ? "primary-disabled" : "primary"}
+      preset={isLoading ? "secondary-disabled" : "secondary"}
       text={"Update"}
       onPress={() => {
         handleSubmit();

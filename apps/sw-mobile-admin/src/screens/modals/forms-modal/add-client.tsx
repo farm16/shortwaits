@@ -48,7 +48,7 @@ export const AddClientModal: FC<ModalsScreenProps<"add-client-modal-screen">> = 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
-      headerTitle: () => <Text preset="headerTitle" text={"Add Client"} />,
+      headerTitle: () => <Text preset="headerTitle" text={"Add client"} />,
     });
   }, [intl, navigation]);
 
@@ -178,19 +178,8 @@ export const AddClientModal: FC<ModalsScreenProps<"add-client-modal-screen">> = 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: Colors.background }}>
       <View style={{ paddingHorizontal: 16 }}>
-        <Space />
-        <Text text={"Save new client to:"} preset="textLargeBold" />
         <Space size="large" />
-        {/* <ButtonCard
-          leftIconName={clientType === "shortwaits" ? "radiobox-marked" : "radiobox-blank"}
-          leftIconColor={Colors.brandPrimary}
-          rightIconName="none"
-          // disabled={disabled}
-          title="Shortwaits Clients"
-          onPress={() => {
-            setClientType("shortwaits");
-          }}
-        /> */}
+
         <TouchableOpacity onPress={() => setClientType("shortwaits")}>
           <Container
             direction="row"
@@ -201,20 +190,25 @@ export const AddClientModal: FC<ModalsScreenProps<"add-client-modal-screen">> = 
           >
             <Icon name={clientType === "shortwaits" ? "radiobox-marked" : "radiobox-blank"} color={Colors.brandPrimary} size={26} />
             <Space direction="vertical" size="small" />
-            <Text text={"Shortwaits Clients"} preset="cardTitle" />
+            <Text text={"Scan QR code"} preset="textLarge" />
           </Container>
         </TouchableOpacity>
-        <ButtonCard
-          leftIconName={clientType === "local" ? "radiobox-marked" : "radiobox-blank"}
-          leftIconColor={Colors.brandPrimary}
-          rightIconName="none"
-          // disabled={disabled}
-          title="Address Book"
-          onPress={() => {
-            setClientType("local");
-          }}
-        />
+        <Space size="small" />
+        <TouchableOpacity onPress={() => setClientType("local")}>
+          <Container
+            direction="row"
+            alignItems="center"
+            style={{
+              paddingHorizontal: 8,
+            }}
+          >
+            <Icon name={clientType === "local" ? "radiobox-marked" : "radiobox-blank"} color={Colors.brandPrimary} size={26} />
+            <Space direction="vertical" size="small" />
+            <Text text={"Enter details manually"} preset="textLarge" />
+          </Container>
+        </TouchableOpacity>
       </View>
+      <Space />
       {clientType === "shortwaits" ? (
         <QrScanner preset="scanClientQr" />
       ) : (
@@ -349,6 +343,7 @@ export const AddClientModal: FC<ModalsScreenProps<"add-client-modal-screen">> = 
           <Space size="large" />
           <Button
             text="Submit"
+            preset="secondary"
             disabled={errors && Object.keys(errors).length > 0}
             onPress={() => {
               handleSubmit();

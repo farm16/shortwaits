@@ -107,7 +107,7 @@ export const AddServicesModal: FC<ModalsScreenProps<"add-service-modal-screen">>
 
   const renderFooter = (
     <Button
-      preset="primary"
+      preset="secondary"
       onPress={() => {
         handleSubmit();
       }}

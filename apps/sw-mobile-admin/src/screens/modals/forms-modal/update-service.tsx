@@ -93,7 +93,7 @@ export const UpdateServicesModal: FC<ModalsScreenProps<"update-service-modal-scr
     [setFieldValue]
   );
 
-  const renderFooter = <Button preset="primary" onPress={() => handleSubmit()} text={intl.formatMessage({ id: "Common.update" })} />;
+  const renderFooter = <Button preset="secondary" onPress={() => handleSubmit()} text={intl.formatMessage({ id: "Common.update" })} />;
 
   const renderDurationBar = useCallback(() => {
     const handleDurationTimeChange = durationInMin => {

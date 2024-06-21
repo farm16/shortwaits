@@ -146,6 +146,7 @@ export const AddStaffModal: FC<ModalsScreenProps<"add-staff-modal-screen">> = ({
 
   const _renderSubmitButton = (
     <Button
+      preset="secondary"
       text={intl.formatMessage({ id: "Common.submit" })}
       onPress={() => {
         handleSubmit();

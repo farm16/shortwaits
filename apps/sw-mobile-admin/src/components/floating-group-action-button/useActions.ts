@@ -9,7 +9,7 @@ export const useActions = () => {
   const actions = useMemo<FABGroupProps["actions"]>(() => {
     return [
       {
-        label: "Add Event",
+        label: "Add event",
         icon: "calendar-clock",
         onPress: () => {
           navigate("modals", {
@@ -18,7 +18,7 @@ export const useActions = () => {
         },
       },
       {
-        label: "Add Service",
+        label: "Add service",
         icon: "briefcase-outline",
         onPress: () => {
           navigate("modals", {
@@ -27,7 +27,7 @@ export const useActions = () => {
         },
       },
       {
-        label: "Add Client",
+        label: "Add client",
         icon: "account-outline",
         onPress: () => {
           navigate("modals", {
@@ -36,7 +36,7 @@ export const useActions = () => {
         },
       },
       {
-        label: "Add Staff",
+        label: "Add staff",
         icon: "account-tie-outline",
         onPress: () => {
           navigate("modals", {
