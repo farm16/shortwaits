@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 
 import { generateKeyPairSync } from "crypto";
-
+// todo: move values to env, for now using hardcoded values
 function genKeyPair() {
   // Generates an object where the keys are stored in properties `privateKey` and `publicKey`
   const keyPair = generateKeyPairSync("rsa", {
@@ -15,7 +15,7 @@ function genKeyPair() {
       type: "pkcs8", // "Public Key Cryptography Standards 1"
       format: "pem", // Most common formatting choice
       cipher: "aes-256-cbc",
-      passphrase: "shortwaits",
+      passphrase: "shortwaits", // move to env
     },
   });
 
