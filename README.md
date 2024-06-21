@@ -1,7 +1,6 @@
 # Shortwaits
 
-A Free scheduling software.
-Organize your business with 24/7 automated online booking, reminders, payments, and more!
+Shortwaits is a mobile app designed for efficient appointment scheduling and management for businesses. It allows users to manage appointments, customer information, and send automated notifications. The app supports multiple staff calendars and online booking through a client app. It also facilitates payment processing, customizable settings, and provides business performance reports. Integration with tools like social media and Google Calendar, along with direct customer support, enhances its functionality.
 
 ![Local image](./assets/images/screenshot1.png)
 ![Local image](./assets/images/screenshot2.png)
