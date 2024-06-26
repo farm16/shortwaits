@@ -7,11 +7,12 @@ import {
   BusinessType,
   BusinessUserUpdateDtoType,
   CreateBusinessUsersDtoType,
+  ObjectId,
   UpdateClientDtoType,
 } from "@shortwaits/shared-lib";
 import { Model } from "mongoose";
 import { convertStringToObjectId } from "../../utils/converters";
-import { generateBusinessStaffUsers, generateClientUsers } from "../../utils/generateUserPayload";
+import { generateBusinessStaff, generateClientUsers } from "../../utils/generateUserPayload";
 import { BusinessUser } from "../business-staff/entities/business-staff.entity";
 import { ClientUser } from "../client-user/entities/client-user.entity";
 import { LocalClientUser } from "../local-client-user/entities/local-client-user.entity";
@@ -68,6 +69,7 @@ export class BusinessService {
       throw new NotFoundException("Business not available");
     }
   }
+
   /**
    *
    * we need to verify that user is an admin for the requested business
@@ -155,44 +157,6 @@ export class BusinessService {
     }
   }
 
-  async getBusinessStaff(businessId: string, userId: string) {
-    const businessData = await this.findBusinessById(businessId);
-    const { isAdmin, isSuperAdmin } = this.isUserAdminType(businessData, userId);
-    if (isAdmin || isSuperAdmin) {
-      const staff = await this.businessUserModel
-        .find({
-          _id: {
-            $in: businessData.staff,
-          },
-        })
-        .select("-__v -hashedRt");
-      return staff;
-    }
-  }
-
-  async createBusinessStaff(businessUserId: string, businessId: string, staff: CreateBusinessUsersDtoType) {
-    const businessData = await this.findBusinessById(businessId);
-
-    const { isAdmin, isSuperAdmin } = this.isUserAdminType(businessData, businessUserId);
-
-    if (isAdmin || isSuperAdmin) {
-      const staffPayload = generateBusinessStaffUsers(staff);
-      const insertedStaff = await this.businessUserModel.insertMany(staffPayload);
-      const staffIds = insertedStaff.map(client => {
-        return client._id;
-      });
-      await this.businessModel.findByIdAndUpdate(businessId, {
-        $push: { staff: staffIds },
-      });
-      const newStaff = await this.businessUserModel.find({
-        businesses: {
-          $in: [businessId],
-        },
-      });
-      return newStaff;
-    }
-  }
-
   async createBusinessLocalClients(businessUserId: string, businessId: string, clients: AddClientsDtoType) {
     const businessData = await this.findBusinessById(businessId);
 
@@ -277,6 +241,63 @@ export class BusinessService {
     }
   }
 
+  // STAFF
+
+  // staff helpers
+  async getActiveBusinessStaffRecords(staffIds: ObjectId[], projection = "-__v -hashedRt") {
+    const staffRecords = await this.businessUserModel
+      .find({
+        _id: {
+          $in: staffIds,
+        },
+        deleted: false,
+      })
+      .select(projection);
+
+    return staffRecords;
+  }
+
+  async getBusinessStaff(businessId: string, userId: string) {
+    try {
+      const businessData = await this.findBusinessById(businessId);
+      const { isAdmin, isSuperAdmin } = this.isUserAdminType(businessData, userId);
+      if (isAdmin || isSuperAdmin) {
+        const staff = await this.getActiveBusinessStaffRecords(businessData.staff);
+        return staff;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async createBusinessStaff(businessUserId: string, businessId: string, staff: CreateBusinessUsersDtoType) {
+    const businessData = await this.findBusinessById(businessId);
+
+    const { isAdmin, isSuperAdmin } = this.isUserAdminType(businessData, businessUserId);
+
+    if (isAdmin || isSuperAdmin) {
+      const staffPayload = generateBusinessStaff(staff, businessId);
+      const insertedStaff = await this.businessUserModel.insertMany(staffPayload);
+      const staffIds = insertedStaff.map(client => client._id);
+
+      const newBusinessRecord = await this.businessModel.findByIdAndUpdate(
+        businessId,
+        {
+          $push: { staff: staffIds },
+        },
+        { new: true }
+      );
+
+      const newStaff = await this.businessUserModel.find({
+        _id: {
+          $in: newBusinessRecord.staff,
+        },
+      });
+
+      return newStaff;
+    }
+  }
+
   async updateBusinessStaff(businessUserId: string, businessId: string, staff: BusinessUserUpdateDtoType) {
     const businessData = await this.findBusinessById(businessId);
     const { isAdmin, isSuperAdmin } = this.isUserAdminType(businessData, businessUserId);
@@ -294,6 +315,31 @@ export class BusinessService {
       });
 
       return updatedClient;
+    }
+  }
+
+  async deleteBusinessStaff(businessUserId: string, businessId: string, staff: BusinessUserUpdateDtoType) {
+    try {
+      const businessData = await this.findBusinessById(businessId);
+      const { isAdmin, isSuperAdmin } = this.isUserAdminType(businessData, businessUserId);
+
+      if (isAdmin || isSuperAdmin) {
+        const staffId = convertStringToObjectId(staff._id);
+        const isStaff = businessData.staff.includes(staffId);
+
+        if (!isStaff) {
+          throw new ForbiddenException("Unrecognized staff");
+        }
+
+        const updatedClient = await this.businessUserModel.findByIdAndUpdate(staff._id, { deleted: true });
+        const updatedBusiness = await this.businessModel.findByIdAndUpdate(businessId, { $pull: { staff: updatedClient._id } }, { new: true });
+        const newClients = await this.getActiveBusinessStaffRecords(updatedBusiness.staff);
+        return newClients;
+      } else {
+        throw new ForbiddenException("Not enough permissions");
+      }
+    } catch (error) {
+      console.log(error);
     }
   }
 }

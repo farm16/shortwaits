@@ -1,13 +1,6 @@
-import {
-  Controller,
-  Get,
-  HttpCode,
-  HttpStatus,
-  Param,
-  UseInterceptors,
-} from "@nestjs/common";
-import { CategoriesService } from "./categories.service";
+import { Controller, Get, HttpCode, HttpStatus, Param } from "@nestjs/common";
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
+import { CategoriesService } from "./categories.service";
 
 // TODO: this can be cache !!!
 @ApiTags("categories")
@@ -27,14 +20,14 @@ export class CategoriesController {
     return this.categoriesService.getAllCategories();
   }
 
-  @Get(":id")
+  @Get(":categoryId")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
     description: "Returns category record",
     // type: CategoriesSuccessResponse,
   })
-  getCategory(@Param("id") categoriesId: string) {
+  getCategory(@Param("categoryId") categoriesId: string) {
     return this.categoriesService.getCategory(categoriesId);
   }
 }

@@ -7,4 +7,5 @@ export * from "./useEvents";
 export * from "./useLocalClients";
 export * from "./useServices";
 export * from "./useSignOut";
+export * from "./useStaff";
 export * from "./useUser";

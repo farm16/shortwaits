@@ -47,24 +47,23 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation }) => {
       </View>
       <View style={{ padding: 16 }}>
         <Button
-          text={intl.formatMessage({ id: "Common.register" })}
-          onPress={() =>
-            navigation.navigate("unauthorized", {
-              screen: "sign-up-screen",
-            })
-          }
-        />
-        <Space size="small" />
-        <Button
-          preset="link"
-          text={intl.formatMessage({ id: "Common.login" })}
+          text={"Sign in"}
           onPress={() =>
             navigation.navigate("unauthorized", {
               screen: "sign-in-screen",
             })
           }
         />
-        <Space size="tiny" />
+        <Space size="small" />
+        <Button
+          preset="link"
+          text={"Create an account"}
+          onPress={() =>
+            navigation.navigate("unauthorized", {
+              screen: "sign-up-screen",
+            })
+          }
+        />
       </View>
     </Screen>
   );

@@ -390,7 +390,7 @@ export class AuthService {
     const saltRounds = Number(this.configService.get("SALT_ROUNDS"));
     const salt = await bcrypt.genSalt(saltRounds);
 
-    const userPayload = generateBusinessUser(newUser, ["superAdmin", "backgroundAdmin", "admin"]);
+    const userPayload = generateBusinessUser(newUser, ["superAdmin", "backgroundAdmin", "admin"], "");
     const currentUser = new this.businessUserModel(userPayload);
 
     const businessShortId = await this.generateBusinessShortUniqueId();

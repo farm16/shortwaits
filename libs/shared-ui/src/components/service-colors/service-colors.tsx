@@ -27,7 +27,6 @@ function Circle({ width: circleDiameter, color, isSelected, onSelect }: CirclePr
     justifyContent: "center",
     alignItems: "center",
   };
-  console.log("isSelected >>>", isSelected);
   return (
     <Button preset="none" style={style} onPress={onSelect}>
       {isSelected && <Icon name="check-bold" size={circleDiameter - 5} color="white" />}
@@ -51,9 +50,6 @@ export function ServiceColors({ selectedColor, onSelect, serviceColors }: Servic
     const circleWidth = width / (colorsCount * 1.9);
 
     return Object.keys(serviceColors).map(elem => {
-      console.log("serviceColors[elem] >>>", serviceColors[elem]);
-      console.log("selectedColor >>>", selectedColor);
-      console.log("circleWidth >>>", serviceColors[elem].colorId === selectedColor?.colorId);
       return (
         <Circle
           key={serviceColors[elem].colorId}

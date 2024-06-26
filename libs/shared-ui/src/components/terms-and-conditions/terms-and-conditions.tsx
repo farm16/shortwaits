@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Text } from "../common";
 
 type TermsAndConditionsProps = {
-  onPress?(): null;
+  onPress?(): void;
 };
 export const TermsAndConditions: React.FC<TermsAndConditionsProps> = props => {
   const { onPress } = props;

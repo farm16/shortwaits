@@ -24,6 +24,8 @@ type Endpoint =
   | `business/${string}/clients`
   | `business/${string}/staff`
   | "business/registration/complete"
+  | "categories"
+  | "categories/:categoryId"
   | "shortwaits/admin/mobile"
   | "shortwaits/client/mobile" // todo: add this
   | "shortwaits/client/web" // todo: add this
@@ -160,7 +162,12 @@ export const endpoints = {
   getBusinessStaff: createEndpoint("business/:businessId/staff", "GET"),
   createBusinessStaff: createEndpoint("business/:businessId/staff", "POST"),
   updateBusinessStaff: createEndpoint("business/:businessId/staff", "PUT"),
+  deleteBusinessStaff: createEndpoint("business/:businessId/staff", "DELETE"),
   registerBusiness: createEndpoint("business/registration/complete", "POST"),
+
+  // categories
+  getCategories: createEndpoint("categories", "GET"),
+  getCategory: createEndpoint("categories/:categoryId", "GET"),
 
   // shortwaits
   getShortwaitsAdminMobile: createEndpoint("shortwaits/admin/mobile", "GET"),

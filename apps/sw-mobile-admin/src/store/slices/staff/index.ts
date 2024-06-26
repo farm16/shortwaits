@@ -14,12 +14,25 @@ export const staffSlice = createSlice({
     },
   },
   extraReducers: builder => {
-    builder.addMatcher(shortwaitsApi.endpoints.getBusinessStaff.matchFulfilled, (state, action) => {
-      return [...action.payload.data];
-    });
-    // .addMatcher(shortwaitsApi.endpoints.getPeopleInEvent.matchFulfilled, (state, action) => {
-    //   return [...state, ...action.payload.data.businessUsers];
-    // });
+    builder
+      .addMatcher(shortwaitsApi.endpoints.getBusinessStaff.matchFulfilled, (state, action) => {
+        return [...action.payload.data];
+      })
+      .addMatcher(shortwaitsApi.endpoints.createBusinessStaff.matchFulfilled, (state, action) => {
+        return action.payload.data;
+      })
+      .addMatcher(shortwaitsApi.endpoints.updateBusinessStaff.matchFulfilled, (state, action) => {
+        const updatedStaff = action.payload.data;
+        return state.map(staff => {
+          if (staff._id === updatedStaff._id) {
+            return updatedStaff;
+          }
+          return staff;
+        });
+      })
+      .addMatcher(shortwaitsApi.endpoints.deleteBusinessStaff.matchFulfilled, (state, action) => {
+        return action.payload.data;
+      });
   },
 });
 

@@ -8,7 +8,7 @@ import { FlatList, RefreshControl, StyleSheet } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import { RootStackParamList, UnauthorizedStackParamList } from "../../../navigation";
 import { useGetServicesQuery, useRegisterBusinessMutation } from "../../../services";
-import { useBusiness } from "../../../store";
+import { useBusiness, useServices } from "../../../store";
 
 export interface OnboardingScreenProps {
   navigation: CompositeNavigationProp<StackNavigationProp<UnauthorizedStackParamList, "onboarding-2-screen">, StackNavigationProp<RootStackParamList>>;
@@ -16,13 +16,10 @@ export interface OnboardingScreenProps {
 
 export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
   const business = useBusiness();
+  const services = useServices();
+
   const intl = useIntl();
-  const {
-    data: services,
-    isLoading,
-    isSuccess,
-    refetch,
-  } = useGetServicesQuery(business ? business?._id : skipToken, {
+  const { data, isLoading, isSuccess, refetch } = useGetServicesQuery(business ? business?._id : skipToken, {
     refetchOnMountOrArgChange: true,
   });
 
@@ -95,9 +92,10 @@ export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
             }}
           />
         }
+        showsVerticalScrollIndicator={false}
         ItemSeparatorComponent={() => <Space size="tiny" />}
         contentContainerStyle={styles.contentContainer}
-        data={services.data}
+        data={services}
         renderItem={({ item }) => {
           return <ServiceItem service={item} onPress={() => handleCardOnPress(item)} />;
         }}

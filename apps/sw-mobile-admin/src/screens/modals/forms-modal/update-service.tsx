@@ -1,5 +1,6 @@
 import { ServiceDtoType } from "@shortwaits/shared-lib";
 import {
+  ActivityIndicator,
   Avatar,
   BackButton,
   Button,
@@ -28,7 +29,7 @@ import { useBusiness, useMobileAdmin } from "../../../store";
 export const UpdateServicesModal: FC<ModalsScreenProps<"update-service-modal-screen">> = ({ navigation, route }) => {
   const service = route?.params?.initialValues as ServiceDtoType;
 
-  console.log("service >>>", JSON.stringify(service, null, 2));
+  // console.log("service >>>", JSON.stringify(service, null, 2));
 
   const intl = useIntl();
   const business = useBusiness();
@@ -36,7 +37,9 @@ export const UpdateServicesModal: FC<ModalsScreenProps<"update-service-modal-scr
   const [deleteService, deleteServiceStatus] = useDeleteServiceMutation();
   const [updateService, updateServiceStatus] = useUpdateServiceMutation();
 
-  const { touched, errors, values, handleChange, setFieldValue, handleSubmit } = useForm(
+  const isLoading = deleteServiceStatus.isLoading || updateServiceStatus.isLoading;
+
+  const { touched, errors, values, handleChange, setFieldValue, handleSubmit, dirty } = useForm(
     {
       initialValues: service,
       onSubmit: formData => {
@@ -58,7 +61,28 @@ export const UpdateServicesModal: FC<ModalsScreenProps<"update-service-modal-scr
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
+      headerLeft: () => (
+        <BackButton
+          onPress={() => {
+            if (dirty) {
+              Alert.alert("Are you sure you want to leave?", "You have unsaved changes.", [
+                {
+                  text: "Cancel",
+                  style: "cancel",
+                },
+                {
+                  text: "Accept",
+                  onPress: () => {
+                    navigation.goBack();
+                  },
+                },
+              ]);
+            } else {
+              navigation.goBack();
+            }
+          }}
+        />
+      ),
       headerTitle: () => <Text preset="headerTitle" text={service.name} />,
       headerRight: () => (
         <IconButton
@@ -84,7 +108,7 @@ export const UpdateServicesModal: FC<ModalsScreenProps<"update-service-modal-scr
         />
       ),
     });
-  }, [business._id, deleteService, intl, navigation, service._id, service.name]);
+  }, [business._id, deleteService, dirty, intl, navigation, service._id, service.name]);
 
   const handleServiceColorChange = useCallback(
     serviceColor => {
@@ -104,7 +128,13 @@ export const UpdateServicesModal: FC<ModalsScreenProps<"update-service-modal-scr
     return <DurationFieldCard title={intl.formatMessage({ id: "UpdateServiceModal.duration" })} values={[values.durationInMin]} onValuesChange={handleDurationTimeChange} />;
   }, [intl, setFieldValue, values.durationInMin]);
 
-  console.log("form values >>>", values?.serviceColor);
+  // console.log("form values >>>", values?.serviceColor);
+
+  console.log("DIRTY >>>", dirty);
+
+  if (isLoading) {
+    return <ActivityIndicator />;
+  }
 
   return (
     <FormContainer footer={renderFooter}>
@@ -114,7 +144,7 @@ export const UpdateServicesModal: FC<ModalsScreenProps<"update-service-modal-scr
           alignSelf: "center",
         }}
         size="medium"
-        mode="upload"
+        mode="static"
         onPress={noop}
       />
       <Space size="small" />

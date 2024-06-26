@@ -1,7 +1,7 @@
 import { CompositeNavigationProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Button, Container, FacebookIcon, GoogleIcon, Screen, Space, Text, TextFieldCard, useTheme } from "@shortwaits/shared-ui";
-import React, { FC, useCallback, useState } from "react";
+import React, { FC, useCallback, useLayoutEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { ActivityIndicator, Alert, AlertButton, StyleSheet, View } from "react-native";
 import { useForm, useGoogleAuth } from "../../../hooks";
@@ -18,6 +18,12 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
   const intl = useIntl();
   const [localSignIn, localSignInResponse] = useLocalSignInMutation();
   const { isLoading: isGoogleAuthLoading, error: googleAuthError, handleGoogleAuth } = useGoogleAuth();
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: () => <Text preset="headerTitle" text={"Sign in"} />,
+    });
+  }, [intl, navigation]);
 
   const isLoading = localSignInResponse.isLoading || isGoogleAuthLoading;
 
@@ -37,6 +43,7 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
     username: "",
     password: "",
   };
+
   const { touched, errors, values, handleChange, handleSubmit, dirty } = useForm(
     {
       initialValues,
@@ -89,16 +96,7 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
   if (isLoading) return <ActivityIndicator />;
 
   return (
-    <Screen preset="scroll" unsafe unsafeBottom withHorizontalPadding>
-      {/* <View
-        style={{
-          justifyContent: "center",
-          alignItems: "center",
-          flex: 1,
-        }}
-      >
-        <Logo1 height="25%" />
-      </View> */}
+    <Screen preset="scroll" unsafe withHorizontalPadding>
       <Space />
       <TextFieldCard
         autoCapitalize="none"
@@ -129,16 +127,6 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
         isTouched={touched.password}
         errors={errors.password}
       />
-
-      <Space />
-      <Button
-        preset="primary"
-        onPress={() => handleSubmit()}
-        text={intl.formatMessage({
-          id: "Common.signIn",
-        })}
-      />
-      <Space size="tiny" />
       <Text
         preset="textLarge"
         style={{
@@ -155,7 +143,17 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
           alert("Forgot password");
         }}
       />
-      <Space size="large" />
+      <Space />
+      <Space />
+      <Button
+        preset="primary"
+        onPress={() => handleSubmit()}
+        text={intl.formatMessage({
+          id: "Common.signIn",
+        })}
+      />
+      <Space size="small" />
+
       <Button preset="social" onPress={handleGoogleAuth} style={styles.socialButton}>
         <Container style={styles.socialButtonText}>
           <FacebookIcon width={30} height={30} style={styles.socialIcon} />

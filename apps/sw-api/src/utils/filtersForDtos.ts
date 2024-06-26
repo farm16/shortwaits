@@ -228,7 +228,7 @@ export const initServiceRecord = (userId: string, businessId: string, updateServ
     isVideoConference: updateServiceDto.isVideoConference ?? false,
     deleted: false,
     serviceColor: updateServiceDto.serviceColor ?? null,
-    imageUrl: generateAvatarUrl(updateServiceDto.name ?? "service"),
+    imageUrl: generateAvatarUrl(updateServiceDto.name ?? "service", updateServiceDto.serviceColor.hexCode ?? "000000"),
     createdBy: userId,
     updatedBy: userId,
   };

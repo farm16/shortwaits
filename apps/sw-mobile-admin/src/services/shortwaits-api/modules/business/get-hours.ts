@@ -1,10 +1,7 @@
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
-import { BusinessHoursType, CommonResponseType } from "@shortwaits/shared-lib";
-import { shortwaitsApiEndpoints } from "../../../../configs";
-
-const { getBusinessHours } = shortwaitsApiEndpoints.BUSINESS;
+import { BusinessHoursType, CommonResponseType, endpoints } from "@shortwaits/shared-lib";
 
 export default (builder: EndpointBuilder<any, any, any>) =>
   builder.query<CommonResponseType<BusinessHoursType>, string>({
-    query: businessId => getBusinessHours.getPath(businessId),
+    query: businessId => endpoints.getBusinessHours.getQueryConfig({ pathVars: [businessId] }),
   });

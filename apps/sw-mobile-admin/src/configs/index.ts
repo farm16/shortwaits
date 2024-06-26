@@ -1,1 +1,1 @@
-export * from "./shortwaits-api-endpoints";
+export * from "./shortwaits-api";

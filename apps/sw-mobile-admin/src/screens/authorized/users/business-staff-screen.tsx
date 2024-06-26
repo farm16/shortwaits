@@ -1,22 +1,47 @@
-import { BackButton, Button, Container, IconButton, NonIdealState, Screen, Space, Text, handleEmail, handlePhoneCall, handleSms, useTheme } from "@shortwaits/shared-ui";
+import {
+  ActivityIndicator,
+  BackButton,
+  Button,
+  Container,
+  IconButton,
+  NonIdealState,
+  Screen,
+  Space,
+  Text,
+  handleEmail,
+  handlePhoneCall,
+  handleSms,
+  useTheme,
+} from "@shortwaits/shared-ui";
 import { isEmpty } from "lodash";
-import React, { useCallback, useLayoutEffect } from "react";
-import { Image, StyleSheet, View } from "react-native";
+import React, { useCallback, useEffect, useLayoutEffect } from "react";
+import { Alert, Image, StyleSheet, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { AgendaItem } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
-import { useEvents } from "../../../store";
+import { useDeleteBusinessStaffMutation, useUpdateBusinessStaffMutation } from "../../../services";
+import { useBusiness, useEvents, useStaffById } from "../../../store";
 
 export function BusinessStaffScreen({ navigation, route }: AuthorizedScreenProps<"business-staff-screen">) {
-  const { staff, onUserRemove } = route.params;
+  const { staff: staffParam, onUserRemove } = route.params;
   const { Colors } = useTheme();
+  const staff = useStaffById(staffParam._id);
   const events = useEvents();
+  const business = useBusiness();
+  const [updateBusinessStaff, updateBusinessStaffStatus] = useUpdateBusinessStaffMutation();
+  const [deleteBusinessStaff, deleteBusinessStaffStatus] = useDeleteBusinessStaffMutation();
 
-  const staffName = staff.displayName || staff.familyName || staff.givenName || staff.middleName || staff.email;
+  const staffName = staff?.displayName || staff?.familyName || staff?.givenName || staff?.middleName || staff?.email || "";
 
-  const phoneNumbers = staff.phoneNumbers || [];
+  const phoneNumbers = staff?.phoneNumbers || [];
   const phoneNumber = isEmpty(phoneNumbers) ? "" : phoneNumbers[0].number;
   const phoneNumberLabel = isEmpty(phoneNumbers) ? "" : phoneNumbers[0].label;
+
+  useEffect(() => {
+    if (deleteBusinessStaffStatus.isSuccess) {
+      navigation.goBack();
+    }
+  }, [deleteBusinessStaffStatus.isSuccess, navigation]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -24,7 +49,7 @@ export function BusinessStaffScreen({ navigation, route }: AuthorizedScreenProps
       headerTitle: () => {
         return (
           <Container direction="row" justifyContent="center">
-            <Text preset="headerTitle" text={"Staff"} />
+            <Text preset="headerTitle" text={`${staff?.userRoles?.isAdmin ? "Administrator" : "Staff"}`} />
           </Container>
         );
       },
@@ -38,24 +63,23 @@ export function BusinessStaffScreen({ navigation, route }: AuthorizedScreenProps
       headerRight: () => {
         return (
           <Container direction="row" alignItems="center">
-            {/* <IconButton
+            <IconButton
               withMarginRight
-              iconType="delete"
+              iconType="edit"
               onPress={() => {
-                navigation.goBack();
+                // navigation.navigate("modals", { screen: "add-staff-modal-screen", params: { staff } });
               }}
-            /> */}
-            {/* <IconButton withMarginRight iconType="calendar"  /> */}
+            />
           </Container>
         );
       },
       headerShadowVisible: false,
     });
-  }, [navigation]);
+  }, [navigation, staff, staff?.userRoles?.isAdmin]);
 
   const getEventsWithStaff = () => {
     return events.filter(event => {
-      return event.staffIds.includes(staff._id);
+      return event.staffIds.includes(staff?._id);
     });
   };
 
@@ -84,15 +108,31 @@ export function BusinessStaffScreen({ navigation, route }: AuthorizedScreenProps
     );
   }, [navigation]);
 
+  if (!staff) {
+    return (
+      <Screen preset="fixed" unsafe unsafeBottom>
+        <NonIdealState type="noStaff" />
+      </Screen>
+    );
+  }
+
+  if (updateBusinessStaffStatus.isError) {
+    Alert.alert("Error", "An error occurred while updating staff");
+  }
+
+  if (updateBusinessStaffStatus.isLoading || deleteBusinessStaffStatus.isLoading) {
+    return <ActivityIndicator />;
+  }
+
   return (
     <Screen preset="fixed" unsafe unsafeBottom>
       <View style={styles.headerContainer}>
         <Space size="small" />
         <Container direction="row" style={styles.staffInfoContainer}>
-          <Image source={{ uri: staff.accountImageUrl ? staff.accountImageUrl : "https://picsum.photos/200" }} style={styles.staffImage} />
+          <Image source={{ uri: staff?.accountImageUrl ? staff?.accountImageUrl : "https://picsum.photos/200" }} style={styles.staffImage} />
           <View style={styles.staffDetails}>
             {staffName ? <Text style={[styles.staffName, { color: Colors.text }]} text={staffName} /> : null}
-            {staff.email ? <Text style={[styles.staffEmail, { color: Colors.subText }]} text={staff.email} /> : null}
+            {staff?.email ? <Text style={[styles.staffEmail, { color: Colors.subText }]} text={staff?.email} /> : null}
             {phoneNumber && phoneNumberLabel ? <Text style={[styles.phoneNumber, { color: Colors.subText }]} text={`${phoneNumberLabel}: ${phoneNumber}`} /> : null}
           </View>
         </Container>
@@ -100,12 +140,39 @@ export function BusinessStaffScreen({ navigation, route }: AuthorizedScreenProps
         <View style={styles.headerActions}>
           <Button
             leftIconSize={25}
-            leftIconColor={staff.email ? Colors.brandPrimary : Colors.disabledBackground}
+            leftIconColor={staff?.hours ? Colors.brandPrimary : Colors.disabledBackground}
             preset="icon2"
-            disabled={!staff.email}
+            disabled={!staff?.hours}
+            leftIconName="calendar-clock"
+            onPress={() => {
+              navigation.push("modals", {
+                screen: "schedule-modal-screen",
+                params: {
+                  headerTitle: "Staff hours",
+                  hours: staff?.hours,
+                  onSubmit: hours => {
+                    const businessId = business._id;
+                    const body = {
+                      ...staff,
+                      hours,
+                    };
+                    updateBusinessStaff({
+                      businessId,
+                      body,
+                    });
+                  },
+                },
+              });
+            }}
+          />
+          <Button
+            leftIconSize={25}
+            leftIconColor={staff?.email ? Colors.brandPrimary : Colors.disabledBackground}
+            preset="icon2"
+            disabled={!staff?.email}
             leftIconName="email-outline"
             onPress={() => {
-              handleEmail(staff.email);
+              handleEmail(staff?.email);
             }}
           />
           <Button
@@ -128,23 +195,48 @@ export function BusinessStaffScreen({ navigation, route }: AuthorizedScreenProps
               handleSms(phoneNumber);
             }}
           />
-          <Button leftIconSize={25} leftIconColor={Colors.brandPrimary} preset={"icon2"} disabled={false} leftIconName={"share-variant"} onPress={() => {}} />
-          {onUserRemove ? (
-            <Button
-              leftIconSize={25}
-              leftIconColor={Colors.failed}
-              style={{
-                backgroundColor: Colors.failedBackground,
-              }}
-              preset={"icon2"}
-              leftIconName={"delete"}
-              onPress={() => {
-                if (onUserRemove) {
-                  onUserRemove(staff);
-                }
-              }}
-            />
-          ) : null}
+          <Button
+            leftIconSize={25}
+            leftIconColor={Colors.brandPrimary}
+            preset={"icon2"}
+            disabled={false}
+            leftIconName={"share-variant"}
+            onPress={() => {
+              console.log("share");
+            }}
+          />
+          <Button
+            leftIconSize={25}
+            leftIconColor={Colors.failed}
+            style={{
+              backgroundColor: Colors.failedBackground,
+            }}
+            preset={"icon2"}
+            leftIconName={"delete"}
+            onPress={() => {
+              Alert.alert("Delete Staff", "Are you sure you want to delete this staff?", [
+                {
+                  text: "Cancel",
+                  style: "cancel",
+                },
+                {
+                  text: "Delete",
+                  style: "destructive",
+                  onPress: () => {
+                    const businessId = business._id;
+                    const body = {
+                      ...staff,
+                      deleted: true,
+                    };
+                    deleteBusinessStaff({
+                      businessId,
+                      body,
+                    });
+                  },
+                },
+              ]);
+            }}
+          />
         </View>
         <Space />
       </View>

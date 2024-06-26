@@ -4,6 +4,7 @@ import { FormattedMessage, useIntl } from "react-intl"; // Import FormattedMessa
 import { Platform, StyleSheet } from "react-native";
 import DeviceInfo from "react-native-device-info";
 import { List } from "react-native-paper";
+import { shortwaitsApi } from "../../../configs";
 import { AuthorizedScreenProps } from "../../../navigation";
 
 const appName = DeviceInfo.getApplicationName();
@@ -11,6 +12,8 @@ const appVersion = DeviceInfo.getVersion();
 const appBuildNumber = DeviceInfo.getBuildNumber();
 const appBundleId = DeviceInfo.getBundleId();
 const deviceType = DeviceInfo.getDeviceType();
+const privacyPolicyUrl = `${shortwaitsApi.baseUrl}/shortwaits/privacy-policy`;
+const termsOfServiceUrl = `${shortwaitsApi.baseUrl}/shortwaits/terms-of-use`;
 
 export const AppInfoScreen: FC<AuthorizedScreenProps<"app-info-screen">> = ({ navigation }) => {
   const { Colors } = useTheme();
@@ -31,7 +34,7 @@ export const AppInfoScreen: FC<AuthorizedScreenProps<"app-info-screen">> = ({ na
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
-      headerTitle: () => <Text preset="headerTitle" text={"Add Information"} />,
+      headerTitle: () => <Text preset="headerTitle" text={"App Information"} />,
     });
   }, [intl, navigation]);
 
@@ -116,7 +119,7 @@ export const AppInfoScreen: FC<AuthorizedScreenProps<"app-info-screen">> = ({ na
             navigation.navigate("modals", {
               screen: "webview-modal-screen",
               params: {
-                uri: "https://www.shortwaits.com/v1/shortwaits/terms-of-service",
+                uri: termsOfServiceUrl,
                 header: "Terms of Service",
               },
             });
@@ -134,7 +137,7 @@ export const AppInfoScreen: FC<AuthorizedScreenProps<"app-info-screen">> = ({ na
             navigation.navigate("modals", {
               screen: "webview-modal-screen",
               params: {
-                uri: "https://www.shortwaits.com/v1/shortwaits/privacy-policy",
+                uri: privacyPolicyUrl,
                 header: "Privacy Policy",
               },
             });

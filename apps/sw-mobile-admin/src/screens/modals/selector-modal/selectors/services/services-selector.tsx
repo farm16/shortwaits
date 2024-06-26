@@ -114,7 +114,7 @@ export const ServicesSelector: FC<ModalsScreenProps<"selector-modal-screen">> = 
     [handleOnSelect, selectedItems]
   );
 
-  const renderSeparator = useCallback(() => <Space size="tiny" />, []);
+  const renderSeparator = useCallback(() => <Space size="small" />, []);
 
   const keyExtractor = useCallback(item => item._id, []);
 
@@ -125,33 +125,31 @@ export const ServicesSelector: FC<ModalsScreenProps<"selector-modal-screen">> = 
     return <ActivityIndicator />;
   }
 
-  if (isSuccess) {
-    return (
-      <Screen preset="fixed" withHorizontalPadding unsafe>
-        <Space />
-        <AnimatedSearchBar onChangeText={handleOnChangeText} isVisible={isListSearchable} />
-        <FlatList
-          refreshControl={
-            <RefreshControl
-              refreshing={isLoading}
-              onRefresh={async () => {
-                await refetchServices();
-              }}
-            />
-          }
-          style={styles.flatList}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.flatListContainer}
-          data={filteredData}
-          ItemSeparatorComponent={renderSeparator}
-          renderItem={renderItem}
-          keyExtractor={keyExtractor}
-          ListEmptyComponent={<NonIdealState type="noServices" />}
-          ListFooterComponent={<Space size="large" />}
-        />
-      </Screen>
-    );
-  }
+  return (
+    <Screen preset="fixed" withHorizontalPadding unsafe>
+      <Space />
+      <AnimatedSearchBar onChangeText={handleOnChangeText} isVisible={isListSearchable} />
+      <FlatList
+        refreshControl={
+          <RefreshControl
+            refreshing={isLoading}
+            onRefresh={async () => {
+              await refetchServices();
+            }}
+          />
+        }
+        style={styles.flatList}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.flatListContainer}
+        data={filteredData}
+        ItemSeparatorComponent={renderSeparator}
+        renderItem={renderItem}
+        keyExtractor={keyExtractor}
+        ListEmptyComponent={<NonIdealState type="noServices" />}
+        ListFooterComponent={<Space size="large" />}
+      />
+    </Screen>
+  );
 
   return null;
 };

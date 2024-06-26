@@ -204,7 +204,7 @@ export const UpdateLocalClientModal: FC<ModalsScreenProps<"update-local-client-m
       />
       <ButtonCard
         title={intl.formatMessage({ id: "AddLocalClientModal.state" })}
-        subTitle={STATIC_FORM_USA_STATES.find(state => state.key === values.addresses[0].state)?.title ?? "Select State"}
+        subTitle={STATIC_FORM_USA_STATES.find(state => state._id === values.addresses[0].state)?.title ?? "Select State"}
         isTouched={touched?.addresses ? touched.addresses[0]?.state ?? false : false}
         errors={errors.addresses ? (errors.addresses[0] as FormikErrors<ClientType["addresses"][number]>)?.state ?? "" : ""}
         onPress={() =>

@@ -1,10 +1,7 @@
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
-import { ServicesDtoType } from "@shortwaits/shared-lib";
-import { shortwaitsApiEndpoints } from "../../../../configs";
-
-const { getBusinessServices } = shortwaitsApiEndpoints.BUSINESS;
+import { ServicesDtoType, endpoints } from "@shortwaits/shared-lib";
 
 export default (builder: EndpointBuilder<any, any, any>) =>
   builder.query<ServicesDtoType, string>({
-    query: businessId => getBusinessServices.getPath(businessId),
+    query: businessId => endpoints.getBusinessServices.getQueryConfig({ pathVars: [businessId] }),
   });

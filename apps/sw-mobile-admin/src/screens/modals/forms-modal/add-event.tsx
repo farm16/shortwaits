@@ -12,7 +12,6 @@ import {
   Text,
   TextFieldCard,
   TimePickerFieldCard,
-  compareFormObjectsBeforeAbort,
   getEmojiString,
   useForm,
 } from "@shortwaits/shared-ui";
@@ -113,7 +112,7 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
     return _initialValues;
   }, [business._id, user?._id]);
 
-  const { touched, errors, values, handleChange, handleSubmit, setFieldValue, setValues } = useForm(
+  const { touched, errors, values, handleChange, handleSubmit, setFieldValue, setValues, dirty } = useForm(
     {
       initialValues: initialValues,
       validate: validateDates,
@@ -140,13 +139,24 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
 
   useLayoutEffect(() => {
     const handleOnGoBack = () => {
-      const onAbort = () => {
+      if (dirty) {
+        Alert.alert("Are you sure you want to leave?", "You have unsaved changes.", [
+          {
+            text: "Cancel",
+            style: "cancel",
+          },
+          {
+            text: "Accept",
+            onPress: () => {
+              onGoBack && onGoBack();
+              navigation.goBack();
+            },
+          },
+        ]);
+      } else {
+        onGoBack && onGoBack();
         navigation.goBack();
-      };
-      if (onGoBack) {
-        onGoBack();
       }
-      compareFormObjectsBeforeAbort({ obj1: initialValues, obj2: values, onAbort });
     };
     const handleReset = () => {
       setValues(initialValues, false);
@@ -156,7 +166,7 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
       headerRight: () => <IconButton iconType="reset" onPress={handleReset} withMarginRight />,
       headerTitle: () => <Text preset="headerTitle" text={intl.formatMessage({ id: "AddEventModal.title" })} />,
     });
-  }, [navigation, intl, setValues, initialValues, onGoBack, values]);
+  }, [navigation, intl, setValues, initialValues, onGoBack, values, dirty]);
 
   useEffect(() => {
     if (createEventStatus.isSuccess) {

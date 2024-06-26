@@ -1,12 +1,13 @@
 import { BaseQueryFn, FetchArgs, FetchBaseQueryError, fetchBaseQuery } from "@reduxjs/toolkit/query";
 import { AuthResponseType, endpoints } from "@shortwaits/shared-lib";
 import { Mutex } from "async-mutex";
-import { API_BASE_URL } from "../../configs";
+import { shortwaitsApi } from "../../configs";
 import { RootState, setCredentials } from "../../store";
 
 const mutex = new Mutex();
+
 const baseQuery = fetchBaseQuery({
-  baseUrl: API_BASE_URL,
+  baseUrl: shortwaitsApi.baseUrl,
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth.token;
     const deviceInfo = (getState() as RootState).mobileAdmin.deviceInfo;

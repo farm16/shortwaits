@@ -213,19 +213,19 @@ export const UpdateClientModal: FC<ModalsScreenProps<"update-client-modal-screen
       />
       <ButtonCard
         title={intl.formatMessage({ id: "UpdateClientModal.state" })}
-        subTitle={STATIC_FORM_USA_STATES.find(state => state.key === values.addresses[0].state)?.title ?? "Select State"}
+        subTitle={STATIC_FORM_USA_STATES.find(state => state._id === values.addresses[0].state)?.title ?? "Select State"}
         isTouched={touched?.addresses ? touched.addresses[0]?.state ?? false : false}
         errors={errors.addresses ? (errors.addresses[0] as FormikErrors<ClientType["addresses"][number]>)?.state ?? "" : ""}
         onPress={() =>
           navigation.navigate("modals", {
             screen: "selector-modal-screen",
             params: {
-              type: "static",
+              mode: "static",
               headerTitle: "Select State",
               data: STATIC_FORM_USA_STATES,
-              closeOnSelect: true,
-              onSelect: state => {
-                setFieldValue("addresses[0].state", state.key);
+              onSelect: data => {
+                const state = data[0] as GenericModalData;
+                setFieldValue("addresses[0].state", state._id);
               },
             },
           })

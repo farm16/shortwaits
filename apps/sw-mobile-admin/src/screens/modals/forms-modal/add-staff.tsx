@@ -21,7 +21,7 @@ import { useIntl } from "react-intl";
 import { Alert } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import { useForm } from "../../../hooks";
-import { ModalsScreenProps } from "../../../navigation";
+import { GenericModalData, ModalsScreenProps } from "../../../navigation";
 import { useCreateBusinessStaffMutation } from "../../../services";
 import { useBusiness } from "../../../store";
 
@@ -280,19 +280,19 @@ export const AddStaffModal: FC<ModalsScreenProps<"add-staff-modal-screen">> = ({
         />
         <ButtonCard
           title={intl.formatMessage({ id: "AddStaffModal.state" })}
-          subTitle={STATIC_FORM_USA_STATES.find(state => state.key === values.addresses[0].state)?.title ?? "Select State"}
+          subTitle={STATIC_FORM_USA_STATES.find(state => state._id === values.addresses[0].state)?.title ?? "Select State"}
           isTouched={touched?.addresses ? touched.addresses[0]?.state ?? false : false}
           errors={errors.addresses ? (errors.addresses[0] as FormikErrors<ClientType["addresses"][number]>)?.state ?? "" : ""}
           onPress={() =>
             navigation.navigate("modals", {
               screen: "selector-modal-screen",
               params: {
-                type: "static",
-                data: STATIC_FORM_USA_STATES,
+                mode: "static",
                 headerTitle: "Select State",
-                closeOnSelect: true,
-                onSelect: state => {
-                  setFieldValue("addresses[0].state", state.key);
+                data: STATIC_FORM_USA_STATES,
+                onSelect: data => {
+                  const state = data[0] as GenericModalData;
+                  setFieldValue("addresses[0].state", state._id);
                 },
               },
             })

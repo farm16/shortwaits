@@ -12,7 +12,9 @@ type StaffSelectorItemProps = {
 
 export const StaffSelectorItem: FC<StaffSelectorItemProps> = props => {
   const { item, onSelect, rightIconName, disabled = false } = props;
-  const title = item.givenName || item.familyName || item.displayName || item.username;
+  const isAdmin = item?.userRoles?.isAdmin ?? false;
+
+  const title = (item.givenName || item.familyName || item.displayName || item.username) + (isAdmin ? " (Admin)" : "");
   const subTitle = item.email || item.phoneNumbers?.[0]?.number;
 
   return <SelectorListItem imageUrl={item.accountImageUrl} disabled={disabled} onPress={onSelect} rightIconName={rightIconName} title={title} subTitle={subTitle} />;

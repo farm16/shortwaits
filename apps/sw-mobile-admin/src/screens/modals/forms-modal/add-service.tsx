@@ -1,6 +1,5 @@
 import { CreateServiceDtoType } from "@shortwaits/shared-lib";
 import {
-  Avatar,
   BackButton,
   Button,
   ButtonCard,
@@ -135,15 +134,6 @@ export const AddServicesModal: FC<ModalsScreenProps<"add-service-modal-screen">>
 
   return (
     <FormContainer footer={renderFooter}>
-      <Avatar
-        url={values.imageUrl}
-        style={{
-          alignSelf: "center",
-        }}
-        size="medium"
-        mode="upload"
-        onPress={noop}
-      />
       <Space size="small" />
       <Card mode="static">
         <Text

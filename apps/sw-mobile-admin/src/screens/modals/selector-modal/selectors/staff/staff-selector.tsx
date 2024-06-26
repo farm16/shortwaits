@@ -1,12 +1,11 @@
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { BusinessUsersDtoType } from "@shortwaits/shared-lib";
-import { ActivityIndicator, AnimatedSearchBar, BackButton, Container, IconButton, NonIdealState, Screen, Text } from "@shortwaits/shared-ui";
-import React, { FC, useCallback, useEffect, useLayoutEffect, useState } from "react";
+import { ActivityIndicator, BackButton, Container, IconButton, NonIdealState, Screen, Text } from "@shortwaits/shared-ui";
+import React, { FC, useCallback, useLayoutEffect, useState } from "react";
 import { Alert, FlatList, StyleSheet } from "react-native";
-import { useDispatch } from "react-redux";
 import { ModalsScreenProps } from "../../../../../navigation";
 import { useGetBusinessStaffQuery } from "../../../../../services";
-import { showPremiumMembershipModal, useBusiness } from "../../../../../store";
+import { useBusiness, useStaff } from "../../../../../store";
 import { StaffSelectorItem } from "./staff-selector-item";
 
 const MIN_SELECTED_ITEMS_DEFAULT = 0; // Define your minimum selected items here
@@ -23,25 +22,20 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
     maxSelectedItems = MAX_SELECTED_ITEMS_DEFAULT,
   } = route.params;
 
-  const dispatch = useDispatch();
-  const handleAddStaffPress = useCallback(() => {
-    dispatch(showPremiumMembershipModal());
-  }, [dispatch]);
-
   const business = useBusiness();
-
-  const {
-    data: payload,
-    isError,
-    isLoading,
-    isSuccess,
-  } = useGetBusinessStaffQuery(business ? business._id : skipToken, {
+  const staff = useStaff();
+  const [selectedItems, setSelectedItems] = useState(selectedData);
+  const { isError, isLoading } = useGetBusinessStaffQuery(business ? business._id : skipToken, {
     refetchOnMountOrArgChange: true,
   });
-  const [searchText, setSearchText] = useState("");
-  const [filteredData, setFilteredData] = useState<BusinessUsersDtoType>([]);
-  const [isListSearchable, setIsListSearchable] = useState(false);
-  const [selectedItems, setSelectedItems] = useState(selectedData);
+  // const [filteredData, setFilteredData] = useState<BusinessUsersDtoType>(staff ? staff : []);
+  // const [isListSearchable, setIsListSearchable] = useState(false);
+
+  const handleAddStaffPress = useCallback(() => {
+    navigation.navigate("modals", {
+      screen: "add-staff-modal-screen",
+    });
+  }, [navigation]);
 
   function filterBusinessUsers(searchText: string, users: BusinessUsersDtoType) {
     return users.filter(item =>
@@ -49,16 +43,9 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
     );
   }
 
-  useEffect(() => {
-    if (payload?.data && isSuccess) {
-      const initialFilteredData = filterBusinessUsers(searchText, payload.data ?? []);
-      setFilteredData(initialFilteredData);
-    }
-  }, [isSuccess, payload, searchText]);
-
   useLayoutEffect(() => {
     const handleOnGoBack = () => {
-      const items = payload?.data?.filter(item => selectedItems.includes(item._id)) || null;
+      const items = staff.filter(item => selectedItems.includes(item._id)) || null;
       if (onGoBack) {
         onGoBack(items);
       }
@@ -74,7 +61,7 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
       ),
       headerRight: () => (
         <Container direction="row" alignItems="center">
-          {searchable ? (
+          {/* {searchable ? (
             <IconButton
               withMarginRight
               iconType={isListSearchable ? "search-close" : "search"}
@@ -82,18 +69,17 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
                 setIsListSearchable(s => !s);
               }}
             />
-          ) : null}
+          ) : null} */}
           <IconButton onPress={() => handleAddStaffPress()} withMarginRight iconType="add-staff" />
         </Container>
       ),
     });
-  }, [handleAddStaffPress, headerTitle, isListSearchable, navigation, onGoBack, payload?.data, searchable, selectedItems]);
+  }, [handleAddStaffPress, headerTitle, navigation, onGoBack, searchable, selectedItems, staff]);
 
-  const handleOnChangeText = (text: string) => {
-    setSearchText(text);
-    const filteredItems = filterBusinessUsers(text, payload.data);
-    setFilteredData(filteredItems);
-  };
+  // const handleOnChangeText = (text: string) => {
+  //   const filteredItems = filterBusinessUsers(text, staff);
+  //   setFilteredData(filteredItems);
+  // };
 
   const handleOnSelect = useCallback(
     item => {
@@ -136,26 +122,25 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
   if (isError) {
     return <Text>Error</Text>;
   }
+
   if (isLoading) {
     return <ActivityIndicator />;
   }
 
-  if (isSuccess && payload.data) {
-    return (
-      <Screen preset="fixed" withHorizontalPadding unsafe>
-        <AnimatedSearchBar onChangeText={handleOnChangeText} isVisible={isListSearchable} />
-        <FlatList
-          style={styles.container}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.flatList}
-          data={filteredData}
-          renderItem={renderItem}
-          keyExtractor={keyExtractor}
-          ListEmptyComponent={<NonIdealState type="noStaff" />}
-        />
-      </Screen>
-    );
-  }
+  return (
+    <Screen preset="fixed" withHorizontalPadding unsafe>
+      {/* <AnimatedSearchBar onChangeText={handleOnChangeText} isVisible={isListSearchable} /> */}
+      <FlatList
+        style={styles.container}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.flatList}
+        data={staff}
+        renderItem={renderItem}
+        keyExtractor={keyExtractor}
+        ListEmptyComponent={<NonIdealState type="noStaff" />}
+      />
+    </Screen>
+  );
 };
 
 const styles = StyleSheet.create({

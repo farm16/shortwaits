@@ -1,5 +1,6 @@
 import CreateBusinessLocalClients from "./create-business-local-client-users";
 import CreateBusinessStaff from "./create-business-staff-user";
+import DeleteBusinessStaff from "./delete-business-staff-user";
 import GetAllBusinessClients from "./get-all-business-clients";
 import GetBusiness from "./get-business";
 import GetBusinessCategory from "./get-categories";
@@ -14,6 +15,7 @@ import UpdateBusinessStaff from "./update-business-staff-user";
 export {
   CreateBusinessLocalClients,
   CreateBusinessStaff,
+  DeleteBusinessStaff,
   GetAllBusinessClients,
   GetBusiness,
   GetBusinessCategory,

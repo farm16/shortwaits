@@ -12,7 +12,59 @@ import {
   generateShortId,
 } from "@shortwaits/shared-lib";
 
-export const generateBusinessUser = (user: CreateBusinessUserDtoType, businessUserRoles: BusinessUserRoles) => {
+const defaultStaffHours = {
+  mon: [
+    {
+      startTime: 540,
+      endTime: 1020,
+      isActive: true,
+    },
+  ],
+  tue: [
+    {
+      startTime: 540,
+      endTime: 1020,
+      isActive: true,
+    },
+  ],
+  wed: [
+    {
+      startTime: 540,
+      endTime: 1020,
+      isActive: true,
+    },
+  ],
+  thu: [
+    {
+      startTime: 540,
+      endTime: 1020,
+      isActive: true,
+    },
+  ],
+  fri: [
+    {
+      startTime: 540,
+      endTime: 1020,
+      isActive: true,
+    },
+  ],
+  sat: [
+    {
+      startTime: 540,
+      endTime: 1020,
+      isActive: true,
+    },
+  ],
+  sun: [
+    {
+      startTime: 540,
+      endTime: 1020,
+      isActive: true,
+    },
+  ],
+};
+
+export const generateBusinessUser = (user: CreateBusinessUserDtoType, businessUserRoles: BusinessUserRoles, businessId?: string) => {
   // if no accountImageUrl, insert a property with a generated avatar url to the user object
   if (!user?.accountImageUrl) {
     const stringIdentifier = user.email || user.username || "?";
@@ -32,11 +84,12 @@ export const generateBusinessUser = (user: CreateBusinessUserDtoType, businessUs
     roleId: null,
     deleted: false,
     isDisabled: false,
-    businesses: [],
+    businesses: [businessId],
     userRoles: userRoles,
     createdByBusinessId: "",
     isEmailVerified: false,
     registrationState: undefined,
+    hours: defaultStaffHours,
     createdAt: "",
     updatedAt: "",
     lastSignInAt: "",
@@ -78,9 +131,9 @@ export const generateBusinessUser_socialAuth = (user: CreateBusinessUserDtoType,
   return businessUser;
 };
 
-export const generateBusinessStaffUsers = (users: CreateBusinessUsersDtoType) => {
+export const generateBusinessStaff = (users: CreateBusinessUsersDtoType, businessId: string) => {
   const businessUsers = users.map(user => {
-    return generateBusinessUser(user, ["staff"]);
+    return generateBusinessUser(user, ["staff"], businessId);
   });
   return businessUsers;
 };

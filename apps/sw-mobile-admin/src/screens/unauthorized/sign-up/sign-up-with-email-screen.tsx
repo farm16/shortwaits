@@ -49,7 +49,7 @@ export const SignUpWithEmail: FC<SignUpWithEmailScreenProps> = ({ navigation }) 
   }, []);
 
   return (
-    <Screen preset="scroll" withHorizontalPadding>
+    <Screen preset="scroll" withHorizontalPadding unsafe>
       <Space />
       <TextFieldCard
         keyboardType="default"
@@ -85,11 +85,7 @@ export const SignUpWithEmail: FC<SignUpWithEmailScreenProps> = ({ navigation }) 
         errors={errors.passwordConfirmation}
       />
       <Space />
-      <Button
-        onPress={() => handleSubmit()}
-        // preset={`primary${isValid ? "" : "-disabled"}`}
-        text={intl.formatMessage({ id: "Common.signUp" })}
-      />
+      <Button onPress={() => handleSubmit()} text={intl.formatMessage({ id: "Common.signUp" })} />
       <Space />
       <View style={styles.signInRow}>
         <Text

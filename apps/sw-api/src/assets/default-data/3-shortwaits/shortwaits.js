@@ -48,6 +48,7 @@ const defaultServiceColors = {
     isDefault: false,
   },
 };
+
 const defaultBusinessHours = {
   mon: [
     {
@@ -99,6 +100,7 @@ const defaultBusinessHours = {
     },
   ],
 };
+
 const shortwaitsAdminDefaultData = [
   {
     _id: getObjectId("0000001"),
@@ -137,7 +139,7 @@ const shortwaitsAdminDefaultData = [
           isVideoConference: false,
           deleted: false,
           serviceColor: defaultServiceColors["red"],
-          imageUrl: "",
+          imageUrl: `https://ui-avatars.com/api/?name=${"S"}${"1"}&background=${defaultServiceColors["red"].hexCode.substring(1)}&color=fff`,
         },
         {
           name: "Service II - 1 hr",
@@ -155,7 +157,7 @@ const shortwaitsAdminDefaultData = [
           isVideoConference: false,
           deleted: false,
           serviceColor: defaultServiceColors["blue"],
-          imageUrl: "",
+          imageUrl: `https://ui-avatars.com/api/?name=${"S"}${"2"}&background=${defaultServiceColors["blue"].hexCode.substring(1)}&color=fff`,
         },
         {
           name: "Service III - 3 hrs",
@@ -173,7 +175,7 @@ const shortwaitsAdminDefaultData = [
           isVideoConference: false,
           deleted: false,
           serviceColor: defaultServiceColors["green"],
-          imageUrl: "",
+          imageUrl: `https://ui-avatars.com/api/?name=${"S"}${"3"}&background=${defaultServiceColors["green"].hexCode.substring(1)}&color=fff`,
         },
       ],
       currencies: [
@@ -334,4 +336,5 @@ const shortwaitsAdminDefaultData = [
     },
   },
 ];
+
 module.exports = shortwaitsAdminDefaultData;

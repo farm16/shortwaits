@@ -17,7 +17,7 @@ import React, { Fragment, useEffect, useLayoutEffect, useMemo } from "react";
 import { useIntl } from "react-intl";
 import { Alert } from "react-native";
 import { useForm, useSelectImage } from "../../../hooks";
-import { AuthorizedScreenProps } from "../../../navigation";
+import { AuthorizedScreenProps, GenericModalData } from "../../../navigation";
 import { useUpdateBusinessMutation } from "../../../services";
 import { useBusiness } from "../../../store";
 
@@ -248,17 +248,17 @@ export function BusinessProfileScreen({ navigation }: AuthorizedScreenProps<"bus
             title={intl.formatMessage({
               id: "BusinessProfile_screen.state",
             })}
-            subTitle={STATIC_FORM_USA_STATES.find(state => state.key === values.location.state)?.title ?? "Select State"}
+            subTitle={STATIC_FORM_USA_STATES.find(state => state._id === values.location.state)?.title ?? "Select State"}
             onPress={() =>
               navigation.navigate("modals", {
                 screen: "selector-modal-screen",
                 params: {
-                  type: "static",
+                  mode: "static",
                   headerTitle: "Select a State",
                   data: STATIC_FORM_USA_STATES,
-                  closeOnSelect: true,
-                  onSelect: state => {
-                    setFieldValue("location.state", state.key);
+                  onSelect: data => {
+                    const state = data[0] as GenericModalData;
+                    setFieldValue("addresses[0].state", state._id);
                   },
                 },
               })

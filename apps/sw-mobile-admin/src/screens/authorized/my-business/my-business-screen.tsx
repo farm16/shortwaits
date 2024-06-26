@@ -148,7 +148,6 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
           onPress={() =>
             navigation.navigate("modals", {
               screen: "schedule-modal-screen",
-
               params: {
                 headerTitle: intl.formatMessage({ id: "MyBusiness_screen.scheduleTitle" }),
                 hours: business.hours,

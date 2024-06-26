@@ -5,6 +5,7 @@ import React, { FC } from "react";
 import { useIntl } from "react-intl";
 import { Alert, StyleSheet, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
+import { shortwaitsApi } from "../../../configs";
 import { useGoogleAuth } from "../../../hooks";
 import { RootStackParamList, UnauthorizedStackParamList } from "../../../navigation";
 
@@ -15,6 +16,7 @@ export interface SignUpScreenProps {
 export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
   const { Colors } = useTheme();
   const intl = useIntl(); // Access the intl object
+  const termsOfServiceUrl = `${shortwaitsApi.baseUrl}/shortwaits/terms-of-use`;
 
   const { isLoading, error, handleGoogleAuth } = useGoogleAuth();
 
@@ -93,7 +95,17 @@ export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
           </Container>
         </Button>
         <Space />
-        <TermsAndConditions />
+        <TermsAndConditions
+          onPress={() => {
+            navigation.navigate("modals", {
+              screen: "webview-modal-screen",
+              params: {
+                uri: termsOfServiceUrl,
+                header: "Terms and Conditions",
+              },
+            });
+          }}
+        />
         <Space />
       </View>
     </Screen>

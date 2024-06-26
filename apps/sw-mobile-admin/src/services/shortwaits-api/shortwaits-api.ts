@@ -7,6 +7,7 @@ import {
   CreateEvent,
   CreateLocalClients,
   CreateService,
+  DeleteBusinessStaff,
   DeleteService,
   GetAdminMobile,
   GetAllBusinessClients,
@@ -60,18 +61,21 @@ export const shortwaitsApi = createApi({
     getBusinessCategory: GetBusinessCategory(builder),
     getBusinessServices: GetBusinessServices(builder),
     getAllBusinessClients: GetAllBusinessClients(builder),
-    getBusinessStaff: GetBusinessStaff(builder),
 
     updateBusiness: UpdateBusiness(builder),
     registerBusiness: RegisterBusiness(builder),
-    // A business User === Staff
 
-    // A client User === Client also known as a customer
+    // ! A business User === Staff
+    getBusinessStaff: GetBusinessStaff(builder),
     createBusinessStaff: CreateBusinessStaff(builder),
-    createBusinessLocalClients: CreateBusinessLocalClients(builder),
     updateBusinessStaff: UpdateBusinessStaff(builder), // updates single business staff
+    deleteBusinessStaff: DeleteBusinessStaff(builder), // deletes single business staff
+
+    // ! A client User === Customer
+    createBusinessLocalClients: CreateBusinessLocalClients(builder),
     updateBusinessLocalClient: UpdateBusinessLocalClient(builder), // updates single business client
-    // <<<<< business
+
+    // <<<<<
 
     //categories
     getCategory: GetCategory(builder),

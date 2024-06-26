@@ -28,7 +28,7 @@ export const WebViewModal: FC<ModalsScreenProps<"webview-modal-screen">> = ({ na
   }, [handleGoBack, header, navigation]);
 
   return (
-    <Screen preset="fixed">
+    <Screen preset="fixed" unsafe>
       <WebView source={{ uri }} />
     </Screen>
   );

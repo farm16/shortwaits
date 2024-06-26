@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Put, Req, UseGuards, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Req, UseGuards, ValidationPipe } from "@nestjs/common";
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
 import { AddClientsDtoType, CreateBusinessUsersDtoType, UpdateClientDtoType } from "@shortwaits/shared-lib";
 import { AtGuard } from "../../common/guards";
@@ -144,6 +144,16 @@ export class BusinessController {
   })
   async updateBusinessStaff(@Param("businessId") businessId: string, @Req() request, @Body() dto: UpdateClientDtoType) {
     return this.businessService.updateBusinessStaff(request.user.sub, businessId, dto);
+  }
+
+  @Delete(":businessId/staff")
+  @HttpCode(HttpStatus.OK)
+  @ApiCreatedResponse({
+    status: HttpStatus.CREATED,
+    description: "Returns created",
+  })
+  async deleteBusinessStaff(@Param("businessId") businessId: string, @Req() request, @Body() dto: UpdateClientDtoType) {
+    return this.businessService.deleteBusinessStaff(request.user.sub, businessId, dto);
   }
 
   @Post("registration/complete")
