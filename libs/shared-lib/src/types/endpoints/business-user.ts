@@ -26,4 +26,4 @@ export type CreateBusinessUserDtoType = Omit<
 >;
 export type CreateBusinessUsersDtoType = CreateBusinessUserDtoType[];
 
-export type BusinessUserUpdateDtoType = Partial<BusinessUserDtoType>; // update is only done for each business user (staff)
+export type PartialBusinessUserDtoType = Partial<BusinessUserDtoType>; // update is only done for each business user (staff)

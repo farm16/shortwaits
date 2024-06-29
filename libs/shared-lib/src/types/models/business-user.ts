@@ -39,33 +39,36 @@ export type BusinessUserType = {
   createdByBusinessId: ObjectId; // if this is set and user "A" is superAdmin, user "A" can delete or update this user
   // Also we need to let the user know that this user is created by a business (super admin) and belongs to that business
   deleted: boolean; // will not be shown in the list of users, but the data will be kept
-
-  preferredAlias: "username" | "displayName";
-
-  username: string; // this should be unique for each user (business)
-
-  email: string; // no longer unique for each user (business)
+  registrationState: {
+    screenName: string;
+    state: number;
+    isCompleted: boolean;
+  };
+  createdAt: Date;
+  updatedAt: Date;
+  lastSignInAt: Date;
+  hashedRt: string;
   isEmailVerified: boolean; // once email is verified, this should be set to true
-  hours: WeekHoursType;
 
+  // below are fields that are not protected
+  preferredAlias: "username" | "displayName";
+  username: string; // this should be unique for each user (business)
   displayName: string;
   familyName: string;
   givenName: string;
   middleName: string;
-
+  email: string; // no longer unique for each user (business)
+  hours: WeekHoursType;
   accountImageUrl: string;
-
   primaryPhoneNumberLabel: string; // this should be unique for each user (business)' should be mobile
   phoneNumbers: {
     label: string;
     number: string;
   }[];
-
   imAddresses: {
     username: string;
     service: string;
   }[];
-
   addresses: {
     label: string;
     address1: string;
@@ -82,7 +85,6 @@ export type BusinessUserType = {
     username?: string;
   }[];
   birthday: string;
-
   desiredCurrencies: string[];
   locale: {
     countryCode: string;
@@ -90,15 +92,4 @@ export type BusinessUserType = {
     languageCode: string;
     languageTag: string;
   };
-  // bellow are fields from the that are not in the CreateBusinessUserDtoType
-  registrationState: {
-    screenName: string;
-    state: number;
-    isCompleted: boolean;
-  };
-
-  createdAt: Date;
-  updatedAt: Date;
-  lastSignInAt: Date;
-  hashedRt: string;
 };

@@ -5,9 +5,9 @@ import {
   BusinessDtoType,
   BusinessHoursType,
   BusinessType,
-  BusinessUserUpdateDtoType,
   CreateBusinessUsersDtoType,
   ObjectId,
+  PartialBusinessUserDtoType,
   UpdateClientDtoType,
 } from "@shortwaits/shared-lib";
 import { Model } from "mongoose";
@@ -298,7 +298,7 @@ export class BusinessService {
     }
   }
 
-  async updateBusinessStaff(businessUserId: string, businessId: string, staff: BusinessUserUpdateDtoType) {
+  async updateBusinessStaff(businessUserId: string, businessId: string, staff: PartialBusinessUserDtoType) {
     const businessData = await this.findBusinessById(businessId);
     const { isAdmin, isSuperAdmin } = this.isUserAdminType(businessData, businessUserId);
 
@@ -318,7 +318,7 @@ export class BusinessService {
     }
   }
 
-  async deleteBusinessStaff(businessUserId: string, businessId: string, staff: BusinessUserUpdateDtoType) {
+  async deleteBusinessStaff(businessUserId: string, businessId: string, staff: PartialBusinessUserDtoType) {
     try {
       const businessData = await this.findBusinessById(businessId);
       const { isAdmin, isSuperAdmin } = this.isUserAdminType(businessData, businessUserId);

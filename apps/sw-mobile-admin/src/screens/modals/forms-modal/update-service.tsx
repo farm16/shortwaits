@@ -1,4 +1,4 @@
-import { ServiceDtoType } from "@shortwaits/shared-lib";
+import { ServiceColorType, ServiceDtoType } from "@shortwaits/shared-lib";
 import {
   ActivityIndicator,
   Avatar,
@@ -15,21 +15,19 @@ import {
   Space,
   Text,
   TextFieldCard,
+  useForm,
 } from "@shortwaits/shared-ui";
 import { FormikErrors } from "formik";
 import { noop } from "lodash";
 import React, { FC, useCallback, useEffect, useLayoutEffect } from "react";
 import { useIntl } from "react-intl";
 import { Alert } from "react-native";
-import { useForm } from "../../../hooks";
 import { ModalsScreenProps } from "../../../navigation";
 import { useDeleteServiceMutation, useUpdateServiceMutation } from "../../../services";
 import { useBusiness, useMobileAdmin } from "../../../store";
 
 export const UpdateServicesModal: FC<ModalsScreenProps<"update-service-modal-screen">> = ({ navigation, route }) => {
   const service = route?.params?.initialValues as ServiceDtoType;
-
-  // console.log("service >>>", JSON.stringify(service, null, 2));
 
   const intl = useIntl();
   const business = useBusiness();
@@ -39,11 +37,12 @@ export const UpdateServicesModal: FC<ModalsScreenProps<"update-service-modal-scr
 
   const isLoading = deleteServiceStatus.isLoading || updateServiceStatus.isLoading;
 
-  const { touched, errors, values, handleChange, setFieldValue, handleSubmit, dirty } = useForm(
+  const { touched, errors, values, handleChange, setFieldValue, handleSubmit, dirty } = useForm<ServiceDtoType>(
     {
       initialValues: service,
       onSubmit: formData => {
         console.log("formData", JSON.stringify(formData, null, 2));
+
         updateService({
           businessId: business._id,
           body: formData,
@@ -52,6 +51,8 @@ export const UpdateServicesModal: FC<ModalsScreenProps<"update-service-modal-scr
     },
     "updateService"
   );
+
+  console.log(">>>", errors);
 
   useEffect(() => {
     if (deleteServiceStatus.isSuccess || updateServiceStatus.isSuccess) {
@@ -111,13 +112,17 @@ export const UpdateServicesModal: FC<ModalsScreenProps<"update-service-modal-scr
   }, [business._id, deleteService, dirty, intl, navigation, service._id, service.name]);
 
   const handleServiceColorChange = useCallback(
-    serviceColor => {
+    (serviceColor: ServiceColorType) => {
+      // remove # from hexCode
+      const hexCode = serviceColor.hexCode.replace("#", "");
+      const newImageUrl = `https://ui-avatars.com/api/?name=S3&background=${hexCode}&color=fff`;
+      setFieldValue("imageUrl", newImageUrl);
       setFieldValue("serviceColor", serviceColor);
     },
     [setFieldValue]
   );
 
-  const renderFooter = <Button preset="secondary" onPress={() => handleSubmit()} text={intl.formatMessage({ id: "Common.update" })} />;
+  const renderFooter = <Button preset="secondary" disabled={!dirty} onPress={() => handleSubmit()} text={intl.formatMessage({ id: "Common.done" })} />;
 
   const renderDurationBar = useCallback(() => {
     const handleDurationTimeChange = durationInMin => {
@@ -127,8 +132,6 @@ export const UpdateServicesModal: FC<ModalsScreenProps<"update-service-modal-scr
 
     return <DurationFieldCard title={intl.formatMessage({ id: "UpdateServiceModal.duration" })} values={[values.durationInMin]} onValuesChange={handleDurationTimeChange} />;
   }, [intl, setFieldValue, values.durationInMin]);
-
-  // console.log("form values >>>", values?.serviceColor);
 
   console.log("DIRTY >>>", dirty);
 
@@ -167,7 +170,9 @@ export const UpdateServicesModal: FC<ModalsScreenProps<"update-service-modal-scr
         keyboardType="number-pad"
         placeholder={"0.00"}
         value={values.price}
-        onChangeValue={price => setFieldValue("price", price)}
+        onChangeValue={price => {
+          setFieldValue("price", price);
+        }}
         isTouched={touched.price}
         errors={errors.price}
         currencyType={"USD"}

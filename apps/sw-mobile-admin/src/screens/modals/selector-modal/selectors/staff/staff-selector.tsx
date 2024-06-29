@@ -1,6 +1,6 @@
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { BusinessUsersDtoType } from "@shortwaits/shared-lib";
-import { ActivityIndicator, BackButton, Container, IconButton, NonIdealState, Screen, Text } from "@shortwaits/shared-ui";
+import { ActivityIndicator, BackButton, Button, Container, IconButton, NonIdealState, Screen, Text } from "@shortwaits/shared-ui";
 import React, { FC, useCallback, useLayoutEffect, useState } from "react";
 import { Alert, FlatList, StyleSheet } from "react-native";
 import { ModalsScreenProps } from "../../../../../navigation";
@@ -18,16 +18,18 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
     headerTitle = "Staff",
     selectedData = [],
     onGoBack,
+    onSubmit,
     minSelectedItems = MIN_SELECTED_ITEMS_DEFAULT,
     maxSelectedItems = MAX_SELECTED_ITEMS_DEFAULT,
   } = route.params;
 
   const business = useBusiness();
   const staff = useStaff();
-  const [selectedItems, setSelectedItems] = useState(selectedData);
+  const [selectedItems, setSelectedItems] = useState<string[]>(selectedData);
   const { isError, isLoading } = useGetBusinessStaffQuery(business ? business._id : skipToken, {
     refetchOnMountOrArgChange: true,
   });
+  const isMultiple = onSubmit ? true : false;
   // const [filteredData, setFilteredData] = useState<BusinessUsersDtoType>(staff ? staff : []);
   // const [isListSearchable, setIsListSearchable] = useState(false);
 
@@ -86,12 +88,18 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
       if (maxSelectedItems && selectedItems.length >= maxSelectedItems) {
         Alert.alert("Warning", `You can only select ${maxSelectedItems}`);
       } else {
-        setSelectedItems(selectedItems => [...selectedItems, item._id]);
+        setSelectedItems(prevState => {
+          if (prevState.includes(item._id)) {
+            return prevState.filter(id => id !== item._id);
+          } else {
+            return [...prevState, item._id];
+          }
+        });
       }
       if (onSelect) {
         onSelect(item);
         navigation.goBack();
-      } else {
+      } else if (!isMultiple) {
         navigation.navigate("authorized-stack", {
           screen: "business-staff-screen",
           params: {
@@ -100,21 +108,31 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
         });
       }
     },
-    [maxSelectedItems, navigation, onSelect, selectedItems]
+    [isMultiple, maxSelectedItems, navigation, onSelect, selectedItems.length]
   );
+
+  const handleOnSubmit = useCallback(() => {
+    if (onSubmit) {
+      onSubmit(selectedItems);
+    }
+    navigation.goBack();
+  }, [navigation, onSubmit, selectedItems]);
 
   const renderItem = useCallback(
     ({ item }) => {
+      const rightIconName = selectedItems.includes(item._id) ? "checkbox-outline" : "checkbox-blank-outline";
+
       return (
         <StaffSelectorItem
           item={item}
+          rightIconName={isMultiple ? rightIconName : undefined}
           onSelect={() => {
             handleOnSelect(item);
           }}
         />
       );
     },
-    [handleOnSelect]
+    [handleOnSelect, isMultiple, selectedItems]
   );
 
   const keyExtractor = useCallback(item => item._id, []);
@@ -139,6 +157,7 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
         keyExtractor={keyExtractor}
         ListEmptyComponent={<NonIdealState type="noStaff" />}
       />
+      {isMultiple ? <Button preset="secondary" onPress={handleOnSubmit} disabled={selectedItems.length < minSelectedItems} text="Done" /> : null}
     </Screen>
   );
 };

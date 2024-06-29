@@ -1,4 +1,4 @@
-import { ClientType, CreateBusinessUserDtoType } from "@shortwaits/shared-lib";
+import { ClientType, CreateBusinessUserDtoType, PartialBusinessUserDtoType } from "@shortwaits/shared-lib";
 import {
   BackButton,
   Button,
@@ -17,113 +17,55 @@ import {
 } from "@shortwaits/shared-ui";
 import { FormikErrors } from "formik";
 import { noop } from "lodash";
-import React, { FC, useEffect, useLayoutEffect, useMemo } from "react";
+import React, { FC, useEffect, useLayoutEffect } from "react";
 import { useIntl } from "react-intl";
 import { Alert } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import { GenericModalData, ModalsScreenProps } from "../../../navigation";
-import { useCreateBusinessStaffMutation } from "../../../services";
+import { useUpdateBusinessStaffMutation } from "../../../services";
 import { useBusiness } from "../../../store";
 
-export const AddStaffModal: FC<ModalsScreenProps<"add-staff-modal-screen">> = ({ navigation, route }) => {
-  //const { onSubmit, onDone, closeOnSubmit = true } = route.params;
+export const UpdateStaffModal: FC<ModalsScreenProps<"update-staff-modal-screen">> = ({ navigation, route }) => {
   const params = route?.params;
   const onSubmit = params?.onSubmit ?? noop;
   const onDone = params?.onDone ?? noop;
+  const initialValues = params?.initialValues as PartialBusinessUserDtoType;
   const closeOnSubmit = params?.closeOnSubmit ?? true;
 
   const intl = useIntl(); // Access the intl object
 
   const business = useBusiness();
 
-  const [createBusinessStaff, createBusinessStaffStatus] = useCreateBusinessStaffMutation();
+  const [updateBusinessStaff, updateBusinessStaffStatus] = useUpdateBusinessStaffMutation();
 
-  const initialValues = useMemo(() => {
-    const _initialValues: CreateBusinessUserDtoType = {
-      // constant values for now
-      imAddresses: [],
-      socialAccounts: [],
-      desiredCurrencies: ["USD"],
-      preferredAlias: "displayName",
-      //
-      // set to US for now
-      locale: {
-        countryCode: "US",
-        isRTL: false,
-        languageCode: "en",
-        languageTag: "en-US",
-      },
-      //
-      displayName: "",
-      accountImageUrl: "",
-      email: "",
-      givenName: "",
-      familyName: "",
-      middleName: "",
-      phoneNumbers: [
-        {
-          label: "mobile",
-          number: "",
-        },
-        {
-          label: "home",
-          number: "",
-        },
-        {
-          label: "work",
-          number: "",
-        },
-      ],
-      addresses: [
-        {
-          label: "home",
-          address1: "",
-          address2: "",
-          city: "",
-          region: "",
-          state: "",
-          postCode: "",
-          country: "",
-        },
-      ],
-      birthday: new Date().toISOString(),
-      hours: business?.hours,
-      password: "",
-      isPasswordProtected: false,
-      username: "",
-      primaryPhoneNumberLabel: "",
-    };
-    return _initialValues;
-  }, [business?.hours]);
-
-  const { touched, errors, values, setFieldValue, validateField, setFieldTouched, handleChange, handleSubmit, setFieldError } = useForm(
+  const { touched, errors, values, setFieldValue, validateField, setFieldTouched, handleChange, handleSubmit, setFieldError } = useForm<PartialBusinessUserDtoType>(
     {
       initialValues,
       onSubmit: formData => {
-        createBusinessStaff({
+        updateBusinessStaff({
           businessId: business._id,
-          body: [formData],
+          body: formData,
         });
         if (onSubmit) {
           onSubmit(formData);
         }
       },
     },
-    "addStaff"
+    "updateStaff"
   );
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
-      headerTitle: () => <Text preset="headerTitle" text={intl.formatMessage({ id: "AddStaffModal.title" })} />,
+      headerTitle: () => <Text preset="headerTitle" text={"Update Staff"} />,
     });
   }, [closeOnSubmit, handleSubmit, intl, navigation]);
 
   useEffect(() => {
-    if (createBusinessStaffStatus.isSuccess && closeOnSubmit) {
+    if (updateBusinessStaffStatus.isSuccess && closeOnSubmit) {
       navigation.goBack();
     }
-  }, [closeOnSubmit, createBusinessStaffStatus.isSuccess, navigation]);
+  }, [closeOnSubmit, updateBusinessStaffStatus.isSuccess, navigation]);
 
   useEffect(() => {
     const cleanup = async () => {
@@ -140,8 +82,8 @@ export const AddStaffModal: FC<ModalsScreenProps<"add-staff-modal-screen">> = ({
     };
   }, []);
 
-  if (createBusinessStaffStatus.isError) {
-    Alert.alert("Error", createBusinessStaffStatus.error.message);
+  if (updateBusinessStaffStatus.isError) {
+    Alert.alert("Error", updateBusinessStaffStatus.error.message);
   }
 
   const _renderSubmitButton = (
@@ -154,7 +96,7 @@ export const AddStaffModal: FC<ModalsScreenProps<"add-staff-modal-screen">> = ({
     />
   );
 
-  return createBusinessStaffStatus.isLoading ? (
+  return updateBusinessStaffStatus.isLoading ? (
     <ActivityIndicator />
   ) : (
     <FormContainer footer={_renderSubmitButton}>

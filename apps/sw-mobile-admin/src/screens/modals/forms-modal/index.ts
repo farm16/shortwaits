@@ -6,3 +6,4 @@ export * from "./add-staff";
 export * from "./update-event";
 export * from "./update-local-client";
 export * from "./update-service";
+export * from "./update-staff";

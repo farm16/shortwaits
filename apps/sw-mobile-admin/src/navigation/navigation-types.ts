@@ -119,6 +119,12 @@ export type ModalStackParamList = {
     onDone?(): void;
     closeOnSubmit?: boolean;
   };
+  [MODAL_SCREENS.UPDATE_STAFF_MODAL_SCREEN]: {
+    initialValues?: FormData[FormType];
+    onSubmit?<T extends keyof FormData>(arg: FormData[T]): void;
+    onDone?(): void;
+    closeOnSubmit?: boolean;
+  };
   [MODAL_SCREENS.ADD_SERVICE_MODAL_SCREEN]: {
     initialValues?: FormData[FormType];
     onSubmit?<T extends keyof FormData>(arg: FormData[T]): void;

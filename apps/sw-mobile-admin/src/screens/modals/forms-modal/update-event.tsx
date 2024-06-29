@@ -169,7 +169,7 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
   const renderSubmitButton = (
     <Button
       preset="secondary"
-      text={intl.formatMessage({ id: "UpdateEventModal.updateEventButton" })}
+      text={intl.formatMessage({ id: "Common.done" })}
       onPress={() => {
         handleSubmit();
       }}

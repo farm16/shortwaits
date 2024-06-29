@@ -1,10 +1,10 @@
-import { FormikConfig, useFormik } from "formik";
-import { FormSchemaKeys, FormSchemaTypes, formSchemas } from "../";
+import { FormikConfig, FormikValues, useFormik } from "formik";
+import { FormSchemaKeys, formSchemas } from "../";
 
-export const useForm = <T extends FormSchemaKeys>(config: FormikConfig<FormSchemaTypes[T]>, schema: T) => {
-  const validationSchema = formSchemas[schema];
-  return useFormik({
-    validationSchema: validationSchema,
+export const useForm = <T extends FormikValues>(config: FormikConfig<T>, schemaName: FormSchemaKeys) => {
+  const validationSchema = formSchemas[schemaName];
+  return useFormik<T>({
     ...config,
+    validationSchema,
   });
 };

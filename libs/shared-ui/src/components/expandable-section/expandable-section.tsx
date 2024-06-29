@@ -18,7 +18,11 @@ export const ExpandableSection: React.FC<ExpandableSectionProps> = ({ children }
     <Fragment>
       <Button
         preset="link"
-        textStyle={{ color: Colors.text, fontWeight: "500" }}
+        textStyle={{
+          color: Colors.text,
+          //textDecorationLine: "underline",
+          fontWeight: "500",
+        }}
         leftIconName={isWithMoreInfo ? "chevron-up" : "chevron-down"}
         leftIconColor={Colors.brandPrimary}
         leftIconSize={24}

@@ -93,7 +93,6 @@ export const addLocalClientSchema = Yup.object({
   locale: localeSchema.optional(),
   phoneNumbers: phoneNumbersSchema.optional(),
   addresses: addressesSchema.optional(),
-
   isSocialAccount: Yup.boolean().optional(),
   socialAccount: socialAccountSchema.optional().nullable(),
   deviceSetting: deviceSettingSchema.optional().nullable(),

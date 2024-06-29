@@ -67,7 +67,12 @@ export function BusinessStaffScreen({ navigation, route }: AuthorizedScreenProps
               withMarginRight
               iconType="edit"
               onPress={() => {
-                // navigation.navigate("modals", { screen: "add-staff-modal-screen", params: { staff } });
+                navigation.push("modals", {
+                  screen: "update-staff-modal-screen",
+                  params: {
+                    initialValues: staff,
+                  },
+                });
               }}
             />
           </Container>

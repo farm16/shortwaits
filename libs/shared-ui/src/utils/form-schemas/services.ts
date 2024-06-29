@@ -31,82 +31,30 @@ export const createServiceSchema = Yup.object({
 });
 
 export const updateServiceSchema = Yup.object({
-  businessId: Yup.string(),
-  name: Yup.string().min(3, "a longer name is required").required("this field is required"),
-  description: Yup.string().optional(),
-  hours: Yup.object()
-    .shape({
-      mon: Yup.array().of(
-        Yup.object({
-          startTime: Yup.number(),
-          endTime: Yup.number(),
-          isActive: Yup.boolean(),
-        })
-      ),
-      tue: Yup.array().of(
-        Yup.object({
-          startTime: Yup.number(),
-          endTime: Yup.number(),
-          isActive: Yup.boolean(),
-        })
-      ),
-      wed: Yup.array().of(
-        Yup.object({
-          startTime: Yup.number(),
-          endTime: Yup.number(),
-          isActive: Yup.boolean(),
-        })
-      ),
-      thu: Yup.array().of(
-        Yup.object({
-          startTime: Yup.number(),
-          endTime: Yup.number(),
-          isActive: Yup.boolean(),
-        })
-      ),
-      fri: Yup.array().of(
-        Yup.object({
-          startTime: Yup.number(),
-          endTime: Yup.number(),
-          isActive: Yup.boolean(),
-        })
-      ),
-      sat: Yup.array().of(
-        Yup.object({
-          startTime: Yup.number(),
-          endTime: Yup.number(),
-          isActive: Yup.boolean(),
-        })
-      ),
-      sun: Yup.array().of(
-        Yup.object({
-          startTime: Yup.number(),
-          endTime: Yup.number(),
-          isActive: Yup.boolean(),
-        })
-      ),
-    })
-    .optional(),
-  applicableCategories: Yup.array().of(Yup.string()).optional(),
+  name: Yup.string().min(3, "a longer name is required").nullable().optional(),
+  description: Yup.string().nullable().optional(),
+  hours: Yup.object().optional(),
+  applicableCategories: Yup.array().of(Yup.string()).nullable().optional(),
   staff: Yup.array().of(Yup.string()).optional().nullable(),
-  durationInMin: Yup.number(),
-  price: Yup.number(),
-  currency: Yup.mixed().required().oneOf(["USD", "PEN"]).optional(),
-  isPrivate: Yup.boolean().optional(),
+  durationInMin: Yup.number().optional().nullable(),
+  price: Yup.number().optional().nullable(),
+  currency: Yup.mixed().required().oneOf(["USD", "PEN"]).nullable().optional(),
+  isPrivate: Yup.boolean().nullable().optional(),
   urls: Yup.object()
     .shape({
       zoom: Yup.string(),
       other1: Yup.string(),
       other2: Yup.string(),
     })
+    .nullable()
     .optional(),
-  isVideoConference: Yup.boolean().optional(),
+  isVideoConference: Yup.boolean().nullable().optional(),
   serviceColor: Yup.object({
     colorId: Yup.string(),
     colorName: Yup.string(),
     hexCode: Yup.string(),
-    isSelected: Yup.mixed().optional(),
-    isDefault: Yup.mixed().optional(),
+    isSelected: Yup.mixed(),
+    isDefault: Yup.mixed(),
   }),
-  imageUrl: Yup.string().optional(),
+  imageUrl: Yup.string().nullable().optional(),
 });

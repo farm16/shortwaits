@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
-import { BusinessUserDtoType, BusinessUsersDtoType, ClientDtoType, EventDtoType } from "@shortwaits/shared-lib";
+import { BusinessUserDtoType, ClientDtoType, EventDtoType } from "@shortwaits/shared-lib";
 import {
   BusinessUserCard,
   Button,
@@ -18,47 +18,51 @@ import {
 import { isEmpty } from "lodash";
 import React, { Fragment, useCallback, useMemo } from "react";
 import { useIntl } from "react-intl";
-import { RefreshControl, SectionList, SectionListData, SectionListRenderItem, View } from "react-native";
+import { Alert, RefreshControl, SectionList, SectionListData, SectionListRenderItem, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import { SelectedClients } from "../../..";
 import { AuthorizedScreenProps } from "../../../../navigation";
 import { useGetPeopleInEventQuery, useUpdateEventMutation } from "../../../../services";
-import { useBusiness } from "../../../../store";
+import { useBusiness, useClients, useLocalClients, useStaff } from "../../../../store";
 
 type PeopleDtoType = BusinessUserDtoType | ClientDtoType;
 
 export function EventUsersTab({ event }: { event: EventDtoType }) {
   const { Colors } = useTheme();
   const business = useBusiness();
+  const clients = useClients();
+  const localClients = useLocalClients();
+  const staff = useStaff();
   const intl = useIntl();
   const { navigate } = useNavigation<AuthorizedScreenProps<"event-screen">["navigation"]>();
   const [updateEvent, updateEventStatus] = useUpdateEventMutation();
   const isEventDisabled = nextEventStatuses[event.status.statusName].length === 0;
 
   const {
-    data: peopleInEventData,
     isLoading: isPeopleInEventQueryLoading,
-    isSuccess: isPeopleInEventQuerySuccess,
     isError: isPeopleInEventQueryError,
     refetch: refetchPeopleInEventQuery,
   } = useGetPeopleInEventQuery(event._id ? event._id : skipToken, {
     refetchOnMountOrArgChange: true,
   });
 
-  const allClients = getCombinedClientTypes(peopleInEventData?.data?.clientUsers ?? [], peopleInEventData?.data?.localClients ?? []);
+  const eventClients = event.clientsIds.map(clientId => clients?.find(client => client._id === clientId)).filter(Boolean);
+  const eventLocalClients = event.localClientsIds.map(localClientId => localClients?.find(localClient => localClient._id === localClientId)).filter(Boolean);
+  const allClients = getCombinedClientTypes(eventClients ?? [], eventLocalClients ?? []);
+  const eventStaff = event.staffIds.map(staffId => staff?.find(staff => staff._id === staffId)).filter(Boolean);
 
   const _data = useMemo(
     () => [
       {
         title: "Staff",
-        data: peopleInEventData?.data?.businessUsers ?? [],
+        data: eventStaff ?? [],
       },
       {
         title: "Clients",
-        data: allClients,
+        data: allClients ?? [],
       },
     ],
-    [allClients, peopleInEventData?.data?.businessUsers]
+    [allClients, eventStaff]
   );
 
   const handleRefresh = useCallback(() => {
@@ -130,6 +134,10 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
     [business._id, event, updateEvent]
   );
 
+  const selectedClients = useMemo(() => {
+    return getSelectedClients(eventClients ?? [], eventLocalClients ?? []);
+  }, [eventClients, eventLocalClients]);
+
   const nonIdealState = useCallback(
     section => {
       const { title } = section;
@@ -149,7 +157,7 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
                     screen: "clients-selector-modal-screen",
                     params: {
                       mode: "clientsAndLocalClients",
-                      selectedData: getSelectedClients(peopleInEventData?.data?.clientUsers ?? [], peopleInEventData?.data?.localClients ?? []),
+                      selectedData: selectedClients,
                       onSubmit: selectedUsers => {
                         console.log("selectedUsers >>>", selectedUsers);
                         handleClientsUpdateEvent(selectedUsers);
@@ -188,15 +196,14 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
         />
       );
     },
-    [handleClientsUpdateEvent, intl, isEventDisabled, navigate, peopleInEventData?.data?.clientUsers, peopleInEventData?.data?.localClients]
+    [handleClientsUpdateEvent, intl, isEventDisabled, navigate, selectedClients]
   );
 
   const handleStaffUpdateEvent = useCallback(
-    (staff: BusinessUsersDtoType) => {
-      const staffIds = event.staffIds;
-      const newStaffIds = staff.map(user => user._id);
-      const uniqueIds = [...new Set(newStaffIds)];
-      const isEqual = JSON.stringify(uniqueIds) === JSON.stringify(staffIds);
+    (staffIds: string[]) => {
+      const currentStaffIds = event.staffIds;
+      const uniqueIds = [...new Set(staffIds)];
+      const isEqual = JSON.stringify(uniqueIds) === JSON.stringify(currentStaffIds);
       if (isEqual) {
         return;
       }
@@ -249,8 +256,8 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
                     params: {
                       mode: "staff",
                       selectedData: event.staffIds,
-                      onGoBack: selectedClientIds => {
-                        handleStaffUpdateEvent(selectedClientIds as BusinessUsersDtoType);
+                      onSubmit: (selectedClientIds: string[]) => {
+                        handleStaffUpdateEvent(selectedClientIds);
                       },
                     },
                   });
@@ -259,7 +266,7 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
                     screen: "clients-selector-modal-screen",
                     params: {
                       mode: "clientsAndLocalClients",
-                      selectedData: getSelectedClients(peopleInEventData?.data?.clientUsers ?? [], peopleInEventData?.data?.localClients ?? []),
+                      selectedData: selectedClients,
                       onSubmit: selectedUsers => {
                         console.log("selectedUsers >>>", selectedUsers);
                         handleClientsUpdateEvent(selectedUsers);
@@ -274,20 +281,7 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
         </Fragment>
       );
     },
-    [
-      Colors.lightBackground,
-      Colors.text,
-      _data,
-      event.staffIds,
-      handleClientsUpdateEvent,
-      handleStaffUpdateEvent,
-      intl,
-      isEventDisabled,
-      navigate,
-      nonIdealState,
-      peopleInEventData?.data?.clientUsers,
-      peopleInEventData?.data?.localClients,
-    ]
+    [Colors.lightBackground, Colors.text, _data, event.staffIds, handleClientsUpdateEvent, handleStaffUpdateEvent, intl, isEventDisabled, navigate, nonIdealState, selectedClients]
   );
 
   const _renderListEmptyComponent = useCallback(() => {
@@ -302,7 +296,13 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
     return <Space size="large" />;
   }, []);
 
-  if (isPeopleInEventQueryLoading || updateEventStatus.isLoading) return <ActivityIndicator animating={true} color={Colors.brandPrimary} />;
+  if (isPeopleInEventQueryError) {
+    Alert.alert("Error", "An error occurred while fetching people in event");
+  }
+
+  if (isPeopleInEventQueryLoading || updateEventStatus.isLoading) {
+    return <ActivityIndicator animating={true} color={Colors.brandPrimary} />;
+  }
 
   return (
     <SectionList
@@ -314,7 +314,7 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
       renderSectionHeader={_renderSectionHeader}
       ListFooterComponent={_renderListFooterComponent}
       renderItem={_renderItem}
-      sections={_data}
+      sections={_data as SectionListData<PeopleDtoType>[]}
     />
   );
 }

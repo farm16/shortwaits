@@ -12,11 +12,12 @@ import {
   Text,
   TextFieldCard,
   compareFormObjectsBeforeAbort,
+  useForm,
 } from "@shortwaits/shared-ui";
 import React, { Fragment, useEffect, useLayoutEffect, useMemo } from "react";
 import { useIntl } from "react-intl";
 import { Alert } from "react-native";
-import { useForm, useSelectImage } from "../../../hooks";
+import { useSelectImage } from "../../../hooks";
 import { AuthorizedScreenProps, GenericModalData } from "../../../navigation";
 import { useUpdateBusinessMutation } from "../../../services";
 import { useBusiness } from "../../../store";
