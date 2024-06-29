@@ -1,9 +1,9 @@
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
-import { ClientResponseType, UpdateClientDtoType, endpoints } from "@shortwaits/shared-lib";
+import { ClientResponseType, UpdateLocalClientDtoType, endpoints } from "@shortwaits/shared-lib";
 
 type RequestType = {
   businessId: string;
-  body: UpdateClientDtoType;
+  body: UpdateLocalClientDtoType;
 };
 
 export default (builder: EndpointBuilder<any, any, any>) =>

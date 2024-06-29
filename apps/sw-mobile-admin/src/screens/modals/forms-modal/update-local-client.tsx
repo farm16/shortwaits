@@ -1,14 +1,27 @@
 import { ClientType, UpdateLocalClientDtoType } from "@shortwaits/shared-lib";
-import { BackButton, Button, ButtonCard, FormContainer, PhoneNumberCard, STATIC_FORM_USA_STATES, Space, Text, TextFieldCard, getCapitalizedString } from "@shortwaits/shared-ui";
+import {
+  BackButton,
+  Button,
+  ButtonCard,
+  Container,
+  FormContainer,
+  IconButton,
+  PhoneNumberCard,
+  STATIC_FORM_USA_STATES,
+  Space,
+  Text,
+  TextFieldCard,
+  getCapitalizedString,
+  useForm,
+} from "@shortwaits/shared-ui";
 import { FormikErrors } from "formik";
 import { isEmpty, noop } from "lodash";
 import React, { FC, useEffect, useLayoutEffect } from "react";
 import { useIntl } from "react-intl";
 import { Alert } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
-import { useForm } from "../../../hooks";
-import { ModalsScreenProps } from "../../../navigation";
-import { useCreateLocalClientsMutation } from "../../../services";
+import { GenericModalData, ModalsScreenProps } from "../../../navigation";
+import { useUpdateBusinessLocalClientMutation } from "../../../services";
 import { useBusiness } from "../../../store";
 
 export const UpdateLocalClientModal: FC<ModalsScreenProps<"update-local-client-modal-screen">> = ({ navigation, route }) => {
@@ -57,15 +70,15 @@ export const UpdateLocalClientModal: FC<ModalsScreenProps<"update-local-client-m
 
   const intl = useIntl(); // Access the intl object
   const business = useBusiness();
-  const [createLocalClients, createLocalClientsStatus] = useCreateLocalClientsMutation();
+  const [updateLocalClient, updateLocalClientStatus] = useUpdateBusinessLocalClientMutation();
 
   const { touched, errors, values, validateField, setFieldTouched, handleChange, handleSubmit, setFieldError, setFieldValue } = useForm(
     {
       initialValues: _initialValues,
       onSubmit: formData => {
-        createLocalClients({
+        updateLocalClient({
           businessId: business._id,
-          body: [formData],
+          body: formData,
         });
         if (onSubmit) {
           onSubmit(formData);
@@ -82,14 +95,19 @@ export const UpdateLocalClientModal: FC<ModalsScreenProps<"update-local-client-m
     navigation.setOptions({
       headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
       headerTitle: () => <Text preset="headerTitle" text={intl.formatMessage({ id: "Common.updateClient" })} />,
+      headerRight: () => (
+        <Container direction="row" alignItems="center" justifyContent="center">
+          <IconButton withMarginRight iconType="delete" onPress={() => {}} />
+        </Container>
+      ),
     });
   }, [intl, navigation]);
 
   useEffect(() => {
-    if (createLocalClientsStatus.isSuccess && closeOnSubmit) {
+    if (updateLocalClientStatus.isSuccess && closeOnSubmit) {
       navigation.goBack();
     }
-  }, [closeOnSubmit, createLocalClientsStatus.isSuccess, navigation]);
+  }, [closeOnSubmit, updateLocalClientStatus.isSuccess, navigation]);
 
   useEffect(() => {
     const cleanup = async () => {
@@ -106,8 +124,8 @@ export const UpdateLocalClientModal: FC<ModalsScreenProps<"update-local-client-m
     };
   }, []);
 
-  if (createLocalClientsStatus.isError) {
-    Alert.alert("Error", createLocalClientsStatus.error.message);
+  if (updateLocalClientStatus.isError) {
+    Alert.alert("Error", updateLocalClientStatus.error.message);
   }
 
   const _renderSubmitButton = (
@@ -119,7 +137,7 @@ export const UpdateLocalClientModal: FC<ModalsScreenProps<"update-local-client-m
     />
   );
 
-  return createLocalClientsStatus.isLoading ? (
+  return updateLocalClientStatus.isLoading ? (
     <ActivityIndicator />
   ) : (
     <FormContainer footer={_renderSubmitButton}>
@@ -144,7 +162,7 @@ export const UpdateLocalClientModal: FC<ModalsScreenProps<"update-local-client-m
         isTouched={touched.familyName}
         errors={errors.familyName}
       />
-      <TextFieldCard title={"Email or phone"} value={values.email} onChangeText={handleChange("email")} isTouched={touched.email} errors={errors.email} />
+      <TextFieldCard title={"Email"} value={values.email} onChangeText={handleChange("email")} isTouched={touched.email} errors={errors.email} />
       <PhoneNumberCard
         title={getCapitalizedString(values.phoneNumbers[0]?.label ?? "mobile")}
         onChangeText={handleChange(`phoneNumbers[0].number`)}
@@ -211,12 +229,12 @@ export const UpdateLocalClientModal: FC<ModalsScreenProps<"update-local-client-m
           navigation.navigate("modals", {
             screen: "selector-modal-screen",
             params: {
-              type: "static",
+              mode: "static",
               headerTitle: "Select State",
               data: STATIC_FORM_USA_STATES,
-              closeOnSelect: true,
-              onSelect: state => {
-                setFieldValue("addresses[0].state", state.key);
+              onSelect: data => {
+                const state = data[0] as GenericModalData;
+                setFieldValue("addresses[0].state", state._id);
               },
             },
           })

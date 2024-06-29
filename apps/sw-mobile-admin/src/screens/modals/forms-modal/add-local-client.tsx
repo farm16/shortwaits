@@ -11,6 +11,7 @@ import {
   Text,
   TextFieldCard,
   getCapitalizedString,
+  useForm,
 } from "@shortwaits/shared-ui";
 import { FormikErrors } from "formik";
 import { noop } from "lodash";
@@ -18,7 +19,6 @@ import React, { FC, useEffect, useLayoutEffect, useMemo } from "react";
 import { useIntl } from "react-intl";
 import { Alert } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
-import { useForm } from "../../../hooks";
 import { GenericModalData, ModalsScreenProps } from "../../../navigation";
 import { useCreateLocalClientsMutation } from "../../../services";
 import { useBusiness } from "../../../store";

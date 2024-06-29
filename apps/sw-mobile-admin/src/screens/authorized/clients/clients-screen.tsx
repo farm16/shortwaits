@@ -7,13 +7,11 @@ import { ClientsTabs, FloatingGroupActionButton } from "../../../components";
 import { useOsContacts } from "../../../hooks";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useCreateLocalClientsMutation, useGetAllBusinessClientsQuery } from "../../../services";
-import { useBusiness, useLocalClients, useShowGhostComponent } from "../../../store";
+import { useBusiness, useLocalClients } from "../../../store";
 import { LocalClientsTab } from "./clients-screen-tabs/local-clients-tab";
 import { ShortwaitsClientsTab } from "./clients-screen-tabs/shortwaits-clients-tab";
 
 export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ navigation }) => {
-  useShowGhostComponent("floatingActionButton");
-
   const intl = useIntl();
   const business = useBusiness();
   const currentClients = useLocalClients();
@@ -30,19 +28,11 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
     navigation.navigate("modals", {
       screen: "add-client-modal-screen",
     });
-    // will use "add-client-modal-screen" instead of "add-local-client-modal-screen" - it will handle both local and shortwaits clients
-    // navigation.navigate("modals", {
-    //   screen: "add-local-client-modal-screen",
-    // });
   }, [navigation]);
 
   const { error: osContactsError, isLoading: isOsContactsLoading, getContacts: getOsContacts } = useOsContacts();
   const [createLocalClients, createLocalClientsResult] = useCreateLocalClientsMutation();
-  const {
-    isLoading: isAllClientsQueryLoading,
-    isSuccess: isAllClientsQuerySuccess,
-    refetch: refetchAllClientsQuery,
-  } = useGetAllBusinessClientsQuery(business?._id ?? skipToken, {
+  const { isLoading: isAllClientsQueryLoading, refetch: refetchAllClientsQuery } = useGetAllBusinessClientsQuery(business?._id ?? skipToken, {
     refetchOnMountOrArgChange: true,
   });
 

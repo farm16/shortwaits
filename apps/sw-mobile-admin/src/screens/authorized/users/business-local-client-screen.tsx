@@ -20,11 +20,7 @@ export function BusinessLocalClientScreen({ navigation, route }: AuthorizedScree
     navigation.setOptions({
       headerTitleAlign: "center",
       headerTitle: () => {
-        return (
-          <Container direction="row" alignItems="center" justifyContent="center">
-            {/* <Text preset="headerTitle" text={"Client Profile"} /> */}
-          </Container>
-        );
+        return <Container direction="row" alignItems="center" justifyContent="center"></Container>;
       },
       headerLeft: () => {
         return (
@@ -40,17 +36,20 @@ export function BusinessLocalClientScreen({ navigation, route }: AuthorizedScree
               withMarginRight
               iconType="edit"
               onPress={() => {
-                navigation.goBack();
+                navigation.navigate("modals", {
+                  screen: "update-local-client-modal-screen",
+                  params: {
+                    initialValues: localClient,
+                  },
+                });
               }}
             />
-
-            {/* <IconButton withMarginRight iconType="calendar"  /> */}
           </Container>
         );
       },
       headerShadowVisible: false,
     });
-  }, [navigation]);
+  }, [localClient, navigation]);
 
   const { localClientData, hasLocalClients } = useMemo(() => {
     const _clientData = events.filter(event => {
