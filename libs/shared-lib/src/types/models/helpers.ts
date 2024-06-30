@@ -69,6 +69,8 @@ export type WeekHoursType = {
   sun: WeekDayTimeRangeType[];
 };
 
+export type BusinessHourWeekDayType = keyof WeekHoursType;
+
 export type WeekDayType = Partial<WeekHoursType>;
 
 export type WeekDayTimeRangeType = {

@@ -1,4 +1,4 @@
-import { ClientsDtoType, LocalClientsDtoType } from "@shortwaits/shared-lib";
+import { BusinessDtoType, ClientsDtoType, LocalClientsDtoType } from "@shortwaits/shared-lib";
 import { isEqual } from "lodash";
 import { Alert } from "react-native";
 
@@ -71,4 +71,18 @@ export const getFriendlyShortId = (inputId: string) => {
   const formattedId = chunks.join("-");
 
   return formattedId;
+};
+
+export const getIsBusinessOpenToday = (business: BusinessDtoType) => {
+  const today = new Date().getDay();
+
+  const days = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
+  console.log("days >>>", days);
+  const day = days[today];
+
+  console.log("today >>>", today);
+  console.log("day >>>", JSON.stringify(day));
+
+  const todaysHours = business?.hours[day as keyof BusinessDtoType["hours"]];
+  return todaysHours.some(hour => hour.isActive);
 };

@@ -107,5 +107,14 @@ const styles = StyleSheet.create({
     borderTopColor: "#E5E5E5",
     borderTopWidth: StyleSheet.hairlineWidth,
     paddingHorizontal: getResponsiveHeight(16),
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    backgroundColor: "white",
   },
 });

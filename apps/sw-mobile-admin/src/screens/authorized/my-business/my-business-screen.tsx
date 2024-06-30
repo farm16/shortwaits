@@ -1,18 +1,28 @@
 import { useIsFocused } from "@react-navigation/native";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
-import { ActivityIndicator, BusinessIncomeInfo, ButtonCard, Container, IconButton, Screen, Text, useShareUrlWithMessage, useTheme } from "@shortwaits/shared-ui";
+import {
+  ActivityIndicator,
+  BusinessIncomeInfo,
+  ButtonCard,
+  Container,
+  IconButton,
+  Screen,
+  Text,
+  getIsBusinessOpenToday,
+  useShareUrlWithMessage,
+  useTheme,
+} from "@shortwaits/shared-ui";
 import { truncate } from "lodash";
 import React, { FC, useCallback, useLayoutEffect } from "react";
 import { useIntl } from "react-intl";
-import { Alert } from "react-native";
+import { Alert, View } from "react-native";
 import FastImage from "react-native-fast-image";
 import { useDispatch } from "react-redux";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useGetEventsSummaryByBusinessQuery, useUpdateBusinessMutation } from "../../../services";
-import { hidePremiumMembershipBanner, showPremiumMembershipBanner, useBusiness, useShowGhostComponent } from "../../../store";
+import { hidePremiumMembershipBanner, showPremiumMembershipBanner, useBusiness } from "../../../store";
 
 export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> = ({ navigation }) => {
-  useShowGhostComponent("floatingActionButton");
   const business = useBusiness();
   const { Colors } = useTheme();
   const dispatch = useDispatch();
@@ -82,6 +92,7 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
         title: business.shortName || business.longName,
       });
     };
+    const isBusinessOpenToday = getIsBusinessOpenToday(business);
     navigation.setOptions({
       headerTitle: "",
       headerLeft: () => {
@@ -109,10 +120,28 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
               }}
               text={truncate(business.shortName, { length: 16 })}
             />
+            <View
+              style={{
+                width: 8,
+                height: 8,
+                borderRadius: 5,
+                backgroundColor: isBusinessOpenToday ? Colors.success : Colors.failed,
+                marginLeft: 4,
+                marginRight: 4,
+                //green shadow
+                shadowColor: isBusinessOpenToday ? Colors.success : Colors.failed,
+                shadowOffset: {
+                  width: 0,
+                  height: 2,
+                },
+                shadowOpacity: 0.5,
+                shadowRadius: 6,
+                elevation: 6,
+              }}
+            />
           </Container>
         );
       },
-
       headerRight: () => {
         return (
           <Container direction="row" alignItems="center">
@@ -131,9 +160,7 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
         );
       },
     });
-  }, [business._id, business.longName, business.shortName, business.web.logoImageUrl, navigation, share]);
-
-  // console.log("eventSummary", eventSummary?.data?.listData);
+  }, [Colors.failed, Colors.success, business, navigation, share]);
 
   if (isLoading) return <ActivityIndicator />;
 

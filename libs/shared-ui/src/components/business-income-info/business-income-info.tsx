@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { View, StyleSheet } from "react-native";
-import { Menu, IconButton } from "react-native-paper";
+import { useIntl } from "react-intl";
+import { StyleSheet, View } from "react-native";
+import { IconButton, Menu } from "react-native-paper";
 import { useTheme } from "../../theme";
 import { Text } from "../common";
 import { Graph } from "../graph/graph";
 import { GraphData, GraphIdentifier, getGraphCoordinates } from "../graph/graph-utils";
-import { useIntl } from "react-intl";
 
 export type BusinessIncomeInfoProps = {
   data: GraphData;
@@ -20,11 +20,7 @@ function BusinessIncomeInfoComponent({ data, isLoading, error }: BusinessIncomeI
   const intl = useIntl();
 
   if (error || !data) {
-    return (
-      <View style={{ alignItems: "center" }}>
-        <Text text="Error loading data" />
-      </View>
-    );
+    return null;
   }
 
   return (
