@@ -47,7 +47,7 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
 
   useLayoutEffect(() => {
     const handleOnGoBack = () => {
-      const items = staff.filter(item => selectedItems.includes(item._id)) || null;
+      const items = staff?.filter(item => selectedItems.includes(item._id)) || null;
       if (onGoBack) {
         onGoBack(items);
       }

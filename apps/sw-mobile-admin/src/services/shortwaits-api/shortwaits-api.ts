@@ -5,8 +5,8 @@ import {
   CreateBusinessLocalClients,
   CreateBusinessStaff,
   CreateEvent,
-  CreateLocalClients,
   CreateService,
+  DeleteBusinessLocalClients,
   DeleteBusinessStaff,
   DeleteService,
   GetAdminMobile,
@@ -21,7 +21,6 @@ import {
   GetClients,
   GetEventsByBusiness,
   GetEventsSummaryByBusiness,
-  GetLocalClients,
   GetPeopleInEvent,
   GetService,
   GetServices,
@@ -68,12 +67,13 @@ export const shortwaitsApi = createApi({
     // ! A business User === Staff
     getBusinessStaff: GetBusinessStaff(builder),
     createBusinessStaff: CreateBusinessStaff(builder),
+    deleteBusinessStaff: DeleteBusinessStaff(builder), // ! <- deletes single business staff | TODO: delete multiple staff
     updateBusinessStaff: UpdateBusinessStaff(builder), // updates single business staff
-    deleteBusinessStaff: DeleteBusinessStaff(builder), // deletes single business staff
 
     // ! A client User === Customer
     createBusinessLocalClients: CreateBusinessLocalClients(builder),
-    updateBusinessLocalClient: UpdateBusinessLocalClient(builder), // updates single business client
+    deleteBusinessLocalClients: DeleteBusinessLocalClients(builder),
+    updateBusinessLocalClient: UpdateBusinessLocalClient(builder), // ! <- Updates single local client
 
     // <<<<<
 
@@ -98,9 +98,7 @@ export const shortwaitsApi = createApi({
 
     // todo: Users
     getClients: GetClients(builder),
-    getLocalClients: GetLocalClients(builder),
     addClientToBusiness: AddClientToBusiness(builder),
-    createLocalClients: CreateLocalClients(builder),
     getStaff: GetStaff(builder),
 
     //file uploads

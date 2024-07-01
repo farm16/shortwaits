@@ -16,20 +16,82 @@ import {
 } from "@shortwaits/shared-ui";
 import { FormikErrors } from "formik";
 import { isEmpty, noop } from "lodash";
-import React, { FC, useEffect, useLayoutEffect } from "react";
+import React, { FC, useEffect, useLayoutEffect, useMemo } from "react";
 import { useIntl } from "react-intl";
 import { Alert } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import { GenericModalData, ModalsScreenProps } from "../../../navigation";
-import { useUpdateBusinessLocalClientMutation } from "../../../services";
+import { useDeleteBusinessLocalClientsMutation, useUpdateBusinessLocalClientMutation } from "../../../services";
 import { useBusiness } from "../../../store";
 
 export const UpdateLocalClientModal: FC<ModalsScreenProps<"update-local-client-modal-screen">> = ({ navigation, route }) => {
   const params = route?.params;
   const onSubmit = params?.onSubmit ?? noop;
-  const onDone = params?.onDone ?? noop;
-  const closeOnSubmit = params?.closeOnSubmit ?? true;
-  const initialValues = params?.initialValues ?? {};
+
+  const [updateLocalClient, updateLocalClientStatus] = useUpdateBusinessLocalClientMutation();
+  const [deleteLocalClients, deleteLocalClientsStatus] = useDeleteBusinessLocalClientsMutation();
+  const initialValues = useMemo(() => params?.initialValues, [params]);
+  const intl = useIntl(); // Access the intl object
+  const business = useBusiness();
+  console.log("initialValues >>>", JSON.stringify(initialValues, null, 3));
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
+      headerTitle: () => <Text preset="headerTitle" text={intl.formatMessage({ id: "Common.updateClient" })} />,
+      headerRight: () => (
+        <Container direction="row" alignItems="center" justifyContent="center">
+          <IconButton
+            withMarginRight
+            iconType="delete"
+            onPress={() => {
+              Alert.alert("Delete Client", "Are you sure you want to delete this client?", [
+                {
+                  text: "Cancel",
+                  onPress: () => console.log("Cancel Pressed"),
+                  style: "cancel",
+                },
+                {
+                  text: "OK",
+                  onPress: () => {
+                    deleteLocalClients({
+                      businessId: business._id,
+                      body: [initialValues],
+                    });
+                    navigation.goBack();
+                  },
+                },
+              ]);
+            }}
+          />
+        </Container>
+      ),
+    });
+  }, [business._id, deleteLocalClients, initialValues, intl, navigation]);
+
+  useEffect(() => {
+    if (updateLocalClientStatus.isSuccess || deleteLocalClientsStatus.isSuccess) {
+      if (onSubmit) {
+        onSubmit();
+      }
+      navigation.goBack();
+    }
+  }, [updateLocalClientStatus.isSuccess, navigation, onSubmit, deleteLocalClientsStatus.isSuccess]);
+
+  useEffect(() => {
+    const cleanup = async () => {
+      if (onSubmit) {
+        try {
+          await onSubmit();
+        } catch (error) {
+          console.error("Error in onSubmit:", error);
+        }
+      }
+    };
+    return () => {
+      cleanup();
+    };
+  }, []);
 
   const _initialValues: UpdateLocalClientDtoType = {
     ...initialValues,
@@ -68,10 +130,6 @@ export const UpdateLocalClientModal: FC<ModalsScreenProps<"update-local-client-m
       : initialValues.addresses,
   };
 
-  const intl = useIntl(); // Access the intl object
-  const business = useBusiness();
-  const [updateLocalClient, updateLocalClientStatus] = useUpdateBusinessLocalClientMutation();
-
   const { touched, errors, values, validateField, setFieldTouched, handleChange, handleSubmit, setFieldError, setFieldValue } = useForm(
     {
       initialValues: _initialValues,
@@ -88,46 +146,6 @@ export const UpdateLocalClientModal: FC<ModalsScreenProps<"update-local-client-m
     "updateLocalClient"
   );
 
-  // console.log("errors", JSON.stringify(errors, null, 3));
-  console.log("initialValues >>>", JSON.stringify(initialValues, null, 3));
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
-      headerTitle: () => <Text preset="headerTitle" text={intl.formatMessage({ id: "Common.updateClient" })} />,
-      headerRight: () => (
-        <Container direction="row" alignItems="center" justifyContent="center">
-          <IconButton withMarginRight iconType="delete" onPress={() => {}} />
-        </Container>
-      ),
-    });
-  }, [intl, navigation]);
-
-  useEffect(() => {
-    if (updateLocalClientStatus.isSuccess && closeOnSubmit) {
-      navigation.goBack();
-    }
-  }, [closeOnSubmit, updateLocalClientStatus.isSuccess, navigation]);
-
-  useEffect(() => {
-    const cleanup = async () => {
-      if (onDone) {
-        try {
-          await onDone();
-        } catch (error) {
-          console.error("Error in onDone:", error);
-        }
-      }
-    };
-    return () => {
-      cleanup();
-    };
-  }, []);
-
-  if (updateLocalClientStatus.isError) {
-    Alert.alert("Error", updateLocalClientStatus.error.message);
-  }
-
   const _renderSubmitButton = (
     <Button
       text={intl.formatMessage({ id: "Common.update" })}
@@ -137,9 +155,19 @@ export const UpdateLocalClientModal: FC<ModalsScreenProps<"update-local-client-m
     />
   );
 
-  return updateLocalClientStatus.isLoading ? (
-    <ActivityIndicator />
-  ) : (
+  if (updateLocalClientStatus.isError || deleteLocalClientsStatus.isError) {
+    const errors = [updateLocalClientStatus.error, deleteLocalClientsStatus.error].filter(Boolean);
+
+    const errorMessages = errors.map(error => error.message).join("\n");
+
+    Alert.alert("Error", errorMessages);
+  }
+
+  if (updateLocalClientStatus.isLoading || deleteLocalClientsStatus.isLoading) {
+    return <ActivityIndicator />;
+  }
+
+  return (
     <FormContainer footer={_renderSubmitButton}>
       <TextFieldCard
         title={intl.formatMessage({ id: "AddLocalClientModal.nickname" })}

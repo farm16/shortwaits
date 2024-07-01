@@ -78,7 +78,6 @@ export type ModalStackParamList = {
     days?: BusinessWeekDaysType[];
     disabledDays?: BusinessWeekDaysType[];
     onSubmit(hours: WeekHoursType): void;
-    closeOnSubmit?: boolean;
   };
   [MODAL_SCREENS.SERVICE_MODAL_SCREEN]: {
     service?: ServiceDtoType;
@@ -87,20 +86,16 @@ export type ModalStackParamList = {
     onSubmit?<T extends keyof FormData>(arg: FormData[T]): void;
     onDone?(): void;
     onGoBack?(arg0): void;
-    closeOnSubmit?: boolean;
   };
   [MODAL_SCREENS.ADD_LOCAL_CLIENT_MODAL_SCREEN]: {
     onSubmit?<T extends keyof FormData>(arg: FormData[T]): void;
     onDone?(): void;
     onGoBack?(arg0): void;
-    closeOnSubmit?: boolean;
   };
   [MODAL_SCREENS.UPDATE_LOCAL_CLIENT_MODAL_SCREEN]: {
     initialValues: UpdateLocalClientDtoType;
     onSubmit?<T extends keyof FormData>(arg: FormData[T]): void;
-    onDone?(): void;
     onGoBack?(arg0): void;
-    closeOnSubmit?: boolean;
   };
   [MODAL_SCREENS.ADD_EVENT_MODAL_SCREEN]: {
     onSubmit?(): void;
@@ -116,26 +111,21 @@ export type ModalStackParamList = {
   [MODAL_SCREENS.ADD_STAFF_MODAL_SCREEN]: {
     initialValues?: FormData[FormType];
     onSubmit?<T extends keyof FormData>(arg: FormData[T]): void;
-    onDone?(): void;
-    closeOnSubmit?: boolean;
   };
   [MODAL_SCREENS.UPDATE_STAFF_MODAL_SCREEN]: {
     initialValues?: FormData[FormType];
     onSubmit?<T extends keyof FormData>(arg: FormData[T]): void;
     onDone?(): void;
-    closeOnSubmit?: boolean;
   };
   [MODAL_SCREENS.ADD_SERVICE_MODAL_SCREEN]: {
     initialValues?: FormData[FormType];
     onSubmit?<T extends keyof FormData>(arg: FormData[T]): void;
     onDone?(): void;
-    closeOnSubmit?: boolean;
   };
   [MODAL_SCREENS.UPDATE_SERVICE_MODAL_SCREEN]: {
     initialValues?: FormData[FormType];
     onSubmit?<T extends keyof FormData>(arg: FormData[T]): void;
     onDone?(): void;
-    closeOnSubmit?: boolean;
   };
   [MODAL_SCREENS.WEBVIEW_MODAL_SCREEN]: {
     uri: string;

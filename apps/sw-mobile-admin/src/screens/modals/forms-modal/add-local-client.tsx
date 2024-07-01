@@ -20,19 +20,18 @@ import { useIntl } from "react-intl";
 import { Alert } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import { GenericModalData, ModalsScreenProps } from "../../../navigation";
-import { useCreateLocalClientsMutation } from "../../../services";
+import { useCreateBusinessLocalClientsMutation } from "../../../services";
 import { useBusiness } from "../../../store";
 
 export const AddLocalClientModal: FC<ModalsScreenProps<"add-local-client-modal-screen">> = ({ navigation, route }) => {
   const params = route?.params;
   const onSubmit = params?.onSubmit ?? noop;
   const onDone = params?.onDone ?? noop;
-  const closeOnSubmit = params?.closeOnSubmit ?? true;
 
   const intl = useIntl(); // Access the intl object
   const business = useBusiness();
 
-  const [createLocalClients, createLocalClientsStatus] = useCreateLocalClientsMutation();
+  const [createLocalClients, createLocalClientsStatus] = useCreateBusinessLocalClientsMutation();
 
   const initialValues = useMemo(() => {
     const _initialValues: AddLocalClientDtoType = {
@@ -117,10 +116,10 @@ export const AddLocalClientModal: FC<ModalsScreenProps<"add-local-client-modal-s
   }, [intl, navigation]);
 
   useEffect(() => {
-    if (createLocalClientsStatus.isSuccess && closeOnSubmit) {
+    if (createLocalClientsStatus.isSuccess) {
       navigation.goBack();
     }
-  }, [closeOnSubmit, createLocalClientsStatus.isSuccess, navigation]);
+  }, [createLocalClientsStatus.isSuccess, navigation]);
 
   useEffect(() => {
     const cleanup = async () => {
@@ -138,7 +137,7 @@ export const AddLocalClientModal: FC<ModalsScreenProps<"add-local-client-modal-s
   }, []);
 
   if (createLocalClientsStatus.isError) {
-    Alert.alert("Error", createLocalClientsStatus.error.message);
+    Alert.alert("Error", createLocalClientsStatus?.error?.message);
   }
 
   const renderSubmitButton = (
@@ -150,9 +149,11 @@ export const AddLocalClientModal: FC<ModalsScreenProps<"add-local-client-modal-s
     />
   );
 
-  return createLocalClientsStatus.isLoading ? (
-    <ActivityIndicator />
-  ) : (
+  if (createLocalClientsStatus.isLoading) {
+    return <ActivityIndicator />;
+  }
+
+  return (
     <FormContainer footer={renderSubmitButton}>
       <TextFieldCard
         title={intl.formatMessage({ id: "AddLocalClientModal.nickname" })}

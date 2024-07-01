@@ -40,6 +40,9 @@ export function BusinessLocalClientScreen({ navigation, route }: AuthorizedScree
                   screen: "update-local-client-modal-screen",
                   params: {
                     initialValues: localClient,
+                    onSubmit: values => {
+                      navigation.goBack();
+                    },
                   },
                 });
               }}
@@ -146,22 +149,20 @@ export function BusinessLocalClientScreen({ navigation, route }: AuthorizedScree
               console.log("share");
             }}
           />
-          {onUserRemove ? (
-            <Button
-              leftIconSize={25}
-              leftIconColor={Colors.failed}
-              style={{
-                backgroundColor: Colors.failedBackground,
-              }}
-              preset={"icon2"}
-              leftIconName={"delete"}
-              onPress={() => {
-                if (onUserRemove) {
-                  onUserRemove(localClient);
-                }
-              }}
-            />
-          ) : null}
+          <Button
+            leftIconSize={25}
+            leftIconColor={Colors.failed}
+            style={{
+              backgroundColor: Colors.failedBackground,
+            }}
+            preset={"icon2"}
+            leftIconName={"delete"}
+            onPress={() => {
+              if (onUserRemove) {
+                onUserRemove(localClient);
+              }
+            }}
+          />
         </View>
         <Space />
       </View>

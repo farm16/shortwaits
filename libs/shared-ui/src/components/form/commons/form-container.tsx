@@ -1,4 +1,4 @@
-import React, { ReactElement, ReactNode, useCallback, useState } from "react";
+import React, { Fragment, ReactElement, ReactNode, useCallback, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Banner } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
@@ -91,19 +91,22 @@ export const FormContainer = (props: FormContainerProps) => {
   }
 
   return (
-    <Screen unsafe preset="scroll" {...rest} withHorizontalPadding={false} backgroundColor={backgroundColor} statusBarBackgroundColor={statusBarBackgroundColor}>
-      <View style={{ flex: 1, paddingHorizontal: withHorizontalPadding ? 16 : 0 }}>
-        <Space size="large" />
-        {children}
-      </View>
+    <Fragment>
+      <Screen unsafe preset="scroll" {...rest} withHorizontalPadding={false} backgroundColor={backgroundColor} statusBarBackgroundColor={statusBarBackgroundColor}>
+        <View style={{ flex: 1, paddingHorizontal: withHorizontalPadding ? 16 : 0 }}>
+          <Space size="large" />
+          {children}
+        </View>
+      </Screen>
       {clonedFooter ? <View style={styles.footer}>{clonedFooter}</View> : null}
-    </Screen>
+    </Fragment>
   );
 };
 
 const styles = StyleSheet.create({
   footer: {
     paddingTop: getResponsiveHeight(16),
+    paddingBottom: getResponsiveHeight(16),
     borderTopColor: "#E5E5E5",
     borderTopWidth: StyleSheet.hairlineWidth,
     paddingHorizontal: getResponsiveHeight(16),

@@ -10,7 +10,7 @@ import { ClientUser } from "./entities/client-user.entity";
 export class ClientUserService {
   constructor(
     @InjectModel(ClientUser.name)
-    private readonly clientUserModel: Model<ClientUser>,
+    private readonly clientModel: Model<ClientUser>,
     @InjectModel(Business.name)
     private readonly businessModel: Model<Business>
   ) {}
@@ -24,7 +24,7 @@ export class ClientUserService {
       if (business.clients?.length === 0) {
         return [];
       }
-      const clients = await this.clientUserModel.find({ _id: { $in: business.clients } }).exec();
+      const clients = await this.clientModel.find({ _id: { $in: business.clients } }).exec();
       return clients;
     } catch (error) {
       console.log(error);
@@ -43,7 +43,7 @@ export class ClientUserService {
         throw new PreconditionFailedException(`No clients provided`);
       }
       // todo we might need to limit on the number of local clients that can be created at once or in total
-      const newLocalClientUsers = await this.clientUserModel.create(localClients);
+      const newLocalClientUsers = await this.clientModel.create(localClients);
       return newLocalClientUsers;
     } catch (error) {
       console.log(error);
@@ -62,7 +62,7 @@ export class ClientUserService {
       if (!localClient) {
         throw new PreconditionFailedException(`No client provided`);
       }
-      const updatedLocalClientUser = await this.clientUserModel.findByIdAndUpdate(localClient._id, localClient, { new: true });
+      const updatedLocalClientUser = await this.clientModel.findByIdAndUpdate(localClient._id, localClient, { new: true });
       return updatedLocalClientUser;
     } catch (error) {
       console.log(error);
@@ -80,7 +80,7 @@ export class ClientUserService {
       if (!clientShortId) {
         throw new PreconditionFailedException(`No client short id provided`);
       }
-      const userClient = await this.clientUserModel.findOne({ shortId: clientShortId }).exec();
+      const userClient = await this.clientModel.findOne({ shortId: clientShortId }).exec();
       if (!userClient) {
         throw new NotFoundException(`Client #${clientShortId} not found`);
       }
@@ -105,7 +105,7 @@ export class ClientUserService {
 
   async searchClients(query: string) {
     try {
-      return this.clientUserModel.find({ $text: { $search: query } }).exec();
+      return this.clientModel.find({ $text: { $search: query } }).exec();
     } catch (error) {
       console.log(error);
       throw new InternalServerErrorException(error.message);
@@ -117,7 +117,7 @@ export class ClientUserService {
       if (!clientShortId) {
         throw new PreconditionFailedException(`No client short id provided`);
       }
-      const userClient = await this.clientUserModel.findOne({ clientShortId }).exec();
+      const userClient = await this.clientModel.findOne({ clientShortId }).exec();
       if (!userClient) {
         throw new NotFoundException(`Client #${clientShortId} not found`);
       }

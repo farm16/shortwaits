@@ -36,7 +36,6 @@ async function bootstrap() {
   //swagger setup
   const swaggerDocumentConfig = new DocumentBuilder()
     .setTitle("Shortwaits Admin - API")
-    .setDescription(html)
     .addServer("http://127.0.0.1:8080", "Dev server")
     .addServer("https://api.shortwaits.com", "Production server")
     .addBearerAuth()
@@ -64,21 +63,3 @@ async function bootstrap() {
 }
 
 bootstrap();
-
-const html = `Shortwaits's successful response: <br>
-<code>{data: [
-{ id: 1, name: "Item 1" },
-{ id: 2, name: "Item 2" },
-{ id: 3, name: "Item 3" },
-],<br>
-statusCode: 200,<br>
-meta: {
-pagination: {
-totalItems: 10,
-totalPages: 2,
-currentPage: 1,
-itemsPerPage: 3,
-},
-},
-}<code>
-`;

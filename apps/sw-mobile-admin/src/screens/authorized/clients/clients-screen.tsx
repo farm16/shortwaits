@@ -6,7 +6,7 @@ import { Alert } from "react-native";
 import { ClientsTabs, FloatingGroupActionButton } from "../../../components";
 import { useOsContacts } from "../../../hooks";
 import { AuthorizedScreenProps } from "../../../navigation";
-import { useCreateLocalClientsMutation, useGetAllBusinessClientsQuery } from "../../../services";
+import { useCreateBusinessLocalClientsMutation, useGetAllBusinessClientsQuery } from "../../../services";
 import { useBusiness, useLocalClients } from "../../../store";
 import { LocalClientsTab } from "./clients-screen-tabs/local-clients-tab";
 import { ShortwaitsClientsTab } from "./clients-screen-tabs/shortwaits-clients-tab";
@@ -31,12 +31,12 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
   }, [navigation]);
 
   const { error: osContactsError, isLoading: isOsContactsLoading, getContacts: getOsContacts } = useOsContacts();
-  const [createLocalClients, createLocalClientsResult] = useCreateLocalClientsMutation();
+  const [createBusinessLocalClients, createBusinessLocalClientsResult] = useCreateBusinessLocalClientsMutation();
   const { isLoading: isAllClientsQueryLoading, refetch: refetchAllClientsQuery } = useGetAllBusinessClientsQuery(business?._id ?? skipToken, {
     refetchOnMountOrArgChange: true,
   });
 
-  const isCreateClientsLoading = createLocalClientsResult.isLoading && !createLocalClientsResult.isSuccess;
+  const isCreateClientsLoading = createBusinessLocalClientsResult.isLoading && !createBusinessLocalClientsResult.isSuccess;
   const isLoading = isCreateClientsLoading;
 
   const renderShortwaitsClientsTab = useCallback(() => {
@@ -59,7 +59,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
 
         console.log("filteredContacts >>>", JSON.stringify(filteredContacts, null, 2));
 
-        createLocalClients({
+        createBusinessLocalClients({
           businessId: business._id,
           body: filteredContacts,
         });
@@ -76,7 +76,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
         },
       ]);
     },
-    [business._id, createLocalClients, currentClients, getOsContacts, osContactsError]
+    [business._id, createBusinessLocalClients, currentClients, getOsContacts, osContactsError]
   );
 
   useLayoutEffect(() => {

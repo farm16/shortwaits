@@ -25,7 +25,7 @@ import { Alert, TouchableOpacity, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { ActivityIndicator } from "react-native-paper";
 import { GenericModalData, ModalsScreenProps } from "../../../navigation";
-import { useAddClientToBusinessMutation, useCreateLocalClientsMutation } from "../../../services";
+import { useAddClientToBusinessMutation, useCreateBusinessLocalClientsMutation } from "../../../services";
 import { useBusiness } from "../../../store";
 
 export const AddClientModal: FC<ModalsScreenProps<"add-client-modal-screen">> = ({ navigation, route }) => {
@@ -147,27 +147,27 @@ const LocalClientForm = ({ onSubmit }) => {
   const intl = useIntl(); // Access the intl object
   const business = useBusiness();
   const navigation = useNavigation<ModalsScreenProps<"add-client-modal-screen">["navigation"]>();
-  const [addLocalClients, addLocalClientsStatus] = useCreateLocalClientsMutation();
+  const [addBusinessLocalClients, addBusinessLocalClientsStatus] = useCreateBusinessLocalClientsMutation();
   const initialValues = useMemo(() => {
     return localClientFormInitialValues;
   }, []);
 
-  if (addLocalClientsStatus.isError) {
-    console.log("addLocalClientsStatus.error >>>", addLocalClientsStatus.error);
-    Alert.alert("Error", addLocalClientsStatus.error.data.message);
+  if (addBusinessLocalClientsStatus.isError) {
+    console.log("addBusinessLocalClientsStatus.error >>>", addBusinessLocalClientsStatus.error);
+    Alert.alert("Error", addBusinessLocalClientsStatus.error.data.message);
   }
 
   useEffect(() => {
-    if (addLocalClientsStatus.isSuccess) {
+    if (addBusinessLocalClientsStatus.isSuccess) {
       navigation.goBack();
     }
-  }, [addLocalClientsStatus.isSuccess, navigation]);
+  }, [addBusinessLocalClientsStatus.isSuccess, navigation]);
 
   const { touched, errors, values, validateField, setFieldTouched, handleChange, handleSubmit, setFieldError, setFieldValue } = useForm<AddLocalClientDtoType>(
     {
       initialValues: initialValues,
       onSubmit: formData => {
-        addLocalClients({
+        addBusinessLocalClients({
           businessId: business._id,
           body: [formData], // needs to be an array to support multiple clients
         });

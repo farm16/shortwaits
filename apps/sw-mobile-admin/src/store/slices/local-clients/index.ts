@@ -14,16 +14,13 @@ export const localClientsSlice = createSlice({
   },
   extraReducers: builder => {
     builder
-      .addMatcher(shortwaitsApi.endpoints.getLocalClients.matchFulfilled, (state, action) => {
-        return action.payload.data;
-      })
       .addMatcher(shortwaitsApi.endpoints.createBusinessLocalClients.matchFulfilled, (_state, action) => {
         return action.payload.data;
       })
-      .addMatcher(shortwaitsApi.endpoints.getAllBusinessClients.matchFulfilled, (_state, action) => {
-        return action.payload.data.localClients;
+      .addMatcher(shortwaitsApi.endpoints.deleteBusinessLocalClients.matchFulfilled, (state, action) => {
+        return action.payload.data;
       })
-      .addMatcher(shortwaitsApi.endpoints.createLocalClients.matchFulfilled, (state, action) => {
+      .addMatcher(shortwaitsApi.endpoints.getAllBusinessClients.matchFulfilled, (_state, action) => {
         return action.payload.data.localClients;
       });
   },

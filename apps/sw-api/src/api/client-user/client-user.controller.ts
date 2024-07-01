@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Put, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { ClientDtoType } from "@shortwaits/shared-lib";
 import { AtGuard } from "../../common/guards";
@@ -33,25 +33,19 @@ export class ClientUserController {
 
   @Put("business/:businessId/local-clients")
   @HttpCode(HttpStatus.OK)
-  async addClientToBusiness(@Param("businessId") businessId: string, @Body() body: { shortId: string }) {
+  async updateClientToBusiness(@Param("businessId") businessId: string, @Body() body: { shortId: string }) {
     return this.clientUsersService.addClientUserToBusiness(businessId, body.shortId);
   }
 
-  // @Put(":clientId")
-  // @HttpCode(HttpStatus.OK)
-  // async updateClients(@Param("clientId") clientId: string, @Body() dto: CreateClientUserDto) {
-  //   return null;
-  // }
+  @Delete("business/:businessId/local-clients")
+  @HttpCode(HttpStatus.OK)
+  async deleteClientToBusiness(@Param("businessId") businessId: string, @Body() body: { shortId: string }) {
+    return this.clientUsersService.addClientUserToBusiness(businessId, body.shortId);
+  }
 
   @Get(":clientShortId")
   @HttpCode(HttpStatus.OK)
   async searchClients(@Param("clientShortId") clientShortId: string) {
     return this.clientUsersService.getClient(clientShortId);
   }
-
-  // @Get("search")
-  // @HttpCode(HttpStatus.OK)
-  // async searchClients(@Query("q") query: string) {
-  //   return this.clientUsersService.searchClients(query);
-  // }
 }

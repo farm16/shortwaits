@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Req, UseGuards, ValidationPipe } from "@nestjs/common";
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
-import { AddClientsDtoType, CreateBusinessUsersDtoType, UpdateClientDtoType } from "@shortwaits/shared-lib";
+import { AddClientsDtoType, CreateBusinessUsersDtoType, DeleteLocalClientsDtoType, UpdateClientDtoType } from "@shortwaits/shared-lib";
 import { AtGuard } from "../../common/guards";
 import { BusinessService } from "./business.service";
 import { RegisterBusinessDto } from "./dto/registerBusiness.dto";
@@ -86,14 +86,14 @@ export class BusinessController {
     return this.businessService.findByKey(businessId, "events");
   }
 
-  @Get(":businessId/clients")
+  @Get(":businessId/all-clients")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
     description: "Returns business clients",
   })
   async getClients(@Param("businessId") businessId: string, @Req() request) {
-    return this.businessService.getClients(request.user.sub, businessId);
+    return this.businessService.getAllClients(request.user.sub, businessId);
   }
 
   @Post(":businessId/local-clients")
@@ -104,6 +104,16 @@ export class BusinessController {
   })
   async createBusinessLocalClients(@Param("businessId") businessId: string, @Req() request, @Body() dto: AddClientsDtoType) {
     return this.businessService.createBusinessLocalClients(request.user.sub, businessId, dto);
+  }
+
+  @Delete(":businessId/local-clients")
+  @HttpCode(HttpStatus.OK)
+  @ApiCreatedResponse({
+    status: HttpStatus.CREATED,
+    description: "Returns created",
+  })
+  async deleteBusinessLocalClients(@Param("businessId") businessId: string, @Req() request, @Body() dto: DeleteLocalClientsDtoType) {
+    return this.businessService.deleteBusinessLocalClients(request.user.sub, businessId, dto);
   }
 
   @Put(":businessId/local-client")

@@ -1,10 +1,9 @@
 import { Portal } from "@gorhom/portal";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-import React, { useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 import { StyleSheet } from "react-native";
 import { FAB, FABGroupProps } from "react-native-paper";
 import { ThemeColorName, useTheme } from "../../theme";
-import { getResponsiveHeight } from "../../utils";
 
 type FloatingActionButtonProps = {
   actions: FABGroupProps["actions"];
@@ -31,7 +30,7 @@ export const FabGroupButton = (props: FloatingActionButtonProps) => {
         open={isOpen}
         fabStyle={[
           {
-            marginBottom: tabBarHeight + getResponsiveHeight(16),
+            marginBottom: tabBarHeight + 32,
             backgroundColor: backgroundColor ? Colors[backgroundColor] : Colors.brandAccent,
           },
         ]}

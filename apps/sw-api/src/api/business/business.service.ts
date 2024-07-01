@@ -6,6 +6,7 @@ import {
   BusinessHoursType,
   BusinessType,
   CreateBusinessUsersDtoType,
+  DeleteLocalClientsDtoType,
   ObjectId,
   PartialBusinessUserDtoType,
   UpdateClientDtoType,
@@ -165,29 +166,82 @@ export class BusinessService {
     if (isAdmin || isSuperAdmin) {
       const clientsPayload = generateClientUsers(clients);
       const insertedClients = await this.localClientUserModel.insertMany(clientsPayload);
-      const clientsIds = insertedClients.map(client => {
+      const insertedLocalClientsIds = insertedClients.map(client => {
         return client._id;
       });
-      const businessClients = businessData.clients ? businessData.clients.concat(clientsIds) : clientsIds;
-      const business = await this.businessModel.findByIdAndUpdate(
+
+      const updatedBusiness = await this.businessModel.findByIdAndUpdate(
         businessId,
         {
-          clients: businessClients,
+          $push: { localClients: insertedLocalClientsIds },
         },
         { new: true }
       );
 
-      const updatedBusiness = await business.save();
-      const newClients = await this.localClientUserModel.find({
+      const newLocalClients = await this.localClientUserModel.find({
         _id: {
-          $in: updatedBusiness.clients,
+          $in: updatedBusiness.localClients,
         },
+        deleted: false, // although we are creating new clients, we want to make sure that we are not returning deleted clients
       });
-      return newClients;
+      return newLocalClients;
     }
   }
 
-  async getClients(businessUserId: string, businessId: string) {
+  async deleteBusinessLocalClients(businessUserId: string, businessId: string, clients: DeleteLocalClientsDtoType) {
+    const businessData = await this.findBusinessById(businessId);
+
+    const { isAdmin, isSuperAdmin } = this.isUserAdminType(businessData, businessUserId);
+
+    if (isAdmin || isSuperAdmin) {
+      const clientsIds = clients.map(client => {
+        return client._id;
+      });
+
+      const updateManyResult = await this.localClientUserModel.updateMany(
+        {
+          _id: {
+            $in: clientsIds,
+          },
+        },
+        { deleted: true }
+      );
+
+      if (updateManyResult.modifiedCount === 0) {
+        throw new NotFoundException("No clients found");
+      }
+
+      const _clients = await this.localClientUserModel.find({
+        _id: {
+          $in: clientsIds,
+        },
+        deleted: true,
+      });
+
+      const deletedClientsIds = _clients.map(client => client._id);
+      const updatedClients = businessData.localClients.filter(client => !deletedClientsIds.includes(client));
+      const updatedBusiness = await this.businessModel.findByIdAndUpdate(
+        businessId,
+        {
+          localClients: updatedClients,
+        },
+        { new: true }
+      );
+
+      console.log("updatedBusiness >>>", updatedBusiness);
+
+      const updatedLocalClients = await this.localClientUserModel.find({
+        _id: {
+          $in: updatedBusiness.localClients,
+        },
+        deleted: false, // although we are creating new clients, we want to make sure that we are not returning deleted clients
+      });
+
+      return updatedLocalClients;
+    }
+  }
+
+  async getAllClients(businessUserId: string, businessId: string) {
     if (!businessId || !businessUserId) {
       throw new ForbiddenException("Unrecognized business or user");
     }
@@ -201,6 +255,7 @@ export class BusinessService {
           _id: {
             $in: businessData.localClients,
           },
+          deleted: false,
         })
         .select("-__v -hashedRt");
 
@@ -209,6 +264,7 @@ export class BusinessService {
           _id: {
             $in: businessData.clients,
           },
+          deleted: false,
         })
         .select("-__v -hashedRt");
 
@@ -275,7 +331,11 @@ export class BusinessService {
 
     const { isAdmin, isSuperAdmin } = this.isUserAdminType(businessData, businessUserId);
 
-    if (isAdmin || isSuperAdmin) {
+    if (!isAdmin && !isSuperAdmin) {
+      throw new ForbiddenException("Not enough permissions");
+    }
+
+    try {
       const staffPayload = generateBusinessStaff(staff, businessId);
       const insertedStaff = await this.businessUserModel.insertMany(staffPayload);
       const staffIds = insertedStaff.map(client => client._id);
@@ -292,9 +352,15 @@ export class BusinessService {
         _id: {
           $in: newBusinessRecord.staff,
         },
+        deleted: false,
       });
 
+      console.log("newBusinessRecord >>>", newBusinessRecord);
+      console.log("newStaff >>>", newStaff);
+
       return newStaff;
+    } catch (error) {
+      console.log(error);
     }
   }
 

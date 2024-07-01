@@ -26,11 +26,9 @@ import { useCreateBusinessStaffMutation } from "../../../services";
 import { useBusiness } from "../../../store";
 
 export const AddStaffModal: FC<ModalsScreenProps<"add-staff-modal-screen">> = ({ navigation, route }) => {
-  //const { onSubmit, onDone, closeOnSubmit = true } = route.params;
+  //const { onSubmit, onSubmit, closeOnSubmit = true } = route.params;
   const params = route?.params;
   const onSubmit = params?.onSubmit ?? noop;
-  const onDone = params?.onDone ?? noop;
-  const closeOnSubmit = params?.closeOnSubmit ?? true;
 
   const intl = useIntl(); // Access the intl object
 
@@ -117,21 +115,21 @@ export const AddStaffModal: FC<ModalsScreenProps<"add-staff-modal-screen">> = ({
       headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
       headerTitle: () => <Text preset="headerTitle" text={intl.formatMessage({ id: "AddStaffModal.title" })} />,
     });
-  }, [closeOnSubmit, handleSubmit, intl, navigation]);
+  }, [handleSubmit, intl, navigation]);
 
   useEffect(() => {
-    if (createBusinessStaffStatus.isSuccess && closeOnSubmit) {
+    if (createBusinessStaffStatus.isSuccess) {
       navigation.goBack();
     }
-  }, [closeOnSubmit, createBusinessStaffStatus.isSuccess, navigation]);
+  }, [createBusinessStaffStatus.isSuccess, navigation]);
 
   useEffect(() => {
     const cleanup = async () => {
-      if (onDone) {
+      if (onSubmit) {
         try {
-          await onDone();
+          await onSubmit();
         } catch (error) {
-          console.error("Error in onDone:", error);
+          console.error("Error in onSubmit:", error);
         }
       }
     };
