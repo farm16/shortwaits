@@ -1,6 +1,6 @@
 import {
-  AddClientDtoType,
-  AddClientsDtoType,
+  AddLocalClientDtoType,
+  AddLocalClientsDtoType,
   BusinessUserRoles,
   BusinessUserType,
   ClientType,
@@ -8,6 +8,7 @@ import {
   CreateBusinessUserDtoType,
   CreateBusinessUsersDtoType,
   LocalClientType,
+  PartialLocalClientDtoType,
   generateAvatarUrl,
   generateShortId,
 } from "@shortwaits/shared-lib";
@@ -67,7 +68,7 @@ const defaultStaffHours = {
 export const generateBusinessUser = (user: CreateBusinessUserDtoType, businessUserRoles: BusinessUserRoles, businessId?: string) => {
   // if no accountImageUrl, insert a property with a generated avatar url to the user object
   if (!user?.accountImageUrl) {
-    const stringIdentifier = user.email || user.username || "?";
+    const stringIdentifier = user.email || user.username || user.displayName || user.familyName || user.middleName || "?";
     user.accountImageUrl = generateAvatarUrl(stringIdentifier);
   }
   // get userRoles based on businessUserRoles
@@ -138,21 +139,34 @@ export const generateBusinessStaff = (users: CreateBusinessUsersDtoType, busines
   return businessUsers;
 };
 
-export const generateNewClientPayload = (user: AddClientDtoType) => {
-  const accountImageUrl = generateAvatarUrl(user.email || "?");
+export const generateNewLocalClientPayload = (client: AddLocalClientDtoType): PartialLocalClientDtoType => {
+  const imageUrlIdentifier = client.displayName || client.familyName || client.givenName || client.email || "?";
+  const accountImageUrl = generateAvatarUrl(imageUrlIdentifier);
   return {
-    email: user.email,
-    password: user.password,
+    ...client,
+    email: client.email,
+    password: "password",
     accountImageUrl: accountImageUrl,
     roleId: null,
     deleted: false,
-    isDisabled: false,
+    registration: {
+      isRegistered: false,
+      registrationType: "business",
+      state: {
+        screenName: "",
+        state: 7,
+        isPendingVerification: false,
+      },
+    },
   };
 };
 
-export const generateClientUsers = (users: AddClientsDtoType) => {
+export const generateLocalClients = (users: AddLocalClientsDtoType) => {
+  if (!users || users.length === 0) {
+    return [];
+  }
   const clientUsers = users.map(user => {
-    return generateNewClientPayload(user);
+    return generateNewLocalClientPayload(user);
   });
   return clientUsers;
 };

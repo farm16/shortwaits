@@ -4,7 +4,7 @@ export function convertArrayToObjectId(ids: string[]): Types.ObjectId[] {
   return ids.map(id => new Types.ObjectId(id));
 }
 
-export function convertStringToObjectId(id: string): Types.ObjectId {
+export function convertStringToObjectId(id: string): any {
   return new Types.ObjectId(id);
 }
 

@@ -32,8 +32,8 @@ type ForbidFields =
   | "currentMembership"
   | "password";
 
-type ProtectedPartialLocalClientDtoType = Partial<ConvertToDtoType<Omit<LocalClientType, ForbidFields>>>;
-type PartialLocalClientDtoType = Partial<LocalClientDtoType>;
+export type ProtectedPartialLocalClientDtoType = Partial<ConvertToDtoType<Omit<LocalClientType, ForbidFields>>>;
+export type PartialLocalClientDtoType = Partial<LocalClientDtoType>;
 
 export type AddLocalClientDtoType = ProtectedPartialLocalClientDtoType;
 export type AddLocalClientsDtoType = ProtectedPartialLocalClientDtoType[];

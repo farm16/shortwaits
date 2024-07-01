@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory, raw } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
-import { LocalClientType, ObjectId } from "@shortwaits/shared-lib";
+import { ClientRegistration, LocalClientType, ObjectId } from "@shortwaits/shared-lib";
 import { Document, Schema as MongooseSchema } from "mongoose";
 
 @Schema({ collection: "local-client-users" })
@@ -110,7 +110,11 @@ export class LocalClientUser extends Document implements LocalClientType {
   }[];
 
   @ApiProperty()
-  @Prop()
+  @Prop(
+    raw({
+      type: Array,
+    })
+  )
   imAddresses: {
     username: string;
     service: string;
@@ -136,7 +140,9 @@ export class LocalClientUser extends Document implements LocalClientType {
   @ApiProperty()
   @Prop(
     raw({
-      type: MongooseSchema.Types.Mixed,
+      screenName: String,
+      state: Number,
+      isCompleted: Boolean,
     })
   )
   registrationState: {
@@ -156,10 +162,14 @@ export class LocalClientUser extends Document implements LocalClientType {
   @ApiProperty()
   @Prop()
   desiredCurrencies: string[];
+
   @ApiProperty()
   @Prop(
     raw({
-      type: MongooseSchema.Types.Mixed,
+      countryCode: String,
+      isRTL: Boolean,
+      languageCode: String,
+      languageTag: String,
     })
   )
   locale: {
@@ -170,7 +180,9 @@ export class LocalClientUser extends Document implements LocalClientType {
   };
 
   @ApiProperty()
-  @Prop()
+  @Prop({
+    default: false,
+  })
   deleted: boolean;
 
   @ApiProperty()
@@ -190,28 +202,36 @@ export class LocalClientUser extends Document implements LocalClientType {
   hashedRt: string;
 
   @ApiProperty()
-  @Prop()
+  @Prop({
+    default: "local",
+  })
   clientType: "local";
 
   @ApiProperty()
   @Prop(
     raw({
-      type: MongooseSchema.Types.Mixed,
+      isRegistered: Boolean,
+      registrationType: String,
+      state: {
+        screenName: String,
+        state: Number,
+        messages: Array<string>,
+        isPendingVerification: Boolean,
+      },
     })
   )
-  registration: {
-    isRegistered: boolean;
-    state: {
-      screenName: string;
-      state: 0 | 1 | 2 | 3 | 4;
-      messages: string[];
-      isPendingVerification: boolean;
-    };
-  };
+  registration: ClientRegistration;
+
   @ApiProperty()
   @Prop(
     raw({
-      type: MongooseSchema.Types.Mixed,
+      membershipId: MongooseSchema.Types.ObjectId,
+      invoiceId: MongooseSchema.Types.ObjectId,
+      membershipShortId: String,
+      membershipShortName: String,
+      status: String,
+      isFaulty: Boolean,
+      faultyReason: Array,
     })
   )
   currentMembership: {
@@ -226,7 +246,7 @@ export class LocalClientUser extends Document implements LocalClientType {
   @ApiProperty()
   @Prop(
     raw({
-      type: MongooseSchema.Types.Mixed,
+      invoiceId: MongooseSchema.Types.Mixed,
     })
   )
   billing: {

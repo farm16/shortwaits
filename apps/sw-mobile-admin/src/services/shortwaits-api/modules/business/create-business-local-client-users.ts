@@ -10,8 +10,13 @@ type RequestType = {
 //client User === Client
 export default (builder: EndpointBuilder<any, any, any>) =>
   builder.mutation<LocalClientsResponseType, RequestType>({
-    query: ({ businessId, body }) => ({
-      ...endpoints.createBusinessLocalClients.getConfig([businessId], {}),
-      body,
-    }),
+    query: ({ businessId, body }) => {
+      console.log("businessId >>>", businessId);
+      console.log("body >>>", body);
+
+      return endpoints.createBusinessLocalClients.getMutationConfig({
+        pathVars: [businessId],
+        body: body,
+      });
+    },
   });

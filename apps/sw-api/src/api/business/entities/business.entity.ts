@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory, raw } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
-import { AccountType, BusinessHoursType, BusinessLocationType, BusinessType, CurrencyType, EmojiType, ObjectId } from "@shortwaits/shared-lib";
+import { AccountType, BusinessHoursType, BusinessLocationType, BusinessType, CurrencyType, EmojiType } from "@shortwaits/shared-lib";
 import { Document, Schema as MongooseSchema } from "mongoose";
 
 @Schema()
@@ -56,19 +56,19 @@ export class Business extends Document implements BusinessType {
 
   @ApiProperty()
   @Prop()
-  events: ObjectId[];
+  events: MongooseSchema.Types.ObjectId[];
 
   @ApiProperty()
   @Prop()
-  admins: ObjectId[];
+  admins: MongooseSchema.Types.ObjectId[];
 
   @ApiProperty()
   @Prop()
-  superAdmins: ObjectId[];
+  superAdmins: MongooseSchema.Types.ObjectId[];
 
   @ApiProperty()
   @Prop()
-  backgroundAdmins: ObjectId[];
+  backgroundAdmins: MongooseSchema.Types.ObjectId[];
 
   @ApiProperty()
   @Prop({ type: String, default: "free" })
@@ -76,15 +76,15 @@ export class Business extends Document implements BusinessType {
 
   @ApiProperty()
   @Prop()
-  staff: ObjectId[];
+  staff: MongooseSchema.Types.ObjectId[];
 
   @ApiProperty()
   @Prop()
-  categories: ObjectId[];
+  categories: MongooseSchema.Types.ObjectId[];
 
   @ApiProperty()
   @Prop()
-  services: ObjectId[];
+  services: MongooseSchema.Types.ObjectId[];
 
   @ApiProperty()
   @Prop()
@@ -164,11 +164,11 @@ export class Business extends Document implements BusinessType {
 
   @ApiProperty()
   @Prop()
-  clients: ObjectId[];
+  clients: MongooseSchema.Types.ObjectId[];
 
   @ApiProperty()
   @Prop()
-  localClients: ObjectId[];
+  localClients: MongooseSchema.Types.ObjectId[];
 
   @ApiProperty()
   @Prop()
@@ -176,7 +176,7 @@ export class Business extends Document implements BusinessType {
 
   @ApiProperty()
   @Prop()
-  reservations: ObjectId[];
+  reservations: MongooseSchema.Types.ObjectId[];
 
   @ApiProperty()
   @Prop()
@@ -236,8 +236,8 @@ export class Business extends Document implements BusinessType {
   @Prop()
   taggedClients: [
     {
-      clientId: ObjectId;
-      services: ObjectId[];
+      clientId: MongooseSchema.Types.ObjectId;
+      services: MongooseSchema.Types.ObjectId[];
       tags: string[];
     }
   ];

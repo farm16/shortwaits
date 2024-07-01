@@ -1,4 +1,4 @@
-import { Types } from "mongoose";
+import { ObjectId } from "@shortwaits/shared-lib";
 import { customAlphabet } from "nanoid";
 
 export function generateUniqueId(idLength = 16) {
@@ -7,6 +7,6 @@ export function generateUniqueId(idLength = 16) {
   return shortId;
 }
 
-export function getUniqueIdArray(array: Types.ObjectId[]) {
+export function getUniqueIdArray(array: ObjectId[]) {
   return [...new Set(array)];
 }

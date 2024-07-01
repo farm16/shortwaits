@@ -19,23 +19,6 @@ export const clientsSlice = createSlice({
       })
       .addMatcher(shortwaitsApi.endpoints.getAllBusinessClients.matchFulfilled, (_state, action) => {
         return action.payload.data.clients;
-      })
-      .addMatcher(shortwaitsApi.endpoints.updateBusinessLocalClient.matchFulfilled, (state, action) => {
-        const updatedClient = action.payload.data;
-        const existingClient = state.findIndex(event => event._id === updatedClient._id);
-        let clients;
-
-        if (existingClient !== -1) {
-          clients = state.map(client => {
-            if (client._id === updatedClient._id) {
-              return updatedClient;
-            }
-            return client;
-          });
-        } else {
-          clients = state.push(updatedClient);
-        }
-        return clients;
       });
   },
 });

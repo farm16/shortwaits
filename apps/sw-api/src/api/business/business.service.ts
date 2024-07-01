@@ -1,7 +1,7 @@
 import { ForbiddenException, Injectable, NotFoundException, PreconditionFailedException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import {
-  AddClientsDtoType,
+  AddLocalClientsDtoType,
   BusinessDtoType,
   BusinessHoursType,
   BusinessType,
@@ -13,7 +13,7 @@ import {
 } from "@shortwaits/shared-lib";
 import { Model } from "mongoose";
 import { convertStringToObjectId } from "../../utils/converters";
-import { generateBusinessStaff, generateClientUsers } from "../../utils/generateUserPayload";
+import { generateBusinessStaff, generateLocalClients } from "../../utils/generateUserPayload";
 import { BusinessUser } from "../business-staff/entities/business-staff.entity";
 import { ClientUser } from "../client-user/entities/client-user.entity";
 import { LocalClientUser } from "../local-client-user/entities/local-client-user.entity";
@@ -158,25 +158,53 @@ export class BusinessService {
     }
   }
 
-  async createBusinessLocalClients(businessUserId: string, businessId: string, clients: AddClientsDtoType) {
+  async createBusinessLocalClients(businessUserId: string, businessId: string, clients: AddLocalClientsDtoType) {
     const businessData = await this.findBusinessById(businessId);
 
     const { isAdmin, isSuperAdmin } = this.isUserAdminType(businessData, businessUserId);
 
-    if (isAdmin || isSuperAdmin) {
-      const clientsPayload = generateClientUsers(clients);
+    if (!isAdmin && !isSuperAdmin) {
+      throw new ForbiddenException("Not enough permissions");
+    }
+
+    if (!clients || clients.length === 0) {
+      throw new PreconditionFailedException({
+        error: "Precondition Failed",
+        message: "Unable to create clients\n missing: clients.",
+        statusCode: 412,
+      });
+    }
+
+    try {
+      const clientsPayload = generateLocalClients(clients);
       const insertedClients = await this.localClientUserModel.insertMany(clientsPayload);
       const insertedLocalClientsIds = insertedClients.map(client => {
         return client._id;
       });
 
-      const updatedBusiness = await this.businessModel.findByIdAndUpdate(
-        businessId,
-        {
-          $push: { localClients: insertedLocalClientsIds },
-        },
-        { new: true }
-      );
+      let updatedBusiness;
+
+      if (businessData.localClients && businessData.localClients.length > 0) {
+        updatedBusiness = await this.businessModel.findByIdAndUpdate(
+          businessId,
+          {
+            $push: {
+              localClients: {
+                $each: insertedLocalClientsIds,
+              },
+            },
+          },
+          { new: true }
+        );
+      } else {
+        updatedBusiness = await this.businessModel.findByIdAndUpdate(
+          businessId,
+          {
+            localClients: insertedLocalClientsIds,
+          },
+          { new: true }
+        );
+      }
 
       const newLocalClients = await this.localClientUserModel.find({
         _id: {
@@ -184,7 +212,10 @@ export class BusinessService {
         },
         deleted: false, // although we are creating new clients, we want to make sure that we are not returning deleted clients
       });
+
       return newLocalClients;
+    } catch (error) {
+      console.log(error);
     }
   }
 
@@ -282,18 +313,21 @@ export class BusinessService {
     const businessData = await this.findBusinessById(businessId);
     const { isAdmin, isSuperAdmin } = this.isUserAdminType(businessData, businessUserId);
 
-    const clientId = convertStringToObjectId(client._id);
-    const isClient = businessData.clients.includes(clientId);
+    const clientStringIds = businessData?.localClients ? businessData.localClients.map(client => client.toString()) : [];
 
-    if (!isClient) {
+    if (!clientStringIds.includes(client._id)) {
       throw new ForbiddenException("Unrecognized client");
     }
 
     if (isAdmin || isSuperAdmin) {
-      const updatedClient = await this.clientUserModel.findOneAndUpdate({ _id: client._id }, client, {
-        new: true,
+      await this.localClientUserModel.findOneAndUpdate({ _id: client._id }, client);
+      const updatedClients = await this.localClientUserModel.find({
+        _id: {
+          $in: businessData.localClients,
+        },
+        deleted: false,
       });
-      return updatedClient;
+      return updatedClients;
     }
   }
 
@@ -343,7 +377,11 @@ export class BusinessService {
       const newBusinessRecord = await this.businessModel.findByIdAndUpdate(
         businessId,
         {
-          $push: { staff: staffIds },
+          $push: {
+            staff: {
+              $each: staffIds,
+            },
+          },
         },
         { new: true }
       );

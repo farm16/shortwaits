@@ -5,7 +5,6 @@ import {
   ButtonCard,
   Container,
   FormContainer,
-  IconButton,
   PhoneNumberCard,
   STATIC_FORM_USA_STATES,
   Space,
@@ -21,7 +20,7 @@ import { useIntl } from "react-intl";
 import { Alert } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import { GenericModalData, ModalsScreenProps } from "../../../navigation";
-import { useDeleteBusinessLocalClientsMutation, useUpdateBusinessLocalClientMutation } from "../../../services";
+import { useUpdateBusinessLocalClientMutation } from "../../../services";
 import { useBusiness } from "../../../store";
 
 export const UpdateLocalClientModal: FC<ModalsScreenProps<"update-local-client-modal-screen">> = ({ navigation, route }) => {
@@ -29,7 +28,6 @@ export const UpdateLocalClientModal: FC<ModalsScreenProps<"update-local-client-m
   const onSubmit = params?.onSubmit ?? noop;
 
   const [updateLocalClient, updateLocalClientStatus] = useUpdateBusinessLocalClientMutation();
-  const [deleteLocalClients, deleteLocalClientsStatus] = useDeleteBusinessLocalClientsMutation();
   const initialValues = useMemo(() => params?.initialValues, [params]);
   const intl = useIntl(); // Access the intl object
   const business = useBusiness();
@@ -39,44 +37,18 @@ export const UpdateLocalClientModal: FC<ModalsScreenProps<"update-local-client-m
     navigation.setOptions({
       headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
       headerTitle: () => <Text preset="headerTitle" text={intl.formatMessage({ id: "Common.updateClient" })} />,
-      headerRight: () => (
-        <Container direction="row" alignItems="center" justifyContent="center">
-          <IconButton
-            withMarginRight
-            iconType="delete"
-            onPress={() => {
-              Alert.alert("Delete Client", "Are you sure you want to delete this client?", [
-                {
-                  text: "Cancel",
-                  onPress: () => console.log("Cancel Pressed"),
-                  style: "cancel",
-                },
-                {
-                  text: "OK",
-                  onPress: () => {
-                    deleteLocalClients({
-                      businessId: business._id,
-                      body: [initialValues],
-                    });
-                    navigation.goBack();
-                  },
-                },
-              ]);
-            }}
-          />
-        </Container>
-      ),
+      headerRight: () => <Container direction="row" alignItems="center" justifyContent="center"></Container>,
     });
-  }, [business._id, deleteLocalClients, initialValues, intl, navigation]);
+  }, [business._id, initialValues, intl, navigation]);
 
   useEffect(() => {
-    if (updateLocalClientStatus.isSuccess || deleteLocalClientsStatus.isSuccess) {
+    if (updateLocalClientStatus.isSuccess) {
       if (onSubmit) {
         onSubmit();
       }
       navigation.goBack();
     }
-  }, [updateLocalClientStatus.isSuccess, navigation, onSubmit, deleteLocalClientsStatus.isSuccess]);
+  }, [updateLocalClientStatus.isSuccess, navigation, onSubmit]);
 
   useEffect(() => {
     const cleanup = async () => {
@@ -130,7 +102,7 @@ export const UpdateLocalClientModal: FC<ModalsScreenProps<"update-local-client-m
       : initialValues.addresses,
   };
 
-  const { touched, errors, values, validateField, setFieldTouched, handleChange, handleSubmit, setFieldError, setFieldValue } = useForm(
+  const { touched, dirty, errors, values, validateField, setFieldTouched, handleChange, handleSubmit, setFieldError, setFieldValue } = useForm(
     {
       initialValues: _initialValues,
       onSubmit: formData => {
@@ -146,8 +118,12 @@ export const UpdateLocalClientModal: FC<ModalsScreenProps<"update-local-client-m
     "updateLocalClient"
   );
 
+  console.log("errors >>>", JSON.stringify(errors, null, 3));
+
   const _renderSubmitButton = (
     <Button
+      preset="secondary"
+      disabled={!dirty}
       text={intl.formatMessage({ id: "Common.update" })}
       onPress={() => {
         handleSubmit();
@@ -155,15 +131,11 @@ export const UpdateLocalClientModal: FC<ModalsScreenProps<"update-local-client-m
     />
   );
 
-  if (updateLocalClientStatus.isError || deleteLocalClientsStatus.isError) {
-    const errors = [updateLocalClientStatus.error, deleteLocalClientsStatus.error].filter(Boolean);
-
-    const errorMessages = errors.map(error => error.message).join("\n");
-
-    Alert.alert("Error", errorMessages);
+  if (updateLocalClientStatus.isError) {
+    Alert.alert("Error", updateLocalClientStatus.error?.message ?? "Failed to update local client");
   }
 
-  if (updateLocalClientStatus.isLoading || deleteLocalClientsStatus.isLoading) {
+  if (updateLocalClientStatus.isLoading) {
     return <ActivityIndicator />;
   }
 

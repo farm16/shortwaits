@@ -1,18 +1,36 @@
-import { BackButton, Button, Container, IconButton, NonIdealState, Screen, Space, Text, handleEmail, handlePhoneCall, handleSms, useTheme } from "@shortwaits/shared-ui";
-import React, { useCallback, useLayoutEffect, useMemo } from "react";
-import { Image, StyleSheet, View } from "react-native";
+import {
+  ActivityIndicator,
+  BackButton,
+  Button,
+  Container,
+  IconButton,
+  NonIdealState,
+  Screen,
+  Space,
+  Text,
+  handleEmail,
+  handlePhoneCall,
+  handleSms,
+  useTheme,
+} from "@shortwaits/shared-ui";
+import React, { useCallback, useEffect, useLayoutEffect, useMemo } from "react";
+import { Alert, Image, StyleSheet, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { AgendaItem } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
-import { useEvents } from "../../../store";
+import { useDeleteBusinessLocalClientsMutation } from "../../../services";
+import { useBusiness, useEvents } from "../../../store";
 
 export function BusinessLocalClientScreen({ navigation, route }: AuthorizedScreenProps<"business-local-client-screen">) {
   const { localClient, onUserRemove } = route.params;
+
   const { Colors } = useTheme();
+  const business = useBusiness();
   const events = useEvents();
+  const [deleteLocalClients, deleteLocalClientsStatus] = useDeleteBusinessLocalClientsMutation();
 
   const clientName = localClient.displayName || localClient.familyName || localClient.givenName || localClient.middleName || localClient.email || "";
-  const hasPhoneNumbers = localClient.phoneNumbers && localClient.phoneNumbers.length > 0;
+  const hasPhoneNumbers = localClient.phoneNumbers && localClient.phoneNumbers.length > 0 && localClient.phoneNumbers.some(phone => phone.number);
   const phoneNumber = hasPhoneNumbers ? localClient.phoneNumbers[0]?.number : "";
   const hasEmail = localClient.email && localClient.email.length > 0;
 
@@ -40,9 +58,6 @@ export function BusinessLocalClientScreen({ navigation, route }: AuthorizedScree
                   screen: "update-local-client-modal-screen",
                   params: {
                     initialValues: localClient,
-                    onSubmit: values => {
-                      navigation.goBack();
-                    },
                   },
                 });
               }}
@@ -66,6 +81,7 @@ export function BusinessLocalClientScreen({ navigation, route }: AuthorizedScree
 
   console.log("events >>>", localClientData);
   console.log("localClient", JSON.stringify(localClient, null, 2));
+
   const renderItem = useCallback(({ item }) => {
     return <AgendaItem item={item} />;
   }, []);
@@ -88,6 +104,42 @@ export function BusinessLocalClientScreen({ navigation, route }: AuthorizedScree
       />
     );
   }, [navigation]);
+
+  const handleRemoveUser = () => {
+    Alert.alert("Delete Client", "Are you sure you want to delete this client?", [
+      {
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel",
+      },
+      {
+        text: "OK",
+        onPress: () => {
+          deleteLocalClients({
+            businessId: business._id,
+            body: [localClient],
+          });
+        },
+      },
+    ]);
+    if (onUserRemove) {
+      onUserRemove(localClient);
+    }
+  };
+
+  useEffect(() => {
+    if (deleteLocalClientsStatus.isSuccess) {
+      navigation.goBack();
+    }
+  }, [deleteLocalClientsStatus.isSuccess, navigation]);
+
+  if (deleteLocalClientsStatus.isError) {
+    Alert.alert("Error", "Failed to delete local client");
+  }
+
+  if (deleteLocalClientsStatus.isLoading) {
+    return <ActivityIndicator />;
+  }
 
   return (
     <Screen preset="fixed" unsafe unsafeBottom>
@@ -158,9 +210,7 @@ export function BusinessLocalClientScreen({ navigation, route }: AuthorizedScree
             preset={"icon2"}
             leftIconName={"delete"}
             onPress={() => {
-              if (onUserRemove) {
-                onUserRemove(localClient);
-              }
+              handleRemoveUser();
             }}
           />
         </View>

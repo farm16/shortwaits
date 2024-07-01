@@ -18,7 +18,6 @@ import {
   useTheme,
 } from "@shortwaits/shared-ui";
 import { FormikErrors } from "formik";
-import { noop } from "lodash";
 import React, { FC, useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { useIntl } from "react-intl";
 import { Alert, TouchableOpacity, View } from "react-native";
@@ -30,7 +29,7 @@ import { useBusiness } from "../../../store";
 
 export const AddClientModal: FC<ModalsScreenProps<"add-client-modal-screen">> = ({ navigation, route }) => {
   const params = route?.params;
-  const onSubmit = params?.onSubmit ?? noop;
+  const onSubmit = params?.onSubmit;
 
   const intl = useIntl(); // Access the intl object
   const { Colors } = useTheme();
@@ -167,6 +166,10 @@ const LocalClientForm = ({ onSubmit }) => {
     {
       initialValues: initialValues,
       onSubmit: formData => {
+        console.log("formData >>>", {
+          businessId: business._id,
+          body: [formData], // needs to be an array to support multiple clients
+        });
         addBusinessLocalClients({
           businessId: business._id,
           body: [formData], // needs to be an array to support multiple clients

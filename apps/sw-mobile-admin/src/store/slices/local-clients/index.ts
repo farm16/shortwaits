@@ -14,6 +14,9 @@ export const localClientsSlice = createSlice({
   },
   extraReducers: builder => {
     builder
+      .addMatcher(shortwaitsApi.endpoints.updateBusinessLocalClient.matchFulfilled, (_state, action) => {
+        return action.payload.data;
+      })
       .addMatcher(shortwaitsApi.endpoints.createBusinessLocalClients.matchFulfilled, (_state, action) => {
         return action.payload.data;
       })

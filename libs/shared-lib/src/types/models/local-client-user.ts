@@ -5,6 +5,7 @@ import { Document } from "mongoose";
 // end of warning //
 
 import { ObjectId } from "../common";
+import { ClientRegistration } from "./common";
 
 /**
  *
@@ -93,15 +94,7 @@ export type LocalClientType = {
   lastSignInAt: Date;
   roleId: ObjectId;
   hashedRt: string;
-  registration: {
-    isRegistered: boolean; // if the user has completed the registration process ( code 2)
-    state: {
-      screenName: string;
-      state: 0 | 1 | 2 | 3 | 4; // 0: not started, 1: started, 2: completed , 3:verified, 4: failed
-      messages: string[]; // messages to be displayed to the user based on the state
-      isPendingVerification: boolean; // if the user has completed the registration process but the email is not verified yet
-    };
-  };
+  registration: ClientRegistration;
   currentMembership: {
     membershipId: ObjectId;
     membershipShortId: string;

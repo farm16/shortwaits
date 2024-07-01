@@ -9,7 +9,7 @@ import {
 } from "@shortwaits/shared-ui";
 import React, { FC, useCallback, useLayoutEffect, useState } from "react";
 import { useIntl } from "react-intl";
-import { FlatList, StyleSheet } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import { ModalsScreenProps } from "../../../../../navigation";
 import { useGetCategoriesQuery } from "../../../../../services";
@@ -75,7 +75,7 @@ export const CategoriesSelector: FC<ModalsScreenProps<"selector-modal-screen">> 
   }
 
   return (
-    <Screen preset="fixed" withHorizontalPadding unsafe>
+    <Screen preset="fixed" unsafe>
       <FlatList
         style={{
           backgroundColor: Colors.lightBackground,
@@ -88,16 +88,18 @@ export const CategoriesSelector: FC<ModalsScreenProps<"selector-modal-screen">> 
         keyExtractor={keyExtractor}
       />
       {onSubmit && (
-        <Button
-          preset="secondary"
-          text={intl.formatMessage({
-            id: "Common.done",
-          })}
-          onPress={() => {
-            onSubmit(categories.data.filter(category => selectedItems.includes(category._id)));
-            navigation.goBack();
-          }}
-        />
+        <View style={styles.button}>
+          <Button
+            preset="secondary"
+            text={intl.formatMessage({
+              id: "Common.done",
+            })}
+            onPress={() => {
+              onSubmit(categories.data.filter(category => selectedItems.includes(category._id)));
+              navigation.goBack();
+            }}
+          />
+        </View>
       )}
     </Screen>
   );
@@ -106,5 +108,19 @@ export const CategoriesSelector: FC<ModalsScreenProps<"selector-modal-screen">> 
 const styles = StyleSheet.create({
   container: {},
   searchBar: {},
-  flatList: {},
+  button: {
+    padding: 16,
+    backgroundColor: "#fff",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+    elevation: 4,
+  },
+  flatList: {
+    paddingHorizontal: 16,
+  },
 });

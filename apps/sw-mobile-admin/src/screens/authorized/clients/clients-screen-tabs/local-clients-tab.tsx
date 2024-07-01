@@ -14,11 +14,11 @@ export function LocalClientsTab({ isLoading, refresh }: { isLoading: boolean; re
   const [, setSearchText] = useState("");
   const currentLocalClients = useLocalClients();
   const [filteredLocalClientsData, setFilteredLocalClientsData] = useState([]);
-  const { navigate } = useNavigation<AuthorizedScreenProps<"events-screen">["navigation"]>();
+  const { navigate, push } = useNavigation<AuthorizedScreenProps<"events-screen">["navigation"]>();
 
   const handleAddClient = useCallback(() => {
     navigate("modals", {
-      screen: "add-local-client-modal-screen",
+      screen: "add-client-modal-screen",
     });
   }, [navigate]);
 
@@ -32,7 +32,7 @@ export function LocalClientsTab({ isLoading, refresh }: { isLoading: boolean; re
 
   const _renderItem: ListRenderItem<LocalClientDtoType> = useCallback(
     ({ item }) => {
-      const title = item.givenName || item.familyName || item.displayName || item.username;
+      const title = item.givenName || item.displayName || item.familyName || item.displayName || item.username;
 
       const subTitle = `ID: ${getFriendlyShortId(item.shortId)}`;
 
@@ -40,7 +40,7 @@ export function LocalClientsTab({ isLoading, refresh }: { isLoading: boolean; re
         <SelectorListItem
           imageUrl={item.accountImageUrl}
           onPress={() => {
-            navigate("authorized-stack", {
+            push("authorized-stack", {
               screen: "business-local-client-screen",
               params: {
                 localClient: item,
