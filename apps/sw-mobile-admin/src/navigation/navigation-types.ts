@@ -31,14 +31,14 @@ export type FormData = {
 
 export type FormType = keyof FormData;
 export type FormDataType = FormData[FormType];
-export type SelectorModalModeType = "staff" | "categories" | "services" | "labels" | "static" | "eventLabels" | "events";
+export type SelectorModalModeType = "staff" | "categories" | "services" | "static" | "eventLabels" | "events";
 export type GenericModalData<T = unknown> = {
   _id: string; // selected data will look for this id
   title: string;
   subTitle?: string;
   itemData?: T;
 };
-export type SelectorModalData = BusinessLabelType | ServiceDtoType | BusinessLabelType | EventDtoType | BusinessUserDtoType | GenericModalData;
+export type SelectorModalData = BusinessLabelType | ServiceDtoType | BusinessLabelType | EventDtoType | BusinessUserDtoType | GenericModalData | string;
 export type SelectedData = string[]; // this should be the id of the selected data only
 
 export type ModalStackParamList = {

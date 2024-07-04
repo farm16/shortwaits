@@ -56,6 +56,7 @@
     "Common.eventStatus.rejected": "Rejected",
     "Common.eventStatus.canceled": "Canceled",
     "Common.eventStatus.completed": "Completed",
+    "Common.eventStatus.unknown": "Unknown",
 
     "Common.error.oops": "Oops!",
     "Common.error.somethingWentWrong": "Something went wrong. Please try again.",
@@ -129,6 +130,7 @@
     "CalendarItem.status.rejected": "Rejected",
     "CalendarItem.status.canceled": "Canceled",
     "CalendarItem.status.completed": "Completed",
+    "CalendarItem.status.unknown": "Unknown",
 
     "Event_Screen.eventStatusButton.status.pending": "Pending",
     "Event_Screen.eventStatusButton.status.accept": "Accept",
@@ -405,6 +407,8 @@
     "Common.eventStatus.rejected": "Rechazado",
     "Common.eventStatus.canceled": "Cancelado",
     "Common.eventStatus.completed": "Completado",
+    "Common.eventStatus.unknown": "Desconocido",
+
     "Common.updateClient": "Actualizar Cliente",
 
     "Common.error.oops": "¡Ups!",
@@ -480,6 +484,7 @@
     "CalendarItem.status.rejected": "Rechazado",
     "CalendarItem.status.canceled": "Cancelado",
     "CalendarItem.status.completed": "Completado",
+    "CalendarItem.status.unknown": "Desconocido",
 
     "Event_Screen.eventStatusButton.status.pending": "Pendiente",
     "Event_Screen.eventStatusButton.status.accept": "Aceptar",

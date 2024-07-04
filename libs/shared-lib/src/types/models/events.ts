@@ -23,13 +23,23 @@ export type EventLocationType = {
 };
 
 export const eventStatusNames = {
-  PENDING: "PENDING",
-  APPROVED: "APPROVED",
-  REJECTED: "REJECTED",
-  CANCELED: "CANCELED",
-  COMPLETED: "COMPLETED",
-};
+  PENDING: "PENDING", // code 0
+  APPROVED: "APPROVED", // code 1
+  REJECTED: "REJECTED", // code 2
+  CANCELED: "CANCELED", // code 3
+  COMPLETED: "COMPLETED", // code 4
+} as const;
+
+export const eventStatusCodes = {
+  PENDING: 0,
+  APPROVED: 1,
+  REJECTED: 2,
+  CANCELED: 3,
+  COMPLETED: 4,
+} as const;
+
 export type EventStatusName = keyof typeof eventStatusNames;
+export type EventStatusCode = (typeof eventStatusCodes)[EventStatusName];
 
 export const eventPaymentMethods = {
   CASH: "Cash",
@@ -62,7 +72,7 @@ export type EventType = {
   features: string[]; // Array of additional features or specifications for the event
 
   status: {
-    statusCode: number; // Status code for the event
+    statusCode: EventStatusCode; // Status code for the event
     statusName: EventStatusName; // Status name for the event
   };
 

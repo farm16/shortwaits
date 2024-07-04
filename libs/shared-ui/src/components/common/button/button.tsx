@@ -10,7 +10,6 @@ import { ButtonPresets, ButtonProps } from "./button-types";
 export const Button: FC<ButtonProps> = props => {
   const {
     preset = "primary",
-    withShadow = false,
     iText,
     text,
     isLoading = false,
@@ -25,7 +24,6 @@ export const Button: FC<ButtonProps> = props => {
     leftIconColor,
     disabled: disabledOverride,
     isTouchableOpacity = true,
-
     ...rest
   } = props;
 

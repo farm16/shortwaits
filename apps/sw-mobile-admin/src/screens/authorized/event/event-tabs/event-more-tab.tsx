@@ -14,9 +14,11 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
   const PaymentMethod = () => {
     const paymentMethod = event.paymentMethod || "Cash";
     return (
-      <View style={styles.rowDetail}>
-        <Text preset="textLargeBold" text="Payment method" />
-        <Text text={paymentMethod} />
+      <View style={styles.detail}>
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <Text preset="textLargeBold" text="Payment method" />
+          <Text text={paymentMethod} />
+        </View>
       </View>
     );
   };
@@ -28,7 +30,6 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
         <Text preset="textLargeBold" text="Labels" />
         <Space size="small" />
         <Messages type={"warning"} message={"This event has no labels"} />
-        <Space />
       </View>
     );
   };
@@ -40,14 +41,12 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
         <Text preset="textLargeBold" text="Description" />
         <Space size="small" />
         <Text text={event.description} />
-        <Space />
       </View>
     ) : (
       <View style={styles.detail}>
         <Text preset="textLargeBold" text="Description" />
         <Space size="small" />
         <Messages type={"warning"} message={"This event has no description"} />
-        <Space />
       </View>
     );
   };
@@ -59,14 +58,12 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
         <Text preset="textLargeBold" text="Description" />
         <Space size="small" />
         <Text text={event.notes} />
-        <Space />
       </View>
     ) : (
       <View style={styles.detail}>
         <Text preset="textLargeBold" text="Description" />
         <Space size="small" />
         <Messages type={"warning"} message={"This event has no notes"} />
-        <Space />
       </View>
     );
   };
@@ -74,33 +71,32 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
   const EventService = () => {
     if (!service) {
       return (
-        <View>
+        <View style={styles.detail}>
           <Text preset="textLargeBold" text="Service" />
           <Space size="small" />
           <Messages type={"warning"} message={"This event has no service"} />
-          <Space />
         </View>
       );
     }
 
     return (
-      <View>
+      <View style={styles.detail}>
         <Text preset="textLargeBold" text="Service" />
         <Space size="small" />
         <ServiceItem
+          disabled
           service={service}
           onPress={_service => {
             console.log("service", _service);
           }}
         />
-        <Space />
       </View>
     );
   };
 
   const EventMeetingUrls = () => {
     return (
-      <View>
+      <View style={styles.detail}>
         <Text preset="textLargeBold" text="Meeting Platform" />
         <Space size="small" />
         {event.urls?.length === 0 ? (
@@ -115,7 +111,6 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
             );
           })
         )}
-        <Space />
       </View>
     );
   };
@@ -156,16 +151,18 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
     };
 
     return (
-      <View style={styles.rowDetail}>
-        <Text preset="textLargeBold" text="Repeat" />
-        <Switch
-          disabled
-          trackColor={{ false: Colors.red1, true: Colors.lightBackground }}
-          thumbColor={isActive ? Colors.brandSecondary2 : Colors.gray}
-          ios_backgroundColor={Colors.lightBackground}
-          onChange={handleSwitch}
-          value={isActive}
-        />
+      <View style={styles.detail}>
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <Text preset="textLargeBold" text="Repeat" />
+          <Switch
+            disabled
+            trackColor={{ false: Colors.red1, true: Colors.lightBackground }}
+            thumbColor={isActive ? Colors.brandSecondary2 : Colors.gray}
+            ios_backgroundColor={Colors.lightBackground}
+            onChange={handleSwitch}
+            value={isActive}
+          />
+        </View>
       </View>
     );
   };
@@ -174,9 +171,11 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
     event.attendeeLimit = 0;
     const attendeeLimit = event.attendeeLimit === 0 || event.attendeeLimit === null || event.attendeeLimit === undefined ? "No limit" : event.attendeeLimit.toString();
     return (
-      <View style={styles.rowDetail}>
-        <Text preset="textLargeBold" text="Attendee limit" />
-        <Text text={attendeeLimit} />
+      <View style={styles.detail}>
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <Text preset="textLargeBold" text="Attendee limit" />
+          <Text text={attendeeLimit} />
+        </View>
       </View>
     );
   };
@@ -186,27 +185,27 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
   }
 
   return (
-    <ScrollView
-      style={{
-        flex: 1,
-        paddingHorizontal: getResponsiveWidth(16),
-        backgroundColor: Colors.lightBackground,
-      }}
-      showsVerticalScrollIndicator={false}
-    >
-      <Space size="xLarge" />
-      <EventNotes />
-      <EventDescription />
-      <PaymentMethod />
-      <EventLabels />
-      <EventService />
-      <AttendeeLimit />
-      <EventRepeat />
-      <EventMeetingUrls />
-      <EventPrivacy />
-      <Space size="xLarge" />
-      <Space size="xLarge" />
-    </ScrollView>
+    <View style={{ flex: 1 }}>
+      <ScrollView
+        contentContainerStyle={{
+          paddingHorizontal: getResponsiveWidth(16),
+          // backgroundColor: Colors.background,
+        }}
+        showsVerticalScrollIndicator={false}
+      >
+        <Space size="xLarge" />
+        <EventNotes />
+        <EventDescription />
+        <PaymentMethod />
+        <EventLabels />
+        <EventService />
+        <AttendeeLimit />
+        <EventRepeat />
+        <EventMeetingUrls />
+        <EventPrivacy />
+        <Space size="xLarge" />
+      </ScrollView>
+    </View>
   );
 }
 
@@ -216,6 +215,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
     miHeight: getResponsiveHeight(50),
     marginBottom: getResponsiveHeight(16),
+    paddingBottom: 16,
   },
   rowDetail: {
     flexDirection: "row",

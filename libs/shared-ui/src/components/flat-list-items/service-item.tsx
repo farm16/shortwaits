@@ -1,5 +1,5 @@
 import { ServiceDtoType } from "@shortwaits/shared-lib";
-import React, { FC } from "react";
+import { FC } from "react";
 import { StyleSheet, View, ViewStyle } from "react-native";
 import { getDimensions, useTheme } from "../../theme";
 import { getPrettyStringFromPrice } from "../../utils/currency";
@@ -15,11 +15,12 @@ interface ServiceCardProps {
   service: ServiceDtoType;
   style?: ViewStyle;
   isSelected?: boolean;
+  disabled?: boolean;
 }
 
 export const ServiceItem: FC<ServiceCardProps> = props => {
   const { Colors } = useTheme();
-  const { service, onPress, onLongPress, style: styleOverride, isSelected, ...rest } = props;
+  const { service, onPress, onLongPress, style: styleOverride, isSelected, disabled, ...rest } = props;
   const { width } = getDimensions();
 
   const selectedStyle = isSelected
@@ -58,7 +59,9 @@ export const ServiceItem: FC<ServiceCardProps> = props => {
         },
         styleOverride,
         selectedStyle,
+        disabled ? styles.noShadow : {},
       ]}
+      disabled={disabled}
       {...rest}
     >
       <View style={styles.textItems}>
@@ -87,6 +90,13 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 1.41,
     elevation: 2,
+  },
+  noShadow: {
+    shadowColor: undefined,
+    shadowOffset: undefined,
+    shadowOpacity: undefined,
+    shadowRadius: undefined,
+    elevation: undefined,
   },
   textItems: {
     flex: 1,

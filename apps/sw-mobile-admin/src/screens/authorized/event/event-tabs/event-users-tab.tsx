@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
-import { BusinessUserDtoType, ClientDtoType, EventDtoType } from "@shortwaits/shared-lib";
+import { BusinessUserDtoType, ClientDtoType, EventDtoType, LocalClientDtoType } from "@shortwaits/shared-lib";
 import {
   BusinessUserCard,
   Button,
@@ -16,7 +16,7 @@ import {
   useTheme,
 } from "@shortwaits/shared-ui";
 import { isEmpty } from "lodash";
-import React, { Fragment, useCallback, useMemo } from "react";
+import React, { Fragment, useCallback, useEffect, useMemo } from "react";
 import { useIntl } from "react-intl";
 import { Alert, RefreshControl, SectionList, SectionListData, SectionListRenderItem, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
@@ -25,7 +25,7 @@ import { AuthorizedScreenProps } from "../../../../navigation";
 import { useGetPeopleInEventQuery, useUpdateEventMutation } from "../../../../services";
 import { useBusiness, useClients, useLocalClients, useStaff } from "../../../../store";
 
-type PeopleDtoType = BusinessUserDtoType | ClientDtoType;
+type PeopleDtoType = (BusinessUserDtoType & ClientDtoType) | { clientType: "local" | "external" };
 
 export function EventUsersTab({ event }: { event: EventDtoType }) {
   const { Colors } = useTheme();
@@ -36,13 +36,14 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
   const intl = useIntl();
   const { navigate } = useNavigation<AuthorizedScreenProps<"event-screen">["navigation"]>();
   const [updateEvent, updateEventStatus] = useUpdateEventMutation();
-  const isEventDisabled = nextEventStatuses[event.status.statusName].length === 0;
+  const statusName = event?.status?.statusName ?? "";
+  const isEventDisabled = statusName ? nextEventStatuses[statusName].length === 0 : true;
 
   const {
     isLoading: isPeopleInEventQueryLoading,
     isError: isPeopleInEventQueryError,
     refetch: refetchPeopleInEventQuery,
-  } = useGetPeopleInEventQuery(event._id ? event._id : skipToken, {
+  } = useGetPeopleInEventQuery(event?._id ? event._id : skipToken, {
     refetchOnMountOrArgChange: true,
   });
 
@@ -88,22 +89,33 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
         />
       );
     } else {
-      return (
-        <ClientUserCard
-          onPress={() => {
-            navigate("authorized-stack", {
-              screen: "business-client-screen",
-              params: {
-                client: data.item as ClientDtoType,
-                onUserRemove: client => {
-                  console.log("client >>>", client);
-                },
+      const isLocalClient = data.item.clientType === "local";
+
+      const handleOnPress = () => {
+        if (isLocalClient) {
+          navigate("authorized-stack", {
+            screen: "business-local-client-screen",
+            params: {
+              localClient: data.item as LocalClientDtoType,
+              onUserRemove: client => {
+                console.log("client >>>", client);
               },
-            });
-          }}
-          user={data.item as ClientDtoType}
-        />
-      );
+            },
+          });
+        } else {
+          navigate("authorized-stack", {
+            screen: "business-client-screen",
+            params: {
+              client: data.item as ClientDtoType,
+              onUserRemove: client => {
+                console.log("client >>>", client);
+              },
+            },
+          });
+        }
+      };
+
+      return <ClientUserCard onPress={handleOnPress} user={data.item as ClientDtoType} />;
     }
   };
 
@@ -228,7 +240,7 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
               width: "100%",
               justifyContent: "space-between",
               alignItems: "center",
-              backgroundColor: Colors.lightBackground,
+              // backgroundColor: Colors.lightBackground,
             }}
           >
             <Text
@@ -256,8 +268,8 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
                     params: {
                       mode: "staff",
                       selectedData: event.staffIds,
-                      onSubmit: (selectedClientIds: string[]) => {
-                        handleStaffUpdateEvent(selectedClientIds);
+                      onSubmit: selectedClientIds => {
+                        handleStaffUpdateEvent(selectedClientIds as string[]);
                       },
                     },
                   });
@@ -281,7 +293,7 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
         </Fragment>
       );
     },
-    [Colors.lightBackground, Colors.text, _data, event.staffIds, handleClientsUpdateEvent, handleStaffUpdateEvent, intl, isEventDisabled, navigate, nonIdealState, selectedClients]
+    [Colors.text, _data, event.staffIds, handleClientsUpdateEvent, handleStaffUpdateEvent, intl, isEventDisabled, navigate, nonIdealState, selectedClients]
   );
 
   const _renderListEmptyComponent = useCallback(() => {
@@ -296,9 +308,11 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
     return <Space size="large" />;
   }, []);
 
-  if (isPeopleInEventQueryError) {
-    Alert.alert("Error", "An error occurred while fetching people in event");
-  }
+  useEffect(() => {
+    if (isPeopleInEventQueryError) {
+      Alert.alert("Error", "An error occurred while fetching people in event");
+    }
+  }, [isPeopleInEventQueryError]);
 
   if (isPeopleInEventQueryLoading || updateEventStatus.isLoading) {
     return <ActivityIndicator animating={true} color={Colors.brandPrimary} />;

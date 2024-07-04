@@ -1,7 +1,8 @@
 import { skipToken } from "@reduxjs/toolkit/dist/query";
-import { BackButton, IconButton, Space, Text } from "@shortwaits/shared-ui";
+import { BackButton, IconButton, Space } from "@shortwaits/shared-ui";
 import React, { FC, useCallback, useLayoutEffect, useMemo, useState } from "react";
-import { FlatList, StyleSheet } from "react-native";
+import { Alert, FlatList, StyleSheet } from "react-native";
+import { ActivityIndicator } from "react-native-paper";
 import { useDispatch } from "react-redux";
 import { ModalsScreenProps } from "../../../../../navigation";
 import { useGetBusinessQuery } from "../../../../../services";
@@ -10,10 +11,9 @@ import { selectorConfigs } from "../../selector-config";
 import { LabelSelectorItem } from "./labels-selector-item";
 
 export const LabelsSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ navigation, route }) => {
-  const dispatch = useDispatch();
-
   const { mode, onSelect } = route.params;
 
+  const dispatch = useDispatch();
   const { headerTitle, searchPlaceholder, isReadOnly } = useMemo(() => selectorConfigs[mode], [mode]);
 
   const handleAddLabels = useCallback(() => {
@@ -36,37 +36,33 @@ export const LabelsSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({
   console.log("payload >>>", JSON.stringify(payload?.data));
 
   const handleOnSelect = item => {
-    if (multiple) {
-      if (selectedItems.includes(item._id)) {
-        setSelectedItems(selectedItems.filter(id => id !== item._id));
-      } else {
-        setSelectedItems([...selectedItems, item._id]);
-      }
+    if (selectedItems.includes(item._id)) {
+      setSelectedItems(selectedItems.filter(id => id !== item._id));
     } else {
-      onSelect(item);
+      setSelectedItems([...selectedItems, item._id]);
     }
   };
 
   if (isError) {
-    return <Text>Error</Text>;
+    Alert.alert("Error", "An error occurred while fetching labels");
   }
+
   if (isLoading) {
-    return <Text>Loading...</Text>;
+    return <ActivityIndicator />;
   }
-  if (isSuccess) {
-    return (
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={[styles.listContainer]}
-        data={payload.data.labels}
-        ItemSeparatorComponent={() => <Space size="small" />}
-        renderItem={({ item }) => {
-          return <LabelSelectorItem isSelected={false} disabled={false} item={item} onSelectItem={handleOnSelect} />;
-        }}
-        // keyExtractor={(item, index) => `${item.name || ""}${index}`}
-      />
-    );
-  }
+
+  return (
+    <FlatList
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={[styles.listContainer]}
+      data={payload.data.labels}
+      ItemSeparatorComponent={() => <Space size="small" />}
+      renderItem={({ item }) => {
+        return <LabelSelectorItem item={item} onSelect={handleOnSelect} />;
+      }}
+      // keyExtractor={(item, index) => `${item.name || ""}${index}`}
+    />
+  );
 };
 
 const styles = StyleSheet.create({

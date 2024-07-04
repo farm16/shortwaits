@@ -231,6 +231,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: getResponsiveHeight(16),
     borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: "#E5E5E5",
+    paddingBottom: getResponsiveHeight(16),
   },
   searchBar: {},
   flatList: {},

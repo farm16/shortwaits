@@ -92,7 +92,7 @@ export const FormContainer = (props: FormContainerProps) => {
 
   return (
     <Screen unsafe preset="scroll" {...rest} withHorizontalPadding={false} backgroundColor={backgroundColor} statusBarBackgroundColor={statusBarBackgroundColor}>
-      <View style={{ flex: 1, paddingHorizontal: withHorizontalPadding ? 16 : 0 }}>
+      <View style={{ paddingHorizontal: withHorizontalPadding ? 16 : 0 }}>
         <Space size="large" />
         {children}
       </View>
@@ -117,5 +117,6 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
     backgroundColor: "white",
+    marginTop: "auto",
   },
 });

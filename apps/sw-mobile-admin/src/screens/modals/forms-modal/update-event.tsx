@@ -1,4 +1,4 @@
-import { BusinessUsersDtoType, EventDtoType, ServiceDtoType, UpdateEventDtoType, eventPaymentMethods } from "@shortwaits/shared-lib";
+import { BusinessUsersDtoType, EventDtoType, ServiceDtoType, UpdateEventDtoType, eventPaymentMethods, eventStatusCodes, eventStatusNames } from "@shortwaits/shared-lib";
 import {
   ActivityIndicator,
   BackButton,
@@ -37,11 +37,10 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
   const intl = useIntl();
   const services = useServices();
   const business = useBusiness();
-  const [selectedService, setSelectedService] = useState<ServiceDtoType | null>(
-    params?.initialValues?.serviceId ? services.find(service => service?._id === params?.initialValues?.serviceId) : null
-  );
+  const [selectedService, setSelectedService] = useState(params?.initialValues?.serviceId ? services.find(service => service?._id === params?.initialValues?.serviceId) : null);
   const [isFree, setIsFree] = useState<boolean>(false);
-  const isEventDisabled = nextEventStatuses[params?.initialValues?.status?.statusName].length === 0;
+  const statusName = params?.initialValues?.status?.statusName ?? "";
+  const isEventDisabled = statusName ? nextEventStatuses[params?.initialValues?.status?.statusName].length === 0 : true;
 
   const [updateEvent, updateEventStatus] = useUpdateEventMutation();
 
@@ -104,27 +103,40 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
         <IconButton
           disabled={isEventDisabled}
           onPress={() =>
-            Alert.alert("Delete Event", "Are you sure you want to delete this event?", [
+            Alert.alert("Are you sure you want to cancel this event?", "This event will be cancelled and all participants will be notified.", [
               {
-                text: "Cancel",
+                text: "No",
                 style: "cancel",
               },
               {
-                text: "Delete",
+                text: "Yes",
                 onPress: () => {
-                  // todo: delete event
-                  navigation.goBack();
+                  const status = "CANCELED";
+                  const body = {
+                    ...initialValues,
+                    status: {
+                      statusName: eventStatusNames[status],
+                      statusCode: eventStatusCodes[status],
+                    },
+                  };
+
+                  console.log("cancel event body", body);
+
+                  updateEvent({
+                    body,
+                    businessId: initialValues.businessId,
+                  });
                 },
               },
             ])
           }
           withMarginRight
-          iconType="delete"
+          iconType="cancel"
         />
       ),
       headerTitle: () => <Text preset="headerTitle" text={intl.formatMessage({ id: "UpdateEventModal.title" })} />,
     });
-  }, [initialValues, intl, isEventDisabled, navigation, onGoBack, values]);
+  }, [initialValues, intl, isEventDisabled, navigation, onGoBack, updateEvent, values]);
 
   useEffect(() => {
     if (updateEventStatus.isSuccess) {
@@ -305,9 +317,20 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
 
   const renderErrorMessage = useCallback(() => {
     if (isEventDisabled) {
-      return <Messages type="warning" message="This event is no longer active." />;
+      return (
+        <>
+          <Messages type="warning" message="This event is no longer active." />
+          <Space size="large" />
+        </>
+      );
     } else return null;
   }, [isEventDisabled]);
+
+  useEffect(() => {
+    if (updateEventStatus.isError) {
+      Alert.alert("Error", updateEventStatus?.error?.message ?? "An error occurred.");
+    }
+  }, [updateEventStatus]);
 
   if (updateEventStatus.isLoading) {
     return <ActivityIndicator />;

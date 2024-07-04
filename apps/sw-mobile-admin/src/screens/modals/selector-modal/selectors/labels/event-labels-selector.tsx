@@ -60,7 +60,7 @@ export const EventLabelsSelector: FC<ModalsScreenProps<"selector-modal-screen">>
       }
       navigation.goBack();
     };
-    return onSubmit ? <Button text={`Done`} onPress={handleOnSubmit} /> : null;
+    return onSubmit ? <Button preset="secondary" text={`Done`} onPress={handleOnSubmit} /> : null;
   }, [onSubmit, navigation, businessData?.data?.labels]);
 
   const handleOnSelect = item => {

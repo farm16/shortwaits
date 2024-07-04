@@ -1,4 +1,3 @@
-import React from "react";
 import { KeyboardAvoidingView, Platform, StatusBar, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";

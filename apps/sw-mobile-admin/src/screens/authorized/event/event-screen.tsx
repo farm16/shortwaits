@@ -1,4 +1,4 @@
-import { EventStatusName } from "@shortwaits/shared-lib";
+import { EventStatusName, eventStatusCodes, eventStatusNames } from "@shortwaits/shared-lib";
 import { ActivityIndicator, BackButton, Container, EventStatusButtons, IconButton, Screen, Space, Text, useShareUrlWithMessage } from "@shortwaits/shared-ui";
 import { truncate } from "lodash";
 import React, { useCallback, useLayoutEffect } from "react";
@@ -62,8 +62,8 @@ export function EventScreen({ navigation, route }: AuthorizedScreenProps<"event-
         body: {
           ...event,
           status: {
-            statusName: status,
-            statusCode: event.status?.statusCode,
+            statusName: eventStatusNames[status],
+            statusCode: eventStatusCodes[status],
           },
         },
         businessId: event.businessId,
@@ -77,7 +77,7 @@ export function EventScreen({ navigation, route }: AuthorizedScreenProps<"event-
   }
 
   return (
-    <Screen preset="fixed" unsafe unsafeBottom backgroundColor="lightBackground">
+    <Screen preset="fixed" unsafe unsafeBottom backgroundColor="background">
       <Space size="normal" />
       <EventStatusButtons event={event} onPress={handleUpdateEvent} />
       <Space size="normal" />

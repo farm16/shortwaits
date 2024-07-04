@@ -18,7 +18,8 @@ export const EventStatusButtons: React.FC<EventStatusButtonsProps> = ({ event, o
   const { Colors } = useTheme();
   const intl = useIntl();
 
-  const statusCount = nextEventStatuses[event?.status?.statusName ?? ""].length;
+  const statusName = event?.status?.statusName ?? "";
+  const statusCount = statusName ? nextEventStatuses[statusName].length : 0;
   const _width = (Dimensions.get("window").width - 32) / statusCount;
   const cardHeight = size === "small" ? CALENDAR_EVENT_HEIGHT : CALENDAR_EVENT_HEIGHT;
   const cardWidth = size === "small" ? CALENDAR_EVENT_HEIGHT : _width;
@@ -32,83 +33,90 @@ export const EventStatusButtons: React.FC<EventStatusButtonsProps> = ({ event, o
   if (isLoading) return <ActivityIndicator />;
 
   return (
-    <View style={[styles.container]}>
-      {nextEventStatuses[event?.status?.statusName ?? ""].map((status, index) => {
-        const isEndButton = nextEventStatuses[event?.status?.statusName ?? ""].length - 1 === index;
-        const isStartButton = index === 0;
-        return (
-          <Button
-            key={index}
-            preset="none"
-            onPress={() => handleStatusUpdate(status)}
-            style={[
-              styles.button,
-              size === "large" ? styles.buttonShadow : {},
-              {
-                height: cardHeight,
-                width: cardWidth,
-                borderColor: Colors.lightGray,
-                borderWidth: StyleSheet.hairlineWidth,
-                borderRightWidth: StyleSheet.hairlineWidth,
-                borderRightColor: Colors.lightGray,
-                borderTopLeftRadius: isStartButton ? EVENT_ITEM_BORDER_RADIUS : 0,
-                borderBottomLeftRadius: isStartButton ? EVENT_ITEM_BORDER_RADIUS : 0,
-                borderTopRightRadius: isEndButton ? EVENT_ITEM_BORDER_RADIUS : 0,
-                borderBottomRightRadius: isEndButton ? EVENT_ITEM_BORDER_RADIUS : 0,
-                backgroundColor: Colors[eventStatusColors[status].backgroundColor],
-              },
-            ]}
-          >
-            <Icon name={eventStatusIconNames[status]} size={24} color={Colors[eventStatusColors[status].color]} />
-            {size === "large" ? (
-              <Text
-                text={intl.formatMessage({
-                  id: `Event_Screen.eventStatusButton.status.${eventStatusNames[status]}`,
-                })}
-                preset="none"
-                style={[
-                  {
-                    marginTop: 8,
-                    fontWeight: "500",
-                    fontSize: getResponsiveFontSize(16),
-                    color: Colors[eventStatusColors[status].color],
-                  },
-                ]}
-              />
-            ) : (
-              <Text
-                text={intl.formatMessage({
-                  id: `Event_Screen.eventStatusButton.status.${eventStatusNames[status]}`,
-                })}
-                preset="none"
-                style={[
-                  {
-                    marginTop: 4,
-                    fontWeight: "500",
-                    fontSize: getResponsiveFontSize(10),
-                    color: Colors[eventStatusColors[status].color],
-                  },
-                ]}
-              />
-            )}
-          </Button>
-        );
-      })}
+    <View style={[styles.root]}>
+      <View style={[styles.buttonContainer, size === "large" ? styles.shadow : {}]}>
+        {statusName
+          ? nextEventStatuses[statusName].map((status, index) => {
+              const isEndButton = nextEventStatuses[statusName].length - 1 === index;
+              const isStartButton = index === 0;
+              return (
+                <Button
+                  key={index}
+                  preset="none"
+                  onPress={() => handleStatusUpdate(status)}
+                  style={[
+                    styles.button,
+                    {
+                      height: cardHeight,
+                      width: cardWidth,
+                      borderColor: Colors.lightGray,
+                      borderWidth: StyleSheet.hairlineWidth,
+                      borderRightWidth: StyleSheet.hairlineWidth,
+                      borderRightColor: Colors.lightGray,
+                      borderTopLeftRadius: isStartButton ? EVENT_ITEM_BORDER_RADIUS : 0,
+                      borderBottomLeftRadius: isStartButton ? EVENT_ITEM_BORDER_RADIUS : 0,
+                      borderTopRightRadius: isEndButton ? EVENT_ITEM_BORDER_RADIUS : 0,
+                      borderBottomRightRadius: isEndButton ? EVENT_ITEM_BORDER_RADIUS : 0,
+                      backgroundColor: Colors[eventStatusColors[status].backgroundColor],
+                    },
+                  ]}
+                >
+                  <Icon name={eventStatusIconNames[status]} size={24} color={Colors[eventStatusColors[status].color]} />
+                  {size === "large" ? (
+                    <Text
+                      text={intl.formatMessage({
+                        id: `Event_Screen.eventStatusButton.status.${eventStatusNames[status]}`,
+                      })}
+                      preset="none"
+                      style={[
+                        {
+                          marginTop: 8,
+                          fontWeight: "500",
+                          fontSize: getResponsiveFontSize(16),
+                          color: Colors[eventStatusColors[status].color],
+                        },
+                      ]}
+                    />
+                  ) : (
+                    <Text
+                      text={intl.formatMessage({
+                        id: `Event_Screen.eventStatusButton.status.${eventStatusNames[status]}`,
+                      })}
+                      preset="none"
+                      style={[
+                        {
+                          marginTop: 4,
+                          fontWeight: "500",
+                          fontSize: getResponsiveFontSize(10),
+                          color: Colors[eventStatusColors[status].color],
+                        },
+                      ]}
+                    />
+                  )}
+                </Button>
+              );
+            })
+          : null}
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flexDirection: "row",
+  root: {
     justifyContent: "center",
     alignItems: "center",
+  },
+  buttonContainer: {
+    borderRadius: EVENT_ITEM_BORDER_RADIUS,
+    flexDirection: "row",
   },
   button: {
     justifyContent: "center",
     alignItems: "center",
   },
-  buttonShadow: {
+  shadow: {
+    backgroundColor: "#fff",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,

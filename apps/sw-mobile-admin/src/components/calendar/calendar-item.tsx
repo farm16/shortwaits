@@ -160,12 +160,15 @@ export const AgendaItem = (props: AgendaItemProps) => {
 
   const eventStatus = useCallback(() => {
     const isPublicEvent = item.isPublicEvent;
-    const statusName = item.status?.statusName ? statusDisplayMessages[item.status.statusName] : "";
+    const statusName = item.status?.statusName ?? "";
+    const statusDisplayMessage = statusName ? statusDisplayMessages[item.status.statusName] : "";
+    const _statusDisplayMessagesBackgroundColor = statusDisplayMessagesBackgroundColor[statusName] ?? Colors.lightGray;
+    const _statusDisplayMessagesColor = statusDisplayMessagesColor[statusName] ?? Colors.text;
     return (
       <View style={[styles.statusContainer, { borderLeftColor: Colors.lightGray }]}>
         <View
           style={{
-            backgroundColor: statusDisplayMessagesBackgroundColor[item.status.statusName],
+            backgroundColor: _statusDisplayMessagesBackgroundColor,
             paddingHorizontal: 8,
             paddingVertical: 4,
             borderRadius: 5,
@@ -177,12 +180,12 @@ export const AgendaItem = (props: AgendaItemProps) => {
             style={[
               styles.eventNameRow2,
               {
-                color: statusDisplayMessagesColor[item.status.statusName],
+                color: _statusDisplayMessagesColor,
                 width: "100%",
               },
             ]}
             preset={"none"}
-            text={intl.formatMessage({ id: `CalendarItem.status.${statusName}` })}
+            text={intl.formatMessage({ id: `CalendarItem.status.${statusDisplayMessage ? statusDisplayMessage : "unknown"}` })}
           />
         </View>
         <Space size="tiny" />
@@ -193,7 +196,7 @@ export const AgendaItem = (props: AgendaItemProps) => {
         />
       </View>
     );
-  }, [Colors.lightGray, Colors.subText, intl, item.isPublicEvent, item.status.statusName]);
+  }, [Colors.lightGray, Colors.subText, Colors.text, intl, item.isPublicEvent, item?.status?.statusName]);
 
   return (
     <Swipeable ref={swipeableRef} renderRightActions={renderRightActions}>

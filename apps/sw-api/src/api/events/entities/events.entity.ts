@@ -169,7 +169,7 @@ export class Events extends Document implements EventType {
     })
   )
   status: {
-    statusCode: number;
+    statusCode: 0 | 1 | 2 | 3 | 4;
     statusName: "PENDING" | "APPROVED" | "REJECTED" | "CANCELED" | "COMPLETED";
   };
 

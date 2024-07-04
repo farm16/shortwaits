@@ -44,17 +44,13 @@ export function Messages({ type, title, message, style, textColor = "text" }: Me
           paddingHorizontal: getResponsiveHeight(12),
           paddingVertical: getResponsiveHeight(12),
           borderRadius: getResponsiveHeight(8),
-          // apply shadow
           shadowColor: "#000",
           shadowOffset: {
             width: 0,
             height: 2,
           },
-          shadowOpacity: 0.25,
-          shadowRadius: 3.84,
-          elevation: 5,
-          // borderWidth: 1.5,
-          // borderColor: Colors[messageTypeToColor[type]],
+          shadowOpacity: 0.23,
+          elevation: 3,
         },
         style,
       ]}

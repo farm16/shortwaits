@@ -38,7 +38,11 @@ export function BusinessLocalClientScreen({ navigation, route }: AuthorizedScree
     navigation.setOptions({
       headerTitleAlign: "center",
       headerTitle: () => {
-        return <Container direction="row" alignItems="center" justifyContent="center"></Container>;
+        return (
+          <Container direction="row" alignItems="center" justifyContent="center">
+            <Text preset="headerTitle" text={"Client Details"} />
+          </Container>
+        );
       },
       headerLeft: () => {
         return (

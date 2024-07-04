@@ -59,6 +59,8 @@
     "Common.eventStatus.rejected": "Rejected",
     "Common.eventStatus.canceled": "Canceled",
     "Common.eventStatus.completed": "Completed",
+    "Common.eventStatus.unknown": "Unknown",
+
     "Common.greeting.morning": "Good morning",
     "Common.greeting.afternoon": "Good afternoon",
     "Common.greeting.evening": "Good evening",
@@ -134,6 +136,7 @@
     "CalendarItem.status.rejected": "Rejected",
     "CalendarItem.status.canceled": "Canceled",
     "CalendarItem.status.completed": "Completed",
+    "CalendarItem.status.unknown": "Unknown",
 
     "Event_Screen.eventStatusButton.status.pending": "Pending",
     "Event_Screen.eventStatusButton.status.accept": "Accept",
@@ -423,6 +426,8 @@
     "Common.eventStatus.rejected": "Rechazado",
     "Common.eventStatus.canceled": "Cancelado",
     "Common.eventStatus.completed": "Completado",
+    "Common.eventStatus.unknown": "Desconocido",
+
     "Common.error.oops": "¡Ups!",
     "Common.error.somethingWentWrong": "Algo salió mal. Por favor, inténtalo de nuevo.",
     "Common.greeting.morning": "Buenos Días",
@@ -498,6 +503,7 @@
     "CalendarItem.status.rejected": "Rechazado",
     "CalendarItem.status.canceled": "Cancelado",
     "CalendarItem.status.completed": "Completado",
+    "CalendarItem.status.unknown": "Desconocido",
 
     "Event_Screen.eventStatusButton.status.pending": "Pendiente",
     "Event_Screen.eventStatusButton.status.accept": "Aceptar",

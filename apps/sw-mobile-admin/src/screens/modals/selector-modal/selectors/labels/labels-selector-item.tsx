@@ -17,7 +17,7 @@ type LabelSelectorItemProps = {
 };
 
 export function LabelSelectorItem(props: LabelSelectorItemProps) {
-  const { initialIsSelected, item, onSelect, disabled = false } = props;
+  const { initialIsSelected, item, onSelect, disabled } = props;
   const [isSelected, setIsSelected] = useState(initialIsSelected);
 
   const handleOnSelect = useCallback(() => {

@@ -146,7 +146,7 @@ export function EventScreenHeader({ event }: { event: EventDtoType }) {
           value={
             intl
               .formatMessage({
-                id: `Common.eventStatus.${event.status.statusName.toLowerCase()}`,
+                id: `Common.eventStatus.${event?.status?.statusName ? event.status.statusName.toLowerCase() : "unknown"}`,
               })
               .toUpperCase() ?? ""
           }
