@@ -19,14 +19,15 @@ import { FlatList } from "react-native-gesture-handler";
 import { AgendaItem } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useDeleteBusinessLocalClientsMutation } from "../../../services";
-import { useBusiness, useEvents } from "../../../store";
+import { useBusiness, useEvents, useLocalClient } from "../../../store";
 
 export function BusinessLocalClientScreen({ navigation, route }: AuthorizedScreenProps<"business-local-client-screen">) {
-  const { localClient, onUserRemove } = route.params;
+  const { localClient: localClientParam, onUserRemove } = route.params;
 
   const { Colors } = useTheme();
   const business = useBusiness();
   const events = useEvents();
+  const localClient = useLocalClient(localClientParam._id);
   const [deleteLocalClients, deleteLocalClientsStatus] = useDeleteBusinessLocalClientsMutation();
 
   const clientName = localClient.displayName || localClient.familyName || localClient.givenName || localClient.middleName || localClient.email || "";

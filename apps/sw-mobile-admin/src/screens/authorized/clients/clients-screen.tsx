@@ -51,8 +51,9 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
     async function () {
       const run = async () => {
         if (osContactsError) {
-          Alert.alert("Error", osContactsError.message);
+          Alert.alert("Error", osContactsError?.message ?? "An error occurred while getting contacts.");
         }
+        const hasSyncedContacts = currentClients.some(client => client.deviceSettings?.[0]?.hasExportedContacts);
         const contacts = await getOsContacts();
         const clientKeySet = new Set(currentClients.map(client => client.phoneNumbers?.[0]?.number));
         const filteredContacts = contacts.data.filter(contact => !clientKeySet.has(contact.phoneNumbers?.[0]?.number));

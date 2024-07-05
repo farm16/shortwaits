@@ -5,7 +5,7 @@ import { Document } from "mongoose";
 // end of warning //
 
 import { ObjectId } from "../common";
-import { ClientRegistration } from "./common";
+import { AddressType, Alias, ClientRegistration, CurrentMembershipType, LocaleType, PhoneNumberType, SocialAccountType, UserAccountSettings, UserDeviceSettings } from "./common";
 
 /**
  *
@@ -25,8 +25,9 @@ export type LocalClientUserMethodsType = {
 export type LocalClientType = {
   shortId: string;
   clientType: "local"; // local means the user is created by the admin, external means the user is created by the client
+  // contact =========
   username: string;
-  alias: "username" | "familyName" | "givenName" | "middleName" | "displayName" | "email";
+  alias: Alias;
   displayName: string;
   familyName: string;
   givenName: string;
@@ -34,54 +35,17 @@ export type LocalClientType = {
   accountImageUrl: string;
   email: string;
   password: string;
-  locale: {
-    countryCode: string;
-    isRTL: boolean;
-    languageCode: string;
-    languageTag: string;
-  };
-  phoneNumbers: {
-    label: string;
-    number: string;
-  }[];
+  locale: LocaleType;
+  phoneNumbers: PhoneNumberType[];
   imAddresses: {
     username: string;
     service: string;
   }[];
-  addresses: {
-    label: string;
-    address1: string;
-    address2: string;
-    city: string;
-    region: string;
-    state: string;
-    postCode: string;
-    country: string;
-  }[];
+  addresses: AddressType[];
   isSocialAccount: boolean;
-  socialAccount: {
-    kind: string;
-    uid?: string;
-    username?: string;
-  };
-  deviceSetting: {
-    isEmailVerified: boolean;
-    isPhoneVerified: boolean;
-    isTwoFactorEnabled: boolean;
-    isTwoFactorVerified: boolean;
-    isTouchIdEnabled: boolean;
-    isTouchIdVerified: boolean;
-    isFaceIdEnabled: boolean;
-    isFaceIdVerified: boolean;
-    isPasswordlessEnabled: boolean;
-  };
-  accountSettings: {
-    isDarkModeEnabled: boolean;
-    isNotificationsEnabled: boolean;
-    isLocationEnabled: boolean;
-    isLocationShared: boolean;
-    isLocationSharedWithBusinesses: boolean;
-  };
+  socialAccount: SocialAccountType;
+  deviceSettings: UserDeviceSettings[];
+  accountSettings: UserAccountSettings;
   desiredCurrencies: string[];
   // below are fields from the that are not in the AddClientDtoType
   billing: {
@@ -95,15 +59,7 @@ export type LocalClientType = {
   roleId: ObjectId;
   hashedRt: string;
   registration: ClientRegistration;
-  currentMembership: {
-    membershipId: ObjectId;
-    membershipShortId: string;
-    membershipShortName: string;
-    status: string;
-    invoiceId: ObjectId;
-    isFaulty: boolean;
-    faultyReason: string[];
-  };
+  currentMembership: CurrentMembershipType;
 };
 
 export type LocalClientUserDocumentType = LocalClientType & Document;

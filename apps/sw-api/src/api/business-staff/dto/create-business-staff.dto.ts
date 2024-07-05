@@ -1,8 +1,28 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { ConvertToDtoType, CreateBusinessUserDtoType, WeekHoursType } from "@shortwaits/shared-lib";
+import { Alias, ConvertToDtoType, CreateBusinessUserDtoType, UserAccountSettings, UserDeviceSettings, WeekHoursType } from "@shortwaits/shared-lib";
 import { IsNotEmpty, IsOptional } from "class-validator";
 
 export class CreateBusinessUserDto implements CreateBusinessUserDtoType {
+  @ApiProperty()
+  @IsOptional()
+  alias: Alias;
+
+  @ApiProperty()
+  @IsOptional()
+  shortId: string;
+
+  @ApiProperty()
+  @IsOptional()
+  isSocialAccount: boolean;
+
+  @ApiProperty()
+  @IsOptional()
+  deviceSettings: UserDeviceSettings[];
+
+  @ApiProperty()
+  @IsOptional()
+  accountSettings: ConvertToDtoType<UserAccountSettings>;
+
   @ApiProperty()
   @IsOptional()
   password: string;

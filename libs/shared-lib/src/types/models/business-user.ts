@@ -4,6 +4,17 @@
 // end of warning //
 
 import { ObjectId } from "../common";
+import {
+  AddressType,
+  Alias,
+  LocaleType,
+  PhoneNumberType,
+  ShortwaitsAdminUserRoles,
+  SocialAccountType,
+  StaffRegistrationStateType,
+  UserAccountSettings,
+  UserDeviceSettings,
+} from "./common";
 import { WeekHoursType } from "./helpers";
 
 /**
@@ -25,71 +36,47 @@ export type BusinessUserRole = "admin" | "superAdmin" | "backgroundAdmin" | "sta
 export type BusinessUserRoles = BusinessUserRole[];
 
 export type BusinessUserType = {
-  roleId: ObjectId;
-  password: string;
-  isPasswordProtected: boolean;
+  shortId: string;
   businesses: ObjectId[];
   isDisabled: boolean; // if this is set to true, the user will not be able to login but user will be visible in the list of users
-  userRoles: {
-    isStaff: boolean;
-    isAdmin: boolean;
-    isSuperAdmin: boolean;
-    isBackgroundAdmin: boolean;
-  };
+  userRoles: ShortwaitsAdminUserRoles;
   createdByBusinessId: ObjectId; // if this is set and user "A" is superAdmin, user "A" can delete or update this user
   // Also we need to let the user know that this user is created by a business (super admin) and belongs to that business
   deleted: boolean; // will not be shown in the list of users, but the data will be kept
-  registrationState: {
-    screenName: string;
-    state: number;
-    isCompleted: boolean;
-  };
-  createdAt: Date;
-  updatedAt: Date;
+  registrationState: StaffRegistrationStateType;
+  createdAt: string;
+  updatedAt: string;
   lastSignInAt: Date;
+  roleId: ObjectId;
   hashedRt: string;
   isEmailVerified: boolean; // once email is verified, this should be set to true
 
   // below are fields that are not protected
-  preferredAlias: "username" | "displayName";
+  // contact =========
   username: string; // this should be unique for each user (business)
+  alias: Alias;
   displayName: string;
   familyName: string;
   givenName: string;
   middleName: string;
-  email: string; // no longer unique for each user (business)
-  hours: WeekHoursType;
+  // ================
   accountImageUrl: string;
-  primaryPhoneNumberLabel: string; // this should be unique for each user (business)' should be mobile
-  phoneNumbers: {
-    label: string;
-    number: string;
-  }[];
+  email: string; // no longer unique for each user (business)
+  password: string;
+  isPasswordProtected: boolean;
+  locale: LocaleType;
+  phoneNumbers: PhoneNumberType[];
   imAddresses: {
     username: string;
     service: string;
   }[];
-  addresses: {
-    label: string;
-    address1: string;
-    address2: string;
-    city: string;
-    region: string;
-    state: string;
-    postCode: string;
-    country: string;
-  }[];
-  socialAccounts: {
-    kind: string;
-    uid?: string;
-    username?: string;
-  }[];
-  birthday: string;
+  addresses: AddressType[];
+  isSocialAccount: boolean;
+  socialAccounts: SocialAccountType[];
+  deviceSettings: UserDeviceSettings[];
+  accountSettings: UserAccountSettings;
   desiredCurrencies: string[];
-  locale: {
-    countryCode: string;
-    isRTL: boolean;
-    languageCode: string;
-    languageTag: string;
-  };
+
+  hours: WeekHoursType;
+  birthday: string;
 };

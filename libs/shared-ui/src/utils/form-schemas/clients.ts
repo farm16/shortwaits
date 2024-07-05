@@ -95,15 +95,15 @@ export const addLocalClientSchema = Yup.object({
   addresses: addressesSchema.optional(),
   isSocialAccount: Yup.boolean().optional(),
   socialAccount: socialAccountSchema.optional().nullable(),
-  deviceSetting: deviceSettingSchema.optional().nullable(),
+  deviceSettings: deviceSettingSchema.optional().nullable(),
   accountSettings: accountSettingsSchema.optional().nullable(),
 });
 
 export const updateLocalClientSchema = Yup.object({
   shortId: Yup.string().optional(),
   isSocialAccount: Yup.boolean().optional(),
-  socialAccount: socialAccountSchema.optional(),
-  deviceSetting: deviceSettingSchema.optional().nullable(),
+  socialAccount: socialAccountSchema.nullable().optional(),
+  deviceSettings: deviceSettingSchema.optional().nullable(),
   accountSettings: accountSettingsSchema.optional().nullable(),
   clientType: Yup.mixed().required().oneOf(["local", "external"]),
   username: Yup.string().min(3, "a longer name is required").optional(),
@@ -118,8 +118,8 @@ export const updateLocalClientSchema = Yup.object({
   phoneNumbers: phoneNumbersSchema.optional(),
   imAddresses: imAddressesSchema.optional(),
   addresses: addressesSchema.optional(),
-  socialAccounts: socialAccountsSchema.optional().nullable(),
-  desiredCurrencies: Yup.array().of(Yup.string()),
+  socialAccounts: socialAccountsSchema.optional().nullable().optional(),
+  desiredCurrencies: Yup.array().of(Yup.string()).optional(),
 });
 
 export const updateClientSchema = Yup.object({

@@ -371,6 +371,6 @@ const localClientFormInitialValues: AddLocalClientDtoType = {
   ],
   isSocialAccount: false,
   socialAccount: null,
-  deviceSetting: null,
+  deviceSettings: null,
   accountSettings: null,
 };

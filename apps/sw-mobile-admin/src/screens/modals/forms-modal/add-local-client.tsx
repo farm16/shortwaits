@@ -83,7 +83,7 @@ export const AddLocalClientModal: FC<ModalsScreenProps<"add-local-client-modal-s
       shortId: "",
       isSocialAccount: false,
       socialAccount: null,
-      deviceSetting: null,
+      deviceSettings: null,
       accountSettings: null,
     };
     return _initialValues;

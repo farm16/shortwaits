@@ -60,7 +60,18 @@ export const AgendaItem = (props: AgendaItemProps) => {
 
   const eventServiceColor = useCallback(() => {
     if (!service?.serviceColor?.hexCode) {
-      return null;
+      return (
+        <View
+          style={[
+            styles.eventServiceColor,
+            {
+              // borderWidth: StyleSheet.hairlineWidth,
+              // borderColor: Colors.gray,
+              backgroundColor: "transparent",
+            },
+          ]}
+        />
+      );
     }
     return (
       <View

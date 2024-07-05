@@ -4,10 +4,10 @@ import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundE
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import { InjectModel } from "@nestjs/mongoose";
-import { BusinessType, BusinessUserType, ClientType, ObjectId, WithDbProps } from "@shortwaits/shared-lib";
+import { BusinessType, BusinessUserType, ClientType, ObjectId } from "@shortwaits/shared-lib";
 import bcrypt from "bcryptjs";
 import { OAuth2Client } from "google-auth-library";
-import { Model } from "mongoose";
+import { Model, Types } from "mongoose";
 import { noop } from "rxjs";
 import {
   convertToLowercase,
@@ -227,7 +227,12 @@ export class AuthService {
     return { auth: signedTokens, attributes: { currentUser: user } };
   }
 
-  private async updateBusinessUserRt(user: WithDbProps<BusinessUserType>, rt: string) {
+  private async updateBusinessUserRt(
+    user: BusinessUserType & {
+      _id: Types.ObjectId;
+    },
+    rt: string
+  ) {
     const saltRounds = Number(this.configService.get("SALT_ROUNDS"));
     const salt = await bcrypt.genSalt(saltRounds);
     const hash = await bcrypt.hash(rt, salt);
@@ -259,7 +264,11 @@ export class AuthService {
     );
   }
 
-  private async signTokens(userInfo: WithDbProps<ClientUser>) {
+  private async signTokens(
+    userInfo: ClientUser & {
+      _id: Types.ObjectId;
+    }
+  ) {
     const payload = { sub: userInfo._id, email: userInfo.email };
 
     const [token, refreshToken] = await Promise.all([
@@ -279,7 +288,11 @@ export class AuthService {
     };
   }
 
-  private async signBusinessUserTokens(userInfo: WithDbProps<BusinessUserType>) {
+  private async signBusinessUserTokens(
+    userInfo: BusinessUserType & {
+      _id: Types.ObjectId;
+    }
+  ) {
     const payload = { sub: userInfo._id, email: userInfo.email };
 
     const [token, refreshToken] = await Promise.all([
@@ -335,7 +348,11 @@ export class AuthService {
     return await userInfoResponse.json();
   }
 
-  async successfulExistingBusinessUser(existingUser: WithDbProps<BusinessUserType>) {
+  async successfulExistingBusinessUser(
+    existingUser: BusinessUserType & {
+      _id: Types.ObjectId;
+    }
+  ) {
     const signedTokens = await this.signBusinessUserTokens(existingUser);
     const updatedBusinessUser = await this.updateBusinessUserRt(existingUser, signedTokens.refreshToken);
 

@@ -151,7 +151,7 @@ export const generateNewLocalClientPayload = (client: AddLocalClientDtoType): Pa
     deleted: false,
     registration: {
       isRegistered: false,
-      registrationType: "business",
+      registrationType: "local",
       state: {
         screenName: "",
         state: 7,
@@ -181,17 +181,21 @@ export const getNewClientPayload = (userPayloadOverride: RequiredKeys) => {
     shortId: generateShortId(),
     alias: "email",
     accountImageUrl: generateAvatarUrl(imageUrlIdentifier),
-    deviceSetting: {
-      isEmailVerified: false,
-      isPhoneVerified: false,
-      isTwoFactorEnabled: false,
-      isTwoFactorVerified: false,
-      isTouchIdEnabled: false,
-      isTouchIdVerified: false,
-      isFaceIdEnabled: false,
-      isFaceIdVerified: false,
-      isPasswordlessEnabled: false,
-    },
+    deviceSettings: [
+      {
+        deviceUuid: "",
+        hasExportedContacts: false,
+        isEmailVerified: false,
+        isPhoneVerified: false,
+        isTwoFactorEnabled: false,
+        isTwoFactorVerified: false,
+        isTouchIdEnabled: false,
+        isTouchIdVerified: false,
+        isFaceIdEnabled: false,
+        isFaceIdVerified: false,
+        isPasswordlessEnabled: false,
+      },
+    ],
     accountSettings: {
       isDarkModeEnabled: false,
       isNotificationsEnabled: false,
@@ -211,6 +215,7 @@ export const getNewClientPayload = (userPayloadOverride: RequiredKeys) => {
         messages: ["Your account is pending verification."],
         isPendingVerification: true,
       },
+      registrationType: "local",
     },
     currentMembership: {
       membershipId: null,

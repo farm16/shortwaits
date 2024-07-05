@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory, raw } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
-import { ClientRegistration, LocalClientType, ObjectId } from "@shortwaits/shared-lib";
+import { Alias, ClientRegistration, LocalClientType, ObjectId } from "@shortwaits/shared-lib";
 import { Document, Schema as MongooseSchema } from "mongoose";
 
 @Schema({ collection: "local-client-users" })
@@ -26,12 +26,27 @@ export class LocalClientUser extends Document implements LocalClientType {
   };
 
   @ApiProperty()
-  @Prop(
-    raw({
-      type: MongooseSchema.Types.Mixed,
-    })
-  )
-  deviceSetting: {
+  @Prop({
+    type: MongooseSchema.Types.Mixed,
+    default: [
+      {
+        deviceUuid: "",
+        hasExportedContacts: false,
+        isEmailVerified: false,
+        isPhoneVerified: false,
+        isTwoFactorEnabled: false,
+        isTwoFactorVerified: false,
+        isTouchIdEnabled: false,
+        isTouchIdVerified: false,
+        isFaceIdEnabled: false,
+        isFaceIdVerified: false,
+        isPasswordlessEnabled: false,
+      },
+    ],
+  })
+  deviceSettings: {
+    deviceUuid: string;
+    hasExportedContacts: boolean;
     isEmailVerified: boolean;
     isPhoneVerified: boolean;
     isTwoFactorEnabled: boolean;
@@ -41,7 +56,7 @@ export class LocalClientUser extends Document implements LocalClientType {
     isFaceIdEnabled: boolean;
     isFaceIdVerified: boolean;
     isPasswordlessEnabled: boolean;
-  };
+  }[];
 
   @ApiProperty()
   @Prop(
@@ -78,9 +93,10 @@ export class LocalClientUser extends Document implements LocalClientType {
 
   @ApiProperty()
   @Prop({
+    type: String,
     default: "displayName",
   })
-  alias: "displayName" | "familyName" | "givenName" | "middleName" | "username";
+  alias: Alias;
 
   @ApiProperty()
   @Prop()

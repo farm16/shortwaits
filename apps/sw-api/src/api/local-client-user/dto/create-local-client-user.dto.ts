@@ -17,7 +17,9 @@ export class CreateLocalClientUserDto implements AddLocalClientDtoType {
 
   @ApiProperty()
   @IsNotEmpty()
-  deviceSetting: {
+  deviceSettings: {
+    deviceUuid: string;
+    hasExportedContacts: boolean;
     isEmailVerified: boolean;
     isPhoneVerified: boolean;
     isTwoFactorEnabled: boolean;
@@ -27,7 +29,7 @@ export class CreateLocalClientUserDto implements AddLocalClientDtoType {
     isFaceIdEnabled: boolean;
     isFaceIdVerified: boolean;
     isPasswordlessEnabled: boolean;
-  };
+  }[];
 
   @ApiProperty()
   @IsNotEmpty()

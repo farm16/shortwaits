@@ -22,7 +22,7 @@ export const getFilteredClientUser = (createCustomerDto: Partial<AddClientDtoTyp
     desiredCurrencies: createCustomerDto?.desiredCurrencies,
     isSocialAccount: false,
     socialAccount: undefined,
-    deviceSetting: undefined,
+    deviceSettings: undefined,
     accountSettings: undefined,
   };
   return filteredClientUser;
@@ -98,14 +98,14 @@ const newBusinessOwnerRoles = {
   isAdmin: true,
   isSuperAdmin: true,
   isBackgroundAdmin: true,
-};
+} as const;
 /**
  * @description
  * this inits values for business users
  **/
 export const filterBusinessOwnerPayload_localAuth = (ownerSignupDto: SignUpWithEmailDto): BusinessUserType => {
   const filteredBusinessUser: BusinessUserType = {
-    preferredAlias: "username",
+    alias: "username",
     displayName: null,
     familyName: null,
     givenName: null,
@@ -117,7 +117,6 @@ export const filterBusinessOwnerPayload_localAuth = (ownerSignupDto: SignUpWithE
     addresses: null,
     socialAccounts: null,
     desiredCurrencies: null,
-    primaryPhoneNumberLabel: null,
     birthday: null,
     hours: null,
 
@@ -128,7 +127,6 @@ export const filterBusinessOwnerPayload_localAuth = (ownerSignupDto: SignUpWithE
     password: ownerSignupDto?.password,
     isPasswordProtected: true,
     isDisabled: false,
-    userRoles: newBusinessOwnerRoles,
     createdByBusinessId: null,
     deleted: false,
 
@@ -146,13 +144,38 @@ export const filterBusinessOwnerPayload_localAuth = (ownerSignupDto: SignUpWithE
     // `createdAt` and `updatedAt` will get overridden by the Mongoose schema
     createdAt: null,
     updatedAt: null,
+    userRoles: newBusinessOwnerRoles,
+    shortId: generateShortId(6), // generate shortId with 8 characters
+    isSocialAccount: false,
+    deviceSettings: [
+      {
+        deviceUuid: "",
+        hasExportedContacts: false,
+        isEmailVerified: false,
+        isPhoneVerified: false,
+        isTwoFactorEnabled: false,
+        isTwoFactorVerified: false,
+        isTouchIdEnabled: false,
+        isTouchIdVerified: false,
+        isFaceIdEnabled: false,
+        isFaceIdVerified: false,
+        isPasswordlessEnabled: false,
+      },
+    ],
+    accountSettings: {
+      isDarkModeEnabled: false,
+      isNotificationsEnabled: false,
+      isLocationEnabled: false,
+      isLocationShared: false,
+      isLocationSharedWithBusinesses: false,
+    },
   };
   return filteredBusinessUser;
 };
 
 export const filterBusinessOwnerPayload_socialAuth = (ownerSignupDto: SignUpWithEmailDto) => {
   const filteredBusinessUser: BusinessUserType = {
-    preferredAlias: "username",
+    alias: "username",
     displayName: null,
     familyName: null,
     givenName: null,
@@ -164,7 +187,6 @@ export const filterBusinessOwnerPayload_socialAuth = (ownerSignupDto: SignUpWith
     addresses: null,
     socialAccounts: null,
     desiredCurrencies: null,
-    primaryPhoneNumberLabel: null,
     birthday: null,
     hours: null,
 
@@ -193,6 +215,30 @@ export const filterBusinessOwnerPayload_socialAuth = (ownerSignupDto: SignUpWith
     createdAt: null,
     updatedAt: null,
     userRoles: newBusinessOwnerRoles,
+    shortId: generateShortId(6), // generate shortId with 8 characters
+    isSocialAccount: false,
+    deviceSettings: [
+      {
+        deviceUuid: "",
+        hasExportedContacts: false,
+        isEmailVerified: false,
+        isPhoneVerified: false,
+        isTwoFactorEnabled: false,
+        isTwoFactorVerified: false,
+        isTouchIdEnabled: false,
+        isTouchIdVerified: false,
+        isFaceIdEnabled: false,
+        isFaceIdVerified: false,
+        isPasswordlessEnabled: false,
+      },
+    ],
+    accountSettings: {
+      isDarkModeEnabled: false,
+      isNotificationsEnabled: false,
+      isLocationEnabled: false,
+      isLocationShared: false,
+      isLocationSharedWithBusinesses: false,
+    },
   };
   return filteredBusinessUser;
 };

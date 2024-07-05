@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { AddClientDtoType, ConvertToDtoType } from "@shortwaits/shared-lib";
+import { AddClientDtoType, ConvertToDtoType, UserDeviceSettings } from "@shortwaits/shared-lib";
 import { IsNotEmpty, IsOptional } from "class-validator";
 
 export class CreateClientUserDto implements AddClientDtoType {
@@ -13,17 +13,7 @@ export class CreateClientUserDto implements AddClientDtoType {
 
   @ApiProperty()
   @IsNotEmpty()
-  deviceSetting: ConvertToDtoType<{
-    isEmailVerified: boolean;
-    isPhoneVerified: boolean;
-    isTwoFactorEnabled: boolean;
-    isTwoFactorVerified: boolean;
-    isTouchIdEnabled: boolean;
-    isTouchIdVerified: boolean;
-    isFaceIdEnabled: boolean;
-    isFaceIdVerified: boolean;
-    isPasswordlessEnabled: boolean;
-  }>;
+  deviceSettings: ConvertToDtoType<UserDeviceSettings>[];
 
   @ApiProperty()
   @IsNotEmpty()

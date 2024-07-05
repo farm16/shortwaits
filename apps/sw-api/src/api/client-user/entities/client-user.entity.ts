@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory, raw } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
-import { ClientType, ObjectId } from "@shortwaits/shared-lib";
+import { Alias, ClientType, ObjectId, UserDeviceSettings } from "@shortwaits/shared-lib";
 import { Document, Schema as MongooseSchema } from "mongoose";
 
 @Schema({ collection: "client-users" })
@@ -27,17 +27,7 @@ export class ClientUser extends Document implements ClientType {
       type: MongooseSchema.Types.Mixed,
     })
   )
-  deviceSetting: {
-    isEmailVerified: boolean;
-    isPhoneVerified: boolean;
-    isTwoFactorEnabled: boolean;
-    isTwoFactorVerified: boolean;
-    isTouchIdEnabled: boolean;
-    isTouchIdVerified: boolean;
-    isFaceIdEnabled: boolean;
-    isFaceIdVerified: boolean;
-    isPasswordlessEnabled: boolean;
-  };
+  deviceSettings: UserDeviceSettings[];
 
   @ApiProperty()
   @Prop(
@@ -79,9 +69,10 @@ export class ClientUser extends Document implements ClientType {
 
   @ApiProperty()
   @Prop({
+    type: String,
     default: "displayName",
   })
-  alias: "displayName" | "familyName" | "givenName" | "middleName" | "username";
+  alias: Alias;
 
   @ApiProperty()
   @Prop()
@@ -176,11 +167,11 @@ export class ClientUser extends Document implements ClientType {
 
   @ApiProperty()
   @Prop()
-  createdAt: Date;
+  createdAt: string;
 
   @ApiProperty()
   @Prop()
-  updatedAt: Date;
+  updatedAt: string;
 
   @ApiProperty()
   @Prop()
@@ -202,6 +193,7 @@ export class ClientUser extends Document implements ClientType {
   )
   registration: {
     isRegistered: boolean;
+    registrationType: "external";
     state: {
       screenName: string;
       state: 0 | 1 | 2 | 3 | 4;
