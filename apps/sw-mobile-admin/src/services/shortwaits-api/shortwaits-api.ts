@@ -64,7 +64,8 @@ export const shortwaitsApi = createApi({
     updateBusiness: UpdateBusiness(builder),
     registerBusiness: RegisterBusiness(builder),
 
-    // ! A business User === Staff
+    // ! -> A business User is Staff
+    getStaff: GetStaff(builder),
     getBusinessStaff: GetBusinessStaff(builder),
     createBusinessStaff: CreateBusinessStaff(builder),
     deleteBusinessStaff: DeleteBusinessStaff(builder), // ! <- deletes single business staff | TODO: delete multiple staff
@@ -74,8 +75,6 @@ export const shortwaitsApi = createApi({
     createBusinessLocalClients: CreateBusinessLocalClients(builder),
     deleteBusinessLocalClients: DeleteBusinessLocalClients(builder),
     updateBusinessLocalClient: UpdateBusinessLocalClient(builder), // ! <- Updates single local client
-
-    // <<<<<
 
     //categories
     getCategory: GetCategory(builder),
@@ -96,10 +95,9 @@ export const shortwaitsApi = createApi({
     getEventsSummaryByBusiness: GetEventsSummaryByBusiness(builder),
     getPeopleInEvent: GetPeopleInEvent(builder),
 
-    // todo: Users
+    //clients
     getClients: GetClients(builder),
     addClientToBusiness: AddClientToBusiness(builder),
-    getStaff: GetStaff(builder),
 
     //file uploads
     uploadImageFile: UploadImageFile(builder),

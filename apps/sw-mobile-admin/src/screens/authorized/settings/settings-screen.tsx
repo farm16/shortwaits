@@ -1,11 +1,11 @@
-import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { Button, Container, Screen, Space, Switch, Text, useTheme } from "@shortwaits/shared-ui";
 import React, { FC, useCallback, useLayoutEffect } from "react";
 import { FormattedMessage, useIntl } from "react-intl"; // Import FormattedMessage and useIntl
-import { StyleSheet } from "react-native";
+import { Alert, StyleSheet } from "react-native";
 import { List } from "react-native-paper";
+import Rate, { AndroidMarket } from "react-native-rate";
 import { AuthorizedScreenProps } from "../../../navigation";
-import { useGetStaffQuery, useLocalSignOutMutation, useUpdateBusinessMutation } from "../../../services";
+import { useLocalSignOutMutation, useUpdateBusinessMutation } from "../../../services";
 import { useBusiness } from "../../../store";
 import { AppInfoSettings } from "./options/app-info";
 import { AppLanguage } from "./options/select-language";
@@ -14,10 +14,9 @@ import { ManageAdminUsers } from "./options/user-account";
 
 export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ navigation }) => {
   const { Colors } = useTheme();
-  const currentBusiness = useBusiness();
-  const { data: staffQuery, isLoading, isError, isSuccess } = useGetStaffQuery(currentBusiness?._id ?? skipToken);
+  const business = useBusiness();
   const intl = useIntl(); // Initialize the Intl instance
-  const [updateBusiness, state] = useUpdateBusinessMutation();
+  const [updateBusiness, updateBusinessState] = useUpdateBusinessMutation();
   const [signOut] = useLocalSignOutMutation();
   const handleSignOut = useCallback(async () => {
     await signOut(undefined);
@@ -48,18 +47,31 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
     borderBottomWidth: StyleSheet.hairlineWidth,
   };
 
+  const options = {
+    AppleAppID: "2193813192",
+    GooglePackageName: "com.mywebsite.myapp",
+    AmazonPackageName: "com.mywebsite.myapp",
+    OtherAndroidURL: "http://www.randomappstore.com/app/47172391",
+    preferredAndroidMarket: AndroidMarket.Google,
+    preferInApp: false,
+    openAppStoreIfInAppFails: true,
+    fallbackPlatformURL: "http://www.mywebsite.com/myapp.html",
+  };
+
   return (
     <Screen preset="scroll" unsafeBottom unsafe>
       <List.Section>
-        <List.Item
-          title={<FormattedMessage id="Settings_Screen.business_plan.title" values={{ accountType: currentBusiness?.accountType }} />}
+        {/*
+        // will uncomment this when the business plan feature is ready and allowed to be displayed
+        { <List.Item
+          title={<FormattedMessage id="Settings_Screen.business_plan.title" values={{ accountType: business?.accountType }} />}
           style={itemStyle}
           titleStyle={{ color: Colors.text }}
           descriptionStyle={{ color: Colors.orange5, fontWeight: "700", textTransform: "uppercase" }}
-          description={<FormattedMessage id="Settings_Screen.business_plan.description" values={{ accountType: currentBusiness?.accountType }} />}
+          description={<FormattedMessage id="Settings_Screen.business_plan.description" values={{ accountType: business?.accountType }} />}
           right={props => <List.Icon {...props} color={Colors.brandPrimary} icon="chevron-right" />}
           onPress={() => navigation.navigate("authorized-stack", { screen: "plans-screen" })}
-        />
+        />} */}
         <List.Item
           descriptionStyle={{ color: Colors.subText }}
           titleStyle={{
@@ -70,6 +82,18 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
           description={<FormattedMessage id="Settings_Screen.rate_us_description" />}
           left={props => <List.Icon {...props} color={Colors.red4} icon="heart" />}
           right={props => <List.Icon {...props} color={Colors.brandPrimary} icon="chevron-right" />}
+          onPress={() => {
+            Rate.rate(options, (success, errorMessage) => {
+              if (success) {
+                // this technically only tells us if the user successfully went to the Review Page. Whether they actually did anything, we do not know.
+                console.log("Example page Rate.rate() success");
+              }
+              if (errorMessage) {
+                // errorMessage comes from the native code. Useful for debugging, but probably not for users to view
+                console.error(`Example page Rate.rate() error: ${errorMessage}`);
+              }
+            });
+          }}
         />
         <List.Item
           titleStyle={{ color: Colors.text }}
@@ -77,17 +101,17 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
           descriptionStyle={{ color: Colors.subText }}
           title={<FormattedMessage id="Settings_Screen.web_booking_title" />}
           description={<FormattedMessage id="Settings_Screen.web_booking_description" />}
-          right={props => (
+          right={_props => (
             <Switch
-              isLoading={state.isLoading}
-              value={currentBusiness?.isWebBookingEnabled ?? false}
+              isLoading={updateBusinessState.isLoading}
+              value={business?.isWebBookingEnabled ?? false}
               onChange={() => {
-                const isWebBookingEnabled = !(currentBusiness?.isWebBookingEnabled ?? false);
+                const isWebBookingEnabled = !(business?.isWebBookingEnabled ?? false);
                 console.log("isWebBookingEnabled", isWebBookingEnabled);
                 updateBusiness({
-                  businessId: currentBusiness._id,
+                  businessId: business._id,
                   body: {
-                    ...currentBusiness,
+                    ...business,
                     isWebBookingEnabled,
                   },
                 });
@@ -103,14 +127,14 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
           style={itemStyle}
           right={() => (
             <Switch
-              isLoading={state.isLoading}
-              value={currentBusiness?.isAppNotificationEnabled ?? false}
+              isLoading={updateBusinessState.isLoading}
+              value={business?.isAppNotificationEnabled ?? false}
               onChange={() => {
-                const isAppNotificationEnabled = !(currentBusiness?.isAppNotificationEnabled ?? false);
+                const isAppNotificationEnabled = !(business?.isAppNotificationEnabled ?? false);
                 updateBusiness({
-                  businessId: currentBusiness._id,
+                  businessId: business._id,
                   body: {
-                    ...currentBusiness,
+                    ...business,
                     isAppNotificationEnabled,
                   },
                 });
@@ -126,15 +150,15 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
           style={itemStyle}
           right={() => (
             <Switch
-              isLoading={state.isLoading}
-              value={currentBusiness?.isSmsNotificationEnabled ?? false}
+              isLoading={updateBusinessState.isLoading}
+              value={business?.isSmsNotificationEnabled ?? false}
               onChange={() => {
-                const isSmsNotificationEnabled = !(currentBusiness?.isSmsNotificationEnabled ?? false);
+                const isSmsNotificationEnabled = !(business?.isSmsNotificationEnabled ?? false);
                 console.log("isSmsNotificationEnabled", isSmsNotificationEnabled);
                 updateBusiness({
-                  businessId: currentBusiness._id,
+                  businessId: business._id,
                   body: {
-                    ...currentBusiness,
+                    ...business,
                     isSmsNotificationEnabled,
                   },
                 });
@@ -152,15 +176,15 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
           description={<FormattedMessage id="Settings_Screen.video_conference_description" />}
           right={() => (
             <Switch
-              isLoading={state.isLoading}
-              value={currentBusiness?.isVideoConferenceEnabled ?? false}
+              isLoading={updateBusinessState.isLoading}
+              value={business?.isVideoConferenceEnabled ?? false}
               onChange={() => {
-                const isVideoConferenceEnabled = !(currentBusiness?.isVideoConferenceEnabled ?? false);
+                const isVideoConferenceEnabled = !(business?.isVideoConferenceEnabled ?? false);
                 console.log("isVideoConferenceEnabled", isVideoConferenceEnabled);
                 updateBusiness({
-                  businessId: currentBusiness._id,
+                  businessId: business._id,
                   body: {
-                    ...currentBusiness,
+                    ...business,
                     isVideoConferenceEnabled,
                   },
                 });
@@ -168,8 +192,7 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
             />
           )}
         />
-        <ManageAdminUsers admins={staffQuery?.data} />
-
+        <ManageAdminUsers />
         <AppLanguage />
         <List.Item
           descriptionStyle={{ color: Colors.subText }}
@@ -191,17 +214,32 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
           description={<FormattedMessage id="Settings_Screen.disable_store_description" />}
           right={() => (
             <Switch
-              isLoading={state.isLoading}
-              value={currentBusiness?.isDisabled ?? false}
+              isLoading={updateBusinessState.isLoading}
+              value={business?.isDisabled ?? false}
               onChange={() => {
-                const isDisabled = !(currentBusiness?.isDisabled ?? false);
-                updateBusiness({
-                  businessId: currentBusiness._id,
-                  body: {
-                    ...currentBusiness,
-                    isDisabled,
-                  },
-                });
+                Alert.alert(
+                  "Disable Store",
+                  "Disabling your store will prevent customers from making bookings and all hours will be removed. Are you sure you want to disable your store?",
+                  [
+                    {
+                      text: "Cancel",
+                      style: "cancel",
+                    },
+                    {
+                      text: "Disable",
+                      onPress: () => {
+                        const isDisabled = !(business?.isDisabled ?? false);
+                        updateBusiness({
+                          businessId: business._id,
+                          body: {
+                            ...business,
+                            isDisabled,
+                          },
+                        });
+                      },
+                    },
+                  ]
+                );
               }}
             />
           )}

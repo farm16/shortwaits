@@ -1,5 +1,5 @@
 import { EventStatusName, eventStatusCodes, eventStatusNames } from "@shortwaits/shared-lib";
-import { ActivityIndicator, BackButton, Container, EventStatusButtons, IconButton, Screen, Space, Text, useShareUrlWithMessage } from "@shortwaits/shared-ui";
+import { ActivityIndicator, BackButton, Container, EventStatusButtons, IconButton, Screen, Text, useShareUrlWithMessage } from "@shortwaits/shared-ui";
 import { truncate } from "lodash";
 import React, { useCallback, useLayoutEffect } from "react";
 import { AuthorizedScreenProps } from "../../../navigation";
@@ -78,9 +78,7 @@ export function EventScreen({ navigation, route }: AuthorizedScreenProps<"event-
 
   return (
     <Screen preset="fixed" unsafe unsafeBottom backgroundColor="background">
-      <Space size="normal" />
       <EventStatusButtons event={event} onPress={handleUpdateEvent} />
-      <Space size="normal" />
       <EventScreenTabs event={event} />
     </Screen>
   );

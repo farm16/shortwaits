@@ -15,6 +15,9 @@ export const staffSlice = createSlice({
   },
   extraReducers: builder => {
     builder
+      .addMatcher(shortwaitsApi.endpoints.getStaff.matchFulfilled, (state, action) => {
+        return action.payload.data;
+      })
       .addMatcher(shortwaitsApi.endpoints.getBusinessStaff.matchFulfilled, (state, action) => {
         return action.payload.data;
       })

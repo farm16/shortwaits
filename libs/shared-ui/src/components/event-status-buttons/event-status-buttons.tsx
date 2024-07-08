@@ -3,7 +3,7 @@ import React from "react";
 import { useIntl } from "react-intl";
 import { Dimensions, StyleSheet, View } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { ActivityIndicator, Button, Text } from "..";
+import { ActivityIndicator, Button, Space, Text } from "..";
 import { useTheme } from "../../theme";
 import { CALENDAR_EVENT_HEIGHT, EVENT_ITEM_BORDER_RADIUS, eventStatusColors, eventStatusIconNames, eventStatusNames, getResponsiveFontSize, nextEventStatuses } from "../../utils";
 
@@ -32,8 +32,11 @@ export const EventStatusButtons: React.FC<EventStatusButtonsProps> = ({ event, o
 
   if (isLoading) return <ActivityIndicator />;
 
+  if (nextEventStatuses[statusName] === undefined || nextEventStatuses[statusName].length === 0) return null;
+
   return (
     <View style={[styles.root]}>
+      <Space size="normal" />
       <View style={[styles.buttonContainer, size === "large" ? styles.shadow : {}]}>
         {statusName
           ? nextEventStatuses[statusName].map((status, index) => {
@@ -98,6 +101,7 @@ export const EventStatusButtons: React.FC<EventStatusButtonsProps> = ({ event, o
             })
           : null}
       </View>
+      <Space size="normal" />
     </View>
   );
 };
