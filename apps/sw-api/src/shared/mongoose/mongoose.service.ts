@@ -1,4 +1,4 @@
-import { Injectable, Inject } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { MongooseModuleOptions, MongooseOptionsFactory } from "@nestjs/mongoose";
 

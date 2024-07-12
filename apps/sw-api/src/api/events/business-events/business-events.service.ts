@@ -1,8 +1,7 @@
-import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException } from "@nestjs/common";
+import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundException, PreconditionFailedException, UnauthorizedException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Model, ObjectId, Types } from "mongoose";
-
 import { EventDtoType } from "@shortwaits/shared-lib";
+import { Model, ObjectId, Types } from "mongoose";
 import { convertArrayToObjectId } from "../../../utils/converters";
 import { generateNewEvent } from "../../../utils/filtersForDtos";
 import { BusinessUser } from "../../business-staff/entities/business-staff.entity";
@@ -25,7 +24,9 @@ export class EventsService {
     @InjectModel(ClientUser.name) private clientUserModel: Model<ClientUser>,
     @InjectModel(LocalClientUser.name)
     private localClientUserModel: Model<LocalClientUser>
-  ) {}
+  ) // @InjectRepository(EventTransaction)
+  // private usersRepository: Repository<EventTransaction>
+  {}
 
   async createEvent(event: CreateEventsDto, userId: string): Promise<Events & { _id: Types.ObjectId }> {
     try {
@@ -71,6 +72,44 @@ export class EventsService {
     } catch (error) {
       console.error(error);
       throw new InternalServerErrorException("Failed to update event");
+    }
+  }
+
+  async registerClientToEvent(clientId: string, eventId: string) {
+    try {
+      const eventRecord = await this.eventsModel.findOne({ _id: eventId, deleted: false });
+      const clientRecord = await this.clientUserModel.findOne({ _id: clientId, deleted: false });
+      const isClientAlreadyRegistered = eventRecord.clientsIds.includes(clientRecord._id);
+
+      if (!eventRecord || !clientRecord || isClientAlreadyRegistered) {
+        throw new PreconditionFailedException("Invalid parameters");
+      }
+
+      const updatedEvent = await this.eventsModel.findOneAndUpdate({ _id: eventId, deleted: false }, { $push: { clientsIds: clientRecord._id } }, { new: true });
+
+      return updatedEvent;
+    } catch (error) {
+      console.error(error);
+      throw new InternalServerErrorException("Failed to register client to event");
+    }
+  }
+
+  async registerLocalClientToEvent(localClientId: string, eventId: string) {
+    try {
+      const eventRecord = await this.eventsModel.findOne({ _id: eventId, deleted: false });
+      const localClientRecord = await this.localClientUserModel.findOne({ _id: localClientId, deleted: false });
+      const isLocalClientAlreadyRegistered = eventRecord.clientsIds.includes(localClientRecord._id);
+
+      if (!eventRecord || !localClientRecord || isLocalClientAlreadyRegistered) {
+        throw new PreconditionFailedException("Invalid parameters");
+      }
+
+      const updatedEvent = await this.eventsModel.findOneAndUpdate({ _id: eventId, deleted: false }, { $push: { localClientsIds: localClientRecord._id } }, { new: true });
+
+      return updatedEvent;
+    } catch (error) {
+      console.error(error);
+      throw new InternalServerErrorException("Failed to register local client to event");
     }
   }
 

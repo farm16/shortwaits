@@ -112,8 +112,6 @@ export class EventsService {
 
   async registerClientToEvent(clientId: string, eventId: string) {
     try {
-      console.log("registerClientToEvent >>>", clientId, eventId);
-
       const eventRecord = await this.eventsModel.findOne({ _id: eventId, deleted: false }).exec();
 
       if (!eventRecord) {

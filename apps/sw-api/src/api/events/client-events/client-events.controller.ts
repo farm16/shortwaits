@@ -39,7 +39,6 @@ export class EventsController {
     description: "Join event by event id",
   })
   async registerEventByEventId(@Req() request, @Param("eventId") eventId: string) {
-    console.log("registerEventByEventId >>>>");
     return this.eventsService.registerClientToEvent(request.user.sub, eventId);
   }
 
