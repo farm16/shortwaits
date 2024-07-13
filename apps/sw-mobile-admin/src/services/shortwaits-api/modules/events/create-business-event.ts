@@ -9,7 +9,7 @@ type RequestType = {
 export default (builder: EndpointBuilder<any, any, any>) =>
   builder.mutation<EventResponseType, RequestType>({
     query: ({ businessId, body }) => ({
-      ...endpoints.createEventForBusiness.getConfig([businessId], {}),
+      ...endpoints.createBusinessEvent.getConfig([businessId], {}),
       body,
     }),
   });

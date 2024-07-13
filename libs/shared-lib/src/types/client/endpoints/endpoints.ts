@@ -150,7 +150,6 @@ export const endpoints = {
   getBusinessServices: createEndpoint("business/:businessId/services", "GET"),
   getBusinessCategories: createEndpoint("business/:businessId/categories", "GET"),
   getBusinessHours: createEndpoint("business/:businessId/hours", "GET"),
-  getBusinessEvents: createEndpoint("business/:businessId/events", "GET"),
   getAllBusinessClients: createEndpoint("business/:businessId/all-clients", "GET"),
   createBusinessLocalClients: createEndpoint("business/:businessId/local-clients", "POST"),
   deleteBusinessLocalClients: createEndpoint("business/:businessId/local-clients", "DELETE"),
@@ -168,13 +167,15 @@ export const endpoints = {
   // shortwaits
   getShortwaitsAdminMobile: createEndpoint("shortwaits/admin/mobile", "GET"),
 
-  //events
-  getEventsBusinessSummary: createEndpoint("business-events/summary/:businessId", "GET"),
-  getEventsForBusiness: createEndpoint<PaginationQuery>("business-events/:businessId", "GET"),
-  createEventForBusiness: createEndpoint("business-events/:businessId", "POST"),
-  updateEvents: createEndpoint("business-events/:businessId", "PUT"),
-
-  getPeopleInEvent: createEndpoint<EventIdQuery>("business-events/people", "GET"),
+  //business-events
+  getBusinessEventsSummary: createEndpoint("business-events/summary/:businessId", "GET"),
+  getBusinessEvents: createEndpoint<PaginationQuery>("business-events/:businessId", "GET"),
+  createBusinessEvent: createEndpoint("business-events/:businessId", "POST"),
+  updateBusinessEvent: createEndpoint("business-events/:businessId", "PUT"),
+  getBusinessEventPeople: createEndpoint<EventIdQuery>("business-events/people", "GET"),
+  registerLocalClientsToBusinessEvent: createEndpoint("business-events/register/local-clients", "POST"),
+  registerClientsToBusinessEvent: createEndpoint("business-events/register/clients", "POST"),
+  updateBusinessEventStatus: createEndpoint("business-events/status/:eventId", "PUT"),
 
   //client-events
   withdrawEventForClient: createEndpoint("client-events/withdraw/:eventId", "PUT"),
@@ -192,16 +193,12 @@ export const endpoints = {
   deleteService: createEndpoint("services/:businessId", "DELETE"),
 
   // Clients
-  getClientUsers: createEndpoint("clients/business/:businessId", "GET"),
-  addClientUsers: createEndpoint("clients/business/:businessId", "POST"),
-  updateClientUsers: createEndpoint("clients/business/:businessId", "PUT"),
-  addClientToBusiness: createEndpoint("clients/business/:businessId/local-clients", "PUT"),
-  getClientUser: createEndpoint("clients/:clientShortId", "GET"),
+  getBusinessClients: createEndpoint("clients/business/:businessId", "GET"),
+  addClientToBusiness: createEndpoint("clients/business/:businessId/client", "PUT"),
 
   // Local Clients
-  getLocalClientUsers: createEndpoint("local-clients/business/:businessId", "GET"),
-  addLocalClientUser: createEndpoint("local-clients/business/:businessId", "POST"),
-  updateLocalClientUsers: createEndpoint("local-clients/business/:businessId", "PUT"),
+  getBusinessLocalClients: createEndpoint("local-clients/business/:businessId", "GET"),
+  addBusinessLocalClient: createEndpoint("local-clients/business/:businessId", "POST"),
 
   // business staff
   getStaffUsers: createEndpoint("business-staff/business/:businessId", "GET"),

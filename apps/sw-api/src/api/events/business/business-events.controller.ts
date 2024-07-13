@@ -19,8 +19,8 @@ export class EventsController {
     status: HttpStatus.OK,
     description: "Get a summary of all events in a business (business is NOT a user!!!)",
   })
-  async getEventsSummaryByBusiness(@Param("businessId") businessId: string) {
-    return this.eventsService.getEventsSummaryByBusiness(businessId);
+  async getBusinessEventSummary(@Param("businessId") businessId: string) {
+    return this.eventsService.getBusinessEventSummary(businessId);
   }
 
   // todo will validate if user in Business has permission to view events
@@ -30,11 +30,11 @@ export class EventsController {
     status: HttpStatus.OK,
     description: "Get all events in a business (business is NOT a user!!!)",
   })
-  async getEventsByBusiness(@Param("businessId") businessId: string, @Query() query: EventsQueryDto) {
+  async getBusinessEvents(@Param("businessId") businessId: string, @Query() query: EventsQueryDto) {
     const { page = 1, limit = 10, date = new Date().toISOString(), filterBy = "year" } = query;
     console.log(page, limit, date, filterBy);
 
-    return this.eventsService.getEventsByBusiness(
+    return this.eventsService.getBusinessEvents(
       businessId,
       {
         page,
@@ -56,7 +56,7 @@ export class EventsController {
   })
   createEventByBusiness(@Req() request, @Body() event: CreateEventsDto) {
     // todo: validate permission with business
-    return this.eventsService.createEvent(event, request.user.sub);
+    return this.eventsService.createBusinessEvent(event, request.user.sub);
   }
 
   @Put(":businessId")
@@ -68,7 +68,7 @@ export class EventsController {
   })
   updateEventByBusiness(@Req() request, @Param("businessId") businessId: string, @Body() event: EventDtoType) {
     // todo validate permission
-    return this.eventsService.updateEvent(event, businessId, request.user.sub);
+    return this.eventsService.updateBusinessEvent(event, businessId, request.user.sub);
   }
 
   @Get("people")
@@ -95,7 +95,7 @@ export class EventsController {
   })
   async registerLocalClientToEvent(@Req() request, @Body() body) {
     const { eventId, localClientIds } = body;
-    const { sub } = request.user; // business user id to validate permission
+    const { sub } = request.user; // todo: business user id to validate permission
     return await this.eventsService.registerLocalClientsToEvent(localClientIds, eventId);
   }
 
@@ -103,11 +103,23 @@ export class EventsController {
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
-    description: "Register local clients to an event",
+    description: "Register clients to an event",
   })
   async registerClientToEvent(@Req() request, @Body() body) {
     const { eventId, localClientIds } = body;
-    const { sub } = request.user; // business user id to validate permission
+    const { sub } = request.user; // todo: business user id to validate permission
     return await this.eventsService.registerClientsToEvent(localClientIds, eventId);
+  }
+
+  @Put("status/:eventId")
+  @HttpCode(HttpStatus.OK)
+  @ApiCreatedResponse({
+    status: HttpStatus.OK,
+    description: "Update event status",
+  })
+  async updateEventStatus(@Req() request, @Body() body) {
+    const { status } = body;
+    const { sub } = request.user; // todo: business user id to validate permission
+    //return await this.eventsService.registerClientsToEvent(localClientIds, eventId);
   }
 }

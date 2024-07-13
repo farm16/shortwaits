@@ -2,14 +2,14 @@ import { EventDtoType } from "@shortwaits/shared-lib";
 import { ActivityIndicator, Messages, ServiceItem, Space, Switch, Text, UrlCard, UrlTypes, getResponsiveHeight, getResponsiveWidth, useTheme } from "@shortwaits/shared-ui";
 import React from "react";
 import { Alert, ScrollView, StyleSheet, View } from "react-native";
-import { useUpdateEventMutation } from "../../../../services";
+import { useUpdateBusinessEventMutation } from "../../../../services";
 import { useBusiness, useService } from "../../../../store";
 
 export function EventMoreTab({ event }: { event: EventDtoType }) {
   const { Colors } = useTheme();
   const business = useBusiness();
   const service = useService(event.serviceId);
-  const [updateEvent, updateEventStatus] = useUpdateEventMutation();
+  const [updateBusinessEvent, updateEventStatus] = useUpdateBusinessEventMutation();
 
   const PaymentMethod = () => {
     const paymentMethod = event.paymentMethod || "Cash";
@@ -123,7 +123,7 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
         ...event,
         isPublicEvent: !isEventPublic,
       };
-      updateEvent({ businessId: business._id, body: formData });
+      updateBusinessEvent({ businessId: business._id, body: formData });
     };
 
     return (

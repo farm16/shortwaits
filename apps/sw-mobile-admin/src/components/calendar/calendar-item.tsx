@@ -18,7 +18,7 @@ import { useIntl } from "react-intl";
 import { Alert, Animated, Pressable, StyleSheet, View } from "react-native";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import { navigate } from "../../navigation";
-import { useUpdateEventMutation } from "../../services";
+import { useUpdateBusinessEventMutation } from "../../services";
 import { useService } from "../../store";
 import { getEventTime } from "./calendar-utils";
 
@@ -33,7 +33,7 @@ export const AgendaItem = (props: AgendaItemProps) => {
   const { Colors } = useTheme();
   const intl = useIntl();
   const service = useService(item?.serviceId ?? "");
-  const [updateEvent, updateEventStatus] = useUpdateEventMutation();
+  const [updateBusinessEvent, updateEventStatus] = useUpdateBusinessEventMutation();
 
   useFocusEffect(() => {
     if (triggerTick) {
@@ -92,7 +92,7 @@ export const AgendaItem = (props: AgendaItemProps) => {
         size="small"
         onPress={status => {
           console.log("status", status);
-          updateEvent({
+          updateBusinessEvent({
             body: {
               ...item,
               status: {

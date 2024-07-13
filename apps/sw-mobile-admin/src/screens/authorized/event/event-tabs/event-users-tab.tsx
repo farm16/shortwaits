@@ -22,7 +22,7 @@ import { Alert, RefreshControl, SectionList, SectionListData, SectionListRenderI
 import { ActivityIndicator } from "react-native-paper";
 import { SelectedClients } from "../../..";
 import { AuthorizedScreenProps } from "../../../../navigation";
-import { useGetPeopleInEventQuery, useUpdateEventMutation } from "../../../../services";
+import { useGetBusinessEventPeopleQuery, useUpdateBusinessEventMutation } from "../../../../services";
 import { useBusiness, useClients, useLocalClients, useStaff } from "../../../../store";
 
 type PeopleDtoType = (BusinessUserDtoType & ClientDtoType) | { clientType: "local" | "external" };
@@ -35,7 +35,7 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
   const staff = useStaff();
   const intl = useIntl();
   const { navigate } = useNavigation<AuthorizedScreenProps<"event-screen">["navigation"]>();
-  const [updateEvent, updateEventStatus] = useUpdateEventMutation();
+  const [updateBusinessEvent, updateEventStatus] = useUpdateBusinessEventMutation();
   const statusName = event?.status?.statusName ?? "";
   const isEventDisabled = statusName ? nextEventStatuses[statusName].length === 0 : true;
 
@@ -43,7 +43,7 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
     isLoading: isPeopleInEventQueryLoading,
     isError: isPeopleInEventQueryError,
     refetch: refetchPeopleInEventQuery,
-  } = useGetPeopleInEventQuery(event?._id ? event._id : skipToken, {
+  } = useGetBusinessEventPeopleQuery(event?._id ? event._id : skipToken, {
     refetchOnMountOrArgChange: true,
   });
 
@@ -141,9 +141,9 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
         localClientsIds: uniqueLocalClientIds,
       };
 
-      updateEvent({ body: updatedEvent, businessId: business._id });
+      updateBusinessEvent({ body: updatedEvent, businessId: business._id });
     },
-    [business._id, event, updateEvent]
+    [business._id, event, updateBusinessEvent]
   );
 
   const selectedClients = useMemo(() => {
@@ -224,9 +224,9 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
         staffIds: uniqueIds,
       };
 
-      updateEvent({ body: updatedEvent, businessId: business._id });
+      updateBusinessEvent({ body: updatedEvent, businessId: business._id });
     },
-    [business._id, event, updateEvent]
+    [business._id, event, updateBusinessEvent]
   );
 
   const _renderSectionHeader = useCallback(

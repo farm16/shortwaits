@@ -1,7 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { persistStore } from "redux-persist";
-
 import { shortwaitsApi } from "../services";
 import { persistedReducer } from "./rootReducer";
 

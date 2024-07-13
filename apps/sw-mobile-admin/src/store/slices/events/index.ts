@@ -16,10 +16,10 @@ export const eventsSlice = createSlice({
   },
   extraReducers: builder => {
     builder
-      .addMatcher(shortwaitsApi.endpoints.getEventsByBusiness.matchFulfilled, (_state, action) => {
+      .addMatcher(shortwaitsApi.endpoints.getBusinessEvents.matchFulfilled, (_state, action) => {
         return [...action.payload.data];
       })
-      .addMatcher(shortwaitsApi.endpoints.createEvent.matchFulfilled, (state, action) => {
+      .addMatcher(shortwaitsApi.endpoints.createBusinessEvent.matchFulfilled, (state, action) => {
         const updatedEvent = action.payload.data;
         const existingEventIndex = state.findIndex(event => event._id === updatedEvent._id);
         const newState = [...state];
@@ -33,7 +33,7 @@ export const eventsSlice = createSlice({
         }
         return newState;
       })
-      .addMatcher(shortwaitsApi.endpoints.updateEvent.matchFulfilled, (state, action) => {
+      .addMatcher(shortwaitsApi.endpoints.updateBusinessEvent.matchFulfilled, (state, action) => {
         const updatedEvent = action.payload.data;
         const existingEventIndex = state.findIndex(event => event._id === updatedEvent._id);
         const newState = [...state];

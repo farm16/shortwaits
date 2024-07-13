@@ -3,7 +3,7 @@ import { ActivityIndicator, BackButton, Container, EventStatusButtons, IconButto
 import { truncate } from "lodash";
 import React, { useCallback, useLayoutEffect } from "react";
 import { AuthorizedScreenProps } from "../../../navigation";
-import { useUpdateEventMutation } from "../../../services";
+import { useUpdateBusinessEventMutation } from "../../../services";
 import { useEvent } from "../../../store";
 import { EventScreenTabs } from "./event-tabs";
 
@@ -13,7 +13,7 @@ export function EventScreen({ navigation, route }: AuthorizedScreenProps<"event-
   const { eventId } = route.params;
   const event = useEvent(eventId);
   const { share, data: shareData, loading: shareLoading, error: shareError } = useShareUrlWithMessage();
-  const [updateEvent, updateEventStatus] = useUpdateEventMutation();
+  const [updateBusinessEvent, updateEventStatus] = useUpdateBusinessEventMutation();
 
   useLayoutEffect(() => {
     const handleShare = async () => {
@@ -58,7 +58,7 @@ export function EventScreen({ navigation, route }: AuthorizedScreenProps<"event-
 
   const handleUpdateEvent = useCallback(
     (status: EventStatusName) => {
-      updateEvent({
+      updateBusinessEvent({
         body: {
           ...event,
           status: {
@@ -69,7 +69,7 @@ export function EventScreen({ navigation, route }: AuthorizedScreenProps<"event-
         businessId: event.businessId,
       });
     },
-    [event, updateEvent]
+    [event, updateBusinessEvent]
   );
 
   if (updateEventStatus.isLoading) {

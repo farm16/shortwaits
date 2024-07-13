@@ -19,7 +19,7 @@ import { Alert, View } from "react-native";
 import FastImage from "react-native-fast-image";
 import { useDispatch } from "react-redux";
 import { AuthorizedScreenProps } from "../../../navigation";
-import { useGetEventsSummaryByBusinessQuery, useUpdateBusinessMutation } from "../../../services";
+import { useGetBusinessEventSummaryQuery, useUpdateBusinessMutation } from "../../../services";
 import { hidePremiumMembershipBanner, showPremiumMembershipBanner, useBusiness } from "../../../store";
 
 export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> = ({ navigation }) => {
@@ -33,7 +33,7 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
     data: eventSummary,
     isLoading: isEventSummaryLoading,
     error: errorEventSummary,
-  } = useGetEventsSummaryByBusinessQuery(business?._id ?? skipToken, {
+  } = useGetBusinessEventSummaryQuery(business?._id ?? skipToken, {
     refetchOnMountOrArgChange: true,
   });
 

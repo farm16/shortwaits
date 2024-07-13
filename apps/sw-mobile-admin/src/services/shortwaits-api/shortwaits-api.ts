@@ -2,9 +2,9 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithInterceptor } from "./interceptor";
 import {
   AddClientToBusiness,
+  CreateBusinessEvent,
   CreateBusinessLocalClients,
   CreateBusinessStaff,
-  CreateEvent,
   CreateService,
   DeleteBusinessLocalClients,
   DeleteBusinessStaff,
@@ -13,15 +13,15 @@ import {
   GetAllBusinessClients,
   GetBusiness,
   GetBusinessCategory,
+  GetBusinessEventPeople,
+  GetBusinessEventSummary,
+  GetBusinessEvents,
   GetBusinessHours,
   GetBusinessServices,
   GetBusinessStaff,
   GetCategories,
   GetCategory,
   GetClients,
-  GetEventsByBusiness,
-  GetEventsSummaryByBusiness,
-  GetPeopleInEvent,
   GetService,
   GetServices,
   GetStaff,
@@ -32,9 +32,9 @@ import {
   PostSocialSignUp,
   RegisterBusiness,
   UpdateBusiness,
+  UpdateBusinessEvent,
   UpdateBusinessLocalClient,
   UpdateBusinessStaff,
-  UpdateEvent,
   UpdateService,
   UploadImageFile,
 } from "./modules";
@@ -45,6 +45,7 @@ export const shortwaitsApi = createApi({
   endpoints: builder => ({
     //default mobile data
     getAdminMobile: GetAdminMobile(builder),
+
     //auth
     localSignUp: PostLocalSignUp(builder),
     localSignIn: PostLocalSignIn(builder),
@@ -52,26 +53,24 @@ export const shortwaitsApi = createApi({
     socialSignIn: PostSocialSignIn(builder),
     socialSignUp: PostSocialSignUp(builder),
 
-    // >>>>> business
+    //business
     getBusiness: GetBusiness(builder),
     getBusinessHours: GetBusinessHours(builder),
-
+    updateBusiness: UpdateBusiness(builder),
+    registerBusiness: RegisterBusiness(builder),
     // this only return _ids
     getBusinessCategory: GetBusinessCategory(builder),
     getBusinessServices: GetBusinessServices(builder),
     getAllBusinessClients: GetAllBusinessClients(builder),
 
-    updateBusiness: UpdateBusiness(builder),
-    registerBusiness: RegisterBusiness(builder),
-
-    // ! -> A business User is Staff
+    //business staff
     getStaff: GetStaff(builder),
     getBusinessStaff: GetBusinessStaff(builder),
     createBusinessStaff: CreateBusinessStaff(builder),
     deleteBusinessStaff: DeleteBusinessStaff(builder), // ! <- deletes single business staff | TODO: delete multiple staff
     updateBusinessStaff: UpdateBusinessStaff(builder), // updates single business staff
 
-    // ! A client User === Customer
+    //business clients
     createBusinessLocalClients: CreateBusinessLocalClients(builder),
     deleteBusinessLocalClients: DeleteBusinessLocalClients(builder),
     updateBusinessLocalClient: UpdateBusinessLocalClient(builder), // ! <- Updates single local client
@@ -83,17 +82,16 @@ export const shortwaitsApi = createApi({
     //services
     getService: GetService(builder),
     getServices: GetServices(builder),
-
     updateService: UpdateService(builder),
     createService: CreateService(builder),
     deleteService: DeleteService(builder),
 
     //events
-    createEvent: CreateEvent(builder),
-    updateEvent: UpdateEvent(builder),
-    getEventsByBusiness: GetEventsByBusiness(builder),
-    getEventsSummaryByBusiness: GetEventsSummaryByBusiness(builder),
-    getPeopleInEvent: GetPeopleInEvent(builder),
+    createBusinessEvent: CreateBusinessEvent(builder),
+    updateBusinessEvent: UpdateBusinessEvent(builder),
+    getBusinessEvents: GetBusinessEvents(builder),
+    getBusinessEventSummary: GetBusinessEventSummary(builder),
+    GetBusinessEventPeople: GetBusinessEventPeople(builder),
 
     //clients
     getClients: GetClients(builder),

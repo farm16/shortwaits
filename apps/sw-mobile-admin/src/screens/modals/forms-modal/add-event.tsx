@@ -20,7 +20,7 @@ import React, { FC, useCallback, useEffect, useLayoutEffect, useMemo, useState }
 import { useIntl } from "react-intl";
 import { Alert } from "react-native";
 import { GenericModalData, ModalsScreenProps } from "../../../navigation";
-import { useCreateEventMutation } from "../../../services";
+import { useCreateBusinessEventMutation } from "../../../services";
 import { useBusiness, useUser } from "../../../store";
 
 export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({ navigation, route }) => {
@@ -35,7 +35,7 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
   const user = useUser();
   const business = useBusiness();
 
-  const [createEvent, createEventStatus] = useCreateEventMutation();
+  const [createBusinessEvent, createEventStatus] = useCreateBusinessEventMutation();
 
   const validateDates = (formData: CreateEventDtoType): FormikErrors<CreateEventDtoType> => {
     const errors: FormikErrors<CreateEventDtoType> = {};
@@ -55,7 +55,7 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
   const initialValues = useMemo(() => {
     const currentDate = new Date();
     const futureDate = new Date(currentDate.getTime() + 15 * 60000);
-    const _initialValues: FormSchemaTypes["createEvent"] = {
+    const _initialValues: FormSchemaTypes["createBusinessEvent"] = {
       participantsIds: [],
       leadClientId: "",
       urls: [],
@@ -117,13 +117,13 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
       initialValues: initialValues,
       validate: validateDates,
       onSubmit: formData => {
-        createEvent({ businessId: business._id, body: formData });
+        createBusinessEvent({ businessId: business._id, body: formData });
         if (onSubmit) {
           onSubmit();
         }
       },
     },
-    "createEvent"
+    "createBusinessEvent"
   );
 
   console.log("errors", errors);

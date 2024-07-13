@@ -1,7 +1,7 @@
-import GetEventsByBusiness from "./get-events-by-business";
-import CreateEvent from "./create-event";
-import UpdateEvent from "./update-event";
-import GetEventsSummaryByBusiness from "./get-events-summary-by-business";
-import GetPeopleInEvent from "./get-people-in-event";
+import CreateBusinessEvent from "./create-business-event";
+import GetBusinessEventPeople from "./get-business-event-people";
+import GetBusinessEventSummary from "./get-business-event-summary";
+import GetBusinessEvents from "./get-business-events";
+import UpdateBusinessEvent from "./update-business-event";
 
-export { UpdateEvent, GetEventsByBusiness, CreateEvent, GetEventsSummaryByBusiness, GetPeopleInEvent };
+export { CreateBusinessEvent, GetBusinessEventPeople, GetBusinessEventSummary, GetBusinessEvents, UpdateBusinessEvent };

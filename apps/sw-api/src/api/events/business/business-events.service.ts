@@ -28,7 +28,7 @@ export class EventsService {
     @InjectSequelizeModel(EventTransactionModel) private eventTransactionModel: typeof EventTransactionModel
   ) {}
 
-  async createEvent(event: CreateEventsDto, userId: string): Promise<Event & { _id: Types.ObjectId }> {
+  async createBusinessEvent(event: CreateEventsDto, userId: string): Promise<Event & { _id: Types.ObjectId }> {
     try {
       const businessRecord = await this.businessModel.findById(event.businessId);
 
@@ -60,7 +60,7 @@ export class EventsService {
     }
   }
 
-  async updateEvent(event: EventDtoType, businessId: string, updatedBy: string) {
+  async updateBusinessEvent(event: EventDtoType, businessId: string, updatedBy: string) {
     try {
       const updatedEvent = await this.eventsModel.findOneAndUpdate({ _id: event._id, deleted: false }, { ...event, updatedBy }, { new: true });
 
@@ -72,6 +72,49 @@ export class EventsService {
     } catch (error) {
       console.error(error);
       throw new InternalServerErrorException("Failed to update event");
+    }
+  }
+
+  // todo: allow business admin to have visibility to all events people
+  async getPeopleByEvent(eventId: string, requestedBy: string) {
+    try {
+      const filter = { _id: eventId };
+
+      const event = await this.eventsModel.findOne(filter).exec();
+
+      if (!event) {
+        throw new NotFoundException("Event not found");
+      }
+
+      // check if event.clientIds or event.staffIds is not empty and is a valid array else return empty arrays
+      if ((!event.clientsIds || !event.clientsIds.length) && (!event.staffIds || !event.staffIds.length) && (!event.localClientsIds || !event.localClientsIds.length)) {
+        return { clientUsers: [], businessUsers: [], localClients: [], event };
+      }
+      // turn all ids to string and push only unique ids - only staffIds/business are allowed to view this event
+      const eligibleUsers = [...new Set([...event.staffIds.map(id => id?.toString())])];
+
+      if (!eligibleUsers.includes(requestedBy)) {
+        throw new ForbiddenException("You are not allowed to view this event");
+      }
+
+      console.log("clientIds >>>", event.clientsIds);
+      console.log("localClientsIds >>>", event.localClientsIds);
+      console.log("businessUsersIds >>>", event.staffIds);
+
+      const [clientUsers, localClients, businessUsers] = await Promise.all([
+        this.findClientUsers(event?.clientsIds as ObjectId[]),
+        this.findLocalClientUsers(event?.localClientsIds as ObjectId[]),
+        this.findBusinessUsers(event?.staffIds as ObjectId[]),
+      ]);
+
+      console.log("clientUsers found >>>", clientUsers);
+      console.log("localClients found >>>", localClients);
+      console.log("businessUsers found >>>", businessUsers);
+
+      return { clientUsers, localClients, businessUsers, event };
+    } catch (error) {
+      console.error(error);
+      throw error;
     }
   }
 
@@ -149,7 +192,7 @@ export class EventsService {
     }
   }
 
-  async getEventsSummaryByBusiness(businessId: string) {
+  async getBusinessEventSummary(businessId: string) {
     try {
       const filter: {
         businessId: string;
@@ -241,7 +284,7 @@ export class EventsService {
     }
   }
 
-  async getEventsByBusiness(businessId: string, paginateOptions?: { page?: number; limit?: number }, filterOptions?: { date: string; filterBy: "day" | "month" | "year" }) {
+  async getBusinessEvents(businessId: string, paginateOptions?: { page?: number; limit?: number }, filterOptions?: { date: string; filterBy: "day" | "month" | "year" }) {
     try {
       const { page, limit } = paginateOptions ?? {};
       const skip = (page - 1) * limit;
@@ -290,50 +333,7 @@ export class EventsService {
     }
   }
 
-  // todo: allow business admin to have visibility to all events people
-  async getPeopleByEvent(eventId: string, requestedBy: string) {
-    try {
-      const filter = { _id: eventId };
-
-      const event = await this.eventsModel.findOne(filter).exec();
-
-      if (!event) {
-        throw new NotFoundException("Event not found");
-      }
-
-      // check if event.clientIds or event.staffIds is not empty and is a valid array else return empty arrays
-      if ((!event.clientsIds || !event.clientsIds.length) && (!event.staffIds || !event.staffIds.length) && (!event.localClientsIds || !event.localClientsIds.length)) {
-        return { clientUsers: [], businessUsers: [], localClients: [], event };
-      }
-      // turn all ids to string and push only unique ids - only staffIds/business are allowed to view this event
-      const eligibleUsers = [...new Set([...event.staffIds.map(id => id?.toString())])];
-
-      if (!eligibleUsers.includes(requestedBy)) {
-        throw new ForbiddenException("You are not allowed to view this event");
-      }
-
-      console.log("clientIds >>>", event.clientsIds);
-      console.log("localClientsIds >>>", event.localClientsIds);
-      console.log("businessUsersIds >>>", event.staffIds);
-
-      const [clientUsers, localClients, businessUsers] = await Promise.all([
-        this.findClientUsers(event?.clientsIds as ObjectId[]),
-        this.findLocalClientUsers(event?.localClientsIds as ObjectId[]),
-        this.findBusinessUsers(event?.staffIds as ObjectId[]),
-      ]);
-
-      console.log("clientUsers found >>>", clientUsers);
-      console.log("localClients found >>>", localClients);
-      console.log("businessUsers found >>>", businessUsers);
-
-      return { clientUsers, localClients, businessUsers, event };
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
-  }
-
-  // HELPER FUNCTIONS
+  // ======= HELPER FUNCTIONS =======
   async findLocalClientUsers(userIds: string[] | ObjectId[]) {
     if (!userIds || !userIds.length) {
       return [];

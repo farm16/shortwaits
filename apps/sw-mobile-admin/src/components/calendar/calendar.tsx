@@ -7,7 +7,7 @@ import { RefreshControl, SectionListData, SectionListRenderItem, View } from "re
 import { AgendaList, CalendarProvider, ExpandableCalendar } from "react-native-calendars";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { navigate } from "../../navigation/navigation-utils";
-import { useGetEventsByBusinessQuery } from "../../services";
+import { useGetBusinessEventsQuery } from "../../services";
 import { useBusiness, useEvents } from "../../store";
 import { useCalendarTheme } from "./calendar-hooks";
 import { AgendaItem } from "./calendar-item";
@@ -50,7 +50,7 @@ export const Calendar: FC<CalendarProps> = memo(props => {
     isLoading: isEventsLoading,
     isError: isEventsError,
     refetch: refetchEvents,
-  } = useGetEventsByBusinessQuery(
+  } = useGetBusinessEventsQuery(
     {
       businessId: currentBusiness._id,
       query: {

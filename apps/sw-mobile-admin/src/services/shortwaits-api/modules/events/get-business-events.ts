@@ -14,5 +14,5 @@ export default (builder: EndpointBuilder<any, any, any>) =>
       };
     }
   >({
-    query: ({ businessId, query }) => endpoints.getEventsForBusiness.getConfig([businessId], query).url,
+    query: ({ businessId, query }) => endpoints.getBusinessEvents.getConfig([businessId], query).url,
   });

@@ -13,8 +13,8 @@ export type FormSchemaTypes = {
   updateLocalClient: Yup.InferType<typeof updateLocalClientSchema>;
   addStaff: Yup.InferType<typeof addStaffSchema>;
   updateStaff: Yup.InferType<typeof updateStaffSchema>;
-  createEvent: Yup.InferType<typeof createEventSchema>;
-  updateEvent: Yup.InferType<typeof updateEventSchema>;
+  createBusinessEvent: Yup.InferType<typeof createEventSchema>;
+  updateBusinessEvent: Yup.InferType<typeof updateEventSchema>;
   onboarding1: Yup.InferType<typeof onboarding1Schema>;
   adminAppLocalSignIn: Yup.InferType<typeof adminAppLocalSignInSchema>;
   adminAppLocalSignUp: Yup.InferType<typeof adminAppLocalSignUpSchema>;
@@ -53,6 +53,6 @@ export const formSchemas = {
   updateLocalClient: updateLocalClientSchema,
 
   //events
-  createEvent: createEventSchema,
-  updateEvent: updateEventSchema,
+  createBusinessEvent: createEventSchema,
+  updateBusinessEvent: updateEventSchema,
 };

@@ -4,7 +4,7 @@ import { PeopleInEventResponseType, endpoints } from "@shortwaits/shared-lib";
 export default (builder: EndpointBuilder<any, any, any>) =>
   builder.query<PeopleInEventResponseType, string>({
     query: eventId =>
-      endpoints.getPeopleInEvent.getConfig([], {
+      endpoints.getBusinessEventPeople.getConfig([], {
         eventId,
       }).url,
   });

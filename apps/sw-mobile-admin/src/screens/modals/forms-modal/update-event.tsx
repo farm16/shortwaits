@@ -24,7 +24,7 @@ import React, { FC, useCallback, useEffect, useLayoutEffect, useState } from "re
 import { useIntl } from "react-intl";
 import { Alert } from "react-native";
 import { GenericModalData, ModalsScreenProps } from "../../../navigation";
-import { useUpdateEventMutation } from "../../../services";
+import { useUpdateBusinessEventMutation } from "../../../services";
 import { useBusiness, useServices } from "../../../store";
 
 export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">> = ({ navigation, route }) => {
@@ -42,7 +42,7 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
   const statusName = params?.initialValues?.status?.statusName ?? "";
   const isEventDisabled = statusName ? nextEventStatuses[params?.initialValues?.status?.statusName].length === 0 : true;
 
-  const [updateEvent, updateEventStatus] = useUpdateEventMutation();
+  const [updateBusinessEvent, updateEventStatus] = useUpdateBusinessEventMutation();
 
   const validateDates = (formData: UpdateEventDtoType): FormikErrors<UpdateEventDtoType> => {
     const errors: FormikErrors<UpdateEventDtoType> = {};
@@ -73,16 +73,16 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
   const { touched, errors, values, setValues, handleChange, handleSubmit, setFieldValue } = useForm(
     {
       // todo remove this hardcoded paymentMethod value
-      initialValues: initialValues as FormSchemaTypes["updateEvent"],
+      initialValues: initialValues as FormSchemaTypes["updateBusinessEvent"],
       validate: validateDates,
       onSubmit: formData => {
-        updateEvent({ businessId: business._id, body: formData as EventDtoType });
+        updateBusinessEvent({ businessId: business._id, body: formData as EventDtoType });
         if (onSubmit) {
           onSubmit();
         }
       },
     },
-    "updateEvent"
+    "updateBusinessEvent"
   );
 
   console.log("errors", errors);
@@ -122,7 +122,7 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
 
                   console.log("cancel event body", body);
 
-                  updateEvent({
+                  updateBusinessEvent({
                     body,
                     businessId: initialValues.businessId,
                   });
@@ -136,7 +136,7 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
       ),
       headerTitle: () => <Text preset="headerTitle" text={intl.formatMessage({ id: "UpdateEventModal.title" })} />,
     });
-  }, [initialValues, intl, isEventDisabled, navigation, onGoBack, updateEvent, values]);
+  }, [initialValues, intl, isEventDisabled, navigation, onGoBack, updateBusinessEvent, values]);
 
   useEffect(() => {
     if (updateEventStatus.isSuccess) {

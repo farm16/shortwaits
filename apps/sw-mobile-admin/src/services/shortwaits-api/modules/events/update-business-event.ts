@@ -11,7 +11,7 @@ export default (builder: EndpointBuilder<any, any, any>) =>
   >({
     query: ({ businessId, body }) => {
       return {
-        ...endpoints.updateEvents.getConfig([businessId], {}),
+        ...endpoints.updateBusinessEvent.getConfig([businessId], {}),
         body,
       };
     },

@@ -18,24 +18,4 @@ export class BusinessStaffController {
     console.log("businessId >>", businessId);
     return this.businessUserService.getBusinessStaff(businessId);
   }
-
-  // @Post("business/:businessId")
-  // @HttpCode(HttpStatus.CREATED)
-  // async create(@Param(":businessId") businessId: string, @Body() dto: CreateBusinessUserDto) {
-  //   return await this.businessUserService.create(dto);
-  // }
-
-  // @Put("business/:businessId")
-  // @HttpCode(HttpStatus.OK)
-  // async updateSingleBusinessStaff(@Param(":businessId") businessId: string, @Body() userIds: string[]) {
-  //   // todo: validate permission with business
-  //   return await this.businessUserService.findMultiple(userIds);
-  // }
-
-  // @Get(":staffId")
-  // @HttpCode(HttpStatus.OK)
-  // async getSingleBusinessStaff(@Param(":businessId") businessId: string, @Body() userIds: string[]) {
-  //   // todo: validate permission with business
-  //   return await this.businessUserService.findMultiple(userIds);
-  // }
 }

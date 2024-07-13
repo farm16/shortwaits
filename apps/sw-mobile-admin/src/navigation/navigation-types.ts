@@ -26,7 +26,7 @@ export type FormData = {
   addStaff: CreateBusinessUserDtoType;
   addService: ServiceDtoType;
   updateService: ServiceDtoType;
-  updateEvent: UpdateEventDtoType;
+  updateBusinessEvent: UpdateEventDtoType;
 };
 
 export type FormType = keyof FormData;

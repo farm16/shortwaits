@@ -7,7 +7,7 @@ import { CreateClientUserDto } from "./dto";
 import { Client } from "./entities/client.entity";
 
 @Injectable()
-export class ClientUserService {
+export class ClientsService {
   constructor(
     @InjectModel(Client.name)
     private readonly clientModel: Model<Client>,

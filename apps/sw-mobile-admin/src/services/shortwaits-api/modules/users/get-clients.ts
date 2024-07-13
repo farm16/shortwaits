@@ -3,5 +3,5 @@ import { ClientsResponseType, endpoints } from "@shortwaits/shared-lib";
 
 export default (builder: EndpointBuilder<any, any, any>) =>
   builder.query<ClientsResponseType, string>({
-    query: businessId => endpoints.getClientUsers.getConfig([businessId], {}).url,
+    query: businessId => endpoints.getBusinessClients.getConfig([businessId], {}).url,
   });
