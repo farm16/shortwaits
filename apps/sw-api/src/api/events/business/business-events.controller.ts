@@ -7,9 +7,9 @@ import { EventsService } from "./business-events.service";
 import { CreateEventsDto, EventsQueryDto } from "./dto";
 
 @UseGuards(AtGuard)
-@ApiTags("events/business")
+@ApiTags("business-events")
 @ApiBearerAuth("bearer")
-@Controller("events/business")
+@Controller("business-events")
 export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
 

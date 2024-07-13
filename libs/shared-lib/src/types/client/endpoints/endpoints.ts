@@ -1,4 +1,4 @@
-type HttpMethod = "POST" | "GET" | "PUT" | "DELETE";
+import { HttpMethod } from "../../common";
 
 type Endpoint =
   | "auth/business/sign-in/local-auth"
@@ -29,18 +29,13 @@ type Endpoint =
   | "shortwaits/admin/mobile"
   | "shortwaits/client/mobile" // todo: add this
   | "shortwaits/client/web" // todo: add this
-  | `events/business/summary/${string}`
-  | `events/business/${string}`
-  | "events/business/people"
-  | `events/${string}`
-  | "events"
-  | `events/delete/${string}`
-  | "events/delete"
+  | `business-events/summary/${string}`
+  | `business-events/${string}`
+  | "business-events/people"
   | "services"
   | `services/${string}`
   | "business-user/multiple"
   | "upload-file/image"
-  // users endpoints
   | `clients`
   | `clients/${string}`
   | `clients/business/${string}`
@@ -174,31 +169,26 @@ export const endpoints = {
   getShortwaitsAdminMobile: createEndpoint("shortwaits/admin/mobile", "GET"),
 
   //events
-  getEventsBusinessSummary: createEndpoint(`events/business/summary/:businessId`, "GET"),
-  getEventsForBusiness: createEndpoint<PaginationQuery>(`events/business/:businessId`, "GET"),
-  createEventForBusiness: createEndpoint(`events/business/:businessId`, "POST"),
-  getEvents: createEndpoint("events", "GET"),
-  getEvent: createEndpoint(`events/:eventId`, "GET"),
-  updateEvents: createEndpoint(`events/business/:businessId`, "PUT"),
-  deleteEvent: createEndpoint(`events/delete/:eventId`, "PUT"),
-  deleteEvents: createEndpoint("events/delete", "PUT"),
-  getPeopleInEvent: createEndpoint<EventIdQuery>("events/business/people", "GET"),
+  getEventsBusinessSummary: createEndpoint("business-events/summary/:businessId", "GET"),
+  getEventsForBusiness: createEndpoint<PaginationQuery>("business-events/:businessId", "GET"),
+  createEventForBusiness: createEndpoint("business-events/:businessId", "POST"),
+  updateEvents: createEndpoint("business-events/:businessId", "PUT"),
+  getPeopleInEvent: createEndpoint<EventIdQuery>("business-events/people", "GET"),
 
   //client-events
-  withdrawEventForClient: createEndpoint(`client-events/withdraw/:eventId`, "PUT"),
-  registerEventByIdForClient: createEndpoint(`client-events/register/:eventId`, "PUT"),
-
-  getEventDetailsForClient: createEndpoint(`client-events/details/event/:eventId`, "GET"),
-  getEventsDetailsForClient: createEndpoint(`client-events/details/events`, "GET"),
-  getServiceByIdForClient: createEndpoint(`client-events/details/service/:serviceId`, "GET"),
-  getServicesByBusinessIdsForClient: createEndpoint(`client-events/details/services/:businessId`, "GET"),
+  withdrawEventForClient: createEndpoint("client-events/withdraw/:eventId", "PUT"),
+  registerEventByIdForClient: createEndpoint("client-events/register/:eventId", "PUT"),
+  getEventDetailsForClient: createEndpoint("client-events/details/event/:eventId", "GET"),
+  getEventsDetailsForClient: createEndpoint("client-events/details/events", "GET"),
+  getServiceByIdForClient: createEndpoint("client-events/details/service/:serviceId", "GET"),
+  getServicesByBusinessIdsForClient: createEndpoint("client-events/details/services/:businessId", "GET"),
 
   //services
   getService: createEndpoint<ServiceIdQuery>("services", "GET"),
   getServices: createEndpoint<BusinessIdQuery>("services", "GET"),
-  updateService: createEndpoint(`services/:businessId`, "PUT"),
-  createService: createEndpoint(`services/:businessId`, "POST"),
-  deleteService: createEndpoint(`services/:businessId`, "DELETE"),
+  updateService: createEndpoint("services/:businessId", "PUT"),
+  createService: createEndpoint("services/:businessId", "POST"),
+  deleteService: createEndpoint("services/:businessId", "DELETE"),
 
   // Client Users
   getClientUsers: createEndpoint("clients/business/:businessId", "GET"),
@@ -210,10 +200,10 @@ export const endpoints = {
   // Local Client Users
   getLocalClientUsers: createEndpoint("local-clients/business/:businessId", "GET"),
   addLocalClientUser: createEndpoint("local-clients/business/:businessId", "POST"),
-  updateLocalClientUsers: createEndpoint(`local-clients/business/:businessId`, "PUT"),
+  updateLocalClientUsers: createEndpoint("local-clients/business/:businessId", "PUT"),
 
   // business staff
-  getStaffUsers: createEndpoint(`business-staff/business/:businessId`, "GET"),
+  getStaffUsers: createEndpoint("business-staff/business/:businessId", "GET"),
 
   // upload file
   uploadImageFile: createEndpoint("upload-file/image", "POST"),
@@ -222,12 +212,7 @@ export const endpoints = {
 type BusinessIdQuery = {
   businessId: string;
 };
-type ClientIdQuery = {
-  clientId: string;
-};
-type StaffIdQuery = {
-  staffId: string;
-};
+
 type ServiceIdQuery = {
   serviceId: string;
 };
