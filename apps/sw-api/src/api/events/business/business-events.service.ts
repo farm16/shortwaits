@@ -3,7 +3,6 @@ import { InjectModel } from "@nestjs/mongoose";
 import { InjectModel as InjectSequelizeModel } from "@nestjs/sequelize";
 import { EventDtoType, EventTransactionType } from "@shortwaits/shared-lib";
 import { Model, ObjectId, Types } from "mongoose";
-import { convertArrayToObjectId } from "../../../utils/converters";
 import { generateNewEvent } from "../../../utils/filtersForDtos";
 import { BusinessUser } from "../../business-staff/entities/business-staff.entity";
 import { Business } from "../../business/entities/business.entity";
@@ -73,75 +72,6 @@ export class EventsService {
     } catch (error) {
       console.error(error);
       throw new InternalServerErrorException("Failed to update event");
-    }
-  }
-
-  async deleteEvent(eventId: string, deletedBy: string) {
-    try {
-      // Find and delete the event
-      const deleteResult = await this.eventsModel
-        .findOneAndUpdate(
-          {
-            _id: eventId,
-            deleted: false,
-          },
-          {
-            $set: {
-              deleted: true,
-              updatedBy: deletedBy,
-            },
-          },
-          { new: true }
-        )
-        .exec();
-
-      if (!deleteResult) {
-        throw new NotFoundException("Event not found");
-      }
-      await this.businessModel.updateOne({ events: eventId }, { $pull: { events: eventId } }).exec();
-      return deleteResult;
-    } catch (error) {
-      console.error(error);
-      throw new InternalServerErrorException("Failed to delete event");
-    }
-  }
-
-  async deleteEvents(eventIds: string[], deletedBy: string) {
-    try {
-      const _eventIds = convertArrayToObjectId(eventIds);
-      console.log(_eventIds);
-      const updatedEvents = await this.eventsModel
-        .updateMany(
-          {
-            _id: { $in: _eventIds },
-            deleted: false,
-          },
-          {
-            $set: {
-              deleted: true,
-              updatedBy: deletedBy,
-            },
-          }
-        )
-        .exec();
-
-      if (updatedEvents.modifiedCount === 0) {
-        return {
-          modifiedEventCount: updatedEvents.modifiedCount,
-          modifiedBusinessCount: 0,
-          modifiedClientCount: null, //pending
-        };
-      }
-      const updatedBusiness = await this.businessModel.updateOne({ events: { $in: _eventIds } }, { $pullAll: { events: _eventIds } }).exec();
-
-      return {
-        modifiedCount: updatedEvents.modifiedCount,
-        modifiedBusinessCount: updatedBusiness.modifiedCount,
-        modifiedClientCount: null, //pending
-      };
-    } catch (error) {
-      console.error(error);
-      throw new InternalServerErrorException("Failed to delete events");
     }
   }
 
@@ -360,91 +290,6 @@ export class EventsService {
     }
   }
 
-  async getEventsByClientId(clientId: string, paginateOptions?: { page?: number; limit?: number }, filterOptions?: { date: string; filterBy: "day" | "month" | "year" }) {
-    try {
-      const { page, limit } = paginateOptions ?? {};
-      const skip = (page - 1) * limit;
-
-      const { date, filterBy } = filterOptions ?? {};
-      const _date = new Date(date);
-
-      const filter: {
-        clientsIds: { $in: string[] };
-        deleted: boolean;
-        startTime?: { $gte: Date; $lte: Date };
-      } = {
-        clientsIds: { $in: [clientId] },
-        deleted: false,
-      };
-
-      if (_date && filterBy === "day") {
-        console.log({
-          $gte: _date,
-          $lte: new Date(_date.getTime() + 24 * 60 * 60 * 1000),
-        });
-        filter.startTime = {
-          $gte: _date,
-          $lte: new Date(_date.getTime() + 24 * 60 * 60 * 1000),
-        };
-      } else if (_date && filterBy === "month") {
-        const startDate = new Date(_date.getFullYear(), _date.getMonth(), 1);
-        const endDate = new Date(_date.getFullYear(), _date.getMonth() + 1, 0);
-        filter.startTime = {
-          $gte: startDate,
-          $lte: endDate,
-        };
-      } else if (_date && filterBy === "year") {
-        const startDate = new Date(_date.getFullYear(), 0, 1);
-        const endDate = new Date(_date.getFullYear(), 11, 31);
-        filter.startTime = {
-          $gte: startDate,
-          $lte: endDate,
-        };
-      }
-      const events = await this.eventsModel.find(filter).skip(skip).limit(limit).exec();
-      return events;
-    } catch (error) {
-      console.error(error);
-      throw new InternalServerErrorException("Failed to get events");
-    }
-  }
-
-  async findLocalClientUsers(userIds: string[] | ObjectId[]) {
-    if (!userIds || !userIds.length) {
-      return [];
-    }
-    try {
-      const localClients = await this.localClientUserModel.find({ _id: { $in: userIds } }).exec();
-      return localClients;
-    } catch (error) {
-      throw new InternalServerErrorException(error.message);
-    }
-  }
-
-  async findClientUsers(userIds: string[] | ObjectId[]) {
-    if (!userIds || !userIds.length) {
-      return [];
-    }
-    try {
-      const clientUsers = await this.clientUserModel.find({ _id: { $in: userIds } }).exec();
-      return clientUsers;
-    } catch (error) {
-      throw new InternalServerErrorException(error.message);
-    }
-  }
-
-  async findBusinessUsers(userIds: string[] | ObjectId[]) {
-    if (!userIds || !userIds.length) {
-      return [];
-    }
-    try {
-      const clientUsers = await this.businessUserModel.find({ _id: { $in: userIds } }).exec();
-      return clientUsers;
-    } catch (error) {
-      throw new InternalServerErrorException(error.message);
-    }
-  }
-
   // todo: allow business admin to have visibility to all events people
   async getPeopleByEvent(eventId: string, requestedBy: string) {
     try {
@@ -485,6 +330,43 @@ export class EventsService {
     } catch (error) {
       console.error(error);
       throw error;
+    }
+  }
+
+  // HELPER FUNCTIONS
+  async findLocalClientUsers(userIds: string[] | ObjectId[]) {
+    if (!userIds || !userIds.length) {
+      return [];
+    }
+    try {
+      const localClients = await this.localClientUserModel.find({ _id: { $in: userIds } }).exec();
+      return localClients;
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
+  }
+
+  async findClientUsers(userIds: string[] | ObjectId[]) {
+    if (!userIds || !userIds.length) {
+      return [];
+    }
+    try {
+      const clientUsers = await this.clientUserModel.find({ _id: { $in: userIds } }).exec();
+      return clientUsers;
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
+  }
+
+  async findBusinessUsers(userIds: string[] | ObjectId[]) {
+    if (!userIds || !userIds.length) {
+      return [];
+    }
+    try {
+      const clientUsers = await this.businessUserModel.find({ _id: { $in: userIds } }).exec();
+      return clientUsers;
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
     }
   }
 }

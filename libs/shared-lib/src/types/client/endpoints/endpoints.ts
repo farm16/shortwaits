@@ -173,6 +173,7 @@ export const endpoints = {
   getEventsForBusiness: createEndpoint<PaginationQuery>("business-events/:businessId", "GET"),
   createEventForBusiness: createEndpoint("business-events/:businessId", "POST"),
   updateEvents: createEndpoint("business-events/:businessId", "PUT"),
+
   getPeopleInEvent: createEndpoint<EventIdQuery>("business-events/people", "GET"),
 
   //client-events
@@ -190,14 +191,14 @@ export const endpoints = {
   createService: createEndpoint("services/:businessId", "POST"),
   deleteService: createEndpoint("services/:businessId", "DELETE"),
 
-  // Client Users
+  // Clients
   getClientUsers: createEndpoint("clients/business/:businessId", "GET"),
   addClientUsers: createEndpoint("clients/business/:businessId", "POST"),
   updateClientUsers: createEndpoint("clients/business/:businessId", "PUT"),
   addClientToBusiness: createEndpoint("clients/business/:businessId/local-clients", "PUT"),
   getClientUser: createEndpoint("clients/:clientShortId", "GET"),
 
-  // Local Client Users
+  // Local Clients
   getLocalClientUsers: createEndpoint("local-clients/business/:businessId", "GET"),
   addLocalClientUser: createEndpoint("local-clients/business/:businessId", "POST"),
   updateLocalClientUsers: createEndpoint("local-clients/business/:businessId", "PUT"),

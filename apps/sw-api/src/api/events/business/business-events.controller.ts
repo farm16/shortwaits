@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, InternalServerErrorException, NotFoundException, Param, Post, Put, Query, Req, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, HttpCode, HttpStatus, NotFoundException, Param, Post, Put, Query, Req, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
 import { EventDtoType } from "@shortwaits/shared-lib";
 import { AtGuard } from "../../../common/guards";
@@ -69,46 +69,6 @@ export class EventsController {
   updateEventByBusiness(@Req() request, @Param("businessId") businessId: string, @Body() event: EventDtoType) {
     // todo validate permission
     return this.eventsService.updateEvent(event, businessId, request.user.sub);
-  }
-
-  @Put()
-  @HttpCode(HttpStatus.ACCEPTED)
-  @ApiCreatedResponse({
-    status: HttpStatus.ACCEPTED,
-    description: "Create new event record",
-    type: CreateEventsDto,
-  })
-  updateEventByUser(@Req() request, @Body() event: EventDtoType) {
-    // todo validate permission
-    return this.eventsService.updateEvent(event, request.user.sub, request.user.sub);
-  }
-
-  @Put("delete/:eventId")
-  @HttpCode(202)
-  @ApiCreatedResponse({
-    status: HttpStatus.ACCEPTED,
-    description: "Event deleted successfully.",
-  })
-  async deleteEvent(@Req() request, @Param("eventId") eventId: string) {
-    try {
-      return await this.eventsService.deleteEvent(eventId, request.user.sub);
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        throw error;
-      }
-      console.error(error);
-      throw new InternalServerErrorException("Failed to delete event");
-    }
-  }
-
-  @Put("delete")
-  @HttpCode(202)
-  @ApiCreatedResponse({
-    status: HttpStatus.ACCEPTED,
-    description: "Event deleted successfully.",
-  })
-  async deleteEvents(@Req() request, @Body() eventIds: string[]) {
-    return await this.eventsService.deleteEvents(eventIds, request.user.sub);
   }
 
   @Get("people")

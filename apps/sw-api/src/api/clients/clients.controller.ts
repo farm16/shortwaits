@@ -6,8 +6,8 @@ import { ClientUserService } from "./clients.service";
 import { CreateClientUserDto } from "./dto";
 
 @UseGuards(AtGuard)
-@ApiTags("client")
-@Controller("client-user")
+@ApiTags("clients")
+@Controller("clients")
 @ApiBearerAuth("bearer")
 export class ClientUserController {
   constructor(private readonly clientUsersService: ClientUserService) {}
