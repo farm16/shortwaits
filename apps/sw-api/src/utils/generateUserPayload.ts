@@ -4,9 +4,9 @@ import {
   BusinessUserRoles,
   BusinessUserType,
   ClientType,
-  ConvertToDtoType,
   CreateBusinessUserDtoType,
   CreateBusinessUsersDtoType,
+  DtoFriendlyType,
   LocalClientType,
   PartialLocalClientDtoType,
   generateAvatarUrl,
@@ -79,7 +79,7 @@ export const generateBusinessUser = (user: CreateBusinessUserDtoType, businessUs
     isBackgroundAdmin: businessUserRoles.some(role => role === "backgroundAdmin"),
   };
 
-  const businessUser: ConvertToDtoType<BusinessUserType> = {
+  const businessUser: DtoFriendlyType<BusinessUserType> = {
     ...user,
     username: user.email, // username is the same as email
     roleId: null,
@@ -113,7 +113,7 @@ export const generateBusinessUser_socialAuth = (user: CreateBusinessUserDtoType,
     isBackgroundAdmin: businessUserRoles.some(role => role === "backgroundAdmin"),
   };
 
-  const businessUser: ConvertToDtoType<BusinessUserType> = {
+  const businessUser: DtoFriendlyType<BusinessUserType> = {
     ...user,
     username: user.email, // username is the same as email
     roleId: null,

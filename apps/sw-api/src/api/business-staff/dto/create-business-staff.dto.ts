@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Alias, ConvertToDtoType, CreateBusinessUserDtoType, UserAccountSettings, UserDeviceSettings, WeekHoursType } from "@shortwaits/shared-lib";
+import { Alias, CreateBusinessUserDtoType, DtoFriendlyType, UserAccountSettings, UserDeviceSettings, WeekHoursType } from "@shortwaits/shared-lib";
 import { IsNotEmpty, IsOptional } from "class-validator";
 
 export class CreateBusinessUserDto implements CreateBusinessUserDtoType {
@@ -21,7 +21,7 @@ export class CreateBusinessUserDto implements CreateBusinessUserDtoType {
 
   @ApiProperty()
   @IsOptional()
-  accountSettings: ConvertToDtoType<UserAccountSettings>;
+  accountSettings: DtoFriendlyType<UserAccountSettings>;
 
   @ApiProperty()
   @IsOptional()
@@ -45,7 +45,7 @@ export class CreateBusinessUserDto implements CreateBusinessUserDtoType {
 
   @ApiProperty()
   @IsNotEmpty()
-  hours: ConvertToDtoType<WeekHoursType>;
+  hours: DtoFriendlyType<WeekHoursType>;
 
   @ApiProperty()
   @IsOptional()
@@ -106,5 +106,5 @@ export class CreateBusinessUserDto implements CreateBusinessUserDtoType {
 
   @ApiProperty()
   @IsOptional()
-  locale: ConvertToDtoType<{ countryCode: string; isRTL: boolean; languageCode: string; languageTag: string }>;
+  locale: DtoFriendlyType<{ countryCode: string; isRTL: boolean; languageCode: string; languageTag: string }>;
 }

@@ -1,6 +1,6 @@
 import { CompositeNavigationProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { Button, Screen, Space, Text, TextFieldCard, useForm, useTheme } from "@shortwaits/shared-ui";
+import { ActivityIndicator, Button, Screen, Space, Text, TextFieldCard, useForm, useTheme } from "@shortwaits/shared-ui";
 import React, { FC, useCallback, useLayoutEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { StyleSheet, View } from "react-native";
@@ -43,10 +43,15 @@ export const SignUpWithEmail: FC<SignUpWithEmailScreenProps> = ({ navigation }) 
     },
     "adminAppLocalSignUp"
   );
+  console.log("errors >>> ", errors);
 
   const handlePasswordVisibility = useCallback(() => {
     setIsVisible(visibility => !visibility);
   }, []);
+
+  if (isLoading) {
+    return <ActivityIndicator />;
+  }
 
   return (
     <Screen preset="scroll" withHorizontalPadding unsafe>

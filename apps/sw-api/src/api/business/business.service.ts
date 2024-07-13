@@ -15,8 +15,8 @@ import { Model } from "mongoose";
 import { convertStringToObjectId } from "../../utils/converters";
 import { generateBusinessStaff, generateLocalClients } from "../../utils/generateUserPayload";
 import { BusinessUser } from "../business-staff/entities/business-staff.entity";
-import { ClientUser } from "../client-user/entities/client-user.entity";
-import { LocalClientUser } from "../local-client-user/entities/local-client-user.entity";
+import { Client } from "../clients/entities/client.entity";
+import { LocalClientUser } from "../local-clients/entities/local-client-user.entity";
 import { RegisterBusinessDto } from "./dto/registerBusiness.dto";
 import { Business } from "./entities/business.entity";
 
@@ -27,8 +27,8 @@ export class BusinessService {
     private businessModel: Model<Business>,
     @InjectModel(BusinessUser.name)
     private businessUserModel: Model<BusinessUser>,
-    @InjectModel(ClientUser.name)
-    private clientUserModel: Model<ClientUser>,
+    @InjectModel(Client.name)
+    private clientUserModel: Model<Client>,
     @InjectModel(LocalClientUser.name)
     private localClientUserModel: Model<LocalClientUser>
   ) {}

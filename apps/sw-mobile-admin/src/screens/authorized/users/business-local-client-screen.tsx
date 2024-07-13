@@ -227,7 +227,7 @@ export function BusinessLocalClientScreen({ navigation, route }: AuthorizedScree
           {hasLocalClients ? (
             <Container direction="row" style={[styles.eventBoxHeader]}>
               <Text preset="none" style={[styles.eventBoxHeaderTitle, { color: Colors.text }]}>
-                {`Events (${localClientData.length})`}
+                {`Event (${localClientData.length})`}
               </Text>
               {/* <Text preset="none" style={[styles.eventBoxHeaderTitle, { color: Colors.text }]}>
             {`History`}

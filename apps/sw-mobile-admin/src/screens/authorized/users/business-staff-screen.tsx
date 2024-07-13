@@ -249,7 +249,7 @@ export function BusinessStaffScreen({ navigation, route }: AuthorizedScreenProps
         <Space size="small" />
         <Container direction="row" style={[styles.eventBoxHeader]}>
           <Text preset="none" style={[styles.eventBoxHeaderTitle, { color: Colors.text }]}>
-            {`Events (${getEventsWithStaff().length})`}
+            {`Event (${getEventsWithStaff().length})`}
           </Text>
           <IconButton
             iconType="add"

@@ -4,7 +4,7 @@ import { Model } from "mongoose";
 import { convertStringToObjectId, validateId } from "../../utils/converters";
 import { getQuerySelect } from "../../utils/mongoDbUtils";
 import { Business } from "../business/entities/business.entity";
-import { ClientUser } from "../client-user/entities/client-user.entity";
+import { Client } from "../clients/entities/client.entity";
 import { Shortwaits } from "./shortwaits.schema";
 
 @Injectable()
@@ -14,8 +14,8 @@ export class ShortwaitsService {
     private readonly shortwaitsModel: Model<Shortwaits>,
     @InjectModel(Business.name)
     private businessModel: Model<Business>,
-    @InjectModel(ClientUser.name)
-    private clientUserModel: Model<ClientUser>
+    @InjectModel(Client.name)
+    private clientUserModel: Model<Client>
   ) {}
 
   public async getAdminMobileDefaultData(storeIndicator = "en") {

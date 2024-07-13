@@ -2,10 +2,12 @@ import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { APP_INTERCEPTOR } from "@nestjs/core";
 import { MongooseModule } from "@nestjs/mongoose";
+import { SequelizeModule } from "@nestjs/sequelize";
 import { ApiModule } from "./api/api.module";
 import { getEnvPath } from "./common/env.helper";
 import { TransformInterceptor } from "./common/interceptors/transform.interceptor";
 import { MongooseConfigService } from "./shared/mongoose/mongoose.service";
+import { SqliteConfigService } from "./shared/sqlite/sqlite.service";
 
 const envFilePath = getEnvPath();
 
@@ -18,6 +20,7 @@ const envFilePath = getEnvPath();
     MongooseModule.forRootAsync({
       useClass: MongooseConfigService,
     }),
+    SequelizeModule.forRootAsync(SqliteConfigService),
     ApiModule,
   ],
   providers: [

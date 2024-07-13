@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { BusinessAvailableCurrenciesType, ConvertToDtoType, ServiceColorType, ServiceDtoType, WeekHoursType } from "@shortwaits/shared-lib";
+import { BusinessAvailableCurrenciesType, DtoFriendlyType, ServiceColorType, ServiceDtoType, WeekHoursType } from "@shortwaits/shared-lib";
 import { IsArray, IsBoolean, IsNumber, IsObject, IsString } from "class-validator";
 
 export class UpdateServiceDto implements ServiceDtoType {
@@ -26,7 +26,7 @@ export class UpdateServiceDto implements ServiceDtoType {
   description: string;
   @IsObject()
   @ApiProperty({ required: false })
-  hours: ConvertToDtoType<WeekHoursType>;
+  hours: DtoFriendlyType<WeekHoursType>;
   @IsArray()
   @ApiProperty({ required: false })
   applicableCategories: string[];
@@ -47,13 +47,13 @@ export class UpdateServiceDto implements ServiceDtoType {
   isPrivate: boolean;
   @IsObject()
   @ApiProperty({ required: false })
-  urls?: ConvertToDtoType<{ zoom?: string; other1?: string; other2?: string }>;
+  urls?: DtoFriendlyType<{ zoom?: string; other1?: string; other2?: string }>;
   @IsBoolean()
   @ApiProperty({ required: false })
   isVideoConference: boolean;
   @IsObject()
   @ApiProperty({ required: false })
-  serviceColor: ConvertToDtoType<ServiceColorType>;
+  serviceColor: DtoFriendlyType<ServiceColorType>;
   @IsString()
   @ApiProperty({ required: false })
   imageUrl: string;

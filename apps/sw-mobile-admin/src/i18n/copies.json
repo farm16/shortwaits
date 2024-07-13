@@ -1,6 +1,6 @@
 {
   "en": {
-    "Navigation.tab.label.events": "Events",
+    "Navigation.tab.label.events": "Event",
     "Navigation.tab.label.clients": "Clients",
     "Navigation.tab.label.myBusiness": "My Business",
     "Navigation.tab.label.activities": "Activities",
@@ -44,7 +44,7 @@
     "Common.category": "Category",
     "Common.services": "Services",
     "Common.service": "Service",
-    "Common.events": "Events",
+    "Common.events": "Event",
     "Common.event": "Event",
     "Common.clients": "Clients",
     "Common.client": "Client",
@@ -109,8 +109,8 @@
     "Welcome_Screen.title": "Welcome to \nShortwaits Admin",
     "Welcome_Screen.description": "Where you're the captain of your business!\nExplore our tools to take control and drive your success.",
 
-    "Events_Screen.title": "Events",
-    "Events_Screen.qrCodeModal.title": "Events",
+    "Events_Screen.title": "Event",
+    "Events_Screen.qrCodeModal.title": "Event",
     "Events_Screen.qrCodeModal.description": "Allow clients to scan this QR code to show all public events",
     "Events_Screen.qrCodeModal.warningMessage": "For private events, please share from event page.",
     "Events_Screen.searchEvents.headerTitle": "Search events",

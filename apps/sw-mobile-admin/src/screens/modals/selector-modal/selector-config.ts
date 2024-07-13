@@ -27,7 +27,7 @@ export const selectorConfigs: Record<SelectorConfigsKeys, any> = {
     searchPlaceholder: "search",
   },
   events: {
-    headerTitle: "Events",
+    headerTitle: "Event",
     isReadOnly: false,
     searchPlaceholder: "search",
   },

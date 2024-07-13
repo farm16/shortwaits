@@ -208,7 +208,7 @@ const categories = [
   {
     _id: getObjectId("1027"),
     short_id: "1027",
-    name: "Wedding, Events & Meetings",
+    name: "Wedding, Event & Meetings",
     keys: ["party", "bridal", "weeding", "ring"],
     translations: [
       {

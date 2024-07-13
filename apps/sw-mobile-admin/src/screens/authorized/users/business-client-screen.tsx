@@ -171,7 +171,7 @@ export function BusinessClientScreen({ navigation, route }: AuthorizedScreenProp
         {hasClients ? (
           <Container direction="row" style={[styles.eventBoxHeader]}>
             <Text preset="none" style={[styles.eventBoxHeaderTitle, { color: Colors.text }]}>
-              {`Events (${clientData.length})`}
+              {`Event (${clientData.length})`}
             </Text>
             {/* <Text preset="none" style={[styles.eventBoxHeaderTitle, { color: Colors.text }]}>
             {`History`}

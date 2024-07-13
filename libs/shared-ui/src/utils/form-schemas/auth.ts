@@ -18,7 +18,9 @@ export const adminAppLocalSignUpSchema = Yup.object({
   username: Yup.string()
     .min(3)
     .max(320, "Username or email address is too long")
-    .test("is-email-or-username", "Invalid format", value => {
+    .test("is-email-or-username", "Invalid format", (value?: string) => {
+      if (!value) return true;
+      // check if value is an email or username
       const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
       const usernameRegex = /^[A-Za-z0-9_]+$/;
       return emailRegex.test(value) || usernameRegex.test(value);
@@ -27,6 +29,7 @@ export const adminAppLocalSignUpSchema = Yup.object({
   password: Yup.string()
     .required("no password provided.")
     .min(6, "password is too short - should be 8 chars minimum.")
+    // allow minimum 6 characters, one uppercase, one lowercase and one number, allow special characters
     .matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/, "must contain 6 characters, one uppercase, one lowercase and one number."),
   passwordConfirmation: Yup.string()
     .oneOf([Yup.ref("password"), null], "passwords must match")

@@ -1,11 +1,10 @@
 import { CompositeNavigationProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
-import { BackButton, Button, FormContainer, IconButton, Messages, ServiceItem, Space, Text } from "@shortwaits/shared-ui";
+import { ActivityIndicator, BackButton, Button, FormContainer, IconButton, Messages, ServiceItem, Space, Text } from "@shortwaits/shared-ui";
 import React, { useCallback, useLayoutEffect } from "react";
 import { useIntl } from "react-intl";
-import { FlatList, RefreshControl, StyleSheet } from "react-native";
-import { ActivityIndicator } from "react-native-paper";
+import { FlatList, StyleSheet } from "react-native";
 import { RootStackParamList, UnauthorizedStackParamList } from "../../../navigation";
 import { useGetServicesQuery, useRegisterBusinessMutation } from "../../../services";
 import { useBusiness, useServices } from "../../../store";
@@ -19,9 +18,10 @@ export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
   const services = useServices();
 
   const intl = useIntl();
-  const { data, isLoading, isSuccess, refetch } = useGetServicesQuery(business ? business?._id : skipToken, {
+  const { isLoading: isGetServicesQueryLoading, refetch } = useGetServicesQuery(business ? business?._id : skipToken, {
     refetchOnMountOrArgChange: true,
   });
+  const [registerBusiness, registerBusinessStatus] = useRegisterBusinessMutation();
 
   const handleCardOnPress = useCallback(
     item => {
@@ -34,7 +34,6 @@ export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
     },
     [navigation]
   );
-  const [registerBusiness, registerBusinessStatus] = useRegisterBusinessMutation();
 
   const handleBusinessRegistration = useCallback(() => {
     registerBusiness(business);
@@ -64,7 +63,7 @@ export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
     });
   }, [intl, navigation]);
 
-  if (isLoading || registerBusinessStatus.isLoading) {
+  if (isGetServicesQueryLoading || registerBusinessStatus.isLoading) {
     return <ActivityIndicator />;
   }
 
@@ -84,14 +83,6 @@ export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
       <Messages type={"info"} message={intl.formatMessage({ id: "Onboarding_2_Screen.infoMessage" })} />
       <Space />
       <FlatList
-        refreshControl={
-          <RefreshControl
-            refreshing={isLoading}
-            onRefresh={async () => {
-              await refetch();
-            }}
-          />
-        }
         showsVerticalScrollIndicator={false}
         ItemSeparatorComponent={() => <Space size="tiny" />}
         contentContainerStyle={styles.contentContainer}

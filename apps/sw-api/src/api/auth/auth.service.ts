@@ -21,7 +21,7 @@ import {
 } from "../../utils";
 import { BusinessUser } from "../business-staff/entities/business-staff.entity";
 import { Business } from "../business/entities/business.entity";
-import { ClientUser } from "../client-user/entities/client-user.entity";
+import { Client } from "../clients/entities/client.entity";
 import { Service } from "../services/entities/service.entity";
 import { ClientSignInWithEmailDto, ClientSignUpWithEmailDto, SignInWithEmailDto, SignUpWithEmailDto } from "./dto";
 
@@ -33,8 +33,8 @@ export class AuthService {
   private readonly oAuth2Client: OAuth2Client;
 
   constructor(
-    @InjectModel(ClientUser.name)
-    private clientUserModel: Model<ClientUser>,
+    @InjectModel(Client.name)
+    private clientUserModel: Model<Client>,
     @InjectModel(BusinessUser.name)
     private businessUserModel: Model<BusinessUser>,
     @InjectModel(Business.name) private businessModel: Model<Business>,
@@ -250,7 +250,7 @@ export class AuthService {
     return updatedBusinessUser;
   }
 
-  private async updateClientUserRt(user: ClientUser, rt: string): Promise<void> {
+  private async updateClientUserRt(user: Client, rt: string): Promise<void> {
     const saltRounds = Number(this.configService.get("SALT_ROUNDS"));
     const salt = await bcrypt.genSalt(saltRounds);
     const hash = await bcrypt.hash(rt, salt);
@@ -265,7 +265,7 @@ export class AuthService {
   }
 
   private async signTokens(
-    userInfo: ClientUser & {
+    userInfo: Client & {
       _id: Types.ObjectId;
     }
   ) {

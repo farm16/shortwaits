@@ -1,2 +1,2 @@
-export * from "./business-events";
-export * from "./client-events";
+export * from "./business";
+export * from "./client";
