@@ -25,15 +25,17 @@ import { getEventTime } from "./calendar-utils";
 type AgendaItemProps = {
   item: EventDtoType;
   triggerTick?: boolean;
+  disabled?: boolean;
 };
 
 export const AgendaItem = (props: AgendaItemProps) => {
-  const { item, triggerTick = false } = props;
+  const { item, triggerTick = false, disabled } = props;
   const swipeableRef = React.useRef<Swipeable>(null);
   const { Colors } = useTheme();
   const intl = useIntl();
   const service = useService(item?.serviceId ?? "");
-  const [updateBusinessEvent, updateEventStatus] = useUpdateBusinessEventMutation();
+  const borderColor = disabled ? Colors.white : Colors.lightGray;
+  const [updateBusinessEvent, updateEventStatus] = useUpdateBusinessEventMutation(); // todo update to new api hook
 
   useFocusEffect(() => {
     if (triggerTick) {
@@ -60,18 +62,7 @@ export const AgendaItem = (props: AgendaItemProps) => {
 
   const eventServiceColor = useCallback(() => {
     if (!service?.serviceColor?.hexCode) {
-      return (
-        <View
-          style={[
-            styles.eventServiceColor,
-            {
-              // borderWidth: StyleSheet.hairlineWidth,
-              // borderColor: Colors.gray,
-              backgroundColor: "transparent",
-            },
-          ]}
-        />
-      );
+      return <View style={[styles.eventServiceColor]} />;
     }
     return (
       <View
@@ -109,7 +100,7 @@ export const AgendaItem = (props: AgendaItemProps) => {
 
   const eventTime = useCallback(
     () => (
-      <View style={[styles.eventTime, { borderLeftColor: Colors.lightGray }]}>
+      <View style={[styles.eventTime, { borderLeftColor: borderColor }]}>
         <Text
           preset="none"
           style={[styles.eventTimeRow1, { color: Colors.text }]}
@@ -121,7 +112,7 @@ export const AgendaItem = (props: AgendaItemProps) => {
         <Text preset="none" style={[styles.eventTimeRow2, { color: Colors.subText }]} text={getEventTime(item.durationInMin * 60000)} />
       </View>
     ),
-    [Colors.lightGray, Colors.subText, Colors.text, item.durationInMin, item.startTime]
+    [Colors.subText, Colors.text, borderColor, item.durationInMin, item.startTime]
   );
 
   const eventDescription = useCallback(() => {
@@ -176,7 +167,7 @@ export const AgendaItem = (props: AgendaItemProps) => {
     const _statusDisplayMessagesBackgroundColor = statusDisplayMessagesBackgroundColor[statusName] ?? Colors.lightGray;
     const _statusDisplayMessagesColor = statusDisplayMessagesColor[statusName] ?? Colors.text;
     return (
-      <View style={[styles.statusContainer, { borderLeftColor: Colors.lightGray }]}>
+      <View style={[styles.statusContainer, { borderLeftColor: borderColor }]}>
         <View
           style={{
             backgroundColor: _statusDisplayMessagesBackgroundColor,
@@ -207,18 +198,18 @@ export const AgendaItem = (props: AgendaItemProps) => {
         />
       </View>
     );
-  }, [Colors.lightGray, Colors.subText, Colors.text, intl, item.isPublicEvent, item?.status?.statusName]);
+  }, [Colors.lightGray, Colors.subText, Colors.text, borderColor, intl, item.isPublicEvent, item.status.statusName]);
 
-  return (
-    <Swipeable ref={swipeableRef} renderRightActions={renderRightActions}>
+  const renderPressable = useCallback(() => {
+    return (
       <Pressable
         onPress={handleOnPress}
+        disabled={disabled}
         onLongPress={handleOnLongPress}
         style={[
           styles.calendarItem,
           {
-            zIndex: 10,
-            backgroundColor: "#FFFFFF",
+            backgroundColor: disabled ? Colors.lightBackground : Colors.white,
           },
         ]}
       >
@@ -227,6 +218,18 @@ export const AgendaItem = (props: AgendaItemProps) => {
         {eventStatus()}
         {eventTime()}
       </Pressable>
+    );
+  }, [Colors.lightBackground, Colors.white, disabled, eventDescription, eventServiceColor, eventStatus, eventTime, handleOnLongPress, handleOnPress]);
+
+  if (!item) return null;
+
+  if (disabled) {
+    return renderPressable();
+  }
+
+  return (
+    <Swipeable ref={swipeableRef} renderRightActions={renderRightActions}>
+      {renderPressable()}
     </Swipeable>
   );
 };
@@ -239,6 +242,7 @@ const styles = StyleSheet.create({
   eventServiceColor: {
     height: "100%",
     width: 6,
+    backgroundColor: "transparent",
     borderTopStartRadius: EVENT_ITEM_BORDER_RADIUS,
     borderBottomStartRadius: EVENT_ITEM_BORDER_RADIUS,
   },
@@ -291,7 +295,7 @@ const styles = StyleSheet.create({
   },
   calendarItem: {
     height: CALENDAR_EVENT_HEIGHT,
-    // borderBottomWidth: 1,
+    zIndex: 10,
     alignItems: "center",
     flexDirection: "row",
     marginHorizontal: 5,

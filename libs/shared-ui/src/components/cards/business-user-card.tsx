@@ -14,12 +14,13 @@ export type BusinessUserCardProps = {
   user: BusinessUserDtoType;
   style?: StyleProp<ViewStyle>;
   onPress(): void;
+  onRemove?(user: BusinessUserDtoType): void;
 };
 
 export const BusinessUserCard = (props: BusinessUserCardProps) => {
   const { Colors } = useTheme();
 
-  const { user, onPress, style: styleOverrides } = props;
+  const { user, onPress, onRemove, style: styleOverrides } = props;
 
   const handlePhoneCallPress = useCallback(phoneNumber => {
     handlePhoneCall(phoneNumber);
@@ -37,10 +38,10 @@ export const BusinessUserCard = (props: BusinessUserCardProps) => {
     }
   }, [onPress]);
 
-  const title = useMemo(() => {
-    const fullName = user.givenName || user.familyName || user.middleName || null;
-    return fullName || user.username || user.email;
-  }, [user.email, user.familyName, user.givenName, user.middleName, user.username]);
+  const title = user.displayName || user.givenName || user.familyName || user.middleName || user.username || user.email || "";
+  const shortId = user.shortId ? `ID:${user.shortId}` : "";
+  const admin = user.userRoles?.isAdmin ? " (Admin)" : "";
+  const subTitle = shortId;
 
   const avatarUrl = useMemo(() => {
     return generateAvatarUrl(title);
@@ -50,7 +51,9 @@ export const BusinessUserCard = (props: BusinessUserCardProps) => {
     return (
       <Pressable
         onPress={() => {
-          alert("pressed");
+          if (onRemove) {
+            onRemove(user);
+          }
         }}
         style={{
           backgroundColor: Colors.failedBackground,
@@ -86,12 +89,15 @@ export const BusinessUserCard = (props: BusinessUserCardProps) => {
           resizeMode={FastImage.resizeMode.contain}
           style={styles.image}
         />
-        <Text
-          preset="cardTitle"
-          text={truncate(title, {
-            length: 20,
-          })}
-        />
+        <View>
+          <Text
+            preset="cardTitle"
+            text={`${truncate(title, {
+              length: 20,
+            })}${admin}`}
+          />
+          {subTitle ? <Text preset="subTitle" text={subTitle} /> : null}
+        </View>
         <View style={styles.icons}>
           <Icon name="dots-vertical" color={Colors.darkGray} size={23} />
         </View>

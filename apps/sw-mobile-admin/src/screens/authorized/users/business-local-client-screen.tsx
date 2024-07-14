@@ -1,34 +1,17 @@
-import {
-  ActivityIndicator,
-  BackButton,
-  Button,
-  Container,
-  IconButton,
-  NonIdealState,
-  Screen,
-  Space,
-  Text,
-  handleEmail,
-  handlePhoneCall,
-  handleSms,
-  useTheme,
-} from "@shortwaits/shared-ui";
-import React, { useCallback, useEffect, useLayoutEffect, useMemo } from "react";
-import { Alert, Image, StyleSheet, View } from "react-native";
+import { BackButton, Button, Container, IconButton, NonIdealState, Screen, Space, Text, handleEmail, handlePhoneCall, handleSms, useTheme } from "@shortwaits/shared-ui";
+import React, { useCallback, useLayoutEffect, useMemo } from "react";
+import { Image, StyleSheet, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { AgendaItem } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
-import { useDeleteBusinessLocalClientsMutation } from "../../../services";
-import { useBusiness, useEvents, useLocalClient } from "../../../store";
+import { useEvents, useLocalClient } from "../../../store";
 
 export function BusinessLocalClientScreen({ navigation, route }: AuthorizedScreenProps<"business-local-client-screen">) {
   const { localClient: localClientParam, onUserRemove } = route.params;
 
   const { Colors } = useTheme();
-  const business = useBusiness();
   const events = useEvents();
   const localClient = useLocalClient(localClientParam._id);
-  const [deleteLocalClients, deleteLocalClientsStatus] = useDeleteBusinessLocalClientsMutation();
 
   const clientName = localClient.displayName || localClient.familyName || localClient.givenName || localClient.middleName || localClient.email || "";
   const hasPhoneNumbers = localClient.phoneNumbers && localClient.phoneNumbers.length > 0 && localClient.phoneNumbers.some(phone => phone.number);
@@ -88,7 +71,7 @@ export function BusinessLocalClientScreen({ navigation, route }: AuthorizedScree
   console.log("localClient", JSON.stringify(localClient, null, 2));
 
   const renderItem = useCallback(({ item }) => {
-    return <AgendaItem item={item} />;
+    return <AgendaItem disabled item={item} />;
   }, []);
 
   const renderNonIdealState = useCallback(() => {
@@ -111,40 +94,26 @@ export function BusinessLocalClientScreen({ navigation, route }: AuthorizedScree
   }, [navigation]);
 
   const handleRemoveUser = () => {
-    Alert.alert("Delete Client", "Are you sure you want to delete this client?", [
-      {
-        text: "Cancel",
-        onPress: () => console.log("Cancel Pressed"),
-        style: "cancel",
-      },
-      {
-        text: "OK",
-        onPress: () => {
-          deleteLocalClients({
-            businessId: business._id,
-            body: [localClient],
-          });
-        },
-      },
-    ]);
+    // Alert.alert("Delete Client", "Are you sure you want to delete this client?", [
+    //   {
+    //     text: "Cancel",
+    //     onPress: () => console.log("Cancel Pressed"),
+    //     style: "cancel",
+    //   },
+    //   {
+    //     text: "OK",
+    //     onPress: () => {
+    //       deleteLocalClients({
+    //         businessId: business._id,
+    //         body: [localClient],
+    //       });
+    //     },
+    //   },
+    // ]);
     if (onUserRemove) {
       onUserRemove(localClient);
     }
   };
-
-  useEffect(() => {
-    if (deleteLocalClientsStatus.isSuccess) {
-      navigation.goBack();
-    }
-  }, [deleteLocalClientsStatus.isSuccess, navigation]);
-
-  if (deleteLocalClientsStatus.isError) {
-    Alert.alert("Error", "Failed to delete local client");
-  }
-
-  if (deleteLocalClientsStatus.isLoading) {
-    return <ActivityIndicator />;
-  }
 
   return (
     <Screen preset="fixed" unsafe unsafeBottom>
@@ -206,18 +175,18 @@ export function BusinessLocalClientScreen({ navigation, route }: AuthorizedScree
               console.log("share");
             }}
           />
-          <Button
-            leftIconSize={25}
-            leftIconColor={Colors.failed}
-            style={{
-              backgroundColor: Colors.failedBackground,
-            }}
-            preset={"icon2"}
-            leftIconName={"delete"}
-            onPress={() => {
-              handleRemoveUser();
-            }}
-          />
+          {onUserRemove ? (
+            <Button
+              leftIconSize={25}
+              leftIconColor={Colors.failed}
+              style={{
+                backgroundColor: Colors.failedBackground,
+              }}
+              preset={"icon2"}
+              leftIconName={"delete"}
+              onPress={handleRemoveUser}
+            />
+          ) : null}
         </View>
         <Space />
       </View>

@@ -4,7 +4,7 @@ import {
   ActivityIndicator,
   BusinessUserCard,
   Button,
-  ClientUserCard,
+  CombinedClientCard,
   Container,
   IconButton,
   NonIdealState,
@@ -28,11 +28,8 @@ type Section = {
   title: "Staff" | "Clients";
   data: any[];
 };
-
 type PeopleSectionListRenderItem = SectionListRenderItem<any, Section>;
-
 type PeopleSectionListData = SectionListData<any, Section>[];
-
 type EventUsersTabProps = {
   event: EventDtoType;
   onSectionListRefresh?(): void;
@@ -82,22 +79,21 @@ export function EventUsersTab(props: EventUsersTabProps) {
 
   const renderBusinessUserCard = useCallback(
     (item: BusinessUserDtoType) => {
-      return (
-        <BusinessUserCard
-          user={item}
-          onPress={() => {
-            navigate("authorized-stack", {
-              screen: "business-staff-screen",
-              params: {
-                staff: item,
-                onUserRemove: staff => {
-                  console.log("staff >>>", staff);
-                },
-              },
-            });
-          }}
-        />
-      );
+      const handleOnPress = () => {
+        navigate("authorized-stack", {
+          screen: "business-staff-screen",
+          params: {
+            staff: item,
+            onUserRemove: staff => {
+              console.log("staff >>>", staff);
+            },
+          },
+        });
+      };
+      const handleOnRemove = (user: BusinessUserDtoType) => {
+        console.log("user >>>", user);
+      };
+      return <BusinessUserCard user={item} onPress={handleOnPress} onRemove={handleOnRemove} />;
     },
     [navigate]
   );
@@ -158,7 +154,11 @@ export function EventUsersTab(props: EventUsersTabProps) {
       };
       const handleOnPress = isLocalClient ? navigateToLocalClientScreen : navigateToClientScreen;
 
-      return <ClientUserCard onPress={handleOnPress} user={item} />;
+      const handleOnRemove = (user: CombinedClientType) => {
+        console.log("user >>>", user);
+      };
+
+      return <CombinedClientCard onPress={handleOnPress} user={item} onRemove={handleOnRemove} />;
     },
     [navigate]
   );

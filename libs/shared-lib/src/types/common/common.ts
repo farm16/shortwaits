@@ -10,7 +10,9 @@ export type ObjectId = Schema.Types.ObjectId | Types.ObjectId | MongoObjectId;
 export type BusinessClientType = "external" | "local";
 export type AllClientsType = (Omit<LocalClientDtoType, "clientType"> & { clientType: BusinessClientType })[];
 
-export type CombinedClientType = Omit<LocalClientDtoType & ClientDtoType, "clientType"> & { clientType: "local" | "external" };
+export type MergeAndOverride<T1, T2> = Omit<T1, keyof T2> & T2;
+
+export type CombinedClientType = MergeAndOverride<Omit<ClientDtoType, "clientType">, Omit<LocalClientDtoType, "clientType"> & { clientType: "local" | "external" }>;
 
 export type DeepPartial<T> = {
   [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K];

@@ -1,7 +1,7 @@
 import { CombinedClientType } from "@shortwaits/shared-lib";
 import { truncate } from "lodash";
 import { useMemo } from "react";
-import { Alert, Animated, Pressable, StyleSheet, View } from "react-native";
+import { Animated, Pressable, StyleSheet, View } from "react-native";
 import FastImage from "react-native-fast-image";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
@@ -9,18 +9,16 @@ import { useTheme } from "../../theme";
 import { generateAvatarUrl } from "../../utils/generateAvatarUrl";
 import { Button, ButtonProps, Text } from "../common";
 
-export type ClientUserCardProps = ButtonProps & {
+export type CombinedClientCardProps = ButtonProps & {
   user: CombinedClientType;
   onPress?: () => void;
   onLongPress?: () => void;
-  onUserRemove?: () => void;
-  clientRemoveMessage?: string;
+  onRemove?: (user: CombinedClientType) => void;
 };
-const defaultClientRemoveMessage = "Are you sure you want to remove this client from event?";
 
-export const ClientUserCard = (props: ClientUserCardProps) => {
+export const CombinedClientCard = (props: CombinedClientCardProps) => {
   const { Colors } = useTheme();
-  const { user, clientRemoveMessage = defaultClientRemoveMessage, onPress, onLongPress, onUserRemove } = props;
+  const { user, onPress, onLongPress, onRemove } = props;
 
   const title = useMemo(() => {
     const title = user.givenName || user.familyName || user.middleName || user.displayName || truncate(user.username || user.email, { length: 20 });
@@ -48,24 +46,9 @@ export const ClientUserCard = (props: ClientUserCardProps) => {
   };
 
   const handleRemove = () => {
-    Alert.alert("Remove Client", clientRemoveMessage, [
-      {
-        text: "Cancel",
-        onPress: () => {
-          // Do nothing
-        },
-        style: "cancel",
-      },
-      {
-        text: "Remove",
-        onPress: () => {
-          if (onUserRemove) {
-            onUserRemove();
-          }
-        },
-        style: "destructive",
-      },
-    ]);
+    if (onRemove) {
+      onRemove(user);
+    }
   };
 
   const renderRightActions = (_progress: Animated.AnimatedInterpolation<any>, _dragX: Animated.AnimatedInterpolation<any>) => {
@@ -93,7 +76,7 @@ export const ClientUserCard = (props: ClientUserCardProps) => {
           handlePress();
         }}
       >
-        {isSwClient ? (
+        {/* {!isSwClient ? (
           <View
             style={{
               position: "absolute",
@@ -103,11 +86,15 @@ export const ClientUserCard = (props: ClientUserCardProps) => {
               justifyContent: "center",
               alignItems: "center",
               transform: [{ rotate: "310deg" }],
-              backgroundColor: Colors.brandPrimary,
+              backgroundColor: Colors.brandAccent,
+              borderBottomColor: Colors.brandAccent6,
+              borderBottomWidth: 1,
+              borderTopColor: Colors.brandAccent6,
+              borderTopWidth: 1,
               paddingVertical: 2,
               zIndex: 1,
               elevation: 1,
-              shadowColor: Colors.darkGray,
+              shadowColor: Colors.black,
               shadowOffset: {
                 width: 0,
                 height: 1,
@@ -126,7 +113,7 @@ export const ClientUserCard = (props: ClientUserCardProps) => {
               text="SW"
             />
           </View>
-        ) : null}
+        ) : null} */}
         <FastImage
           source={{
             uri: user.accountImageUrl || avatarUrl,
@@ -134,12 +121,15 @@ export const ClientUserCard = (props: ClientUserCardProps) => {
           resizeMode={FastImage.resizeMode.contain}
           style={styles.image}
         />
-        <Text
-          preset="cardTitle"
-          text={truncate(title, {
-            length: 20,
-          })}
-        />
+        <View>
+          <Text
+            preset="cardTitle"
+            text={truncate(title, {
+              length: 20,
+            })}
+          />
+          {user.shortId ? <Text preset="subTitle" text={user.shortId || ""} /> : null}
+        </View>
         <View style={styles.icons}>
           <Icon name="dots-vertical" color={Colors.darkGray} size={23} />
         </View>
