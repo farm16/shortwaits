@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
-import { selectCurrentEventsState } from "../slices/events";
+import { selectCurrentEventsState } from "../slices/events/event-slice";
 
 export const useEvents = () => {
   const events = useSelector(selectCurrentEventsState);

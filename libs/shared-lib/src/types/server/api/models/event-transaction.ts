@@ -12,4 +12,5 @@ export interface EventTransactionType {
   notes?: string;
   /** "promo123,promo213,promo341" */
   promo_codes?: string;
+  withdraw_from_event: boolean;
 }

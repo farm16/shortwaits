@@ -2,7 +2,9 @@ import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundE
 import { InjectModel } from "@nestjs/mongoose";
 import { InjectModel as InjectSequelizeModel } from "@nestjs/sequelize";
 import { EventDtoType, EventTransactionType } from "@shortwaits/shared-lib";
+import { isEmpty } from "lodash";
 import { Model, ObjectId, Types } from "mongoose";
+import { Op } from "sequelize";
 import { generateNewEvent } from "../../../utils/filtersForDtos";
 import { BusinessUser } from "../../business-staff/entities/business-staff.entity";
 import { Business } from "../../business/entities/business.entity";
@@ -55,7 +57,7 @@ export class EventsService {
 
       return newEvent;
     } catch (error) {
-      console.error(error);
+      console.log(error);
       throw new InternalServerErrorException("Failed to create event");
     }
   }
@@ -70,7 +72,7 @@ export class EventsService {
 
       return updatedEvent;
     } catch (error) {
-      console.error(error);
+      console.log(error);
       throw new InternalServerErrorException("Failed to update event");
     }
   }
@@ -113,7 +115,7 @@ export class EventsService {
 
       return { clientUsers, localClients, businessUsers, event };
     } catch (error) {
-      console.error(error);
+      console.log(error);
       throw error;
     }
   }
@@ -135,22 +137,24 @@ export class EventsService {
 
       const eventTransactionPayload: EventTransactionType[] = clientRecords.map(record => ({
         event_id: eventRecord._id.toString(),
-        client_id: record._id,
+        client_id: record._id.toString(),
         local_client_id: null,
         transaction_date: new Date(),
-        transaction_amount: eventRecord.payment.amount || 0,
+        transaction_amount: eventRecord?.payment?.amount || 0,
         transaction_type: eventRecord.paymentMethod || null,
         payment_method: eventRecord.paymentMethod || null,
         transaction_status: eventRecord.status.statusName,
         notes: null,
         promo_codes: null,
+        withdraw_from_event: false,
       }));
 
       const transactions = await this.eventTransactionModel.bulkCreate(eventTransactionPayload);
+      console.log("transactions >>>", transactions);
 
-      return { updatedEvent, transactions };
+      return updatedEvent;
     } catch (error) {
-      console.error(error);
+      console.log(error);
       throw new InternalServerErrorException("Failed to register client to event");
     }
   }
@@ -173,22 +177,172 @@ export class EventsService {
       const eventTransactionPayload: EventTransactionType[] = localClientRecords.map(record => ({
         event_id: eventRecord._id.toString(),
         client_id: null,
-        local_client_id: record._id,
+        local_client_id: record._id.toString(),
         transaction_date: new Date(),
-        transaction_amount: eventRecord.payment.amount || 0,
+        transaction_amount: eventRecord?.payment?.amount || 0,
         transaction_type: eventRecord.paymentMethod || null,
         payment_method: eventRecord.paymentMethod || null,
         transaction_status: eventRecord.status.statusName,
         notes: null,
         promo_codes: null,
+        withdraw_from_event: false,
       }));
 
       const transactions = await this.eventTransactionModel.bulkCreate(eventTransactionPayload);
+      console.log("transactions >>>", transactions);
 
-      return { updatedEvent, transactions };
+      return updatedEvent;
     } catch (error) {
-      console.error(error);
+      console.log(error);
       throw new InternalServerErrorException("Failed to register local client to event");
+    }
+  }
+
+  async registerMultipleToEvent(eventId: string, localClientIds: string[], clientIds: string[]) {
+    try {
+      if (isEmpty(localClientIds) && isEmpty(clientIds)) {
+        throw new PreconditionFailedException("no clients provided");
+      }
+
+      const eventRecord = await this.eventsModel.findOne({ _id: eventId, deleted: false });
+      if (!eventRecord) {
+        throw new PreconditionFailedException("Invalid parameters");
+      }
+      const eventLocalClientsStringIds = eventRecord.localClientsIds.map(id => id.toString());
+      const eventClientsStringIds = eventRecord.clientsIds.map(id => id.toString());
+
+      // if localClientIds has any id from eventLocalClientsStringIds, remove it
+      const cleanLocalClients = localClientIds.reduce((acc, id) => {
+        if (!eventLocalClientsStringIds.includes(id)) {
+          acc.push(id);
+        }
+        return acc;
+      }, []);
+      const cleanClients = clientIds.reduce((acc, id) => {
+        if (!eventClientsStringIds.includes(id)) {
+          acc.push(id);
+        }
+        return acc;
+      }, []);
+
+      console.log("cleanLocalClients >>>", cleanLocalClients);
+      console.log("cleanClients >>>", cleanClients);
+
+      if (isEmpty(cleanLocalClients) && isEmpty(cleanClients)) {
+        throw new PreconditionFailedException("Clients already registered to event");
+      }
+
+      const _localClientIds = isEmpty(cleanLocalClients) ? [] : cleanLocalClients;
+      const _clientIds = isEmpty(cleanClients) ? [] : cleanClients;
+
+      // todo: we can optimize this by checking if the clientIds are already registered to the event
+      const localClientRecords = await this.localClientUserModel.find({ _id: { $in: _localClientIds }, deleted: false });
+      const clientRecords = await this.clientUserModel.find({ _id: { $in: _clientIds }, deleted: false });
+
+      if (localClientRecords.length === 0 && clientRecords.length === 0) {
+        throw new PreconditionFailedException("no clients provided");
+      }
+
+      const updatedEvent = await this.eventsModel.findOneAndUpdate(
+        { _id: eventId, deleted: false },
+        {
+          $push: {
+            localClientsIds: { $each: localClientRecords.map(record => record._id) },
+            clientsIds: { $each: clientRecords.map(record => record._id) },
+          },
+        },
+        { new: true }
+      );
+
+      // turn eventRecord._id to string
+      const eventRecordId = updatedEvent._id.toString();
+
+      const eventTransactionPayload: EventTransactionType[] = [
+        ...localClientRecords.map(record => ({
+          event_id: eventRecordId,
+          client_id: null,
+          local_client_id: record._id.toString(),
+          transaction_date: new Date(),
+          transaction_amount: eventRecord?.payment?.amount || 0,
+          transaction_type: eventRecord.paymentMethod || null,
+          payment_method: eventRecord.paymentMethod || null,
+          transaction_status: eventRecord.status.statusName,
+          notes: null,
+          promo_codes: null,
+          withdraw_from_event: false,
+        })),
+        ...clientRecords.map(record => ({
+          event_id: eventRecordId,
+          client_id: record._id.toString(),
+          local_client_id: null,
+          transaction_date: new Date(),
+          transaction_amount: eventRecord?.payment?.amount || 0,
+          transaction_type: eventRecord.paymentMethod || null,
+          payment_method: eventRecord.paymentMethod || null,
+          transaction_status: eventRecord.status.statusName,
+          notes: null,
+          promo_codes: null,
+          withdraw_from_event: false,
+        })),
+      ];
+
+      console.log("eventTransactionPayload >>>", eventTransactionPayload);
+
+      const transactions = await this.eventTransactionModel.bulkCreate(eventTransactionPayload);
+      console.log("transactions >>>", transactions);
+
+      return updatedEvent;
+    } catch (error) {
+      console.log("registerMultipleToEvent error >>>", error);
+      throw error;
+    }
+  }
+
+  async withdrawMultipleFromEvent(eventId: string, localClientIds: string[], clientIds: string[]) {
+    try {
+      const eventRecord = await this.eventsModel.findOne({ _id: eventId, deleted: false });
+
+      if (!eventRecord) {
+        throw new PreconditionFailedException("Invalid parameters");
+      }
+
+      if (isEmpty(localClientIds) && isEmpty(clientIds)) {
+        throw new PreconditionFailedException("no clients provided");
+      }
+
+      const localClientRecords = await this.localClientUserModel.find({ _id: { $in: localClientIds }, deleted: false });
+      const clientRecords = await this.clientUserModel.find({ _id: { $in: clientIds }, deleted: false });
+
+      if (localClientRecords.length === 0 && clientRecords.length === 0) {
+        throw new PreconditionFailedException("no valid clients provided");
+      }
+
+      const updatedEvent = await this.eventsModel.findOneAndUpdate(
+        { _id: eventId, deleted: false },
+        {
+          $pull: {
+            localClientsIds: { $in: localClientRecords.map(record => record._id) },
+            clientsIds: { $in: clientRecords.map(record => record._id) },
+          },
+        },
+        { new: true }
+      );
+
+      const transactions = await this.eventTransactionModel.update(
+        { withdraw_from_event: true },
+        {
+          where: {
+            event_id: eventId,
+            [Op.or]: [{ client_id: { [Op.in]: clientIds } }, { local_client_id: { [Op.in]: localClientIds } }],
+          },
+        }
+      );
+      console.log("transactions >>>", transactions);
+
+      return updatedEvent;
+    } catch (error) {
+      console.log(error);
+      throw new InternalServerErrorException("Failed to withdraw multiple clients from event");
     }
   }
 
@@ -279,7 +433,7 @@ export class EventsService {
         listData: events,
       };
     } catch (error) {
-      console.error(error);
+      console.log(error);
       throw new InternalServerErrorException("Failed to get events");
     }
   }
@@ -328,7 +482,7 @@ export class EventsService {
       const events = await this.eventsModel.find(filter).skip(skip).limit(limit).exec();
       return events;
     } catch (error) {
-      console.error(error);
+      console.log(error);
       throw new InternalServerErrorException("Failed to get events");
     }
   }

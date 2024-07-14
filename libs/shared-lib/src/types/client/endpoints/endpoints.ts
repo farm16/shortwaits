@@ -175,6 +175,8 @@ export const endpoints = {
   getBusinessEventPeople: createEndpoint<EventIdQuery>("business-events/people", "GET"),
   registerLocalClientsToBusinessEvent: createEndpoint("business-events/register/local-clients", "POST"),
   registerClientsToBusinessEvent: createEndpoint("business-events/register/clients", "POST"),
+  registerMultipleToBusinessEvent: createEndpoint("business-events/register/multiple", "POST"),
+  withdrawMultipleFromBusinessEvent: createEndpoint("business-events/withdraw/multiple", "PUT"),
   updateBusinessEventStatus: createEndpoint("business-events/status/:eventId", "PUT"),
 
   //client-events

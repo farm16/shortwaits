@@ -76,29 +76,29 @@ interface NonIdealStateProps {
   type: NonIdealStateTypes;
   buttons?: React.ReactNode | React.ReactNode[];
   imageProps?: SvgProps;
+  customMessage?: string;
 }
 
 export const NonIdealState = (props: NonIdealStateProps) => {
   const {
     type = "noClients",
+    customMessage,
     buttons,
     imageProps = {
       width: Dimensions.get("window").width * 0.5,
       height: Dimensions.get("window").width * 0.5,
     },
   } = props;
-
+  const { Colors } = useTheme();
   const intl = useIntl();
-
   const nonIdealTypes = useMemo(() => {
     return _NonIdealProps;
   }, []);
 
   const arrayChildren = Children.toArray(buttons);
-
-  const { Colors } = useTheme();
-
   const Image = nonIdealTypes[type].Image;
+  const message = customMessage || intl.formatMessage({ id: nonIdealTypes[type].intlMessageCode });
+
   return (
     <View
       style={{
@@ -114,13 +114,14 @@ export const NonIdealState = (props: NonIdealStateProps) => {
 
       {nonIdealTypes[type].message ? (
         <Text
-          text={intl.formatMessage({ id: nonIdealTypes[type].intlMessageCode })}
+          text={message}
           preset="text"
           style={[
             {
               color: Colors[nonIdealTypes[type].messageColor],
               textTransform: "uppercase",
               padding: 16,
+              textAlign: "center",
             },
           ]}
         />

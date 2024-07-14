@@ -1,4 +1,4 @@
-import { ClientDtoType, LocalClientDtoType } from "@shortwaits/shared-lib";
+import { CombinedClientType } from "@shortwaits/shared-lib";
 import { truncate } from "lodash";
 import { useMemo } from "react";
 import { Alert, Animated, Pressable, StyleSheet, View } from "react-native";
@@ -10,7 +10,7 @@ import { generateAvatarUrl } from "../../utils/generateAvatarUrl";
 import { Button, ButtonProps, Text } from "../common";
 
 export type ClientUserCardProps = ButtonProps & {
-  user: ClientDtoType | LocalClientDtoType;
+  user: CombinedClientType;
   onPress?: () => void;
   onLongPress?: () => void;
   onUserRemove?: () => void;

@@ -15,9 +15,11 @@ type Route = {
 
 type EventScreenTabsProps = {
   event: EventDtoType;
+  onPeopleRefresh?(): void;
+  isPeopleLoading?: boolean;
 };
 export const EventScreenTabs = (props: EventScreenTabsProps) => {
-  const { event } = props;
+  const { event, isPeopleLoading, onPeopleRefresh } = props;
   const layout = useWindowDimensions();
   const { Colors } = useTheme();
   const [index, setIndex] = useState(0);
@@ -31,8 +33,8 @@ export const EventScreenTabs = (props: EventScreenTabsProps) => {
   }, [intl]);
 
   const renderPeopleTab = useCallback(() => {
-    return <EventUsersTab event={event} />;
-  }, [event]);
+    return <EventUsersTab event={event} onSectionListRefresh={onPeopleRefresh} isSectionListLoading={isPeopleLoading} />;
+  }, [event, isPeopleLoading, onPeopleRefresh]);
 
   const renderMoreTab = useCallback(() => {
     return <EventMoreTab event={event} />;
@@ -43,7 +45,7 @@ export const EventScreenTabs = (props: EventScreenTabsProps) => {
     more: renderMoreTab,
   });
 
-  const _renderTabBar = useCallback(
+  const renderTabBar = useCallback(
     (tabBarProps: TabBarProps<Route>) => {
       const inputRange = tabBarProps.navigationState.routes.map((x, i) => i);
       return (
@@ -90,7 +92,7 @@ export const EventScreenTabs = (props: EventScreenTabsProps) => {
     [Colors.brandSecondary, Colors.brandSecondary1, Colors.brandSecondary8, event, index]
   );
 
-  return <TabView renderTabBar={_renderTabBar} navigationState={{ index, routes }} renderScene={renderScene} onIndexChange={setIndex} initialLayout={{ width: layout.width }} />;
+  return <TabView renderTabBar={renderTabBar} navigationState={{ index, routes }} renderScene={renderScene} onIndexChange={setIndex} initialLayout={{ width: layout.width }} />;
 };
 
 const styles = StyleSheet.create({

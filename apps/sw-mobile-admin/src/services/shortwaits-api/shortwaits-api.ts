@@ -2,7 +2,6 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithInterceptor } from "./interceptor";
 import {
   AddClientToBusiness,
-  CreateBusinessEvent,
   CreateBusinessLocalClients,
   CreateBusinessStaff,
   CreateService,
@@ -13,9 +12,6 @@ import {
   GetAllBusinessClients,
   GetBusiness,
   GetBusinessCategory,
-  GetBusinessEventPeople,
-  GetBusinessEventSummary,
-  GetBusinessEvents,
   GetBusinessHours,
   GetBusinessServices,
   GetBusinessStaff,
@@ -32,11 +28,19 @@ import {
   PostSocialSignUp,
   RegisterBusiness,
   UpdateBusiness,
-  UpdateBusinessEvent,
   UpdateBusinessLocalClient,
   UpdateBusinessStaff,
   UpdateService,
   UploadImageFile,
+  createBusinessEvent,
+  getBusinessEventPeople,
+  getBusinessEventSummary,
+  getBusinessEvents,
+  registerClientsToBusinessEvent,
+  registerLocalClientsToBusinessEvent,
+  registerMultipleToBusinessEvent,
+  updateBusinessEvent,
+  updateBusinessEventStatus,
 } from "./modules";
 
 export const shortwaitsApi = createApi({
@@ -58,10 +62,9 @@ export const shortwaitsApi = createApi({
     getBusinessHours: GetBusinessHours(builder),
     updateBusiness: UpdateBusiness(builder),
     registerBusiness: RegisterBusiness(builder),
-    // this only return _ids
-    getBusinessCategory: GetBusinessCategory(builder),
-    getBusinessServices: GetBusinessServices(builder),
-    getAllBusinessClients: GetAllBusinessClients(builder),
+    getBusinessCategory: GetBusinessCategory(builder), // this only return _ids
+    getBusinessServices: GetBusinessServices(builder), // this only return _ids
+    getAllBusinessClients: GetAllBusinessClients(builder), // this only return _ids
 
     //business staff
     getStaff: GetStaff(builder),
@@ -86,12 +89,17 @@ export const shortwaitsApi = createApi({
     createService: CreateService(builder),
     deleteService: DeleteService(builder),
 
-    //events
-    createBusinessEvent: CreateBusinessEvent(builder),
-    updateBusinessEvent: UpdateBusinessEvent(builder),
-    getBusinessEvents: GetBusinessEvents(builder),
-    getBusinessEventSummary: GetBusinessEventSummary(builder),
-    GetBusinessEventPeople: GetBusinessEventPeople(builder),
+    //business events
+    createBusinessEvent: createBusinessEvent(builder),
+    updateBusinessEvent: updateBusinessEvent(builder),
+    getBusinessEvents: getBusinessEvents(builder),
+    getBusinessEventSummary: getBusinessEventSummary(builder),
+    getBusinessEventPeople: getBusinessEventPeople(builder),
+    registerClientsToBusinessEvent: registerClientsToBusinessEvent(builder),
+    registerLocalClientsToBusinessEvent: registerLocalClientsToBusinessEvent(builder),
+    registerMultipleToBusinessEvent: registerMultipleToBusinessEvent(builder),
+    withdrawMultipleFromBusinessEvent: registerMultipleToBusinessEvent(builder),
+    updateBusinessEventStatus: updateBusinessEventStatus(builder),
 
     //clients
     getClients: GetClients(builder),

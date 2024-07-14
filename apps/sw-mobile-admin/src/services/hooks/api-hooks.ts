@@ -1,8 +1,9 @@
 import { shortwaitsApi } from "../shortwaits-api";
 
 export const {
+  usePrefetch,
+
   //Mutations hooks
-  useCreateBusinessEventMutation,
   useRegisterBusinessMutation,
   useSocialSignInMutation,
   useSocialSignUpMutation,
@@ -16,12 +17,19 @@ export const {
   useCreateBusinessStaffMutation,
   useUpdateBusinessStaffMutation,
   useDeleteBusinessStaffMutation,
-  useUpdateBusinessEventMutation,
   useUpdateServiceMutation,
   useCreateServiceMutation,
   useDeleteServiceMutation,
   useUploadImageFileMutation,
   useAddClientToBusinessMutation,
+  // business event mutations
+  useCreateBusinessEventMutation,
+  useUpdateBusinessEventMutation,
+  useRegisterClientsToBusinessEventMutation,
+  useRegisterLocalClientsToBusinessEventMutation,
+  useRegisterMultipleToBusinessEventMutation,
+  useWithdrawMultipleFromBusinessEventMutation,
+  useUpdateBusinessEventStatusMutation,
 
   //Query hooks
   useGetAdminMobileQuery,

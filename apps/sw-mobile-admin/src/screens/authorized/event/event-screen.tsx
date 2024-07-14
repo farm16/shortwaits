@@ -1,9 +1,11 @@
+import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { EventStatusName, eventStatusCodes, eventStatusNames } from "@shortwaits/shared-lib";
 import { ActivityIndicator, BackButton, Container, EventStatusButtons, IconButton, Screen, Text, useShareUrlWithMessage } from "@shortwaits/shared-ui";
 import { truncate } from "lodash";
-import React, { useCallback, useLayoutEffect } from "react";
+import React, { useCallback, useEffect, useLayoutEffect } from "react";
+import { Alert } from "react-native";
 import { AuthorizedScreenProps } from "../../../navigation";
-import { useUpdateBusinessEventMutation } from "../../../services";
+import { useGetBusinessEventPeopleQuery, useUpdateBusinessEventMutation } from "../../../services";
 import { useEvent } from "../../../store";
 import { EventScreenTabs } from "./event-tabs";
 
@@ -14,6 +16,16 @@ export function EventScreen({ navigation, route }: AuthorizedScreenProps<"event-
   const event = useEvent(eventId);
   const { share, data: shareData, loading: shareLoading, error: shareError } = useShareUrlWithMessage();
   const [updateBusinessEvent, updateEventStatus] = useUpdateBusinessEventMutation();
+  // const [updateBusinessEvent, updateEventStatus] = useUpdateBusinessEventStatusMutation();
+
+  const {
+    isLoading: isPeopleInEventQueryLoading,
+    isError: isPeopleInEventQueryError,
+    error: peopleInEventQueryError,
+    refetch: refetchPeopleInEventQuery,
+  } = useGetBusinessEventPeopleQuery(event?._id ? event._id : skipToken, {
+    refetchOnMountOrArgChange: true,
+  });
 
   useLayoutEffect(() => {
     const handleShare = async () => {
@@ -72,14 +84,28 @@ export function EventScreen({ navigation, route }: AuthorizedScreenProps<"event-
     [event, updateBusinessEvent]
   );
 
-  if (updateEventStatus.isLoading) {
+  useEffect(() => {
+    if (isPeopleInEventQueryError) {
+      console.log("peopleInEventQueryError >>>", peopleInEventQueryError);
+      const defaultErrorMessage = "Failed to fetch people in event";
+      const errorData = peopleInEventQueryError?.data;
+      const message = errorData?.message ?? "";
+      const errorMessage = errorData?.error ?? "";
+      const statusCode = errorData?.statusCode ? `${errorData?.statusCode}` : "";
+      const errorTitle = statusCode.startsWith("4") ? "Warning" : "Error";
+      const alertErrorMessage = `${message}\n${errorMessage}` || defaultErrorMessage;
+      Alert.alert(errorTitle, alertErrorMessage, [{ text: "Retry", onPress: refetchPeopleInEventQuery }, { text: "Ok" }]);
+    }
+  }, [isPeopleInEventQueryError, peopleInEventQueryError, refetchPeopleInEventQuery]);
+
+  if (updateEventStatus.isLoading || isPeopleInEventQueryLoading) {
     return <ActivityIndicator />;
   }
 
   return (
     <Screen preset="fixed" unsafe unsafeBottom backgroundColor="background">
       <EventStatusButtons event={event} onPress={handleUpdateEvent} />
-      <EventScreenTabs event={event} />
+      <EventScreenTabs event={event} onPeopleRefresh={refetchPeopleInEventQuery} isPeopleLoading={isPeopleInEventQueryLoading} />
     </Screen>
   );
 }

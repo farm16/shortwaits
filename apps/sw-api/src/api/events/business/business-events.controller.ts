@@ -111,6 +111,30 @@ export class EventsController {
     return await this.eventsService.registerClientsToEvent(localClientIds, eventId);
   }
 
+  @Post("register/multiple")
+  @HttpCode(HttpStatus.OK)
+  @ApiCreatedResponse({
+    status: HttpStatus.OK,
+    description: "Register clients to an event",
+  })
+  async registerMultipleToEvent(@Req() request, @Body() body) {
+    const { eventId, clientIds, localClientIds } = body;
+    const { sub } = request.user; // todo: business user id to validate permission
+    return await this.eventsService.registerMultipleToEvent(eventId, localClientIds, clientIds);
+  }
+
+  @Post("withdraw/multiple")
+  @HttpCode(HttpStatus.OK)
+  @ApiCreatedResponse({
+    status: HttpStatus.OK,
+    description: "Withdraw clients from an event",
+  })
+  async withdrawMultipleFromEvent(@Req() request, @Body() body) {
+    const { eventId, clientIds, localClientIds } = body;
+    const { sub } = request.user; // todo: business user id to validate permission
+    return await this.eventsService.withdrawMultipleFromEvent(eventId, localClientIds, clientIds);
+  }
+
   @Put("status/:eventId")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({

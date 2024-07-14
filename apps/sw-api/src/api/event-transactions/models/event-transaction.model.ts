@@ -76,4 +76,11 @@ export class EventTransactionModel extends Model<EventTransactionModel> implemen
     type: DataType.TEXT,
   })
   promo_codes?: string;
+
+  @AllowNull(false)
+  @Column({
+    type: DataType.BOOLEAN,
+    defaultValue: false,
+  })
+  withdraw_from_event!: boolean;
 }

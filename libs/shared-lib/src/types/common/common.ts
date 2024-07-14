@@ -2,13 +2,15 @@
 import { ObjectId as MongoObjectId } from "mongodb";
 import mongoose, { Document as MongooseDocument, Schema, Types } from "mongoose";
 import "mongoose-paginate-v2";
-import { LocalClientDtoType } from "../server";
+import { ClientDtoType, LocalClientDtoType } from "../server";
 
 export type Document = MongooseDocument;
 export type ObjectId = Schema.Types.ObjectId | Types.ObjectId | MongoObjectId;
 
 export type BusinessClientType = "external" | "local";
 export type AllClientsType = (Omit<LocalClientDtoType, "clientType"> & { clientType: BusinessClientType })[];
+
+export type CombinedClientType = Omit<LocalClientDtoType & ClientDtoType, "clientType"> & { clientType: "local" | "external" };
 
 export type DeepPartial<T> = {
   [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K];

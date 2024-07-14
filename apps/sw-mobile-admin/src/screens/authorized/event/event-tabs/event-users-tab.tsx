@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
-import { skipToken } from "@reduxjs/toolkit/dist/query";
-import { BusinessUserDtoType, ClientDtoType, EventDtoType, LocalClientDtoType } from "@shortwaits/shared-lib";
+import { BusinessUserDtoType, ClientDtoType, CombinedClientType, EventDtoType, LocalClientDtoType } from "@shortwaits/shared-lib";
 import {
+  ActivityIndicator,
   BusinessUserCard,
   Button,
   ClientUserCard,
@@ -18,16 +18,29 @@ import {
 import { isEmpty } from "lodash";
 import React, { Fragment, useCallback, useEffect, useMemo } from "react";
 import { useIntl } from "react-intl";
-import { Alert, RefreshControl, SectionList, SectionListData, SectionListRenderItem, View } from "react-native";
-import { ActivityIndicator } from "react-native-paper";
+import { Alert, RefreshControl, SectionList, SectionListData, SectionListRenderItem, StyleSheet, View } from "react-native";
 import { SelectedClients } from "../../..";
 import { AuthorizedScreenProps } from "../../../../navigation";
-import { useGetBusinessEventPeopleQuery, useUpdateBusinessEventMutation } from "../../../../services";
+import { useRegisterMultipleToBusinessEventMutation, useUpdateBusinessEventMutation, useWithdrawMultipleFromBusinessEventMutation } from "../../../../services";
 import { useBusiness, useClients, useLocalClients, useStaff } from "../../../../store";
 
-type PeopleDtoType = (BusinessUserDtoType & ClientDtoType) | { clientType: "local" | "external" };
+type Section = {
+  title: "Staff" | "Clients";
+  data: any[];
+};
 
-export function EventUsersTab({ event }: { event: EventDtoType }) {
+type PeopleSectionListRenderItem = SectionListRenderItem<any, Section>;
+
+type PeopleSectionListData = SectionListData<any, Section>[];
+
+type EventUsersTabProps = {
+  event: EventDtoType;
+  onSectionListRefresh?(): void;
+  isSectionListLoading?: boolean;
+};
+
+export function EventUsersTab(props: EventUsersTabProps) {
+  const { event, onSectionListRefresh, isSectionListLoading = false } = props;
   const { Colors } = useTheme();
   const business = useBusiness();
   const clients = useClients();
@@ -36,23 +49,18 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
   const intl = useIntl();
   const { navigate } = useNavigation<AuthorizedScreenProps<"event-screen">["navigation"]>();
   const [updateBusinessEvent, updateEventStatus] = useUpdateBusinessEventMutation();
+  const [registerMultipleToBusinessEvent, registerMultipleToBusinessEventStatus] = useRegisterMultipleToBusinessEventMutation();
+  const [withdrawMultipleFromBusinessEvent, withdrawMultipleFromBusinessEventStatus] = useWithdrawMultipleFromBusinessEventMutation();
+
   const statusName = event?.status?.statusName ?? "";
   const isEventDisabled = statusName ? nextEventStatuses[statusName].length === 0 : true;
 
-  const {
-    isLoading: isPeopleInEventQueryLoading,
-    isError: isPeopleInEventQueryError,
-    refetch: refetchPeopleInEventQuery,
-  } = useGetBusinessEventPeopleQuery(event?._id ? event._id : skipToken, {
-    refetchOnMountOrArgChange: true,
-  });
-
   const eventClients = event.clientsIds.map(clientId => clients?.find(client => client._id === clientId)).filter(Boolean);
   const eventLocalClients = event.localClientsIds.map(localClientId => localClients?.find(localClient => localClient._id === localClientId)).filter(Boolean);
-  const allClients = getCombinedClientTypes(eventClients ?? [], eventLocalClients ?? []);
+  const combinedClients = getCombinedClientTypes(eventClients ?? [], eventLocalClients ?? []);
   const eventStaff = event.staffIds.map(staffId => staff?.find(staff => staff._id === staffId)).filter(Boolean);
 
-  const _data = useMemo(
+  const data = useMemo(
     () => [
       {
         title: "Staff",
@@ -60,26 +68,28 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
       },
       {
         title: "Clients",
-        data: allClients ?? [],
+        data: combinedClients ?? [],
       },
     ],
-    [allClients, eventStaff]
+    [combinedClients, eventStaff]
   );
 
   const handleRefresh = useCallback(() => {
-    refetchPeopleInEventQuery();
-  }, [refetchPeopleInEventQuery]);
+    if (onSectionListRefresh) {
+      onSectionListRefresh();
+    }
+  }, [onSectionListRefresh]);
 
-  const _renderItem: SectionListRenderItem<PeopleDtoType> = data => {
-    if (data.section.title === "Staff") {
+  const renderBusinessUserCard = useCallback(
+    (item: BusinessUserDtoType) => {
       return (
         <BusinessUserCard
-          user={data.item as BusinessUserDtoType}
+          user={item}
           onPress={() => {
             navigate("authorized-stack", {
               screen: "business-staff-screen",
               params: {
-                staff: data.item as BusinessUserDtoType,
+                staff: item,
                 onUserRemove: staff => {
                   console.log("staff >>>", staff);
                 },
@@ -88,35 +98,75 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
           }}
         />
       );
-    } else {
-      const isLocalClient = data.item.clientType === "local";
+    },
+    [navigate]
+  );
 
-      const handleOnPress = () => {
-        if (isLocalClient) {
-          navigate("authorized-stack", {
-            screen: "business-local-client-screen",
-            params: {
-              localClient: data.item as LocalClientDtoType,
-              onUserRemove: client => {
-                console.log("client >>>", client);
-              },
+  useEffect(() => {
+    if (registerMultipleToBusinessEventStatus.isError) {
+      console.log("registerMultipleToBusinessEventStatus.error >>>", registerMultipleToBusinessEventStatus?.error);
+      const defaultErrorMessage = "Failed to register clients to event";
+      const errorData = registerMultipleToBusinessEventStatus?.error?.data;
+      const message = errorData?.message ?? "";
+      const errorMessage = errorData?.error ?? "";
+      const statusCode = errorData?.statusCode ? `${errorData?.statusCode}` : "";
+      const errorTitle = statusCode.startsWith("4") ? "Warning" : "Error";
+      const alertErrorMessage = `${message}\n${errorMessage}` || defaultErrorMessage;
+      Alert.alert(errorTitle, alertErrorMessage);
+    }
+    if (updateEventStatus.isError) {
+      const defaultErrorMessage = `Failed to update event`;
+      const errorData = updateEventStatus.error?.data;
+      const message = errorData?.message ?? "";
+      const errorMessage = errorData?.error ?? "";
+      const statusCode = errorData?.statusCode ? `${errorData?.statusCode}` : "";
+      const errorTitle = statusCode.startsWith("4") ? "Warning" : "Error";
+      const alertErrorMessage = `${message}\n${errorMessage}` || defaultErrorMessage;
+      Alert.alert(errorTitle, alertErrorMessage);
+    }
+  }, [registerMultipleToBusinessEventStatus?.error, registerMultipleToBusinessEventStatus?.isError, updateEventStatus?.error, updateEventStatus?.isError]);
+
+  const renderCombinedClientUserCard = useCallback(
+    (item: CombinedClientType) => {
+      if (!item?.clientType) {
+        return null;
+      }
+      const isLocalClient = item.clientType === "local";
+
+      const navigateToClientScreen = () => {
+        navigate("authorized-stack", {
+          screen: "business-client-screen",
+          params: {
+            client: item as unknown as ClientDtoType,
+            onUserRemove: client => {
+              console.log("client >>>", client);
             },
-          });
-        } else {
-          navigate("authorized-stack", {
-            screen: "business-client-screen",
-            params: {
-              client: data.item as ClientDtoType,
-              onUserRemove: client => {
-                console.log("client >>>", client);
-              },
-            },
-          });
-        }
+          },
+        });
       };
 
-      return <ClientUserCard onPress={handleOnPress} user={data.item as ClientDtoType} />;
-    }
+      const navigateToLocalClientScreen = () => {
+        navigate("authorized-stack", {
+          screen: "business-local-client-screen",
+          params: {
+            localClient: item as unknown as LocalClientDtoType,
+            onUserRemove: client => {
+              console.log("client >>>", client);
+            },
+          },
+        });
+      };
+      const handleOnPress = isLocalClient ? navigateToLocalClientScreen : navigateToClientScreen;
+
+      return <ClientUserCard onPress={handleOnPress} user={item} />;
+    },
+    [navigate]
+  );
+
+  const renderItem: PeopleSectionListRenderItem = data => {
+    const isStaff = data.section.title === "Staff";
+
+    return isStaff ? renderBusinessUserCard(data.item as BusinessUserDtoType) : renderCombinedClientUserCard(data.item as CombinedClientType);
   };
 
   const handleClientsUpdateEvent = useCallback(
@@ -134,79 +184,61 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
         console.log("no changes");
         return;
       }
+      // todo prevent duplicate clients and local clients from being added to the event
 
-      const updatedEvent = {
-        ...event,
-        clientsIds: uniqueClientIds,
-        localClientsIds: uniqueLocalClientIds,
-      };
-
-      updateBusinessEvent({ body: updatedEvent, businessId: business._id });
+      registerMultipleToBusinessEvent({
+        eventId: event._id,
+        clientIds: uniqueClientIds,
+        localClientIds: uniqueLocalClientIds,
+      });
     },
-    [business._id, event, updateBusinessEvent]
+    [event._id, event.clientsIds, event.localClientsIds, registerMultipleToBusinessEvent]
   );
 
   const selectedClients = useMemo(() => {
     return getSelectedClients(eventClients ?? [], eventLocalClients ?? []);
   }, [eventClients, eventLocalClients]);
 
-  const nonIdealState = useCallback(
+  const renderNonIdealStateSection = useCallback(
     section => {
       const { title } = section;
-      return !isEmpty(section.data) ? null : title === "Clients" ? (
-        <NonIdealState
-          type={"noClientsInEvent"}
-          buttons={[
-            !isEventDisabled ? (
-              <Button
-                style={{
-                  width: "auto",
-                  paddingHorizontal: 28,
-                }}
-                text={intl.formatMessage({ id: "Common.addClient" })}
-                onPress={() => {
-                  navigate("modals", {
-                    screen: "clients-selector-modal-screen",
-                    params: {
-                      mode: "clientsAndLocalClients",
-                      selectedData: selectedClients,
-                      onSubmit: selectedUsers => {
-                        console.log("selectedUsers >>>", selectedUsers);
-                        handleClientsUpdateEvent(selectedUsers);
-                      },
-                    },
-                  });
-                }}
-              />
-            ) : null,
-          ]}
-        />
-      ) : (
-        <NonIdealState
-          type={"noStaffInEvent"}
-          buttons={[
-            <Button
-              disabled={isEventDisabled}
-              style={{
-                width: "auto",
-                paddingHorizontal: 28,
-              }}
-              text={intl.formatMessage({ id: "Common.addStaff" })}
-              onPress={() => {
-                navigate("modals", {
-                  screen: "selector-modal-screen",
-                  params: {
-                    mode: "staff",
-                    onSelect: user => {
-                      console.log("selected user:", user);
-                    },
-                  },
-                });
-              }}
-            />,
-          ]}
-        />
-      );
+      const hasData = !isEmpty(section.data);
+      const isClient = title === "Clients";
+
+      if (hasData) {
+        return null;
+      }
+
+      const navigateToClientsSelectorModalScreen = () => {
+        navigate("modals", {
+          screen: "clients-selector-modal-screen",
+          params: {
+            mode: "clientsAndLocalClients",
+            selectedData: selectedClients,
+            onSubmit: selectedUsers => {
+              console.log("selectedUsers >>>", selectedUsers);
+              handleClientsUpdateEvent(selectedUsers);
+            },
+          },
+        });
+      };
+
+      const navigateToStaffSelectorModalScreen = () => {
+        navigate("modals", {
+          screen: "selector-modal-screen",
+          params: {
+            mode: "staff",
+            onSelect: user => {
+              console.log("selected user:", user);
+            },
+          },
+        });
+      };
+
+      const handleOnPress = isClient ? navigateToClientsSelectorModalScreen : navigateToStaffSelectorModalScreen;
+      const text = intl.formatMessage({ id: isClient ? "Common.addClients" : "Common.addStaff" });
+
+      return <NonIdealState type={"noClientsInEvent"} buttons={[<Button style={styles.nonIdealStateSection} disabled={isEventDisabled} text={text} onPress={handleOnPress} />]} />;
     },
     [handleClientsUpdateEvent, intl, isEventDisabled, navigate, selectedClients]
   );
@@ -229,106 +261,108 @@ export function EventUsersTab({ event }: { event: EventDtoType }) {
     [business._id, event, updateBusinessEvent]
   );
 
-  const _renderSectionHeader = useCallback(
-    ({ section }) => {
-      const { title } = section as SectionListData<PeopleDtoType>;
+  const renderSectionHeader = useCallback(
+    ({ section }: { section: Section }) => {
+      const { title } = section;
+      const isStaff = title === "Staff";
+
+      const navigateToStaffSelectorModalScreen = () => {
+        navigate("modals", {
+          screen: "selector-modal-screen",
+          params: {
+            mode: "staff",
+            selectedData: event.staffIds,
+            onSubmit: selectedClientIds => {
+              console.log("selectedClientIds >>>", selectedClientIds);
+              handleStaffUpdateEvent(selectedClientIds as string[]);
+            },
+          },
+        });
+      };
+
+      const navigateToClientsAndLocalClientsSelectorModalScreen = () => {
+        navigate("modals", {
+          screen: "clients-selector-modal-screen",
+          params: {
+            mode: "clientsAndLocalClients",
+            selectedData: selectedClients,
+            onSubmit: selectedUsers => {
+              console.log("selectedUsers >>>", selectedUsers);
+              handleClientsUpdateEvent(selectedUsers);
+            },
+          },
+        });
+      };
+
+      const handleOnPress = isStaff ? navigateToStaffSelectorModalScreen : navigateToClientsAndLocalClientsSelectorModalScreen;
+
       return (
         <Fragment>
-          <Container
-            direction="row"
-            style={{
-              width: "100%",
-              justifyContent: "space-between",
-              alignItems: "center",
-              // backgroundColor: Colors.lightBackground,
-            }}
-          >
+          <Container direction="row" style={styles.sectionHeader}>
             <Text
               preset="none"
-              style={{
-                paddingTop: 24,
-                paddingBottom: 16,
-                fontSize: 14,
-                fontWeight: "500",
-                textTransform: "uppercase",
-                color: Colors.text,
-              }}
-            >
-              {`${intl.formatMessage({ id: `Common.${(title as string).toLowerCase()}` })} (${_data.find(({ title: _title }) => _title === title).data.length})`}
-            </Text>
-            <IconButton
-              iconType="add"
-              disabled={isEventDisabled}
-              disabledAlertMessage="The event is no longer active"
-              onPress={() => {
-                const isStaff = title === "Staff";
-                if (isStaff) {
-                  navigate("modals", {
-                    screen: "selector-modal-screen",
-                    params: {
-                      mode: "staff",
-                      selectedData: event.staffIds,
-                      onSubmit: selectedClientIds => {
-                        handleStaffUpdateEvent(selectedClientIds as string[]);
-                      },
-                    },
-                  });
-                } else {
-                  navigate("modals", {
-                    screen: "clients-selector-modal-screen",
-                    params: {
-                      mode: "clientsAndLocalClients",
-                      selectedData: selectedClients,
-                      onSubmit: selectedUsers => {
-                        console.log("selectedUsers >>>", selectedUsers);
-                        handleClientsUpdateEvent(selectedUsers);
-                      },
-                    },
-                  });
-                }
-              }}
+              style={[styles.sectionHeaderTitle, { color: Colors.text }]}
+              text={`${intl.formatMessage({ id: `Common.${(title as string).toLowerCase()}` })} (${data.find(({ title: _title }) => _title === title).data.length})`}
             />
+            <IconButton iconType="add" disabled={isEventDisabled} disabledAlertMessage="The event is no longer active" onPress={handleOnPress} />
           </Container>
-          {nonIdealState(section as SectionListData<PeopleDtoType>)}
+          {renderNonIdealStateSection(section)}
         </Fragment>
       );
     },
-    [Colors.text, _data, event.staffIds, handleClientsUpdateEvent, handleStaffUpdateEvent, intl, isEventDisabled, navigate, nonIdealState, selectedClients]
+    [Colors.text, data, event.staffIds, handleClientsUpdateEvent, handleStaffUpdateEvent, intl, isEventDisabled, navigate, renderNonIdealStateSection, selectedClients]
   );
 
-  const _renderListEmptyComponent = useCallback(() => {
+  const renderListEmptyComponent = useCallback(() => {
     return (
       <View style={{ marginTop: 16, padding: 16 }}>
-        <NonIdealState type={"noClients"} buttons={[<Button text="Sync contacts" onPress={() => null} />]} />
+        <NonIdealState type={"noClients"} customMessage="Oops, no clients have been added to this event yet." />
       </View>
     );
   }, []);
 
-  const _renderListFooterComponent = useCallback(() => {
+  const renderListFooterComponent = useCallback(() => {
     return <Space size="large" />;
   }, []);
 
-  useEffect(() => {
-    if (isPeopleInEventQueryError) {
-      Alert.alert("Error", "An error occurred while fetching people in event");
-    }
-  }, [isPeopleInEventQueryError]);
-
-  if (isPeopleInEventQueryLoading || updateEventStatus.isLoading) {
-    return <ActivityIndicator animating={true} color={Colors.brandPrimary} />;
+  if (updateEventStatus.isLoading) {
+    return <ActivityIndicator />;
   }
 
   return (
     <SectionList
-      refreshControl={<RefreshControl refreshing={isPeopleInEventQueryLoading} onRefresh={handleRefresh} />}
+      refreshControl={<RefreshControl refreshing={isSectionListLoading} onRefresh={handleRefresh} />}
       showsVerticalScrollIndicator={false}
-      keyExtractor={item => item._id}
-      style={{ flex: 1, paddingHorizontal: 16 }}
-      ListEmptyComponent={_renderListEmptyComponent}
-      renderSectionHeader={_renderSectionHeader}
-      ListFooterComponent={_renderListFooterComponent}
-      renderItem={_renderItem}
-      sections={_data as SectionListData<PeopleDtoType>[]}
+      keyExtractor={(item, index) => `${item._id}-${index}`}
+      style={styles.sectionList}
+      ListEmptyComponent={renderListEmptyComponent}
+      renderSectionHeader={renderSectionHeader}
+      ListFooterComponent={renderListFooterComponent}
+      renderItem={renderItem}
+      sections={data as PeopleSectionListData}
     />
   );
 }
+
+const styles = StyleSheet.create({
+  sectionList: {
+    flex: 1,
+    paddingHorizontal: 16,
+  },
+  sectionHeader: {
+    width: "100%",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  sectionHeaderTitle: {
+    paddingTop: 24,
+    paddingBottom: 16,
+    fontSize: 14,
+    fontWeight: "500",
+    textTransform: "uppercase",
+  },
+  nonIdealStateSection: {
+    width: "auto",
+    paddingHorizontal: 28,
+  },
+});
