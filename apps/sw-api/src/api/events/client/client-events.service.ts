@@ -2,25 +2,25 @@ import { Injectable, InternalServerErrorException, NotFoundException, Unauthoriz
 import { InjectModel } from "@nestjs/mongoose";
 import { EventDtoType } from "@shortwaits/shared-lib";
 import { Model } from "mongoose";
-import { BusinessUser } from "../../business-staff/entities/business-staff.entity";
+import { Service } from "../../business-services/entities/business-service.entity";
+import { BusinessUser } from "../../business-users/entities/business-user.entity";
 import { Business } from "../../business/entities/business.entity";
 import { Client } from "../../clients/entities/client.entity";
-import { LocalClientUser } from "../../local-clients/entities/local-client-user.entity";
-import { Service } from "../../services/entities/service.entity";
+import { LocalClient } from "../../local-clients/entities/local-client.entity";
 import { Event } from "../entities/event.entity";
 
 const WEEK_DAY = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 @Injectable()
-export class EventsService {
+export class BusinessEventsService {
   constructor(
     @InjectModel(Event.name) private eventsModel: Model<Event>,
     @InjectModel(Business.name) private businessModel: Model<Business>,
     @InjectModel(Service.name) private servicesModel: Model<Service>,
     @InjectModel(BusinessUser.name) private businessUserModel: Model<BusinessUser>,
     @InjectModel(Client.name) private clientUserModel: Model<Client>,
-    @InjectModel(LocalClientUser.name)
-    private localClientUserModel: Model<LocalClientUser>
+    @InjectModel(LocalClient.name)
+    private localClientUserModel: Model<LocalClient>
   ) {}
 
   async getServiceById(serviceId: string) {

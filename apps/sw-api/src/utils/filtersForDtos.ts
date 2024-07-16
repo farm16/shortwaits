@@ -1,6 +1,6 @@
 import { AddClientDtoType, BusinessUserType, EventDtoType, UpdateServiceDtoType, generateAvatarUrl, generateShortId } from "@shortwaits/shared-lib";
 import { SignUpWithEmailDto } from "../api/auth/dto";
-import { CreateBusinessUserDto } from "../api/business-staff/dto";
+import { CreateBusinessUserDto } from "../api/business-users/dto";
 import { CreateEventsDto } from "../api/events/business/dto";
 
 export const getFilteredClientUser = (createCustomerDto: Partial<AddClientDtoType>) => {

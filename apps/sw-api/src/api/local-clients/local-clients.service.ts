@@ -5,13 +5,13 @@ import { Model, Schema } from "mongoose";
 import { getNewClientPayload, getSupportedLocales, getUniqueIdArray } from "../../utils";
 import { Business } from "../business/entities/business.entity";
 import { CreateLocalClientUserDto } from "./dto";
-import { LocalClientUser } from "./entities/local-client-user.entity";
+import { LocalClient } from "./entities/local-client.entity";
 
 @Injectable()
 export class LocalClientUserService {
   constructor(
-    @InjectModel(LocalClientUser.name)
-    private readonly localClientUserModel: Model<LocalClientUser>,
+    @InjectModel(LocalClient.name)
+    private readonly localClientUserModel: Model<LocalClient>,
     @InjectModel(Business.name)
     private readonly businessModel: Model<Business>
   ) {}

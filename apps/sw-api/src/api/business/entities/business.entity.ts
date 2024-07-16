@@ -3,7 +3,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { AccountType, BusinessHoursType, BusinessLocationType, BusinessType, CurrencyType, EmojiType } from "@shortwaits/shared-lib";
 import { Document, Schema as MongooseSchema } from "mongoose";
 
-@Schema()
+@Schema({ collection: "business" })
 export class Business extends Document implements BusinessType {
   @ApiProperty()
   @Prop()

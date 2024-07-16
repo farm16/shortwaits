@@ -14,9 +14,9 @@ import {
 import { Model } from "mongoose";
 import { convertStringToObjectId } from "../../utils/converters";
 import { generateBusinessStaff, generateLocalClients } from "../../utils/generateUserPayload";
-import { BusinessUser } from "../business-staff/entities/business-staff.entity";
+import { BusinessUser } from "../business-users/entities/business-user.entity";
 import { Client } from "../clients/entities/client.entity";
-import { LocalClientUser } from "../local-clients/entities/local-client-user.entity";
+import { LocalClient } from "../local-clients/entities/local-client.entity";
 import { RegisterBusinessDto } from "./dto/registerBusiness.dto";
 import { Business } from "./entities/business.entity";
 
@@ -29,8 +29,8 @@ export class BusinessService {
     private businessUserModel: Model<BusinessUser>,
     @InjectModel(Client.name)
     private clientUserModel: Model<Client>,
-    @InjectModel(LocalClientUser.name)
-    private localClientUserModel: Model<LocalClientUser>
+    @InjectModel(LocalClient.name)
+    private localClientUserModel: Model<LocalClient>
   ) {}
 
   isUserAdminType(business: Business, userId: any) {

@@ -52,7 +52,7 @@ class Discount implements DiscountType {
   };
 }
 
-@Schema()
+@Schema({ collection: "event" })
 export class Event extends Document implements EventType {
   @ApiProperty()
   @Prop()

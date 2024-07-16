@@ -2,15 +2,15 @@ import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Put, Query, R
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
 import { EventDtoType } from "@shortwaits/shared-lib";
 import { AtGuard } from "../../../common/guards";
-import { EventsService } from "./client-events.service";
+import { BusinessEventsService } from "./client-events.service";
 import { EventsQueryDto } from "./dto";
 
 @UseGuards(AtGuard)
 @ApiTags("client-events")
 @ApiBearerAuth("bearer")
 @Controller("client-events")
-export class EventsController {
-  constructor(private readonly eventsService: EventsService) {}
+export class BusinessEventsController {
+  constructor(private readonly eventsService: BusinessEventsService) {}
 
   @Post()
   @HttpCode(HttpStatus.OK)

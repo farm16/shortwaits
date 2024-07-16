@@ -3,15 +3,15 @@ import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
 import { EventDtoType } from "@shortwaits/shared-lib";
 import { AtGuard } from "../../../common/guards";
 import { Event } from "../entities/event.entity";
-import { EventsService } from "./business-events.service";
+import { BusinessEventsService } from "./business-events.service";
 import { CreateEventsDto, EventsQueryDto } from "./dto";
 
 @UseGuards(AtGuard)
 @ApiTags("business-events")
 @ApiBearerAuth("bearer")
 @Controller("business-events")
-export class EventsController {
-  constructor(private readonly eventsService: EventsService) {}
+export class BusinessEventsController {
+  constructor(private readonly eventsService: BusinessEventsService) {}
 
   @Get("summary/:businessId")
   @HttpCode(HttpStatus.OK)
@@ -87,30 +87,6 @@ export class EventsController {
     return await this.eventsService.getPeopleByEvent(eventId, request.user.sub);
   }
 
-  @Post("register/local-clients")
-  @HttpCode(HttpStatus.OK)
-  @ApiCreatedResponse({
-    status: HttpStatus.OK,
-    description: "Register local clients to an event",
-  })
-  async registerLocalClientToEvent(@Req() request, @Body() body) {
-    const { eventId, localClientIds } = body;
-    const { sub } = request.user; // todo: business user id to validate permission
-    return await this.eventsService.registerLocalClientsToEvent(localClientIds, eventId);
-  }
-
-  @Post("register/clients")
-  @HttpCode(HttpStatus.OK)
-  @ApiCreatedResponse({
-    status: HttpStatus.OK,
-    description: "Register clients to an event",
-  })
-  async registerClientToEvent(@Req() request, @Body() body) {
-    const { eventId, localClientIds } = body;
-    const { sub } = request.user; // todo: business user id to validate permission
-    return await this.eventsService.registerClientsToEvent(localClientIds, eventId);
-  }
-
   @Post("register/multiple")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
@@ -121,18 +97,6 @@ export class EventsController {
     const { eventId, clientIds, localClientIds } = body;
     const { sub } = request.user; // todo: business user id to validate permission
     return await this.eventsService.registerMultipleToEvent(eventId, localClientIds, clientIds);
-  }
-
-  @Post("withdraw/multiple")
-  @HttpCode(HttpStatus.OK)
-  @ApiCreatedResponse({
-    status: HttpStatus.OK,
-    description: "Withdraw clients from an event",
-  })
-  async withdrawMultipleFromEvent(@Req() request, @Body() body) {
-    const { eventId, clientIds, localClientIds } = body;
-    const { sub } = request.user; // todo: business user id to validate permission
-    return await this.eventsService.withdrawMultipleFromEvent(eventId, localClientIds, clientIds);
   }
 
   @Put("status/:eventId")

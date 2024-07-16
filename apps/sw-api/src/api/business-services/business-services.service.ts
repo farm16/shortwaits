@@ -8,7 +8,7 @@ import { filterServiceRecord, initServiceRecord, updateServiceRecord } from "../
 import { Business } from "../business/entities/business.entity";
 import { CreateServiceDto } from "./dto/create-service.dto";
 import { UpdateServiceDto } from "./dto/update-service.dto";
-import { Service } from "./entities/service.entity";
+import { Service } from "./entities/business-service.entity";
 @Injectable()
 export class ServicesService {
   constructor(@InjectModel(Service.name) private serviceModel: Model<Service>, @InjectModel(Business.name) private businessModel: Model<Business>, private config: ConfigService) {}

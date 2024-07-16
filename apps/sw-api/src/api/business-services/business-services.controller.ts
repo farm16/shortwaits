@@ -1,9 +1,9 @@
 import { Body, Controller, Delete, Get, NotAcceptableException, Param, Post, Put, Query, Req, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { AtGuard } from "../../common/guards";
+import { ServicesService } from "./business-services.service";
 import { CreateServiceDto } from "./dto/create-service.dto";
 import { UpdateServiceDto } from "./dto/update-service.dto";
-import { ServicesService } from "./services.service";
 
 import { GetServicesQuery } from "./dto/getServiceQuery";
 

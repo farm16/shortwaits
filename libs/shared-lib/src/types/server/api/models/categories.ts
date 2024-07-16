@@ -16,6 +16,6 @@ export type BusinessCategoryType = {
   deleted?: boolean;
 };
 
-export type CategoriesDocType = BusinessCategoryType & Document;
+export type CategoriesDocType = Document<BusinessCategoryType>;
 
 export type CategoriesModelType = PaginatedModel<CategoriesDocType>;

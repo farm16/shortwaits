@@ -1,9 +1,9 @@
 import { Module } from "@nestjs/common";
-import { ServicesService } from "./services.service";
-import { ServicesController } from "./services.controller";
 import { MongooseModule } from "@nestjs/mongoose";
-import { Service, ServiceSchema } from "./entities/service.entity";
 import { Business, BusinessSchema } from "../business/entities/business.entity";
+import { ServicesController } from "./business-services.controller";
+import { ServicesService } from "./business-services.service";
+import { Service, ServiceSchema } from "./entities/business-service.entity";
 
 @Module({
   imports: [

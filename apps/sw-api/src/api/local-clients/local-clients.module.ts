@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
 import { Business, BusinessSchema } from "../business/entities/business.entity";
-import { LocalClientUser, LocalClientUserSchema } from "./entities/local-client-user.entity";
+import { LocalClient, LocalClientUserSchema } from "./entities/local-client.entity";
 import { LocalClientUserController } from "./local-clients.controller";
 import { LocalClientUserService } from "./local-clients.service";
 
@@ -10,7 +10,7 @@ import { LocalClientUserService } from "./local-clients.service";
     MongooseModule.forFeature([
       { name: Business.name, schema: BusinessSchema },
       {
-        name: LocalClientUser.name,
+        name: LocalClient.name,
         schema: LocalClientUserSchema,
       },
     ]),

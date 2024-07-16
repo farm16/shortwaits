@@ -19,10 +19,10 @@ import {
   getNewClientPayload,
   getSupportedLocales,
 } from "../../utils";
-import { BusinessUser } from "../business-staff/entities/business-staff.entity";
+import { Service } from "../business-services/entities/business-service.entity";
+import { BusinessUser } from "../business-users/entities/business-user.entity";
 import { Business } from "../business/entities/business.entity";
 import { Client } from "../clients/entities/client.entity";
-import { Service } from "../services/entities/service.entity";
 import { ClientSignInWithEmailDto, ClientSignUpWithEmailDto, SignInWithEmailDto, SignUpWithEmailDto } from "./dto";
 
 const providers = ["google", "facebook"];

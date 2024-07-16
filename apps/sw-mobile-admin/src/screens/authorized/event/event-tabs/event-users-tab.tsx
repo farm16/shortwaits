@@ -135,7 +135,7 @@ export function EventUsersTab(props: EventUsersTabProps) {
           params: {
             client: item as unknown as ClientDtoType,
             onUserRemove: client => {
-              console.log("client >>>", client);
+              console.log("business-client-screen >>>", client);
             },
           },
         });
@@ -147,7 +147,7 @@ export function EventUsersTab(props: EventUsersTabProps) {
           params: {
             localClient: item as unknown as LocalClientDtoType,
             onUserRemove: client => {
-              console.log("client >>>", client);
+              console.log("business-local-client-screen >>>", client);
             },
           },
         });
@@ -273,7 +273,7 @@ export function EventUsersTab(props: EventUsersTabProps) {
             mode: "staff",
             selectedData: event.staffIds,
             onSubmit: selectedClientIds => {
-              console.log("selectedClientIds >>>", selectedClientIds);
+              console.log("selected selector-modal-screen >>>", selectedClientIds);
               handleStaffUpdateEvent(selectedClientIds as string[]);
             },
           },
@@ -287,7 +287,7 @@ export function EventUsersTab(props: EventUsersTabProps) {
             mode: "clientsAndLocalClients",
             selectedData: selectedClients,
             onSubmit: selectedUsers => {
-              console.log("selectedUsers >>>", selectedUsers);
+              console.log("selected clientsAndLocalClients >>>", selectedUsers);
               handleClientsUpdateEvent(selectedUsers);
             },
           },

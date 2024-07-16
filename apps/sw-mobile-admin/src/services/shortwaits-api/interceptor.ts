@@ -61,14 +61,9 @@ const getBaseQueryExtraOptions = (
 export const baseQueryWithInterceptor: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (args, api, extraOptions) => {
   // wait until the mutex is available without locking it
   await mutex.waitForUnlock();
-  const refreshToken = (api.getState() as RootState).auth.refreshToken;
+  const currentState = api.getState() as RootState;
+  const refreshToken = currentState.auth.refreshToken;
 
-  // const {
-  //   auth: { token, refreshToken },
-  //   mobileAdmin: { deviceInfo, suggestedLanguage },
-  // } = api.getState() as RootState;
-
-  // await mutex.waitForUnlock();
   let result = await baseQuery(args, api, extraOptions);
 
   console.log();

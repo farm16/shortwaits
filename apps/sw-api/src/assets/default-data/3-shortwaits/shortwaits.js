@@ -1,8 +1,8 @@
 const { getObjectId } = require("mongo-seeding");
-const categories = require("../1-categories/categories");
-const memberships = require("../2-memberships/memberships");
+const categories = require("../1-business_category/business_category");
+const membership = require("../2-business_membership/business_membership");
 const categoriesIds = categories.map(category => category._id);
-const membershipPlans = memberships.map(membership => membership._id);
+const membershipPlans = membership.map(membership => membership._id);
 
 const defaultServiceColors = {
   red: {

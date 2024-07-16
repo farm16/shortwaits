@@ -1,13 +1,13 @@
 import { Module } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
-import { BusinessUser, BusinessUserSchema } from "../../business-staff/entities/business-staff.entity";
+import { Service, ServiceSchema } from "../../business-services/entities/business-service.entity";
+import { BusinessUser, BusinessUserSchema } from "../../business-users/entities/business-user.entity";
 import { Business, BusinessSchema } from "../../business/entities/business.entity";
 import { Client, ClientUserSchema } from "../../clients/entities/client.entity";
-import { LocalClientUser, LocalClientUserSchema } from "../../local-clients/entities/local-client-user.entity";
-import { Service, ServiceSchema } from "../../services/entities/service.entity";
+import { LocalClient, LocalClientUserSchema } from "../../local-clients/entities/local-client.entity";
 import { Event, EventsSchema } from "../entities/event.entity";
-import { EventsController } from "./client-events.controller";
-import { EventsService } from "./client-events.service";
+import { BusinessEventsController } from "./client-events.controller";
+import { BusinessEventsService } from "./client-events.service";
 
 @Module({
   imports: [
@@ -33,12 +33,12 @@ import { EventsService } from "./client-events.service";
         schema: ClientUserSchema,
       },
       {
-        name: LocalClientUser.name,
+        name: LocalClient.name,
         schema: LocalClientUserSchema,
       },
     ]),
   ],
-  controllers: [EventsController],
-  providers: [EventsService],
+  controllers: [BusinessEventsController],
+  providers: [BusinessEventsService],
 })
 export class ClientEventsModule {}

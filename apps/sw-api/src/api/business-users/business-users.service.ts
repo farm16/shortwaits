@@ -2,7 +2,7 @@ import { Injectable, InternalServerErrorException, NotFoundException } from "@ne
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { Business } from "../business/entities/business.entity";
-import { BusinessUser } from "./entities/business-staff.entity";
+import { BusinessUser } from "./entities/business-user.entity";
 
 @Injectable()
 export class BusinessStaffService {

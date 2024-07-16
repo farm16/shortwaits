@@ -3,8 +3,8 @@ import { ApiProperty } from "@nestjs/swagger";
 import { Alias, ClientRegistration, LocalClientType, ObjectId } from "@shortwaits/shared-lib";
 import { Document, Schema as MongooseSchema } from "mongoose";
 
-@Schema({ collection: "local-client-users" })
-export class LocalClientUser extends Document implements LocalClientType {
+@Schema({ collection: "local_client" })
+export class LocalClient extends Document implements LocalClientType {
   @ApiProperty()
   @Prop()
   shortId: string;
@@ -270,4 +270,4 @@ export class LocalClientUser extends Document implements LocalClientType {
   };
 }
 
-export const LocalClientUserSchema = SchemaFactory.createForClass(LocalClientUser);
+export const LocalClientUserSchema = SchemaFactory.createForClass(LocalClient);

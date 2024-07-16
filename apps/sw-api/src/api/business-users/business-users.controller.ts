@@ -2,7 +2,7 @@ import { Controller, Get, HttpCode, HttpStatus, Param, UseGuards } from "@nestjs
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 
 import { AtGuard } from "../../common/guards";
-import { BusinessStaffService } from "./business-staff.service";
+import { BusinessStaffService } from "./business-users.service";
 
 @ApiTags("business-staff")
 @Controller("business-staff")

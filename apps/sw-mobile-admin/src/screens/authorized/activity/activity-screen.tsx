@@ -3,10 +3,8 @@ import React, { FC, useLayoutEffect, useState } from "react";
 import { FlatListProps, StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import Timeline from "react-native-timeline-flatlist";
 import { AuthorizedScreenProps } from "../../../navigation";
-import { useShowGhostComponent } from "../../../store";
 
 export const ActivityScreen: FC<AuthorizedScreenProps<"activity-screen">> = ({ navigation }) => {
-  useShowGhostComponent("floatingActionButton");
   const { Colors } = useTheme();
   const [activityType, setActivityType] = useState<"business" | "staff">("business");
 
@@ -24,7 +22,7 @@ export const ActivityScreen: FC<AuthorizedScreenProps<"activity-screen">> = ({ n
         );
       },
     });
-  }, [activityType, navigation]);
+  }, [navigation]);
 
   // data is render in array order - it does not get filtered
   type Data = {

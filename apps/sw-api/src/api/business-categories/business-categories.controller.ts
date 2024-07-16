@@ -1,6 +1,6 @@
 import { Controller, Get, HttpCode, HttpStatus, Param } from "@nestjs/common";
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
-import { CategoriesService } from "./categories.service";
+import { CategoriesService } from "./business-categories.service";
 
 // TODO: this can be cache !!!
 @ApiTags("categories")

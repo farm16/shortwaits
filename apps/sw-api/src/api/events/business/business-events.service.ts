@@ -3,30 +3,30 @@ import { InjectModel } from "@nestjs/mongoose";
 import { InjectModel as InjectSequelizeModel } from "@nestjs/sequelize";
 import { EventDtoType, EventTransactionType } from "@shortwaits/shared-lib";
 import { isEmpty } from "lodash";
-import { Model, ObjectId, Types } from "mongoose";
+import { FilterQuery, Model, ObjectId, Types, UpdateQuery } from "mongoose";
 import { Op } from "sequelize";
 import { generateNewEvent } from "../../../utils/filtersForDtos";
-import { BusinessUser } from "../../business-staff/entities/business-staff.entity";
+import { Service } from "../../business-services/entities/business-service.entity";
+import { BusinessUser } from "../../business-users/entities/business-user.entity";
 import { Business } from "../../business/entities/business.entity";
 import { Client } from "../../clients/entities/client.entity";
 import { EventTransactionModel } from "../../event-transactions/models/event-transaction.model";
-import { LocalClientUser } from "../../local-clients/entities/local-client-user.entity";
-import { Service } from "../../services/entities/service.entity";
+import { LocalClient } from "../../local-clients/entities/local-client.entity";
 import { Event } from "../entities/event.entity";
 import { CreateEventsDto } from "./dto";
 
 const WEEK_DAY = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 @Injectable()
-export class EventsService {
+export class BusinessEventsService {
   constructor(
     @InjectModel(Event.name) private eventsModel: Model<Event>,
     @InjectModel(Business.name) private businessModel: Model<Business>,
     @InjectModel(Service.name) private servicesModel: Model<Service>,
     @InjectModel(BusinessUser.name) private businessUserModel: Model<BusinessUser>,
     @InjectModel(Client.name) private clientUserModel: Model<Client>,
-    @InjectModel(LocalClientUser.name)
-    private localClientUserModel: Model<LocalClientUser>,
+    @InjectModel(LocalClient.name)
+    private localClientUserModel: Model<LocalClient>,
     @InjectSequelizeModel(EventTransactionModel) private eventTransactionModel: typeof EventTransactionModel
   ) {}
 
@@ -120,84 +120,6 @@ export class EventsService {
     }
   }
 
-  async registerClientsToEvent(clientIds: string[], eventId: string) {
-    try {
-      const eventRecord = await this.eventsModel.findOne({ _id: eventId, deleted: false });
-      const clientRecords = await this.clientUserModel.find({ _id: { $in: clientIds }, deleted: false });
-
-      if (!eventRecord || clientRecords.length === 0) {
-        throw new PreconditionFailedException("Invalid parameters");
-      }
-
-      const updatedEvent = await this.eventsModel.findOneAndUpdate(
-        { _id: eventId, deleted: false },
-        { $push: { localClientsIds: { $each: clientRecords.map(record => record._id) } } },
-        { new: true }
-      );
-
-      const eventTransactionPayload: EventTransactionType[] = clientRecords.map(record => ({
-        event_id: eventRecord._id.toString(),
-        client_id: record._id.toString(),
-        local_client_id: null,
-        transaction_date: new Date(),
-        transaction_amount: eventRecord?.payment?.amount || 0,
-        transaction_type: eventRecord.paymentMethod || null,
-        payment_method: eventRecord.paymentMethod || null,
-        transaction_status: eventRecord.status.statusName,
-        notes: null,
-        promo_codes: null,
-        withdraw_from_event: false,
-      }));
-
-      const transactions = await this.eventTransactionModel.bulkCreate(eventTransactionPayload);
-      console.log("transactions >>>", transactions);
-
-      return updatedEvent;
-    } catch (error) {
-      console.log(error);
-      throw new InternalServerErrorException("Failed to register client to event");
-    }
-  }
-
-  async registerLocalClientsToEvent(localClientIds: string[], eventId: string) {
-    try {
-      const eventRecord = await this.eventsModel.findOne({ _id: eventId, deleted: false });
-      const localClientRecords = await this.localClientUserModel.find({ _id: { $in: localClientIds }, deleted: false });
-
-      if (!eventRecord || localClientRecords.length === 0) {
-        throw new PreconditionFailedException("Invalid parameters");
-      }
-
-      const updatedEvent = await this.eventsModel.findOneAndUpdate(
-        { _id: eventId, deleted: false },
-        { $push: { localClientsIds: { $each: localClientRecords.map(record => record._id) } } },
-        { new: true }
-      );
-
-      const eventTransactionPayload: EventTransactionType[] = localClientRecords.map(record => ({
-        event_id: eventRecord._id.toString(),
-        client_id: null,
-        local_client_id: record._id.toString(),
-        transaction_date: new Date(),
-        transaction_amount: eventRecord?.payment?.amount || 0,
-        transaction_type: eventRecord.paymentMethod || null,
-        payment_method: eventRecord.paymentMethod || null,
-        transaction_status: eventRecord.status.statusName,
-        notes: null,
-        promo_codes: null,
-        withdraw_from_event: false,
-      }));
-
-      const transactions = await this.eventTransactionModel.bulkCreate(eventTransactionPayload);
-      console.log("transactions >>>", transactions);
-
-      return updatedEvent;
-    } catch (error) {
-      console.log(error);
-      throw new InternalServerErrorException("Failed to register local client to event");
-    }
-  }
-
   async registerMultipleToEvent(eventId: string, localClientIds: string[], clientIds: string[]) {
     try {
       if (isEmpty(localClientIds) && isEmpty(clientIds)) {
@@ -208,57 +130,115 @@ export class EventsService {
       if (!eventRecord) {
         throw new PreconditionFailedException("Invalid parameters");
       }
-      const eventLocalClientsStringIds = eventRecord.localClientsIds.map(id => id.toString());
-      const eventClientsStringIds = eventRecord.clientsIds.map(id => id.toString());
+      const existingLocalClientIds = eventRecord.localClientsIds.map(id => id.toString());
+      const existingClientIds = eventRecord.clientsIds.map(id => id.toString());
 
-      // if localClientIds has any id from eventLocalClientsStringIds, remove it
-      const cleanLocalClients = localClientIds.reduce((acc, id) => {
-        if (!eventLocalClientsStringIds.includes(id)) {
+      // if localClientIds doesn't contain any existing local client ids remove them from the event
+      const localClientsToBeRemoved = existingLocalClientIds.filter(id => !localClientIds.includes(id));
+      const clientsToBeRemoved = existingClientIds.filter(id => !clientIds.includes(id));
+
+      const localClientsToBeAdded = localClientIds.reduce<string[]>((acc, id) => {
+        if (!existingLocalClientIds.includes(id)) {
           acc.push(id);
         }
         return acc;
       }, []);
-      const cleanClients = clientIds.reduce((acc, id) => {
-        if (!eventClientsStringIds.includes(id)) {
+      const clientsToBeAdded = clientIds.reduce<string[]>((acc, id) => {
+        if (!existingClientIds.includes(id)) {
           acc.push(id);
         }
         return acc;
       }, []);
 
-      console.log("cleanLocalClients >>>", cleanLocalClients);
-      console.log("cleanClients >>>", cleanClients);
+      const hasLocalClientsToBeRemoved = !isEmpty(localClientsToBeRemoved);
+      const hasClientsToBeRemoved = !isEmpty(clientsToBeRemoved);
+      const hasLocalClientsToBeAdded = !isEmpty(localClientsToBeAdded);
+      const hasClientsToBeAdded = !isEmpty(clientsToBeAdded);
 
-      if (isEmpty(cleanLocalClients) && isEmpty(cleanClients)) {
-        throw new PreconditionFailedException("Clients already registered to event");
+      console.log("localClientsToBeRemoved >>>", localClientsToBeRemoved);
+      console.log("clientsToBeRemoved >>>", clientsToBeRemoved);
+      console.log("localClientsToBeAdded >>>", localClientsToBeAdded);
+      console.log("clientsToBeAdded >>>", clientsToBeAdded);
+
+      if (!hasLocalClientsToBeRemoved && !hasClientsToBeRemoved && !hasLocalClientsToBeAdded && !hasClientsToBeAdded) {
+        throw new PreconditionFailedException("Nothing to update");
       }
 
-      const _localClientIds = isEmpty(cleanLocalClients) ? [] : cleanLocalClients;
-      const _clientIds = isEmpty(cleanClients) ? [] : cleanClients;
+      let localClientRecordsToBeAdded: LocalClient[] = [];
+      let clientRecordsToBeAdded: Client[] = [];
+      let localClientRecordsToBeRemoved: LocalClient[] = [];
+      let clientRecordsToBeRemoved: Client[] = [];
 
-      // todo: we can optimize this by checking if the clientIds are already registered to the event
-      const localClientRecords = await this.localClientUserModel.find({ _id: { $in: _localClientIds }, deleted: false });
-      const clientRecords = await this.clientUserModel.find({ _id: { $in: _clientIds }, deleted: false });
-
-      if (localClientRecords.length === 0 && clientRecords.length === 0) {
-        throw new PreconditionFailedException("no clients provided");
+      if (hasLocalClientsToBeAdded) {
+        localClientRecordsToBeAdded = await this.localClientUserModel.find({ _id: { $in: localClientsToBeAdded }, deleted: false });
+        if (isEmpty(localClientRecordsToBeAdded)) {
+          throw new PreconditionFailedException("no records found for local clients to be added");
+        }
       }
 
-      const updatedEvent = await this.eventsModel.findOneAndUpdate(
-        { _id: eventId, deleted: false },
-        {
-          $push: {
-            localClientsIds: { $each: localClientRecords.map(record => record._id) },
-            clientsIds: { $each: clientRecords.map(record => record._id) },
+      if (hasClientsToBeAdded) {
+        clientRecordsToBeAdded = await this.clientUserModel.find({ _id: { $in: clientsToBeAdded }, deleted: false });
+        if (isEmpty(clientRecordsToBeAdded)) {
+          throw new PreconditionFailedException("no records found for clients to be added");
+        }
+      }
+
+      if (hasLocalClientsToBeRemoved) {
+        localClientRecordsToBeRemoved = await this.localClientUserModel.find({ _id: { $in: localClientsToBeRemoved }, deleted: false });
+        if (isEmpty(localClientRecordsToBeRemoved)) {
+          throw new PreconditionFailedException("no records found for local clients to be removed");
+        }
+      }
+
+      if (hasClientsToBeRemoved) {
+        clientRecordsToBeRemoved = await this.clientUserModel.find({ _id: { $in: clientsToBeRemoved }, deleted: false });
+        if (isEmpty(clientRecordsToBeRemoved)) {
+          throw new PreconditionFailedException("no records found for clients to be removed");
+        }
+      }
+
+      const eventsFilterQuery: FilterQuery<Event> = { _id: eventId, deleted: false };
+      const clientRecordIdStringsToBeRemoved: string[] = clientRecordsToBeRemoved.map(record => record._id.toString());
+      const localClientRecordIdStringToBeRemoved: string[] = localClientRecordsToBeRemoved.map(record => record._id.toString());
+      const hasClientRecordIdStringsToBeRemoved = !isEmpty(clientRecordIdStringsToBeRemoved);
+      const hasLocalClientRecordIdStringToBeRemoved = !isEmpty(localClientRecordIdStringToBeRemoved);
+      const hasRecordsToBeRemoved = hasClientRecordIdStringsToBeRemoved || hasLocalClientRecordIdStringToBeRemoved;
+
+      if (hasRecordsToBeRemoved) {
+        const eventsToBeRemovedModelQuery: UpdateQuery<Event> = {
+          $pull: {
+            ...(hasLocalClientRecordIdStringToBeRemoved ? { localClientsIds: { $in: localClientRecordIdStringToBeRemoved } } : {}),
+            ...(hasRecordsToBeRemoved ? { clientsIds: { $in: clientRecordIdStringsToBeRemoved } } : {}),
           },
+        };
+        console.log("eventsToBeRemovedModelQuery >>>", JSON.stringify(eventsToBeRemovedModelQuery, null, 2));
+        await this.eventsModel.findOneAndUpdate(eventsFilterQuery, eventsToBeRemovedModelQuery);
+
+        const updatedTransactions = await this.eventTransactionModel.update(
+          { withdraw_from_event: false },
+          {
+            where: {
+              event_id: eventId,
+              [Op.or]: [{ client_id: { [Op.in]: clientRecordIdStringsToBeRemoved } }, { local_client_id: { [Op.in]: localClientRecordIdStringToBeRemoved } }],
+            },
+          }
+        );
+        console.log("updated transactions: { withdraw_from_event: false } >>>", updatedTransactions);
+      }
+
+      const eventsModelQuery: UpdateQuery<Event> = {
+        $push: {
+          ...(isEmpty(localClientRecordsToBeAdded) ? {} : { localClientsIds: { $each: localClientRecordsToBeAdded.map(record => record._id) } }),
+          ...(isEmpty(clientRecordsToBeAdded) ? {} : { clientsIds: { $each: clientRecordsToBeAdded.map(record => record._id) } }),
         },
-        { new: true }
-      );
+      };
 
-      // turn eventRecord._id to string
+      const updatedEvent = await this.eventsModel.findOneAndUpdate(eventsFilterQuery, eventsModelQuery, { new: true });
+      console.log("updatedEvent >>>", updatedEvent);
+
       const eventRecordId = updatedEvent._id.toString();
-
-      const eventTransactionPayload: EventTransactionType[] = [
-        ...localClientRecords.map(record => ({
+      const newEventTransactionPayload: EventTransactionType[] = [
+        ...localClientRecordsToBeAdded.map(record => ({
           event_id: eventRecordId,
           client_id: null,
           local_client_id: record._id.toString(),
@@ -271,7 +251,7 @@ export class EventsService {
           promo_codes: null,
           withdraw_from_event: false,
         })),
-        ...clientRecords.map(record => ({
+        ...clientRecordsToBeAdded.map(record => ({
           event_id: eventRecordId,
           client_id: record._id.toString(),
           local_client_id: null,
@@ -285,64 +265,14 @@ export class EventsService {
           withdraw_from_event: false,
         })),
       ];
-
-      console.log("eventTransactionPayload >>>", eventTransactionPayload);
-
-      const transactions = await this.eventTransactionModel.bulkCreate(eventTransactionPayload);
-      console.log("transactions >>>", transactions);
+      console.log("newEventTransactionPayload >>>", newEventTransactionPayload);
+      const newTransactions = await this.eventTransactionModel.bulkCreate(newEventTransactionPayload);
+      console.log("new transactions >>>", newTransactions);
 
       return updatedEvent;
     } catch (error) {
       console.log("registerMultipleToEvent error >>>", error);
       throw error;
-    }
-  }
-
-  async withdrawMultipleFromEvent(eventId: string, localClientIds: string[], clientIds: string[]) {
-    try {
-      const eventRecord = await this.eventsModel.findOne({ _id: eventId, deleted: false });
-
-      if (!eventRecord) {
-        throw new PreconditionFailedException("Invalid parameters");
-      }
-
-      if (isEmpty(localClientIds) && isEmpty(clientIds)) {
-        throw new PreconditionFailedException("no clients provided");
-      }
-
-      const localClientRecords = await this.localClientUserModel.find({ _id: { $in: localClientIds }, deleted: false });
-      const clientRecords = await this.clientUserModel.find({ _id: { $in: clientIds }, deleted: false });
-
-      if (localClientRecords.length === 0 && clientRecords.length === 0) {
-        throw new PreconditionFailedException("no valid clients provided");
-      }
-
-      const updatedEvent = await this.eventsModel.findOneAndUpdate(
-        { _id: eventId, deleted: false },
-        {
-          $pull: {
-            localClientsIds: { $in: localClientRecords.map(record => record._id) },
-            clientsIds: { $in: clientRecords.map(record => record._id) },
-          },
-        },
-        { new: true }
-      );
-
-      const transactions = await this.eventTransactionModel.update(
-        { withdraw_from_event: true },
-        {
-          where: {
-            event_id: eventId,
-            [Op.or]: [{ client_id: { [Op.in]: clientIds } }, { local_client_id: { [Op.in]: localClientIds } }],
-          },
-        }
-      );
-      console.log("transactions >>>", transactions);
-
-      return updatedEvent;
-    } catch (error) {
-      console.log(error);
-      throw new InternalServerErrorException("Failed to withdraw multiple clients from event");
     }
   }
 
