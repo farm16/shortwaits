@@ -135,5 +135,5 @@ apps/sw-api/src/assets/.env.development
 apps/sw-api/src/assets/.env.production
 apps/sw-api/src/assets/private.pem
 apps/sw-api/src/assets/public.pem
-devops/db/sw-api.sqlite
-devops/db/sw-api-dev.sqlite
+devops/db/sw_api_dev.db
+devops/db/sw_api.db

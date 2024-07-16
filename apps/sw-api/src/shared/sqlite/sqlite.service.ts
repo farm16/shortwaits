@@ -14,7 +14,7 @@ export const SqliteConfigService: SequelizeModuleAsyncOptions = {
     const logQueryParameters = configService.get<string>("SQLITE_DB_LOG_QUERY_PARAMETERS") === "1";
     const logging = configService.get<string>("SQLITE_DB_LOGGING") === "1";
 
-    const currentPath = process.cwd() + databasePath;
+    const currentPath = process.cwd() + "/" + databasePath;
 
     console.log("SQLITE_DB_DATABASE >>>", database);
     console.log("SQLITE_DB_PATH >>>", databasePath);

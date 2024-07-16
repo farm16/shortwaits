@@ -122,10 +122,6 @@ export class BusinessEventsService {
 
   async registerMultipleToEvent(eventId: string, localClientIds: string[], clientIds: string[]) {
     try {
-      if (isEmpty(localClientIds) && isEmpty(clientIds)) {
-        throw new PreconditionFailedException("no clients provided");
-      }
-
       const eventRecord = await this.eventsModel.findOne({ _id: eventId, deleted: false });
       if (!eventRecord) {
         throw new PreconditionFailedException("Invalid parameters");
@@ -198,8 +194,10 @@ export class BusinessEventsService {
       }
 
       const eventsFilterQuery: FilterQuery<Event> = { _id: eventId, deleted: false };
-      const clientRecordIdStringsToBeRemoved: string[] = clientRecordsToBeRemoved.map(record => record._id.toString());
-      const localClientRecordIdStringToBeRemoved: string[] = localClientRecordsToBeRemoved.map(record => record._id.toString());
+      const clientRecordIdsToBeRemoved: ObjectId[] = clientRecordsToBeRemoved.map(record => record._id);
+      const localClientRecordIdsToBeRemoved: ObjectId[] = localClientRecordsToBeRemoved.map(record => record._id);
+      const clientRecordIdStringsToBeRemoved: string[] = clientRecordIdsToBeRemoved.map(_id => _id.toString());
+      const localClientRecordIdStringToBeRemoved: string[] = localClientRecordIdsToBeRemoved.map(_id => _id.toString());
       const hasClientRecordIdStringsToBeRemoved = !isEmpty(clientRecordIdStringsToBeRemoved);
       const hasLocalClientRecordIdStringToBeRemoved = !isEmpty(localClientRecordIdStringToBeRemoved);
       const hasRecordsToBeRemoved = hasClientRecordIdStringsToBeRemoved || hasLocalClientRecordIdStringToBeRemoved;
@@ -207,7 +205,7 @@ export class BusinessEventsService {
       if (hasRecordsToBeRemoved) {
         const eventsToBeRemovedModelQuery: UpdateQuery<Event> = {
           $pull: {
-            ...(hasLocalClientRecordIdStringToBeRemoved ? { localClientsIds: { $in: localClientRecordIdStringToBeRemoved } } : {}),
+            ...(hasLocalClientRecordIdStringToBeRemoved ? { localClientsIds: { $in: localClientRecordIdsToBeRemoved } } : {}),
             ...(hasRecordsToBeRemoved ? { clientsIds: { $in: clientRecordIdStringsToBeRemoved } } : {}),
           },
         };
@@ -215,7 +213,7 @@ export class BusinessEventsService {
         await this.eventsModel.findOneAndUpdate(eventsFilterQuery, eventsToBeRemovedModelQuery);
 
         const updatedTransactions = await this.eventTransactionModel.update(
-          { withdraw_from_event: false },
+          { withdraw_from_event: true },
           {
             where: {
               event_id: eventId,
