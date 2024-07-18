@@ -2,14 +2,14 @@ import { Controller, Get, HttpCode, HttpStatus, Param, UseGuards } from "@nestjs
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 
 import { AtGuard } from "../../common/guards";
-import { BusinessUserService } from "./business-users.service";
+import { BusinessUsersService } from "./business-users.service";
 
-@ApiTags("business-user")
-@Controller("business-user")
+@ApiTags("business-users")
+@Controller("business-users")
 @ApiBearerAuth("bearer")
 @UseGuards(AtGuard)
-export class BusinessUserController {
-  constructor(private readonly businessUserService: BusinessUserService) {}
+export class BusinessUsersController {
+  constructor(private readonly businessUserService: BusinessUsersService) {}
 
   @Get("business/:businessId")
   @HttpCode(HttpStatus.OK)

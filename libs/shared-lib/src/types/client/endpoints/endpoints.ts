@@ -34,14 +34,13 @@ type Endpoint =
   | "business-events/people"
   | "services"
   | `services/${string}`
-  | "business-user/multiple"
   | "upload-file/image"
   | `clients`
   | `clients/${string}`
   | `clients/business/${string}`
   | `clients/business/${string}/clients`
-  | `business-user`
-  | `business-user/business/${string}`
+  | `business-users`
+  | `business-users/business/${string}`
   | `local-clients/${string}`
   | `local-clients/business/${string}`
   | `client-events/event/${string}`
@@ -200,7 +199,7 @@ export const endpoints = {
   addBusinessLocalClient: createEndpoint("local-clients/business/:businessId", "POST"),
 
   // business user (staff, admin, super admin)
-  getStaffUsers: createEndpoint("business-user/business/:businessId", "GET"),
+  getBusinessUsers: createEndpoint("business-users/business/:businessId", "GET"),
 
   // upload file
   uploadImageFile: createEndpoint("upload-file/image", "POST"),

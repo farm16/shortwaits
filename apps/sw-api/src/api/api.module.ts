@@ -2,7 +2,7 @@ import { Module } from "@nestjs/common";
 import { AuthModule } from "./auth/auth.module";
 import { CategoriesModule } from "./business-categories/business-categories.module";
 import { ServicesModule } from "./business-services/business-services.module";
-import { BusinessUserModule } from "./business-users/business-users.module";
+import { BusinessUsersModule } from "./business-users/business-users.module";
 import { BusinessModule } from "./business/business.module";
 import { ClientsModule } from "./clients/clients.module";
 import { EventTransactionsModule } from "./event-transactions/event-transactions.module";
@@ -22,7 +22,7 @@ import { ShortwaitsModule } from "./shortwaits/shortwaits.module";
     CategoriesModule,
     ClientsModule,
     LocalClientsModule,
-    BusinessUserModule,
+    BusinessUsersModule,
     FileUploadModule,
     EventTransactionsModule,
   ],

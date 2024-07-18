@@ -5,7 +5,7 @@ import { Business } from "../business/entities/business.entity";
 import { BusinessUser } from "./entities/business-user.entity";
 
 @Injectable()
-export class BusinessUserService {
+export class BusinessUsersService {
   constructor(
     @InjectModel(BusinessUser.name)
     private readonly businessUserModel: Model<BusinessUser>,
