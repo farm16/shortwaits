@@ -24,7 +24,7 @@ import { Alert, TouchableOpacity, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { ActivityIndicator } from "react-native-paper";
 import { GenericModalData, ModalsScreenProps } from "../../../navigation";
-import { useAddClientToBusinessMutation, useCreateBusinessLocalClientsMutation } from "../../../services";
+import { useAddBusinessClientMutation, useCreateBusinessLocalClientsMutation } from "../../../services";
 import { useBusiness } from "../../../store";
 
 export const AddClientModal: FC<ModalsScreenProps<"add-client-modal-screen">> = ({ navigation, route }) => {
@@ -34,7 +34,7 @@ export const AddClientModal: FC<ModalsScreenProps<"add-client-modal-screen">> = 
   const intl = useIntl(); // Access the intl object
   const { Colors } = useTheme();
   const business = useBusiness();
-  const [addClient, addClientStatus] = useAddClientToBusinessMutation();
+  const [addClient, addClientStatus] = useAddBusinessClientMutation();
   const [clientType, setClientType] = useState<"shortwaits" | "local">("shortwaits"); // ["shortwaits", "local"
 
   useLayoutEffect(() => {

@@ -1,7 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithInterceptor } from "./interceptor";
 import {
-  AddClientToBusiness,
   CreateBusinessLocalClients,
   CreateBusinessUser,
   CreateService,
@@ -14,13 +13,11 @@ import {
   GetBusinessCategory,
   GetBusinessHours,
   GetBusinessServices,
-  GetBusinessUser,
+  GetBusinessUsers,
   GetCategories,
   GetCategory,
-  GetClients,
   GetService,
   GetServices,
-  GetStaff,
   PostLocalSignIn,
   PostLocalSignOut,
   PostLocalSignUp,
@@ -32,6 +29,7 @@ import {
   UpdateBusinessUser,
   UpdateService,
   UploadImageFile,
+  addBusinessClient,
   createBusinessEvent,
   getBusinessEventPeople,
   getBusinessEventSummary,
@@ -64,9 +62,8 @@ export const shortwaitsApi = createApi({
     getBusinessServices: GetBusinessServices(builder), // this only return _ids
     getAllBusinessClients: GetAllBusinessClients(builder), // this only return _ids
 
-    //business staff
-    getStaff: GetStaff(builder),
-    getBusinessUser: GetBusinessUser(builder),
+    //business users
+    getBusinessUsers: GetBusinessUsers(builder),
     createBusinessUser: CreateBusinessUser(builder),
     deleteBusinessUser: DeleteBusinessUser(builder), // ! <- deletes single business staff | TODO: delete multiple staff
     updateBusinessUser: UpdateBusinessUser(builder), // updates single business staff
@@ -97,8 +94,7 @@ export const shortwaitsApi = createApi({
     updateBusinessEventStatus: updateBusinessEventStatus(builder),
 
     //clients
-    getClients: GetClients(builder),
-    addClientToBusiness: AddClientToBusiness(builder),
+    addBusinessClient: addBusinessClient(builder),
 
     //file uploads
     uploadImageFile: UploadImageFile(builder),

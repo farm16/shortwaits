@@ -4,21 +4,18 @@ import { BusinessUsersDtoType } from "@shortwaits/shared-lib";
 import type { RootState } from "../..";
 import { shortwaitsApi } from "../../../services";
 
-export const staffInitialState: BusinessUsersDtoType = null;
+export const businessUsersInitialState: BusinessUsersDtoType = null;
 export const staffSlice = createSlice({
-  name: "staff",
-  initialState: staffInitialState,
+  name: "businessUsers",
+  initialState: businessUsersInitialState,
   reducers: {
-    setStaff(state) {
+    setBusinessUsers(state) {
       return [...state];
     },
   },
   extraReducers: builder => {
     builder
-      .addMatcher(shortwaitsApi.endpoints.getStaff.matchFulfilled, (state, action) => {
-        return action.payload.data;
-      })
-      .addMatcher(shortwaitsApi.endpoints.getBusinessUser.matchFulfilled, (state, action) => {
+      .addMatcher(shortwaitsApi.endpoints.getBusinessUsers.matchFulfilled, (state, action) => {
         return action.payload.data;
       })
       .addMatcher(shortwaitsApi.endpoints.createBusinessUser.matchFulfilled, (state, action) => {
@@ -39,6 +36,6 @@ export const staffSlice = createSlice({
   },
 });
 
-export const { setStaff } = staffSlice.actions;
+export const { setBusinessUsers } = staffSlice.actions;
 
-export const selectCurrentStaffState = (state: RootState) => state.staff;
+export const selectCurrentBusinessUsersState = (state: RootState) => state.businessUsers;

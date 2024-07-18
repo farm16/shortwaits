@@ -22,7 +22,7 @@ import { Alert, RefreshControl, SectionList, SectionListData, SectionListRenderI
 import { SelectedClients } from "../../..";
 import { AuthorizedScreenProps } from "../../../../navigation";
 import { useUpdateBusinessEventMutation, useUpdateClientsInBusinessEventMutation } from "../../../../services";
-import { useBusiness, useClients, useLocalClients, useStaff } from "../../../../store";
+import { useBusiness, useBusinessUsers, useClients, useLocalClients } from "../../../../store";
 
 type Section = {
   title: "Staff" | "Clients";
@@ -42,7 +42,7 @@ export function EventUsersTab(props: EventUsersTabProps) {
   const business = useBusiness();
   const clients = useClients();
   const localClients = useLocalClients();
-  const staff = useStaff();
+  const staff = useBusinessUsers();
   const intl = useIntl();
   const { navigate } = useNavigation<AuthorizedScreenProps<"event-screen">["navigation"]>();
   const [updateBusinessEvent, updateEventStatus] = useUpdateBusinessEventMutation();

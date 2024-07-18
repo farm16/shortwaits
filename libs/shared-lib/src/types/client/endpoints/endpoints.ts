@@ -1,10 +1,10 @@
 import { HttpMethod } from "../../common";
 
 type Endpoint =
+  | "auth/admin/local/forgot-password"
   | "auth/business/sign-in/local-auth"
   | "auth/business/sign-out/local-auth"
   | "auth/business/sign-up/local-auth"
-  | "auth/admin/local/forgot-password"
   | "auth/business/refresh-token/local-auth"
   | "auth/business/sign-up/social"
   | "auth/business/sign-in/social"
@@ -35,11 +35,11 @@ type Endpoint =
   | "services"
   | `services/${string}`
   | "upload-file/image"
-  | `clients`
+  | "clients"
   | `clients/${string}`
   | `clients/business/${string}`
   | `clients/business/${string}/clients`
-  | `business-users`
+  | "business-users"
   | `business-users/business/${string}`
   | `local-clients/${string}`
   | `local-clients/business/${string}`
@@ -47,9 +47,10 @@ type Endpoint =
   | `client-events/register/${string}`
   | `client-events/withdraw/${string}`
   | `client-events/details/event/${string}`
-  | `client-events/details/events`
+  | "client-events/details/events"
   | `client-events/details/service/${string}`
-  | `client-events/details/services/${string}`;
+  | `client-events/details/services/${string}`
+  | `event-transactions/business/${string}`;
 
 type QueryConfigParams<T> = {
   pathVars?: string[];
@@ -153,7 +154,6 @@ export const endpoints = {
   createBusinessLocalClients: createEndpoint("business/:businessId/local-clients", "POST"),
   deleteBusinessLocalClients: createEndpoint("business/:businessId/local-clients", "DELETE"),
   updateBusinessLocalClient: createEndpoint("business/:businessId/local-client", "PUT"),
-  getBusinessUser: createEndpoint("business/:businessId/user", "GET"),
   createBusinessUser: createEndpoint("business/:businessId/user", "POST"),
   updateBusinessUser: createEndpoint("business/:businessId/user", "PUT"),
   deleteBusinessUser: createEndpoint("business/:businessId/user", "DELETE"),
@@ -203,6 +203,8 @@ export const endpoints = {
 
   // upload file
   uploadImageFile: createEndpoint("upload-file/image", "POST"),
+
+  getBusinessEventTransactions: createEndpoint("event-transactions/business/:businessId", "GET"),
 };
 
 type BusinessIdQuery = {

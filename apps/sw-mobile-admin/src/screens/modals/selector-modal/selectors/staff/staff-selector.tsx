@@ -4,8 +4,8 @@ import { ActivityIndicator, BackButton, Button, Container, IconButton, NonIdealS
 import React, { FC, useCallback, useLayoutEffect, useState } from "react";
 import { Alert, FlatList, StyleSheet } from "react-native";
 import { ModalsScreenProps } from "../../../../../navigation";
-import { useGetBusinessUserQuery } from "../../../../../services";
-import { useBusiness, useStaff } from "../../../../../store";
+import { useGetBusinessUsersQuery } from "../../../../../services";
+import { useBusiness, useBusinessUsers } from "../../../../../store";
 import { StaffSelectorItem } from "./staff-selector-item";
 
 const MIN_SELECTED_ITEMS_DEFAULT = 0; // Define your minimum selected items here
@@ -24,9 +24,9 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
   } = route.params;
 
   const business = useBusiness();
-  const staff = useStaff();
+  const staff = useBusinessUsers();
   const [selectedItems, setSelectedItems] = useState<string[]>(selectedData);
-  const { isError, isLoading } = useGetBusinessUserQuery(business ? business._id : skipToken, {
+  const { isError, isLoading } = useGetBusinessUsersQuery(business ? business._id : skipToken, {
     refetchOnMountOrArgChange: true,
   });
   const isMultiple = onSubmit ? true : false;

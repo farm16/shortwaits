@@ -21,7 +21,7 @@ export const {
   useCreateServiceMutation,
   useDeleteServiceMutation,
   useUploadImageFileMutation,
-  useAddClientToBusinessMutation,
+  useAddBusinessClientMutation,
   // business event mutations
   useCreateBusinessEventMutation,
   useUpdateBusinessEventMutation,
@@ -35,7 +35,6 @@ export const {
   useGetBusinessCategoryQuery,
   useGetBusinessHoursQuery,
   useGetBusinessServicesQuery,
-  useGetBusinessUserQuery,
   useGetCategoriesQuery,
   useGetCategoryQuery,
   useGetServiceQuery,
@@ -43,8 +42,7 @@ export const {
   useGetBusinessEventsQuery,
   useGetBusinessEventSummaryQuery,
   useGetBusinessEventPeopleQuery,
-  useGetClientsQuery,
-  useGetStaffQuery,
+  useGetBusinessUsersQuery,
 
   //Lazy Query hooks
   useLazyGetBusinessEventPeopleQuery,
@@ -59,8 +57,5 @@ export const {
   useLazyGetBusinessCategoryQuery,
   useLazyGetBusinessHoursQuery,
   useLazyGetBusinessServicesQuery,
-  useLazyGetBusinessUserQuery,
   useLazyGetBusinessEventSummaryQuery,
-  useLazyGetClientsQuery,
-  useLazyGetStaffQuery,
 } = shortwaitsApi;

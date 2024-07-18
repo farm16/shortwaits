@@ -20,12 +20,12 @@ import { FlatList } from "react-native-gesture-handler";
 import { AgendaItem } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useDeleteBusinessUserMutation, useUpdateBusinessUserMutation } from "../../../services";
-import { useBusiness, useEvents, useStaffById } from "../../../store";
+import { useBusiness, useBusinessUser, useEvents } from "../../../store";
 
 export function BusinessUserProfileScreen({ navigation, route }: AuthorizedScreenProps<"business-user-profile-screen">) {
   const { staff: staffParam, onUserRemove } = route.params;
   const { Colors } = useTheme();
-  const staff = useStaffById(staffParam._id);
+  const staff = useBusinessUser(staffParam._id);
   const events = useEvents();
   const business = useBusiness();
   const [updateBusinessUser, updateBusinessUserStatus] = useUpdateBusinessUserMutation();

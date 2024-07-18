@@ -2,6 +2,7 @@ import { Module } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
 import { SequelizeModule } from "@nestjs/sequelize";
 import { Business, BusinessSchema } from "../business/entities/business.entity";
+import { EventTransactionsController } from "./event-transactions.controller";
 import { EventTransactionsService } from "./event-transactions.service";
 import { EventTransactionModel } from "./models/event-transaction.model";
 
@@ -15,7 +16,7 @@ import { EventTransactionModel } from "./models/event-transaction.model";
       },
     ]),
   ],
-  controllers: [],
+  controllers: [EventTransactionsController],
   providers: [EventTransactionsService],
 })
 export class EventTransactionsModule {}

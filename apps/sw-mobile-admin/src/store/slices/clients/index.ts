@@ -13,13 +13,9 @@ export const clientsSlice = createSlice({
     },
   },
   extraReducers: builder => {
-    builder
-      .addMatcher(shortwaitsApi.endpoints.getClients.matchFulfilled, (_state, action) => {
-        return action.payload.data;
-      })
-      .addMatcher(shortwaitsApi.endpoints.getAllBusinessClients.matchFulfilled, (_state, action) => {
-        return action.payload.data.clients;
-      });
+    builder.addMatcher(shortwaitsApi.endpoints.getAllBusinessClients.matchFulfilled, (_state, action) => {
+      return action.payload.data.clients;
+    });
   },
 });
 

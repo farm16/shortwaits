@@ -3,8 +3,8 @@ import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { Accordion, AccordionDataItemType, Text, useTheme } from "@shortwaits/shared-ui";
 import React from "react";
 import { AuthorizedScreenProps } from "../../../../navigation";
-import { useGetStaffQuery } from "../../../../services";
-import { useBusiness, useStaff } from "../../../../store";
+import { useGetBusinessUsersQuery } from "../../../../services";
+import { useBusiness, useBusinessUsers } from "../../../../store";
 
 type ManageAdminUsersProps = {
   isDisabled?: boolean;
@@ -13,8 +13,8 @@ export const ManageAdminUsers = ({ isDisabled }: ManageAdminUsersProps) => {
   const { Colors } = useTheme();
   const currentBusiness = useBusiness();
   const { navigate } = useNavigation<AuthorizedScreenProps<"settings-screen">["navigation"]>();
-  const { isLoading, isError } = useGetStaffQuery(currentBusiness?._id ?? skipToken);
-  const staff = useStaff();
+  const { isLoading, isError } = useGetBusinessUsersQuery(currentBusiness?._id ?? skipToken);
+  const staff = useBusinessUsers();
 
   let accordionData: AccordionDataItemType[] = staff.map(admin => {
     const isAdmin = admin?.userRoles?.isAdmin || admin?.userRoles?.isSuperAdmin || admin?.userRoles?.isBackgroundAdmin;
