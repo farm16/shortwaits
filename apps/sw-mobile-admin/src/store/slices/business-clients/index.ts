@@ -22,12 +22,12 @@ export const staffSlice = createSlice({
         return action.payload.data;
       })
       .addMatcher(shortwaitsApi.endpoints.updateBusinessUser.matchFulfilled, (state, action) => {
-        const updatedStaff = action.payload.data;
-        return state.map(staff => {
-          if (staff._id === updatedStaff._id) {
-            return updatedStaff;
+        const businessUsersPayloadData = action.payload.data;
+        return state.map(businessUser => {
+          if (businessUser._id === businessUsersPayloadData._id) {
+            return businessUsersPayloadData;
           }
-          return staff;
+          return businessUser;
         });
       })
       .addMatcher(shortwaitsApi.endpoints.deleteBusinessUser.matchFulfilled, (state, action) => {

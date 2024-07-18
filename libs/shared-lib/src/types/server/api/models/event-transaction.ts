@@ -1,3 +1,4 @@
+import { CommonResponseType } from "../../../common";
 import { EventStatusName } from "./events";
 
 export interface EventTransactionType {
@@ -14,3 +15,8 @@ export interface EventTransactionType {
   promo_codes?: string;
   withdraw_from_event: boolean;
 }
+
+export type EventTransactionsType = EventTransactionType[];
+
+export type EventTransactionResponseType = CommonResponseType<EventTransactionType>;
+export type EventTransactionsResponseType = CommonResponseType<EventTransactionsType>;

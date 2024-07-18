@@ -33,6 +33,7 @@ import {
   createBusinessEvent,
   getBusinessEventPeople,
   getBusinessEventSummary,
+  getBusinessEventTransactions,
   getBusinessEvents,
   updateBusinessEvent,
   updateBusinessEventStatus,
@@ -98,5 +99,8 @@ export const shortwaitsApi = createApi({
 
     //file uploads
     uploadImageFile: UploadImageFile(builder),
+
+    // business event transactions
+    getBusinessEventTransactions: getBusinessEventTransactions(builder),
   }),
 });

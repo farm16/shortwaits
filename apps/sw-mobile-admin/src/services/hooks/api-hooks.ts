@@ -43,8 +43,11 @@ export const {
   useGetBusinessEventSummaryQuery,
   useGetBusinessEventPeopleQuery,
   useGetBusinessUsersQuery,
+  useGetBusinessEventTransactionsQuery,
 
   //Lazy Query hooks
+  useLazyGetBusinessEventTransactionsQuery,
+  useLazyGetBusinessUsersQuery,
   useLazyGetBusinessEventPeopleQuery,
   useLazyGetCategoryQuery,
   useLazyGetCategoriesQuery,
