@@ -60,7 +60,7 @@ export const eventsSlice = createSlice({
         }
         return newState;
       })
-      .addMatcher(shortwaitsApi.endpoints.registerMultipleToBusinessEvent.matchFulfilled, (state, action) => {
+      .addMatcher(shortwaitsApi.endpoints.updateClientsInBusinessEvent.matchFulfilled, (state, action) => {
         const updatedEvent = action.payload.data;
         const existingEventIndex = state.findIndex(event => event._id === updatedEvent._id);
         const newState = [...state];

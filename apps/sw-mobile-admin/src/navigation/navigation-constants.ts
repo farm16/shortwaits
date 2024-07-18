@@ -21,8 +21,8 @@ export const AUTHORIZED_STACK_SCREENS = {
   PLANS_SCREEN: "plans-screen",
   BUSINESS_PROFILE_SCREEN: "business-profile-screen",
   BUSINESS_CLIENT_SCREEN: "business-client-screen",
-  BUSINESS_LOCAL_CLIENT_SCREEN: "business-local-client-screen",
-  BUSINESS_STAFF_SCREEN: "business-staff-screen",
+  BUSINESS_LOCAL_CLIENT_SCREEN: "business-local-client-profile-screen",
+  BUSINESS_STAFF_SCREEN: "business-user-profile-screen",
   APP_INFO_SCREEN: "app-info-screen",
 } as const;
 

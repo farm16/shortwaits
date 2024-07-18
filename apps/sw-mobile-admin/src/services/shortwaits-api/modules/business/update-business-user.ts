@@ -9,7 +9,7 @@ type RequestType = {
 export default (builder: EndpointBuilder<any, any, any>) =>
   builder.mutation<BusinessUserResponseType, RequestType>({
     query: ({ businessId, body }) => ({
-      ...endpoints.updateBusinessStaff.getConfig([businessId], {}),
+      ...endpoints.updateBusinessUser.getConfig([businessId], {}),
       body,
     }),
   });

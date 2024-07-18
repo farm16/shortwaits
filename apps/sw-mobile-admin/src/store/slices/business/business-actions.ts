@@ -15,7 +15,7 @@ export const {
   setBusinessLocation,
   setBusinessCategories,
   setBusinessCategory,
-  setBusinessStaff,
+  setBusinessUser,
   setBusinessService,
   setBusinessServices,
   setBusinessIsRegistrationCompleted,

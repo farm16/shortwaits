@@ -41,7 +41,7 @@ export function LocalClientsTab({ isLoading, refresh }: { isLoading: boolean; re
           imageUrl={item.accountImageUrl}
           onPress={() => {
             push("authorized-stack", {
-              screen: "business-local-client-screen",
+              screen: "business-local-client-profile-screen",
               params: {
                 localClient: item,
               },

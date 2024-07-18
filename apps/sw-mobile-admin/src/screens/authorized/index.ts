@@ -5,6 +5,6 @@ export * from "./event/event-screen";
 export * from "./events/events-screen";
 export * from "./my-business/my-business-screen";
 export * from "./plans/plans-screen";
+export * from "./profiles";
 export * from "./settings/app-info-screen";
 export * from "./settings/settings-screen";
-export * from "./users";

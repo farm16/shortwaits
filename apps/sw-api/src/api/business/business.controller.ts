@@ -126,44 +126,44 @@ export class BusinessController {
     return this.businessService.updateBusinessLocalClient(request.user.sub, businessId, dto);
   }
 
-  @Get(":businessId/staff")
+  @Get(":businessId/user")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
     description: "Returns business staff",
   })
-  async getBusinessStaffByIds(@Param("businessId") businessId: string, @Req() request) {
-    return this.businessService.getBusinessStaff(businessId, request.user.sub);
+  async getBusinessUserByIds(@Param("businessId") businessId: string, @Req() request) {
+    return this.businessService.getBusinessUser(businessId, request.user.sub);
   }
 
-  @Post(":businessId/staff")
+  @Post(":businessId/user")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
     description: "Returns business staff",
   })
-  async createBusinessStaff(@Param("businessId") businessId: string, @Req() request, @Body() dto: CreateBusinessUsersDtoType) {
-    return this.businessService.createBusinessStaff(request.user.sub, businessId, dto);
+  async createBusinessUser(@Param("businessId") businessId: string, @Req() request, @Body() dto: CreateBusinessUsersDtoType) {
+    return this.businessService.createBusinessUser(request.user.sub, businessId, dto);
   }
 
-  @Put(":businessId/staff")
+  @Put(":businessId/user")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.CREATED,
     description: "Returns created",
   })
-  async updateBusinessStaff(@Param("businessId") businessId: string, @Req() request, @Body() dto: UpdateClientDtoType) {
-    return this.businessService.updateBusinessStaff(request.user.sub, businessId, dto);
+  async updateBusinessUser(@Param("businessId") businessId: string, @Req() request, @Body() dto: UpdateClientDtoType) {
+    return this.businessService.updateBusinessUser(request.user.sub, businessId, dto);
   }
 
-  @Delete(":businessId/staff")
+  @Delete(":businessId/user")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.CREATED,
     description: "Returns created",
   })
-  async deleteBusinessStaff(@Param("businessId") businessId: string, @Req() request, @Body() dto: UpdateClientDtoType) {
-    return this.businessService.deleteBusinessStaff(request.user.sub, businessId, dto);
+  async deleteBusinessUser(@Param("businessId") businessId: string, @Req() request, @Body() dto: UpdateClientDtoType) {
+    return this.businessService.deleteBusinessUser(request.user.sub, businessId, dto);
   }
 
   @Post("registration/complete")

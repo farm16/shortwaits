@@ -3,10 +3,10 @@ import { baseQueryWithInterceptor } from "./interceptor";
 import {
   AddClientToBusiness,
   CreateBusinessLocalClients,
-  CreateBusinessStaff,
+  CreateBusinessUser,
   CreateService,
   DeleteBusinessLocalClients,
-  DeleteBusinessStaff,
+  DeleteBusinessUser,
   DeleteService,
   GetAdminMobile,
   GetAllBusinessClients,
@@ -14,7 +14,7 @@ import {
   GetBusinessCategory,
   GetBusinessHours,
   GetBusinessServices,
-  GetBusinessStaff,
+  GetBusinessUser,
   GetCategories,
   GetCategory,
   GetClients,
@@ -29,18 +29,16 @@ import {
   RegisterBusiness,
   UpdateBusiness,
   UpdateBusinessLocalClient,
-  UpdateBusinessStaff,
+  UpdateBusinessUser,
   UpdateService,
   UploadImageFile,
   createBusinessEvent,
   getBusinessEventPeople,
   getBusinessEventSummary,
   getBusinessEvents,
-  registerClientsToBusinessEvent,
-  registerLocalClientsToBusinessEvent,
-  registerMultipleToBusinessEvent,
   updateBusinessEvent,
   updateBusinessEventStatus,
+  updateClientsInBusinessEvent,
 } from "./modules";
 
 export const shortwaitsApi = createApi({
@@ -68,10 +66,10 @@ export const shortwaitsApi = createApi({
 
     //business staff
     getStaff: GetStaff(builder),
-    getBusinessStaff: GetBusinessStaff(builder),
-    createBusinessStaff: CreateBusinessStaff(builder),
-    deleteBusinessStaff: DeleteBusinessStaff(builder), // ! <- deletes single business staff | TODO: delete multiple staff
-    updateBusinessStaff: UpdateBusinessStaff(builder), // updates single business staff
+    getBusinessUser: GetBusinessUser(builder),
+    createBusinessUser: CreateBusinessUser(builder),
+    deleteBusinessUser: DeleteBusinessUser(builder), // ! <- deletes single business staff | TODO: delete multiple staff
+    updateBusinessUser: UpdateBusinessUser(builder), // updates single business staff
 
     //business clients
     createBusinessLocalClients: CreateBusinessLocalClients(builder),
@@ -95,10 +93,7 @@ export const shortwaitsApi = createApi({
     getBusinessEvents: getBusinessEvents(builder),
     getBusinessEventSummary: getBusinessEventSummary(builder),
     getBusinessEventPeople: getBusinessEventPeople(builder),
-    registerClientsToBusinessEvent: registerClientsToBusinessEvent(builder),
-    registerLocalClientsToBusinessEvent: registerLocalClientsToBusinessEvent(builder),
-    registerMultipleToBusinessEvent: registerMultipleToBusinessEvent(builder),
-    withdrawMultipleFromBusinessEvent: registerMultipleToBusinessEvent(builder),
+    updateClientsInBusinessEvent: updateClientsInBusinessEvent(builder),
     updateBusinessEventStatus: updateBusinessEventStatus(builder),
 
     //clients

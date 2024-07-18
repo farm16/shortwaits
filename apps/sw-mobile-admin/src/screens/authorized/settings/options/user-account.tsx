@@ -26,7 +26,7 @@ export const ManageAdminUsers = ({ isDisabled }: ManageAdminUsersProps) => {
         iconColor: admin?.userRoles?.isSuperAdmin ? Colors.orange4 : Colors.text,
         onPress: () => {
           navigate("authorized-stack", {
-            screen: "business-staff-screen",
+            screen: "business-user-profile-screen",
             params: {
               staff: admin,
             },

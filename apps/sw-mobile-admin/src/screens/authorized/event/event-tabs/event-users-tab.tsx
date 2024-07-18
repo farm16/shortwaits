@@ -21,7 +21,7 @@ import { useIntl } from "react-intl";
 import { Alert, RefreshControl, SectionList, SectionListData, SectionListRenderItem, StyleSheet, View } from "react-native";
 import { SelectedClients } from "../../..";
 import { AuthorizedScreenProps } from "../../../../navigation";
-import { useRegisterMultipleToBusinessEventMutation, useUpdateBusinessEventMutation, useWithdrawMultipleFromBusinessEventMutation } from "../../../../services";
+import { useUpdateBusinessEventMutation, useUpdateClientsInBusinessEventMutation } from "../../../../services";
 import { useBusiness, useClients, useLocalClients, useStaff } from "../../../../store";
 
 type Section = {
@@ -46,8 +46,7 @@ export function EventUsersTab(props: EventUsersTabProps) {
   const intl = useIntl();
   const { navigate } = useNavigation<AuthorizedScreenProps<"event-screen">["navigation"]>();
   const [updateBusinessEvent, updateEventStatus] = useUpdateBusinessEventMutation();
-  const [registerMultipleToBusinessEvent, registerMultipleToBusinessEventStatus] = useRegisterMultipleToBusinessEventMutation();
-  const [withdrawMultipleFromBusinessEvent, withdrawMultipleFromBusinessEventStatus] = useWithdrawMultipleFromBusinessEventMutation();
+  const [updateClientsInBusinessEvent, registerMultipleToBusinessEventStatus] = useUpdateClientsInBusinessEventMutation();
 
   const statusName = event?.status?.statusName ?? "";
   const isEventDisabled = statusName ? nextEventStatuses[statusName].length === 0 : true;
@@ -81,7 +80,7 @@ export function EventUsersTab(props: EventUsersTabProps) {
     (item: BusinessUserDtoType) => {
       const handleOnPress = () => {
         navigate("authorized-stack", {
-          screen: "business-staff-screen",
+          screen: "business-user-profile-screen",
           params: {
             staff: item,
             onUserRemove: staff => {
@@ -143,11 +142,11 @@ export function EventUsersTab(props: EventUsersTabProps) {
 
       const navigateToLocalClientScreen = () => {
         navigate("authorized-stack", {
-          screen: "business-local-client-screen",
+          screen: "business-local-client-profile-screen",
           params: {
             localClient: item as unknown as LocalClientDtoType,
             onUserRemove: client => {
-              console.log("business-local-client-screen >>>", client);
+              console.log("business-local-client-profile-screen >>>", client);
             },
           },
         });
@@ -186,13 +185,13 @@ export function EventUsersTab(props: EventUsersTabProps) {
       }
       // todo prevent duplicate clients and local clients from being added to the event
 
-      registerMultipleToBusinessEvent({
+      updateClientsInBusinessEvent({
         eventId: event._id,
         clientIds: uniqueClientIds,
         localClientIds: uniqueLocalClientIds,
       });
     },
-    [event._id, event.clientsIds, event.localClientsIds, registerMultipleToBusinessEvent]
+    [event._id, event.clientsIds, event.localClientsIds, updateClientsInBusinessEvent]
   );
 
   const selectedClients = useMemo(() => {

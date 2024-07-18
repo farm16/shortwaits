@@ -4,7 +4,7 @@ import { ActivityIndicator, BackButton, Button, Container, IconButton, NonIdealS
 import React, { FC, useCallback, useLayoutEffect, useState } from "react";
 import { Alert, FlatList, StyleSheet } from "react-native";
 import { ModalsScreenProps } from "../../../../../navigation";
-import { useGetBusinessStaffQuery } from "../../../../../services";
+import { useGetBusinessUserQuery } from "../../../../../services";
 import { useBusiness, useStaff } from "../../../../../store";
 import { StaffSelectorItem } from "./staff-selector-item";
 
@@ -26,7 +26,7 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
   const business = useBusiness();
   const staff = useStaff();
   const [selectedItems, setSelectedItems] = useState<string[]>(selectedData);
-  const { isError, isLoading } = useGetBusinessStaffQuery(business ? business._id : skipToken, {
+  const { isError, isLoading } = useGetBusinessUserQuery(business ? business._id : skipToken, {
     refetchOnMountOrArgChange: true,
   });
   const isMultiple = onSubmit ? true : false;
@@ -101,7 +101,7 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
         navigation.goBack();
       } else if (!isMultiple) {
         navigation.navigate("authorized-stack", {
-          screen: "business-staff-screen",
+          screen: "business-user-profile-screen",
           params: {
             staff: item,
           },

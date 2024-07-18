@@ -44,7 +44,7 @@ export const businessReducers = {
 
     return { ...state, categories };
   },
-  setBusinessStaff(state: BusinessDtoType, action: PayloadAction<string>) {
+  setBusinessUser(state: BusinessDtoType, action: PayloadAction<string>) {
     if (state.staff.includes(action.payload)) {
       const staff = state.staff.filter(elem => elem !== action.payload);
       console.log("removing >>>", staff);

@@ -2,20 +2,20 @@ import { Controller, Get, HttpCode, HttpStatus, Param, UseGuards } from "@nestjs
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 
 import { AtGuard } from "../../common/guards";
-import { BusinessStaffService } from "./business-users.service";
+import { BusinessUserService } from "./business-users.service";
 
-@ApiTags("business-staff")
-@Controller("business-staff")
+@ApiTags("business-user")
+@Controller("business-user")
 @ApiBearerAuth("bearer")
 @UseGuards(AtGuard)
-export class BusinessStaffController {
-  constructor(private readonly businessUserService: BusinessStaffService) {}
+export class BusinessUserController {
+  constructor(private readonly businessUserService: BusinessUserService) {}
 
   @Get("business/:businessId")
   @HttpCode(HttpStatus.OK)
-  async getBusinessStaff(@Param("businessId") businessId: string) {
+  async getBusinessUser(@Param("businessId") businessId: string) {
     // todo: validate permission with business
     console.log("businessId >>", businessId);
-    return this.businessUserService.getBusinessStaff(businessId);
+    return this.businessUserService.getBusinessUser(businessId);
   }
 }

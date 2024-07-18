@@ -9,7 +9,7 @@ type RequestType = {
 export default (builder: EndpointBuilder<any, any, any>) =>
   builder.mutation<BusinessUsersResponseType, RequestType>({
     query: ({ businessId, body }) => {
-      return endpoints.deleteBusinessStaff.getMutationConfig({
+      return endpoints.deleteBusinessUser.getMutationConfig({
         pathVars: [businessId],
         body,
       });

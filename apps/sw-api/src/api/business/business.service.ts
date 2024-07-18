@@ -334,7 +334,7 @@ export class BusinessService {
   // STAFF
 
   // staff helpers
-  async getActiveBusinessStaffRecords(staffIds: ObjectId[], projection = "-__v -hashedRt") {
+  async getActiveBusinessUserRecords(staffIds: ObjectId[], projection = "-__v -hashedRt") {
     const staffRecords = await this.businessUserModel
       .find({
         _id: {
@@ -347,12 +347,12 @@ export class BusinessService {
     return staffRecords;
   }
 
-  async getBusinessStaff(businessId: string, userId: string) {
+  async getBusinessUser(businessId: string, userId: string) {
     try {
       const businessData = await this.findBusinessById(businessId);
       const { isAdmin, isSuperAdmin } = this.isUserAdminType(businessData, userId);
       if (isAdmin || isSuperAdmin) {
-        const staff = await this.getActiveBusinessStaffRecords(businessData.staff);
+        const staff = await this.getActiveBusinessUserRecords(businessData.staff);
         return staff;
       }
     } catch (error) {
@@ -360,7 +360,7 @@ export class BusinessService {
     }
   }
 
-  async createBusinessStaff(businessUserId: string, businessId: string, staff: CreateBusinessUsersDtoType) {
+  async createBusinessUser(businessUserId: string, businessId: string, staff: CreateBusinessUsersDtoType) {
     const businessData = await this.findBusinessById(businessId);
 
     const { isAdmin, isSuperAdmin } = this.isUserAdminType(businessData, businessUserId);
@@ -402,7 +402,7 @@ export class BusinessService {
     }
   }
 
-  async updateBusinessStaff(businessUserId: string, businessId: string, staff: PartialBusinessUserDtoType) {
+  async updateBusinessUser(businessUserId: string, businessId: string, staff: PartialBusinessUserDtoType) {
     const businessData = await this.findBusinessById(businessId);
     const { isAdmin, isSuperAdmin } = this.isUserAdminType(businessData, businessUserId);
 
@@ -422,7 +422,7 @@ export class BusinessService {
     }
   }
 
-  async deleteBusinessStaff(businessUserId: string, businessId: string, staff: PartialBusinessUserDtoType) {
+  async deleteBusinessUser(businessUserId: string, businessId: string, staff: PartialBusinessUserDtoType) {
     try {
       const businessData = await this.findBusinessById(businessId);
       const { isAdmin, isSuperAdmin } = this.isUserAdminType(businessData, businessUserId);
@@ -437,7 +437,7 @@ export class BusinessService {
 
         const updatedClient = await this.businessUserModel.findByIdAndUpdate(staff._id, { deleted: true });
         const updatedBusiness = await this.businessModel.findByIdAndUpdate(businessId, { $pull: { staff: updatedClient._id } }, { new: true });
-        const newClients = await this.getActiveBusinessStaffRecords(updatedBusiness.staff);
+        const newClients = await this.getActiveBusinessUserRecords(updatedBusiness.staff);
         return newClients;
       } else {
         throw new ForbiddenException("Not enough permissions");

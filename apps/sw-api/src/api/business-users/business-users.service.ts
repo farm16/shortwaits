@@ -5,7 +5,7 @@ import { Business } from "../business/entities/business.entity";
 import { BusinessUser } from "./entities/business-user.entity";
 
 @Injectable()
-export class BusinessStaffService {
+export class BusinessUserService {
   constructor(
     @InjectModel(BusinessUser.name)
     private readonly businessUserModel: Model<BusinessUser>,
@@ -14,7 +14,7 @@ export class BusinessStaffService {
   ) {}
 
   //get business staff id then get records from businessUserModel
-  async getBusinessStaff(businessId: string) {
+  async getBusinessUser(businessId: string) {
     try {
       const business = await this.businessModel.findById(businessId).exec();
       if (!business) {

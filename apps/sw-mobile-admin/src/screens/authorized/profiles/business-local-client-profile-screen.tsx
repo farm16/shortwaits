@@ -6,7 +6,7 @@ import { AgendaItem } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useEvents, useLocalClient } from "../../../store";
 
-export function BusinessLocalClientScreen({ navigation, route }: AuthorizedScreenProps<"business-local-client-screen">) {
+export function BusinessLocalClientProfileScreen({ navigation, route }: AuthorizedScreenProps<"business-local-client-profile-screen">) {
   const { localClient: localClientParam, onUserRemove } = route.params;
 
   const { Colors } = useTheme();

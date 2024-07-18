@@ -87,16 +87,16 @@ export class BusinessEventsController {
     return await this.eventsService.getPeopleByEvent(eventId, request.user.sub);
   }
 
-  @Post("register/multiple")
+  @Post("clients")
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
     description: "Register clients to an event",
   })
-  async registerMultipleToEvent(@Req() request, @Body() body) {
+  async updateClientsInBusinessEvent(@Req() request, @Body() body) {
     const { eventId, clientIds, localClientIds } = body;
     const { sub } = request.user; // todo: business user id to validate permission
-    return await this.eventsService.registerMultipleToEvent(eventId, localClientIds, clientIds);
+    return await this.eventsService.updateClientsInBusinessEvent(eventId, localClientIds, clientIds);
   }
 
   @Put("status/:eventId")

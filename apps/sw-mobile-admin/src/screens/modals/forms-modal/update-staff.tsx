@@ -22,7 +22,7 @@ import { useIntl } from "react-intl";
 import { Alert } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import { GenericModalData, ModalsScreenProps } from "../../../navigation";
-import { useUpdateBusinessStaffMutation } from "../../../services";
+import { useUpdateBusinessUserMutation } from "../../../services";
 import { useBusiness } from "../../../store";
 
 export const UpdateStaffModal: FC<ModalsScreenProps<"update-staff-modal-screen">> = ({ navigation, route }) => {
@@ -36,13 +36,13 @@ export const UpdateStaffModal: FC<ModalsScreenProps<"update-staff-modal-screen">
 
   const business = useBusiness();
 
-  const [updateBusinessStaff, updateBusinessStaffStatus] = useUpdateBusinessStaffMutation();
+  const [updateBusinessUser, updateBusinessUserStatus] = useUpdateBusinessUserMutation();
 
   const { touched, errors, values, setFieldValue, validateField, setFieldTouched, handleChange, handleSubmit, setFieldError } = useForm<PartialBusinessUserDtoType>(
     {
       initialValues,
       onSubmit: formData => {
-        updateBusinessStaff({
+        updateBusinessUser({
           businessId: business._id,
           body: formData,
         });
@@ -62,10 +62,10 @@ export const UpdateStaffModal: FC<ModalsScreenProps<"update-staff-modal-screen">
   }, [closeOnSubmit, handleSubmit, intl, navigation]);
 
   useEffect(() => {
-    if (updateBusinessStaffStatus.isSuccess && closeOnSubmit) {
+    if (updateBusinessUserStatus.isSuccess && closeOnSubmit) {
       navigation.goBack();
     }
-  }, [closeOnSubmit, updateBusinessStaffStatus.isSuccess, navigation]);
+  }, [closeOnSubmit, updateBusinessUserStatus.isSuccess, navigation]);
 
   useEffect(() => {
     const cleanup = async () => {
@@ -82,8 +82,8 @@ export const UpdateStaffModal: FC<ModalsScreenProps<"update-staff-modal-screen">
     };
   }, []);
 
-  if (updateBusinessStaffStatus.isError) {
-    Alert.alert("Error", updateBusinessStaffStatus.error.message);
+  if (updateBusinessUserStatus.isError) {
+    Alert.alert("Error", updateBusinessUserStatus.error.message);
   }
 
   const _renderSubmitButton = (
@@ -96,7 +96,7 @@ export const UpdateStaffModal: FC<ModalsScreenProps<"update-staff-modal-screen">
     />
   );
 
-  return updateBusinessStaffStatus.isLoading ? (
+  return updateBusinessUserStatus.isLoading ? (
     <ActivityIndicator />
   ) : (
     <FormContainer footer={_renderSubmitButton}>

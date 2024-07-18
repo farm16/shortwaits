@@ -69,44 +69,6 @@ export const getBusinessEventPeople = (builder: EndpointBuilder<any, any, any>) 
       }).url,
   });
 
-export const registerLocalClientsToBusinessEvent = (builder: EndpointBuilder<any, any, any>) =>
-  builder.mutation<
-    CommonResponseType<EventDtoType>,
-    {
-      eventId: string;
-      localClientIds: string[];
-    }
-  >({
-    query: ({ eventId, localClientIds }) => {
-      return endpoints.registerLocalClientsToBusinessEvent.getMutationConfig({
-        pathVars: [],
-        body: {
-          localClientIds,
-          eventId,
-        },
-      });
-    },
-  });
-
-export const registerClientsToBusinessEvent = (builder: EndpointBuilder<any, any, any>) =>
-  builder.mutation<
-    CommonResponseType<EventDtoType>,
-    {
-      eventId: string;
-      clientIds: string[];
-    }
-  >({
-    query: ({ eventId, clientIds }) => {
-      return endpoints.registerLocalClientsToBusinessEvent.getMutationConfig({
-        pathVars: [],
-        body: {
-          clientIds,
-          eventId,
-        },
-      });
-    },
-  });
-
 export const updateBusinessEventStatus = (builder: EndpointBuilder<any, any, any>) =>
   builder.mutation<
     CommonResponseType<EventDtoType>,
@@ -125,7 +87,7 @@ export const updateBusinessEventStatus = (builder: EndpointBuilder<any, any, any
     },
   });
 
-export const registerMultipleToBusinessEvent = (builder: EndpointBuilder<any, any, any>) =>
+export const updateClientsInBusinessEvent = (builder: EndpointBuilder<any, any, any>) =>
   builder.mutation<
     CommonResponseType<EventDtoType>,
     {
@@ -135,28 +97,7 @@ export const registerMultipleToBusinessEvent = (builder: EndpointBuilder<any, an
     }
   >({
     query: ({ eventId, clientIds, localClientIds }) => {
-      return endpoints.registerMultipleToBusinessEvent.getMutationConfig({
-        pathVars: [],
-        body: {
-          clientIds,
-          localClientIds,
-          eventId,
-        },
-      });
-    },
-  });
-
-export const withdrawMultipleFromBusinessEvent = (builder: EndpointBuilder<any, any, any>) =>
-  builder.mutation<
-    CommonResponseType<EventDtoType>,
-    {
-      eventId: string;
-      clientIds: string[];
-      localClientIds: string[];
-    }
-  >({
-    query: ({ eventId, clientIds, localClientIds }) => {
-      return endpoints.withdrawMultipleFromBusinessEvent.getMutationConfig({
+      return endpoints.updateClientsInBusinessEvent.getMutationConfig({
         pathVars: [],
         body: {
           clientIds,

@@ -19,17 +19,17 @@ import { Alert, Image, StyleSheet, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { AgendaItem } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
-import { useDeleteBusinessStaffMutation, useUpdateBusinessStaffMutation } from "../../../services";
+import { useDeleteBusinessUserMutation, useUpdateBusinessUserMutation } from "../../../services";
 import { useBusiness, useEvents, useStaffById } from "../../../store";
 
-export function BusinessStaffScreen({ navigation, route }: AuthorizedScreenProps<"business-staff-screen">) {
+export function BusinessUserProfileScreen({ navigation, route }: AuthorizedScreenProps<"business-user-profile-screen">) {
   const { staff: staffParam, onUserRemove } = route.params;
   const { Colors } = useTheme();
   const staff = useStaffById(staffParam._id);
   const events = useEvents();
   const business = useBusiness();
-  const [updateBusinessStaff, updateBusinessStaffStatus] = useUpdateBusinessStaffMutation();
-  const [deleteBusinessStaff, deleteBusinessStaffStatus] = useDeleteBusinessStaffMutation();
+  const [updateBusinessUser, updateBusinessUserStatus] = useUpdateBusinessUserMutation();
+  const [deleteBusinessUser, deleteBusinessUserStatus] = useDeleteBusinessUserMutation();
 
   const staffName = staff?.displayName || staff?.familyName || staff?.givenName || staff?.middleName || staff?.email || "";
 
@@ -38,10 +38,10 @@ export function BusinessStaffScreen({ navigation, route }: AuthorizedScreenProps
   const phoneNumberLabel = isEmpty(phoneNumbers) ? "" : phoneNumbers[0].label;
 
   useEffect(() => {
-    if (deleteBusinessStaffStatus.isSuccess) {
+    if (deleteBusinessUserStatus.isSuccess) {
       navigation.goBack();
     }
-  }, [deleteBusinessStaffStatus.isSuccess, navigation]);
+  }, [deleteBusinessUserStatus.isSuccess, navigation]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -121,11 +121,11 @@ export function BusinessStaffScreen({ navigation, route }: AuthorizedScreenProps
     );
   }
 
-  if (updateBusinessStaffStatus.isError) {
+  if (updateBusinessUserStatus.isError) {
     Alert.alert("Error", "An error occurred while updating staff");
   }
 
-  if (updateBusinessStaffStatus.isLoading || deleteBusinessStaffStatus.isLoading) {
+  if (updateBusinessUserStatus.isLoading || deleteBusinessUserStatus.isLoading) {
     return <ActivityIndicator />;
   }
 
@@ -161,7 +161,7 @@ export function BusinessStaffScreen({ navigation, route }: AuthorizedScreenProps
                       ...staff,
                       hours,
                     };
-                    updateBusinessStaff({
+                    updateBusinessUser({
                       businessId,
                       body,
                     });
@@ -233,7 +233,7 @@ export function BusinessStaffScreen({ navigation, route }: AuthorizedScreenProps
                       ...staff,
                       deleted: true,
                     };
-                    deleteBusinessStaff({
+                    deleteBusinessUser({
                       businessId,
                       body,
                     });

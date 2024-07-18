@@ -52,7 +52,7 @@ export const businessSlice = createSlice({
 
       return { ...state, categories };
     },
-    setBusinessStaff(state, action: PayloadAction<string>) {
+    setBusinessUser(state, action: PayloadAction<string>) {
       if (state.staff.includes(action.payload)) {
         const staff = state.staff.filter(elem => elem !== action.payload);
         console.log("removing >>>", staff);

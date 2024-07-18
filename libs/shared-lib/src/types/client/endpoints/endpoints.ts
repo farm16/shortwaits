@@ -40,8 +40,8 @@ type Endpoint =
   | `clients/${string}`
   | `clients/business/${string}`
   | `clients/business/${string}/clients`
-  | `business-staff`
-  | `business-staff/business/${string}`
+  | `business-user`
+  | `business-user/business/${string}`
   | `local-clients/${string}`
   | `local-clients/business/${string}`
   | `client-events/event/${string}`
@@ -154,10 +154,10 @@ export const endpoints = {
   createBusinessLocalClients: createEndpoint("business/:businessId/local-clients", "POST"),
   deleteBusinessLocalClients: createEndpoint("business/:businessId/local-clients", "DELETE"),
   updateBusinessLocalClient: createEndpoint("business/:businessId/local-client", "PUT"),
-  getBusinessStaff: createEndpoint("business/:businessId/staff", "GET"),
-  createBusinessStaff: createEndpoint("business/:businessId/staff", "POST"),
-  updateBusinessStaff: createEndpoint("business/:businessId/staff", "PUT"),
-  deleteBusinessStaff: createEndpoint("business/:businessId/staff", "DELETE"),
+  getBusinessUser: createEndpoint("business/:businessId/user", "GET"),
+  createBusinessUser: createEndpoint("business/:businessId/user", "POST"),
+  updateBusinessUser: createEndpoint("business/:businessId/user", "PUT"),
+  deleteBusinessUser: createEndpoint("business/:businessId/user", "DELETE"),
   registerBusiness: createEndpoint("business/registration/complete", "POST"),
 
   // categories
@@ -173,10 +173,7 @@ export const endpoints = {
   createBusinessEvent: createEndpoint("business-events/:businessId", "POST"),
   updateBusinessEvent: createEndpoint("business-events/:businessId", "PUT"),
   getBusinessEventPeople: createEndpoint<EventIdQuery>("business-events/people", "GET"),
-  registerLocalClientsToBusinessEvent: createEndpoint("business-events/register/local-clients", "POST"),
-  registerClientsToBusinessEvent: createEndpoint("business-events/register/clients", "POST"),
-  registerMultipleToBusinessEvent: createEndpoint("business-events/register/multiple", "POST"),
-  withdrawMultipleFromBusinessEvent: createEndpoint("business-events/withdraw/multiple", "PUT"),
+  updateClientsInBusinessEvent: createEndpoint("business-events/clients", "POST"),
   updateBusinessEventStatus: createEndpoint("business-events/status/:eventId", "PUT"),
 
   //client-events
@@ -202,8 +199,8 @@ export const endpoints = {
   getBusinessLocalClients: createEndpoint("local-clients/business/:businessId", "GET"),
   addBusinessLocalClient: createEndpoint("local-clients/business/:businessId", "POST"),
 
-  // business staff
-  getStaffUsers: createEndpoint("business-staff/business/:businessId", "GET"),
+  // business user (staff, admin, super admin)
+  getStaffUsers: createEndpoint("business-user/business/:businessId", "GET"),
 
   // upload file
   uploadImageFile: createEndpoint("upload-file/image", "POST"),

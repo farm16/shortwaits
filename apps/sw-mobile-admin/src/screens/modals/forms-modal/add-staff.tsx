@@ -22,7 +22,7 @@ import { useIntl } from "react-intl";
 import { Alert } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import { GenericModalData, ModalsScreenProps } from "../../../navigation";
-import { useCreateBusinessStaffMutation } from "../../../services";
+import { useCreateBusinessUserMutation } from "../../../services";
 import { useBusiness } from "../../../store";
 
 export const AddStaffModal: FC<ModalsScreenProps<"add-staff-modal-screen">> = ({ navigation, route }) => {
@@ -34,7 +34,7 @@ export const AddStaffModal: FC<ModalsScreenProps<"add-staff-modal-screen">> = ({
 
   const business = useBusiness();
 
-  const [createBusinessStaff, createBusinessStaffStatus] = useCreateBusinessStaffMutation();
+  const [createBusinessUser, createBusinessUserStatus] = useCreateBusinessUserMutation();
 
   const initialValues = useMemo(() => {
     const _initialValues: CreateBusinessUserDtoType = {
@@ -98,7 +98,7 @@ export const AddStaffModal: FC<ModalsScreenProps<"add-staff-modal-screen">> = ({
     {
       initialValues,
       onSubmit: formData => {
-        createBusinessStaff({
+        createBusinessUser({
           businessId: business._id,
           body: [formData],
         });
@@ -118,10 +118,10 @@ export const AddStaffModal: FC<ModalsScreenProps<"add-staff-modal-screen">> = ({
   }, [handleSubmit, intl, navigation]);
 
   useEffect(() => {
-    if (createBusinessStaffStatus.isSuccess) {
+    if (createBusinessUserStatus.isSuccess) {
       navigation.goBack();
     }
-  }, [createBusinessStaffStatus.isSuccess, navigation]);
+  }, [createBusinessUserStatus.isSuccess, navigation]);
 
   useEffect(() => {
     const cleanup = async () => {
@@ -138,8 +138,8 @@ export const AddStaffModal: FC<ModalsScreenProps<"add-staff-modal-screen">> = ({
     };
   }, []);
 
-  if (createBusinessStaffStatus.isError) {
-    Alert.alert("Error", createBusinessStaffStatus.error.message);
+  if (createBusinessUserStatus.isError) {
+    Alert.alert("Error", createBusinessUserStatus.error.message);
   }
 
   const _renderSubmitButton = (
@@ -152,7 +152,7 @@ export const AddStaffModal: FC<ModalsScreenProps<"add-staff-modal-screen">> = ({
     />
   );
 
-  return createBusinessStaffStatus.isLoading ? (
+  return createBusinessUserStatus.isLoading ? (
     <ActivityIndicator />
   ) : (
     <FormContainer footer={_renderSubmitButton}>

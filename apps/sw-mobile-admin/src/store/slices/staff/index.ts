@@ -18,13 +18,13 @@ export const staffSlice = createSlice({
       .addMatcher(shortwaitsApi.endpoints.getStaff.matchFulfilled, (state, action) => {
         return action.payload.data;
       })
-      .addMatcher(shortwaitsApi.endpoints.getBusinessStaff.matchFulfilled, (state, action) => {
+      .addMatcher(shortwaitsApi.endpoints.getBusinessUser.matchFulfilled, (state, action) => {
         return action.payload.data;
       })
-      .addMatcher(shortwaitsApi.endpoints.createBusinessStaff.matchFulfilled, (state, action) => {
+      .addMatcher(shortwaitsApi.endpoints.createBusinessUser.matchFulfilled, (state, action) => {
         return action.payload.data;
       })
-      .addMatcher(shortwaitsApi.endpoints.updateBusinessStaff.matchFulfilled, (state, action) => {
+      .addMatcher(shortwaitsApi.endpoints.updateBusinessUser.matchFulfilled, (state, action) => {
         const updatedStaff = action.payload.data;
         return state.map(staff => {
           if (staff._id === updatedStaff._id) {
@@ -33,7 +33,7 @@ export const staffSlice = createSlice({
           return staff;
         });
       })
-      .addMatcher(shortwaitsApi.endpoints.deleteBusinessStaff.matchFulfilled, (state, action) => {
+      .addMatcher(shortwaitsApi.endpoints.deleteBusinessUser.matchFulfilled, (state, action) => {
         return action.payload.data;
       });
   },

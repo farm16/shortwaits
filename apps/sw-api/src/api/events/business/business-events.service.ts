@@ -120,7 +120,7 @@ export class BusinessEventsService {
     }
   }
 
-  async registerMultipleToEvent(eventId: string, localClientIds: string[], clientIds: string[]) {
+  async updateClientsInBusinessEvent(eventId: string, localClientIds: string[], clientIds: string[]) {
     try {
       const eventRecord = await this.eventsModel.findOne({ _id: eventId, deleted: false });
       if (!eventRecord) {
@@ -269,7 +269,7 @@ export class BusinessEventsService {
 
       return updatedEvent;
     } catch (error) {
-      console.log("registerMultipleToEvent error >>>", error);
+      console.log("updateClientsInBusinessEvent error >>>", error);
       throw error;
     }
   }
