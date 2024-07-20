@@ -1,4 +1,13 @@
-import { AddClientDtoType, BusinessUserType, EventType, ObjectId as ObjectIdType, UpdateServiceDtoType, generateAvatarUrl, generateShortId } from "@shortwaits/shared-lib";
+import {
+  AddClientDtoType,
+  BusinessUserType,
+  EventDtoType,
+  EventType,
+  ObjectId as ObjectIdType,
+  UpdateServiceDtoType,
+  generateAvatarUrl,
+  generateShortId,
+} from "@shortwaits/shared-lib";
 import { Types } from "mongoose";
 import { customAlphabet } from "nanoid";
 import { SignUpWithEmailDto } from "../api/auth/dto";
@@ -137,6 +146,61 @@ export const generateNewEvent = (event: CreateEventsDto, userId: string) => {
     attendeeLimit: event.attendeeLimit,
     registrationDeadlineTime: event.registrationDeadlineTime,
     registrationFee: event.registrationFee,
+  };
+  return filteredEvent;
+};
+
+export const generateUpdatedEvent = (event: EventDtoType, userId: string) => {
+  const staffIds = generateObjectIds(event.staffIds) ?? [];
+  const clientsIds = generateObjectIds(event.clientsIds) ?? [];
+  const localClientsIds = generateObjectIds(event.localClientsIds) ?? [];
+  const participantsIds = generateObjectIds(event.participantsIds) ?? [];
+  const updatedBy = generateObjectId(userId);
+  const leadClientId = generateObjectId(event.leadClientId);
+  const serviceId = generateObjectId(event.serviceId);
+  const startTime = generateDateFromIsoString(event.startTime);
+  const endTime = generateDateFromIsoString(event.endTime);
+  const expectedEndTime = generateDateFromIsoString(event.expectedEndTime);
+
+  const filteredEvent: Omit<EventType, "createdBy" | "businessId"> = {
+    // createdBy: createdBy,
+    updatedBy: updatedBy,
+    priceFinal: event.priceExpected,
+    cancellationReason: event.cancellationReason,
+    paymentMethod: event.paymentMethod ?? "CASH",
+    name: event.name,
+    description: event.description,
+    eventImage: event.eventImage,
+    features: event.features,
+    hasDuration: event.hasDuration,
+    durationInMin: event.durationInMin,
+    participantsIds: participantsIds,
+    staffIds: staffIds,
+    clientsIds: clientsIds,
+    localClientsIds: localClientsIds,
+    leadClientId: leadClientId,
+    serviceId: serviceId,
+    startTime: startTime,
+    endTime: endTime,
+    expectedEndTime: expectedEndTime,
+    priceExpected: event.priceExpected,
+    repeat: event.repeat,
+    payment: event.payment,
+    notes: event.notes,
+    labels: event.labels,
+    urls: event.urls,
+    location: event.location,
+    attendeeLimit: event.attendeeLimit,
+    registrationDeadlineTime: event.registrationDeadlineTime,
+    registrationFee: event.registrationFee,
+    shortId: event.shortId,
+    status: event.status,
+    canceled: event.canceled,
+    isPublicEvent: event.isPublicEvent,
+    deleted: event.deleted,
+    discountAmount: event.discountAmount,
+    availableDiscountCodes: event.availableDiscountCodes,
+    selectedDiscountCode: event.selectedDiscountCode,
   };
   return filteredEvent;
 };

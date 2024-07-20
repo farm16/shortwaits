@@ -7,17 +7,17 @@ import { selectCurrentServicesState } from "..";
 export const useService = (serviceId?: string): ServiceDtoType | null => {
   const services = useSelector(selectCurrentServicesState);
 
-  if (isEmpty(services) || !serviceId) {
-    return null;
-  }
+  return useMemo(() => {
+    if (isEmpty(services) || !serviceId) {
+      return null;
+    }
+    const service = services.find(service => service._id === serviceId);
+    if (!service) {
+      return null;
+    }
 
-  const service = services.find(service => service._id === serviceId);
-
-  if (!service) {
-    return null;
-  }
-
-  return useMemo(() => service, [service]);
+    return service;
+  }, [services]);
 };
 
 export const useServices = () => {

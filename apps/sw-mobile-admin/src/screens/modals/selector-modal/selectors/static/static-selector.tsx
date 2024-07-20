@@ -12,7 +12,7 @@ export const StaticSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({
   const [searchText, setSearchText] = useState("");
   const [filteredData, setFilteredData] = useState(_data);
   const [isListSearchable, setIsListSearchable] = useState(searchable ?? false);
-  const disabled = onSelect === undefined;
+  const mode = onSelect ? "button" : "static";
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -51,7 +51,7 @@ export const StaticSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({
       };
       return (
         <StaticSelectorItem
-          disabled={disabled}
+          mode={mode}
           item={item}
           onSelectItem={() => {
             handleOnSelect(item);

@@ -1,5 +1,5 @@
 import { useFocusEffect } from "@react-navigation/native";
-import { EventDtoType } from "@shortwaits/shared-lib";
+import { EventDtoType, ServicesDtoType } from "@shortwaits/shared-lib";
 import {
   CALENDAR_EVENT_HEIGHT,
   EVENT_ITEM_BORDER_RADIUS,
@@ -19,21 +19,21 @@ import { Alert, Animated, Pressable, StyleSheet, View } from "react-native";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import { navigate } from "../../navigation";
 import { useUpdateBusinessEventMutation } from "../../services";
-import { useService } from "../../store";
 import { getEventTime } from "./calendar-utils";
 
 type AgendaItemProps = {
   item: EventDtoType;
   triggerTick?: boolean;
   disabled?: boolean;
+  services?: ServicesDtoType;
 };
 
 export const AgendaItem = (props: AgendaItemProps) => {
-  const { item, triggerTick = false, disabled } = props;
+  const { item, triggerTick = false, disabled, services } = props;
   const swipeableRef = React.useRef<Swipeable>(null);
   const { Colors } = useTheme();
   const intl = useIntl();
-  const service = useService(item?.serviceId);
+  const service = services?.find(service => service._id === item.serviceId);
   const borderColor = disabled ? Colors.white : Colors.lightGray;
   const [updateBusinessEvent, updateEventStatus] = useUpdateBusinessEventMutation(); // todo update to new api hook
 

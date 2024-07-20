@@ -8,11 +8,11 @@ import { AgendaList, CalendarProvider, ExpandableCalendar } from "react-native-c
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { navigate } from "../../navigation/navigation-utils";
 import { useGetBusinessEventsQuery } from "../../services";
-import { useBusiness, useEvents } from "../../store";
+import { useBusiness, useEvents, useServices } from "../../store";
 import { useCalendarTheme } from "./calendar-hooks";
 import { AgendaItem } from "./calendar-item";
 import { LocaleConfig } from "./calendar-locales";
-import { AgendaItemType, useAgendaData, useClosestDateFromAgendaData } from "./calendar-utils";
+import { AgendaItemType, AgendaItems, useClosestDateFromAgendaData } from "./calendar-utils";
 
 type CalendarSectionData = EventType;
 type Sections = {
@@ -30,14 +30,39 @@ export const Calendar: FC<CalendarProps> = memo(props => {
   const theme = useCalendarTheme();
   const currentBusiness = useBusiness();
   const currentEvents = useEvents();
+  const services = useServices();
 
-  const filteredEvents = currentEvents?.filter(event => {
-    console.log("event?.status?.statusName", event?.status?.statusName);
-    const isCompleted = event?.status?.statusName === "COMPLETED";
-    const isCanceled = event?.status?.statusName === "CANCELED";
-    return !isCompleted && !isCanceled;
-  });
-  const agendaData = useAgendaData(filteredEvents ?? []);
+  const getAgendaData = useCallback((): AgendaItems => {
+    const filteredEvents =
+      currentEvents?.filter(event => {
+        console.log("event?.status?.statusName", event?.status?.statusName);
+        const isCompleted = event?.status?.statusName === "COMPLETED";
+        const isCanceled = event?.status?.statusName === "CANCELED";
+        return !isCompleted && !isCanceled;
+      }) ?? [];
+
+    const uniqueDatesSet = new Set(filteredEvents.map(item => item.startTime.split("T")[0]));
+    const uniqueDates = Array.from(uniqueDatesSet);
+
+    const eventsByDate = {};
+
+    for (const event of filteredEvents) {
+      const date = event.startTime.split("T")[0];
+      if (!eventsByDate[date]) {
+        eventsByDate[date] = [];
+      }
+      eventsByDate[date].push(event);
+    }
+
+    const agendaData = uniqueDates.map(date => ({
+      title: date,
+      data: eventsByDate[date.split("T")[0]],
+    }));
+
+    return agendaData;
+  }, [currentEvents]);
+
+  const agendaData = getAgendaData();
   const intl = useIntl();
 
   const locale = intl.locale || "en";
@@ -64,7 +89,7 @@ export const Calendar: FC<CalendarProps> = memo(props => {
     const triggerTick = hasBeenTicked && index === 0;
     // eslint-disable-next-line react-hooks/exhaustive-deps -- we need this to reset
     hasBeenTicked = false;
-    return <AgendaItem item={item} triggerTick={triggerTick} />;
+    return <AgendaItem item={item} triggerTick={triggerTick} services={services} />;
   }, []);
 
   const renderSeparatorItem = useCallback(() => <Space size="tiny" direction="horizontal" />, []);

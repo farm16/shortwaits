@@ -29,7 +29,7 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
       <View style={styles.detail}>
         <Text preset="textLargeBold" text="Labels" />
         <Space size="small" />
-        <Messages type={"warning"} message={"This event has no labels"} />
+        <Messages size="small" hasShadow={false} type={"warning"} message={"This event has no labels"} />
       </View>
     );
   };
@@ -46,7 +46,7 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
       <View style={styles.detail}>
         <Text preset="textLargeBold" text="Description" />
         <Space size="small" />
-        <Messages type={"warning"} message={"This event has no description"} />
+        <Messages size="small" hasShadow={false} type={"warning"} message={"This event has no description"} />
       </View>
     );
   };
@@ -63,7 +63,7 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
       <View style={styles.detail}>
         <Text preset="textLargeBold" text="Description" />
         <Space size="small" />
-        <Messages type={"warning"} message={"This event has no notes"} />
+        <Messages size="small" hasShadow={false} type={"warning"} message={"This event has no notes"} />
       </View>
     );
   };
@@ -74,7 +74,7 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
         <View style={styles.detail}>
           <Text preset="textLargeBold" text="Service" />
           <Space size="small" />
-          <Messages type={"warning"} message={"This event has no service"} />
+          <Messages size="small" hasShadow={false} type={"warning"} message={"This event has no service"} />
         </View>
       );
     }
@@ -100,7 +100,7 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
         <Text preset="textLargeBold" text="Meeting Platform" />
         <Space size="small" />
         {event.urls?.length === 0 ? (
-          <Messages type={"warning"} message={"This event has no meeting platform"} />
+          <Messages size="small" hasShadow={false} type={"warning"} message={"This event has no meeting platform"} />
         ) : (
           event.urls.map((item, index) => {
             return (

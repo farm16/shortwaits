@@ -5,7 +5,7 @@ import { EventDtoType, EventTransactionType, ObjectId as ObjectIdType } from "@s
 import { isEmpty } from "lodash";
 import { FilterQuery, Model, ObjectId, Types, UpdateQuery } from "mongoose";
 import { Op } from "sequelize";
-import { generateNewEvent } from "../../../utils";
+import { generateNewEvent, generateUpdatedEvent } from "../../../utils";
 import { Service } from "../../business-services/entities/business-service.entity";
 import { BusinessUser } from "../../business-users/entities/business-user.entity";
 import { Business } from "../../business/entities/business.entity";
@@ -70,7 +70,8 @@ export class BusinessEventsService {
 
   async updateBusinessEvent(event: EventDtoType, businessId: string, updatedBy: string) {
     try {
-      const updatedEvent = await this.eventsModel.findOneAndUpdate({ _id: event._id, deleted: false }, { ...event, updatedBy }, { new: true });
+      const updatedBusinessEvent = generateUpdatedEvent(event, updatedBy);
+      const updatedEvent = await this.eventsModel.findOneAndUpdate({ _id: event._id, deleted: false }, updatedBusinessEvent, { new: true });
 
       if (!updatedEvent) {
         throw new NotFoundException("Event not found");
@@ -356,7 +357,13 @@ export class BusinessEventsService {
           $lte: endDate,
         };
       }
-      const events = await this.eventsModel.find(filter).skip(skip).limit(limit).exec();
+      // todo: add pagination and filter by date and filterBy and limit
+      const events = await this.eventsModel
+        .find({
+          businessId: businessIdObject,
+          deleted: false,
+        })
+        .exec();
       return events;
     } catch (error) {
       console.log(error);
