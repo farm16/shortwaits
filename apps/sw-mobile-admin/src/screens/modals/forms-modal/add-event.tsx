@@ -9,10 +9,14 @@ import {
   FormContainer,
   FormSchemaTypes,
   IconButton,
+  Messages,
+  Space,
   Text,
   TextFieldCard,
   TimePickerFieldCard,
   getEmojiString,
+  getPrettyStringFromDurationInMin,
+  getPrettyStringFromPrice,
   useForm,
 } from "@shortwaits/shared-ui";
 import { FormikErrors } from "formik";
@@ -29,12 +33,11 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
   const onGoBack = params?.onGoBack;
   const onSuccess = params?.onSuccess;
 
-  const intl = useIntl(); // Access the intl object
-  const [selectedService, setSelectedService] = useState<ServiceDtoType | null>(null);
-  const [isFree, setIsFree] = useState<boolean>(true);
+  const intl = useIntl();
   const user = useUser();
   const business = useBusiness();
-
+  const [selectedService, setSelectedService] = useState<ServiceDtoType | null>(null);
+  const [isFree, setIsFree] = useState<boolean>(true);
   const [createBusinessEvent, createEventStatus] = useCreateBusinessEventMutation();
 
   const validateDates = (formData: CreateEventDtoType): FormikErrors<CreateEventDtoType> => {
@@ -81,7 +84,7 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
       localClientsIds: [],
       hasDuration: true,
       eventImage: "",
-      businessId: business._id as string,
+      businessId: business._id,
       name: "",
       description: "",
       features: [],
@@ -128,15 +131,6 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
 
   console.log("errors", errors);
 
-  useEffect(() => {
-    const unsubscribe = navigation.addListener("blur", () => {
-      // to-do: do something when the screen is blurred
-      console.log("AddEventModal: blur");
-    });
-
-    return unsubscribe;
-  }, [navigation]);
-
   useLayoutEffect(() => {
     const handleOnGoBack = () => {
       if (dirty) {
@@ -177,37 +171,26 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
     }
   }, [onSuccess, createEventStatus.isSuccess, navigation, createEventStatus.data]);
 
-  // useEffect(() => {
-  //   if (!selectedService) {
-  //     setValues(initialValues, false);
-  //   } else return;
-  // }, [initialValues, selectedService, setValues]);
-
-  const handleServiceUpdate = useCallback(
-    (selectedService: ServiceDtoType) => {
-      if (selectedService) {
-        const hasDuration = selectedService.durationInMin > 0;
-        const startTime = new Date(values.startTime);
-        const expectedEndTime = new Date(startTime.getTime() + selectedService.durationInMin * 60000).toISOString();
-        setIsFree(selectedService.price === 0 ? true : false);
-        setValues(
-          {
-            ...values,
-            name: values.name,
-            startTime: values.startTime,
-            priceExpected: selectedService.price === 0 ? 0 : selectedService.price,
-            serviceId: selectedService._id,
-            isPublicEvent: !selectedService.isPrivate,
-            durationInMin: selectedService.durationInMin,
-            hasDuration: hasDuration,
-            expectedEndTime: expectedEndTime,
-          },
-          false
-        );
-      }
-    },
-    [setValues, values]
-  );
+  useEffect(() => {
+    if (selectedService) {
+      const startTime = new Date(values.startTime); // todo: check if this is in within service hours
+      const expectedEndTime = new Date(startTime.getTime() + selectedService.durationInMin * 60000);
+      const expectedEndTimeISO = expectedEndTime.toISOString();
+      const hasDuration = startTime.getTime() !== expectedEndTime.getTime();
+      setValues(
+        {
+          ...values,
+          priceExpected: selectedService.price === 0 ? 0 : selectedService.price,
+          serviceId: selectedService._id,
+          isPublicEvent: !selectedService.isPrivate,
+          durationInMin: selectedService.durationInMin,
+          hasDuration: hasDuration,
+          expectedEndTime: expectedEndTimeISO,
+        },
+        false
+      );
+    }
+  }, [selectedService]);
 
   if (createEventStatus.isError) {
     Alert.alert(intl.formatMessage({ id: "AddEventModal.errorTitle" }), createEventStatus.error.message);
@@ -225,6 +208,34 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
 
   const emojis = values.labels.map(label => getEmojiString(label.emojiShortName)).join(" ");
 
+  const handleDiscountCodeUpdate = useCallback(() => {
+    navigation.navigate("modals", {
+      screen: "selector-modal-screen",
+      params: {
+        mode: "static",
+        headerTitle: intl.formatMessage({ id: "AddEventModal.availableDiscountCodes.addAvailableDiscountCode" }),
+        data: [
+          {
+            code: "MANUAL",
+            discount: null,
+            description: "Manual Discount",
+          },
+        ].map(key => {
+          return {
+            _id: key.code,
+            title: key.code,
+            subTitle: key.description,
+            itemData: key,
+          };
+        }),
+        onSelect: selectedDiscountCodes => {
+          const selectedDiscountCode = selectedDiscountCodes[0] as GenericModalData;
+          setFieldValue("selectedDiscountCode", selectedDiscountCode.itemData);
+        },
+      },
+    });
+  }, [intl, navigation, setFieldValue]);
+
   const handleIsFreePress = useCallback(() => {
     setIsFree(isFree => {
       if (!isFree) {
@@ -241,21 +252,19 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
         mode: "services",
         searchable: true,
         selectedData: selectedService ? [selectedService._id] : [],
-        onSelect: services => {
-          console.log("selected service >>>", services);
-          const service = services[0] as ServiceDtoType;
+        onSelect: (service: ServiceDtoType[]) => {
+          const selectedService = service[0];
 
-          if (service._id === values.serviceId) {
+          if (selectedService._id === values.serviceId) {
             setSelectedService(null);
             setFieldValue("serviceId", "");
           } else {
-            setSelectedService(service);
-            handleServiceUpdate(service);
+            setSelectedService(selectedService);
           }
         },
       },
     });
-  }, [handleServiceUpdate, navigation, selectedService, setFieldValue, values.serviceId]);
+  }, [navigation, selectedService, setFieldValue, values.serviceId]);
 
   const handleClientPress = useCallback(() => {
     navigation.navigate("modals", {
@@ -335,6 +344,8 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
     return <ActivityIndicator />;
   }
 
+  const selectedServiceHasDuration = !isNaN(selectedService?.durationInMin);
+
   return (
     <FormContainer footer={renderSubmitButton}>
       <TextFieldCard
@@ -345,15 +356,6 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
         isTouched={touched.name}
         errors={errors.name}
       />
-      <ButtonCard
-        title={intl.formatMessage({ id: "AddEventModal.service.title" })}
-        subTitle={selectedService ? selectedService.name : intl.formatMessage({ id: "AddEventModal.service.description" })}
-        leftIconName={selectedService ? "circle" : "circle-outline"}
-        leftIconColor={selectedService?.serviceColor?.hexCode ?? "grey"}
-        onPress={handleServicePress}
-        isTouched={touched.serviceId}
-        errors={errors.serviceId}
-      />
       <TextFieldCard
         title={intl.formatMessage({ id: "AddEventModal.description" })}
         placeholder={intl.formatMessage({ id: "AddEventModal.enterDescription" })}
@@ -363,12 +365,13 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
         errors={errors.description}
       />
       <ButtonCard
-        isVisible={!selectedService}
-        rightIconName={values?.hasDuration ? "checkbox-blank-outline" : "checkbox-outline"}
-        title={intl.formatMessage({ id: "AddEventModal.noDuration" })}
-        onPress={() => {
-          setFieldValue("hasDuration", !values?.hasDuration);
-        }}
+        title={intl.formatMessage({ id: "AddEventModal.service.title" })}
+        subTitle={selectedService ? selectedService.name : intl.formatMessage({ id: "AddEventModal.service.description" })}
+        leftIconName={selectedService ? "circle" : "circle-outline"}
+        leftIconColor={selectedService?.serviceColor?.hexCode ?? "grey"}
+        onPress={handleServicePress}
+        isTouched={touched.serviceId}
+        errors={errors.serviceId}
       />
       <TimePickerFieldCard
         title={intl.formatMessage({ id: "AddEventModal.startTime" })}
@@ -377,55 +380,68 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
         isTouched={touched.startTime}
         errors={errors.startTime}
       />
-      <TimePickerFieldCard
-        disabled={values?.hasDuration}
-        title={intl.formatMessage({ id: "AddEventModal.endTime" })}
-        date={new Date(values.expectedEndTime)}
-        onChange={handleChange("expectedEndTime")}
-        isTouched={touched.expectedEndTime}
-        errors={errors.expectedEndTime}
-      />
-      {selectedService?.price === 0 ? null : (
+      {selectedService?.durationInMin === 0 ? (
+        <Messages size="small" hasShadow={false} type="info" message="This service has no time limit." />
+      ) : (
+        <TimePickerFieldCard
+          disabled={selectedServiceHasDuration}
+          title={intl.formatMessage({ id: "AddEventModal.endTime" })}
+          date={new Date(values.expectedEndTime)}
+          onChange={handleChange("expectedEndTime")}
+          isTouched={touched.expectedEndTime}
+          errors={errors.expectedEndTime}
+        />
+      )}
+      {selectedService?.durationInMin > 0 ? (
+        <Messages
+          size="small"
+          style={{ marginBottom: 16 }}
+          hasShadow={false}
+          type="info"
+          message={`Service has a duration of ${getPrettyStringFromDurationInMin(selectedService?.durationInMin)}`}
+        />
+      ) : null}
+      <ExpandableSection>
         <ButtonCard
-          disabled={!selectedService}
+          title={intl.formatMessage({ id: "AddEventModal.paymentMethod" })}
+          subTitle={values.paymentMethod ? eventPaymentMethods[values.paymentMethod] : intl.formatMessage({ id: "AddEventModal.selectPaymentMethod" })}
+          onPress={handlePaymentMethodPress}
+        />
+        <ButtonCard
+          disabled={!!selectedService}
           rightIconName={isFree ? "checkbox-outline" : "checkbox-blank-outline"}
           title={intl.formatMessage({ id: "AddEventModal.free" })}
           isVisible={!selectedService}
-          onPress={handleIsFreePress}
-        />
-      )}
-      {isFree ? null : (
-        <>
-          <ButtonCard
-            title={intl.formatMessage({ id: "AddEventModal.paymentMethod" })}
-            subTitle={values.paymentMethod ? eventPaymentMethods[values.paymentMethod] : intl.formatMessage({ id: "AddEventModal.selectPaymentMethod" })}
-            onPress={handlePaymentMethodPress}
-          />
-          <CurrencyFieldCard
-            disabled={!!selectedService}
-            title={intl.formatMessage({ id: "AddEventModal.price" })}
-            keyboardType="number-pad"
-            placeholder={intl.formatMessage({ id: "AddEventModal.enterPrice" })}
-            value={values.priceExpected}
-            onChangeValue={price => setFieldValue("priceExpected", price)}
-            isTouched={touched.priceExpected}
-            errors={errors.priceExpected}
-            currencyType={"USD"}
-          />
-        </>
-      )}
-      <ExpandableSection>
-        <ButtonCard
-          isVisible={!selectedService}
-          rightIconName={values?.isPublicEvent ? "checkbox-outline" : "checkbox-blank-outline"}
-          title={intl.formatMessage({ id: "AddEventModal.isPublicEvent" })}
-          subTitle={intl.formatMessage({ id: "AddEventModal.isPublicEvent.description" }, { isPublicEvent: values?.isPublicEvent })}
           onPress={() => {
-            setFieldValue("isPublicEvent", !values?.isPublicEvent);
+            setIsFree(isFree => {
+              if (!isFree) {
+                setFieldValue("priceExpected", 0);
+              }
+              return !isFree;
+            });
           }}
         />
+        <CurrencyFieldCard
+          disabled={!!selectedService || isFree}
+          title={intl.formatMessage({ id: "AddEventModal.price" })}
+          keyboardType="number-pad"
+          placeholder={intl.formatMessage({ id: "AddEventModal.enterPrice" })}
+          value={values.priceExpected}
+          onChangeValue={price => setFieldValue("priceExpected", price)}
+          isTouched={touched.priceExpected}
+          errors={errors.priceExpected}
+          currencyType={"USD"}
+        />
+        {selectedService?.price ? (
+          <Messages
+            size="small"
+            style={{ marginBottom: 16 }}
+            hasShadow={false}
+            type="info"
+            message={`Service has a price set to ${getPrettyStringFromPrice(selectedService?.currency, selectedService?.price)}`}
+          />
+        ) : null}
         <ButtonCard
-          disabled={values?.isPublicEvent ? true : false}
           title={intl.formatMessage({ id: "AddEventModal.client.title" })}
           subTitle={
             values.clientsIds.length + values.localClientsIds.length > 0
@@ -444,6 +460,40 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
           onPress={handleStaffPress}
         />
         <ButtonCard
+          isVisible={!selectedService}
+          rightIconName={values?.isPublicEvent ? "checkbox-outline" : "checkbox-blank-outline"}
+          title={intl.formatMessage({ id: "AddEventModal.isPublicEvent" })}
+          subTitle={intl.formatMessage({ id: "AddEventModal.isPublicEvent.description" }, { isPublicEvent: values?.isPublicEvent })}
+          onPress={() => {
+            setFieldValue("isPublicEvent", !values?.isPublicEvent);
+          }}
+        />
+        <ButtonCard
+          title={intl.formatMessage({ id: "AddEventModal.availableDiscountCodes.title" })}
+          subTitle={values.selectedDiscountCode ? values.selectedDiscountCode.code : intl.formatMessage({ id: "AddEventModal.availableDiscountCodes.subTitle" })}
+          onPress={handleDiscountCodeUpdate}
+        />
+
+        {values?.selectedDiscountCode?.code === "MANUAL" ? (
+          <CurrencyFieldCard
+            title="Discount Amount"
+            keyboardType="number-pad"
+            value={values?.selectedDiscountCode?.discount}
+            onChangeValue={price => setFieldValue("selectedDiscountCode.discount", price)}
+            isTouched={touched.selectedDiscountCode?.discount}
+            errors={errors.selectedDiscountCode?.discount}
+            currencyType={"USD"}
+          />
+        ) : null}
+        {/* <ButtonCard
+        rightIconName={values?.repeat ? "checkbox-outline" : "checkbox-blank-outline"}
+        title={"Recurring"}
+        disabled // TODO: implement recurring events
+        onPress={() => {
+          setFieldValue("repeat", !values?.repeat);
+        }}
+      /> */}
+        <ButtonCard
           title={intl.formatMessage({ id: "AddEventModal.labels" })}
           subTitle={values.labels.length > 0 ? `${emojis}` : intl.formatMessage({ id: "AddEventModal.selectLabels" })}
           onPress={handleLabelPress}
@@ -458,6 +508,7 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
           errors={errors.notes}
         />
       </ExpandableSection>
+      <Space size="large" />
     </FormContainer>
   );
 };

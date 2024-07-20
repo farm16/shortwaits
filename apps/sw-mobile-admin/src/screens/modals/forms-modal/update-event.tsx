@@ -5,6 +5,7 @@ import {
   Button,
   ButtonCard,
   CurrencyFieldCard,
+  ExpandableSection,
   FormContainer,
   FormSchemaTypes,
   IconButton,
@@ -16,6 +17,8 @@ import {
   compareFormObjectsBeforeAbort,
   getArrCount,
   getEmojiString,
+  getPrettyStringFromDurationInMin,
+  getPrettyStringFromPrice,
   nextEventStatuses,
   useForm,
 } from "@shortwaits/shared-ui";
@@ -25,23 +28,24 @@ import { useIntl } from "react-intl";
 import { Alert } from "react-native";
 import { GenericModalData, ModalsScreenProps } from "../../../navigation";
 import { useUpdateBusinessEventMutation } from "../../../services";
-import { useBusiness, useServices } from "../../../store";
+import { useBusiness, useService } from "../../../store";
 
 export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">> = ({ navigation, route }) => {
   const params = route?.params;
   const onSubmit = params?.onSubmit;
   const onGoBack = params?.onGoBack;
   const onSuccess = params?.onSuccess;
-
-  console.log("serviceId >>>", params?.initialValues?.serviceId);
-  const intl = useIntl();
-  const services = useServices();
-  const business = useBusiness();
-  const [selectedService, setSelectedService] = useState(params?.initialValues?.serviceId ? services.find(service => service?._id === params?.initialValues?.serviceId) : null);
-  const [isFree, setIsFree] = useState<boolean>(false);
+  const initialValues = params?.initialValues;
+  const serviceId = params?.initialValues?.serviceId;
   const statusName = params?.initialValues?.status?.statusName ?? "";
   const isEventDisabled = statusName ? nextEventStatuses[params?.initialValues?.status?.statusName].length === 0 : true;
+  console.log("initialValues", JSON.stringify(initialValues, null, 2));
 
+  const intl = useIntl();
+  const business = useBusiness();
+  const service = useService(serviceId);
+  const [selectedService, setSelectedService] = useState<ServiceDtoType | null>(service);
+  const [isFree, setIsFree] = useState<boolean>(false);
   const [updateBusinessEvent, updateEventStatus] = useUpdateBusinessEventMutation();
 
   const validateDates = (formData: UpdateEventDtoType): FormikErrors<UpdateEventDtoType> => {
@@ -67,8 +71,6 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
 
     return errors;
   };
-
-  const initialValues = params?.initialValues;
 
   const { touched, errors, values, setValues, handleChange, handleSubmit, setFieldValue } = useForm(
     {
@@ -139,6 +141,27 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
   }, [initialValues, intl, isEventDisabled, navigation, onGoBack, updateBusinessEvent, values]);
 
   useEffect(() => {
+    if (selectedService) {
+      const startTime = new Date(values.startTime); // todo: check if this is in within service hours
+      const expectedEndTime = new Date(startTime.getTime() + selectedService.durationInMin * 60000);
+      const expectedEndTimeISO = expectedEndTime.toISOString();
+      const hasDuration = startTime.getTime() !== expectedEndTime.getTime();
+      setValues(
+        {
+          ...values,
+          priceExpected: selectedService.price === 0 ? 0 : selectedService.price,
+          serviceId: selectedService._id,
+          isPublicEvent: !selectedService.isPrivate,
+          durationInMin: selectedService.durationInMin,
+          hasDuration: hasDuration,
+          expectedEndTime: expectedEndTimeISO,
+        },
+        false
+      );
+    }
+  }, [selectedService]);
+
+  useEffect(() => {
     if (updateEventStatus.isSuccess) {
       if (onSuccess) {
         onSuccess(updateEventStatus?.data?.data);
@@ -146,33 +169,6 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
       navigation.goBack();
     }
   }, [onSuccess, updateEventStatus.isSuccess, navigation, updateEventStatus.data]);
-
-  const updateEventService = useCallback(
-    (selectedService: ServiceDtoType) => {
-      const validService = services.find(service => service._id === selectedService._id);
-      if (validService) {
-        const hasDuration = selectedService.durationInMin > 0;
-        const startTime = new Date(values.startTime);
-        const expectedEndTime = new Date(startTime.getTime() + selectedService.durationInMin * 60000).toISOString();
-        setIsFree(selectedService.price === 0 ? true : false);
-        setValues(
-          {
-            ...values,
-            name: values.name,
-            startTime: values.startTime,
-            priceExpected: selectedService.price === 0 ? 0 : selectedService.price,
-            serviceId: selectedService._id,
-            isPublicEvent: !selectedService.isPrivate,
-            durationInMin: selectedService.durationInMin,
-            hasDuration: hasDuration,
-            expectedEndTime: expectedEndTime,
-          },
-          false
-        );
-      }
-    },
-    [services, setValues, values]
-  );
 
   if (updateEventStatus.isError) {
     Alert.alert("Error", updateEventStatus.error.message);
@@ -210,7 +206,7 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
     });
   }, [navigation, setFieldValue, values.labels]);
 
-  const handleServiceUpdate = useCallback(() => {
+  const handleServicePress = useCallback(() => {
     navigation.navigate("modals", {
       screen: "selector-modal-screen",
       params: {
@@ -224,12 +220,11 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
             setFieldValue("serviceId", "");
           } else {
             setSelectedService(selectedService);
-            updateEventService(selectedService);
           }
         },
       },
     });
-  }, [navigation, selectedService, setFieldValue, updateEventService, values.serviceId]);
+  }, [navigation, selectedService, setFieldValue, values.serviceId]);
 
   const handlePaymentMethodUpdate = useCallback(() => {
     navigation.navigate("modals", {
@@ -333,15 +328,40 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
     }
   }, [updateEventStatus]);
 
+  const handleStartTimeChange = (dateString: string) => {
+    const hasDuration = selectedService?.durationInMin > 0;
+    const defaultDuration = 30;
+    setFieldValue("startTime", dateString);
+    if (hasDuration) {
+      const startTime = new Date(dateString);
+      const expectedEndTime = new Date(startTime.getTime() + selectedService.durationInMin * 60000).toISOString();
+      setFieldValue("expectedEndTime", expectedEndTime);
+    } else {
+      const startTime = new Date(dateString);
+      const expectedEndTime = new Date(startTime.getTime() + defaultDuration * 60000).toISOString();
+      setFieldValue("expectedEndTime", expectedEndTime);
+    }
+  };
+
   if (updateEventStatus.isLoading) {
     return <ActivityIndicator />;
   }
 
+  // check if end time is number
+  const selectedServiceHasDuration = !isNaN(selectedService?.durationInMin);
+
   return (
     <FormContainer footer={renderSubmitButton}>
       {renderErrorMessage()}
-      <TextFieldCard disabled={isEventDisabled} title="Name" value={values?.name} onChangeText={handleChange("name")} isTouched={touched.name} errors={errors.name} />
-      <Space size="tiny" />
+      <TextFieldCard
+        disabled={isEventDisabled}
+        title={intl.formatMessage({ id: "AddEventModal.name" })}
+        placeholder={intl.formatMessage({ id: "AddEventModal.name" })}
+        value={values?.name}
+        onChangeText={handleChange("name")}
+        isTouched={touched.name}
+        errors={errors.name}
+      />
       <TextFieldCard
         disabled={isEventDisabled}
         title="Description"
@@ -351,54 +371,52 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
         isTouched={touched.description}
         errors={errors.description}
       />
-      <Space size="tiny" />
-      <TextFieldCard
-        disabled={isEventDisabled}
-        title="Notes"
-        value={values?.notes}
-        multiline
-        onChangeText={handleChange("notes")}
-        isTouched={touched.notes}
-        errors={errors.notes}
-      />
-      <ButtonCard title="Labels" disabled={isEventDisabled} subTitle={values.labels.length > 0 ? `${emojis}` : "Select labels"} onPress={handleLabelUpdate} />
       <ButtonCard
         disabled={isEventDisabled}
         title={intl.formatMessage({ id: "AddEventModal.service.title" })}
         subTitle={selectedService ? selectedService.name : intl.formatMessage({ id: "AddEventModal.service.description" })}
         leftIconName={selectedService ? "circle" : "circle-outline"}
         leftIconColor={selectedService?.serviceColor?.hexCode ?? "grey"}
-        onPress={handleServiceUpdate}
-      />
-      <ButtonCard
-        disabled={isEventDisabled}
-        isVisible={!selectedService}
-        rightIconName={values?.hasDuration ? "checkbox-outline" : "checkbox-blank-outline"}
-        title={intl.formatMessage({ id: "AddEventModal.noDuration" })}
-        onPress={() => {
-          setFieldValue("hasDuration", !values?.hasDuration);
-        }}
+        onPress={handleServicePress}
       />
       <TimePickerFieldCard
         disabled={isEventDisabled}
         title={intl.formatMessage({ id: "AddEventModal.startTime" })}
         date={new Date(values.startTime)}
-        onChange={handleChange("startTime")}
+        onChange={handleStartTimeChange}
         isTouched={touched.startTime}
         errors={errors.startTime}
       />
-      <TimePickerFieldCard
-        disabled={values?.hasDuration || isEventDisabled}
-        title={intl.formatMessage({ id: "AddEventModal.endTime" })}
-        date={new Date(values.expectedEndTime)}
-        onChange={handleChange("expectedEndTime")}
-        isTouched={touched.expectedEndTime}
-        errors={errors.expectedEndTime}
-      />
-
-      {selectedService?.price === 0 ? null : (
+      {selectedService?.durationInMin === 0 ? (
+        <Messages size="small" hasShadow={false} type="info" message="This service has no time limit." />
+      ) : (
+        <TimePickerFieldCard
+          disabled={isEventDisabled || selectedServiceHasDuration}
+          title={intl.formatMessage({ id: "AddEventModal.endTime" })}
+          date={new Date(values.expectedEndTime)}
+          onChange={handleChange("expectedEndTime")}
+          isTouched={touched.expectedEndTime}
+          errors={errors.expectedEndTime}
+        />
+      )}
+      {selectedService?.durationInMin > 0 ? (
+        <Messages
+          size="small"
+          style={{ marginBottom: 16 }}
+          hasShadow={false}
+          type="info"
+          message={`Service has a duration of ${getPrettyStringFromDurationInMin(selectedService?.durationInMin)}`}
+        />
+      ) : null}
+      <ExpandableSection>
         <ButtonCard
-          disabled={!selectedService || isEventDisabled}
+          disabled={isEventDisabled}
+          title={intl.formatMessage({ id: "AddEventModal.paymentMethod" })}
+          subTitle={values.paymentMethod ? eventPaymentMethods[values.paymentMethod] : intl.formatMessage({ id: "AddEventModal.selectPaymentMethod" })}
+          onPress={handlePaymentMethodUpdate}
+        />
+        <ButtonCard
+          disabled={isEventDisabled || !!selectedService}
           rightIconName={isFree ? "checkbox-outline" : "checkbox-blank-outline"}
           title={intl.formatMessage({ id: "AddEventModal.free" })}
           isVisible={!selectedService}
@@ -411,70 +429,90 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
             });
           }}
         />
-      )}
-      <ButtonCard
-        disabled={isEventDisabled}
-        title={intl.formatMessage({ id: "AddEventModal.paymentMethod" })}
-        subTitle={values.paymentMethod ? eventPaymentMethods[values.paymentMethod] : intl.formatMessage({ id: "AddEventModal.selectPaymentMethod" })}
-        onPress={handlePaymentMethodUpdate}
-      />
-      <CurrencyFieldCard
-        disabled={!!selectedService || isEventDisabled}
-        title={intl.formatMessage({ id: "AddEventModal.price" })}
-        keyboardType="number-pad"
-        placeholder={intl.formatMessage({ id: "AddEventModal.enterPrice" })}
-        value={values?.priceExpected}
-        onChangeValue={price => setFieldValue("priceExpected", price)}
-        isTouched={touched.priceExpected}
-        errors={errors.priceExpected}
-        currencyType={"USD"}
-      />
-      <ButtonCard
-        disabled={isEventDisabled}
-        title={intl.formatMessage({ id: "AddEventModal.availableDiscountCodes.title" })}
-        subTitle={values.selectedDiscountCode ? values.selectedDiscountCode.code : intl.formatMessage({ id: "AddEventModal.availableDiscountCodes.subTitle" })}
-        onPress={handleDiscountCodeUpdate}
-      />
-      {values?.selectedDiscountCode?.code === "MANUAL" ? (
         <CurrencyFieldCard
-          disabled={isEventDisabled}
-          title="Discount Amount"
+          disabled={isEventDisabled || !!selectedService || isFree}
+          title={intl.formatMessage({ id: "AddEventModal.price" })}
           keyboardType="number-pad"
-          value={values?.selectedDiscountCode?.discount}
-          onChangeValue={price => setFieldValue("selectedDiscountCode.discount", price)}
-          isTouched={touched.selectedDiscountCode?.discount}
-          errors={errors.selectedDiscountCode?.discount}
+          placeholder={intl.formatMessage({ id: "AddEventModal.enterPrice" })}
+          value={values?.priceExpected}
+          onChangeValue={price => setFieldValue("priceExpected", price)}
+          isTouched={touched.priceExpected}
+          errors={errors.priceExpected}
           currencyType={"USD"}
         />
-      ) : null}
-      <ButtonCard
+        {selectedService?.price ? (
+          <Messages
+            size="small"
+            style={{ marginBottom: 16 }}
+            hasShadow={false}
+            type="info"
+            message={`Service has a price set to ${getPrettyStringFromPrice(selectedService?.currency, selectedService?.price)}`}
+          />
+        ) : null}
+        <ButtonCard
+          disabled={isEventDisabled}
+          title={intl.formatMessage({ id: "AddEventModal.staff.title" })}
+          subTitle={
+            values.staffIds.length > 0
+              ? `${intl.formatMessage({ id: "AddEventModal.staff.description" })}: ${values.staffIds.length}`
+              : intl.formatMessage({ id: "AddEventModal.staff.emptyDescription" })
+          }
+          onPress={handleStaffUpdate}
+        />
+        <ButtonCard
+          disabled={isEventDisabled}
+          title={intl.formatMessage({ id: "AddEventModal.client.title" })}
+          subTitle={
+            clientsCount > 0
+              ? `${intl.formatMessage({ id: "AddEventModal.client.description" })}: ${clientsCount}`
+              : intl.formatMessage({ id: "AddEventModal.client.emptyDescription" })
+          }
+          onPress={handleClientsUpdate}
+        />
+        <ButtonCard
+          disabled={isEventDisabled}
+          title={intl.formatMessage({ id: "AddEventModal.availableDiscountCodes.title" })}
+          subTitle={values.selectedDiscountCode ? values.selectedDiscountCode.code : intl.formatMessage({ id: "AddEventModal.availableDiscountCodes.subTitle" })}
+          onPress={handleDiscountCodeUpdate}
+        />
+
+        {values?.selectedDiscountCode?.code === "MANUAL" ? (
+          <CurrencyFieldCard
+            disabled={isEventDisabled}
+            title="Discount Amount"
+            keyboardType="number-pad"
+            value={values?.selectedDiscountCode?.discount}
+            onChangeValue={price => setFieldValue("selectedDiscountCode.discount", price)}
+            isTouched={touched.selectedDiscountCode?.discount}
+            errors={errors.selectedDiscountCode?.discount}
+            currencyType={"USD"}
+          />
+        ) : null}
+        {/* <ButtonCard
         rightIconName={values?.repeat ? "checkbox-outline" : "checkbox-blank-outline"}
         title={"Recurring"}
         disabled // TODO: implement recurring events
         onPress={() => {
           setFieldValue("repeat", !values?.repeat);
         }}
-      />
-      <ButtonCard
-        disabled={isEventDisabled}
-        title={intl.formatMessage({ id: "AddEventModal.staff.title" })}
-        subTitle={
-          values.staffIds.length > 0
-            ? `${intl.formatMessage({ id: "AddEventModal.staff.description" })}: ${values.staffIds.length}`
-            : intl.formatMessage({ id: "AddEventModal.staff.emptyDescription" })
-        }
-        onPress={handleStaffUpdate}
-      />
-      <ButtonCard
-        disabled={!values?.isPublicEvent || isEventDisabled}
-        title={intl.formatMessage({ id: "AddEventModal.client.title" })}
-        subTitle={
-          clientsCount > 0
-            ? `${intl.formatMessage({ id: "AddEventModal.client.description" })}: ${clientsCount}`
-            : intl.formatMessage({ id: "AddEventModal.client.emptyDescription" })
-        }
-        onPress={handleClientsUpdate}
-      />
+      /> */}
+        <ButtonCard
+          title={intl.formatMessage({ id: "AddEventModal.labels" })}
+          disabled={isEventDisabled}
+          subTitle={values.labels.length > 0 ? `${emojis}` : intl.formatMessage({ id: "AddEventModal.selectLabels" })}
+          onPress={handleLabelUpdate}
+        />
+        <TextFieldCard
+          disabled={isEventDisabled}
+          title={intl.formatMessage({ id: "AddEventModal.notes" })}
+          placeholder={intl.formatMessage({ id: "AddEventModal.enterNotes" })}
+          value={values?.notes}
+          multiline
+          onChangeText={handleChange("notes")}
+          isTouched={touched.notes}
+          errors={errors.notes}
+        />
+      </ExpandableSection>
       <Space size="large" />
     </FormContainer>
   );

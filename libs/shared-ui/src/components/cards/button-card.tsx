@@ -17,6 +17,8 @@ export const ButtonCard = (props: ButtonCardProps) => {
   const { width } = getDimensions();
 
   const withTopBorderStyle = withTopBorder ? { borderTopWidth: 1.5, borderTopColor: Colors.gray } : {};
+  const titleTextPreset = disabled ? "cardTitle-disabled" : "cardTitle";
+  const subTitleTextPreset = disabled ? "cardSubtitle-disabled" : "cardSubtitle";
 
   if (!isVisible) {
     return null;
@@ -25,17 +27,17 @@ export const ButtonCard = (props: ButtonCardProps) => {
   return (
     <>
       <Card {...rest} disabled={disabled} mode="button" rightIconSize={rightIconSize} rightIconName={rightIconName} style={withTopBorderStyle}>
-        <Text preset="cardTitle" style={textStyle} text={title} />
+        <Text preset={titleTextPreset} style={textStyle} text={title} />
         {subTitle && (
           <>
             <Space size="tiny" />
-            <Text preset="cardSubtitle" text={subTitle} />
+            <Text preset={subTitleTextPreset} text={subTitle} />
           </>
         )}
       </Card>
       {errors && isTouched ? (
         <Text
-          preset="cardTitle"
+          preset={titleTextPreset}
           style={{
             ...styles.errorField,
             width: width * 0.87,

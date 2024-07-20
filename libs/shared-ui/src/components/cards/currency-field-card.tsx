@@ -1,8 +1,7 @@
 import { BusinessAvailableCurrenciesType } from "@shortwaits/shared-lib";
-import React, { useRef } from "react";
+import { useRef } from "react";
 import { Platform, Pressable, StyleSheet } from "react-native";
 import CurrencyInput, { CurrencyInputProps } from "react-native-currency-input";
-
 import { getDimensions, useTheme } from "../../theme";
 import { getCentsFromDollars, getCurrencySymbolFromCurrencyType, getDollarsFromCents } from "../../utils/currency";
 import { Card, CardProps, Space, Text } from "../common";
@@ -38,10 +37,7 @@ export function CurrencyFieldCard(props: TextFieldCardType) {
     ...rest
   } = props;
 
-  const {
-    Colors,
-    Common: { textFieldPresets },
-  } = useTheme();
+  const { Colors } = useTheme();
 
   const textInputRef = useRef<CurrencyInput>(null);
   const { width } = getDimensions();
@@ -54,30 +50,24 @@ export function CurrencyFieldCard(props: TextFieldCardType) {
   const handleOnChangeValue = (value: number) => {
     onChangeValue && onChangeValue(getCentsFromDollars(value));
   };
+  const titleTextPreset = disabled ? "cardTitle-disabled" : "cardTitle";
 
   return (
     <>
-      <Card
-        {...rest}
-        disabled={disabled}
-        mode="text-field"
-        rightIconSize={rightIconSize}
-        rightIconName={rightIconName}
-        style={
-          withTopBorder
-            ? {
-                borderTopWidth: 1.5,
-                borderTopColor: Colors.inputBackground,
-              }
-            : undefined
-        }
-      >
+      <Card {...rest} disabled={disabled} mode="text-field" rightIconSize={rightIconSize} rightIconName={rightIconName}>
         <Pressable onPress={handleSetFocus}>
-          <Text preset="cardTitle" text={title} />
+          <Text preset={titleTextPreset} text={title} />
           {Platform.OS === "ios" && <Space size="tiny" />}
         </Pressable>
         <CurrencyInput
-          style={textFieldPresets.cardSubtitle}
+          ref={textInputRef}
+          style={{
+            color: disabled ? Colors.disabledText : Colors.subText,
+            fontWeight: "400",
+            paddingTop: 4,
+            paddingBottom: 0,
+            paddingLeft: 0,
+          }}
           placeholderTextColor={Colors.subText}
           placeholder="0.00"
           prefix={getCurrencySymbolFromCurrencyType(currencyType)}

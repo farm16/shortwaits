@@ -1,11 +1,11 @@
 import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundException, PreconditionFailedException, UnauthorizedException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { InjectModel as InjectSequelizeModel } from "@nestjs/sequelize";
-import { EventDtoType, EventTransactionType } from "@shortwaits/shared-lib";
+import { EventDtoType, EventTransactionType, ObjectId as ObjectIdType } from "@shortwaits/shared-lib";
 import { isEmpty } from "lodash";
 import { FilterQuery, Model, ObjectId, Types, UpdateQuery } from "mongoose";
 import { Op } from "sequelize";
-import { generateNewEvent } from "../../../utils/filtersForDtos";
+import { generateNewEvent } from "../../../utils";
 import { Service } from "../../business-services/entities/business-service.entity";
 import { BusinessUser } from "../../business-users/entities/business-user.entity";
 import { Business } from "../../business/entities/business.entity";
@@ -50,10 +50,16 @@ export class BusinessEventsService {
         // do something
       }
 
-      const filteredNewEvent = generateNewEvent(event, userId);
-      console.log("New Event >>>", JSON.stringify(filteredNewEvent, null, 2));
-      const newEvent = await this.eventsModel.create(filteredNewEvent);
+      const newEventPayload = generateNewEvent(event, userId);
+      console.log("newEventPayload >>>", JSON.stringify(newEventPayload, null, 2));
+      const newEvent = await this.eventsModel.create(newEventPayload);
+      console.log("event created >>>", JSON.stringify(newEvent, null, 2));
+
       await businessRecord.updateOne({ $push: { events: newEvent._id } }).exec();
+
+      const localClientRecordsToBeAdded: LocalClient[] = await this.findActiveLocalClients(newEvent.localClientsIds);
+      const clientRecordsToBeAdded: Client[] = await this.findActiveClients(newEvent.clientsIds);
+      await this.bulkCreateEventTransactions(localClientRecordsToBeAdded, clientRecordsToBeAdded, newEvent);
 
       return newEvent;
     } catch (error) {
@@ -126,8 +132,8 @@ export class BusinessEventsService {
       if (!eventRecord) {
         throw new PreconditionFailedException("Invalid parameters");
       }
-      const existingLocalClientIds = eventRecord.localClientsIds.map(id => id.toString());
-      const existingClientIds = eventRecord.clientsIds.map(id => id.toString());
+      const existingLocalClientIds = eventRecord.localClientsIds?.map(id => id.toString()) ?? [];
+      const existingClientIds = eventRecord.clientsIds?.map(id => id.toString()) ?? [];
 
       // if localClientIds doesn't contain any existing local client ids remove them from the event
       const localClientsToBeRemoved = existingLocalClientIds.filter(id => !localClientIds.includes(id));
@@ -160,38 +166,10 @@ export class BusinessEventsService {
         throw new PreconditionFailedException("Nothing to update");
       }
 
-      let localClientRecordsToBeAdded: LocalClient[] = [];
-      let clientRecordsToBeAdded: Client[] = [];
-      let localClientRecordsToBeRemoved: LocalClient[] = [];
-      let clientRecordsToBeRemoved: Client[] = [];
-
-      if (hasLocalClientsToBeAdded) {
-        localClientRecordsToBeAdded = await this.localClientUserModel.find({ _id: { $in: localClientsToBeAdded }, deleted: false });
-        if (isEmpty(localClientRecordsToBeAdded)) {
-          throw new PreconditionFailedException("no records found for local clients to be added");
-        }
-      }
-
-      if (hasClientsToBeAdded) {
-        clientRecordsToBeAdded = await this.clientUserModel.find({ _id: { $in: clientsToBeAdded }, deleted: false });
-        if (isEmpty(clientRecordsToBeAdded)) {
-          throw new PreconditionFailedException("no records found for clients to be added");
-        }
-      }
-
-      if (hasLocalClientsToBeRemoved) {
-        localClientRecordsToBeRemoved = await this.localClientUserModel.find({ _id: { $in: localClientsToBeRemoved }, deleted: false });
-        if (isEmpty(localClientRecordsToBeRemoved)) {
-          throw new PreconditionFailedException("no records found for local clients to be removed");
-        }
-      }
-
-      if (hasClientsToBeRemoved) {
-        clientRecordsToBeRemoved = await this.clientUserModel.find({ _id: { $in: clientsToBeRemoved }, deleted: false });
-        if (isEmpty(clientRecordsToBeRemoved)) {
-          throw new PreconditionFailedException("no records found for clients to be removed");
-        }
-      }
+      const localClientRecordsToBeAdded: LocalClient[] = await this.findActiveLocalClients(localClientsToBeAdded);
+      const clientRecordsToBeAdded: Client[] = await this.findActiveClients(clientsToBeAdded);
+      const localClientRecordsToBeRemoved: LocalClient[] = await this.findActiveLocalClients(localClientsToBeRemoved);
+      const clientRecordsToBeRemoved: Client[] = await this.findActiveClients(clientsToBeRemoved);
 
       const eventsFilterQuery: FilterQuery<Event> = { _id: eventId, deleted: false };
       const clientRecordIdsToBeRemoved: ObjectId[] = clientRecordsToBeRemoved.map(record => record._id);
@@ -234,38 +212,7 @@ export class BusinessEventsService {
       const updatedEvent = await this.eventsModel.findOneAndUpdate(eventsFilterQuery, eventsModelQuery, { new: true });
       console.log("updatedEvent >>>", updatedEvent);
 
-      const eventRecordId = updatedEvent._id.toString();
-      const newEventTransactionPayload: EventTransactionType[] = [
-        ...localClientRecordsToBeAdded.map(record => ({
-          event_id: eventRecordId,
-          client_id: null,
-          local_client_id: record._id.toString(),
-          transaction_date: new Date(),
-          transaction_amount: eventRecord?.payment?.amount || 0,
-          transaction_type: eventRecord.paymentMethod || null,
-          payment_method: eventRecord.paymentMethod || null,
-          transaction_status: eventRecord.status.statusName,
-          notes: null,
-          promo_codes: null,
-          withdraw_from_event: false,
-        })),
-        ...clientRecordsToBeAdded.map(record => ({
-          event_id: eventRecordId,
-          client_id: record._id.toString(),
-          local_client_id: null,
-          transaction_date: new Date(),
-          transaction_amount: eventRecord?.payment?.amount || 0,
-          transaction_type: eventRecord.paymentMethod || null,
-          payment_method: eventRecord.paymentMethod || null,
-          transaction_status: eventRecord.status.statusName,
-          notes: null,
-          promo_codes: null,
-          withdraw_from_event: false,
-        })),
-      ];
-      console.log("newEventTransactionPayload >>>", newEventTransactionPayload);
-      const newTransactions = await this.eventTransactionModel.bulkCreate(newEventTransactionPayload);
-      console.log("new transactions >>>", newTransactions);
+      await this.bulkCreateEventTransactions(localClientRecordsToBeAdded, clientRecordsToBeAdded, updatedEvent);
 
       return updatedEvent;
     } catch (error) {
@@ -374,12 +321,14 @@ export class BusinessEventsService {
       const { date, filterBy } = filterOptions ?? {};
       const _date = new Date(date);
 
+      const businessIdObject = new Types.ObjectId(businessId);
+
       const filter: {
-        businessId: string;
+        businessId: Types.ObjectId;
         deleted: boolean;
         startTime?: { $gte: Date; $lte: Date };
       } = {
-        businessId,
+        businessId: businessIdObject,
         deleted: false,
       };
 
@@ -449,6 +398,76 @@ export class BusinessEventsService {
       return clientUsers;
     } catch (error) {
       throw new InternalServerErrorException(error.message);
+    }
+  }
+
+  async bulkCreateEventTransactions(localClient: LocalClient[], client: Client[], event: Event) {
+    if (isEmpty(localClient) && isEmpty(client)) {
+      return;
+    }
+
+    try {
+      const eventRecordId = event._id.toString();
+      const newEventTransactionPayload: EventTransactionType[] = [
+        ...localClient.map(record => ({
+          event_id: eventRecordId,
+          client_id: null,
+          local_client_id: record._id.toString(),
+          transaction_date: new Date(),
+          transaction_amount: event?.payment?.amount || 0,
+          transaction_type: event.paymentMethod || null,
+          payment_method: event.paymentMethod || null,
+          transaction_status: event.status.statusName,
+          notes: null,
+          promo_codes: null,
+          withdraw_from_event: false,
+        })),
+        ...client.map(record => ({
+          event_id: eventRecordId,
+          client_id: record._id.toString(),
+          local_client_id: null,
+          transaction_date: new Date(),
+          transaction_amount: event?.payment?.amount || 0,
+          transaction_type: event.paymentMethod || null,
+          payment_method: event.paymentMethod || null,
+          transaction_status: event.status.statusName,
+          notes: null,
+          promo_codes: null,
+          withdraw_from_event: false,
+        })),
+      ];
+      console.log("newEventTransactionPayload >>>", newEventTransactionPayload);
+      const newTransactions = await this.eventTransactionModel.bulkCreate(newEventTransactionPayload);
+      console.log("new transactions >>>", newTransactions);
+    } catch (error) {
+      console.log("bulkCreateEventTransactions error >>>", error);
+      throw error;
+    }
+  }
+
+  async findActiveLocalClients(localClientIds: (ObjectIdType | string)[]) {
+    if (!localClientIds || !localClientIds.length) {
+      return [];
+    }
+
+    try {
+      const localClients = await this.localClientUserModel.find({ _id: { $in: localClientIds }, deleted: false }).exec();
+      return localClients;
+    } catch (error) {
+      throw new PreconditionFailedException("no records found for local clients to be added");
+    }
+  }
+
+  async findActiveClients(clientIds: (ObjectIdType | string)[]) {
+    if (!clientIds || !clientIds.length) {
+      return [];
+    }
+
+    try {
+      const localClients = await this.clientUserModel.find({ _id: { $in: clientIds }, deleted: false }).exec();
+      return localClients;
+    } catch (error) {
+      throw new PreconditionFailedException("no records found for clients to be added");
     }
   }
 }

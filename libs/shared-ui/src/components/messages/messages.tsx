@@ -1,7 +1,7 @@
 import { View, ViewStyle } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { Space, Text } from "..";
-import { ThemeColorName, useTheme } from "../../theme";
+import { useTheme } from "../../theme";
 import { getResponsiveHeight } from "../../utils";
 
 const messageTypeToPreset = {
@@ -23,15 +23,27 @@ const messageTypeToColor = {
   info: "info",
 } as const;
 
+const textSizes = {
+  normal: {
+    title: "titleSmall",
+    message: "textLarge",
+  },
+  small: {
+    title: "textLarge",
+    message: "text",
+  },
+} as const;
+
 type MessageProps = {
   type: keyof typeof messageTypeToPreset;
-  textColor?: ThemeColorName;
+  size?: keyof typeof textSizes;
   title?: string;
   message: string;
   style?: ViewStyle;
+  hasShadow?: boolean;
 };
 
-export function Messages({ type, title, message, style, textColor = "text" }: MessageProps) {
+export function Messages({ type, title, message, style, size = "normal", hasShadow = true }: MessageProps) {
   const { Colors } = useTheme();
 
   return (
@@ -44,6 +56,8 @@ export function Messages({ type, title, message, style, textColor = "text" }: Me
           paddingHorizontal: getResponsiveHeight(12),
           paddingVertical: getResponsiveHeight(12),
           borderRadius: getResponsiveHeight(8),
+        },
+        hasShadow && {
           shadowColor: "#000",
           shadowOffset: {
             width: 0,
@@ -64,12 +78,12 @@ export function Messages({ type, title, message, style, textColor = "text" }: Me
       >
         {title ? (
           <>
-            <Text preset={"titleSmall"} text={title} />
+            <Text preset={textSizes[size].title} text={title} />
             <Space size="tiny" />
           </>
         ) : null}
         <Text
-          preset="textLarge"
+          preset={textSizes[size].message}
           style={{
             flexShrink: 1,
           }}

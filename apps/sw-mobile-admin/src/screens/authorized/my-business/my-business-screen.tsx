@@ -19,7 +19,7 @@ import { useIntl } from "react-intl";
 import { Alert, View } from "react-native";
 import FastImage from "react-native-fast-image";
 import { useDispatch } from "react-redux";
-import { AuthorizedScreenProps } from "../../../navigation";
+import { AuthorizedScreenProps, GenericModalData } from "../../../navigation";
 import { useGetBusinessEventSummaryQuery, useGetBusinessEventTransactionsQuery, useUpdateBusinessMutation } from "../../../services";
 import { hidePremiumMembershipBanner, showPremiumMembershipBanner, useBusiness } from "../../../store";
 
@@ -37,13 +37,14 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
   } = useGetBusinessEventSummaryQuery(business?._id ?? skipToken, {
     refetchOnMountOrArgChange: true,
   });
+  const { data: eventTransactions } = useGetBusinessEventTransactionsQuery(business?._id, {
+    refetchOnMountOrArgChange: true,
+  }); // todo hold this in redux or not
 
-  const { data: eventTransactionsData } = useGetBusinessEventTransactionsQuery(business?._id); // todo hold this in redux or not
-
-  console.log(eventTransactionsData);
-  const transactions = eventTransactionsData?.data
-    ? eventTransactionsData.data.map(item => ({
-        _id: item.id,
+  console.log(eventTransactions);
+  const transactions: GenericModalData[] = eventTransactions?.data
+    ? eventTransactions.data.map(item => ({
+        _id: `${item.short_id}`,
         subTitle: `${getPrettyStringFromPrice("USD", item.transaction_amount)} - ${item.withdraw_from_event ? "Withdraw" : item.transaction_status}`,
         title: `ID: ${item.id}`,
       }))
@@ -206,9 +207,6 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
               screen: "selector-modal-screen",
               params: {
                 mode: "static",
-                onSelect: item => {
-                  console.log(item);
-                },
                 headerTitle: intl.formatMessage({ id: "MyBusiness_screen.transactions" }),
                 data: transactions,
               },

@@ -35,8 +35,8 @@ export const SqliteConfigService: SequelizeModuleAsyncOptions = {
       },
       logQueryParameters: logQueryParameters,
       models: [EventTransactionModel],
-      sync: { force: forceSync },
       autoLoadModels: autoLoadModels,
+      sync: { force: forceSync },
       synchronize: synchronize,
     };
   },

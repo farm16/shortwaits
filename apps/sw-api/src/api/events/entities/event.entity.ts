@@ -83,10 +83,6 @@ export class Event extends Document implements EventType {
   paymentMethod: EventPaymentMethodType;
 
   @ApiProperty()
-  @Prop({ type: Array })
-  participantsIds: ObjectId[];
-
-  @ApiProperty()
   @Prop({ type: Types.ObjectId })
   leadClientId: ObjectId;
 
@@ -112,15 +108,19 @@ export class Event extends Document implements EventType {
 
   @ApiProperty()
   @Prop()
-  staffIds: ObjectId[];
+  participantsIds?: ObjectId[];
 
   @ApiProperty()
   @Prop()
-  localClientsIds: ObjectId[];
+  staffIds?: ObjectId[];
 
   @ApiProperty()
   @Prop()
-  clientsIds: ObjectId[];
+  localClientsIds?: ObjectId[];
+
+  @ApiProperty()
+  @Prop()
+  clientsIds?: ObjectId[];
 
   @ApiProperty()
   @Prop()

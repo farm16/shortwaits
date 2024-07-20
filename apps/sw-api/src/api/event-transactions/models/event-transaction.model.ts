@@ -1,4 +1,5 @@
-import { EventStatusName, EventTransactionType } from "@shortwaits/shared-lib";
+import { EventStatusName, EventTransactionType, generateShortId } from "@shortwaits/shared-lib";
+import { CreationOptional } from "sequelize";
 import { AllowNull, Column, DataType, Default, Model, PrimaryKey, Table } from "sequelize-typescript";
 import { v4 as uuidv4 } from "uuid";
 
@@ -15,6 +16,13 @@ export class EventTransactionModel extends Model<EventTransactionModel> implemen
     defaultValue: DataType.UUIDV4,
   })
   id!: number;
+
+  @AllowNull(false)
+  @Default(generateShortId(6)) // Automatically generate short IDs
+  @Column({
+    type: DataType.INTEGER,
+  })
+  short_id!: CreationOptional<number>;
 
   @AllowNull(false)
   @Column({

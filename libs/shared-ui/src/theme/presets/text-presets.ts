@@ -170,10 +170,20 @@ export const textPresets = ({ FontSize, Fonts, Gutters, Colors }: ThemeCommonPar
       color: Colors.text,
       fontWeight: "400",
     },
+    "cardTitle-disabled": {
+      fontSize: getResponsiveFontSize(13),
+      color: Colors.disabledText,
+      fontWeight: "400",
+    },
     cardSubtitle: {
       fontSize: getResponsiveFontSize(13),
-      fontWeight: "400",
       color: Colors.subText,
+      fontWeight: "400",
+    },
+    "cardSubtitle-disabled": {
+      fontSize: getResponsiveFontSize(13),
+      color: Colors.disabledText,
+      fontWeight: "400",
     },
     priceTag: {
       fontSize: getResponsiveFontSize(16),

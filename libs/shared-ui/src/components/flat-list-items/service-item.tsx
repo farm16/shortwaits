@@ -43,7 +43,7 @@ export const ServiceItem: FC<ServiceCardProps> = props => {
       onLongPress(service);
     }
   };
-
+  const duration = service.durationInMin === 0 ? "No time limit" : getPrettyStringFromDurationInMin(service.durationInMin);
   return (
     <Button
       onPress={handlePress}
@@ -66,7 +66,7 @@ export const ServiceItem: FC<ServiceCardProps> = props => {
     >
       <View style={styles.textItems}>
         <Text text={service.name} style={[styles.textItem1, { color: Colors.text }]} />
-        <Text text={getPrettyStringFromDurationInMin(service.durationInMin)} style={[styles.textItem2, { color: Colors.subText }]} />
+        <Text text={duration} style={[styles.textItem2, { color: Colors.subText }]} />
         <Text text={getPrettyStringFromPrice(service.currency, service.price)} style={[styles.textItem3, { color: service.serviceColor?.hexCode || Colors.text }]} />
       </View>
       <Avatar url={service.imageUrl} size={"default"} color={Colors.gray} mode={"static"} />

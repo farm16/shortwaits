@@ -47,6 +47,7 @@ export const AddServicesModal: FC<ModalsScreenProps<"add-service-modal-screen">>
       price: 0,
       currency: "USD",
       isPrivate: false,
+      hasDuration: false,
       isVideoConference: false,
       serviceColor: mobileAdminData.shortwaits.serviceColors[defaultServiceColor] ?? null,
       imageUrl: "",
@@ -171,6 +172,18 @@ export const AddServicesModal: FC<ModalsScreenProps<"add-service-modal-screen">>
         currencyType={"USD"}
       />
       <Space size="small" />
+      <ButtonCard
+        // disabled={isEventDisabled || !!selectedService}
+        rightIconName={values?.durationInMin === 0 ? "checkbox-outline" : "checkbox-blank-outline"}
+        title={"No Duration"}
+        onPress={() => {
+          if (values?.durationInMin === 0) {
+            setFieldValue("durationInMin", 30);
+          } else {
+            setFieldValue("durationInMin", 0);
+          }
+        }}
+      />
       {renderDurationBar()}
       <ExpandableSection>
         <Space size="small" />

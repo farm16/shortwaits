@@ -112,7 +112,7 @@ export const updateEventSchema = Yup.object({
   name: Yup.string(),
   description: Yup.string(),
   eventImage: Yup.string().url(),
-  serviceId: Yup.string(),
+  serviceId: Yup.string().nullable().notRequired(),
   features: Yup.array().of(Yup.string()),
 
   status: Yup.object({

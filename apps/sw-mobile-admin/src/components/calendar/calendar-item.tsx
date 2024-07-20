@@ -33,7 +33,7 @@ export const AgendaItem = (props: AgendaItemProps) => {
   const swipeableRef = React.useRef<Swipeable>(null);
   const { Colors } = useTheme();
   const intl = useIntl();
-  const service = useService(item?.serviceId ?? "");
+  const service = useService(item?.serviceId);
   const borderColor = disabled ? Colors.white : Colors.lightGray;
   const [updateBusinessEvent, updateEventStatus] = useUpdateBusinessEventMutation(); // todo update to new api hook
 

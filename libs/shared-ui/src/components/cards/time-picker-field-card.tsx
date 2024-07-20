@@ -80,10 +80,13 @@ export function TimePickerFieldCard(props: TimePickerInputProps) {
     }
   };
 
+  const titleTextPreset = disabled ? "cardTitle-disabled" : "cardTitle";
+  const subTitleTextPreset = disabled ? "cardSubtitle-disabled" : "cardSubtitle";
+
   return (
     <>
       <Card mode="text-field" onPress={handleSetFocus} disabled={disabled}>
-        <Text preset="cardTitle" text={title} />
+        <Text preset={titleTextPreset} text={title} />
         <Space size="tiny" />
         <Container direction="row" justifyContent="space-between">
           <TouchableOpacity
@@ -93,7 +96,7 @@ export function TimePickerFieldCard(props: TimePickerInputProps) {
             }}
             onPress={() => setIsDatePickerOpen(true)}
           >
-            <Text preset="cardSubtitle" style={{ color: disabled ? Colors.subText : Colors.brandPrimary }} text={format(date, "MM/dd/yyyy")} />
+            <Text preset={subTitleTextPreset} style={{ fontWeight: "700", color: disabled ? Colors.disabledText : Colors.brandPrimary }} text={format(date, "MM/dd/yyyy")} />
           </TouchableOpacity>
           {withTime ? (
             <TouchableOpacity
@@ -104,14 +107,14 @@ export function TimePickerFieldCard(props: TimePickerInputProps) {
               }}
               onPress={() => setIsTimePickerOpen(true)}
             >
-              <Text preset="cardSubtitle" style={{ color: disabled ? Colors.subText : Colors.brandPrimary }} text={format(date, "hh:mm aa")} />
+              <Text preset={subTitleTextPreset} style={{ fontWeight: "700", color: disabled ? Colors.disabledText : Colors.brandPrimary }} text={format(date, "hh:mm aa")} />
             </TouchableOpacity>
           ) : null}
         </Container>
       </Card>
       {errors && isTouched ? (
         <Text
-          preset="cardTitle"
+          preset={titleTextPreset}
           style={{
             ...styles.errorField,
             width: width * 0.87,

@@ -3,6 +3,7 @@ import { EventStatusName } from "./events";
 
 export interface EventTransactionType {
   id?: number;
+  short_id?: number;
   client_id: string;
   event_id: string;
   transaction_date: Date;

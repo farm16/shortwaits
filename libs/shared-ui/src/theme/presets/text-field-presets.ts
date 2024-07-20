@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native";
 
+import { getResponsiveFontSize } from "../../utils";
 import { ThemeCommonParams } from "../theme.type";
 
 export type TextFieldPresets = keyof ReturnType<typeof textFieldPresets>;
@@ -20,10 +21,10 @@ export const textFieldPresets = ({ FontSize, Fonts, Gutters, Colors }: ThemeComm
       ...BASE,
     },
     cardSubtitle: {
-      ...Fonts.textSmall,
-      fontWeight: "400" as const,
+      fontSize: getResponsiveFontSize(13),
+      color: Colors.subText,
+      fontWeight: "400",
       letterSpacing: 0.65,
-      color: Colors.text,
       paddingTop: 0,
       paddingLeft: 0,
       paddingBottom: 0,

@@ -51,10 +51,10 @@ export function EventUsersTab(props: EventUsersTabProps) {
   const statusName = event?.status?.statusName ?? "";
   const isEventDisabled = statusName ? nextEventStatuses[statusName].length === 0 : true;
 
-  const eventClients = event.clientsIds.map(clientId => clients?.find(client => client._id === clientId)).filter(Boolean);
-  const eventLocalClients = event.localClientsIds.map(localClientId => localClients?.find(localClient => localClient._id === localClientId)).filter(Boolean);
+  const eventStaff = event.staffIds?.map(staffId => staff?.find(staff => staff._id === staffId)).filter(Boolean) ?? [];
+  const eventClients = event.clientsIds?.map(clientId => clients?.find(client => client._id === clientId)).filter(Boolean) ?? [];
+  const eventLocalClients = event.localClientsIds?.map(localClientId => localClients?.find(localClient => localClient._id === localClientId)).filter(Boolean) ?? [];
   const combinedClients = getCombinedClientTypes(eventClients ?? [], eventLocalClients ?? []);
-  const eventStaff = event.staffIds.map(staffId => staff?.find(staff => staff._id === staffId)).filter(Boolean);
 
   const data = useMemo(
     () => [
@@ -244,7 +244,7 @@ export function EventUsersTab(props: EventUsersTabProps) {
 
   const handleStaffUpdateEvent = useCallback(
     (staffIds: string[]) => {
-      const currentStaffIds = event.staffIds;
+      const currentStaffIds = event.staffIds ?? [];
       const uniqueIds = [...new Set(staffIds)];
       const isEqual = JSON.stringify(uniqueIds) === JSON.stringify(currentStaffIds);
       if (isEqual) {
@@ -270,7 +270,7 @@ export function EventUsersTab(props: EventUsersTabProps) {
           screen: "selector-modal-screen",
           params: {
             mode: "staff",
-            selectedData: event.staffIds,
+            selectedData: event.staffIds ?? [],
             onSubmit: selectedClientIds => {
               console.log("selected selector-modal-screen >>>", selectedClientIds);
               handleStaffUpdateEvent(selectedClientIds as string[]);
