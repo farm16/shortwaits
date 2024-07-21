@@ -98,7 +98,7 @@ export const generateBusinessUser = (user: CreateBusinessUserDtoType, businessUs
   return businessUser;
 };
 
-export const generateBusinessUser_socialAuth = (user: CreateBusinessUserDtoType, businessUserRoles: BusinessUserRoles) => {
+export const generateBusinessUser_socialAuth = (user: Partial<BusinessUserType>, businessUserRoles: BusinessUserRoles) => {
   // if no accountImageUrl, insert a property with a generated avatar url to the user object
   if (!user?.accountImageUrl) {
     const stringIdentifier = user.email || user.username || "?";
@@ -112,7 +112,7 @@ export const generateBusinessUser_socialAuth = (user: CreateBusinessUserDtoType,
     isBackgroundAdmin: businessUserRoles.some(role => role === "backgroundAdmin"),
   };
 
-  const businessUser: DtoFriendlyType<BusinessUserType> = {
+  const businessUser = {
     ...user,
     username: user.email, // username is the same as email
     roleId: null,

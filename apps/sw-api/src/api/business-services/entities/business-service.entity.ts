@@ -4,7 +4,7 @@ import { BusinessAvailableCurrenciesType, BusinessHoursType, ObjectId, ServiceCo
 import { Document, Types } from "mongoose";
 
 @Schema({ collection: "business_service" })
-export class Service extends Document implements ServiceType {
+export class Service extends Document<ObjectId> implements ServiceType {
   @ApiProperty()
   @Prop({ type: Array })
   staff: ObjectId[];

@@ -2,6 +2,7 @@ import { Document } from "mongoose";
 import { BusinessAvailableCurrenciesType, BusinessHoursType, ObjectId, PaginatedModel, ServiceColorType } from "../../../";
 
 export type ServiceType = {
+  _id?: ObjectId;
   name: string;
   description: string;
   hours: BusinessHoursType;

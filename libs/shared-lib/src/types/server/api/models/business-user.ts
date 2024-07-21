@@ -31,6 +31,7 @@ export type BusinessUserRole = "admin" | "superAdmin" | "backgroundAdmin" | "sta
 export type BusinessUserRoles = BusinessUserRole[];
 
 export type BusinessUserType = {
+  _id?: ObjectId;
   shortId: string;
   businesses: ObjectId[];
   isDisabled: boolean; // if this is set to true, the user will not be able to login but user will be visible in the list of users
@@ -39,8 +40,8 @@ export type BusinessUserType = {
   // Also we need to let the user know that this user is created by a business (super admin) and belongs to that business
   deleted: boolean; // will not be shown in the list of users, but the data will be kept
   registrationState: StaffRegistrationStateType;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date;
+  updatedAt: Date;
   lastSignInAt: Date;
   roleId: ObjectId;
   hashedRt: string;

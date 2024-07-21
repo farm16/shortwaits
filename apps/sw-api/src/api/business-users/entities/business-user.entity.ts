@@ -1,10 +1,10 @@
 import { Prop, Schema, SchemaFactory, raw } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
-import { Alias, BusinessUserType, UserAccountSettings, UserDeviceSettings, WeekHoursType } from "@shortwaits/shared-lib";
+import { Alias, BusinessUserType, ObjectId, UserAccountSettings, UserDeviceSettings, WeekHoursType } from "@shortwaits/shared-lib";
 import { Document, Types } from "mongoose";
 
 @Schema({ collection: "business_user" })
-export class BusinessUser extends Document implements BusinessUserType {
+export class BusinessUser extends Document<ObjectId> implements BusinessUserType {
   @ApiProperty()
   @Prop()
   shortId: string;
@@ -54,8 +54,12 @@ export class BusinessUser extends Document implements BusinessUserType {
   };
 
   @ApiProperty()
-  @Prop()
-  roleId: Types.ObjectId;
+  @Prop(
+    raw({
+      type: Types.ObjectId,
+    })
+  )
+  roleId: ObjectId;
 
   @ApiProperty()
   @Prop()
@@ -66,16 +70,24 @@ export class BusinessUser extends Document implements BusinessUserType {
   isPasswordProtected: boolean;
 
   @ApiProperty()
-  @Prop()
-  businesses: Types.ObjectId[];
+  @Prop(
+    raw({
+      type: Array,
+    })
+  )
+  businesses: ObjectId[];
 
   @ApiProperty()
   @Prop()
   isDisabled: boolean;
 
   @ApiProperty()
-  @Prop()
-  createdByBusinessId: Types.ObjectId;
+  @Prop(
+    raw({
+      type: Types.ObjectId,
+    })
+  )
+  createdByBusinessId: ObjectId;
 
   @ApiProperty()
   @Prop({ default: false })
@@ -137,11 +149,17 @@ export class BusinessUser extends Document implements BusinessUserType {
 
   @ApiProperty()
   @Prop()
-  phoneNumbers: { label: string; number: string }[];
+  phoneNumbers: {
+    label: string;
+    number: string;
+  }[];
 
   @ApiProperty()
   @Prop()
-  imAddresses: { username: string; service: string }[];
+  imAddresses: {
+    username: string;
+    service: string;
+  }[];
 
   @ApiProperty()
   @Prop()
@@ -155,7 +173,11 @@ export class BusinessUser extends Document implements BusinessUserType {
     postCode: string;
     country: string;
   }[];
-  socialAccounts: { kind: string; uid?: string; username?: string }[];
+  socialAccounts: {
+    kind: string;
+    uid?: string;
+    username?: string;
+  }[];
 
   @ApiProperty()
   @Prop()
@@ -174,7 +196,12 @@ export class BusinessUser extends Document implements BusinessUserType {
       languageTag: { type: String, default: "" },
     })
   )
-  locale: { countryCode: string; isRTL: boolean; languageCode: string; languageTag: string };
+  locale: {
+    countryCode: string;
+    isRTL: boolean;
+    languageCode: string;
+    languageTag: string;
+  };
 
   @Prop(
     raw({
@@ -183,15 +210,19 @@ export class BusinessUser extends Document implements BusinessUserType {
       isCompleted: { type: Boolean, default: false },
     })
   )
-  registrationState: { screenName: string; state: number; isCompleted: boolean };
+  registrationState: {
+    screenName: string;
+    state: number;
+    isCompleted: boolean;
+  };
 
   @ApiProperty()
   @Prop()
-  createdAt: string;
+  createdAt: Date;
 
   @ApiProperty()
   @Prop()
-  updatedAt: string;
+  updatedAt: Date;
 
   @ApiProperty()
   @Prop()

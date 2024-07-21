@@ -1,9 +1,8 @@
 import { ServiceColorsType, ShortwaitsStores, WeekHoursType } from "@shortwaits/shared-lib";
-import categories from "../../../apps/sw-api/src/assets/default-data/1-business_category/business_category";
-import membership from "../../../apps/sw-api/src/assets/default-data/2-business_membership/business_membership";
+import { categories } from "../1-business_category/business_category";
+import { memberships } from "../2-business_membership/business_membership";
 
 const categoriesIds = categories.map(category => category._id);
-const membershipPlans = membership.map(membership => membership._id);
 
 const defaultServiceColors: ServiceColorsType = {
   red: {
@@ -135,7 +134,7 @@ const shortwaitsAdminDefaultData: ShortwaitsStores = [
     timeZones: ["ET"],
     categories: categoriesIds,
     serviceColors: defaultServiceColors,
-    membershipPlans: membershipPlans,
+    membershipPlans: memberships,
     defaultBusinessData: {
       services: [
         {
@@ -276,7 +275,7 @@ const shortwaitsAdminDefaultData: ShortwaitsStores = [
     timeZones: ["UTC"],
     categories: categoriesIds,
     serviceColors: defaultServiceColors,
-    membershipPlans: membershipPlans,
+    membershipPlans: memberships,
     defaultBusinessData: {
       services: [
         {

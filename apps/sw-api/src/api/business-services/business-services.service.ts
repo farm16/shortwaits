@@ -1,49 +1,52 @@
 import { Injectable, InternalServerErrorException, UnauthorizedException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { InjectModel } from "@nestjs/mongoose";
-import { UpdateServiceDtoType } from "@shortwaits/shared-lib";
+import { ObjectId, ServiceType } from "@shortwaits/shared-lib";
 import { Model } from "mongoose";
-import { filterServiceRecord, initServiceRecord, updateServiceRecord } from "../../utils";
-import { convertStringToObjectId } from "../../utils/converters";
+import { filterServiceRecord, generateServiceRecordPayload, updateServiceRecord } from "../../utils";
 import { Business } from "../business/entities/business.entity";
-import { CreateServiceDto } from "./dto/create-service.dto";
-import { UpdateServiceDto } from "./dto/update-service.dto";
 import { Service } from "./entities/business-service.entity";
+
 @Injectable()
 export class ServicesService {
-  constructor(@InjectModel(Service.name) private serviceModel: Model<Service>, @InjectModel(Business.name) private businessModel: Model<Business>, private config: ConfigService) {}
+  constructor(
+    @InjectModel(Service.name)
+    private serviceModel: Model<Service>,
+    @InjectModel(Business.name) private businessModel: Model<Business>,
+    private config: ConfigService
+  ) {}
 
   async findAll() {
     const services = await this.serviceModel.find({});
     return services;
   }
 
-  async findByIds(servicesId: string[]) {
+  async findByIds(servicesId: ObjectId[]) {
     const services = await this.serviceModel.find().where("_id").in(servicesId);
     console.log(services);
     return services;
   }
 
-  async findOne(id: string) {
+  async findOne(id: ObjectId) {
     const service = await this.serviceModel.findById(id);
     return service;
   }
 
-  async updateServiceByBusinessQuery(serviceId: string, businessId: string, updateServiceDto: UpdateServiceDtoType) {
+  async updateBusinessService(serviceId: ObjectId, businessId: ObjectId, service: Partial<ServiceType>) {
     if (!serviceId) {
       throw new UnauthorizedException("Service not found");
     }
     if (!businessId) {
       throw new UnauthorizedException("Business not found");
     }
-    if (!updateServiceDto) {
+    if (!service) {
       throw new UnauthorizedException("Invalid service data");
     }
 
     try {
       const business = await this.findBusinessRecordQuery(businessId);
       const servicePayload = filterServiceRecord({
-        ...updateServiceDto,
+        ...service,
         businessId: business._id,
       });
 
@@ -69,7 +72,7 @@ export class ServicesService {
     }
   }
 
-  async findBusinessRecordQuery(businessId: string) {
+  async findBusinessRecordQuery(businessId: ObjectId) {
     try {
       const business = await this.businessModel.findById(businessId);
       if (!business) {
@@ -82,7 +85,7 @@ export class ServicesService {
     }
   }
 
-  async findAllActiveServicesByBusinessQuery(businessId: string) {
+  async findAllActiveServicesByBusinessQuery(businessId: ObjectId) {
     try {
       const business = await this.findBusinessRecordQuery(businessId);
       const services = await this.serviceModel.find({ businessId: business._id, deleted: false });
@@ -93,21 +96,21 @@ export class ServicesService {
     }
   }
 
-  async findAllActiveServicesByBusiness(businessId: string) {
+  async findAllActiveServicesByBusiness(businessId: ObjectId) {
     const services = await this.findAllActiveServicesByBusinessQuery(businessId);
     return services;
   }
 
-  async update(businessId: string, userId: string, updateServiceDto: UpdateServiceDto) {
+  async update(businessId: ObjectId, userId: ObjectId, service: ServiceType) {
     try {
       const business = await this.findBusinessRecordQuery(businessId);
-      const servicePayload = updateServiceRecord(userId, business._id, updateServiceDto);
+      const servicePayload = updateServiceRecord(userId, business._id, service);
 
-      const service = await this.updateServiceByBusinessQuery(updateServiceDto._id, business._id, servicePayload);
+      const updatedService = await this.updateBusinessService(service._id, business._id, servicePayload);
       const services = await this.findAllActiveServicesByBusinessQuery(business._id);
 
       return {
-        service,
+        service: updatedService,
         services,
       };
     } catch (error) {
@@ -116,18 +119,18 @@ export class ServicesService {
     }
   }
 
-  async create(businessId: string, userId: string, createServiceDto: CreateServiceDto) {
+  async create(businessId: ObjectId, userId: ObjectId, service: ServiceType) {
     try {
       const business = await this.findBusinessRecordQuery(businessId);
-      const servicePayload = initServiceRecord(userId, business._id, createServiceDto);
-      const service = await this.serviceModel.create(servicePayload);
+      const servicePayload = generateServiceRecordPayload(userId, business._id, service);
+      const newService = await this.serviceModel.create(servicePayload);
 
       if (!service) {
         throw new UnauthorizedException("Failed to create service");
       }
 
       await this.businessModel.findByIdAndUpdate(businessId, {
-        $push: { services: convertStringToObjectId(service._id) },
+        $push: { services: newService._id },
       });
 
       const services = await this.findAllActiveServicesByBusinessQuery(business._id);
@@ -142,10 +145,10 @@ export class ServicesService {
     }
   }
 
-  async delete(serviceId: string, businessId: string) {
+  async delete(serviceId: ObjectId, businessId: ObjectId) {
     try {
       const business = await this.findBusinessRecordQuery(businessId);
-      const service = await this.updateServiceByBusinessQuery(serviceId, business._id, {
+      const service = await this.updateBusinessService(serviceId, business._id, {
         deleted: true,
       });
       const services = await this.findAllActiveServicesByBusinessQuery(business._id);

@@ -1,10 +1,10 @@
 import { Prop, Schema, SchemaFactory, raw } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
-import { BusinessAccountType, BusinessHoursType, BusinessLocationType, BusinessType, CurrencyType, EmojiType } from "@shortwaits/shared-lib";
-import { Document, Schema as MongooseSchema } from "mongoose";
+import { BusinessAccountType, BusinessHoursType, BusinessLocationType, BusinessType, CurrencyType, EmojiType, ObjectId } from "@shortwaits/shared-lib";
+import { Document, Schema as MongooseSchema, Types } from "mongoose";
 
 @Schema({ collection: "business" })
-export class Business extends Document implements BusinessType {
+export class Business extends Document<ObjectId> implements BusinessType {
   @ApiProperty()
   @Prop()
   shortId: string;
@@ -60,19 +60,19 @@ export class Business extends Document implements BusinessType {
 
   @ApiProperty()
   @Prop()
-  events: MongooseSchema.Types.ObjectId[];
+  events: ObjectId[];
 
   @ApiProperty()
   @Prop()
-  admins: MongooseSchema.Types.ObjectId[];
+  admins: ObjectId[];
 
   @ApiProperty()
   @Prop()
-  superAdmins: MongooseSchema.Types.ObjectId[];
+  superAdmins: ObjectId[];
 
   @ApiProperty()
   @Prop()
-  backgroundAdmins: MongooseSchema.Types.ObjectId[];
+  backgroundAdmins: ObjectId[];
 
   @ApiProperty()
   @Prop({ type: String, default: "free" })
@@ -80,15 +80,15 @@ export class Business extends Document implements BusinessType {
 
   @ApiProperty()
   @Prop()
-  staff: MongooseSchema.Types.ObjectId[];
+  staff: ObjectId[];
 
   @ApiProperty()
   @Prop()
-  categories: MongooseSchema.Types.ObjectId[];
+  categories: ObjectId[];
 
   @ApiProperty()
   @Prop()
-  services: MongooseSchema.Types.ObjectId[];
+  services: ObjectId[];
 
   @ApiProperty()
   @Prop()
@@ -159,20 +159,36 @@ export class Business extends Document implements BusinessType {
   deleted: boolean;
 
   @ApiProperty()
-  @Prop()
-  createdBy: MongooseSchema.Types.ObjectId;
+  @Prop(
+    raw({
+      type: Types.ObjectId,
+    })
+  )
+  createdBy: ObjectId;
 
   @ApiProperty()
-  @Prop()
-  updatedBy: MongooseSchema.Types.ObjectId;
+  @Prop(
+    raw({
+      type: Types.ObjectId,
+    })
+  )
+  updatedBy: ObjectId;
 
   @ApiProperty()
-  @Prop()
-  clients: MongooseSchema.Types.ObjectId[];
+  @Prop(
+    raw({
+      type: Array,
+    })
+  )
+  clients: ObjectId[];
 
   @ApiProperty()
-  @Prop()
-  localClients: MongooseSchema.Types.ObjectId[];
+  @Prop(
+    raw({
+      type: Array,
+    })
+  )
+  localClients: ObjectId[];
 
   @ApiProperty()
   @Prop()
@@ -180,7 +196,7 @@ export class Business extends Document implements BusinessType {
 
   @ApiProperty()
   @Prop()
-  reservations: MongooseSchema.Types.ObjectId[];
+  reservations: ObjectId[];
 
   @ApiProperty()
   @Prop()
@@ -240,8 +256,8 @@ export class Business extends Document implements BusinessType {
   @Prop()
   taggedClients: [
     {
-      clientId: MongooseSchema.Types.ObjectId;
-      services: MongooseSchema.Types.ObjectId[];
+      clientId: ObjectId;
+      services: ObjectId[];
       tags: string[];
     }
   ];

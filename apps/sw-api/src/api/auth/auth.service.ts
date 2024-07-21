@@ -7,7 +7,7 @@ import { InjectModel } from "@nestjs/mongoose";
 import { BusinessType, BusinessUserType, ClientType, ObjectId, ShortwaitsStore } from "@shortwaits/shared-lib";
 import bcrypt from "bcryptjs";
 import { OAuth2Client } from "google-auth-library";
-import { Model, Types } from "mongoose";
+import { Model } from "mongoose";
 import { noop } from "rxjs";
 import {
   convertToLowercase,
@@ -227,12 +227,7 @@ export class AuthService {
     return { auth: signedTokens, attributes: { currentUser: user } };
   }
 
-  private async updateBusinessUserRt(
-    user: BusinessUserType & {
-      _id: Types.ObjectId;
-    },
-    rt: string
-  ) {
+  private async updateBusinessUserRt(user: BusinessUserType, rt: string) {
     const saltRounds = Number(this.configService.get("SALT_ROUNDS"));
     const salt = await bcrypt.genSalt(saltRounds);
     const hash = await bcrypt.hash(rt, salt);
@@ -264,11 +259,7 @@ export class AuthService {
     );
   }
 
-  private async signTokens(
-    userInfo: Client & {
-      _id: Types.ObjectId;
-    }
-  ) {
+  private async signTokens(userInfo: Client) {
     const payload = { sub: userInfo._id, email: userInfo.email };
 
     const [token, refreshToken] = await Promise.all([
@@ -288,11 +279,7 @@ export class AuthService {
     };
   }
 
-  private async signBusinessUserTokens(
-    userInfo: BusinessUserType & {
-      _id: Types.ObjectId;
-    }
-  ) {
+  private async signBusinessUserTokens(userInfo: BusinessUserType) {
     const payload = { sub: userInfo._id, email: userInfo.email };
 
     const [token, refreshToken] = await Promise.all([
@@ -348,11 +335,7 @@ export class AuthService {
     return await userInfoResponse.json();
   }
 
-  async successfulExistingBusinessUser(
-    existingUser: BusinessUserType & {
-      _id: Types.ObjectId;
-    }
-  ) {
+  async successfulExistingBusinessUser(existingUser: BusinessUserType) {
     const signedTokens = await this.signBusinessUserTokens(existingUser);
     const updatedBusinessUser = await this.updateBusinessUserRt(existingUser, signedTokens.refreshToken);
 

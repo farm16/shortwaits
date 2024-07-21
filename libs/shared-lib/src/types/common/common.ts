@@ -1,11 +1,11 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import mongoose, { ObjectId as MongoObjectId, Document as MongooseDocument, Schema, Types } from "mongoose";
+import mongoose, { ObjectId as MongoObjectId, Document as MongooseDocument, Types } from "mongoose";
 import "mongoose-paginate-v2";
 import { ClientDtoType, LocalClientDtoType } from "../server";
 import { EmojiType } from "./emoji";
 
 export type Document = MongooseDocument;
-export type ObjectId = Schema.Types.ObjectId | Types.ObjectId | MongoObjectId;
+export type ObjectId = MongoObjectId | Types.ObjectId;
 
 export type BusinessClientType = "external" | "local";
 export type AllClientsType = (Omit<LocalClientDtoType, "clientType"> & { clientType: BusinessClientType })[];

@@ -1,6 +1,7 @@
+import { BusinessMembership } from "@shortwaits/shared-lib";
 import { getObjectId } from "mongo-seeding";
 
-const memberships = [
+export const memberships: BusinessMembership[] = [
   {
     _id: getObjectId("1000"),
     short_id: "1000",
@@ -135,8 +136,11 @@ const memberships = [
         isAllowed: true,
         hasLimit: false,
       },
-      update_business_memberships: {
-        isAllowed: true,
+      update_business_categories: {
+        isAllowed: false,
+        hasLimit: false,
+        min: 0,
+        max: 0,
       },
     },
     isActive: true,
@@ -276,35 +280,12 @@ const memberships = [
         hasLimit: false,
       },
       update_business_categories: {
-        isAllowed: true,
+        isAllowed: false,
+        hasLimit: false,
+        min: 0,
+        max: 0,
       },
     },
     isActive: true,
   },
-  // {
-  //   permissions: null,
-  //   isActive: false,
-  // },
-  // {
-  //   permissions: null,
-  //   isActive: false,
-  // },
-  // {
-  //   permissions: null,
-  //   isActive: false,
-  // },
-  // {
-  //   permissions: null,
-  //   isActive: false,
-  // },
-  // {
-  //   permissions: null,
-  //   isActive: false,
-  // },
-  // {
-  //   permissions: null,
-  //   isActive: false,
-  // },
 ];
-
-module.exports = memberships;

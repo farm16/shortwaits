@@ -115,6 +115,7 @@ export type BusinessPermissionsType = {
 };
 
 export type BusinessMembership = {
+  _id?: any;
   short_id: string;
   name: string;
   description: string;

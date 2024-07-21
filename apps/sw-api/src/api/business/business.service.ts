@@ -12,7 +12,7 @@ import {
   UpdateClientDtoType,
 } from "@shortwaits/shared-lib";
 import { Model } from "mongoose";
-import { convertStringToObjectId } from "../../utils/converters";
+import { convertStringIdToObjectId } from "../../utils/common";
 import { generateBusinessStaff, generateLocalClients } from "../../utils/generateUserPayload";
 import { BusinessUser } from "../business-users/entities/business-user.entity";
 import { Client } from "../clients/entities/client.entity";
@@ -34,7 +34,7 @@ export class BusinessService {
   ) {}
 
   isUserAdminType(business: Business, userId: any) {
-    const id = convertStringToObjectId(userId);
+    const id = convertStringIdToObjectId(userId);
     const isAdmin = business.admins.includes(id);
     const isSuperAdmin = business.superAdmins.includes(id);
 
@@ -406,7 +406,7 @@ export class BusinessService {
     const businessData = await this.findBusinessById(businessId);
     const { isAdmin, isSuperAdmin } = this.isUserAdminType(businessData, businessUserId);
 
-    const staffId = convertStringToObjectId(staff._id);
+    const staffId = convertStringIdToObjectId(staff._id);
     const isStaff = businessData.staff.includes(staffId);
 
     if (!isStaff) {
@@ -428,7 +428,7 @@ export class BusinessService {
       const { isAdmin, isSuperAdmin } = this.isUserAdminType(businessData, businessUserId);
 
       if (isAdmin || isSuperAdmin) {
-        const staffId = convertStringToObjectId(staff._id);
+        const staffId = convertStringIdToObjectId(staff._id);
         const isStaff = businessData.staff.includes(staffId);
 
         if (!isStaff) {

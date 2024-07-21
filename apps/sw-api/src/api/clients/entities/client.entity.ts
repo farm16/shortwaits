@@ -4,7 +4,7 @@ import { Alias, ClientType, ObjectId, UserDeviceSettings } from "@shortwaits/sha
 import { Document, Schema as MongooseSchema } from "mongoose";
 
 @Schema({ collection: "client" })
-export class Client extends Document implements ClientType {
+export class Client extends Document<ObjectId> implements ClientType {
   @ApiProperty()
   @Prop()
   isSocialAccount: boolean;

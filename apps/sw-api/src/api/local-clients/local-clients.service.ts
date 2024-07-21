@@ -1,6 +1,6 @@
 import { Injectable, InternalServerErrorException, NotFoundException, PreconditionFailedException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { LocalClientDtoType } from "@shortwaits/shared-lib";
+import { LocalClientDtoType, ObjectId } from "@shortwaits/shared-lib";
 import { Model, Schema } from "mongoose";
 import { getNewClientPayload, getSupportedLocales, getUniqueIdArray } from "../../utils";
 import { Business } from "../business/entities/business.entity";
@@ -56,7 +56,7 @@ export class LocalClientUserService {
           familyName: localClient.familyName,
           givenName: localClient.givenName,
           middleName: localClient.middleName,
-          businesses: [business._id],
+          businesses: [business._id as ObjectId],
           hashedRt: "",
           clientType: "local",
           password: "",
@@ -64,7 +64,7 @@ export class LocalClientUserService {
         });
       });
       const newLocalClientUsers = await this.localClientUserModel.create(newLocalClientUsersPayload);
-      const newLocalClientUserIds = newLocalClientUsers.map(localClient => localClient._id);
+      const newLocalClientUserIds = newLocalClientUsers.map(localClient => localClient._id as ObjectId);
 
       const uniqueLocalClientsIds = getUniqueIdArray([...newLocalClientUserIds, ...(business?.localClients ?? [])]);
       business.localClients = uniqueLocalClientsIds as Schema.Types.ObjectId[];

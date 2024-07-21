@@ -1,6 +1,6 @@
 import { getObjectId } from "mongo-seeding";
 
-const categories = [
+export const categories = [
   {
     _id: getObjectId("1007"),
     short_id: "1007",
@@ -257,5 +257,3 @@ const categories = [
     description: "",
   },
 ];
-
-module.exports = categories;

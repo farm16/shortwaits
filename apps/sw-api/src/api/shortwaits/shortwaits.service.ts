@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
-import { convertStringToObjectId, validateId } from "../../utils/converters";
+import { convertStringIdToObjectId, validateId } from "../../utils/common";
 import { getQuerySelect } from "../../utils/mongoDbUtils";
 import { Business } from "../business/entities/business.entity";
 import { Client } from "../clients/entities/client.entity";
@@ -46,7 +46,7 @@ export class ShortwaitsService {
       console.log("shortId", shortId);
 
       if (validateId(clientUserId)) {
-        const id = convertStringToObjectId(clientUserId);
+        const id = convertStringIdToObjectId(clientUserId);
         client = await this.clientUserModel.findById(id).exec();
         if (!client) {
           client = null;
@@ -103,5 +103,9 @@ export class ShortwaitsService {
       contactUs: "If you have any questions or concerns about our Privacy Policy, please contact us at [Your Contact Information].",
       consent: "By using Shortwaits App, you consent to the terms of this Privacy Policy.",
     };
+  }
+
+  createMultipleShortwaitsStores(shortwaits: Shortwaits[]) {
+    return this.shortwaitsModel.create(shortwaits);
   }
 }

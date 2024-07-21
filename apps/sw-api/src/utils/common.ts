@@ -3,8 +3,10 @@ import {
   BusinessUserType,
   EventDtoType,
   EventType,
+  ObjectId,
   ObjectId as ObjectIdType,
-  UpdateServiceDtoType,
+  ServiceDtoType,
+  ServiceType,
   generateAvatarUrl,
   generateShortId,
 } from "@shortwaits/shared-lib";
@@ -24,19 +26,19 @@ export function getUniqueIdArray(array: ObjectIdType[]) {
   return [...new Set(array)];
 }
 
-export const generateObjectId = (id: string) => {
+export const convertStringIdToObjectId = (id: string) => {
   if (!id) {
     return null;
   }
   return new Types.ObjectId(id);
 };
 
-export const generateObjectIds = (ids: string[]) => {
+export const convertStringIdsToObjectIds = (ids: string[]) => {
   // check if ids are not undefined or array is empty
   if (!ids || ids.length === 0) {
     return null;
   }
-  return ids.map(id => generateObjectId(id));
+  return ids.map(id => convertStringIdToObjectId(id));
 };
 
 export const generateDateFromIsoString = (date: string) => {
@@ -93,15 +95,15 @@ export const getFilteredBusinessUser = (createCustomerDto: CreateBusinessUserDto
 };
 
 export const generateNewEvent = (event: CreateEventsDto, userId: string) => {
-  const staffIds = generateObjectIds(event.staffIds) ?? [];
-  const clientsIds = generateObjectIds(event.clientsIds) ?? [];
-  const localClientsIds = generateObjectIds(event.localClientsIds) ?? [];
-  const participantsIds = generateObjectIds(event.participantsIds) ?? [];
-  const createdBy = generateObjectId(userId);
-  const updatedBy = generateObjectId(userId);
-  const businessId = generateObjectId(event.businessId);
-  const leadClientId = generateObjectId(event.leadClientId);
-  const serviceId = generateObjectId(event.serviceId);
+  const staffIds = convertStringIdsToObjectIds(event.staffIds) ?? [];
+  const clientsIds = convertStringIdsToObjectIds(event.clientsIds) ?? [];
+  const localClientsIds = convertStringIdsToObjectIds(event.localClientsIds) ?? [];
+  const participantsIds = convertStringIdsToObjectIds(event.participantsIds) ?? [];
+  const createdBy = convertStringIdToObjectId(userId);
+  const updatedBy = convertStringIdToObjectId(userId);
+  const businessId = convertStringIdToObjectId(event.businessId);
+  const leadClientId = convertStringIdToObjectId(event.leadClientId);
+  const serviceId = convertStringIdToObjectId(event.serviceId);
   const startTime = generateDateFromIsoString(event.startTime);
   const endTime = generateDateFromIsoString(event.endTime);
   const expectedEndTime = generateDateFromIsoString(event.expectedEndTime);
@@ -151,13 +153,13 @@ export const generateNewEvent = (event: CreateEventsDto, userId: string) => {
 };
 
 export const generateUpdatedEvent = (event: EventDtoType, userId: string) => {
-  const staffIds = generateObjectIds(event.staffIds) ?? [];
-  const clientsIds = generateObjectIds(event.clientsIds) ?? [];
-  const localClientsIds = generateObjectIds(event.localClientsIds) ?? [];
-  const participantsIds = generateObjectIds(event.participantsIds) ?? [];
-  const updatedBy = generateObjectId(userId);
-  const leadClientId = generateObjectId(event.leadClientId);
-  const serviceId = generateObjectId(event.serviceId);
+  const staffIds = convertStringIdsToObjectIds(event.staffIds) ?? [];
+  const clientsIds = convertStringIdsToObjectIds(event.clientsIds) ?? [];
+  const localClientsIds = convertStringIdsToObjectIds(event.localClientsIds) ?? [];
+  const participantsIds = convertStringIdsToObjectIds(event.participantsIds) ?? [];
+  const updatedBy = convertStringIdToObjectId(userId);
+  const leadClientId = convertStringIdToObjectId(event.leadClientId);
+  const serviceId = convertStringIdToObjectId(event.serviceId);
   const startTime = generateDateFromIsoString(event.startTime);
   const endTime = generateDateFromIsoString(event.endTime);
   const expectedEndTime = generateDateFromIsoString(event.expectedEndTime);
@@ -370,34 +372,74 @@ export const filterServiceRecord = payload => {
   return filteredPayload;
 };
 
-export const initServiceRecord = (userId: string, businessId: string, updateServiceDto: UpdateServiceDtoType) => {
-  const servicePayload: UpdateServiceDtoType = {
+export const generateServiceRecordPayload = (userId: ObjectId, businessId: ObjectId, service: Partial<ServiceType>) => {
+  const applicableCategories = service.applicableCategories ?? [];
+  const staff = service.staff ?? [];
+  const createdBy = userId;
+  const updatedBy = userId;
+
+  const servicePayload: ServiceType = {
     businessId: businessId,
-    name: updateServiceDto.name,
-    description: updateServiceDto.description,
-    hours: updateServiceDto.hours,
-    applicableCategories: updateServiceDto.applicableCategories,
-    staff: updateServiceDto.staff,
-    durationInMin: updateServiceDto.durationInMin,
-    price: updateServiceDto.price ?? 0,
+    name: service.name,
+    description: service.description,
+    hours: service.hours,
+    applicableCategories: applicableCategories,
+    staff: staff,
+    durationInMin: service.durationInMin,
+    price: service.price ?? 0,
     currency: "USD", // this is a default value for now todo: change this to a dynamic value
-    isPrivate: updateServiceDto.isPrivate,
-    urls: updateServiceDto.urls ?? null,
-    isVideoConference: updateServiceDto.isVideoConference ?? false,
+    isPrivate: service.isPrivate,
+    urls: service.urls ?? null,
+    isVideoConference: service.isVideoConference ?? false,
     deleted: false,
-    serviceColor: updateServiceDto.serviceColor ?? null,
-    imageUrl: generateAvatarUrl(updateServiceDto.name ?? "service", updateServiceDto.serviceColor.hexCode ?? "000000"),
-    createdBy: userId,
-    updatedBy: userId,
+    serviceColor: service.serviceColor ?? null,
+    imageUrl: generateAvatarUrl(service.name ?? "service", service.serviceColor.hexCode ?? "000000"),
+    createdBy: createdBy,
+    updatedBy: updatedBy,
   };
   return servicePayload;
 };
 
-export const updateServiceRecord = (userId: string, businessId: string, updateServiceDto: UpdateServiceDtoType) => {
-  const filetedServiceRecord = filterServiceRecord(updateServiceDto);
-  const servicePayload: UpdateServiceDtoType = {
+export const updateServiceRecord = (userId: ObjectId, businessId: ObjectId, service: ServiceType) => {
+  const filetedServiceRecord = filterServiceRecord(service);
+  const servicePayload = {
     ...filetedServiceRecord,
     updatedBy: userId,
   };
   return servicePayload;
 };
+
+export function removeNullValuesFromObject(obj: Record<string, any>) {
+  return Object.keys(obj).reduce((acc, key) => {
+    if (obj[key] !== null) {
+      acc[key] = obj[key];
+    }
+    return acc;
+  }, {});
+}
+
+export function convertBusinessServiceDtoToRecord(service: Partial<ServiceDtoType>): ServiceType {
+  const convertedFields = {
+    _id: convertStringIdToObjectId(service._id),
+    staff: convertStringIdsToObjectIds(service.staff),
+    applicableCategories: convertStringIdsToObjectIds(service.applicableCategories),
+    businessId: convertStringIdToObjectId(service.businessId),
+    createdBy: convertStringIdToObjectId(service.createdBy),
+    updatedBy: convertStringIdToObjectId(service.updatedBy),
+    createdAt: generateDateFromIsoString(service.createdAt),
+    updatedAt: generateDateFromIsoString(service.updatedAt),
+  };
+
+  return {
+    ...service,
+    ...(removeNullValuesFromObject(convertedFields) as typeof convertedFields),
+  } as ServiceType;
+}
+
+export function convertToLowercase(text: string) {
+  return text.toLowerCase();
+}
+
+export function validateId(id: string): boolean {
+  return Types.ObjectId.isValid(id);
+}

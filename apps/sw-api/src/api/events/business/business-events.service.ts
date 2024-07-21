@@ -30,7 +30,7 @@ export class BusinessEventsService {
     @InjectSequelizeModel(EventTransactionModel) private eventTransactionModel: typeof EventTransactionModel
   ) {}
 
-  async createBusinessEvent(event: CreateEventsDto, userId: string): Promise<Event & { _id: Types.ObjectId }> {
+  async createBusinessEvent(event: CreateEventsDto, userId: string) {
     try {
       const businessRecord = await this.businessModel.findById(event.businessId);
 
@@ -173,8 +173,8 @@ export class BusinessEventsService {
       const clientRecordsToBeRemoved: Client[] = await this.findActiveClients(clientsToBeRemoved);
 
       const eventsFilterQuery: FilterQuery<Event> = { _id: eventId, deleted: false };
-      const clientRecordIdsToBeRemoved: ObjectId[] = clientRecordsToBeRemoved.map(record => record._id);
-      const localClientRecordIdsToBeRemoved: ObjectId[] = localClientRecordsToBeRemoved.map(record => record._id);
+      const clientRecordIdsToBeRemoved: ObjectId[] = clientRecordsToBeRemoved.map(record => record._id as ObjectId);
+      const localClientRecordIdsToBeRemoved: ObjectId[] = localClientRecordsToBeRemoved.map(record => record._id as ObjectId);
       const clientRecordIdStringsToBeRemoved: string[] = clientRecordIdsToBeRemoved.map(_id => _id.toString());
       const localClientRecordIdStringToBeRemoved: string[] = localClientRecordIdsToBeRemoved.map(_id => _id.toString());
       const hasClientRecordIdStringsToBeRemoved = !isEmpty(clientRecordIdStringsToBeRemoved);

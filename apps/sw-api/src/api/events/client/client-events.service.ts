@@ -1,6 +1,6 @@
 import { Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { EventDtoType } from "@shortwaits/shared-lib";
+import { EventDtoType, ObjectId } from "@shortwaits/shared-lib";
 import { Model } from "mongoose";
 import { Service } from "../../business-services/entities/business-service.entity";
 import { BusinessUser } from "../../business-users/entities/business-user.entity";
@@ -119,7 +119,7 @@ export class BusinessEventsService {
       }
 
       const clientRecord = await this.clientUserModel.findOne({ _id: clientId, deleted: false }).exec();
-      const isClientAlreadyRegistered = eventRecord.clientsIds.includes(clientRecord._id);
+      const isClientAlreadyRegistered = eventRecord.clientsIds.includes(clientRecord._id as ObjectId);
 
       if (!clientRecord) {
         throw new NotFoundException("Client not found");
@@ -129,7 +129,7 @@ export class BusinessEventsService {
         return await this.eventsModel.find({ clientsIds: { $in: [clientRecord._id] }, deleted: false }).exec();
       }
 
-      eventRecord.clientsIds.push(clientRecord._id);
+      eventRecord.clientsIds.push(clientRecord._id as ObjectId);
 
       await eventRecord.save();
 
@@ -191,11 +191,11 @@ export class BusinessEventsService {
       }
 
       const filter: {
-        clientsIds: { $in: string[] };
+        clientsIds: { $in: ObjectId[] };
         deleted: boolean;
         startTime?: { $gte: Date; $lte: Date };
       } = {
-        clientsIds: { $in: [clientRecord._id] },
+        clientsIds: { $in: [clientRecord._id as ObjectId] },
         deleted: false,
       };
 
