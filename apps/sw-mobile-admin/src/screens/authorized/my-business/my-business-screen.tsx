@@ -242,7 +242,16 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
           title={intl.formatMessage({ id: "MyBusiness_screen.clients" })}
           onPress={() => navigation.navigate("clients-screen")}
         />
-        <ButtonCard leftIconName="puzzle" leftIconColor={Colors.text} title={intl.formatMessage({ id: "MyBusiness_screen.integrations" })} />
+        <ButtonCard
+          leftIconName="puzzle"
+          leftIconColor={Colors.text}
+          title={intl.formatMessage({ id: "MyBusiness_screen.integrations" })}
+          onPress={() =>
+            navigation.navigate("authorized-stack", {
+              screen: "integrations-screen",
+            })
+          }
+        />
         <ButtonCard leftIconName="message-star" leftIconColor={Colors.text} title={intl.formatMessage({ id: "MyBusiness_screen.myReviews" })} />
       </Screen>
     </>

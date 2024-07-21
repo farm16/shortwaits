@@ -1,8 +1,8 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { ObjectId as MongoObjectId } from "mongodb";
-import mongoose, { Document as MongooseDocument, Schema, Types } from "mongoose";
+import mongoose, { ObjectId as MongoObjectId, Document as MongooseDocument, Schema, Types } from "mongoose";
 import "mongoose-paginate-v2";
 import { ClientDtoType, LocalClientDtoType } from "../server";
+import { EmojiType } from "./emoji";
 
 export type Document = MongooseDocument;
 export type ObjectId = Schema.Types.ObjectId | Types.ObjectId | MongoObjectId;
@@ -215,6 +215,52 @@ export type BusinessWeekDaysType = keyof typeof WEEKDAYS;
 export type DocType<T = never> = T & {
   _id: ObjectId;
 };
+
+export type BusinessAccountType = "free" | "student" | "basic" | "trial" | "business" | "premium" | "enterprise" | "partner";
+
+export type BusinessWebConfigType = {
+  isActive: boolean;
+  baseUrl: string;
+  bannerImageUrl: string;
+  logoImageUrl: string;
+  faviconImageUrl: string;
+  primaryColor: string;
+  secondaryColor: string;
+  accentColor: string;
+  notificationMessage: string;
+};
+
+export type BusinessLabelType = {
+  name: string;
+  description: string;
+  isFavorite: boolean;
+  emojiShortName: EmojiType;
+};
+
+export type BusinessBookingConfigType = {
+  allowBooking: boolean;
+  allowRescheduling: boolean;
+  allowCancellation: boolean;
+  allowPayment: boolean;
+  allowCheckIn: boolean;
+  allowCheckOut: boolean;
+  allowNoShow: boolean;
+  allowWaitlist: boolean;
+};
+
+export type BusinessTaggedClientType = {
+  clientId: ObjectId;
+  services: ObjectId[];
+  tags: string[];
+};
+
+export type BusinessVideoConferenceType = {
+  label: string;
+  isActive: boolean;
+  url: string;
+};
+
+export type BusinessVideoConferencesType = BusinessVideoConferenceType[];
 
 export interface CommonResponseType<DataPayload = unknown, MetaPayload = unknown> {
   statusCode: number;

@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory, raw } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
-import { AccountType, BusinessHoursType, BusinessLocationType, BusinessType, CurrencyType, EmojiType } from "@shortwaits/shared-lib";
+import { BusinessAccountType, BusinessHoursType, BusinessLocationType, BusinessType, CurrencyType, EmojiType } from "@shortwaits/shared-lib";
 import { Document, Schema as MongooseSchema } from "mongoose";
 
 @Schema({ collection: "business" })
@@ -27,7 +27,11 @@ export class Business extends Document implements BusinessType {
 
   @ApiProperty()
   @Prop()
-  videoConference: { isActive: boolean; url: string }[];
+  videoConferences: {
+    label: string;
+    isActive: boolean;
+    url: string;
+  }[];
 
   @ApiProperty()
   @Prop()
@@ -72,7 +76,7 @@ export class Business extends Document implements BusinessType {
 
   @ApiProperty()
   @Prop({ type: String, default: "free" })
-  accountType: AccountType;
+  accountType: BusinessAccountType;
 
   @ApiProperty()
   @Prop()

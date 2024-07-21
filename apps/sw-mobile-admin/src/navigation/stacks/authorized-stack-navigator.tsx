@@ -7,6 +7,7 @@ import {
   BusinessProfileScreen,
   BusinessUserProfileScreen,
   EventScreen,
+  IntegrationsScreen,
   PlansScreen,
 } from "../../screens";
 import { AUTHORIZED_STACK_SCREENS } from "../navigation-constants";
@@ -24,6 +25,7 @@ export const AuthorizedStackNavigator = () => {
       <Stack.Screen name={AUTHORIZED_STACK_SCREENS.BUSINESS_PROFILE_SCREEN} component={BusinessProfileScreen} />
       <Stack.Screen name={AUTHORIZED_STACK_SCREENS.PLANS_SCREEN} component={PlansScreen} />
       <Stack.Screen name={AUTHORIZED_STACK_SCREENS.APP_INFO_SCREEN} component={AppInfoScreen} />
+      <Stack.Screen name={AUTHORIZED_STACK_SCREENS.INTEGRATIONS_SCREEN} component={IntegrationsScreen} />
     </Stack.Navigator>
   );
 };

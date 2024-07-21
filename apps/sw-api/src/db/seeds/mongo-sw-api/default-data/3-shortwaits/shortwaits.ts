@@ -1,10 +1,11 @@
-const { getObjectId } = require("mongo-seeding");
-const categories = require("../1-business_category/business_category");
-const membership = require("../2-business_membership/business_membership");
+import { ServiceColorsType, ShortwaitsStores, WeekHoursType } from "@shortwaits/shared-lib";
+import categories from "../../../apps/sw-api/src/assets/default-data/1-business_category/business_category";
+import membership from "../../../apps/sw-api/src/assets/default-data/2-business_membership/business_membership";
+
 const categoriesIds = categories.map(category => category._id);
 const membershipPlans = membership.map(membership => membership._id);
 
-const defaultServiceColors = {
+const defaultServiceColors: ServiceColorsType = {
   red: {
     colorId: "1",
     colorName: "red",
@@ -49,7 +50,7 @@ const defaultServiceColors = {
   },
 };
 
-const defaultBusinessHours = {
+const defaultBusinessHours: WeekHoursType = {
   mon: [
     {
       startTime: 540,
@@ -101,9 +102,8 @@ const defaultBusinessHours = {
   ],
 };
 
-const shortwaitsAdminDefaultData = [
+const shortwaitsAdminDefaultData: ShortwaitsStores = [
   {
-    _id: getObjectId("0000001"),
     short_id: "0000001",
     name: "Shortwaits LLC",
     banners: [
@@ -115,6 +115,21 @@ const shortwaitsAdminDefaultData = [
     ],
     description: "Shortwaits Default data for the USA area only",
     links: [],
+    subscriptionPlans: [
+      {
+        title: "",
+        planColor: "",
+        tags: [],
+        hasOffer: true,
+        offerDescription: "",
+        offerCode: "",
+        finalPrice: 0,
+        price: 0,
+        priceDescription: "",
+        planDescription: "",
+        planId: "",
+      },
+    ],
     suggestedLang: "en",
     blackList: [],
     timeZones: ["ET"],
@@ -227,26 +242,38 @@ const shortwaitsAdminDefaultData = [
         { label: "Twitter", isActive: false, url: "" },
       ],
     },
+    accountPermissions: null,
   },
   {
-    _id: getObjectId("0000002"),
     short_id: "0000002",
     name: "Shortwaits Latam LLC",
     banners: [
       {
         id: "0001",
         short_id: "0001",
-        // spanish language
         name: "Actualiza a Shortwaits Premium",
       },
     ],
-    //spanish
     description: "Shortwaits datos predeterminados para el área de Peru solamente",
     links: [],
+    subscriptionPlans: [
+      {
+        title: "",
+        planColor: "",
+        tags: [],
+        hasOffer: true,
+        offerDescription: "",
+        offerCode: "",
+        finalPrice: 0,
+        price: 0,
+        priceDescription: "",
+        planDescription: "",
+        planId: "",
+      },
+    ],
     suggestedLang: "es",
     blackList: [],
-    // universal time
-    timeZone: ["UTC"],
+    timeZones: ["UTC"],
     categories: categoriesIds,
     serviceColors: defaultServiceColors,
     membershipPlans: membershipPlans,
@@ -357,6 +384,7 @@ const shortwaitsAdminDefaultData = [
         { label: "Twitter", isActive: false, url: "" },
       ],
     },
+    accountPermissions: null,
   },
 ];
 

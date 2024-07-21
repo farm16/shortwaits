@@ -46,7 +46,7 @@ const PlanCard: React.FC<PlanCardProps> = ({ planData, isSelected, onPress }) =>
                 {
                   color: Colors.gray,
                   textDecorationLine: "line-through",
-                  fontSize: getResponsiveFontSize(30, cardWidth),
+                  fontSize: getResponsiveFontSize(30),
                 },
               ]}
             >
@@ -160,11 +160,11 @@ const styles = StyleSheet.create({
   },
   price: {
     fontWeight: "800",
-    fontSize: getResponsiveFontSize(42, cardWidth),
+    fontSize: getResponsiveFontSize(42),
   },
   dollarSign: {
     fontWeight: "800",
-    fontSize: getResponsiveFontSize(22, cardWidth),
+    fontSize: getResponsiveFontSize(22),
   },
   priceDescription: {
     fontWeight: "400",

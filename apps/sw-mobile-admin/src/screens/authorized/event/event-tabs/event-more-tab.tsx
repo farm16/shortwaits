@@ -14,11 +14,9 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
   const PaymentMethod = () => {
     const paymentMethod = event.paymentMethod || "Cash";
     return (
-      <View style={styles.detail}>
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Text preset="textLargeBold" text="Payment method" />
-          <Text text={paymentMethod} />
-        </View>
+      <View style={styles.rowDetail}>
+        <Text preset="textLargeBold" text="Payment method" />
+        <Text text={paymentMethod} />
       </View>
     );
   };
@@ -29,7 +27,7 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
       <View style={styles.detail}>
         <Text preset="textLargeBold" text="Labels" />
         <Space size="small" />
-        <Messages size="small" hasShadow={false} type={"warning"} message={"This event has no labels"} />
+        <Messages style={styles.message} size="small" hasShadow={false} type={"warning"} message={"This event has no labels"} />
       </View>
     );
   };
@@ -46,7 +44,7 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
       <View style={styles.detail}>
         <Text preset="textLargeBold" text="Description" />
         <Space size="small" />
-        <Messages size="small" hasShadow={false} type={"warning"} message={"This event has no description"} />
+        <Messages style={styles.message} size="small" hasShadow={false} type={"warning"} message={"This event has no description"} />
       </View>
     );
   };
@@ -63,7 +61,7 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
       <View style={styles.detail}>
         <Text preset="textLargeBold" text="Description" />
         <Space size="small" />
-        <Messages size="small" hasShadow={false} type={"warning"} message={"This event has no notes"} />
+        <Messages style={styles.message} size="small" hasShadow={false} type={"warning"} message={"This event has no notes"} />
       </View>
     );
   };
@@ -74,7 +72,7 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
         <View style={styles.detail}>
           <Text preset="textLargeBold" text="Service" />
           <Space size="small" />
-          <Messages size="small" hasShadow={false} type={"warning"} message={"This event has no service"} />
+          <Messages style={styles.message} size="small" hasShadow={false} type={"warning"} message={"This event has no service"} />
         </View>
       );
     }
@@ -100,13 +98,12 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
         <Text preset="textLargeBold" text="Meeting Platform" />
         <Space size="small" />
         {event.urls?.length === 0 ? (
-          <Messages size="small" hasShadow={false} type={"warning"} message={"This event has no meeting platform"} />
+          <Messages style={styles.message} size="small" hasShadow={false} type={"warning"} message={"This event has no meeting platform"} />
         ) : (
           event.urls.map((item, index) => {
             return (
               <React.Fragment key={index}>
                 <UrlCard key={index} url={item.url} type={item.type as UrlTypes} />
-                <Space size="small" />
               </React.Fragment>
             );
           })
@@ -151,18 +148,16 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
     };
 
     return (
-      <View style={styles.detail}>
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Text preset="textLargeBold" text="Repeat" />
-          <Switch
-            disabled
-            trackColor={{ false: Colors.red1, true: Colors.lightBackground }}
-            thumbColor={isActive ? Colors.brandSecondary2 : Colors.gray}
-            ios_backgroundColor={Colors.lightBackground}
-            onChange={handleSwitch}
-            value={isActive}
-          />
-        </View>
+      <View style={styles.rowDetail}>
+        <Text preset="textLargeBold" text="Repeat" />
+        <Switch
+          disabled
+          trackColor={{ false: Colors.red1, true: Colors.lightBackground }}
+          thumbColor={isActive ? Colors.brandSecondary2 : Colors.gray}
+          ios_backgroundColor={Colors.lightBackground}
+          onChange={handleSwitch}
+          value={isActive}
+        />
       </View>
     );
   };
@@ -171,11 +166,9 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
     event.attendeeLimit = 0;
     const attendeeLimit = event.attendeeLimit === 0 || event.attendeeLimit === null || event.attendeeLimit === undefined ? "No limit" : event.attendeeLimit.toString();
     return (
-      <View style={styles.detail}>
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Text preset="textLargeBold" text="Attendee limit" />
-          <Text text={attendeeLimit} />
-        </View>
+      <View style={styles.rowDetail}>
+        <Text preset="textLargeBold" text="Attendee limit" />
+        <Text text={attendeeLimit} />
       </View>
     );
   };
@@ -215,7 +208,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
     miHeight: getResponsiveHeight(50),
     marginBottom: getResponsiveHeight(16),
-    paddingBottom: 16,
   },
   rowDetail: {
     flexDirection: "row",
@@ -225,5 +217,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
     minHeight: getResponsiveHeight(50),
     marginBottom: getResponsiveHeight(16),
+  },
+  message: {
+    marginBottom: getResponsiveHeight(8),
   },
 });

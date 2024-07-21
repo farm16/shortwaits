@@ -171,6 +171,7 @@ export type AuthorizedStackParamList = {
   };
   [AUTHORIZED_STACK_SCREENS.BUSINESS_PROFILE_SCREEN]: undefined;
   [AUTHORIZED_STACK_SCREENS.APP_INFO_SCREEN]: undefined;
+  [AUTHORIZED_STACK_SCREENS.INTEGRATIONS_SCREEN]: undefined;
 };
 
 export type UnauthorizedStackParamList = {

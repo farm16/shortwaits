@@ -1,5 +1,4 @@
 import {
-  AddLocalClientDtoType,
   AddLocalClientsDtoType,
   BusinessUserRoles,
   BusinessUserType,
@@ -139,7 +138,7 @@ export const generateBusinessStaff = (users: CreateBusinessUsersDtoType, busines
   return businessUsers;
 };
 
-export const generateNewLocalClientPayload = (client: AddLocalClientDtoType): PartialLocalClientDtoType => {
+export const generateNewLocalClientPayload = (client): PartialLocalClientDtoType => {
   const imageUrlIdentifier = client.displayName || client.familyName || client.givenName || client.email || "?";
   const accountImageUrl = generateAvatarUrl(imageUrlIdentifier);
   return {

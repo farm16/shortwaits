@@ -42,7 +42,7 @@ export function BusinessProfileScreen({ navigation }: AuthorizedScreenProps<"bus
       // isWebBookingEnabled: business.isWebBookingEnabled,
       // isSmsNotificationEnabled: business.isSmsNotificationEnabled,
       // isAppNotificationEnabled: business.isAppNotificationEnabled,
-      // videoConference: business.videoConference,
+      // videoConferences: business.videoConferences,
       // isVideoConferenceEnabled: business.isVideoConferenceEnabled,
     };
     return _initialValues;

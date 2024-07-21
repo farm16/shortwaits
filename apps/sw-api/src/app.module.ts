@@ -6,8 +6,8 @@ import { SequelizeModule } from "@nestjs/sequelize";
 import { ApiModule } from "./api/api.module";
 import { getEnvPath } from "./common/env.helper";
 import { TransformInterceptor } from "./common/interceptors/transform.interceptor";
-import { MongooseConfigService } from "./shared/mongoose/mongoose.service";
-import { SqliteConfigService } from "./shared/sqlite/sqlite.service";
+import { MongoConfigService } from "./db/mongo/mongo.service";
+import { SqliteConfigService } from "./db/sqlite/sqlite.service";
 
 const envFilePath = getEnvPath();
 
@@ -18,7 +18,7 @@ const envFilePath = getEnvPath();
       isGlobal: true,
     }),
     MongooseModule.forRootAsync({
-      useClass: MongooseConfigService,
+      useClass: MongoConfigService,
     }),
     SequelizeModule.forRootAsync(SqliteConfigService),
     ApiModule,

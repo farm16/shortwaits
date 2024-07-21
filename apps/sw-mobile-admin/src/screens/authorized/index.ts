@@ -3,6 +3,7 @@ export * from "./business-profile/business-profile-screen";
 export * from "./clients/clients-screen";
 export * from "./event/event-screen";
 export * from "./events/events-screen";
+export * from "./integrations/integrations-screen";
 export * from "./my-business/my-business-screen";
 export * from "./plans/plans-screen";
 export * from "./profiles";

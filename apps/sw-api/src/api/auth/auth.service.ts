@@ -4,7 +4,7 @@ import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundE
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import { InjectModel } from "@nestjs/mongoose";
-import { BusinessType, BusinessUserType, ClientType, ObjectId } from "@shortwaits/shared-lib";
+import { BusinessType, BusinessUserType, ClientType, ObjectId, ShortwaitsStore } from "@shortwaits/shared-lib";
 import bcrypt from "bcryptjs";
 import { OAuth2Client } from "google-auth-library";
 import { Model, Types } from "mongoose";
@@ -473,7 +473,7 @@ export class AuthService {
       isWebBookingEnabled: true,
       isSmsNotificationEnabled: false,
       isAppNotificationEnabled: true,
-      videoConference: [],
+      videoConferences: currentShortwaitsAdmin.defaultBusinessData.videoConferences,
       isVideoConferenceEnabled: false,
       isDisabled: false,
     };
@@ -517,7 +517,7 @@ export class AuthService {
       es: "0000002",
     };
 
-    const currentShortwaitsAdmin = shortwaitsAdmin.find(shortWaits => shortWaits.short_id === storeIndicators[storeIndicator]) ?? shortwaitsAdmin[0];
+    const currentShortwaitsAdmin: ShortwaitsStore = shortwaitsAdmin.find(shortWaits => shortWaits.short_id === storeIndicators[storeIndicator]) ?? shortwaitsAdmin[0];
 
     const saltRounds = Number(this.configService.get("SALT_ROUNDS"));
     const salt = await bcrypt.genSalt(saltRounds);
@@ -588,7 +588,7 @@ export class AuthService {
       isWebBookingEnabled: true,
       isSmsNotificationEnabled: false,
       isAppNotificationEnabled: true,
-      videoConference: [],
+      videoConferences: currentShortwaitsAdmin.defaultBusinessData.videoConferences,
       isVideoConferenceEnabled: false,
       isDisabled: false,
     };

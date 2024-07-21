@@ -1,4 +1,4 @@
-import { BusinessHoursType, CurrencyType, ObjectId, ServiceColorsType } from "../../../";
+import { BusinessHoursType, BusinessLabelType, BusinessVideoConferenceType, CurrencyType, ObjectId, ServiceColorsType } from "../../../";
 import { ServiceType } from "./services";
 
 /**
@@ -26,25 +26,31 @@ export type SubscriptionPlan = {
   planId: string;
 };
 
-export type ShortwaitsAdminDefaultDataType = {
+export type ShortwaitsStore = {
+  _id?: any;
   short_id: string;
-  banners: ShortwaitsAdminBannersType[];
   name: string;
+  banners: ShortwaitsAdminBannersType[];
   description: string;
   links: string[];
   subscriptionPlans: SubscriptionPlans;
   suggestedLang: string;
   blackList: string[];
   timeZones: string[];
-  serviceColors: ServiceColorsType;
   categories: ObjectId[];
+  serviceColors: ServiceColorsType;
+  membershipPlans: BusinessMembership[];
   defaultBusinessData: {
     services: Partial<ServiceType>[];
     currencies: CurrencyType[];
     hours: BusinessHoursType;
+    labels: BusinessLabelType[];
+    videoConferences: BusinessVideoConferenceType[];
   };
   accountPermissions: AccountPermissions;
 };
+
+export type ShortwaitsStores = ShortwaitsStore[];
 
 export type AccountPermissions = {
   free: Record<string, PermissionProps>;
@@ -62,4 +68,57 @@ type PermissionProps = {
   hasLimit: boolean;
   min: number;
   max: number;
+};
+
+export type BusinessMembershipPrices = {
+  country: string;
+  currency: string;
+  priceInCents: number;
+  price: number;
+  validity_period: string;
+};
+
+export type BusinessPermissions =
+  | "add_business_staff"
+  | "add_business_client"
+  | "add_business_service"
+  | "add_business_event"
+  | "remove_business_staff"
+  | "remove_business_client"
+  | "remove_business_service"
+  | "remove_business_event"
+  | "update_business_staff"
+  | "update_business_client"
+  | "update_business_service"
+  | "update_business_event"
+  | "update_business_event_status_to_pending"
+  | "update_business_event_status_to_approved"
+  | "update_business_event_status_to_rejected"
+  | "update_business_event_status_to_cancelled"
+  | "update_business_event_status_to_completed"
+  | "update_business_hours"
+  | "update_business_web"
+  | "update_business_booking"
+  | "update_business_payment_methods"
+  | "update_business_disabled"
+  | "update_business_location"
+  | "update_business_description"
+  | "update_business_email"
+  | "update_business_labels"
+  | "update_business_categories";
+
+export type BusinessPermissionsType = {
+  isAllowed: boolean;
+  hasLimit: boolean;
+  min?: number;
+  max?: number;
+};
+
+export type BusinessMembership = {
+  short_id: string;
+  name: string;
+  description: string;
+  prices: BusinessMembershipPrices[];
+  permissions: Record<BusinessPermissions, BusinessPermissionsType>;
+  isActive: boolean;
 };

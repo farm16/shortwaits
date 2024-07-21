@@ -36,7 +36,7 @@ export const updateBusinessSchema = Yup.object({
   isWebBookingEnabled: Yup.boolean().optional().nullable(),
   isSmsNotificationEnabled: Yup.boolean().optional().nullable(),
   isAppNotificationEnabled: Yup.boolean().optional().nullable(),
-  videoConference: Yup.array().optional().nullable(),
+  videoConferences: Yup.array().optional().nullable(),
   isVideoConferenceEnabled: Yup.boolean().optional().nullable(),
   web: Yup.object({
     isActive: Yup.boolean(),

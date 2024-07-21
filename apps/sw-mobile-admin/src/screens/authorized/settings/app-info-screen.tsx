@@ -18,8 +18,18 @@ const termsOfServiceUrl = `${shortwaitsApi.baseUrl}/shortwaits/terms-of-use`;
 export const AppInfoScreen: FC<AuthorizedScreenProps<"app-info-screen">> = ({ navigation }) => {
   const { Colors } = useTheme();
   const intl = useIntl(); // Access the intl object
-
   const [apiLevel, setApiLevel] = useState(0);
+  const itemStyle = {
+    borderColor: Colors.gray,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+  };
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
+      headerTitle: () => <Text preset="headerTitle" text={"App Information"} />,
+    });
+  }, [intl, navigation]);
 
   useEffect(() => {
     if (Platform.OS === "android") {
@@ -30,18 +40,6 @@ export const AppInfoScreen: FC<AuthorizedScreenProps<"app-info-screen">> = ({ na
       return;
     }
   }, []);
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
-      headerTitle: () => <Text preset="headerTitle" text={"App Information"} />,
-    });
-  }, [intl, navigation]);
-
-  const itemStyle = {
-    borderColor: Colors.gray,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-  };
 
   return (
     <Screen preset="scroll" unsafeBottom unsafe>

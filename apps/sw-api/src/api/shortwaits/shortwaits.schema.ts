@@ -3,17 +3,24 @@ import { ApiProperty } from "@nestjs/swagger";
 import {
   AccountPermissions,
   BusinessHoursType,
+  BusinessLabelType,
+  BusinessMembership,
+  BusinessVideoConferencesType,
   CurrencyType,
   ObjectId,
   ServiceColorsType,
   ServiceType,
   ShortwaitsAdminBannersType,
-  ShortwaitsAdminDefaultDataType,
+  ShortwaitsStore,
 } from "@shortwaits/shared-lib";
 import { Document } from "mongoose";
 
 @Schema()
-export class Shortwaits extends Document implements ShortwaitsAdminDefaultDataType {
+export class Shortwaits extends Document implements ShortwaitsStore {
+  @ApiProperty()
+  @Prop()
+  membershipPlans: BusinessMembership[];
+
   @ApiProperty()
   @Prop(
     raw({
@@ -67,10 +74,13 @@ export class Shortwaits extends Document implements ShortwaitsAdminDefaultDataTy
     })
   )
   defaultBusinessData: {
-    services: ServiceType[];
+    services: Partial<ServiceType>[];
     currencies: CurrencyType[];
     hours: BusinessHoursType;
+    labels: BusinessLabelType[];
+    videoConferences: BusinessVideoConferencesType;
   };
+
   @ApiProperty()
   @Prop({ type: Object })
   serviceColors: ServiceColorsType;

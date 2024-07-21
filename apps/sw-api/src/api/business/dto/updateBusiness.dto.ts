@@ -1,4 +1,4 @@
-import { BusinessHoursType, BusinessLabelType, BusinessLocationType, CurrencyType, ObjectId, UpdateBusinessDtoType } from "@shortwaits/shared-lib";
+import { BusinessHoursType, BusinessLabelType, BusinessLocationType, BusinessVideoConferenceType, CurrencyType, ObjectId, UpdateBusinessDtoType } from "@shortwaits/shared-lib";
 
 export class UpdateBusinessDto implements UpdateBusinessDtoType {
   staff: string[];
@@ -20,7 +20,7 @@ export class UpdateBusinessDto implements UpdateBusinessDtoType {
   isWebBookingEnabled: boolean;
   isSmsNotificationEnabled: boolean;
   isAppNotificationEnabled: boolean;
-  videoConference: { isActive: boolean; url: string }[];
+  videoConferences: BusinessVideoConferenceType[];
   isVideoConferenceEnabled: boolean;
   supportEmail?: string;
   supportPhone?: string;

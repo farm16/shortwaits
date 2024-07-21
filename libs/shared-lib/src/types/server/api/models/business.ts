@@ -1,16 +1,19 @@
 import { Document } from "mongoose";
-import { BusinessHoursType, BusinessLocationType, CurrencyType, EmojiType, ObjectId, PaginatedModel } from "../../../";
-
-export type BusinessLabelType = {
-  name: string;
-  description: string;
-  isFavorite: boolean;
-  emojiShortName: EmojiType;
-};
+import {
+  BusinessAccountType,
+  BusinessBookingConfigType,
+  BusinessHoursType,
+  BusinessLabelType,
+  BusinessLocationType,
+  BusinessTaggedClientType,
+  BusinessVideoConferenceType,
+  BusinessWebConfigType,
+  CurrencyType,
+  ObjectId,
+  PaginatedModel,
+} from "../../../";
 
 export type BusinessLabelsType = BusinessLabelType[];
-
-export type AccountType = "free" | "student" | "basic" | "trial" | "business" | "premium" | "enterprise" | "partner";
 
 export type BusinessType = {
   shortId: string;
@@ -37,21 +40,12 @@ export type BusinessType = {
   updatedBy: ObjectId;
   clients: ObjectId[];
   localClients: ObjectId[];
-  taggedClients: [
-    {
-      clientId: ObjectId;
-      services: ObjectId[];
-      tags: string[];
-    }
-  ];
-  accountType: AccountType;
+  taggedClients: BusinessTaggedClientType[];
+  accountType: BusinessAccountType;
   isWebBookingEnabled: boolean;
   isSmsNotificationEnabled: boolean;
   isAppNotificationEnabled: boolean;
-  videoConference: {
-    isActive: boolean;
-    url: string;
-  }[];
+  videoConferences: BusinessVideoConferenceType[];
   isVideoConferenceEnabled: boolean;
   supportEmail?: string;
   supportPhone?: string;
@@ -59,27 +53,8 @@ export type BusinessType = {
   deliveryInfo?: string;
   reservations?: ObjectId[];
   paymentMethods?: string[];
-  web?: {
-    isActive: boolean;
-    baseUrl: string;
-    bannerImageUrl: string;
-    logoImageUrl: string;
-    faviconImageUrl: string;
-    primaryColor: string;
-    secondaryColor: string;
-    accentColor: string;
-    notificationMessage: string;
-  };
-  booking?: {
-    allowBooking: boolean;
-    allowRescheduling: boolean;
-    allowCancellation: boolean;
-    allowPayment: boolean;
-    allowCheckIn: boolean;
-    allowCheckOut: boolean;
-    allowNoShow: boolean;
-    allowWaitlist: boolean;
-  };
+  web?: BusinessWebConfigType;
+  booking?: BusinessBookingConfigType;
 };
 
 type BusinessDocType = BusinessType & Document;
