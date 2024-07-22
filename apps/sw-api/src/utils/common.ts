@@ -443,3 +443,22 @@ export function convertToLowercase(text: string) {
 export function validateId(id: string): boolean {
   return Types.ObjectId.isValid(id);
 }
+
+type PrintModule = "EventTransactionsService" | "none";
+type PrintArgs = { module: PrintModule; message: string; value: any };
+export const print = (args: PrintArgs) => {
+  const { module = "none", message } = args;
+  let { value } = args;
+
+  const modules = {
+    none: "none",
+    EventTransactionsService: "EventTransactionsService",
+  };
+  // if value is an object, print it as JSON
+  if (typeof value === "object") {
+    value = JSON.stringify(value, null, 2);
+  }
+
+  console.log(`[MODULE :${modules[module]}]`);
+  console.log(`${message} >>>`, value);
+};
