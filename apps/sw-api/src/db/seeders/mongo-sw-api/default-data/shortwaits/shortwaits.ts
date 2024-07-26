@@ -1,107 +1,8 @@
-import { ServiceColorsType, ShortwaitsStores, WeekHoursType } from "@shortwaits/shared-lib";
-import { categories } from "../1-business_category/business_category";
-import { memberships } from "../2-business_membership/business_membership";
+import { ShortwaitsStores } from "@shortwaits/shared-lib";
+import { businessCategories as categories } from "../business-category/business-category";
+import { categoriesIds, defaultBusinessHours, defaultServiceColors, memberships } from "../helpers/helpers";
 
-const categoriesIds = categories.map(category => category._id);
-
-const defaultServiceColors: ServiceColorsType = {
-  red: {
-    colorId: "1",
-    colorName: "red",
-    hexCode: "#e07a5f",
-    isSelected: null,
-    isDefault: true,
-  },
-  blue: {
-    colorId: "2",
-    colorName: "blue",
-    hexCode: "#0c41ff",
-    isSelected: null,
-    isDefault: false,
-  },
-  green: {
-    colorId: "3",
-    colorName: "green",
-    hexCode: "#7ac590",
-    isSelected: null,
-    isDefault: false,
-  },
-  yellow: {
-    colorId: "4",
-    colorName: "yellow",
-    hexCode: "#f2cc8f",
-    isSelected: null,
-    isDefault: false,
-  },
-  lightBlue: {
-    colorId: "5",
-    colorName: "lightBlue",
-    hexCode: "#4ceaff",
-    isSelected: null,
-    isDefault: false,
-  },
-  purple: {
-    colorId: "6",
-    colorName: "purple",
-    hexCode: "#766fff",
-    isSelected: null,
-    isDefault: false,
-  },
-};
-
-const defaultBusinessHours: WeekHoursType = {
-  mon: [
-    {
-      startTime: 540,
-      endTime: 1020,
-      isActive: true,
-    },
-  ],
-  tue: [
-    {
-      startTime: 540,
-      endTime: 1020,
-      isActive: true,
-    },
-  ],
-  wed: [
-    {
-      startTime: 540,
-      endTime: 1020,
-      isActive: true,
-    },
-  ],
-  thu: [
-    {
-      startTime: 540,
-      endTime: 1020,
-      isActive: true,
-    },
-  ],
-  fri: [
-    {
-      startTime: 540,
-      endTime: 1020,
-      isActive: true,
-    },
-  ],
-  sat: [
-    {
-      startTime: 540,
-      endTime: 1020,
-      isActive: true,
-    },
-  ],
-  sun: [
-    {
-      startTime: 540,
-      endTime: 1020,
-      isActive: true,
-    },
-  ],
-};
-
-const shortwaitsAdminDefaultData: ShortwaitsStores = [
+export const shortwaitsStores: ShortwaitsStores = [
   {
     short_id: "0000001",
     name: "Shortwaits LLC",
@@ -386,5 +287,3 @@ const shortwaitsAdminDefaultData: ShortwaitsStores = [
     accountPermissions: null,
   },
 ];
-
-module.exports = shortwaitsAdminDefaultData;

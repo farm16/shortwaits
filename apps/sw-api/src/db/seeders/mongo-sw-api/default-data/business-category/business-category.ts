@@ -1,8 +1,9 @@
-import { getObjectId } from "mongo-seeding";
+import { BusinessCategoriesType } from "@shortwaits/shared-lib";
+import { createObjectId } from "../../../../../utils";
 
-export const categories = [
+export const businessCategories: BusinessCategoriesType = [
   {
-    _id: getObjectId("1007"),
+    _id: createObjectId("1007"),
     short_id: "1007",
     name: "Beauty Services",
     keys: ["beauty"],
@@ -19,7 +20,7 @@ export const categories = [
     description: "",
   },
   {
-    _id: getObjectId("1008"),
+    _id: createObjectId("1008"),
     short_id: "1008",
     name: "Education Services",
     keys: ["education"],
@@ -36,7 +37,7 @@ export const categories = [
     description: "",
   },
   {
-    _id: getObjectId("1018"),
+    _id: createObjectId("1018"),
     short_id: "1018",
     name: "Animal Care",
     keys: ["dog", "cat", "veterinarian"],
@@ -53,7 +54,7 @@ export const categories = [
     description: "",
   },
   {
-    _id: getObjectId("1010"),
+    _id: createObjectId("1010"),
     short_id: "1010",
     name: "Food Product",
     keys: ["food"],
@@ -70,7 +71,7 @@ export const categories = [
     description: "",
   },
   {
-    _id: getObjectId("1000"),
+    _id: createObjectId("1000"),
     short_id: "1000",
     name: "Accounting & Tax Services",
     keys: ["accounting", "tax"],
@@ -87,7 +88,7 @@ export const categories = [
     description: "",
   },
   {
-    _id: getObjectId("1001"),
+    _id: createObjectId("1001"),
     short_id: "1001",
     name: "Arts, Culture & Entertainment",
     keys: ["art", "culture", "entertainment"],
@@ -104,7 +105,7 @@ export const categories = [
     description: "",
   },
   {
-    _id: getObjectId("1017"),
+    _id: createObjectId("1017"),
     short_id: "1017",
     name: "Health & Wellness",
     keys: ["health", "wellness", "covid"],
@@ -121,7 +122,7 @@ export const categories = [
     description: "",
   },
   {
-    _id: getObjectId("1020"),
+    _id: createObjectId("1020"),
     short_id: "1020",
     name: "Other",
     keys: [],
@@ -138,7 +139,7 @@ export const categories = [
     description: "",
   },
   {
-    _id: getObjectId("1024"),
+    _id: createObjectId("1024"),
     short_id: "1024",
     name: "Restaurants & Nightlife",
     keys: ["drinks", "alcohol", "food"],
@@ -155,7 +156,7 @@ export const categories = [
     description: "",
   },
   {
-    _id: getObjectId("1022"),
+    _id: createObjectId("1022"),
     short_id: "1022",
     name: "Pet Services",
     keys: ["dog", "cat", "pet"],
@@ -172,7 +173,7 @@ export const categories = [
     description: "",
   },
   {
-    _id: getObjectId("1021"),
+    _id: createObjectId("1021"),
     short_id: "1021",
     name: "Transportation Services",
     keys: ["taxi", "bus", "car"],
@@ -189,7 +190,7 @@ export const categories = [
     description: "",
   },
   {
-    _id: getObjectId("1026"),
+    _id: createObjectId("1026"),
     short_id: "1026",
     name: "Vehicle service and accessories.",
     keys: ["mechanic", "car", "shop", "fix"],
@@ -206,7 +207,7 @@ export const categories = [
     description: "",
   },
   {
-    _id: getObjectId("1027"),
+    _id: createObjectId("1027"),
     short_id: "1027",
     name: "Wedding, Event & Meetings",
     keys: ["party", "bridal", "weeding", "ring"],
@@ -223,7 +224,7 @@ export const categories = [
     description: "",
   },
   {
-    _id: getObjectId("1023"),
+    _id: createObjectId("1023"),
     short_id: "1023",
     name: "Shopping & Retail",
     keys: ["store", "shop"],
@@ -240,7 +241,7 @@ export const categories = [
     description: "",
   },
   {
-    _id: getObjectId("1019"),
+    _id: createObjectId("1019"),
     short_id: "1019",
     name: "Home Improvement",
     keys: ["home", "construction", "renovation", "improvement"],

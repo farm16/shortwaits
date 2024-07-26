@@ -1,9 +1,107 @@
-import { BusinessMembership } from "@shortwaits/shared-lib";
-import { getObjectId } from "mongo-seeding";
+import { BusinessMembership, ServiceColorsType, WeekHoursType } from "@shortwaits/shared-lib";
+import { businessCategories } from "../business-category/business-category";
+
+export const categoriesIds = businessCategories.map(category => category._id);
+
+export const defaultServiceColors: ServiceColorsType = {
+  red: {
+    colorId: "1",
+    colorName: "red",
+    hexCode: "#e07a5f",
+    isSelected: null,
+    isDefault: true,
+  },
+  blue: {
+    colorId: "2",
+    colorName: "blue",
+    hexCode: "#0c41ff",
+    isSelected: null,
+    isDefault: false,
+  },
+  green: {
+    colorId: "3",
+    colorName: "green",
+    hexCode: "#7ac590",
+    isSelected: null,
+    isDefault: false,
+  },
+  yellow: {
+    colorId: "4",
+    colorName: "yellow",
+    hexCode: "#f2cc8f",
+    isSelected: null,
+    isDefault: false,
+  },
+  lightBlue: {
+    colorId: "5",
+    colorName: "lightBlue",
+    hexCode: "#4ceaff",
+    isSelected: null,
+    isDefault: false,
+  },
+  purple: {
+    colorId: "6",
+    colorName: "purple",
+    hexCode: "#766fff",
+    isSelected: null,
+    isDefault: false,
+  },
+};
+
+export const defaultBusinessHours: WeekHoursType = {
+  mon: [
+    {
+      startTime: 540,
+      endTime: 1020,
+      isActive: true,
+    },
+  ],
+  tue: [
+    {
+      startTime: 540,
+      endTime: 1020,
+      isActive: true,
+    },
+  ],
+  wed: [
+    {
+      startTime: 540,
+      endTime: 1020,
+      isActive: true,
+    },
+  ],
+  thu: [
+    {
+      startTime: 540,
+      endTime: 1020,
+      isActive: true,
+    },
+  ],
+  fri: [
+    {
+      startTime: 540,
+      endTime: 1020,
+      isActive: true,
+    },
+  ],
+  sat: [
+    {
+      startTime: 540,
+      endTime: 1020,
+      isActive: true,
+    },
+  ],
+  sun: [
+    {
+      startTime: 540,
+      endTime: 1020,
+      isActive: true,
+    },
+  ],
+};
 
 export const memberships: BusinessMembership[] = [
   {
-    _id: getObjectId("1000"),
     short_id: "1000",
     name: "Free",
     description: "Free membership plan",
@@ -146,7 +244,6 @@ export const memberships: BusinessMembership[] = [
     isActive: true,
   },
   {
-    _id: getObjectId("1001"),
     short_id: "1001",
     name: "Premium",
     description: "Premium membership plan",

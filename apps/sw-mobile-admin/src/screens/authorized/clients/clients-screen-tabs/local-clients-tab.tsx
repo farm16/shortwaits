@@ -4,7 +4,7 @@ import { AnimatedSearchBar, Button, List, NonIdealState, SelectorListItem, getFr
 import { isEmpty } from "lodash";
 import React, { Fragment, useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
-import { ListRenderItem, View } from "react-native";
+import { Alert, ListRenderItem, View } from "react-native";
 import { RefreshControl } from "react-native-gesture-handler";
 import { AuthorizedScreenProps } from "../../../../navigation";
 import { useLocalClients } from "../../../../store";
@@ -30,11 +30,27 @@ export function LocalClientsTab({ isLoading, refresh }: { isLoading: boolean; re
     }
   }, [currentLocalClients]);
 
+  const sd = () => {
+    Alert.prompt("Remove User", "Are you sure you want to remove this user?", [
+      {
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel",
+      },
+      {
+        text: "OK",
+        onPress: () => {
+          console.log("OK Pressed");
+        },
+      },
+    ]);
+  };
+
   const _renderItem: ListRenderItem<LocalClientDtoType> = useCallback(
     ({ item }) => {
       const title = item.givenName || item.displayName || item.familyName || item.displayName || item.username;
 
-      const subTitle = `ID: ${getFriendlyShortId(item.shortId)}`;
+      const subTitle = `ID: ${getFriendlyShortId(item.shortId, 3)}`;
 
       return (
         <SelectorListItem
@@ -56,7 +72,7 @@ export function LocalClientsTab({ isLoading, refresh }: { isLoading: boolean; re
         />
       );
     },
-    [navigate]
+    [push]
   );
 
   const handleOnChangeText = (text: string) => {

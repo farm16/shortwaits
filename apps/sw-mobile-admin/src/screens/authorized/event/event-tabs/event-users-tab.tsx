@@ -133,9 +133,7 @@ export function EventUsersTab(props: EventUsersTabProps) {
           screen: "business-client-screen",
           params: {
             client: item as unknown as ClientDtoType,
-            onUserRemove: client => {
-              console.log("business-client-screen >>>", client);
-            },
+            eventId: event._id,
           },
         });
       };
@@ -145,9 +143,7 @@ export function EventUsersTab(props: EventUsersTabProps) {
           screen: "business-local-client-profile-screen",
           params: {
             localClient: item as unknown as LocalClientDtoType,
-            onUserRemove: client => {
-              console.log("business-local-client-profile-screen >>>", client);
-            },
+            eventId: event._id,
           },
         });
       };
@@ -159,7 +155,7 @@ export function EventUsersTab(props: EventUsersTabProps) {
 
       return <CombinedClientCard onPress={handleOnPress} user={item} onRemove={handleOnRemove} />;
     },
-    [navigate]
+    [event._id, navigate]
   );
 
   const renderItem: PeopleSectionListRenderItem = data => {

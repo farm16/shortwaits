@@ -7,9 +7,11 @@ import { AuthorizedScreenProps } from "../../../navigation";
 import { useEvents } from "../../../store";
 
 export function BusinessClientProfileScreen({ navigation, route }: AuthorizedScreenProps<"business-client-screen">) {
-  const { client, onUserRemove } = route.params;
+  const { client, eventId } = route.params;
   const { Colors } = useTheme();
   const events = useEvents();
+
+  const removeClientFromEvent = !!eventId;
 
   console.log("client >>>", JSON.stringify(client, null, 2));
 
@@ -157,6 +159,7 @@ export function BusinessClientProfileScreen({ navigation, route }: AuthorizedScr
               preset={"icon2"}
               leftIconName={"delete"}
               onPress={() => {
+                console.log("delete client");
                 if (onUserRemove) {
                   onUserRemove(client);
                 }

@@ -57,7 +57,24 @@ export const getSelectedClients = (clients: ClientsDtoType, localClients: LocalC
 };
 
 // this converts id to asdd-asdas-asdds every 4 characters
-export const getFriendlyShortId = (inputId: string) => {
+export const getFriendlyShortId = (inputId: string, chunks?: 2 | 3 | 4) => {
+  let chunksRegex;
+
+  switch (chunks) {
+    case 2:
+      chunksRegex = /.{1,2}/g;
+      break;
+    case 3:
+      chunksRegex = /.{1,3}/g;
+      break;
+    case 4:
+      chunksRegex = /.{1,4}/g;
+      break;
+    default:
+      chunksRegex = /.{1,4}/g;
+      break;
+  }
+
   // Check if the inputId is a valid string
   if (typeof inputId !== "string") {
     return "";
@@ -66,9 +83,9 @@ export const getFriendlyShortId = (inputId: string) => {
   // Remove any non-alphanumeric characters from the inputId
   const cleanedId = inputId.replace(/[^a-zA-Z0-9]/g, "");
   // Split the cleanedId into chunks of 4 characters
-  const chunks = cleanedId.match(/.{1,4}/g) || [];
+  const chunkedString = cleanedId.match(chunksRegex) || [];
   // Join the chunks with dashes to get the desired format
-  const formattedId = chunks.join("-");
+  const formattedId = chunkedString.join("-");
 
   return formattedId;
 };

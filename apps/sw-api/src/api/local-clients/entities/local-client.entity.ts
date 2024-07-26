@@ -4,7 +4,7 @@ import { Alias, ClientRegistration, LocalClientType, ObjectId } from "@shortwait
 import { Document, Schema as MongooseSchema } from "mongoose";
 
 @Schema({ collection: "local_client" })
-export class LocalClient extends Document implements LocalClientType {
+export class LocalClient extends Document<ObjectId> implements LocalClientType {
   @ApiProperty()
   @Prop()
   shortId: string;
@@ -203,11 +203,11 @@ export class LocalClient extends Document implements LocalClientType {
 
   @ApiProperty()
   @Prop()
-  createdAt: string;
+  createdAt: Date;
 
   @ApiProperty()
   @Prop()
-  updatedAt: string;
+  updatedAt: Date;
 
   @ApiProperty()
   @Prop()
@@ -251,8 +251,8 @@ export class LocalClient extends Document implements LocalClientType {
     })
   )
   currentMembership: {
-    membershipId: MongooseSchema.Types.ObjectId;
-    invoiceId: MongooseSchema.Types.ObjectId;
+    membershipId: ObjectId;
+    invoiceId: ObjectId;
     membershipShortId: string;
     membershipShortName: string;
     status: string;
@@ -262,11 +262,11 @@ export class LocalClient extends Document implements LocalClientType {
   @ApiProperty()
   @Prop(
     raw({
-      invoiceId: MongooseSchema.Types.Mixed,
+      invoiceId: MongooseSchema.Types.ObjectId,
     })
   )
   billing: {
-    invoiceId: MongooseSchema.Types.ObjectId;
+    invoiceId: ObjectId;
   };
 }
 

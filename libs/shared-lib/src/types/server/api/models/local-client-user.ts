@@ -63,8 +63,8 @@ export type LocalClientType = {
   };
   businesses: ObjectId[];
   deleted: boolean;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date;
+  updatedAt: Date;
   lastSignInAt: Date;
   roleId: ObjectId;
   hashedRt: string;

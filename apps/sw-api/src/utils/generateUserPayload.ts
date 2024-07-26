@@ -1,5 +1,4 @@
 import {
-  AddLocalClientsDtoType,
   BusinessUserRoles,
   BusinessUserType,
   ClientType,
@@ -7,7 +6,6 @@ import {
   CreateBusinessUsersDtoType,
   DtoFriendlyType,
   LocalClientType,
-  PartialLocalClientDtoType,
   generateAvatarUrl,
   generateShortId,
 } from "@shortwaits/shared-lib";
@@ -136,38 +134,6 @@ export const generateBusinessStaff = (users: CreateBusinessUsersDtoType, busines
     return generateBusinessUser(user, ["staff"], businessId);
   });
   return businessUsers;
-};
-
-export const generateNewLocalClientPayload = (client): PartialLocalClientDtoType => {
-  const imageUrlIdentifier = client.displayName || client.familyName || client.givenName || client.email || "?";
-  const accountImageUrl = generateAvatarUrl(imageUrlIdentifier);
-  return {
-    ...client,
-    email: client.email,
-    password: "password",
-    accountImageUrl: accountImageUrl,
-    roleId: null,
-    deleted: false,
-    registration: {
-      isRegistered: false,
-      registrationType: "local",
-      state: {
-        screenName: "",
-        state: 7,
-        isPendingVerification: false,
-      },
-    },
-  };
-};
-
-export const generateLocalClients = (users: AddLocalClientsDtoType) => {
-  if (!users || users.length === 0) {
-    return [];
-  }
-  const clientUsers = users.map(user => {
-    return generateNewLocalClientPayload(user);
-  });
-  return clientUsers;
 };
 
 type RequiredKeys = Pick<

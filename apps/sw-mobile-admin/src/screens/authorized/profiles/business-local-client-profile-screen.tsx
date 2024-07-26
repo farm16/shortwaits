@@ -1,22 +1,41 @@
-import { BackButton, Button, Container, IconButton, NonIdealState, Screen, Space, Text, handleEmail, handlePhoneCall, handleSms, useTheme } from "@shortwaits/shared-ui";
-import React, { useCallback, useLayoutEffect, useMemo } from "react";
-import { Image, StyleSheet, View } from "react-native";
+import {
+  ActivityIndicator,
+  BackButton,
+  Button,
+  Container,
+  IconButton,
+  NonIdealState,
+  Screen,
+  Space,
+  Text,
+  handleEmail,
+  handlePhoneCall,
+  handleSms,
+  useTheme,
+} from "@shortwaits/shared-ui";
+import React, { useCallback, useEffect, useLayoutEffect, useMemo } from "react";
+import { Alert, Image, StyleSheet, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { AgendaItem } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
-import { useEvents, useLocalClient } from "../../../store";
+import { useDeleteBusinessLocalClientsMutation, useUpdateClientsInBusinessEventMutation } from "../../../services";
+import { useBusiness, useEvents, useLocalClient } from "../../../store";
 
 export function BusinessLocalClientProfileScreen({ navigation, route }: AuthorizedScreenProps<"business-local-client-profile-screen">) {
-  const { localClient: localClientParam, onUserRemove } = route.params;
+  const { localClient: localClientParam, eventId } = route.params;
 
   const { Colors } = useTheme();
   const events = useEvents();
+  const business = useBusiness();
   const localClient = useLocalClient(localClientParam._id);
-
-  const clientName = localClient.displayName || localClient.familyName || localClient.givenName || localClient.middleName || localClient.email || "";
-  const hasPhoneNumbers = localClient.phoneNumbers && localClient.phoneNumbers.length > 0 && localClient.phoneNumbers.some(phone => phone.number);
-  const phoneNumber = hasPhoneNumbers ? localClient.phoneNumbers[0]?.number : "";
-  const hasEmail = localClient.email && localClient.email.length > 0;
+  const [updateClientsInBusinessEvent, registerMultipleToBusinessEventStatus] = useUpdateClientsInBusinessEventMutation();
+  const [deleteBusinessLocalClients, deleteBusinessLocalClientsStatus] = useDeleteBusinessLocalClientsMutation();
+  const eventToWithdrawFrom = events.find(event => event._id === eventId);
+  const withdrawLocalClientFromEvent = !!eventId && !!eventToWithdrawFrom;
+  const clientName = localClient?.displayName || localClient?.familyName || localClient?.givenName || localClient?.middleName || localClient?.email || "";
+  const hasPhoneNumbers = localClient?.phoneNumbers && localClient?.phoneNumbers.length > 0 && localClient?.phoneNumbers.some(phone => phone.number);
+  const phoneNumber = hasPhoneNumbers ? localClient?.phoneNumbers[0]?.number : "";
+  const hasEmail = localClient?.email && localClient?.email.length > 0;
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -57,9 +76,34 @@ export function BusinessLocalClientProfileScreen({ navigation, route }: Authoriz
     });
   }, [localClient, navigation]);
 
+  useEffect(() => {
+    if (registerMultipleToBusinessEventStatus.isSuccess || deleteBusinessLocalClientsStatus.isSuccess) {
+      navigation.goBack();
+    }
+  }, [deleteBusinessLocalClientsStatus.isSuccess, navigation, registerMultipleToBusinessEventStatus.isSuccess]);
+
+  const handleWithdrawLocalClientFromEvent = () => {
+    const updatedLocalClientIds = [...eventToWithdrawFrom.localClientsIds];
+    const localClientIndex = updatedLocalClientIds.findIndex(id => id === localClient?._id);
+    updatedLocalClientIds.splice(localClientIndex, 1);
+
+    updateClientsInBusinessEvent({
+      eventId: eventToWithdrawFrom._id,
+      clientIds: eventToWithdrawFrom.clientsIds,
+      localClientIds: updatedLocalClientIds,
+    });
+  };
+
+  const handleRemoveLocalClient = () => {
+    deleteBusinessLocalClients({
+      businessId: business._id,
+      body: [localClient],
+    });
+  };
+
   const { localClientData, hasLocalClients } = useMemo(() => {
     const _clientData = events.filter(event => {
-      return event.localClientsIds.includes(localClient._id);
+      return event.localClientsIds.includes(localClient?._id);
     });
     return {
       hasLocalClients: _clientData.length > 0,
@@ -94,38 +138,41 @@ export function BusinessLocalClientProfileScreen({ navigation, route }: Authoriz
   }, [navigation]);
 
   const handleRemoveUser = () => {
-    // Alert.alert("Delete Client", "Are you sure you want to delete this client?", [
-    //   {
-    //     text: "Cancel",
-    //     onPress: () => console.log("Cancel Pressed"),
-    //     style: "cancel",
-    //   },
-    //   {
-    //     text: "OK",
-    //     onPress: () => {
-    //       deleteLocalClients({
-    //         businessId: business._id,
-    //         body: [localClient],
-    //       });
-    //     },
-    //   },
-    // ]);
-    if (onUserRemove) {
-      onUserRemove(localClient);
-    }
+    const alertTitle = withdrawLocalClientFromEvent ? "Withdraw Client from event" : "Remove Client";
+    const alertMessage = withdrawLocalClientFromEvent ? "Are you sure you want to withdraw this client from the event?" : "Are you sure you want to remove this client?";
+
+    const handleRemove = withdrawLocalClientFromEvent ? handleWithdrawLocalClientFromEvent : handleRemoveLocalClient;
+
+    Alert.alert(alertTitle, alertMessage, [
+      {
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel",
+      },
+      {
+        text: "OK",
+        onPress: handleRemove,
+      },
+    ]);
   };
+
+  if (registerMultipleToBusinessEventStatus.isLoading || deleteBusinessLocalClientsStatus.isLoading) {
+    return <ActivityIndicator />;
+  }
+
+  if (!localClient) return null;
 
   return (
     <Screen preset="fixed" unsafe unsafeBottom>
       <View style={styles.headerContainer}>
         <Space size="small" />
         <Container direction="row" style={styles.clientInfoContainer}>
-          <Image source={{ uri: localClient.accountImageUrl ? localClient.accountImageUrl : "https://picsum.photos/200" }} style={styles.clientImage} />
+          <Image source={{ uri: localClient?.accountImageUrl ? localClient?.accountImageUrl : "https://picsum.photos/200" }} style={styles.clientImage} />
           <View style={styles.clientDetails}>
             {clientName ? <Text style={[styles.clientName, { color: Colors.text }]} text={clientName} /> : null}
-            {hasEmail ? <Text style={[styles.clientEmail, { color: Colors.subText }]} text={localClient.email} /> : null}
+            {hasEmail ? <Text style={[styles.clientEmail, { color: Colors.subText }]} text={localClient?.email} /> : null}
             {hasPhoneNumbers ? (
-              <Text style={[styles.phoneNumber, { color: Colors.subText }]} text={`${localClient.phoneNumbers[0].label}: ${localClient.phoneNumbers[0].number}`} />
+              <Text style={[styles.phoneNumber, { color: Colors.subText }]} text={`${localClient?.phoneNumbers[0].label}: ${localClient?.phoneNumbers[0].number}`} />
             ) : null}
           </View>
         </Container>
@@ -138,7 +185,7 @@ export function BusinessLocalClientProfileScreen({ navigation, route }: Authoriz
             disabled={!hasEmail}
             leftIconName="email-outline"
             onPress={() => {
-              handleEmail(localClient.email);
+              handleEmail(localClient?.email);
             }}
           />
           <Button
@@ -175,18 +222,17 @@ export function BusinessLocalClientProfileScreen({ navigation, route }: Authoriz
               console.log("share");
             }}
           />
-          {onUserRemove ? (
-            <Button
-              leftIconSize={25}
-              leftIconColor={Colors.failed}
-              style={{
-                backgroundColor: Colors.failedBackground,
-              }}
-              preset={"icon2"}
-              leftIconName={"delete"}
-              onPress={handleRemoveUser}
-            />
-          ) : null}
+
+          <Button
+            leftIconSize={25}
+            leftIconColor={Colors.failed}
+            style={{
+              backgroundColor: Colors.failedBackground,
+            }}
+            preset={"icon2"}
+            leftIconName={withdrawLocalClientFromEvent ? "exit-to-app" : "delete"}
+            onPress={handleRemoveUser}
+          />
         </View>
         <Space />
       </View>
@@ -196,7 +242,7 @@ export function BusinessLocalClientProfileScreen({ navigation, route }: Authoriz
           {hasLocalClients ? (
             <Container direction="row" style={[styles.eventBoxHeader]}>
               <Text preset="none" style={[styles.eventBoxHeaderTitle, { color: Colors.text }]}>
-                {`Event (${localClientData.length})`}
+                Events
               </Text>
               {/* <Text preset="none" style={[styles.eventBoxHeaderTitle, { color: Colors.text }]}>
             {`History`}

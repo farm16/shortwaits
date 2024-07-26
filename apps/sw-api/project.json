@@ -59,10 +59,24 @@
         }
       }
     },
-    "seed": {
-      "executor": "nx:run-commands",
+    "buildSeed": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
       "options": {
-        "commands": ["DEBUG=mongo-seeding node apps/sw-api/scripts/seeds/default-data.js"]
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/sw-api-seeder",
+        "main": "apps/sw-api/src/seeder.ts",
+        "tsConfig": "apps/sw-api/tsconfig.app.json",
+        "assets": ["apps/sw-api/src/assets"],
+        "isolatedConfig": true,
+        "webpackConfig": "apps/sw-api/webpack.config.js",
+        "quiet": true
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
       }
     }
   },

@@ -1,5 +1,7 @@
 import {
   AddClientDtoType,
+  AddLocalClientDtoType,
+  AddLocalClientsDtoType,
   BusinessUserType,
   EventDtoType,
   EventType,
@@ -10,11 +12,13 @@ import {
   generateAvatarUrl,
   generateShortId,
 } from "@shortwaits/shared-lib";
-import { Types } from "mongoose";
+import { createHash } from "crypto";
+import { Types, mongo } from "mongoose";
 import { customAlphabet } from "nanoid";
 import { SignUpWithEmailDto } from "../api/auth/dto";
 import { CreateBusinessUserDto } from "../api/business-users/dto";
 import { CreateEventsDto } from "../api/events/business/dto";
+import { LocalClient } from "../api/local-clients/entities/local-client.entity";
 
 export function generateUniqueId(idLength = 16) {
   const generateShortId = customAlphabet("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", idLength);
@@ -94,7 +98,7 @@ export const getFilteredBusinessUser = (createCustomerDto: CreateBusinessUserDto
   return filteredBusinessUser;
 };
 
-export const generateNewEvent = (event: CreateEventsDto, userId: string) => {
+export const getNewEventFromDto = (event: CreateEventsDto, userId: string) => {
   const staffIds = convertStringIdsToObjectIds(event.staffIds) ?? [];
   const clientsIds = convertStringIdsToObjectIds(event.clientsIds) ?? [];
   const localClientsIds = convertStringIdsToObjectIds(event.localClientsIds) ?? [];
@@ -152,7 +156,7 @@ export const generateNewEvent = (event: CreateEventsDto, userId: string) => {
   return filteredEvent;
 };
 
-export const generateUpdatedEvent = (event: EventDtoType, userId: string) => {
+export const getUpdatedEventFromDto = (event: EventDtoType, userId: string) => {
   const staffIds = convertStringIdsToObjectIds(event.staffIds) ?? [];
   const clientsIds = convertStringIdsToObjectIds(event.clientsIds) ?? [];
   const localClientsIds = convertStringIdsToObjectIds(event.localClientsIds) ?? [];
@@ -205,6 +209,82 @@ export const generateUpdatedEvent = (event: EventDtoType, userId: string) => {
     selectedDiscountCode: event.selectedDiscountCode,
   };
   return filteredEvent;
+};
+
+export const getNewBusinessLocalClientFromDto = (localClientsDto: AddLocalClientDtoType): Partial<LocalClient> => {
+  if (!localClientsDto) {
+    console.log("localClientsDto is missing");
+    return null;
+  }
+
+  const imageUrlIdentifier = localClientsDto.displayName || localClientsDto.familyName || localClientsDto.givenName || localClientsDto.email || "?";
+  const accountImageUrl = generateAvatarUrl(imageUrlIdentifier);
+  return {
+    shortId: generateShortId(6),
+    clientType: "local",
+    username: localClientsDto.username,
+    alias: localClientsDto.alias,
+    displayName: localClientsDto.displayName,
+    familyName: localClientsDto.familyName,
+    givenName: localClientsDto.givenName,
+    middleName: localClientsDto.middleName,
+    accountImageUrl: accountImageUrl,
+    email: localClientsDto.email,
+    password: "password",
+    locale: localClientsDto.locale,
+    phoneNumbers: localClientsDto.phoneNumbers,
+    imAddresses: localClientsDto.imAddresses,
+    addresses: localClientsDto.addresses,
+    isSocialAccount: false,
+    socialAccount: null,
+    deviceSettings: [
+      {
+        deviceUuid: "",
+        hasExportedContacts: false,
+        isEmailVerified: false,
+        isPhoneVerified: false,
+        isTwoFactorEnabled: false,
+        isTwoFactorVerified: false,
+        isTouchIdEnabled: false,
+        isTouchIdVerified: false,
+        isFaceIdEnabled: false,
+        isFaceIdVerified: false,
+        isPasswordlessEnabled: false,
+      },
+    ],
+    accountSettings: {
+      isDarkModeEnabled: false,
+      isNotificationsEnabled: false,
+      isLocationEnabled: false,
+      isLocationShared: false,
+      isLocationSharedWithBusinesses: false,
+    },
+    desiredCurrencies: ["USD"],
+    billing: null,
+    businesses: [],
+    deleted: false,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    lastSignInAt: null,
+    roleId: null,
+    hashedRt: null,
+    registration: {
+      state: {
+        state: 7,
+        isPendingVerification: false,
+      },
+      isRegistered: false,
+      registrationType: "local",
+    },
+  };
+};
+
+export const getNewBusinessLocalClientsFromDto = (localClientsDto: AddLocalClientsDtoType) => {
+  if (!localClientsDto || localClientsDto.length === 0) {
+    return [];
+  }
+
+  return localClientsDto.map(localClient => getNewBusinessLocalClientFromDto(localClient));
 };
 
 const newBusinessOwnerRoles = {
@@ -444,21 +524,34 @@ export function validateId(id: string): boolean {
   return Types.ObjectId.isValid(id);
 }
 
-type PrintModule = "EventTransactionsService" | "none";
-type PrintArgs = { module: PrintModule; message: string; value: any };
+type PrintModule = "EventTransactionsService" | "MongoConfigService" | "Seeder" | "none" | "SeederService";
+type PrintArgs = { module: PrintModule; message: string; value?: any };
 export const print = (args: PrintArgs) => {
   const { module = "none", message } = args;
   let { value } = args;
 
   const modules = {
-    none: "none",
-    EventTransactionsService: "EventTransactionsService",
+    none: "",
+    EventTransactionsService: "Event Transactions Service",
+    MongoConfigService: "Mongo Configuration Service",
+    Seeder: "Seeder",
+    SeederService: "Seeder Service",
   };
   // if value is an object, print it as JSON
   if (typeof value === "object") {
     value = JSON.stringify(value, null, 2);
   }
 
-  console.log(`[MODULE :${modules[module]}]`);
-  console.log(`${message} >>>`, value);
+  const header = `====================================[ MODULE - ${modules[module]} ]====================================`;
+  console.log(`\n${header}`);
+  console.log(`${message}${value ? " >>> " : ""}`, value ?? "");
+  console.log(`${"=".repeat(header.length)}`);
+};
+
+export const createObjectId = name => {
+  if (name === "") {
+    throw new Error("Name cannot be empty");
+  }
+  const hash = createHash("sha1").update(name, "utf8").digest("hex");
+  return new mongo.ObjectId(hash.substring(0, 24));
 };

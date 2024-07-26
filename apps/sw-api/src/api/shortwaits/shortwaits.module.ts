@@ -3,8 +3,8 @@ import { MongooseModule } from "@nestjs/mongoose";
 
 import { Business, BusinessSchema } from "../business/entities/business.entity";
 import { Client, ClientUserSchema } from "../clients/entities/client.entity";
+import { Shortwaits, ShortwaitsSchema } from "./entities/shortwaits.entity";
 import { ShortwaitsController } from "./shortwaits.controller";
-import { Shortwaits, ShortwaitsSchema } from "./shortwaits.schema";
 import { ShortwaitsService } from "./shortwaits.service";
 
 @Module({

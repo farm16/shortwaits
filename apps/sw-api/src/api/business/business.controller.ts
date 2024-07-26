@@ -2,6 +2,7 @@ import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, 
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
 import { AddLocalClientsDtoType, CreateBusinessUsersDtoType, DeleteLocalClientsDtoType, UpdateClientDtoType } from "@shortwaits/shared-lib";
 import { AtGuard } from "../../common/guards";
+import { convertStringIdToObjectId, getNewBusinessLocalClientsFromDto } from "../../utils";
 import { BusinessService } from "./business.service";
 import { RegisterBusinessDto } from "./dto/registerBusiness.dto";
 import { UpdateBusinessDto } from "./dto/updateBusiness.dto";
@@ -103,7 +104,11 @@ export class BusinessController {
     description: "Returns created",
   })
   async createBusinessLocalClients(@Param("businessId") businessId: string, @Req() request, @Body() dto: AddLocalClientsDtoType) {
-    return this.businessService.createBusinessLocalClients(request.user.sub, businessId, dto);
+    const businessObjectId = convertStringIdToObjectId(businessId);
+    const userObjectId = convertStringIdToObjectId(request.user.sub);
+    const localClients = getNewBusinessLocalClientsFromDto(dto);
+
+    return this.businessService.createBusinessLocalClients(userObjectId, businessObjectId, localClients);
   }
 
   @Delete(":businessId/local-clients")

@@ -1,5 +1,4 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const shortwaitsAdmin = require("../../assets/default-data/3-shortwaits/shortwaits.js");
 import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundException, UnprocessableEntityException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
@@ -9,6 +8,7 @@ import bcrypt from "bcryptjs";
 import { OAuth2Client } from "google-auth-library";
 import { Model } from "mongoose";
 import { noop } from "rxjs";
+import { shortwaitsStores } from "../../db/seeders/mongo-sw-api/default-data/shortwaits/shortwaits";
 import {
   convertToLowercase,
   filterBusinessOwnerPayload_localAuth,
@@ -385,7 +385,7 @@ export class AuthService {
       es: "0000002",
     };
 
-    const currentShortwaitsAdmin = shortwaitsAdmin.find(shortWaits => shortWaits.short_id === storeIndicators[storeIndicator]) ?? shortwaitsAdmin[0];
+    const currentShortwaitsAdmin = shortwaitsStores.find(shortWaits => shortWaits.short_id === storeIndicators[storeIndicator]) ?? shortwaitsStores[0];
 
     const saltRounds = Number(this.configService.get("SALT_ROUNDS"));
     const salt = await bcrypt.genSalt(saltRounds);
@@ -465,7 +465,7 @@ export class AuthService {
     const services = currentShortwaitsAdmin.defaultBusinessData.services.map(service => {
       return { ...service, businessId: newBusinessAccount._id };
     });
-    // create default labels (3) for the business from shortwaitsAdmin template
+    // create default labels (3) for the business from shortwaitsStores template
     const labels = currentShortwaitsAdmin.defaultBusinessData.labels;
 
     const newBusinessServices = await this.serviceModel.insertMany(services);
@@ -500,7 +500,7 @@ export class AuthService {
       es: "0000002",
     };
 
-    const currentShortwaitsAdmin: ShortwaitsStore = shortwaitsAdmin.find(shortWaits => shortWaits.short_id === storeIndicators[storeIndicator]) ?? shortwaitsAdmin[0];
+    const currentShortwaitsAdmin: ShortwaitsStore = shortwaitsStores.find(shortWaits => shortWaits.short_id === storeIndicators[storeIndicator]) ?? shortwaitsStores[0];
 
     const saltRounds = Number(this.configService.get("SALT_ROUNDS"));
     const salt = await bcrypt.genSalt(saltRounds);
@@ -580,7 +580,7 @@ export class AuthService {
     const services = currentShortwaitsAdmin.defaultBusinessData.services.map(service => {
       return { ...service, businessId: newBusinessAccount._id };
     });
-    // create default labels (3) for the business from shortwaitsAdmin template
+    // create default labels (3) for the business from shortwaitsStores template
     const labels = currentShortwaitsAdmin.defaultBusinessData.labels;
 
     const newBusinessServices = await this.serviceModel.insertMany(services);

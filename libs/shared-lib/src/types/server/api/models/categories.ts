@@ -1,7 +1,8 @@
 import { Document } from "mongoose";
-import { PaginatedModel } from "../../../";
+import { ObjectId, PaginatedModel } from "../../../";
 
 export type BusinessCategoryType = {
+  _id?: ObjectId;
   short_id: string;
   name: string;
   keys: string[];
@@ -15,6 +16,8 @@ export type BusinessCategoryType = {
   state: number;
   deleted?: boolean;
 };
+
+export type BusinessCategoriesType = BusinessCategoryType[];
 
 export type CategoriesDocType = Document<BusinessCategoryType>;
 

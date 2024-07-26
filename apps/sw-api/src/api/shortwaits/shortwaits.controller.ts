@@ -1,7 +1,7 @@
 import { Controller, Get, Headers, Inject, Query, Render } from "@nestjs/common";
 import { ApiCreatedResponse, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { Public } from "../../common/decorators/auth.decorator";
-import { Shortwaits } from "./shortwaits.schema";
+import { Shortwaits } from "./entities/shortwaits.entity";
 import { ShortwaitsService } from "./shortwaits.service";
 
 @ApiTags("shortwaits")

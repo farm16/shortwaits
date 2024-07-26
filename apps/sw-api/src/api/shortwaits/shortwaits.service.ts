@@ -5,7 +5,7 @@ import { convertStringIdToObjectId, validateId } from "../../utils/common";
 import { getQuerySelect } from "../../utils/mongoDbUtils";
 import { Business } from "../business/entities/business.entity";
 import { Client } from "../clients/entities/client.entity";
-import { Shortwaits } from "./shortwaits.schema";
+import { Shortwaits } from "./entities/shortwaits.entity";
 
 @Injectable()
 export class ShortwaitsService {

@@ -1,7 +1,6 @@
 import { ForbiddenException, Injectable, NotFoundException, PreconditionFailedException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import {
-  AddLocalClientsDtoType,
   BusinessDtoType,
   BusinessHoursType,
   BusinessType,
@@ -13,7 +12,7 @@ import {
 } from "@shortwaits/shared-lib";
 import { Model } from "mongoose";
 import { convertStringIdToObjectId } from "../../utils/common";
-import { generateBusinessStaff, generateLocalClients } from "../../utils/generateUserPayload";
+import { generateBusinessStaff } from "../../utils/generateUserPayload";
 import { BusinessUser } from "../business-users/entities/business-user.entity";
 import { Client } from "../clients/entities/client.entity";
 import { LocalClient } from "../local-clients/entities/local-client.entity";
@@ -33,8 +32,15 @@ export class BusinessService {
     private localClientUserModel: Model<LocalClient>
   ) {}
 
-  isUserAdminType(business: Business, userId: any) {
-    const id = convertStringIdToObjectId(userId);
+  isUserAdminType(business: Business, userId: string | ObjectId) {
+    let id;
+
+    if (typeof userId === "string") {
+      id = convertStringIdToObjectId(userId);
+    } else {
+      id = userId;
+    }
+
     const isAdmin = business.admins.includes(id);
     const isSuperAdmin = business.superAdmins.includes(id);
 
@@ -61,7 +67,7 @@ export class BusinessService {
     return business;
   }
 
-  async findBusinessById(businessId: string) {
+  async findBusinessById(businessId: string | ObjectId) {
     const businessData = await this.businessModel.findById(businessId).exec();
 
     if (businessData) {
@@ -158,7 +164,7 @@ export class BusinessService {
     }
   }
 
-  async createBusinessLocalClients(businessUserId: string, businessId: string, clients: AddLocalClientsDtoType) {
+  async createBusinessLocalClients(businessUserId: ObjectId, businessId: ObjectId, localClients: Partial<LocalClient>[]) {
     const businessData = await this.findBusinessById(businessId);
 
     const { isAdmin, isSuperAdmin } = this.isUserAdminType(businessData, businessUserId);
@@ -167,7 +173,7 @@ export class BusinessService {
       throw new ForbiddenException("Not enough permissions");
     }
 
-    if (!clients || clients.length === 0) {
+    if (!localClients || localClients.length === 0) {
       throw new PreconditionFailedException({
         error: "Precondition Failed",
         message: "Unable to create clients\n missing: clients.",
@@ -176,9 +182,8 @@ export class BusinessService {
     }
 
     try {
-      const clientsPayload = generateLocalClients(clients);
-      const insertedClients = await this.localClientUserModel.insertMany(clientsPayload);
-      const insertedLocalClientsIds = insertedClients.map(client => {
+      const insertedLocalClients = await this.localClientUserModel.insertMany(localClients);
+      const insertedLocalClientsIds = insertedLocalClients.map(client => {
         return client._id;
       });
 

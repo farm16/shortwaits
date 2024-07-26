@@ -5,7 +5,7 @@ import { EventDtoType, EventTransactionType, ObjectId as ObjectIdType } from "@s
 import { isEmpty } from "lodash";
 import { FilterQuery, Model, ObjectId, Types, UpdateQuery } from "mongoose";
 import { Op } from "sequelize";
-import { generateNewEvent, generateUpdatedEvent } from "../../../utils";
+import { getNewEventFromDto, getUpdatedEventFromDto } from "../../../utils";
 import { Service } from "../../business-services/entities/business-service.entity";
 import { BusinessUser } from "../../business-users/entities/business-user.entity";
 import { Business } from "../../business/entities/business.entity";
@@ -50,7 +50,7 @@ export class BusinessEventsService {
         // do something
       }
 
-      const newEventPayload = generateNewEvent(event, userId);
+      const newEventPayload = getNewEventFromDto(event, userId);
       console.log("newEventPayload >>>", JSON.stringify(newEventPayload, null, 2));
       const newEvent = await this.eventsModel.create(newEventPayload);
       console.log("event created >>>", JSON.stringify(newEvent, null, 2));
@@ -70,7 +70,7 @@ export class BusinessEventsService {
 
   async updateBusinessEvent(event: EventDtoType, businessId: string, updatedBy: string) {
     try {
-      const updatedBusinessEvent = generateUpdatedEvent(event, updatedBy);
+      const updatedBusinessEvent = getUpdatedEventFromDto(event, updatedBy);
       const updatedEvent = await this.eventsModel.findOneAndUpdate({ _id: event._id, deleted: false }, updatedBusinessEvent, { new: true });
 
       if (!updatedEvent) {
