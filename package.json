@@ -20,7 +20,7 @@
     "api:seed:dev": "npm run api:build:seeder && node dist/apps/sw-api-seeder/main.js",
     "api:seed:refresh:dev": "npm run api:build:seeder && node dist/apps/sw-api-seeder/main.js --refresh",
     "api:build": "npm run shared-lib:build && npm run api:build:prod",
-    "api:build:seeder": "nx buildSeed sw-api --verbose",
+    "api:build:seeder": "nx seed sw-api --verbose",
     "api:build:dev": "nx build sw-api --verbose",
     "api:build:prod": "nx build sw-api --verbose",
     "api:deploy:prod": "npm install && npm run api:build:prod && npm run api:run:prod",
