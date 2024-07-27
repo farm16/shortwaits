@@ -1,7 +1,19 @@
 #!/bin/bash
 
-# go to git root directory of the project
-cd $(git rev-parse --show-toplevel)
+root_dir=$(git rev-parse --show-toplevel)
+db_path="$root_dir/devops/db/sw_api.db"
+ecosystem_file="$root_dir/devops/pm2/ecosystem.config.js"
+
+if [ ! -f $db_path ]; then
+  echo "Database file not found at $db_path"
+  echo "Creating a new database file..."
+  sqlite3 $db_path
+  echo "Database file created successfully"
+else
+  echo "Database file found at $db_path"
+fi
+
+cd $root_dir
 rm -rf node_modules dist tmp
 git fetch
 git reset --hard origin/main
