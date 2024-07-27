@@ -1,7 +1,7 @@
+import { generateKeyPairSync } from "crypto";
 import * as fs from "fs";
 import * as path from "path";
 
-import { generateKeyPairSync } from "crypto";
 // todo: move values to env, for now using hardcoded values
 function genKeyPair() {
   // Generates an object where the keys are stored in properties `privateKey` and `publicKey`
