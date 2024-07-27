@@ -176,7 +176,7 @@ export type BusinessLocationType = {
   state: string;
   postalCode: string;
   country: string;
-  coordinates: [number, number];
+  coordinates: number[];
 };
 
 export type BusinessAvailableCurrenciesType = "USD" | "PEN";

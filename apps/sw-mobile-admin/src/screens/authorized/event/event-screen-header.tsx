@@ -109,6 +109,7 @@ function InfoItem({ title, value, onPress, iconName }: InfoItemProps) {
 
 export function EventScreenHeader({ event }: { event: EventDtoType }) {
   const currentService = useService(event?.serviceId);
+  console.log("currentService", currentService);
   const intl = useIntl();
   const hasSameEndDate = isSameDate(event.startTime, event.expectedEndTime);
   const hasDifferentEndDate = !hasSameEndDate;

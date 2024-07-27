@@ -90,12 +90,18 @@ export const getFriendlyShortId = (inputId: string, chunks?: 2 | 3 | 4) => {
   return formattedId;
 };
 
+export const businessDays = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"] as const;
+
+export const getCurrentBusinessDay = () => {
+  const today = new Date().getDay();
+  return businessDays[today];
+};
+
 export const getIsBusinessOpenToday = (business: BusinessDtoType) => {
   const today = new Date().getDay();
 
-  const days = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
-  console.log("days >>>", days);
-  const day = days[today];
+  console.log("days >>>", businessDays);
+  const day = businessDays[today];
 
   console.log("today >>>", today);
   console.log("day >>>", JSON.stringify(day));

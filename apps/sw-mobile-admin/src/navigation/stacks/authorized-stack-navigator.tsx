@@ -4,7 +4,6 @@ import {
   AppInfoScreen,
   BusinessClientProfileScreen,
   BusinessLocalClientProfileScreen,
-  BusinessProfileScreen,
   BusinessUserProfileScreen,
   EventScreen,
   IntegrationsScreen,
@@ -22,7 +21,6 @@ export const AuthorizedStackNavigator = () => {
       <Stack.Screen name={AUTHORIZED_STACK_SCREENS.BUSINESS_CLIENT_SCREEN} component={BusinessClientProfileScreen} />
       <Stack.Screen name={AUTHORIZED_STACK_SCREENS.BUSINESS_LOCAL_CLIENT_SCREEN} component={BusinessLocalClientProfileScreen} />
       <Stack.Screen name={AUTHORIZED_STACK_SCREENS.BUSINESS_STAFF_SCREEN} component={BusinessUserProfileScreen} />
-      <Stack.Screen name={AUTHORIZED_STACK_SCREENS.BUSINESS_PROFILE_SCREEN} component={BusinessProfileScreen} />
       <Stack.Screen name={AUTHORIZED_STACK_SCREENS.PLANS_SCREEN} component={PlansScreen} />
       <Stack.Screen name={AUTHORIZED_STACK_SCREENS.APP_INFO_SCREEN} component={AppInfoScreen} />
       <Stack.Screen name={AUTHORIZED_STACK_SCREENS.INTEGRATIONS_SCREEN} component={IntegrationsScreen} />

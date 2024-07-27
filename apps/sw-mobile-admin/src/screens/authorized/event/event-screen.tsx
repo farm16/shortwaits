@@ -88,7 +88,7 @@ export function EventScreen({ navigation, route }: AuthorizedScreenProps<"event-
     if (isPeopleInEventQueryError) {
       console.log("peopleInEventQueryError >>>", peopleInEventQueryError);
       const defaultErrorMessage = "Failed to fetch people in event";
-      const errorData = peopleInEventQueryError?.data;
+      const errorData = peopleInEventQueryError?.data ? peopleInEventQueryError.data : peopleInEventQueryError;
       const message = errorData?.message ?? "";
       const errorMessage = errorData?.error ?? "";
       const statusCode = errorData?.statusCode ? `${errorData?.statusCode}` : "";

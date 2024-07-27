@@ -8,15 +8,16 @@ import {
   IconButton,
   Screen,
   Text,
+  getCurrentBusinessDay,
   getIsBusinessOpenToday,
   getPrettyStringFromPrice,
   useShareUrlWithMessage,
   useTheme,
 } from "@shortwaits/shared-ui";
-import { truncate } from "lodash";
+import { cloneDeep, truncate } from "lodash";
 import React, { FC, useCallback, useLayoutEffect } from "react";
 import { useIntl } from "react-intl";
-import { Alert, View } from "react-native";
+import { Alert, StyleSheet, View } from "react-native";
 import FastImage from "react-native-fast-image";
 import { useDispatch } from "react-redux";
 import { AuthorizedScreenProps, GenericModalData } from "../../../navigation";
@@ -40,6 +41,7 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
   const { data: eventTransactions } = useGetBusinessEventTransactionsQuery(business?._id, {
     refetchOnMountOrArgChange: true,
   }); // todo hold this in redux or not
+  const isBusinessOpenToday = getIsBusinessOpenToday(business);
 
   console.log(eventTransactions);
   const transactions: GenericModalData[] = eventTransactions?.data
@@ -76,28 +78,35 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
     };
   }, [business.accountType, dispatch, isFocused]);
 
-  const handleCloseAndOpenBusiness = () => {
-    Alert.alert(
-      "Close Business",
-      "Are you sure you want to close your business?",
-      [
-        {
-          text: "Cancel",
-          style: "cancel",
-        },
-        {
-          text: "Yes",
-          onPress: () => {
-            // dispatch(closeBusiness());
-            // navigation.navigate("businesses-screen");
-          },
-        },
-      ],
-      { cancelable: false }
-    );
-  };
-
   useLayoutEffect(() => {
+    const handleCloseAndOpenBusiness = () => {
+      const newHours = cloneDeep(business.hours);
+      const currentBusinessDay = getCurrentBusinessDay();
+      const updatedDay = newHours[currentBusinessDay].map(item => {
+        return { ...item, isActive: !isBusinessOpenToday };
+      });
+      newHours[currentBusinessDay] = updatedDay;
+      Alert.alert(
+        `${isBusinessOpenToday ? "Close" : "Open"} Business`,
+        `Are you sure you want to ${isBusinessOpenToday ? "close" : "open"} the business?`,
+        [
+          {
+            text: "Cancel",
+            style: "cancel",
+          },
+          {
+            text: "Yes",
+            onPress: () => {
+              updateBusiness({
+                businessId: business._id,
+                body: { ...business, hours: newHours },
+              });
+            },
+          },
+        ],
+        { cancelable: false }
+      );
+    };
     const handleShare = async () => {
       await share({
         message: `Check out ${business.shortName || business.longName}`,
@@ -105,7 +114,6 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
         title: business.shortName || business.longName,
       });
     };
-    const isBusinessOpenToday = getIsBusinessOpenToday(business);
     navigation.setOptions({
       headerTitle: "",
       headerLeft: () => {
@@ -117,13 +125,7 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
                   uri: business.web.logoImageUrl,
                 }}
                 resizeMode={FastImage.resizeMode.cover}
-                style={{
-                  width: 32,
-                  height: 32,
-                  borderRadius: 50,
-                  marginLeft: 8,
-                  marginRight: 4,
-                }}
+                style={styles.logoImageUrl}
               />
             ) : null}
             <Text
@@ -134,23 +136,13 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
               text={truncate(business.shortName, { length: 16 })}
             />
             <View
-              style={{
-                width: 8,
-                height: 8,
-                borderRadius: 5,
-                backgroundColor: isBusinessOpenToday ? Colors.success : Colors.failed,
-                marginLeft: 4,
-                marginRight: 4,
-                //green shadow
-                shadowColor: isBusinessOpenToday ? Colors.success : Colors.failed,
-                shadowOffset: {
-                  width: 0,
-                  height: 2,
+              style={[
+                styles.businessStatus,
+                {
+                  backgroundColor: isBusinessOpenToday ? Colors.success : Colors.failed,
+                  shadowColor: isBusinessOpenToday ? Colors.success : Colors.failed,
                 },
-                shadowOpacity: 0.5,
-                shadowRadius: 6,
-                elevation: 6,
-              }}
+              ]}
             />
           </Container>
         );
@@ -158,14 +150,14 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
       headerRight: () => {
         return (
           <Container direction="row" alignItems="center">
-            <IconButton withMarginRight iconType="closed-business" onPress={handleCloseAndOpenBusiness} />
+            <IconButton withMarginRight iconType={isBusinessOpenToday ? "closed-business" : "open-business"} onPress={handleCloseAndOpenBusiness} />
             <IconButton withMarginRight iconType="share" onPress={() => handleShare()} />
             <IconButton
               withMarginRight
               iconType="edit"
               onPress={() => {
-                navigation.navigate("authorized-stack", {
-                  screen: "business-profile-screen",
+                navigation.navigate("modals", {
+                  screen: "update-business-profile-screen",
                 });
               }}
             />
@@ -173,7 +165,7 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
         );
       },
     });
-  }, [Colors.failed, Colors.success, business, navigation, share]);
+  }, [Colors.failed, Colors.success, business, isBusinessOpenToday, navigation, share, updateBusiness]);
 
   if (isLoading) return <ActivityIndicator />;
 
@@ -257,3 +249,27 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
     </>
   );
 };
+
+const styles = StyleSheet.create({
+  logoImageUrl: {
+    width: 32,
+    height: 32,
+    borderRadius: 50,
+    marginLeft: 8,
+    marginRight: 4,
+  },
+  businessStatus: {
+    width: 8,
+    height: 8,
+    borderRadius: 5,
+    marginLeft: 8,
+    marginRight: 4,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 6,
+    elevation: 6,
+  },
+});

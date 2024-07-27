@@ -468,13 +468,12 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
             setFieldValue("isPublicEvent", !values?.isPublicEvent);
           }}
         />
-        <ButtonCard
+        {/* <ButtonCard
           title={intl.formatMessage({ id: "AddEventModal.availableDiscountCodes.title" })}
           subTitle={values.selectedDiscountCode ? values.selectedDiscountCode.code : intl.formatMessage({ id: "AddEventModal.availableDiscountCodes.subTitle" })}
           onPress={handleDiscountCodeUpdate}
-        />
-
-        {values?.selectedDiscountCode?.code === "MANUAL" ? (
+      /> */}
+        {/* {values?.selectedDiscountCode?.code === "MANUAL" ? (
           <CurrencyFieldCard
             title="Discount Amount"
             keyboardType="number-pad"
@@ -484,7 +483,7 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
             errors={errors.selectedDiscountCode?.discount}
             currencyType={"USD"}
           />
-        ) : null}
+        ) : null} */}
         {/* <ButtonCard
         rightIconName={values?.repeat ? "checkbox-outline" : "checkbox-blank-outline"}
         title={"Recurring"}

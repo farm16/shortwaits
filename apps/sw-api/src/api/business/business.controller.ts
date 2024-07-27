@@ -1,11 +1,9 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Req, UseGuards, ValidationPipe } from "@nestjs/common";
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
-import { AddLocalClientsDtoType, CreateBusinessUsersDtoType, DeleteLocalClientsDtoType, UpdateClientDtoType } from "@shortwaits/shared-lib";
+import { AddLocalClientsDtoType, BusinessDtoType, CreateBusinessUsersDtoType, DeleteLocalClientsDtoType, UpdateClientDtoType } from "@shortwaits/shared-lib";
 import { AtGuard } from "../../common/guards";
 import { convertStringIdToObjectId, getNewBusinessLocalClientsFromDto } from "../../utils";
 import { BusinessService } from "./business.service";
-import { RegisterBusinessDto } from "./dto/registerBusiness.dto";
-import { UpdateBusinessDto } from "./dto/updateBusiness.dto";
 
 @UseGuards(AtGuard)
 @ApiTags("business")
@@ -20,7 +18,7 @@ export class BusinessController {
     status: HttpStatus.OK,
     description: "Updates business record",
   })
-  async updateBusiness(@Param("businessId") businessId: string, @Req() request, @Body(new ValidationPipe()) business: UpdateBusinessDto) {
+  async updateBusiness(@Param("businessId") businessId: string, @Req() request, @Body(new ValidationPipe()) business: BusinessDtoType) {
     return this.businessService.updateBusiness(request.user.sub, businessId, business, false);
   }
 
@@ -177,7 +175,7 @@ export class BusinessController {
     status: HttpStatus.OK,
     description: "Register Business",
   })
-  async registerBusiness(@Req() request, @Body(new ValidationPipe()) business: RegisterBusinessDto) {
+  async registerBusiness(@Req() request, @Body(new ValidationPipe()) business: BusinessDtoType) {
     return this.businessService.registerBusiness(request.user.sub, business);
   }
 }

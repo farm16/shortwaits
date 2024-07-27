@@ -19,7 +19,6 @@ export const AUTHORIZED_TAB_SCREENS = {
 export const AUTHORIZED_STACK_SCREENS = {
   EVENT_SCREEN: "event-screen",
   PLANS_SCREEN: "plans-screen",
-  BUSINESS_PROFILE_SCREEN: "business-profile-screen",
   BUSINESS_CLIENT_SCREEN: "business-client-screen",
   BUSINESS_LOCAL_CLIENT_SCREEN: "business-local-client-profile-screen",
   BUSINESS_STAFF_SCREEN: "business-user-profile-screen",
@@ -33,6 +32,7 @@ export const AUTHORIZED_SCREENS = {
 } as const;
 
 export const MODAL_SCREENS = {
+  UPDATE_BUSINESS_PROFILE_SCREEN: "update-business-profile-screen",
   SCHEDULE_MODAL_SCREEN: "schedule-modal-screen",
   SELECTOR_MODAL_SCREEN: "selector-modal-screen",
   SERVICE_MODAL_SCREEN: "service-modal-screen",

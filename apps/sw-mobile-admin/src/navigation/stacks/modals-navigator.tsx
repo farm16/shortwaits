@@ -6,6 +6,7 @@ import {
   AddLocalClientModal,
   AddServicesModal,
   AddStaffModal,
+  BusinessProfileScreen,
   ClientsSelectorModal,
   QrScannerModal,
   ScheduleModal,
@@ -36,6 +37,7 @@ const {
   WEBVIEW_MODAL_SCREEN,
   QR_SCANNER_MODAL_SCREEN,
   CLIENTS_SELECTOR_MODAL_SCREEN,
+  UPDATE_BUSINESS_PROFILE_SCREEN,
 } = MODAL_SCREENS;
 
 const Stack = createStackNavigator<ModalStackParamList>();
@@ -61,6 +63,7 @@ export const ModalsNavigator = (): React.ReactElement => {
       <Stack.Screen name={SERVICE_MODAL_SCREEN} component={ServicesModal} />
       <Stack.Screen name={WEBVIEW_MODAL_SCREEN} component={WebViewModal} />
       <Stack.Screen name={QR_SCANNER_MODAL_SCREEN} component={QrScannerModal} />
+      <Stack.Screen name={UPDATE_BUSINESS_PROFILE_SCREEN} component={BusinessProfileScreen} />
     </Stack.Navigator>
   );
 };

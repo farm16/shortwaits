@@ -2,6 +2,8 @@ import {
   AddClientDtoType,
   AddLocalClientDtoType,
   AddLocalClientsDtoType,
+  BusinessDtoType,
+  BusinessType,
   BusinessUserType,
   EventDtoType,
   EventType,
@@ -154,6 +156,72 @@ export const getNewEventFromDto = (event: CreateEventsDto, userId: string) => {
     registrationFee: event.registrationFee,
   };
   return filteredEvent;
+};
+
+export const getUpdatedBusinessFromDto = (business: BusinessDtoType, userId: string, excludeFields: (keyof BusinessType)[] = []) => {
+  const admins = convertStringIdsToObjectIds(business.admins) ?? [];
+  const superAdmins = convertStringIdsToObjectIds(business.superAdmins) ?? [];
+  const backgroundAdmins = convertStringIdsToObjectIds(business.backgroundAdmins) ?? [];
+  const staff = convertStringIdsToObjectIds(business.staff) ?? [];
+  const categories = convertStringIdsToObjectIds(business.categories) ?? [];
+  const services = convertStringIdsToObjectIds(business.services) ?? [];
+  const events = convertStringIdsToObjectIds(business.events) ?? [];
+  const clients = convertStringIdsToObjectIds(business.clients) ?? [];
+  const localClients = convertStringIdsToObjectIds(business.localClients) ?? [];
+  const taggedClients = business.taggedClients ?? [];
+  const updatedBy = convertStringIdToObjectId(userId);
+  const reservations = convertStringIdsToObjectIds(business.reservations) ?? [];
+
+  const filteredBusiness: Omit<BusinessType, "shortId" | "createdAt" | "createdBy"> = {
+    email: business.email,
+    labels: business.labels,
+    admins: admins,
+    superAdmins: superAdmins,
+    backgroundAdmins: backgroundAdmins,
+    staff: staff,
+    categories: categories,
+    services: services,
+    events: events,
+    description: business.description,
+    currency: business.currency,
+    country: business.country,
+    phone1: business.phone1,
+    shortName: business.shortName,
+    longName: business.longName,
+    hours: business.hours,
+    location: {
+      formattedAddress: business.location.formattedAddress,
+      streetAddress: business.location.streetAddress,
+      city: business.location.city,
+      state: business.location.state,
+      postalCode: business.location.postalCode,
+      country: business.location.country,
+      coordinates: business.location.coordinates ?? [0, 0],
+    },
+    isRegistrationCompleted: business.isRegistrationCompleted,
+    deleted: business.deleted,
+    updatedBy: updatedBy,
+    clients: clients,
+    localClients: localClients,
+    taggedClients: taggedClients,
+    accountType: business.accountType,
+    isWebBookingEnabled: business.isWebBookingEnabled,
+    isSmsNotificationEnabled: business.isSmsNotificationEnabled,
+    isAppNotificationEnabled: business.isAppNotificationEnabled,
+    videoConferences: business.videoConferences,
+    isVideoConferenceEnabled: business.isVideoConferenceEnabled,
+    supportEmail: business.supportEmail,
+    supportPhone: business.supportPhone,
+    isDisabled: business.isDisabled,
+    deliveryInfo: business.deliveryInfo,
+    reservations: reservations,
+    paymentMethods: business.paymentMethods,
+    web: business.web,
+    booking: business.booking,
+  };
+  // exclude fields from the filtered business object
+  excludeFields.forEach(field => delete filteredBusiness[field]);
+  return filteredBusiness;
 };
 
 export const getUpdatedEventFromDto = (event: EventDtoType, userId: string) => {

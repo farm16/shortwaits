@@ -11,12 +11,11 @@ import {
   UpdateClientDtoType,
 } from "@shortwaits/shared-lib";
 import { Model } from "mongoose";
-import { convertStringIdToObjectId } from "../../utils/common";
+import { convertStringIdToObjectId, getUpdatedBusinessFromDto } from "../../utils/common";
 import { generateBusinessStaff } from "../../utils/generateUserPayload";
 import { BusinessUser } from "../business-users/entities/business-user.entity";
 import { Client } from "../clients/entities/client.entity";
 import { LocalClient } from "../local-clients/entities/local-client.entity";
-import { RegisterBusinessDto } from "./dto/registerBusiness.dto";
 import { Business } from "./entities/business.entity";
 
 @Injectable()
@@ -51,22 +50,6 @@ export class BusinessService {
     }
   }
 
-  filterBusiness(business: Partial<BusinessDtoType>) {
-    delete business._id;
-    delete business.createdAt;
-    delete business.updatedAt;
-    delete business.shortId;
-    delete business.updatedBy;
-    delete business.accountType;
-    delete business.admins;
-    delete business.backgroundAdmins;
-    delete business.superAdmins;
-    delete business.deleted;
-    delete business.isRegistrationCompleted;
-    delete business.createdBy;
-    return business;
-  }
-
   async findBusinessById(businessId: string | ObjectId) {
     const businessData = await this.businessModel.findById(businessId).exec();
 
@@ -92,8 +75,8 @@ export class BusinessService {
     }
   }
 
-  async updateBusiness(userId: string, businessId: string, payload: Partial<BusinessDtoType>, isRegistrationCompleted: boolean) {
-    let filteredPayload = this.filterBusiness(payload);
+  async updateBusiness(userId: string, businessId: string, payload: BusinessDtoType, isRegistrationCompleted: boolean) {
+    let filteredPayload = getUpdatedBusinessFromDto(payload, userId, ["isRegistrationCompleted"]);
 
     if (isRegistrationCompleted) {
       console.log("isRegistrationCompleted", isRegistrationCompleted);
@@ -120,7 +103,7 @@ export class BusinessService {
     }
   }
 
-  async registerBusiness(userId: string, business: RegisterBusinessDto) {
+  async registerBusiness(userId: string, business: BusinessDtoType) {
     console.log("registerBusiness ****");
     const isRegistrationCompleted = true;
 

@@ -53,13 +53,13 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
     const hasNotes = event?.notes;
     return hasNotes ? (
       <View style={styles.detail}>
-        <Text preset="textLargeBold" text="Description" />
+        <Text preset="textLargeBold" text="Notes" />
         <Space size="small" />
         <Text text={event.notes} />
       </View>
     ) : (
       <View style={styles.detail}>
-        <Text preset="textLargeBold" text="Description" />
+        <Text preset="textLargeBold" text="Notes" />
         <Space size="small" />
         <Messages style={styles.message} size="small" hasShadow={false} type={"warning"} message={"This event has no notes"} />
       </View>
@@ -187,10 +187,9 @@ export function EventMoreTab({ event }: { event: EventDtoType }) {
         showsVerticalScrollIndicator={false}
       >
         <Space size="xLarge" />
-        <EventNotes />
         <EventDescription />
+        <EventNotes />
         <PaymentMethod />
-        <EventLabels />
         <EventService />
         <AttendeeLimit />
         <EventRepeat />
@@ -207,6 +206,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "rgb(226,226,226)",
     borderBottomWidth: StyleSheet.hairlineWidth,
     miHeight: getResponsiveHeight(50),
+    paddingBottom: getResponsiveHeight(16),
     marginBottom: getResponsiveHeight(16),
   },
   rowDetail: {

@@ -469,13 +469,12 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
           }
           onPress={handleClientsUpdate}
         />
-        <ButtonCard
+        {/* <ButtonCard
           disabled={isEventDisabled}
           title={intl.formatMessage({ id: "AddEventModal.availableDiscountCodes.title" })}
           subTitle={values.selectedDiscountCode ? values.selectedDiscountCode.code : intl.formatMessage({ id: "AddEventModal.availableDiscountCodes.subTitle" })}
           onPress={handleDiscountCodeUpdate}
         />
-
         {values?.selectedDiscountCode?.code === "MANUAL" ? (
           <CurrencyFieldCard
             disabled={isEventDisabled}
@@ -487,7 +486,7 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
             errors={errors.selectedDiscountCode?.discount}
             currencyType={"USD"}
           />
-        ) : null}
+        ) : null} */}
         {/* <ButtonCard
         rightIconName={values?.repeat ? "checkbox-outline" : "checkbox-blank-outline"}
         title={"Recurring"}

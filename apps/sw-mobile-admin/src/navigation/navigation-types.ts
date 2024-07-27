@@ -140,6 +140,7 @@ export type ModalStackParamList = {
     description?: string;
     type: QrScannerTypes;
   };
+  [MODAL_SCREENS.UPDATE_BUSINESS_PROFILE_SCREEN]: undefined;
 };
 
 export type AuthorizedTabsParamList = {
@@ -169,7 +170,6 @@ export type AuthorizedStackParamList = {
     staff: BusinessUserDtoType;
     onUserRemove?(arg: BusinessUserDtoType): void;
   };
-  [AUTHORIZED_STACK_SCREENS.BUSINESS_PROFILE_SCREEN]: undefined;
   [AUTHORIZED_STACK_SCREENS.APP_INFO_SCREEN]: undefined;
   [AUTHORIZED_STACK_SCREENS.INTEGRATIONS_SCREEN]: undefined;
 };

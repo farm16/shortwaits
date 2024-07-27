@@ -1,5 +1,4 @@
 export * from "./activity/activity-screen";
-export * from "./business-profile/business-profile-screen";
 export * from "./clients/clients-screen";
 export * from "./event/event-screen";
 export * from "./events/events-screen";
