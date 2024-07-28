@@ -16,7 +16,7 @@ export const Onboarding1Screen: FC<UnauthorizedScreenProps<"onboarding-1-screen"
   const user = useUser();
   const auth = useAuth();
 
-  console.log("business", business.categories);
+  console.log("business", business?.categories);
 
   useEffect(() => {
     if (auth.token === null) {
@@ -132,10 +132,10 @@ export const Onboarding1Screen: FC<UnauthorizedScreenProps<"onboarding-1-screen"
             screen: "selector-modal-screen",
             params: {
               mode: "categories",
-              selectedData: business.categories,
+              selectedData: business?.categories ?? [],
               onSubmit: (categories: CategoriesDtoType) => {
-                const categoryId = categories.map(category => category._id);
-                dispatch(setBusinessCategories(categoryId));
+                const categoryIds = categories.map(category => category._id);
+                dispatch(setBusinessCategories(categoryIds));
               },
             },
           });
@@ -159,7 +159,7 @@ export const Onboarding1Screen: FC<UnauthorizedScreenProps<"onboarding-1-screen"
           navigation.navigate("modals", {
             screen: "schedule-modal-screen",
             params: {
-              hours: business.hours,
+              hours: business?.hours,
               headerTitle: "Business Hours",
               onSubmit: hours => {
                 console.log("hours", hours);

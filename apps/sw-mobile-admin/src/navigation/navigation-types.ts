@@ -6,6 +6,7 @@ import {
   BusinessLabelType,
   BusinessUserDtoType,
   BusinessWeekDaysType,
+  CategoryDtoType,
   ClientDtoType,
   CreateBusinessUserDtoType,
   CreateEventDtoType,
@@ -38,7 +39,7 @@ export type GenericModalData<T = unknown> = {
   subTitle?: string;
   itemData?: T;
 };
-export type SelectorModalData = BusinessLabelType | ServiceDtoType | BusinessLabelType | EventDtoType | BusinessUserDtoType | GenericModalData | string;
+export type SelectorModalData = BusinessLabelType | ServiceDtoType | BusinessLabelType | EventDtoType | BusinessUserDtoType | CategoryDtoType | GenericModalData | string;
 export type SelectedData = string[]; // this should be the id of the selected data only
 
 export type ModalStackParamList = {
