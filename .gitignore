@@ -128,12 +128,10 @@ apps/sw-mobile-admin/ios/Pods/
 
 /vendor/bundle/
 
-apps/sw-mobile-admin/.env
-apps/sw-mobile-client/.env
-apps/sw-api/src/assets/.env
-apps/sw-api/src/assets/.env.development
-apps/sw-api/src/assets/.env.production
-apps/sw-api/src/assets/private.pem
-apps/sw-api/src/assets/public.pem
-devops/db/sw_api_dev.db
-devops/db/sw_api.db
+.env
+.env.development
+.env.production
+private.pem
+public.pem
+sw_api_dev.db
+sw_api.db

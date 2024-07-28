@@ -366,6 +366,9 @@ const newBusinessOwnerRoles = {
  * this inits values for business users
  **/
 export const filterBusinessOwnerPayload_localAuth = (ownerSignupDto: SignUpWithEmailDto): BusinessUserType => {
+  const email = convertToLowercase(ownerSignupDto.email)
+  const username = convertToLowercase(ownerSignupDto.username)
+  
   const filteredBusinessUser: BusinessUserType = {
     alias: "username",
     displayName: null,
@@ -383,10 +386,11 @@ export const filterBusinessOwnerPayload_localAuth = (ownerSignupDto: SignUpWithE
     hours: null,
 
     // require
-    username: ownerSignupDto?.username,
-    email: ownerSignupDto?.email,
-    isEmailVerified: false,
+    email: email,
+    username: username,
     password: ownerSignupDto?.password,
+
+    isEmailVerified: false,
     isPasswordProtected: true,
     isDisabled: false,
     createdByBusinessId: null,
