@@ -1,8 +1,19 @@
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { EventStatusName, eventStatusCodes, eventStatusNames } from "@shortwaits/shared-lib";
-import { ActivityIndicator, BackButton, Container, EventStatusButtons, IconButton, Screen, Text, useShareUrlWithMessage } from "@shortwaits/shared-ui";
+import {
+  ActivityIndicator,
+  BackButton,
+  BottomSheetType,
+  Container,
+  EventStatusButtons,
+  IconButton,
+  QrBottomSheet,
+  Screen,
+  Text,
+  useShareUrlWithMessage,
+} from "@shortwaits/shared-ui";
 import { truncate } from "lodash";
-import React, { useCallback, useEffect, useLayoutEffect } from "react";
+import React, { useCallback, useEffect, useLayoutEffect, useRef } from "react";
 import { Alert } from "react-native";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useGetBusinessEventPeopleQuery, useUpdateBusinessEventMutation } from "../../../services";
@@ -16,8 +27,7 @@ export function EventScreen({ navigation, route }: AuthorizedScreenProps<"event-
   const event = useEvent(eventId);
   const { share, data: shareData, loading: shareLoading, error: shareError } = useShareUrlWithMessage();
   const [updateBusinessEvent, updateEventStatus] = useUpdateBusinessEventMutation();
-  // const [updateBusinessEvent, updateEventStatus] = useUpdateBusinessEventStatusMutation();
-
+  const qrBottomSheetRef = useRef<BottomSheetType>(null);
   const {
     isLoading: isPeopleInEventQueryLoading,
     isError: isPeopleInEventQueryError,
@@ -40,7 +50,7 @@ export function EventScreen({ navigation, route }: AuthorizedScreenProps<"event-
       headerTitle: () => {
         return (
           <Container direction="row" justifyContent="center">
-            <Text preset="headerTitle" text={truncate(event.name, { length: 16 })} />
+            <Text preset="headerTitle" text={truncate(event.name, { length: 10 })} />
           </Container>
         );
       },
@@ -48,6 +58,13 @@ export function EventScreen({ navigation, route }: AuthorizedScreenProps<"event-
       headerRight: () => {
         return (
           <Container direction="row" alignItems="center">
+            <IconButton
+              onPress={() => {
+                qrBottomSheetRef?.current?.expand();
+              }}
+              withMarginRight
+              iconType="qr"
+            />
             <IconButton onPress={() => handleShare()} withMarginRight iconType="share" />
             <IconButton
               onPress={() => {
@@ -106,6 +123,13 @@ export function EventScreen({ navigation, route }: AuthorizedScreenProps<"event-
     <Screen preset="fixed" unsafe unsafeBottom backgroundColor="background">
       <EventStatusButtons event={event} onPress={handleUpdateEvent} />
       <EventScreenTabs event={event} onPeopleRefresh={refetchPeopleInEventQuery} isPeopleLoading={isPeopleInEventQueryLoading} />
+      <QrBottomSheet
+        ref={qrBottomSheetRef}
+        value={"https://shortwaits.com/event/" + event._id}
+        title={"Event QR Code"}
+        description={`Allow clients to scan this QR code to access to ${event.name} event.`}
+        warningMessage={"Client will be able to request access to this event. Please make sure you are ready to accept them."}
+      />
     </Screen>
   );
 }

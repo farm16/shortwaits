@@ -1,6 +1,6 @@
 import { skipToken } from "@reduxjs/toolkit/dist/query";
-import { Container, IconButton, QrModal, Screen, Text, getUserGreeting, useTheme } from "@shortwaits/shared-ui";
-import React, { useLayoutEffect, useState } from "react";
+import { BottomSheetType, Container, IconButton, QrBottomSheet, Screen, Text, getUserGreeting, useTheme } from "@shortwaits/shared-ui";
+import React, { useLayoutEffect, useRef } from "react";
 import { useIntl } from "react-intl";
 import { Calendar, FloatingGroupActionButton } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
@@ -8,8 +8,7 @@ import { useGetServicesQuery } from "../../../services";
 import { useBusiness, useEvents } from "../../../store";
 
 export function EventsScreen({ navigation }: AuthorizedScreenProps<"events-screen">) {
-  const [isQrVisible, setIsQrVisible] = useState(false);
-
+  const qrBottomSheetRef = useRef<BottomSheetType>(null);
   const currentBusiness = useBusiness();
   const currentsEvents = useEvents();
   const { Colors } = useTheme();
@@ -49,7 +48,7 @@ export function EventsScreen({ navigation }: AuthorizedScreenProps<"events-scree
               withMarginRight
               iconType="qr"
               onPress={() => {
-                setIsQrVisible(true);
+                qrBottomSheetRef?.current?.expand();
               }}
             />
             <IconButton
@@ -77,11 +76,10 @@ export function EventsScreen({ navigation }: AuthorizedScreenProps<"events-scree
 
   return (
     <Screen preset="fixed" unsafe unsafeBottom backgroundColor="white">
-      <QrModal
-        isVisible={isQrVisible}
-        setIsVisible={setIsQrVisible}
+      <QrBottomSheet
+        ref={qrBottomSheetRef}
         value={currentBusiness.web.baseUrl + "/booking"}
-        title={intl.formatMessage({ id: "Events_Screen.qrCodeModal.title" })}
+        title={"Business Events"}
         description={<Text>{intl.formatMessage({ id: "Events_Screen.qrCodeModal.description" })}</Text>}
         warningMessage={intl.formatMessage({ id: "Events_Screen.qrCodeModal.warningMessage" })}
       />

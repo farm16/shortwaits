@@ -1,4 +1,4 @@
-import { BusinessUsersDtoType, EventDtoType, ServiceDtoType, UpdateEventDtoType, eventPaymentMethods, eventStatusCodes, eventStatusNames } from "@shortwaits/shared-lib";
+import { EventDtoType, ServiceDtoType, UpdateEventDtoType, eventPaymentMethods, eventStatusCodes, eventStatusNames } from "@shortwaits/shared-lib";
 import {
   ActivityIndicator,
   BackButton,
@@ -279,16 +279,15 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
       screen: "selector-modal-screen",
       params: {
         mode: "staff",
-        headerTitle: intl.formatMessage({ id: "AddEventModal.staff.selector.headerTitle" }),
-        selectedData: values.staffIds,
-        minSelectedItems: 1,
-        onGoBack: staff => {
-          const staffIds = (staff as BusinessUsersDtoType).map(s => s._id);
-          setFieldValue("staffIds", staffIds);
+        headerTitle: "Event Staff",
+        selectedData: values.staffIds ?? [],
+        onSubmit: selectedClientIds => {
+          console.log("selected selector-modal-screen >>>", selectedClientIds);
+          setFieldValue("staffIds", selectedClientIds);
         },
       },
     });
-  }, [intl, navigation, setFieldValue, values.staffIds]);
+  }, [navigation, setFieldValue, values.staffIds]);
 
   const handleClientsUpdate = useCallback(() => {
     navigation.navigate("modals", {

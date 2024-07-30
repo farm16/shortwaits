@@ -24,7 +24,7 @@ export const FabGroupButton = (props: FloatingActionButtonProps) => {
   const tabBarHeight = useBottomTabBarHeight();
 
   return (
-    <Portal hostName="root">
+    <Portal hostName="Fab">
       <FAB.Group
         visible={isVisible}
         open={isOpen}

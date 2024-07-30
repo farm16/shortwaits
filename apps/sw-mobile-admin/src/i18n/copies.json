@@ -112,7 +112,7 @@
 
     "Events_Screen.title": "Event",
     "Events_Screen.qrCodeModal.title": "Event",
-    "Events_Screen.qrCodeModal.description": "Allow clients to scan this QR code to show all public events",
+    "Events_Screen.qrCodeModal.description": "Allow clients to scan this QR code to show all public events.",
     "Events_Screen.qrCodeModal.warningMessage": "For private events, please share from event page.",
     "Events_Screen.searchEvents.headerTitle": "Search events",
     "Events_Screen.allEvents.headerTitle": "All events",
@@ -482,7 +482,7 @@
     "Events_Screen.searchEvents.headerTitle": "Buscar Eventos",
     "Events_Screen.allEvents.headerTitle": "Todos los Eventos",
     "Events_Screen.qrCodeModal.title": "Eventos",
-    "Events_Screen.qrCodeModal.description": "Permite a los clientes escanear este código QR para mostrar todos los eventos públicos",
+    "Events_Screen.qrCodeModal.description": "Permite a los clientes escanear este código QR para mostrar todos los eventos públicos.",
     "Events_Screen.qrCodeModal.warningMessage": "Para eventos privados, comparte desde la página del evento.",
     "Events_Screen.nonIdealState.button": "Agregar Evento",
     "NonIdealState.noData.message": "No se encontraron eventos",

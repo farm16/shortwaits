@@ -194,50 +194,6 @@ export function EventUsersTab(props: EventUsersTabProps) {
     return getSelectedClients(eventClients ?? [], eventLocalClients ?? []);
   }, [eventClients, eventLocalClients]);
 
-  const renderNonIdealStateSection = useCallback(
-    section => {
-      const { title } = section;
-      const hasData = !isEmpty(section.data);
-      const isClient = title === "Clients";
-
-      if (hasData) {
-        return null;
-      }
-
-      const navigateToClientsSelectorModalScreen = () => {
-        navigate("modals", {
-          screen: "clients-selector-modal-screen",
-          params: {
-            mode: "clientsAndLocalClients",
-            selectedData: selectedClients,
-            onSubmit: selectedUsers => {
-              console.log("selectedUsers >>>", selectedUsers);
-              handleClientsUpdateEvent(selectedUsers);
-            },
-          },
-        });
-      };
-
-      const navigateToStaffSelectorModalScreen = () => {
-        navigate("modals", {
-          screen: "selector-modal-screen",
-          params: {
-            mode: "staff",
-            onSelect: user => {
-              console.log("selected user:", user);
-            },
-          },
-        });
-      };
-
-      const handleOnPress = isClient ? navigateToClientsSelectorModalScreen : navigateToStaffSelectorModalScreen;
-      const text = intl.formatMessage({ id: isClient ? "Common.addClients" : "Common.addStaff" });
-
-      return <NonIdealState type={"noClientsInEvent"} buttons={[<Button style={styles.nonIdealStateSection} disabled={isEventDisabled} text={text} onPress={handleOnPress} />]} />;
-    },
-    [handleClientsUpdateEvent, intl, isEventDisabled, navigate, selectedClients]
-  );
-
   const handleStaffUpdateEvent = useCallback(
     (staffIds: string[]) => {
       const currentStaffIds = event.staffIds ?? [];
@@ -254,6 +210,53 @@ export function EventUsersTab(props: EventUsersTabProps) {
       updateBusinessEvent({ body: updatedEvent, businessId: business._id });
     },
     [business._id, event, updateBusinessEvent]
+  );
+
+  const renderNonIdealStateSection = useCallback(
+    section => {
+      const { title } = section;
+      const hasData = !isEmpty(section.data);
+      const isClient = title === "Clients";
+
+      if (hasData) {
+        return null;
+      }
+
+      const navigateToStaffSelectorModalScreen = () => {
+        navigate("modals", {
+          screen: "selector-modal-screen",
+          params: {
+            mode: "staff",
+            selectedData: event.staffIds ?? [],
+            onSubmit: selectedClientIds => {
+              console.log("selected selector-modal-screen >>>", selectedClientIds);
+              handleStaffUpdateEvent(selectedClientIds as string[]);
+            },
+          },
+        });
+      };
+
+      const navigateToClientsSelectorModalScreen = () => {
+        navigate("modals", {
+          screen: "clients-selector-modal-screen",
+          params: {
+            mode: "clientsAndLocalClients",
+            selectedData: selectedClients,
+            onSubmit: selectedUsers => {
+              console.log("selectedUsers >>>", selectedUsers);
+              handleClientsUpdateEvent(selectedUsers);
+            },
+          },
+        });
+      };
+
+      const handleOnPress = isClient ? navigateToClientsSelectorModalScreen : navigateToStaffSelectorModalScreen;
+      const text = intl.formatMessage({ id: isClient ? "Common.addClients" : "Common.addStaff" });
+      const nonIdealStateType = isClient ? "noClientsInEvent" : "noStaffInEvent";
+
+      return <NonIdealState type={nonIdealStateType} buttons={[<Button style={styles.nonIdealStateSection} disabled={isEventDisabled} text={text} onPress={handleOnPress} />]} />;
+    },
+    [event.staffIds, handleClientsUpdateEvent, handleStaffUpdateEvent, intl, isEventDisabled, navigate, selectedClients]
   );
 
   const renderSectionHeader = useCallback(

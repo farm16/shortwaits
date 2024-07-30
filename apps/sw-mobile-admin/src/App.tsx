@@ -1,6 +1,5 @@
-import { PortalProvider as GPortalProvider, enableLogging } from "@gorhom/portal";
+import { PortalProvider as GPortalProvider, PortalHost, enableLogging } from "@gorhom/portal";
 import { InitialStaticProps, getInitialStaticPropsFromNative } from "@shortwaits/shared-mobile";
-import { PremiumMembershipModal } from "@shortwaits/shared-ui";
 import React from "react";
 import { IntlProvider as ReactIntlProvider } from "react-intl";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -20,7 +19,6 @@ export const App = (initialStaticProps: InitialStaticProps) => {
 
   return (
     <WithProviders>
-      <PremiumMembershipModal />
       <AppNavigator />
     </WithProviders>
   );
@@ -46,7 +44,11 @@ function WithProviders({ children }) {
             <SafeAreaProvider initialMetrics={initialWindowMetrics}>
               <PaperProvider theme={paperTheme}>
                 <GestureHandlerRootView style={{ flex: 1 }}>
-                  <GPortalProvider rootHostName="root">{children}</GPortalProvider>
+                  <GPortalProvider>
+                    {children}
+                    <PortalHost name="Fab" />
+                    <PortalHost name="BottomSheet" />
+                  </GPortalProvider>
                 </GestureHandlerRootView>
               </PaperProvider>
             </SafeAreaProvider>

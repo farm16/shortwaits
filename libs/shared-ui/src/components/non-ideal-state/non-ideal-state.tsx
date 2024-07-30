@@ -2,7 +2,7 @@ import React, { Children, useMemo } from "react";
 import { useIntl } from "react-intl";
 import { Dimensions, View } from "react-native";
 import { SvgProps } from "react-native-svg";
-import { NoClients, NoData, NoEvents, NoTransactions } from "../../assets";
+import { NoClients, NoData, NoEvents, NoStaff, NoTransactions } from "../../assets";
 import { useTheme } from "../../theme";
 import { ThemeColorName } from "../../theme/Colors";
 import { Space, Text } from "../common";
@@ -33,7 +33,7 @@ const _NonIdealProps = {
     messageColor: "brandAccent" as ThemeColorName,
   },
   noStaff: {
-    Image: (props: React.JSX.IntrinsicAttributes & SvgProps) => <NoClients {...props} />,
+    Image: (props: React.JSX.IntrinsicAttributes & SvgProps) => <NoStaff {...props} />,
     message: "NonIdealState.noStaff.message",
     intlMessageCode: "NonIdealState.noStaff.message",
     messageColor: "brandAccent" as ThemeColorName,
@@ -45,7 +45,7 @@ const _NonIdealProps = {
     messageColor: "brandAccent" as ThemeColorName,
   },
   noStaffInEvent: {
-    Image: (props: React.JSX.IntrinsicAttributes & SvgProps) => <NoClients {...props} />,
+    Image: (props: React.JSX.IntrinsicAttributes & SvgProps) => <NoStaff {...props} />,
     message: "NonIdealState.noStaffInEvent.message",
     intlMessageCode: "NonIdealState.noStaffInEvent.message",
     messageColor: "brandAccent" as ThemeColorName,
@@ -85,8 +85,8 @@ export const NonIdealState = (props: NonIdealStateProps) => {
     customMessage,
     buttons,
     imageProps = {
-      width: Dimensions.get("window").width * 0.5,
-      height: Dimensions.get("window").width * 0.5,
+      width: Dimensions.get("window").width * 0.35,
+      height: Dimensions.get("window").width * 0.35,
     },
   } = props;
   const { Colors } = useTheme();

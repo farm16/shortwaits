@@ -1,4 +1,4 @@
-import { BusinessUsersDtoType, CreateEventDtoType, ServiceDtoType, eventPaymentMethods } from "@shortwaits/shared-lib";
+import { CreateEventDtoType, ServiceDtoType, eventPaymentMethods } from "@shortwaits/shared-lib";
 import {
   ActivityIndicator,
   BackButton,
@@ -291,17 +291,15 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
       screen: "selector-modal-screen",
       params: {
         mode: "staff",
-        headerTitle: intl.formatMessage({ id: "AddEventModal.staff.selector.headerTitle" }),
-        selectedData: values.staffIds,
-        minSelectedItems: 1,
-        onGoBack: staff => {
-          console.log("selected staff:", staff);
-          const staffIds = (staff as BusinessUsersDtoType).map(s => s._id);
-          setFieldValue("staffIds", staffIds);
+        headerTitle: "Event Staff",
+        selectedData: values.staffIds ?? [],
+        onSubmit: selectedClientIds => {
+          console.log("selected selector-modal-screen >>>", selectedClientIds);
+          setFieldValue("staffIds", selectedClientIds);
         },
       },
     });
-  }, [navigation, setFieldValue, intl, values.staffIds]);
+  }, [navigation, setFieldValue, values.staffIds]);
 
   const handleLabelPress = useCallback(() => {
     const selectedData = values.labels.map(label => {
