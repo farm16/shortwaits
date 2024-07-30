@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundException, PreconditionFailedException, UnauthorizedException } from "@nestjs/common";
+import { Injectable, InternalServerErrorException, NotFoundException, PreconditionFailedException, UnauthorizedException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { InjectModel as InjectSequelizeModel } from "@nestjs/sequelize";
 import { EventDtoType, EventTransactionType, ObjectId as ObjectIdType } from "@shortwaits/shared-lib";
@@ -100,11 +100,13 @@ export class BusinessEventsService {
         return { clientUsers: [], businessUsers: [], localClients: [], event };
       }
       // turn all ids to string and push only unique ids - only staffIds/business are allowed to view this event
-      const eligibleUsers = [...new Set([...event.staffIds.map(id => id?.toString())])];
 
-      if (!eligibleUsers.includes(requestedBy)) {
-        throw new ForbiddenException("You are not allowed to view this event");
-      }
+      // todo check if the user is allowed to view this event
+      // const allowedBusinessUsers = [...new Set([...event.staffIds.map(id => id?.toString())])];
+
+      // if (!allowedBusinessUsers.includes(requestedBy)) {
+      //   throw new ForbiddenException("You are not allowed to view this event");
+      // }
 
       console.log("clientIds >>>", event.clientsIds);
       console.log("localClientsIds >>>", event.localClientsIds);

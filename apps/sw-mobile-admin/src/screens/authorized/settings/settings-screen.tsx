@@ -1,3 +1,4 @@
+import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { Button, Container, Screen, Space, Switch, Text, useTheme } from "@shortwaits/shared-ui";
 import React, { FC, useCallback, useLayoutEffect } from "react";
 import { FormattedMessage, useIntl } from "react-intl"; // Import FormattedMessage and useIntl
@@ -5,12 +6,12 @@ import { Alert, StyleSheet } from "react-native";
 import { List } from "react-native-paper";
 import Rate, { AndroidMarket } from "react-native-rate";
 import { AuthorizedScreenProps } from "../../../navigation";
-import { useLocalSignOutMutation, useUpdateBusinessMutation } from "../../../services";
+import { useGetBusinessUsersQuery, useLocalSignOutMutation, useUpdateBusinessMutation } from "../../../services";
 import { useBusiness } from "../../../store";
 import { AppInfoSettings } from "./options/app-info";
+import { BusinessUsersTile } from "./options/business-users-tile";
 import { AppLanguage } from "./options/select-language";
 import { ShortwaitsCustomerSupport } from "./options/support";
-import { ManageAdminUsers } from "./options/user-account";
 
 export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ navigation }) => {
   const { Colors } = useTheme();
@@ -18,6 +19,8 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
   const intl = useIntl(); // Initialize the Intl instance
   const [updateBusiness, updateBusinessState] = useUpdateBusinessMutation();
   const [signOut] = useLocalSignOutMutation();
+  const { isLoading, isError } = useGetBusinessUsersQuery(business?._id ?? skipToken);
+
   const handleSignOut = useCallback(async () => {
     await signOut(undefined);
   }, [signOut]);
@@ -192,7 +195,7 @@ export const SettingsScreen: FC<AuthorizedScreenProps<"settings-screen">> = ({ n
             />
           )}
         />
-        <ManageAdminUsers />
+        <BusinessUsersTile />
         <AppLanguage />
         <List.Item
           descriptionStyle={{ color: Colors.subText }}
