@@ -2,7 +2,18 @@ import Svg, { Circle, Path, Polygon, SvgProps } from "react-native-svg";
 
 export const WelcomeImage = (props: SvgProps) => {
   return (
-    <Svg data-name="Layer 1" width="1058" height="747.88979" viewBox="0 0 1058 747.88979" {...props}>
+    <Svg
+      data-name="Layer 1"
+      width="300"
+      height="300"
+      viewBox="-150 0 1300 700"
+      style={
+        {
+          //backgroundColor: "red",
+        }
+      }
+      {...props}
+    >
       <Path
         d="M520.46547,394.96687a51.3281,51.3281,0,0,1-4.75-3.95606l2.05615-2.18457a48.40458,48.40458,0,0,0,4.47168,3.72461Z"
         transform="translate(-71 -76.05511)"

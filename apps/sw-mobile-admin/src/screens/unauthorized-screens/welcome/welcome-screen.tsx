@@ -1,10 +1,10 @@
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { CompositeNavigationProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { Button, Container, Logo2, Screen, ScrollView, Space, Text, WelcomeImage, getResponsiveFontSize, getResponsiveHeight } from "@shortwaits/shared-ui";
+import { Button, Container, Logo2, Screen, ScrollView, Space, Text, WelcomeImage, getResponsiveFontSize } from "@shortwaits/shared-ui";
 import React, { FC, useEffect } from "react";
 import { useIntl } from "react-intl";
-import { StyleSheet, View } from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 import { Settings as FacebookSettings } from "react-native-fbsdk-next";
 import { RootStackParamList, UnauthorizedStackParamList } from "../../../navigation";
 import { useBusiness } from "../../../store";
@@ -29,6 +29,7 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation }) => {
     }
   }, [navigation, business?.isRegistrationCompleted]);
 
+  const welcomeImageWidth = Dimensions.get("window").width;
   return (
     <Screen backgroundColor="white">
       <Container alignItems="center" justifyContent="center">
@@ -36,11 +37,11 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation }) => {
       </Container>
       <Space size="large" />
       <View style={styles.box1}>
-        <WelcomeImage height={getResponsiveHeight(200)} width={getResponsiveHeight(200)} />
+        <WelcomeImage width={welcomeImageWidth} />
         <View style={{ flex: 1 }}>
-          <ScrollView>
-            <Text preset="titleLarge" text={intl.formatMessage({ id: "Welcome_Screen.title" })} />
-            <Space size="tiny" />
+          <ScrollView contentContainerStyle={{ marginTop: "auto", paddingVertical: 16 }}>
+            <Text preset="titleXLarge" text={intl.formatMessage({ id: "Welcome_Screen.title" })} />
+            <Space size="small" />
             <Text preset="textLarge" text={intl.formatMessage({ id: "Welcome_Screen.description" })} />
           </ScrollView>
         </View>
@@ -75,6 +76,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     paddingHorizontal: 16,
+    // backgroundColor: "green",
   },
   scrollView: {
     flex: 1,

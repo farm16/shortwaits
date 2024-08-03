@@ -254,8 +254,24 @@ export type BusinessTaggedClientType = {
   tags: string[];
 };
 
+export type BusinessVideoConferenceIntegrationType =
+  | "youTube"
+  | "zoom"
+  | "twitch"
+  | "x"
+  | "skype"
+  | "discord"
+  | "facebookLive"
+  | "instagram"
+  | "googleMeet"
+  | "microsoftTeams"
+  | "slack"
+  | `custom${string}`;
+
 export type BusinessVideoConferenceType = {
+  id: BusinessVideoConferenceIntegrationType;
   label: string;
+  name?: string;
   isActive: boolean;
   url: string;
 };

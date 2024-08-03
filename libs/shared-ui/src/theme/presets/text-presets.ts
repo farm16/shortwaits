@@ -136,6 +136,12 @@ export const textPresets = ({ FontSize, Fonts, Gutters, Colors }: ThemeCommonPar
       fontWeight: "600",
       color: Colors.black,
     },
+    titleXLarge: {
+      ...BASE,
+      fontSize: getResponsiveFontSize(22),
+      fontWeight: "700",
+      color: Colors.black,
+    },
     subTitle: {
       ...BASE,
       fontSize: getResponsiveFontSize(13),

@@ -78,7 +78,7 @@ export const Skype = (props: SvgProps) => (
   </Svg>
 );
 
-export const Teams = (props: SvgProps) => (
+export const MicrosoftTeams = (props: SvgProps) => (
   <Svg width={800} height={800} viewBox="0 0 32 32" fill="none" {...props}>
     <Path d="M19 13.903c0-.499.404-.903.903-.903h11.194c.499 0 .903.404.903.903V20.5a6.5 6.5 0 1 1-13 0z" fill="url(#a)" />
     <Path d="M9 12.226C9 11.549 9.549 11 10.226 11h13.548c.677 0 1.226.549 1.226 1.226V22a8 8 0 1 1-16 0z" fill="url(#b)" />
