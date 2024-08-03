@@ -1,5 +1,4 @@
-import React from "react";
-import Svg, { SvgProps, G, Path, Polygon } from "react-native-svg";
+import Svg, { G, Path, Polygon, SvgProps } from "react-native-svg";
 
 export const NewUser = (props: SvgProps) => {
   return (

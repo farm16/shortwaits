@@ -1,5 +1,4 @@
-import React from "react";
-import Svg, { SvgProps, Path, Polygon, Circle } from "react-native-svg";
+import Svg, { Circle, Path, Polygon, SvgProps } from "react-native-svg";
 
 export const NoClients = (props: SvgProps) => {
   return (

@@ -18,7 +18,7 @@ import {
   WeekHoursType,
 } from "@shortwaits/shared-lib";
 import { NonIdealStateTypes, QrScannerTypes } from "@shortwaits/shared-ui";
-import { SelectedClients } from "../screens/modals";
+import { SelectedClients } from "../screens/modals-screens";
 import { AUTHORIZED_SCREENS, AUTHORIZED_STACK_SCREENS, MODAL_SCREENS, NAVIGATION_STACKS, UNAUTHORIZED_SCREENS } from "./navigation-constants";
 
 export type FormData = {
@@ -173,6 +173,7 @@ export type AuthorizedStackParamList = {
   };
   [AUTHORIZED_STACK_SCREENS.APP_INFO_SCREEN]: undefined;
   [AUTHORIZED_STACK_SCREENS.INTEGRATIONS_SCREEN]: undefined;
+  [AUTHORIZED_STACK_SCREENS.REVIEW_SCREEN]: undefined;
 };
 
 export type UnauthorizedStackParamList = {

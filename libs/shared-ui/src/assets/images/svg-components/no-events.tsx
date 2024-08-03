@@ -1,5 +1,4 @@
-import React from "react";
-import Svg, { SvgProps, G, Path, Circle, Polygon } from "react-native-svg";
+import Svg, { Circle, G, Path, Polygon, SvgProps } from "react-native-svg";
 
 export const NoEvents = (props: SvgProps) => {
   return (

@@ -1,5 +1,7 @@
+export * from "./email";
 export * from "./facebook";
 export * from "./google";
+export * from "./integrations";
 export * from "./logo-1";
 export * from "./logo-2";
 export * from "./logo-3";

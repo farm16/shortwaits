@@ -50,7 +50,7 @@ export const getPrettyStringFromDurationInMin = (durationInMin: number): string 
   const m = Math.floor(minutes % 60);
   const dDisplay = d > 0 ? d + (d === 1 ? " day " : " days ") : "";
   const hDisplay = h > 0 ? h + (h === 1 ? " hr " : " hrs ") : "";
-  const mDisplay = m >= 0 ? m + (m <= 0 ? " min " : " mins ") : "";
+  const mDisplay = m >= 0 ? m + (m <= 0 ? " min " : " mins") : "";
 
   return dDisplay + hDisplay + mDisplay;
 };
@@ -60,9 +60,17 @@ export const getPrettyStringFromDurationInMinToTime = (durationInMin: number): s
   const h = Math.floor((minutes / 60) % 24);
   const hDisplay = h > 0 ? h + (h === 1 ? " hr " : " hrs ") : "";
   const m = Math.floor(minutes % 60);
-  const mDisplay = m >= 0 ? m + (m <= 0 ? " min " : " mins ") : "";
+  const mDisplay = m >= 0 ? m + (m <= 0 ? " min " : " mins") : "";
 
   return hDisplay + mDisplay;
+};
+
+export const getPrettyStringDurationFromStartAndEndTime = (isoStartTime: string, isoEndTime: string, locale = "en"): string => {
+  const startTime = new Date(isoStartTime);
+  const endTime = new Date(isoEndTime);
+  const diff = endTime.getTime() - startTime.getTime();
+  const minutes = Math.floor(diff / 1000 / 60);
+  return getPrettyStringFromDurationInMin(minutes);
 };
 
 /**

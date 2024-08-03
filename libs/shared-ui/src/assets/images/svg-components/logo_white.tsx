@@ -1,20 +1,20 @@
-import * as React from 'react';
-import Svg, { ClipPath, Defs, G, Mask, Path, Rect, SvgProps } from 'react-native-svg';
+import Svg, { ClipPath, Defs, G, Mask, Path, Rect, SvgProps } from "react-native-svg";
 
 export const LogoWhite = (props: SvgProps) => (
-  <Svg width={590} height={590} viewBox="0 0 590 590" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+  <Svg width={590} height={590} viewBox="0 0 590 590" fill="none" {...props}>
     <G clipPath="url(#clip0_27_19)">
       <Path d="M590 0H0V590H590V0Z" fill="transparent" />
       <Mask
         id="mask0_27_19"
         style={{
-          maskType: 'luminance',
+          maskType: "luminance",
         }}
         maskUnits="userSpaceOnUse"
         x={0}
         y={134}
         width={590}
-        height={310}>
+        height={310}
+      >
         <Path d="M590 134H0V444H590V134Z" fill="white" />
       </Mask>
       <G mask="url(#mask0_27_19)">

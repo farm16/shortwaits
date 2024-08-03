@@ -1,4 +1,3 @@
-import React from "react";
 import Svg, { Path, Polygon, SvgProps } from "react-native-svg";
 
 export const NoTransactions = (props: SvgProps) => {

@@ -1,5 +1,4 @@
-import * as React from "react";
-import Svg, { G, Path, Mask, Rect, Defs, RadialGradient, Stop, ClipPath } from "react-native-svg";
+import Svg, { ClipPath, Defs, G, Mask, Path, RadialGradient, Rect, Stop } from "react-native-svg";
 export const Logo2 = props => (
   <Svg width={590} height={590} viewBox="0 0 590 590" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
     <G clipPath="url(#clip0_3_75)">

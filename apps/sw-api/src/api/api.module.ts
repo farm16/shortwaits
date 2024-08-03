@@ -1,6 +1,7 @@
 import { Module } from "@nestjs/common";
 import { AuthModule } from "./auth/auth.module";
 import { CategoriesModule } from "./business-categories/business-categories.module";
+import { BusinessReviewsModule } from "./business-reviews/business-reviews.module";
 import { ServicesModule } from "./business-services/business-services.module";
 import { BusinessUsersModule } from "./business-users/business-users.module";
 import { BusinessModule } from "./business/business.module";
@@ -25,6 +26,7 @@ import { ShortwaitsModule } from "./shortwaits/shortwaits.module";
     BusinessUsersModule,
     FileUploadModule,
     EventTransactionsModule,
+    BusinessReviewsModule,
   ],
 })
 export class ApiModule {}

@@ -15,7 +15,7 @@ export const AuthorizedTabNavigator = () => {
   const screenOptions = useMemo(
     () =>
       ({
-        unmountOnBlur: true,
+        // unmountOnBlur: true,
         tabBarHideOnKeyboard: true,
         headerShown: true,
         headerTitleAlign: "center",

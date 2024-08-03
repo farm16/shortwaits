@@ -1,5 +1,4 @@
-import * as React from "react";
-import Svg, { Mask, Path, G, SvgProps } from "react-native-svg";
+import Svg, { G, Mask, Path, SvgProps } from "react-native-svg";
 
 export const Logo1 = (props: SvgProps) => (
   <Svg width={590} height={207} viewBox="0 0 590 207" fill="none" {...props}>

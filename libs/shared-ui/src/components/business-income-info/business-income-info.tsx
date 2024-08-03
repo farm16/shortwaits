@@ -28,14 +28,7 @@ function BusinessIncomeInfoComponent({ data, isLoading, error }: BusinessIncomeI
       {isLoading ? (
         <Text>...</Text>
       ) : (
-        <View
-          style={[
-            styles.graphTopBar,
-            {
-              backgroundColor: Colors.lightGray,
-            },
-          ]}
-        >
+        <View style={[styles.graphTopBar]}>
           <Text
             preset="textSmall"
             style={{ fontWeight: "500" }}

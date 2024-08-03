@@ -136,21 +136,19 @@ export const IconButton: FC<IconButtonProps> = props => {
   };
 
   const disabled = disabledOverride;
-  const isDisabled = props.disabledAlertMessage ? false : disabled;
-  const iconColor = iconColorOverride || iconProps[iconType]?.color || "brandSecondary";
+  const iconColorWithDisabled = disabled ? "disabledText" : iconProps[iconType]?.color;
+  const iconColor = iconColorOverride || iconColorWithDisabled || "brandSecondary";
   const iconSize = iconSizeOverride || iconProps[iconType]?.size || 22;
   const iconName = iconProps[iconType]?.name || "plus";
 
   const handlePress = () => {
-    if (disabled) {
-      alert(props.disabledAlertMessage ?? "button is disabled");
-    } else if (onPress) {
+    if (onPress) {
       onPress();
     }
   };
 
   return (
-    <Button preset="icon-wrapper" {...rest} onPress={handlePress} disabled={isDisabled} style={[style, styleOverride]}>
+    <Button preset="icon-wrapper" {...rest} onPress={handlePress} disabled={disabled} style={[style, styleOverride]}>
       <Icon name={iconName} color={Colors[iconColor]} size={getResponsiveHeight(iconSize)} />
     </Button>
   );

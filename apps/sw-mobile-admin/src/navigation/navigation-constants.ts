@@ -24,6 +24,7 @@ export const AUTHORIZED_STACK_SCREENS = {
   BUSINESS_STAFF_SCREEN: "business-user-profile-screen",
   APP_INFO_SCREEN: "app-info-screen",
   INTEGRATIONS_SCREEN: "integrations-screen",
+  REVIEW_SCREEN: "review-screen",
 } as const;
 
 export const AUTHORIZED_SCREENS = {

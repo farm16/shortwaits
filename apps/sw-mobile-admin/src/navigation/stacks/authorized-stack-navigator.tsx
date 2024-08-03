@@ -9,6 +9,7 @@ import {
   IntegrationsScreen,
   PlansScreen,
 } from "../../screens";
+import { ReviewsScreen } from "../../screens/authorized-screens/reviews-screen/reviews-screens";
 import { AUTHORIZED_STACK_SCREENS } from "../navigation-constants";
 import { AuthorizedStackParamList } from "../navigation-types";
 
@@ -24,6 +25,7 @@ export const AuthorizedStackNavigator = () => {
       <Stack.Screen name={AUTHORIZED_STACK_SCREENS.PLANS_SCREEN} component={PlansScreen} />
       <Stack.Screen name={AUTHORIZED_STACK_SCREENS.APP_INFO_SCREEN} component={AppInfoScreen} />
       <Stack.Screen name={AUTHORIZED_STACK_SCREENS.INTEGRATIONS_SCREEN} component={IntegrationsScreen} />
+      <Stack.Screen name={AUTHORIZED_STACK_SCREENS.REVIEW_SCREEN} component={ReviewsScreen} />
     </Stack.Navigator>
   );
 };

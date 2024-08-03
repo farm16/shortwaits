@@ -41,9 +41,12 @@ type MessageProps = {
   message: string;
   style?: ViewStyle;
   hasShadow?: boolean;
+  actionMessage?: string;
+  onActionPress?: () => void;
 };
 
-export function Messages({ type, title, message, style, size = "normal", hasShadow = true }: MessageProps) {
+export function Messages(props: MessageProps) {
+  const { type, title, message, style, size = "normal", hasShadow = true, actionMessage, onActionPress } = props;
   const { Colors } = useTheme();
 
   return (
@@ -52,6 +55,7 @@ export function Messages({ type, title, message, style, size = "normal", hasShad
         {
           flexDirection: "row",
           alignItems: "center",
+
           backgroundColor: Colors[`${messageTypeToColor[type]}Background`],
           paddingHorizontal: getResponsiveHeight(12),
           paddingVertical: getResponsiveHeight(12),
@@ -89,6 +93,19 @@ export function Messages({ type, title, message, style, size = "normal", hasShad
           }}
           text={message}
         />
+        {actionMessage && onActionPress ? (
+          <Text
+            preset="text"
+            style={{
+              color: Colors[messageTypeToColor[type]],
+              textDecorationLine: "underline",
+              marginTop: 4,
+              // alignSelf: "flex-end",
+            }}
+            text={actionMessage}
+            onPress={onActionPress}
+          />
+        ) : null}
       </View>
     </View>
   );

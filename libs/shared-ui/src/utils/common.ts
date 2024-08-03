@@ -1,5 +1,5 @@
-import { BusinessDtoType, ClientsDtoType, LocalClientsDtoType } from "@shortwaits/shared-lib";
-import { isEqual } from "lodash";
+import { BusinessDtoType, ClientsDtoType, LocalClientsDtoType, WeekHoursType } from "@shortwaits/shared-lib";
+import { cloneDeep, isEqual } from "lodash";
 import { Alert } from "react-native";
 
 export const getArrCount = (arr: string[] | null) => {
@@ -108,4 +108,27 @@ export const getIsBusinessOpenToday = (business: BusinessDtoType) => {
 
   const todaysHours = business?.hours[day as keyof BusinessDtoType["hours"]];
   return todaysHours.some(hour => hour.isActive);
+};
+
+export const updateCurrentBusinessDay = (hours: WeekHoursType, isBusinessOpenToday: boolean) => {
+  const newHours = cloneDeep(hours);
+  const currentBusinessDay = getCurrentBusinessDay();
+  const updatedDay = newHours[currentBusinessDay].map(item => {
+    return { ...item, isActive: isBusinessOpenToday };
+  });
+  newHours[currentBusinessDay] = updatedDay;
+
+  return newHours;
+};
+
+export const updateAllBusinessDays = (hours: WeekHoursType, isAllDaysOpen: boolean) => {
+  const newHours = cloneDeep(hours);
+  businessDays.forEach(day => {
+    const updatedDay = newHours[day].map(item => {
+      return { ...item, isActive: isAllDaysOpen };
+    });
+    newHours[day] = updatedDay;
+  });
+
+  return newHours;
 };

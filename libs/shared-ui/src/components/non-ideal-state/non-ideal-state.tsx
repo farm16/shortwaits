@@ -8,6 +8,12 @@ import { ThemeColorName } from "../../theme/Colors";
 import { Space, Text } from "../common";
 
 const _NonIdealProps = {
+  businessDisabled: {
+    Image: (props: React.JSX.IntrinsicAttributes & SvgProps) => <NoData {...props} />,
+    message: "NonIdealState.businessDisabled.message",
+    intlMessageCode: "NonIdealState.businessDisabled.message",
+    messageColor: "brandAccent" as ThemeColorName,
+  },
   noData: {
     Image: (props: React.JSX.IntrinsicAttributes & SvgProps) => <NoData {...props} />,
     message: "NonIdealState.noData.message",

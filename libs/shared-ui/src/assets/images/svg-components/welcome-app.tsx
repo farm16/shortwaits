@@ -1,5 +1,4 @@
-import * as React from "react";
-import Svg, { Path, Polygon, Circle, SvgProps } from "react-native-svg";
+import Svg, { Circle, Path, Polygon, SvgProps } from "react-native-svg";
 
 export const WelcomeImage = (props: SvgProps) => {
   return (

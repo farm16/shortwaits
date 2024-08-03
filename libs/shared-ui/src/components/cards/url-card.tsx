@@ -1,20 +1,13 @@
 import Clipboard from "@react-native-clipboard/clipboard";
-import React, { useCallback, useRef } from "react";
+import { useCallback, useRef } from "react";
 import { Alert, Linking, Platform, Pressable, StyleSheet } from "react-native";
 import MaterialIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import CustomUrl from "../../assets/icons/custom-url.svg";
-import Discord from "../../assets/icons/discord-url.svg";
-import FacebookLive from "../../assets/icons/fb-url.svg";
-import GoogleMeet from "../../assets/icons/meet-url.svg";
-import Skype from "../../assets/icons/skype-url.svg";
-import Teams from "../../assets/icons/teams-url.svg";
-import Twitter from "../../assets/icons/twitter-url.svg";
-import Zoom from "../../assets/icons/zoom-url.svg";
+import { Discord, FacebookLive, GoogleMeet, Link, Skype, Teams, X, Zoom } from "../../assets";
 import { Text } from "../common";
 
 const urlIcons = {
   custom: {
-    component: CustomUrl,
+    component: Link,
     friendlyName: "URL",
     style: {
       backgroundColor: "#424549",
@@ -77,8 +70,8 @@ const urlIcons = {
     },
   },
   twitter_space: {
-    component: Twitter,
-    friendlyName: "Twitter Space",
+    component: X,
+    friendlyName: "X Space",
     style: {
       backgroundColor: "#ffffff",
       iconSize: 30,

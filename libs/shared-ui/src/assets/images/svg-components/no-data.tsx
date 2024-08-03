@@ -1,4 +1,3 @@
-import React from "react";
 import Svg, { Circle, Ellipse, Path, Polygon, SvgProps } from "react-native-svg";
 
 export const NoData = (props: SvgProps) => {

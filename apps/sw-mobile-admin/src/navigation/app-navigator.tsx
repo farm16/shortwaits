@@ -36,14 +36,7 @@ const AppStack = () => {
     >
       {isAuthenticated ? (
         <>
-          <RootStack.Screen
-            name={NAVIGATION_STACKS.AUTHORIZED_TAB}
-            component={AuthorizedTabNavigator}
-            options={{
-              headerShown: false,
-              animationEnabled: false,
-            }}
-          />
+          <RootStack.Screen name={NAVIGATION_STACKS.AUTHORIZED_TAB} component={AuthorizedTabNavigator} />
           <RootStack.Screen name={NAVIGATION_STACKS.AUTHORIZED_STACK} component={AuthorizedStackNavigator} />
         </>
       ) : (
