@@ -269,7 +269,7 @@ export type BusinessVideoConferenceIntegrationType =
   | `custom${string}`;
 
 export type BusinessVideoConferenceType = {
-  id: BusinessVideoConferenceIntegrationType;
+  type: BusinessVideoConferenceIntegrationType;
   label: string;
   name?: string;
   isActive: boolean;

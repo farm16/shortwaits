@@ -28,7 +28,7 @@ export const Calendar: FC<CalendarProps> = memo(props => {
   const { isWeekView } = props;
 
   const theme = useCalendarTheme();
-  const currentBusiness = useBusiness();
+  const business = useBusiness();
   const currentEvents = useEvents();
   const services = useServices();
 
@@ -77,7 +77,7 @@ export const Calendar: FC<CalendarProps> = memo(props => {
     refetch: refetchEvents,
   } = useGetBusinessEventsQuery(
     {
-      businessId: currentBusiness._id,
+      businessId: business?._id,
       query: {
         limit,
       },

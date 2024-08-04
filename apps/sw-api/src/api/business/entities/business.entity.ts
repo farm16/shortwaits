@@ -37,7 +37,7 @@ export class Business extends Document<ObjectId> implements BusinessType {
   @ApiProperty()
   @Prop()
   videoConferences: {
-    id: BusinessVideoConferenceIntegrationType;
+    type: BusinessVideoConferenceIntegrationType;
     label: string;
     name: string;
     isActive: boolean;

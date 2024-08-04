@@ -1,9 +1,23 @@
+import { BusinessVideoConferencesType } from "@shortwaits/shared-lib";
 import { BackButton, Button, FormContainer, Switch, Text, useTheme } from "@shortwaits/shared-ui";
 import React, { FC, useLayoutEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { View } from "react-native";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useBusiness } from "../../../store";
+
+const integrationReducer = (state: BusinessVideoConferencesType, action) => {
+  switch (action.type) {
+    case "UPDATE":
+      return { ...state, ...action.payload };
+
+    case "ADD_INTEGRATION":
+      return { ...state, integrations: [...state.integrations, action.payload] };
+
+    default:
+      return state;
+  }
+};
 
 export const IntegrationsScreen: FC<AuthorizedScreenProps<"integrations-screen">> = props => {
   const { navigation } = props;
@@ -12,14 +26,6 @@ export const IntegrationsScreen: FC<AuthorizedScreenProps<"integrations-screen">
   const business = useBusiness();
   const { Colors } = useTheme();
   const [isZoomEnabled, setIsZoomEnabled] = useState(false);
-  const [isMeetsEnabled, setIsMeetsEnabled] = useState(false);
-  const [isTeamsEnabled, setIsTeamsEnabled] = useState(false);
-  const [isSlackEnabled, setIsSlackEnabled] = useState(false);
-  const [isFacebookLiveEnabled, setIsFacebookLiveEnabled] = useState(false);
-  const [isInstagramEnabled, setIsInstagramEnabled] = useState(false);
-  const [isYoutubeEnabled, setIsYoutubeEnabled] = useState(false);
-  const [isTwitchEnabled, setIsTwitchEnabled] = useState(false);
-  const [isTwitterEnabled, setIsTwitterEnabled] = useState(false);
 
   useLayoutEffect(() => {
     navigation.setOptions({
