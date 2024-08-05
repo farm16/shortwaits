@@ -61,11 +61,11 @@ export const Card = (props: CardProps) => {
     const defaultStyle = buttonViewPresets["card"] || buttonViewPresets.primary;
     const defaultTextStyle = buttonTextPresets["card"] || buttonTextPresets.primary;
     const textStyles = [defaultTextStyle, textStyleOverride];
-    const style = [defaultStyle, styleOverride];
+    const style = [defaultStyle, disabledStyles];
 
     const content = children || <Text text={text} style={textStyles} />;
     return (
-      <View style={[style, disabledStyles]}>
+      <View style={[style, styleOverride]}>
         {leftIconName &&
           (mode === "static" || leftIconName === "none" ? null : (
             <Pressable

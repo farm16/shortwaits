@@ -159,9 +159,9 @@ export const getNewEventFromDto = (event: CreateEventsDto, userId: string) => {
 };
 
 export const getUpdatedBusinessFromDto = (business: BusinessDtoType, userId: string, excludeFields: (keyof BusinessType)[] = []) => {
-  const admins = convertStringIdsToObjectIds(business.admins) ?? [];
-  const superAdmins = convertStringIdsToObjectIds(business.superAdmins) ?? [];
-  const backgroundAdmins = convertStringIdsToObjectIds(business.backgroundAdmins) ?? [];
+  // const admins = convertStringIdsToObjectIds(business.admins) ?? []; // todo allow at one point to update admins types
+  // const superAdmins = convertStringIdsToObjectIds(business.superAdmins) ?? [];
+  // const backgroundAdmins = convertStringIdsToObjectIds(business.backgroundAdmins) ?? [];
   const staff = convertStringIdsToObjectIds(business.staff) ?? [];
   const categories = convertStringIdsToObjectIds(business.categories) ?? [];
   const services = convertStringIdsToObjectIds(business.services) ?? [];
@@ -172,12 +172,12 @@ export const getUpdatedBusinessFromDto = (business: BusinessDtoType, userId: str
   const updatedBy = convertStringIdToObjectId(userId);
   const reservations = convertStringIdsToObjectIds(business.reservations) ?? [];
 
-  const filteredBusiness: Omit<BusinessType, "shortId" | "createdAt" | "createdBy"> = {
+  const filteredBusiness: Omit<BusinessType, "shortId" | "createdAt" | "createdBy" | "admins" | "superAdmins" | "backgroundAdmins"> = {
     email: business.email,
     labels: business.labels,
-    admins: admins,
-    superAdmins: superAdmins,
-    backgroundAdmins: backgroundAdmins,
+    // admins: admins,
+    // superAdmins: superAdmins,
+    // backgroundAdmins: backgroundAdmins,
     staff: staff,
     categories: categories,
     services: services,
@@ -366,9 +366,9 @@ const newBusinessOwnerRoles = {
  * this inits values for business users
  **/
 export const filterBusinessOwnerPayload_localAuth = (ownerSignupDto: SignUpWithEmailDto): BusinessUserType => {
-  const email = convertToLowercase(ownerSignupDto.email)
-  const username = convertToLowercase(ownerSignupDto.username)
-  
+  const email = convertToLowercase(ownerSignupDto.email);
+  const username = convertToLowercase(ownerSignupDto.username);
+
   const filteredBusinessUser: BusinessUserType = {
     alias: "username",
     displayName: null,

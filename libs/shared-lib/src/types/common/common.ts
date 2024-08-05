@@ -266,7 +266,7 @@ export type BusinessVideoConferenceIntegrationType =
   | "googleMeet"
   | "microsoftTeams"
   | "slack"
-  | `custom${string}`;
+  | "custom";
 
 export type BusinessVideoConferenceType = {
   type: BusinessVideoConferenceIntegrationType;

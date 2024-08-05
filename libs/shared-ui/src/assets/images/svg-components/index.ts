@@ -10,6 +10,7 @@ export * from "./new-user";
 export * from "./no-clients";
 export * from "./no-data";
 export * from "./no-events";
+export * from "./no-reviews";
 export * from "./no-staff";
 export * from "./no-transactions";
 export * from "./welcome-2";

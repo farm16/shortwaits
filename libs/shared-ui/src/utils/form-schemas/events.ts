@@ -3,7 +3,7 @@ import * as Yup from "yup";
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-const paymentMethodSchema: Yup.SchemaOf<EventPaymentMethodType> = Yup.string().required().oneOf(Object.keys(eventPaymentMethods));
+const paymentMethodSchema: Yup.ObjectSchema<EventPaymentMethodType> = Yup.string().required().oneOf(Object.keys(eventPaymentMethods));
 
 const discountCodeSchema = Yup.object({
   code: Yup.string(),

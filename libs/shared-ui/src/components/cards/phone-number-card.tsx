@@ -1,9 +1,9 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import { Pressable, StyleSheet } from "react-native";
 
+import PhoneInput, { ReactNativePhoneInputProps } from "react-native-phone-input";
 import { getDimensions, useTheme } from "../../theme";
 import { Card, CardProps, Space, Text } from "../common";
-import PhoneInput, { ReactNativePhoneInputProps } from "react-native-phone-input";
 
 type PhoneNumberProps = Omit<CardProps, "mode"> & {
   title: string;
@@ -43,11 +43,11 @@ export const PhoneNumberCard = (props: PhoneNumberProps) => {
 
   const { width } = getDimensions();
 
-  const phoneNumber = useRef<PhoneInput>(null);
+  const phoneNumberRef = useRef<PhoneInput>(null);
 
   const handleSetFocus = () => {
-    if (phoneNumber.current) {
-      phoneNumber.current.focus();
+    if (phoneNumberRef?.current) {
+      phoneNumberRef?.current.focus();
     }
   };
 
@@ -73,14 +73,15 @@ export const PhoneNumberCard = (props: PhoneNumberProps) => {
         </Pressable>
         <PhoneInput
           disabled={disabled}
-          ref={phoneNumber}
+          ref={phoneNumberRef}
           onChangePhoneNumber={_number => {
-            isValid && isValid(phoneNumber.current?.isValidNumber());
-            onChangeText(phoneNumber.current?.getValue());
+            isValid && isValid(phoneNumberRef?.current?.isValidNumber());
+            onChangeText(phoneNumberRef?.current?.getValue());
           }}
           textStyle={textFieldPresets.cardSubtitle}
           autoFormat={true}
           initialCountry={"us"}
+          initialValue={initialValue}
           //   initialValue={initialValue}
           textProps={{
             placeholder: "Enter a phone number...",

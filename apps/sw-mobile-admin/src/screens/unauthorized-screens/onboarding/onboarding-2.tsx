@@ -70,6 +70,7 @@ export const Onboarding2Screen = ({ navigation }: OnboardingScreenProps) => {
   return (
     <FormContainer
       preset="fixed"
+      unsafeBottom
       footer={
         <Button
           preset={"primary"}

@@ -6,7 +6,9 @@ import { GenericModalData, ModalsScreenProps } from "../../../../../navigation";
 import { StaticSelectorItem } from "./static-selector-item";
 
 export const StaticSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ navigation, route }) => {
-  const { headerTitle, onGoBack, onSubmit, data, onSelect, searchable, nonIdealStateType = "noData" } = route.params;
+  const { selectedData, headerTitle, onGoBack, onSubmit, data, onSelect, searchable, nonIdealStateType = "noData" } = route.params;
+
+  console.log(selectedData);
 
   const _data = data as GenericModalData[];
   const [searchText, setSearchText] = useState("");
@@ -51,6 +53,7 @@ export const StaticSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({
       };
       return (
         <StaticSelectorItem
+          isSelected={selectedData?.includes(item._id)}
           mode={mode}
           item={item}
           onSelectItem={() => {
@@ -59,7 +62,7 @@ export const StaticSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({
         />
       );
     },
-    [onSelect, navigation]
+    [selectedData, mode, onSelect, navigation]
   );
 
   return (

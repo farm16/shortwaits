@@ -2,7 +2,7 @@ import React, { Children, useMemo } from "react";
 import { useIntl } from "react-intl";
 import { Dimensions, View } from "react-native";
 import { SvgProps } from "react-native-svg";
-import { NoClients, NoData, NoEvents, NoStaff, NoTransactions } from "../../assets";
+import { NoClients, NoData, NoEvents, NoReviews, NoStaff, NoTransactions } from "../../assets";
 import { useTheme } from "../../theme";
 import { ThemeColorName } from "../../theme/Colors";
 import { Space, Text } from "../common";
@@ -72,6 +72,12 @@ const _NonIdealProps = {
     Image: (props: React.JSX.IntrinsicAttributes & SvgProps) => <NoData {...props} />,
     message: "NonIdealState.noHistory.message",
     intlMessageCode: "NonIdealState.noHistory.message",
+    messageColor: "brandAccent" as ThemeColorName,
+  },
+  noReviews: {
+    Image: (props: React.JSX.IntrinsicAttributes & SvgProps) => <NoReviews {...props} />,
+    message: "NonIdealState.noReviews.message",
+    intlMessageCode: "NonIdealState.noReviews.message",
     messageColor: "brandAccent" as ThemeColorName,
   },
 } as const;

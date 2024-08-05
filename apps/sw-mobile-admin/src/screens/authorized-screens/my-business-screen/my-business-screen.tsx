@@ -59,7 +59,7 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
   const handleUpdateBusinessHours = useCallback(
     hours => {
       updateBusiness({
-        businessId: business._id,
+        businessId: business?._id,
         body: { ...business, hours },
       });
     },
@@ -70,7 +70,7 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
   const { share, data: shareData, loading: shareLoading, error: shareError } = useShareUrlWithMessage();
 
   useLayoutEffect(() => {
-    if (checkAccountType(business.accountType) && isFocused) {
+    if (checkAccountType(business?.accountType) && isFocused) {
       dispatch(showPremiumMembershipBanner());
     } else {
       dispatch(hidePremiumMembershipBanner());
@@ -78,11 +78,11 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
     return () => {
       dispatch(hidePremiumMembershipBanner());
     };
-  }, [business.accountType, dispatch, isFocused]);
+  }, [business?.accountType, dispatch, isFocused]);
 
   useLayoutEffect(() => {
     const handleCloseAndOpenBusiness = () => {
-      const newHours = updateCurrentBusinessDay(business.hours, !isBusinessOpenToday);
+      const newHours = updateCurrentBusinessDay(business?.hours, !isBusinessOpenToday);
       Alert.alert(
         `${isBusinessOpenToday ? "Close" : "Open"} Business`,
         `Are you sure you want to ${isBusinessOpenToday ? "close" : "open"} the business?`,
@@ -95,7 +95,7 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
             text: "Yes",
             onPress: () => {
               updateBusiness({
-                businessId: business._id,
+                businessId: business?._id,
                 body: { ...business, hours: newHours },
               });
             },
@@ -106,9 +106,9 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
     };
     const handleShare = async () => {
       await share({
-        message: `Check out ${business.shortName || business.longName}`,
-        url: `https://shortwaits.com/business/${business._id}`,
-        title: business.shortName || business.longName,
+        message: `Check out ${business?.shortName || business?.longName}`,
+        url: `https://shortwaits.com/business/${business?._id}`,
+        title: business?.shortName || business?.longName,
       });
     };
     navigation.setOptions({
@@ -116,10 +116,10 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
       headerLeft: () => {
         return (
           <Container direction="row" justifyContent="center" alignItems="center">
-            {business.web.logoImageUrl ? (
+            {business?.web.logoImageUrl ? (
               <FastImage
                 source={{
-                  uri: business.web.logoImageUrl,
+                  uri: business?.web.logoImageUrl,
                 }}
                 resizeMode={FastImage.resizeMode.cover}
                 style={styles.logoImageUrl}
@@ -130,7 +130,7 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
               style={{
                 fontWeight: "700",
               }}
-              text={truncate(business.shortName, { length: 16 })}
+              text={truncate(business?.shortName, { length: 16 })}
             />
             <View
               style={[
@@ -145,10 +145,10 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
         );
       },
       headerRight: () => {
-        console.log(business.isDisabled);
+        console.log(business?.isDisabled);
         return (
           <Container direction="row" alignItems="center">
-            <IconButton disabled={business.isDisabled} withMarginRight iconType={isBusinessOpenToday ? "closed-business" : "open-business"} onPress={handleCloseAndOpenBusiness} />
+            <IconButton disabled={business?.isDisabled} withMarginRight iconType={isBusinessOpenToday ? "closed-business" : "open-business"} onPress={handleCloseAndOpenBusiness} />
             <IconButton withMarginRight iconType="share" onPress={() => handleShare()} />
             <IconButton
               withMarginRight
@@ -182,7 +182,7 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
         text: business?.isDisabled ? intl.formatMessage({ id: "Common.ok" }) : intl.formatMessage({ id: "Common.disable" }),
         onPress: () => {
           updateBusiness({
-            businessId: business._id,
+            businessId: business?._id,
             body: {
               ...business,
               isDisabled: !business?.isDisabled,
@@ -198,7 +198,7 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
 
   return (
     <>
-      {business.isDisabled ? (
+      {business?.isDisabled ? (
         <View style={{ margin: 16, marginBottom: 0 }}>
           <Messages
             type="warning"
@@ -219,7 +219,7 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
               screen: "schedule-modal-screen",
               params: {
                 headerTitle: intl.formatMessage({ id: "MyBusiness_screen.scheduleTitle" }),
-                hours: business.hours,
+                hours: business?.hours,
                 onSubmit: hours => {
                   handleUpdateBusinessHours(hours);
                 },

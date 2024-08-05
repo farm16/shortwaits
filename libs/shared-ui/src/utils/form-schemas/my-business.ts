@@ -1,6 +1,6 @@
 import { eventPaymentMethods } from "@shortwaits/shared-lib";
 import * as Yup from "yup";
-import { hoursOptional } from "./commons";
+import { hoursOptional, videoConferences } from "./commons";
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -67,4 +67,8 @@ export const updateBusinessSchema = Yup.object({
   supportPhone: Yup.string().optional().nullable(),
   deliveryInfo: Yup.string().optional().nullable(),
   reservations: Yup.array().optional().nullable(),
+});
+
+export const businessIntegrationsSchema = Yup.object({
+  videoConferences: videoConferences,
 });

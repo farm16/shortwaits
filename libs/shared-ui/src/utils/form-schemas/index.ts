@@ -2,7 +2,7 @@ import * as Yup from "yup";
 import { adminAppLocalSignInSchema, adminAppLocalSignUpSchema, clientAppLocalSignInSchema, clientAppLocalSignUpSchema, onboarding1Schema } from "./auth";
 import { addClientSchema, addLocalClientSchema, updateClientSchema, updateLocalClientSchema } from "./clients";
 import { createEventSchema, updateEventSchema } from "./events";
-import { updateBusinessSchema } from "./my-business";
+import { businessIntegrationsSchema, updateBusinessSchema } from "./my-business";
 import { createServiceSchema, updateServiceSchema } from "./services";
 import { addStaffSchema, updateStaffSchema } from "./staff";
 
@@ -23,6 +23,7 @@ export type FormSchemaTypes = {
   updateBusiness: Yup.InferType<typeof updateBusinessSchema>;
   addClient: Yup.InferType<typeof addClientSchema>;
   updateClient: Yup.InferType<typeof updateClientSchema>;
+  updateBusinessIntegrations: Yup.InferType<typeof businessIntegrationsSchema>;
 };
 
 export type FormSchemaKeys = keyof typeof formSchemas;
@@ -37,6 +38,7 @@ export const formSchemas = {
 
   // My business
   updateBusiness: updateBusinessSchema,
+  updateBusinessIntegrations: businessIntegrationsSchema,
 
   // services
   addService: createServiceSchema,

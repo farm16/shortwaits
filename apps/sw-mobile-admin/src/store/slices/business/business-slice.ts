@@ -12,7 +12,7 @@ import {
 import { cloneDeep } from "lodash";
 import { shortwaitsApi } from "../../../services";
 
-const initialState: BusinessDtoType = null;
+const initialState: BusinessDtoType | null = null;
 
 export const businessSlice = createSlice({
   name: "business",
@@ -195,7 +195,7 @@ export const businessSlice = createSlice({
         };
       })
       .addMatcher(shortwaitsApi.endpoints.updateBusiness.matchFulfilled, function (state, action) {
-        // console.log(">>> updateBusiness - BUSINESS ", action.payload.data);
+        console.log(">>> updateBusiness - BUSINESS SLICE", action.payload.data);
         return {
           ...state,
           ...action.payload.data,

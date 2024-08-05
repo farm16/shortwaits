@@ -6,12 +6,12 @@ import {
   AddLocalClientModal,
   AddServicesModal,
   AddStaffModal,
-  BusinessProfileScreen,
   ClientsSelectorModal,
   QrScannerModal,
   ScheduleModal,
   SelectorScreenModal,
   ServicesModal,
+  UpdateBusinessProfileModal,
   UpdateEventModal,
   UpdateLocalClientModal,
   UpdateServicesModal,
@@ -63,7 +63,7 @@ export const ModalsNavigator = (): React.ReactElement => {
       <Stack.Screen name={SERVICE_MODAL_SCREEN} component={ServicesModal} />
       <Stack.Screen name={WEBVIEW_MODAL_SCREEN} component={WebViewModal} />
       <Stack.Screen name={QR_SCANNER_MODAL_SCREEN} component={QrScannerModal} />
-      <Stack.Screen name={UPDATE_BUSINESS_PROFILE_SCREEN} component={BusinessProfileScreen} />
+      <Stack.Screen name={UPDATE_BUSINESS_PROFILE_SCREEN} component={UpdateBusinessProfileModal} />
     </Stack.Navigator>
   );
 };

@@ -10,7 +10,7 @@ export function StaticSelectorItem(props: SelectorItemProps<GenericModalData>) {
 
   const { Colors } = useTheme();
   const getCheckIcon = () => {
-    if (isSelected && multiple) {
+    if (isSelected) {
       return "check";
     }
     if (itemRightIconName) {
@@ -19,25 +19,22 @@ export function StaticSelectorItem(props: SelectorItemProps<GenericModalData>) {
     return "none";
   };
 
-  const title = isString ? item : item.title;
-  const subTitle = isString ? undefined : item.subTitle;
-
   return (
     <Card
       onPress={() => {
         onSelectItem(item);
       }}
-      mode="static"
+      mode={mode}
       rightIconName={getCheckIcon()}
       rightIconColor={itemRightIconColor ? Colors[itemRightIconColor] : undefined}
     >
       <Text preset={"cardTitle"} text={isString ? item : item.title} />
-      {subTitle && (
+      {item?.subTitle ? (
         <>
           <Space size="tiny" />
-          <Text preset={"cardSubtitle"} text={subTitle} />
+          <Text preset={"cardSubtitle"} text={item?.subTitle ?? ""} />
         </>
-      )}
+      ) : null}
     </Card>
 
     // <ButtonCard

@@ -354,6 +354,10 @@ export class AuthService {
       })
       .select("-__v");
 
+    if (currentBusinessAccounts.length === 0) {
+      throw new NotFoundException("User has no business accounts");
+    }
+
     delete updatedBusinessUser.password;
 
     return {

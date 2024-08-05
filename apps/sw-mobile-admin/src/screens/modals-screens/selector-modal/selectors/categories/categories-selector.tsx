@@ -1,15 +1,7 @@
-import {
-  BackButton,
-  Button,
-  // SearchBar,
-  Screen,
-  Space,
-  Text,
-  useTheme,
-} from "@shortwaits/shared-ui";
+import { BackButton, Button, FormContainer, Space, Text, useTheme } from "@shortwaits/shared-ui";
 import React, { FC, useCallback, useLayoutEffect, useState } from "react";
 import { useIntl } from "react-intl";
-import { FlatList, StyleSheet, View } from "react-native";
+import { FlatList, StyleSheet } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import { ModalsScreenProps } from "../../../../../navigation";
 import { useGetCategoriesQuery } from "../../../../../services";
@@ -74,8 +66,21 @@ export const CategoriesSelector: FC<ModalsScreenProps<"selector-modal-screen">> 
     return <ActivityIndicator />;
   }
 
+  const submitButton = onSubmit ? (
+    <Button
+      preset="secondary"
+      text={intl.formatMessage({
+        id: "Common.done",
+      })}
+      onPress={() => {
+        onSubmit(categories.data.filter(category => selectedItems.includes(category._id)));
+        navigation.goBack();
+      }}
+    />
+  ) : null;
+
   return (
-    <Screen preset="fixed" unsafe>
+    <FormContainer preset="fixed" footer={submitButton} withHorizontalPadding={false} unsafeBottom>
       <FlatList
         style={{
           backgroundColor: Colors.lightBackground,
@@ -87,21 +92,7 @@ export const CategoriesSelector: FC<ModalsScreenProps<"selector-modal-screen">> 
         renderItem={renderItem}
         keyExtractor={keyExtractor}
       />
-      {onSubmit && (
-        <View style={styles.button}>
-          <Button
-            preset="secondary"
-            text={intl.formatMessage({
-              id: "Common.done",
-            })}
-            onPress={() => {
-              onSubmit(categories.data.filter(category => selectedItems.includes(category._id)));
-              navigation.goBack();
-            }}
-          />
-        </View>
-      )}
-    </Screen>
+    </FormContainer>
   );
 };
 

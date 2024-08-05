@@ -18,6 +18,7 @@ function ScreenWithoutScrolling(props: ScreenProps) {
     unsafe,
     unsafeBottom,
     withHorizontalPadding,
+    ...rest
   } = props;
 
   const insets = useSafeAreaInsets();
@@ -37,7 +38,9 @@ function ScreenWithoutScrolling(props: ScreenProps) {
   return (
     <KeyboardAvoidingView style={[preset.outer, { backgroundColor }]} behavior={isIos ? "padding" : undefined} keyboardVerticalOffset={offsets[keyboardOffset || "none"]}>
       <StatusBar barStyle={statusBarStyle || "dark-content"} backgroundColor={statusBarBackgroundColor} />
-      <View style={[preset.inner, style, insetStyle]}>{children}</View>
+      <View style={[preset.inner, style, insetStyle]} {...rest}>
+        {children}
+      </View>
     </KeyboardAvoidingView>
   );
 }
@@ -56,6 +59,7 @@ function ScreenWithScrolling(props: ScreenProps) {
     stickyHeaderIndices,
     showsVerticalScrollIndicator = false,
     withHorizontalPadding,
+    ...rest
   } = props;
   const insets = useSafeAreaInsets();
   const preset = presets.scroll;
@@ -92,6 +96,7 @@ function ScreenWithScrolling(props: ScreenProps) {
             },
           ]}
           keyboardShouldPersistTaps={keyboardShouldPersistTaps || "handled"}
+          {...rest}
         >
           {children}
         </ScrollView>

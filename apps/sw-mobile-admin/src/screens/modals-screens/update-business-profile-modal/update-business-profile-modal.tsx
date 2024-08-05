@@ -1,5 +1,5 @@
-import { UpdateBusinessDtoType } from "@shortwaits/shared-lib";
 import {
+  ActivityIndicator,
   Avatar,
   BackButton,
   Button,
@@ -11,10 +11,9 @@ import {
   Space,
   Text,
   TextFieldCard,
-  compareFormObjectsBeforeAbort,
   useForm,
 } from "@shortwaits/shared-ui";
-import React, { Fragment, useEffect, useLayoutEffect, useMemo } from "react";
+import React, { Fragment, useEffect, useLayoutEffect } from "react";
 import { useIntl } from "react-intl";
 import { Alert } from "react-native";
 import { useSelectImage } from "../../../hooks";
@@ -22,39 +21,15 @@ import { AuthorizedScreenProps, GenericModalData } from "../../../navigation";
 import { useUpdateBusinessMutation } from "../../../services";
 import { useBusiness } from "../../../store";
 
-export function BusinessProfileScreen({ navigation }: AuthorizedScreenProps<"business-profile-screen">) {
+export function UpdateBusinessProfileModal({ navigation }: AuthorizedScreenProps<"update-business-profile-screen">) {
   const business = useBusiness();
   const intl = useIntl();
-
-  const initialValues = useMemo(() => {
-    const _initialValues: UpdateBusinessDtoType = {
-      web: business.web,
-      shortName: business.shortName,
-      longName: business.longName,
-      description: business.description,
-      email: business.email,
-      phone1: business.phone1,
-      location: business.location,
-      // todo: add these fields
-      // labels: business.labels,
-      // currency: business.currency,
-      // taggedClients: business.taggedClients,
-      // isWebBookingEnabled: business.isWebBookingEnabled,
-      // isSmsNotificationEnabled: business.isSmsNotificationEnabled,
-      // isAppNotificationEnabled: business.isAppNotificationEnabled,
-      // videoConferences: business.videoConferences,
-      // isVideoConferenceEnabled: business.isVideoConferenceEnabled,
-    };
-    return _initialValues;
-  }, [business]);
-
   const { init, isLoading: isImageLoading, imageUrl } = useSelectImage();
   const [updateBusiness, { isError, isLoading, isSuccess }] = useUpdateBusinessMutation();
-  const { touched, errors, values, handleChange, handleSubmit, setFieldTouched, validateField, setFieldValue, setFieldError } = useForm(
+  const { touched, errors, values, handleChange, handleSubmit, setFieldTouched, validateField, setFieldValue, setFieldError, dirty, resetForm } = useForm(
     {
-      initialValues,
+      initialValues: business,
       onSubmit: formData => {
-        // console.log("BUSINESS PROFILLE >>>>", JSON.stringify(formData, null, 2));
         updateBusiness({
           body: formData,
           businessId: business._id,
@@ -64,14 +39,26 @@ export function BusinessProfileScreen({ navigation }: AuthorizedScreenProps<"bus
     "updateBusiness"
   );
 
-  console.log(errors);
-
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => (
         <BackButton
           onPress={() => {
-            compareFormObjectsBeforeAbort({ obj1: initialValues, obj2: values, onAbort: () => navigation.goBack() });
+            if (dirty) {
+              Alert.alert("Warning", "You have unsaved changes. Are you sure you want to leave?", [
+                {
+                  text: "Yes",
+                  onPress: () => {
+                    navigation.goBack();
+                  },
+                },
+                {
+                  text: "No",
+                },
+              ]);
+            } else {
+              navigation.goBack();
+            }
           }}
         />
       ),
@@ -85,7 +72,7 @@ export function BusinessProfileScreen({ navigation }: AuthorizedScreenProps<"bus
         />
       ),
     });
-  }, [initialValues, intl, navigation, values]);
+  }, [dirty, intl, navigation]);
 
   useEffect(() => {
     if (imageUrl) {
@@ -101,13 +88,14 @@ export function BusinessProfileScreen({ navigation }: AuthorizedScreenProps<"bus
 
   useEffect(() => {
     if (isSuccess) {
+      resetForm();
       Alert.alert("Success", "Business updated successfully");
     }
-  }, [isSuccess]);
+  }, [isSuccess, resetForm]);
 
   const renderSubmitButton = (
     <Button
-      preset={isLoading ? "secondary-disabled" : "secondary"}
+      preset={dirty ? "secondary" : "secondary-disabled"}
       text={"Update"}
       onPress={() => {
         handleSubmit();
@@ -115,8 +103,16 @@ export function BusinessProfileScreen({ navigation }: AuthorizedScreenProps<"bus
     />
   );
 
+  if (isLoading) {
+    return <ActivityIndicator />;
+  }
+
+  if (business === null) {
+    return null;
+  }
+
   return (
-    <FormContainer footer={renderSubmitButton} isLoading={isLoading}>
+    <FormContainer footer={renderSubmitButton}>
       <Avatar
         style={{ alignSelf: "center" }}
         url={values.web.logoImageUrl}
@@ -138,11 +134,12 @@ export function BusinessProfileScreen({ navigation }: AuthorizedScreenProps<"bus
         value={business.shortId.toUpperCase()}
         disabled
       />
-      <ButtonCard
+      <TextFieldCard
         title={intl.formatMessage({
           id: "BusinessProfile_screen.accountType",
         })}
-        subTitle={business.accountType.toUpperCase()}
+        disabled
+        value={business.accountType.toUpperCase()}
       />
       <TextFieldCard
         title={intl.formatMessage({
@@ -194,6 +191,7 @@ export function BusinessProfileScreen({ navigation }: AuthorizedScreenProps<"bus
         title={intl.formatMessage({
           id: "BusinessProfile_screen.phone",
         })}
+        initialValue={values.phone1}
         onChangeText={handleChange("phone1")}
         isValid={async isValid => {
           await setFieldTouched("phone1", true);
@@ -220,17 +218,17 @@ export function BusinessProfileScreen({ navigation }: AuthorizedScreenProps<"bus
         title={intl.formatMessage({
           id: "BusinessProfile_screen.country",
         })}
-        subTitle={STATIC_FORM_AMERICAN_COUNTRIES.find(country => country.key === values.location.country)?.title ?? "Select Country"}
+        subTitle={STATIC_FORM_AMERICAN_COUNTRIES.find(country => country._id === values.location.country)?.title ?? "Select Country"}
         onPress={() =>
           navigation.navigate("modals", {
             screen: "selector-modal-screen",
             params: {
-              type: "static",
+              mode: "static",
               headerTitle: "Select a Country",
               data: STATIC_FORM_AMERICAN_COUNTRIES,
-              closeOnSelect: true,
-              onSelect: country => {
-                setFieldValue("location.country", country.key);
+              selectedData: STATIC_FORM_AMERICAN_COUNTRIES.filter(country => country._id === values.location.country).map(country => country._id),
+              onSelect: (data: GenericModalData[]) => {
+                setFieldValue("location.country", data[0]._id);
               },
             },
           })
@@ -257,9 +255,10 @@ export function BusinessProfileScreen({ navigation }: AuthorizedScreenProps<"bus
                   mode: "static",
                   headerTitle: "Select a State",
                   data: STATIC_FORM_USA_STATES,
-                  onSelect: data => {
-                    const state = data[0] as GenericModalData;
-                    setFieldValue("addresses[0].state", state._id);
+                  selectedData: STATIC_FORM_USA_STATES.filter(state => state._id === values.location.state).map(state => state._id),
+                  onSelect: (data: GenericModalData[]) => {
+                    const state = data[0];
+                    setFieldValue("location.state", state._id);
                   },
                 },
               })

@@ -106,7 +106,7 @@ export const getIsBusinessOpenToday = (business: BusinessDtoType) => {
   console.log("today >>>", today);
   console.log("day >>>", JSON.stringify(day));
 
-  const todaysHours = business?.hours[day as keyof BusinessDtoType["hours"]];
+  const todaysHours = business?.hours[day as keyof BusinessDtoType["hours"]] || [];
   return todaysHours.some(hour => hour.isActive);
 };
 

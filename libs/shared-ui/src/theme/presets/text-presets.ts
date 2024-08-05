@@ -108,6 +108,13 @@ export const textPresets = ({ FontSize, Fonts, Gutters, Colors }: ThemeCommonPar
       color: Colors.brandSecondary,
       fontWeight: "700",
     },
+    linkUrl: {
+      ...BASE,
+      color: Colors.blue,
+      fontWeight: "700",
+      // do underline
+      textDecorationLine: "underline",
+    },
     subLink: {
       ...BASE,
       color: Colors.brandSecondary4,

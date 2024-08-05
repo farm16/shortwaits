@@ -11,7 +11,7 @@ export const textFieldPresets = ({ FontSize, Fonts, Gutters, Colors }: ThemeComm
       ...Fonts.textRegular,
       letterSpacing: 0.6,
       lineHeight: 27,
-      textAlign: "center" as const,
+      // textAlign: "center" as const,
       color: Colors.text,
     },
   ]);

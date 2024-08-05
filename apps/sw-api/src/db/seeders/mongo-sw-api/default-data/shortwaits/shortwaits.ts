@@ -144,6 +144,12 @@ export const shortwaitsStores: ShortwaitsStores = [
           url: "",
         },
         {
+          type: "skype",
+          label: "Skype",
+          isActive: false,
+          url: "",
+        },
+        {
           type: "microsoftTeams",
           label: "Microsoft Teams",
           isActive: false,
@@ -330,9 +336,16 @@ export const shortwaitsStores: ShortwaitsStores = [
           isActive: false,
           url: "",
         },
+
         {
           type: "googleMeet",
           label: "Google Meet",
+          isActive: false,
+          url: "",
+        },
+        {
+          type: "skype",
+          label: "Skype",
           isActive: false,
           url: "",
         },

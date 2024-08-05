@@ -160,7 +160,7 @@
     "uuid": "^9.0.0",
     "victory-native": "36.6.11",
     "xdate": "^0.8.2",
-    "yup": "^0.32.11"
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.14.5",
