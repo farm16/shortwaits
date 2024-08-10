@@ -12,7 +12,11 @@ import { useBusiness } from "../../store";
 function BusinessIncomeInfoComponent() {
   const business = useBusiness();
 
-  const { data, isLoading, error } = useGetBusinessEventSummaryQuery(business?._id ?? skipToken, {
+  const {
+    data: eventSummaryQuery,
+    isLoading,
+    error,
+  } = useGetBusinessEventSummaryQuery(business?._id ?? skipToken, {
     refetchOnMountOrArgChange: true,
   });
 
@@ -21,7 +25,7 @@ function BusinessIncomeInfoComponent() {
   const [graphMode, setGraphMode] = useState<GraphIdentifier>("Week");
   const intl = useIntl();
 
-  if (error || !data) {
+  if (!eventSummaryQuery?.data) {
     return null;
   }
 
@@ -35,11 +39,13 @@ function BusinessIncomeInfoComponent() {
             preset="textSmall"
             style={{ fontWeight: "500" }}
             text={`${intl.formatMessage(
-              { id: "MyBusiness_screen.totalIncome" },
+              {
+                id: "MyBusiness_screen.totalIncome",
+              },
               {
                 period: graphMode,
               }
-            )}${"$"}${getGraphCoordinates(data, graphMode)
+            )}$${getGraphCoordinates(eventSummaryQuery?.data?.graphData, graphMode)
               .reduce((pre, cur) => pre + cur.y, 0)
               .toLocaleString("en-US", {
                 maximumFractionDigits: 2,
@@ -51,7 +57,7 @@ function BusinessIncomeInfoComponent() {
             onDismiss={() => setVisible(false)}
             anchor={<IconButton onPress={() => setVisible(true)} icon={"dots-vertical"} iconColor={Colors.brandSecondary} />}
           >
-            {Object.keys(data).map((name: GraphIdentifier) => {
+            {Object.keys(eventSummaryQuery.data.graphData).map((name: GraphIdentifier) => {
               return (
                 <Menu.Item
                   key={name}
@@ -72,7 +78,7 @@ function BusinessIncomeInfoComponent() {
           </Menu>
         </View>
       )}
-      <Graph timeIdentifier={graphMode} data={data} isLoading={isLoading} />
+      <Graph timeIdentifier={graphMode} data={eventSummaryQuery.data.graphData} isLoading={isLoading} />
     </View>
   );
 }

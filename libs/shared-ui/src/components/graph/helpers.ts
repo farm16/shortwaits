@@ -61,8 +61,13 @@ export function isGraphEmpty(obj: { [key: string]: number }): boolean {
   return sum === 0;
 }
 
-export const getGraphCoordinates = (graphData: GraphData, timeIdentifier: GraphIdentifier) =>
-  Object.keys(graphData[timeIdentifier]).map(key => ({
+export const getGraphCoordinates = (graphData: GraphData, timeIdentifier: GraphIdentifier) => {
+  if (!graphData[timeIdentifier]) {
+    return [];
+  }
+
+  return Object.keys(graphData[timeIdentifier]).map(key => ({
     x: key,
     y: graphData[timeIdentifier][key],
   }));
+};
