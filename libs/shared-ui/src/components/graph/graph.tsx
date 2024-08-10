@@ -1,33 +1,16 @@
 import React, { useEffect, useMemo } from "react";
 import { Dimensions, View } from "react-native";
-import {
-  VictoryArea,
-  VictoryAxis,
-  VictoryChart,
-  VictoryScatter,
-} from "victory-native";
 import { Defs, LinearGradient, Stop } from "react-native-svg";
-
+import { VictoryArea, VictoryAxis, VictoryChart, VictoryScatter } from "victory-native";
 import { useTheme } from "../../theme";
-import {
-  getGraphCoordinates,
-  GraphPropTypes,
-  isGraphEmpty,
-} from "./graph-utils";
 import { ex } from "./ex";
+import { GraphPropTypes, getGraphCoordinates, isGraphEmpty } from "./helpers";
 
 const ComponentGraph = (props: GraphPropTypes) => {
-  const {
-    data: graphData = ex,
-    interpolation = "linear",
-    timeIdentifier,
-  } = props;
+  const { data: graphData = ex, interpolation = "linear", timeIdentifier } = props;
   const { Colors } = useTheme();
   const [isEmpty, setIsEmpty] = React.useState<boolean>(false);
-  const coordinates = useMemo(
-    () => getGraphCoordinates(graphData, timeIdentifier),
-    [graphData, timeIdentifier]
-  );
+  const coordinates = useMemo(() => getGraphCoordinates(graphData, timeIdentifier), [graphData, timeIdentifier]);
   const sharedAxisStyles = {
     tickLabels: {
       fontSize: 13,
@@ -75,18 +58,8 @@ const ComponentGraph = (props: GraphPropTypes) => {
             },
           }}
         />
-        <VictoryScatter
-          data={coordinates}
-          size={3.8}
-          style={{ data: { fill: Colors.brandAccent8 } }}
-        />
-        <VictoryAxis
-          dependentAxis
-          tickFormat={tick =>
-            Math.round(tick) === 0 ? "" : `$${Math.round(tick)}`
-          }
-          style={sharedAxisStyles}
-        />
+        <VictoryScatter data={coordinates} size={3.8} style={{ data: { fill: Colors.brandAccent8 } }} />
+        <VictoryAxis dependentAxis tickFormat={tick => (Math.round(tick) === 0 ? "" : `$${Math.round(tick)}`)} style={sharedAxisStyles} />
 
         <VictoryAxis
           tickValues={coordinates.map(coordinate => coordinate.x)}

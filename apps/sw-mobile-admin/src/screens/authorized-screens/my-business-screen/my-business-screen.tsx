@@ -1,8 +1,6 @@
 import { useIsFocused } from "@react-navigation/native";
-import { skipToken } from "@reduxjs/toolkit/dist/query";
 import {
   ActivityIndicator,
-  BusinessIncomeInfo,
   ButtonCard,
   Container,
   IconButton,
@@ -22,8 +20,9 @@ import { useIntl } from "react-intl";
 import { Alert, StyleSheet, View } from "react-native";
 import FastImage from "react-native-fast-image";
 import { useDispatch } from "react-redux";
+import { BusinessIncomeInfo } from "../../../components";
 import { AuthorizedScreenProps, GenericModalData } from "../../../navigation";
-import { useGetBusinessEventSummaryQuery, useGetBusinessEventTransactionsQuery, useUpdateBusinessMutation } from "../../../services";
+import { useGetBusinessEventTransactionsQuery, useUpdateBusinessMutation } from "../../../services";
 import { hidePremiumMembershipBanner, showPremiumMembershipBanner, useBusiness } from "../../../store";
 
 export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> = ({ navigation }) => {
@@ -33,13 +32,6 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
   const isFocused = useIsFocused();
   const intl = useIntl();
   const [updateBusiness, updateBusinessStatus] = useUpdateBusinessMutation();
-  const {
-    data: eventSummary,
-    isLoading: isEventSummaryLoading,
-    error: errorEventSummary,
-  } = useGetBusinessEventSummaryQuery(business?._id ?? skipToken, {
-    refetchOnMountOrArgChange: true,
-  });
   const { data: eventTransactions } = useGetBusinessEventTransactionsQuery(business?._id, {
     refetchOnMountOrArgChange: true,
   }); // todo hold this in redux or not
@@ -54,7 +46,7 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
       }))
     : [];
 
-  const isLoading = updateBusinessStatus.isLoading || isEventSummaryLoading;
+  const isLoading = updateBusinessStatus.isLoading;
 
   const handleUpdateBusinessHours = useCallback(
     hours => {
@@ -208,7 +200,7 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
           />
         </View>
       ) : null}
-      <BusinessIncomeInfo data={eventSummary?.data?.graphData} isLoading={isEventSummaryLoading} error={errorEventSummary} />
+      <BusinessIncomeInfo />
       <Screen preset="scroll" unsafe withHorizontalPadding>
         <ButtonCard
           leftIconName="calendar-month"

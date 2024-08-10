@@ -1,19 +1,21 @@
+import { skipToken } from "@reduxjs/toolkit/dist/query";
+import { Graph, GraphIdentifier, Text, getGraphCoordinates, useTheme } from "@shortwaits/shared-ui";
 import React, { useState } from "react";
 import { useIntl } from "react-intl";
 import { StyleSheet, View } from "react-native";
 import { IconButton, Menu } from "react-native-paper";
-import { useTheme } from "../../theme";
-import { Text } from "../common";
-import { Graph } from "../graph/graph";
-import { GraphData, GraphIdentifier, getGraphCoordinates } from "../graph/graph-utils";
+import { useGetBusinessEventSummaryQuery } from "../../services";
+import { useBusiness } from "../../store";
 
-export type BusinessIncomeInfoProps = {
-  data: GraphData;
-  isLoading?: boolean;
-  error?: any;
-};
+// export type BusinessIncomeInfoProps = {};
 
-function BusinessIncomeInfoComponent({ data, isLoading, error }: BusinessIncomeInfoProps) {
+function BusinessIncomeInfoComponent() {
+  const business = useBusiness();
+
+  const { data, isLoading, error } = useGetBusinessEventSummaryQuery(business?._id ?? skipToken, {
+    refetchOnMountOrArgChange: true,
+  });
+
   const { Colors } = useTheme();
   const [visible, setVisible] = useState<boolean>(false);
   const [graphMode, setGraphMode] = useState<GraphIdentifier>("Week");
