@@ -66,8 +66,8 @@ export const shortwaitsApi = createApi({
     //business users
     getBusinessUsers: GetBusinessUsers(builder),
     createBusinessUser: CreateBusinessUser(builder),
-    deleteBusinessUser: DeleteBusinessUser(builder), // ! <- deletes single business staff | TODO: delete multiple staff
     updateBusinessUser: UpdateBusinessUser(builder), // updates single business staff
+    deleteBusinessUser: DeleteBusinessUser(builder), // ! <- deletes single business staff | TODO: delete multiple staff
 
     //business clients
     createBusinessLocalClients: CreateBusinessLocalClients(builder),

@@ -33,6 +33,8 @@ export const StaffSelector: FC<ModalsScreenProps<"selector-modal-screen">> = ({ 
   // const [filteredData, setFilteredData] = useState<BusinessUsersDtoType>(staff ? staff : []);
   // const [isListSearchable, setIsListSearchable] = useState(false);
 
+  console.log("StaffSelector selectedData >>>", selectedData);
+
   const handleAddStaffPress = useCallback(() => {
     navigation.navigate("modals", {
       screen: "add-staff-modal-screen",

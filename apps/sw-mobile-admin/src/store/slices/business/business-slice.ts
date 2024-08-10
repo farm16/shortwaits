@@ -200,6 +200,9 @@ export const businessSlice = createSlice({
           ...state,
           ...action.payload.data,
         };
+      })
+      .addMatcher(shortwaitsApi.endpoints.createBusinessUser.matchFulfilled, function (state, action) {
+        return action.payload.data.business;
       });
   },
 });

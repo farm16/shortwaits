@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
-import { selectCurrentBusinessUsersState } from "../slices/business-clients";
+import { selectCurrentBusinessUsersState } from "../slices/business-users";
 
 export const useBusinessUsers = () => {
   const businessUsers = useSelector(selectCurrentBusinessUsersState);

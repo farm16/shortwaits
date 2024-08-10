@@ -5,7 +5,8 @@ import type { RootState } from "../..";
 import { shortwaitsApi } from "../../../services";
 
 export const businessUsersInitialState: BusinessUsersDtoType = null;
-export const staffSlice = createSlice({
+
+export const businessUsersSlice = createSlice({
   name: "businessUsers",
   initialState: businessUsersInitialState,
   reducers: {
@@ -19,7 +20,7 @@ export const staffSlice = createSlice({
         return action.payload.data;
       })
       .addMatcher(shortwaitsApi.endpoints.createBusinessUser.matchFulfilled, (state, action) => {
-        return action.payload.data;
+        return action.payload.data.businessUsers;
       })
       .addMatcher(shortwaitsApi.endpoints.updateBusinessUser.matchFulfilled, (state, action) => {
         const businessUsersPayloadData = action.payload.data;
@@ -36,6 +37,6 @@ export const staffSlice = createSlice({
   },
 });
 
-export const { setBusinessUsers } = staffSlice.actions;
+export const { setBusinessUsers } = businessUsersSlice.actions;
 
 export const selectCurrentBusinessUsersState = (state: RootState) => state.businessUsers;

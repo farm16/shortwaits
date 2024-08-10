@@ -129,11 +129,10 @@ export const generateBusinessUser_socialAuth = (user: Partial<BusinessUserType>,
   return businessUser;
 };
 
-export const generateBusinessStaff = (users: CreateBusinessUsersDtoType, businessId: string) => {
-  const businessUsers = users.map(user => {
+export const generateBusinessUsers = (businessUsers: CreateBusinessUsersDtoType, businessId: string) => {
+  return businessUsers.map(user => {
     return generateBusinessUser(user, ["staff"], businessId);
   });
-  return businessUsers;
 };
 
 type RequiredKeys = Pick<

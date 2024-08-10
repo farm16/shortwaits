@@ -61,7 +61,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
         console.log("filteredContacts >>>", JSON.stringify(filteredContacts, null, 2));
 
         createBusinessLocalClients({
-          businessId: business._id,
+          businessId: business?._id,
           body: filteredContacts,
         });
       };
@@ -77,7 +77,7 @@ export const ClientsScreen: FC<AuthorizedScreenProps<"clients-screen">> = ({ nav
         },
       ]);
     },
-    [business._id, createBusinessLocalClients, currentClients, getOsContacts, osContactsError]
+    [business?._id, createBusinessLocalClients, currentClients, getOsContacts, osContactsError]
   );
 
   useLayoutEffect(() => {

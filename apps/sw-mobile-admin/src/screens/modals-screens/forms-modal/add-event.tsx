@@ -287,6 +287,7 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
   }, [intl, navigation, setFieldValue, values.clientsIds, values.localClientsIds]);
 
   const handleStaffPress = useCallback(() => {
+    console.log("handleStaffPress >>>", values.staffIds);
     navigation.navigate("modals", {
       screen: "selector-modal-screen",
       params: {

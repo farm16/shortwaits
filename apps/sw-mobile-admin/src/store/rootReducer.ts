@@ -2,7 +2,7 @@ import { combineReducers } from "redux";
 import { persistReducer } from "redux-persist";
 import { shortwaitsApi } from "../services";
 import { persistRootConfig } from "./redux-persist";
-import { authSlice, businessSlice, clientsSlice, eventsSlice, localClientsSlice, mobileAdminSlice, servicesSlice, staffSlice, themeSlice, userSlice } from "./slices";
+import { authSlice, businessSlice, businessUsersSlice, clientsSlice, eventsSlice, localClientsSlice, mobileAdminSlice, servicesSlice, themeSlice, userSlice } from "./slices";
 
 const _combineReducers = combineReducers({
   [shortwaitsApi.reducerPath]: shortwaitsApi.reducer,
@@ -13,7 +13,7 @@ const _combineReducers = combineReducers({
   [eventsSlice.name]: eventsSlice.reducer,
   [themeSlice.name]: themeSlice.reducer,
   [mobileAdminSlice.name]: mobileAdminSlice.reducer,
-  [staffSlice.name]: staffSlice.reducer,
+  [businessUsersSlice.name]: businessUsersSlice.reducer,
   [clientsSlice.name]: clientsSlice.reducer,
   [localClientsSlice.name]: localClientsSlice.reducer,
 });

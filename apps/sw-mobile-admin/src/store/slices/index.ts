@@ -1,6 +1,6 @@
 export * from "./auth";
 export * from "./business";
-export * from "./business-clients";
+export * from "./business-users";
 export * from "./clients";
 export * from "./events/event-slice";
 export * from "./local-clients";

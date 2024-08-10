@@ -12,7 +12,7 @@ import {
 } from "@shortwaits/shared-lib";
 import { Model } from "mongoose";
 import { convertStringIdToObjectId, getUpdatedBusinessFromDto } from "../../utils/common";
-import { generateBusinessStaff } from "../../utils/generateUserPayload";
+import { generateBusinessUsers } from "../../utils/generateUserPayload";
 import { BusinessUser } from "../business-users/entities/business-user.entity";
 import { Client } from "../clients/entities/client.entity";
 import { LocalClient } from "../local-clients/entities/local-client.entity";
@@ -348,7 +348,7 @@ export class BusinessService {
     }
   }
 
-  async createBusinessUser(businessUserId: string, businessId: string, staff: CreateBusinessUsersDtoType) {
+  async createBusinessUser(businessUserId: string, businessId: string, businessUsers: CreateBusinessUsersDtoType) {
     const businessData = await this.findBusinessById(businessId);
 
     const { isAdmin, isSuperAdmin } = this.isUserAdminType(businessData, businessUserId);
@@ -358,9 +358,9 @@ export class BusinessService {
     }
 
     try {
-      const staffPayload = generateBusinessStaff(staff, businessId);
-      const insertedStaff = await this.businessUserModel.insertMany(staffPayload);
-      const staffIds = insertedStaff.map(client => client._id);
+      const businessUsersPayload = generateBusinessUsers(businessUsers, businessId);
+      const newBusinessUsers = await this.businessUserModel.insertMany(businessUsersPayload);
+      const staffIds = newBusinessUsers.map(client => client._id);
 
       const newBusinessRecord = await this.businessModel.findByIdAndUpdate(
         businessId,
@@ -374,7 +374,7 @@ export class BusinessService {
         { new: true }
       );
 
-      const newStaff = await this.businessUserModel.find({
+      const businessUsersRecords = await this.businessUserModel.find({
         _id: {
           $in: newBusinessRecord.staff,
         },
@@ -382,9 +382,12 @@ export class BusinessService {
       });
 
       console.log("newBusinessRecord >>>", newBusinessRecord);
-      console.log("newStaff >>>", newStaff);
+      console.log("businessUsersRecords >>>", businessUsersRecords);
 
-      return newStaff;
+      return {
+        business: newBusinessRecord,
+        businessUsers: businessUsersRecords,
+      };
     } catch (error) {
       console.log(error);
     }
