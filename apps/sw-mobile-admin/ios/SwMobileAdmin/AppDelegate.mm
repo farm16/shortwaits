@@ -1,6 +1,7 @@
 #import "AppDelegate.h"
 
 #import <React/RCTBundleURLProvider.h>
+#import "RNSplashScreen.h"  // here
 
 @implementation AppDelegate
 
@@ -16,8 +17,15 @@
       @"tertiary": @"#EB9B04"
     }
   };
+  
+  bool didLaunchFinish = [super application:application didFinishLaunchingWithOptions:launchOptions];
 
-  return [super application:application didFinishLaunchingWithOptions:launchOptions];
+  [RNSplashScreen show];
+  
+  return didLaunchFinish;
+
+
+//  return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
