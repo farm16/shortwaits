@@ -3,16 +3,16 @@ import { BackButton, Button, Container, IconButton, NonIdealState, Screen, Space
 import { cloneDeep } from "lodash";
 import React, { FC, useCallback, useLayoutEffect, useRef, useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
-import { ClientsTabs } from "../../../components";
-import { ModalsScreenProps } from "../../../navigation";
-import { useGetAllBusinessClientsQuery } from "../../../services";
-import { useBusiness, useClients, useLocalClients } from "../../../store";
-import { ClientsSelectorItem } from "./clients-selector-item";
+import { ClientsTabs } from "../../../../components";
+import { ModalsScreenProps } from "../../../../navigation";
+import { useGetAllBusinessClientsQuery } from "../../../../services";
+import { useBusiness, useClients, useLocalClients } from "../../../../store";
+import { ClientsSelectorItem } from "./local-clients-list-item";
 
 const MIN_SELECTED_ITEMS_DEFAULT = 0; // Define your minimum selected items here
 const MAX_SELECTED_ITEMS_DEFAULT = 100; // Define your maximum selected items here
 
-export const ClientsSelectorModal: FC<ModalsScreenProps<"clients-selector-modal-screen">> = ({ navigation, route }) => {
+export const LocalClientsListModal: FC<ModalsScreenProps<"business-clients-modal-screen">> = ({ navigation, route }) => {
   const {
     searchable = false,
     headerTitle = "Clients",
@@ -33,10 +33,10 @@ export const ClientsSelectorModal: FC<ModalsScreenProps<"clients-selector-modal-
   const [totalCount, setTotalCount] = useState(initialSelectedIds.clients.length + initialSelectedIds.localClients.length);
   const [isListSearchable, setIsListSearchable] = useState<boolean>(false);
 
-  const _initialSelectedLocalClientIds = useRef(initialSelectedIds.localClients);
-  const _initialSelectedClientIds = useRef(initialSelectedIds.clients);
-  const _selectedLocalClientIds = useRef(initialSelectedIds.localClients);
-  const _selectedClientIds = useRef(initialSelectedIds.clients);
+  const initialSelectedLocalClientIds = useRef(initialSelectedIds.localClients);
+  const initialSelectedClientIds = useRef(initialSelectedIds.clients);
+  const selectedLocalClientIds = useRef(initialSelectedIds.localClients);
+  const selectedClientIds = useRef(initialSelectedIds.clients);
 
   useGetAllBusinessClientsQuery(business._id ?? skipToken); // initial query
 
@@ -69,8 +69,8 @@ export const ClientsSelectorModal: FC<ModalsScreenProps<"clients-selector-modal-
     const handleOnGoBack = () => {
       if (onGoBack) {
         onGoBack({
-          clients: _selectedClientIds.current,
-          localClients: _selectedLocalClientIds.current,
+          clients: selectedClientIds.current,
+          localClients: selectedLocalClientIds.current,
         });
       }
       navigation.goBack();
@@ -103,18 +103,18 @@ export const ClientsSelectorModal: FC<ModalsScreenProps<"clients-selector-modal-
   // shortwaits clients
   const renderClient = useCallback(() => {
     const handleClientOnSelect = item => {
-      if (_selectedClientIds.current.includes(item._id)) {
-        _selectedClientIds.current = _selectedClientIds.current.filter(id => id !== item._id);
+      if (selectedClientIds.current.includes(item._id)) {
+        selectedClientIds.current = selectedClientIds.current.filter(id => id !== item._id);
       } else {
-        _selectedClientIds.current = [..._selectedClientIds.current, item._id];
+        selectedClientIds.current = [...selectedClientIds.current, item._id];
       }
-      setTotalCount(_selectedClientIds.current.length + _selectedLocalClientIds.current.length);
+      setTotalCount(selectedClientIds.current.length + selectedLocalClientIds.current.length);
     };
     const renderClientItem = ({ item }) => {
       return (
         <ClientsSelectorItem
           item={item}
-          initialIsSelected={_selectedClientIds?.current?.includes(item._id)}
+          initialIsSelected={selectedClientIds?.current?.includes(item._id)}
           onSelect={() => {
             handleClientOnSelect(item);
           }}
@@ -137,18 +137,18 @@ export const ClientsSelectorModal: FC<ModalsScreenProps<"clients-selector-modal-
   // local clients
   const renderLocalClient = useCallback(() => {
     const handleLocalClientOnSelect = item => {
-      if (_selectedLocalClientIds.current.includes(item._id)) {
-        _selectedLocalClientIds.current = _selectedLocalClientIds.current.filter(id => id !== item._id);
+      if (selectedLocalClientIds.current.includes(item._id)) {
+        selectedLocalClientIds.current = selectedLocalClientIds.current.filter(id => id !== item._id);
       } else {
-        _selectedLocalClientIds.current = [..._selectedLocalClientIds.current, item._id];
+        selectedLocalClientIds.current = [...selectedLocalClientIds.current, item._id];
       }
-      setTotalCount(_selectedLocalClientIds.current.length + _selectedClientIds.current.length);
+      setTotalCount(selectedLocalClientIds.current.length + selectedClientIds.current.length);
     };
     const renderLocalClientItem = ({ item }) => {
       return (
         <ClientsSelectorItem
           item={item}
-          initialIsSelected={_selectedLocalClientIds?.current?.includes(item._id)}
+          initialIsSelected={selectedLocalClientIds?.current?.includes(item._id)}
           onSelect={() => {
             handleLocalClientOnSelect(item);
           }}
@@ -170,17 +170,17 @@ export const ClientsSelectorModal: FC<ModalsScreenProps<"clients-selector-modal-
   }, [localClients]);
 
   const hasDataChanged = useCallback(() => {
-    if (_selectedClientIds.current.length !== _initialSelectedClientIds.current.length) {
+    if (selectedClientIds.current.length !== initialSelectedClientIds.current.length) {
       return true;
     }
-    if (_selectedLocalClientIds.current.length !== _initialSelectedLocalClientIds.current.length) {
+    if (selectedLocalClientIds.current.length !== initialSelectedLocalClientIds.current.length) {
       return true;
     }
 
-    const clonedInitialSelectedClientIds = cloneDeep(_initialSelectedClientIds.current);
-    const clonedInitialSelectedLocalClientIds = cloneDeep(_initialSelectedLocalClientIds.current);
-    const clonedSelectedClientIds = cloneDeep(_selectedClientIds.current);
-    const clonedSelectedLocalClientIds = cloneDeep(_selectedLocalClientIds.current);
+    const clonedInitialSelectedClientIds = cloneDeep(initialSelectedClientIds.current);
+    const clonedInitialSelectedLocalClientIds = cloneDeep(initialSelectedLocalClientIds.current);
+    const clonedSelectedClientIds = cloneDeep(selectedClientIds.current);
+    const clonedSelectedLocalClientIds = cloneDeep(selectedLocalClientIds.current);
 
     // initial selected data
     const sortedInitialSelectedClientIds = clonedInitialSelectedClientIds.sort();
@@ -203,7 +203,7 @@ export const ClientsSelectorModal: FC<ModalsScreenProps<"clients-selector-modal-
 
   const handleSubmit = useCallback(() => {
     if (onSubmit) {
-      onSubmit({ clients: _selectedClientIds.current, localClients: _selectedLocalClientIds.current });
+      onSubmit({ clients: selectedClientIds.current, localClients: selectedLocalClientIds.current });
     }
     navigation.goBack();
   }, [navigation, onSubmit]);

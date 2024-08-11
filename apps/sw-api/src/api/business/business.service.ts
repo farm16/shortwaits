@@ -360,14 +360,14 @@ export class BusinessService {
     try {
       const businessUsersPayload = generateBusinessUsers(businessUsers, businessId);
       const newBusinessUsers = await this.businessUserModel.insertMany(businessUsersPayload);
-      const staffIds = newBusinessUsers.map(client => client._id);
+      const businessUsersIds = newBusinessUsers.map(client => client._id);
 
       const newBusinessRecord = await this.businessModel.findByIdAndUpdate(
         businessId,
         {
           $push: {
             staff: {
-              $each: staffIds,
+              $each: businessUsersIds,
             },
           },
         },

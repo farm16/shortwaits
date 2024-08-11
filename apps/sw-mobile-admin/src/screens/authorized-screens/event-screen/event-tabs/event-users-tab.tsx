@@ -130,7 +130,7 @@ export function EventUsersTab(props: EventUsersTabProps) {
 
       const navigateToClientScreen = () => {
         navigate("authorized-stack", {
-          screen: "business-client-screen",
+          screen: "business-client-profile-screen",
           params: {
             client: item as unknown as ClientDtoType,
             eventId: event._id,
@@ -238,9 +238,9 @@ export function EventUsersTab(props: EventUsersTabProps) {
 
       const navigateToClientsSelectorModalScreen = () => {
         navigate("modals", {
-          screen: "clients-selector-modal-screen",
+          screen: "business-clients-modal-screen",
           params: {
-            mode: "clientsAndLocalClients",
+            mode: "client-selector",
             selectedData: selectedClients,
             onSubmit: selectedUsers => {
               console.log("selectedUsers >>>", selectedUsers);
@@ -280,12 +280,12 @@ export function EventUsersTab(props: EventUsersTabProps) {
 
       const navigateToClientsAndLocalClientsSelectorModalScreen = () => {
         navigate("modals", {
-          screen: "clients-selector-modal-screen",
+          screen: "business-clients-modal-screen",
           params: {
-            mode: "clientsAndLocalClients",
+            mode: "client-selector",
             selectedData: selectedClients,
             onSubmit: selectedUsers => {
-              console.log("selected clientsAndLocalClients >>>", selectedUsers);
+              console.log("selected clients >>>", selectedUsers);
               handleClientsUpdateEvent(selectedUsers);
             },
           },

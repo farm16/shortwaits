@@ -127,7 +127,7 @@ export const ClientsSelector: FC<ModalsScreenProps<"selector-modal-screen">> = (
         onSelect(item);
       } else {
         navigation.navigate("authorized-stack", {
-          screen: "business-client-screen",
+          screen: "business-client-profile-screen",
           params: {
             client: item,
           },

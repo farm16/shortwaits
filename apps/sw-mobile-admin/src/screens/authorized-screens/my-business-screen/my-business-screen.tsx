@@ -219,21 +219,7 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
             })
           }
         />
-        <ButtonCard
-          leftIconName="cash-fast"
-          leftIconColor={Colors.text}
-          title={intl.formatMessage({ id: "MyBusiness_screen.transactions" })}
-          onPress={() =>
-            navigation.navigate("modals", {
-              screen: "selector-modal-screen",
-              params: {
-                mode: "static",
-                headerTitle: intl.formatMessage({ id: "MyBusiness_screen.transactions" }),
-                data: transactions,
-              },
-            })
-          }
-        />
+
         <ButtonCard
           leftIconName="layers-triple"
           leftIconColor={Colors.text}
@@ -261,7 +247,29 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
           leftIconName="account-multiple"
           leftIconColor={Colors.text}
           title={intl.formatMessage({ id: "MyBusiness_screen.clients" })}
-          onPress={() => navigation.navigate("clients-screen")}
+          onPress={() =>
+            navigation.navigate("modals", {
+              screen: "business-clients-modal-screen",
+              params: {
+                mode: "clients-list",
+              },
+            })
+          }
+        />
+        <ButtonCard
+          leftIconName="cash-fast"
+          leftIconColor={Colors.text}
+          title={intl.formatMessage({ id: "MyBusiness_screen.transactions" })}
+          onPress={() =>
+            navigation.navigate("modals", {
+              screen: "selector-modal-screen",
+              params: {
+                mode: "static",
+                headerTitle: intl.formatMessage({ id: "MyBusiness_screen.transactions" }),
+                data: transactions,
+              },
+            })
+          }
         />
         <ButtonCard
           leftIconName="puzzle"

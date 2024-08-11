@@ -6,7 +6,7 @@ import {
   AddLocalClientModal,
   AddServicesModal,
   AddStaffModal,
-  ClientsSelectorModal,
+  BusinessClientsModal,
   QrScannerModal,
   ScheduleModal,
   SelectorScreenModal,
@@ -36,7 +36,7 @@ const {
   ADD_LOCAL_CLIENT_MODAL_SCREEN,
   WEBVIEW_MODAL_SCREEN,
   QR_SCANNER_MODAL_SCREEN,
-  CLIENTS_SELECTOR_MODAL_SCREEN,
+  BUSINESS_CLIENTS_MODAL_SCREEN,
   UPDATE_BUSINESS_PROFILE_SCREEN,
 } = MODAL_SCREENS;
 
@@ -46,7 +46,7 @@ export const ModalsNavigator = (): React.ReactElement => {
   return (
     <Stack.Navigator>
       <Stack.Screen name={SELECTOR_MODAL_SCREEN} component={SelectorScreenModal} />
-      <Stack.Screen name={CLIENTS_SELECTOR_MODAL_SCREEN} component={ClientsSelectorModal} />
+      <Stack.Screen name={BUSINESS_CLIENTS_MODAL_SCREEN} component={BusinessClientsModal} />
 
       <Stack.Screen name={ADD_EVENT_MODAL_SCREEN} component={AddEventModal} />
       <Stack.Screen name={ADD_STAFF_MODAL_SCREEN} component={AddStaffModal} />

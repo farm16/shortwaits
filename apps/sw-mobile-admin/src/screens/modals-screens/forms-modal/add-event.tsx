@@ -268,9 +268,9 @@ export const AddEventModal: FC<ModalsScreenProps<"add-event-modal-screen">> = ({
 
   const handleClientPress = useCallback(() => {
     navigation.navigate("modals", {
-      screen: "clients-selector-modal-screen",
+      screen: "business-clients-modal-screen",
       params: {
-        mode: "clientsAndLocalClients",
+        mode: "client-selector",
         headerTitle: intl.formatMessage({ id: "AddEventModal.client.selector.headerTitle" }),
         selectedData: {
           clients: values.clientsIds,

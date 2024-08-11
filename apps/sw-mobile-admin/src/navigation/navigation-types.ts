@@ -41,7 +41,7 @@ export type GenericModalData<T = unknown> = {
 };
 export type SelectorModalData = BusinessLabelType | ServiceDtoType | BusinessLabelType | EventDtoType | BusinessUserDtoType | CategoryDtoType | GenericModalData | string;
 export type SelectedData = string[]; // this should be the id of the selected data only
-
+export type BusinessClientsModalScreenMode = "client-selector" | "local-client-selector" | "sw-client-selector" | "clients-list" | "local-clients-list" | "sw-clients-list";
 export type ModalStackParamList = {
   [MODAL_SCREENS.SELECTOR_MODAL_SCREEN]: {
     mode: SelectorModalModeType;
@@ -60,8 +60,8 @@ export type ModalStackParamList = {
     onSubmit?(arg: SelectorModalData[]): void; // ditto
     onGoBack?(arg: SelectorModalData[]): void; // ditto
   };
-  [MODAL_SCREENS.CLIENTS_SELECTOR_MODAL_SCREEN]: {
-    mode: "clients" | "localClients" | "clientsAndLocalClients";
+  [MODAL_SCREENS.BUSINESS_CLIENTS_MODAL_SCREEN]: {
+    mode: BusinessClientsModalScreenMode;
     headerTitle?: string;
     selectedData?: SelectedClients;
     minSelectedItems?: number;
@@ -159,15 +159,15 @@ export type AuthorizedStackParamList = {
   [AUTHORIZED_STACK_SCREENS.PLANS_SCREEN]: {
     business?: BusinessDtoType;
   };
-  [AUTHORIZED_STACK_SCREENS.BUSINESS_CLIENT_SCREEN]: {
+  [AUTHORIZED_STACK_SCREENS.BUSINESS_CLIENT_PROFILE_SCREEN]: {
     client: ClientDtoType;
     eventId?: string;
   };
-  [AUTHORIZED_STACK_SCREENS.BUSINESS_LOCAL_CLIENT_SCREEN]: {
+  [AUTHORIZED_STACK_SCREENS.BUSINESS_LOCAL_CLIENT_PROFILE_SCREEN]: {
     localClient: LocalClientDtoType;
     eventId?: string;
   };
-  [AUTHORIZED_STACK_SCREENS.BUSINESS_STAFF_SCREEN]: {
+  [AUTHORIZED_STACK_SCREENS.BUSINESS_USER_PROFILE_SCREEN]: {
     staff: BusinessUserDtoType;
     onUserRemove?(arg: BusinessUserDtoType): void;
   };

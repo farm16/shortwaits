@@ -291,9 +291,9 @@ export const UpdateEventModal: FC<ModalsScreenProps<"update-event-modal-screen">
 
   const handleClientsUpdate = useCallback(() => {
     navigation.navigate("modals", {
-      screen: "clients-selector-modal-screen",
+      screen: "business-clients-modal-screen",
       params: {
-        mode: "clientsAndLocalClients",
+        mode: "client-selector",
         headerTitle: intl.formatMessage({ id: "AddEventModal.client.selector.headerTitle" }),
         selectedData: {
           clients: values.clientsIds,

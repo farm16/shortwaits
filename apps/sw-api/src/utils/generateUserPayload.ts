@@ -76,22 +76,90 @@ export const generateBusinessUser = (user: CreateBusinessUserDtoType, businessUs
     isBackgroundAdmin: businessUserRoles.some(role => role === "backgroundAdmin"),
   };
 
+  const phoneNumbers = [
+    {
+      label: "mobile",
+      number: "",
+    },
+    {
+      label: "work",
+      number: "",
+    },
+    {
+      label: "home",
+      number: "",
+    },
+  ];
+
+  const addresses = [
+    {
+      label: "",
+      address1: "",
+      address2: "",
+      city: "",
+      region: "",
+      state: "",
+      postCode: "",
+      country: "",
+    },
+    {
+      label: "",
+      address1: "",
+      address2: "",
+      city: "",
+      region: "",
+      state: "",
+      postCode: "",
+      country: "",
+    },
+  ];
+
+  const dateNow = new Date().toISOString();
+
   const businessUser: DtoFriendlyType<BusinessUserType> = {
     ...user,
-    username: user.email, // username is the same as email
+    shortId: generateShortId(),
+    alias: "username",
+    username: user.username || user.email, // username is the same as email
     roleId: null,
     deleted: false,
     isDisabled: false,
     businesses: [businessId],
     userRoles: userRoles,
-    createdByBusinessId: "",
     isEmailVerified: false,
     registrationState: undefined,
-    hours: defaultStaffHours,
-    createdAt: "",
-    updatedAt: "",
+    createdAt: dateNow,
+    updatedAt: dateNow,
     lastSignInAt: "",
     hashedRt: "",
+    createdByBusinessId: businessId || "",
+    birthday: user.birthday || "",
+    hours: user.hours || defaultStaffHours,
+    phoneNumbers: user.phoneNumbers || phoneNumbers,
+    addresses: user.addresses || addresses,
+    deviceSettings: user.deviceSettings || [
+      {
+        deviceUuid: "",
+        hasExportedContacts: false,
+        isEmailVerified: false,
+        isPhoneVerified: false,
+        isTwoFactorEnabled: false,
+        isTwoFactorVerified: false,
+        isTouchIdEnabled: false,
+        isTouchIdVerified: false,
+        isFaceIdEnabled: false,
+        isFaceIdVerified: false,
+        isPasswordlessEnabled: false,
+      },
+    ],
+    accountSettings: user.accountSettings || {
+      isDarkModeEnabled: false,
+      isNotificationsEnabled: false,
+      isLocationEnabled: false,
+      isLocationShared: false,
+      isLocationSharedWithBusinesses: false,
+    },
+    desiredCurrencies: ["USD"],
   };
   return businessUser;
 };

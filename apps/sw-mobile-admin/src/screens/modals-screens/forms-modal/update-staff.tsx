@@ -30,12 +30,10 @@ export const UpdateStaffModal: FC<ModalsScreenProps<"update-staff-modal-screen">
   const onSubmit = params?.onSubmit ?? noop;
   const onDone = params?.onDone ?? noop;
   const initialValues = params?.initialValues as PartialBusinessUserDtoType;
-  const closeOnSubmit = params?.closeOnSubmit ?? true;
+  console.log("initialValues", JSON.stringify(initialValues, null, 2));
 
   const intl = useIntl(); // Access the intl object
-
   const business = useBusiness();
-
   const [updateBusinessUser, updateBusinessUserStatus] = useUpdateBusinessUserMutation();
 
   const { touched, errors, values, setFieldValue, validateField, setFieldTouched, handleChange, handleSubmit, setFieldError } = useForm<PartialBusinessUserDtoType>(
@@ -59,13 +57,13 @@ export const UpdateStaffModal: FC<ModalsScreenProps<"update-staff-modal-screen">
       headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
       headerTitle: () => <Text preset="headerTitle" text={"Update Staff"} />,
     });
-  }, [closeOnSubmit, handleSubmit, intl, navigation]);
+  }, [handleSubmit, intl, navigation]);
 
   useEffect(() => {
-    if (updateBusinessUserStatus.isSuccess && closeOnSubmit) {
+    if (updateBusinessUserStatus.isSuccess) {
       navigation.goBack();
     }
-  }, [closeOnSubmit, updateBusinessUserStatus.isSuccess, navigation]);
+  }, [updateBusinessUserStatus.isSuccess, navigation]);
 
   useEffect(() => {
     const cleanup = async () => {
@@ -165,7 +163,7 @@ export const UpdateStaffModal: FC<ModalsScreenProps<"update-staff-modal-screen">
         />
         <TimePickerFieldCard
           title={intl.formatMessage({ id: "AddStaffModal.dob" })}
-          date={new Date(values.birthday)}
+          date={values.birthday ? new Date(values.birthday) : new Date()}
           onChange={handleChange("birthday")}
           isTouched={touched.birthday}
           errors={errors.birthday}

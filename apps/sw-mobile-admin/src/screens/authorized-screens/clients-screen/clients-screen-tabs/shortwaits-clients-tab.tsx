@@ -40,7 +40,7 @@ export function ShortwaitsClientsTab({ isLoading, refresh }: { isLoading: boolea
           imageUrl={item.accountImageUrl}
           onPress={() => {
             navigate("authorized-stack", {
-              screen: "business-client-screen",
+              screen: "business-client-profile-screen",
               params: {
                 client: item,
               },

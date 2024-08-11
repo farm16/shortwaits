@@ -6,7 +6,7 @@ import { AgendaItem } from "../../../components";
 import { AuthorizedScreenProps } from "../../../navigation";
 import { useEvents } from "../../../store";
 
-export function BusinessClientProfileScreen({ navigation, route }: AuthorizedScreenProps<"business-client-screen">) {
+export function BusinessClientProfileScreen({ navigation, route }: AuthorizedScreenProps<"business-client-profile-screen">) {
   const { client, eventId } = route.params;
   const { Colors } = useTheme();
   const events = useEvents();
