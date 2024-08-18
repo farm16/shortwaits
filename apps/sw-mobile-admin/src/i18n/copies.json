@@ -6,6 +6,7 @@
     "Navigation.tab.label.activities": "Activities",
     "Navigation.tab.label.settings": "Settings",
 
+    "Common.today": "Today",
     "Common.cancel": "Cancel",
     "Common.disable": "Disable",
     "Common.enable": "Enable",
@@ -340,7 +341,8 @@
 
     "Selectors.services.headerTitle": "Select Services",
 
-    "MyBusiness_screen.totalIncome": "{period, select, Yesterday {Yesterday's total income: } Week {Week's total income: } Month {Month's total income: } Year {Year's total income: } other {}}",
+    "MyBusiness_screen.revenueCount": "{period, select,Today {Total revenue: ${count}} Yesterday {Total revenue: ${count}} Week {Total revenue: ${count}} Month {Total revenue: ${count}} Year {Total revenue: ${count}} other {}}",
+    "MyBusiness_screen.eventCount": "{period, select,Today {Number of events: ${count}} Yesterday {Number of events: {count}} Week {Number of events: {count}} Month {Number of events: {count}} Year {Number of events: {count}} other {}}",
     "MyBusiness_screen.schedule": "Schedule",
     "MyBusiness_screen.scheduleTitle": "Business Schedule",
     "MyBusiness_screen.transactions": "Transactions",
@@ -385,6 +387,7 @@
     "Navigation.tab.label.activities": "Actividades",
     "Navigation.tab.label.settings": "Configuración",
 
+    "Common.today": "Hoy",
     "Common.cancel": "Cancelar",
     "Common.disable": "Desactivar",
     "Common.enable": "Activar",
@@ -722,7 +725,9 @@
 
     "Selectors.services.headerTitle": "Seleccionar Servicios",
 
-    "MyBusiness_screen.totalIncome": "{period, select, Yesterday {Ingresos totales de ayer: } Week {Ingresos totales de la semana: } Month {Ingresos totales del mes: } Year {Ingresos totales del año: } other {}}",
+    "MyBusiness_screen.revenueCount": "{period, select,Today {Ingresos totales: ${count}} Yesterday {Ingresos totales: ${count}} Week {Ingresos totales: ${count}} Month {Ingresos totales: ${count}} Year {Ingresos totales: ${count}} other {}}",
+    "MyBusiness_screen.eventCount": "{period, select,Today {Número de eventos: ${count}} Yesterday {Número de eventos: {count}} Week {Número de eventos: {count}} Month {Número de eventos: {count}} Year {Número de eventos: {count}} other {}}",
+
     "MyBusiness_screen.schedule": "Horario",
     "MyBusiness_screen.scheduleTitle": "Horario del Negocio",
     "MyBusiness_screen.transactions": "Transacciones",

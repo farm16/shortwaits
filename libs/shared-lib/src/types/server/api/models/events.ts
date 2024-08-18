@@ -120,6 +120,7 @@ export type EventType = {
   discountAmount: number; // Discount for the event
   availableDiscountCodes: DiscountType[]; // Discount code for the event
   selectedDiscountCode: DiscountType;
+  updatedAt: Date;
 };
 
 export type DiscountType = {

@@ -81,7 +81,10 @@ export const Calendar: FC<CalendarProps> = memo(props => {
       query: {
         limit,
       },
-    } ?? skipToken
+    } ?? skipToken,
+    {
+      refetchOnMountOrArgChange: true,
+    }
   );
 
   let hasBeenTicked = true;

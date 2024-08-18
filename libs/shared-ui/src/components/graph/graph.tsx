@@ -1,16 +1,16 @@
-import React, { useEffect, useMemo } from "react";
-import { Dimensions, View } from "react-native";
+import React, { useEffect, useMemo, useState } from "react";
+import { View } from "react-native";
 import { Defs, LinearGradient, Stop } from "react-native-svg";
 import { VictoryArea, VictoryAxis, VictoryChart, VictoryScatter } from "victory-native";
 import { useTheme } from "../../theme";
-import { ex } from "./ex";
 import { GraphPropTypes, getGraphCoordinates, isGraphEmpty } from "./helpers";
 
 const ComponentGraph = (props: GraphPropTypes) => {
-  const { data: graphData = ex, interpolation = "linear", timeIdentifier } = props;
+  const { data: graphData, interpolation = "linear", timeIdentifier, countType = "revenueCount" } = props;
   const { Colors } = useTheme();
-  const [isEmpty, setIsEmpty] = React.useState<boolean>(false);
-  const coordinates = useMemo(() => getGraphCoordinates(graphData, timeIdentifier), [graphData, timeIdentifier]);
+  const [isEmpty, setIsEmpty] = useState<boolean>(false);
+  const revenueCount = useMemo(() => getGraphCoordinates(graphData, timeIdentifier, countType), [countType, graphData, timeIdentifier]);
+
   const sharedAxisStyles = {
     tickLabels: {
       fontSize: 13,
@@ -36,10 +36,16 @@ const ComponentGraph = (props: GraphPropTypes) => {
   return (
     <View>
       <VictoryChart
-        height={Dimensions.get("screen").height * 0.3}
-        padding={{ bottom: 40, left: 50, right: 30, top: 5 }}
+        // style={{ parent: { backgroundColor: "blue", padding: 0 } }}
+        // height={Dimensions.get("screen").height * 0.3}
+        padding={{
+          bottom: 40,
+          left: 40,
+          right: 30,
+          top: 0,
+        }}
         domainPadding={{ x: 0, y: 30 }}
-        // scale={{ x: "time" }}
+        // scale={{ y: "time" }}
       >
         <Defs>
           <LinearGradient id="gradientStroke" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -49,22 +55,42 @@ const ComponentGraph = (props: GraphPropTypes) => {
         </Defs>
         <VictoryArea
           interpolation={interpolation}
-          data={coordinates}
+          data={revenueCount}
           style={{
-            parent: { backgroundColor: "green" },
             data: {
               fill: "url(#gradientStroke)",
-              stroke: Colors.brandAccent8,
+              stroke: Colors.brandSecondary,
             },
           }}
         />
-        <VictoryScatter data={coordinates} size={3.8} style={{ data: { fill: Colors.brandAccent8 } }} />
-        <VictoryAxis dependentAxis tickFormat={tick => (Math.round(tick) === 0 ? "" : `$${Math.round(tick)}`)} style={sharedAxisStyles} />
-
+        <VictoryScatter data={revenueCount} size={3.8} style={{ data: { fill: Colors.brandSecondary } }} />
         <VictoryAxis
-          tickValues={coordinates.map(coordinate => coordinate.x)}
+          dependentAxis
+          tickFormat={tick => {
+            // convert tick to $40 whole number
+            let tickString;
+            if (countType === "revenueCount") {
+              tickString = `$${tick / 100}`;
+            }
+            if (countType === "eventCount") {
+              tickString = tick;
+            }
+            // if tick is a whole number, return it, otherwise return an empty string
+            return tick % 1 === 0 ? tickString : "";
+          }}
+          style={sharedAxisStyles}
+        />
+        <VictoryAxis
+          tickValues={revenueCount.map(coordinate => coordinate.x)}
           tickFormat={(coordinate, index) => {
             // outputs 12am and 11pm
+            if (timeIdentifier === "Today") {
+              if (index === 0 || index === 23) {
+                return coordinate;
+              } else {
+                return "";
+              }
+            }
             if (timeIdentifier === "Yesterday") {
               if (index === 0 || index === 23) {
                 return coordinate;
@@ -73,11 +99,15 @@ const ComponentGraph = (props: GraphPropTypes) => {
               }
             }
             if (timeIdentifier === "Month") {
-              if ([0, 6, 12, 18, 24, 30].includes(index)) {
+              if ([1, 6, 12, 18, 24].includes(index)) {
                 return coordinate;
-              } else {
-                return "";
               }
+              // output last day of the month
+              if (index === revenueCount.length - 1) {
+                return coordinate;
+              }
+
+              return "";
             }
             return coordinate;
           }}

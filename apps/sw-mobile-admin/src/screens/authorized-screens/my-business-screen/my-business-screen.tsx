@@ -219,7 +219,6 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
             })
           }
         />
-
         <ButtonCard
           leftIconName="layers-triple"
           leftIconColor={Colors.text}

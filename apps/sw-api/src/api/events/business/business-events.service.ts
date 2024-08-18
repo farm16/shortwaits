@@ -5,7 +5,7 @@ import { EventDtoType, EventTransactionType, ObjectId as ObjectIdType } from "@s
 import { isEmpty } from "lodash";
 import { FilterQuery, Model, ObjectId, Types, UpdateQuery } from "mongoose";
 import { Op } from "sequelize";
-import { getNewEventFromDto, getUpdatedEventFromDto } from "../../../utils";
+import { convertStringIdToObjectId, getBusinessEventGraphData, getNewEventFromDto, getUpdatedEventFromDto } from "../../../utils";
 import { Service } from "../../business-services/entities/business-service.entity";
 import { BusinessUser } from "../../business-users/entities/business-user.entity";
 import { Business } from "../../business/entities/business.entity";
@@ -15,7 +15,13 @@ import { LocalClient } from "../../local-clients/entities/local-client.entity";
 import { Event } from "../entities/event.entity";
 import { CreateEventsDto } from "./dto";
 
+const currentDate = new Date();
+
 const WEEK_DAY = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const HOURS_IN_A_DAY = 24;
+const WEEK_DAYS_IN_A_WEEK = 7;
+const DAYS_IN_A_MONTH = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
+const MONTHS_IN_A_YEAR = 12;
 
 @Injectable()
 export class BusinessEventsService {
@@ -226,87 +232,30 @@ export class BusinessEventsService {
 
   async getBusinessEventSummary(businessId: string) {
     try {
-      const filter: {
-        businessId: string;
-      } = { businessId };
-
-      const events = await this.eventsModel.find(filter).exec();
-
-      const totalAmountPerDayHour = {};
-      const totalAmountPerWeekDay = {
-        Sun: 0,
-        Mon: 0,
-        Tue: 0,
-        Wed: 0,
-        Thu: 0,
-        Fri: 0,
-        Sat: 0,
+      const eventFilter = {
+        businessId: convertStringIdToObjectId(businessId),
+        // check if the event was created within a year
+        createdAt: {
+          $gte: new Date(currentDate.getFullYear(), 0, 1),
+          $lte: new Date(currentDate.getFullYear(), 11, 31),
+        },
       };
-      const totalAmountPerMonthDay = {};
-      const totalAmountPerYearMonth = {};
+      const events = await this.eventsModel.find(eventFilter).exec();
 
-      for (let hour = 0; hour < 24; hour++) {
-        totalAmountPerDayHour[hour] = 0;
-      }
-      for (let month = 0; month < 12; month++) {
-        totalAmountPerYearMonth[month + 1] = 0;
-      }
-      events.forEach(item => {
-        if (item.payment?.paymentProcessedOn) {
-          const date = new Date(item.payment.paymentProcessedOn);
-
-          const today = new Date(Date.now());
-          const daysInCurrentMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
-
-          for (let day = 1; day <= daysInCurrentMonth; day++) {
-            totalAmountPerMonthDay[day] = 0;
-          }
-
-          if (date.getDate() === today.getDate()) {
-            const dayHourKey = date.getHours();
-            totalAmountPerDayHour[dayHourKey] += item.payment.amount || 0;
-          }
-
-          // Subtract 7 from the start and end to get the dates for last week
-          const lastWeekStart = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() - 7);
-          const lastWeekEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() + 6 - 7);
-
-          if (
-            date.getFullYear() >= lastWeekStart.getFullYear() &&
-            date.getMonth() >= lastWeekStart.getMonth() &&
-            date.getDate() >= lastWeekStart.getDate() &&
-            date.getFullYear() <= lastWeekEnd.getFullYear() &&
-            date.getMonth() <= lastWeekEnd.getMonth() &&
-            date.getDate() <= lastWeekEnd.getDate()
-          ) {
-            const weekDayKey = date.getDay();
-            const weekDayFullName = WEEK_DAY[weekDayKey];
-
-            totalAmountPerWeekDay[weekDayFullName] += item.payment.amount || 0;
-          }
-          if (date.getFullYear() === today.getFullYear() && date.getMonth() === today.getMonth()) {
-            const monthDayKey = date.getDate();
-
-            totalAmountPerMonthDay[monthDayKey] += item.payment.amount || 0;
-          }
-
-          if (date.getFullYear() === today.getFullYear()) {
-            const monthKey = date.getMonth() + 1;
-            totalAmountPerYearMonth[monthKey] += item.payment.amount || 0;
-          }
-        }
-      });
+      const { yearMonthly, monthDaily, weekDaily, yesterdayHourly, todayHourly } = getBusinessEventGraphData(events);
 
       const graphData = {
-        Yesterday: totalAmountPerDayHour,
-        Week: totalAmountPerWeekDay,
-        Month: totalAmountPerMonthDay,
-        Year: totalAmountPerYearMonth,
+        Today: todayHourly,
+        Yesterday: yesterdayHourly,
+        Week: weekDaily,
+        Month: monthDaily,
+        Year: yearMonthly,
       };
 
       const listData = events; // todo: add transaction format
 
       return {
+        requestDate: currentDate,
         graphData,
         listData: events,
       };

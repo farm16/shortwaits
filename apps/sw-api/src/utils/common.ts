@@ -236,7 +236,7 @@ export const getUpdatedEventFromDto = (event: EventDtoType, userId: string) => {
   const endTime = generateDateFromIsoString(event.endTime);
   const expectedEndTime = generateDateFromIsoString(event.expectedEndTime);
 
-  const filteredEvent: Omit<EventType, "createdBy" | "businessId"> = {
+  const filteredEvent: Omit<EventType, "updatedAt" | "createdBy" | "businessId"> = {
     // createdBy: createdBy,
     updatedBy: updatedBy,
     priceFinal: event.priceExpected,
@@ -626,4 +626,251 @@ export const createObjectId = name => {
   }
   const hash = createHash("sha1").update(name, "utf8").digest("hex");
   return new mongo.ObjectId(hash.substring(0, 24));
+};
+
+type DateWithValue = {
+  date?: string;
+  revenueCount: number;
+  eventCount: number;
+  events: EventType[];
+};
+type DateWithValues = DateWithValue[];
+
+function getHours(date: Date, events: EventType[]) {
+  const locale = "en-US";
+  const timeZone = "America/New_York";
+
+  const hours: DateWithValues = [];
+  const currentDate = new Date(date);
+  currentDate.setHours(0, 0, 0, 0);
+
+  const options: Intl.DateTimeFormatOptions = {
+    timeZone,
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  };
+
+  for (let i = 0; i < 24; i++) {
+    const hourDate = new Date(currentDate);
+    hourDate.setHours(i);
+    hourDate.toLocaleString(locale, options);
+    const isoDateString = hourDate.toISOString();
+
+    hours.push({
+      date: isoDateString, // Store as an ISO string
+      revenueCount: 0,
+      eventCount: 0,
+      events: [],
+    });
+  }
+
+  events.forEach(event => {
+    const updatedAt = new Date(event.updatedAt);
+    const finalPrice = event.priceFinal ?? 0;
+    const eventDate = updatedAt.toISOString().split("T")[0]; // Extract YYYY-MM-DD
+    const eventHour = updatedAt.toISOString().split("T")[1].slice(0, 2); // Extract HH
+
+    const hourIndex = hours.findIndex(h => {
+      const [hourDate, hourTime] = h.date.split("T");
+      const hourFromDate = hourTime.slice(0, 2); // Extract HH
+      // Compare both date and hour
+
+      return hourDate === eventDate && hourFromDate === eventHour;
+    });
+
+    if (hourIndex !== -1) {
+      hours[hourIndex].events.push(event);
+      hours[hourIndex].revenueCount += finalPrice;
+      hours[hourIndex].eventCount += 1;
+    }
+  });
+
+  const hoursObj = {};
+  hours.forEach((hour, index) => {
+    hoursObj[index] = hour;
+  });
+  return hoursObj;
+}
+
+function groupAndSumByHour(hoursWithValues: DateWithValues) {
+  const hourlySums: Record<string, DateWithValue> = {};
+
+  hoursWithValues.forEach(entry => {
+    const hour = entry.date; // Extract HH from ISO date
+
+    if (!hourlySums[hour]) {
+      hourlySums[hour] = {
+        revenueCount: 0,
+        eventCount: 0,
+        events: [],
+      };
+    }
+
+    hourlySums[hour].events.push(...entry.events);
+    hourlySums[hour].revenueCount += entry.revenueCount;
+    hourlySums[hour].eventCount += entry.eventCount;
+  });
+
+  return hourlySums;
+}
+
+function getDefaultDates(date: Date): DateWithValues {
+  const startOfYear = new Date(date.getFullYear(), 0, 1); // January 1st of the current year
+  const endOfYear = new Date(date.getFullYear(), 11, 31); // December 31st of the current year
+  const datesWithValues: DateWithValues = [];
+
+  while (startOfYear <= endOfYear) {
+    const date = startOfYear.toISOString().split("T")[0] + "T00:00:00.000Z"; // Start of the day
+    datesWithValues.push({
+      date: date,
+      revenueCount: 0,
+      eventCount: 0,
+      events: [],
+    });
+    startOfYear.setDate(startOfYear.getDate() + 1); // Move to the next day
+  }
+
+  return datesWithValues;
+}
+
+function getDatesWithEventValues(date: Date, events: EventType[]) {
+  const dates = getDefaultDates(date);
+  console.log("dates >>>", dates);
+
+  events.forEach(event => {
+    const updatedAt = new Date(event.updatedAt);
+    const finalPrice = event.priceFinal ?? 0;
+    const date = updatedAt.toISOString().split("T")[0] + "T00:00:00.000Z"; // Start of the day
+    const dateIndex = dates.findIndex(d => d.date === date);
+    if (dateIndex !== -1) {
+      dates[dateIndex].events.push(event);
+      dates[dateIndex].revenueCount += finalPrice;
+      dates[dateIndex].eventCount += 1;
+    }
+  });
+  return dates;
+}
+
+function groupAndSumByMonth(date: Date, events: EventType[]) {
+  const datesWithValues = getDatesWithEventValues(date, events);
+  const monthlySums: Record<string, DateWithValue> = {};
+
+  datesWithValues.forEach(entry => {
+    const month = entry.date.slice(0, 7); // Extract YYYY-MM from ISO date
+
+    if (!monthlySums[month]) {
+      monthlySums[month] = {
+        revenueCount: 0,
+        eventCount: 0,
+        events: [],
+      };
+    }
+
+    monthlySums[month].events.push(...entry.events);
+    monthlySums[month].revenueCount += entry.revenueCount;
+    monthlySums[month].eventCount += entry.eventCount;
+  });
+
+  return monthlySums;
+}
+
+function getDatesOfCurrentMonth(datesWithValues: DateWithValues) {
+  const now = new Date();
+  const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+
+  return datesWithValues.filter(entry => entry.date.startsWith(currentMonth));
+}
+
+function groupCurrentMonthDays(date: Date, events: EventType[]) {
+  const datesWithValues = getDatesWithEventValues(date, events);
+  const currentMonthDates = getDatesOfCurrentMonth(datesWithValues);
+
+  const dailySums = currentMonthDates.reduce((acc, entry) => {
+    const day = entry.date; // This will be in the format YYYY-MM-DD
+
+    if (!acc[day]) {
+      acc[day] = {
+        revenueCount: 0,
+        eventCount: 0,
+        events: [],
+      };
+    }
+
+    acc[day].revenueCount += entry.revenueCount;
+    acc[day].eventCount += entry.eventCount;
+    acc[day].events.push(...entry.events);
+
+    return acc;
+  }, {});
+
+  return dailySums;
+}
+
+function getDatesOfCurrentWeekDays(datesWithValues: DateWithValues) {
+  const now = new Date();
+  const currentWeek: string[] = [];
+
+  // Calculate the date for Monday of the current week
+  const monday = new Date(now);
+  const day = now.getDay(); // 0 (Sunday) to 6 (Saturday)
+  const diffToMonday = day === 0 ? -6 : 1 - day; // Adjust for Monday start, move Sunday to the end
+  monday.setDate(now.getDate() + diffToMonday);
+
+  // Generate dates for the entire week (Monday to Sunday)
+  for (let i = 0; i < 7; i++) {
+    const date = new Date(monday);
+    date.setDate(monday.getDate() + i);
+    currentWeek.push(date.toISOString().split("T")[0]); // Only date part for comparison
+  }
+
+  return datesWithValues.filter(entry => {
+    const entryDate = entry.date.split("T")[0]; // Only date part for comparison
+    return currentWeek.includes(entryDate);
+  });
+}
+
+function groupCurrentWeekDays(date: Date, events: EventType[]) {
+  const datesWithValues = getDatesWithEventValues(date, events);
+  const currentWeekDates = getDatesOfCurrentWeekDays(datesWithValues);
+
+  const dailySums = currentWeekDates.reduce((acc, entry) => {
+    const day = entry.date; // This will be in the format YYYY-MM-DD
+
+    if (!acc[day]) {
+      acc[day] = {
+        revenueCount: 0,
+        eventCount: 0,
+        events: [],
+      };
+    }
+
+    acc[day].revenueCount += entry.revenueCount;
+    acc[day].eventCount += entry.eventCount;
+    acc[day].events.push(...entry.events);
+
+    return acc;
+  }, {});
+
+  return dailySums;
+}
+
+export const getBusinessEventGraphData = (events: EventType[]) => {
+  const todayDate = new Date();
+  const yesterdayDate = new Date(todayDate);
+  yesterdayDate.setDate(todayDate.getDate() - 1);
+
+  const todayHourly = getHours(todayDate, events);
+  const yesterdayHourly = getHours(yesterdayDate, events);
+  const yearMonthly = groupAndSumByMonth(todayDate, events);
+  const monthDaily = groupCurrentMonthDays(todayDate, events);
+  const weekDaily = groupCurrentWeekDays(todayDate, events);
+
+  return {
+    todayHourly,
+    yesterdayHourly,
+    yearMonthly,
+    monthDaily,
+    weekDaily,
+  };
 };

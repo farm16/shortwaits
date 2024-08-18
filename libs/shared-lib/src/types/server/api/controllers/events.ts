@@ -1,6 +1,6 @@
 import { BusinessUsersDtoType, ClientsDtoType, CommonResponseType, DtoFriendlyType, EventTransactionType, EventType, LocalClientsDtoType, WithDbProps } from "../../..";
 
-export type FilteredEvent = Omit<EventType, "deleted" | "createdBy" | "updatedBy" | "updatedBy" | "__v" | "_id" | "shortId" | "status">;
+export type FilteredEvent = Omit<EventType, "deleted" | "createdBy" | "updatedAt" | "updatedBy" | "__v" | "_id" | "shortId" | "status">;
 
 export type CreateEventDtoType = DtoFriendlyType<FilteredEvent>;
 export type UpdateEventDtoType = DtoFriendlyType<FilteredEvent>;
@@ -18,20 +18,32 @@ export type PeopleInEventResponseType = CommonResponseType<{
   event: EventDtoType;
 }>;
 
-export type EventSummaryType = {
-  Yesterday: Record<string, number>;
-  Week: Record<WeekDay, number>;
-  Month: Record<string, number>;
-  Year: Record<string, number>;
-};
-
 type EventSummary = {
-  graphData: EventSummaryType;
+  graphData: GraphData;
   listData: [];
+  requestDate: string;
 };
 
 export type EventsSummaryResponseType = CommonResponseType<EventSummary>;
-type WeekDay = "Sun" | "Mon" | "Tue" | "Wed" | "Thu" | "Fri" | "Sat";
+
+export type WeekDay = "Sun" | "Mon" | "Tue" | "Wed" | "Thu" | "Fri" | "Sat";
+
+export type Graph = {
+  date?: string;
+  eventCount: number;
+  events: EventType[];
+  revenueCount: number;
+};
+
+export type GraphIdentifier = keyof GraphData;
+
+export type GraphData = {
+  Today: Record<string, Graph>;
+  Yesterday: Record<string, Graph>;
+  Week: Record<string, Graph>;
+  Month: Record<string, Graph>;
+  Year: Record<string, Graph>;
+};
 
 // export class RegisterLocalClientsToEventDto {
 //   @IsArray()
