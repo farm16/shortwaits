@@ -200,96 +200,98 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
           />
         </View>
       ) : null}
-      <BusinessIncomeInfo />
-      <Screen preset="scroll" unsafe withHorizontalPadding>
-        <ButtonCard
-          leftIconName="calendar-month"
-          leftIconColor={Colors.text}
-          title={intl.formatMessage({ id: "MyBusiness_screen.schedule" })}
-          onPress={() =>
-            navigation.navigate("modals", {
-              screen: "schedule-modal-screen",
-              params: {
-                headerTitle: intl.formatMessage({ id: "MyBusiness_screen.scheduleTitle" }),
-                hours: business?.hours,
-                onSubmit: hours => {
-                  handleUpdateBusinessHours(hours);
+      <Screen preset="scroll" unsafe>
+        <BusinessIncomeInfo />
+        <Container withHorizontalPadding>
+          <ButtonCard
+            leftIconName="calendar-month"
+            leftIconColor={Colors.text}
+            title={intl.formatMessage({ id: "MyBusiness_screen.schedule" })}
+            onPress={() =>
+              navigation.navigate("modals", {
+                screen: "schedule-modal-screen",
+                params: {
+                  headerTitle: intl.formatMessage({ id: "MyBusiness_screen.scheduleTitle" }),
+                  hours: business?.hours,
+                  onSubmit: hours => {
+                    handleUpdateBusinessHours(hours);
+                  },
                 },
-              },
-            })
-          }
-        />
-        <ButtonCard
-          leftIconName="layers-triple"
-          leftIconColor={Colors.text}
-          title={intl.formatMessage({ id: "MyBusiness_screen.services" })}
-          onPress={() =>
-            navigation.navigate("modals", {
-              screen: "service-modal-screen",
-            })
-          }
-        />
-        <ButtonCard
-          leftIconName="account-tie"
-          leftIconColor={Colors.text}
-          title={intl.formatMessage({ id: "MyBusiness_screen.staff" })}
-          onPress={() =>
-            navigation.navigate("modals", {
-              screen: "selector-modal-screen",
-              params: {
-                mode: "staff",
-              },
-            })
-          }
-        />
-        <ButtonCard
-          leftIconName="account-multiple"
-          leftIconColor={Colors.text}
-          title={intl.formatMessage({ id: "MyBusiness_screen.clients" })}
-          onPress={() =>
-            navigation.navigate("modals", {
-              screen: "business-clients-modal-screen",
-              params: {
-                mode: "clients-list",
-              },
-            })
-          }
-        />
-        <ButtonCard
-          leftIconName="cash-fast"
-          leftIconColor={Colors.text}
-          title={intl.formatMessage({ id: "MyBusiness_screen.transactions" })}
-          onPress={() =>
-            navigation.navigate("modals", {
-              screen: "selector-modal-screen",
-              params: {
-                mode: "static",
-                headerTitle: intl.formatMessage({ id: "MyBusiness_screen.transactions" }),
-                data: transactions,
-              },
-            })
-          }
-        />
-        <ButtonCard
-          leftIconName="puzzle"
-          leftIconColor={Colors.text}
-          title={intl.formatMessage({ id: "MyBusiness_screen.integrations" })}
-          onPress={() =>
-            navigation.navigate("authorized-stack", {
-              screen: "integrations-screen",
-            })
-          }
-        />
-        <ButtonCard
-          leftIconName="message-star"
-          leftIconColor={Colors.text}
-          title={intl.formatMessage({ id: "MyBusiness_screen.myReviews" })}
-          onPress={() =>
-            navigation.navigate("authorized-stack", {
-              screen: "review-screen",
-            })
-          }
-        />
+              })
+            }
+          />
+          <ButtonCard
+            leftIconName="layers-triple"
+            leftIconColor={Colors.text}
+            title={intl.formatMessage({ id: "MyBusiness_screen.services" })}
+            onPress={() =>
+              navigation.navigate("modals", {
+                screen: "service-modal-screen",
+              })
+            }
+          />
+          <ButtonCard
+            leftIconName="account-tie"
+            leftIconColor={Colors.text}
+            title={intl.formatMessage({ id: "MyBusiness_screen.staff" })}
+            onPress={() =>
+              navigation.navigate("modals", {
+                screen: "selector-modal-screen",
+                params: {
+                  mode: "staff",
+                },
+              })
+            }
+          />
+          <ButtonCard
+            leftIconName="account-multiple"
+            leftIconColor={Colors.text}
+            title={intl.formatMessage({ id: "MyBusiness_screen.clients" })}
+            onPress={() =>
+              navigation.navigate("modals", {
+                screen: "business-clients-modal-screen",
+                params: {
+                  mode: "clients-list",
+                },
+              })
+            }
+          />
+          <ButtonCard
+            leftIconName="cash-fast"
+            leftIconColor={Colors.text}
+            title={intl.formatMessage({ id: "MyBusiness_screen.transactions" })}
+            onPress={() =>
+              navigation.navigate("modals", {
+                screen: "selector-modal-screen",
+                params: {
+                  mode: "static",
+                  headerTitle: intl.formatMessage({ id: "MyBusiness_screen.transactions" }),
+                  data: transactions,
+                },
+              })
+            }
+          />
+          <ButtonCard
+            leftIconName="puzzle"
+            leftIconColor={Colors.text}
+            title={intl.formatMessage({ id: "MyBusiness_screen.integrations" })}
+            onPress={() =>
+              navigation.navigate("authorized-stack", {
+                screen: "integrations-screen",
+              })
+            }
+          />
+          <ButtonCard
+            leftIconName="message-star"
+            leftIconColor={Colors.text}
+            title={intl.formatMessage({ id: "MyBusiness_screen.myReviews" })}
+            onPress={() =>
+              navigation.navigate("authorized-stack", {
+                screen: "review-screen",
+              })
+            }
+          />
+        </Container>
       </Screen>
     </>
   );

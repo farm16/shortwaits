@@ -49,7 +49,7 @@ const ComponentGraph = (props: GraphPropTypes) => {
       >
         <Defs>
           <LinearGradient id="gradientStroke" x1="0%" y1="0%" x2="0%" y2="100%">
-            <Stop offset="0%" stopColor={Colors.brandAccent1} />
+            <Stop offset="0%" stopColor={Colors.brandAccent3} />
             <Stop offset="100%" stopColor="white" />
           </LinearGradient>
         </Defs>
@@ -63,7 +63,7 @@ const ComponentGraph = (props: GraphPropTypes) => {
             },
           }}
         />
-        <VictoryScatter data={revenueCount} size={3.8} style={{ data: { fill: Colors.brandSecondary } }} />
+        <VictoryScatter data={revenueCount} size={2.6} style={{ data: { fill: Colors.brandSecondary } }} />
         <VictoryAxis
           dependentAxis
           tickFormat={tick => {
