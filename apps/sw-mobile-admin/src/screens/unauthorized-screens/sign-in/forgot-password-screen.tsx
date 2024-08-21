@@ -42,7 +42,7 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
     try {
       const authCode = await onGoogleButtonPress();
       await socialSignUp({
-        provider: "google",
+        kind: "google",
         authCode,
       });
     } catch (error) {
@@ -62,7 +62,7 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
     try {
       const authCode = await onGoogleButtonPress();
       await socialSignUp({
-        provider: "facebook",
+        kind: "facebook",
         authCode,
       });
     } catch (error) {

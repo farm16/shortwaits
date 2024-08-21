@@ -48,10 +48,6 @@ export type ClientType = {
   password: string;
   locale: LocaleType;
   phoneNumbers: PhoneNumberType[];
-  imAddresses: {
-    username: string;
-    service: string;
-  }[];
   addresses: AddressType[];
   isSocialAccount: boolean;
   socialAccount: SocialAccountType;

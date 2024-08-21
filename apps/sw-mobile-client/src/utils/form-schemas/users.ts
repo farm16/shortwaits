@@ -24,12 +24,7 @@ export const createClientUserSchema: Yup.Schema<AddClientDtoType> = Yup.object({
       number: Yup.string(), // validations is done via PhoneInput component
     })
   ),
-  imAddresses: Yup.array().of(
-    Yup.object({
-      username: Yup.string(),
-      service: Yup.string().email("email is not valid"),
-    })
-  ),
+
   addresses: Yup.array().of(
     Yup.object({
       label: Yup.string(),
@@ -42,13 +37,11 @@ export const createClientUserSchema: Yup.Schema<AddClientDtoType> = Yup.object({
       country: Yup.string(),
     })
   ),
-  socialAccounts: Yup.array().of(
-    Yup.object({
-      kind: Yup.string(),
-      uid: Yup.string(),
-      username: Yup.string(),
-    })
-  ),
+  socialAccounts: Yup.object({
+    kind: Yup.string(),
+    uid: Yup.string(),
+    username: Yup.string(),
+  }),
   birthday: Yup.string(),
   desiredCurrencies: Yup.array().of(Yup.string()),
 });
@@ -69,14 +62,6 @@ export const createBusinessUserSchema: Yup.Schema<CreateBusinessUserDtoType> = Y
       })
     )
     .optional(),
-  imAddresses: Yup.array()
-    .of(
-      Yup.object({
-        username: Yup.string(),
-        service: Yup.string(),
-      })
-    )
-    .optional(),
   addresses: Yup.array()
     .of(
       Yup.object({
@@ -91,15 +76,11 @@ export const createBusinessUserSchema: Yup.Schema<CreateBusinessUserDtoType> = Y
       })
     )
     .optional(),
-  socialAccounts: Yup.array()
-    .of(
-      Yup.object({
-        kind: Yup.string(),
-        uid: Yup.string(),
-        username: Yup.string(),
-      })
-    )
-    .optional(),
+  socialAccounts: Yup.object({
+    kind: Yup.string(),
+    uid: Yup.string(),
+    username: Yup.string(),
+  }).optional(),
   birthday: Yup.string().optional(),
   email: Yup.string().email("Please enter a valid email").min(2, "Must be more than 10 characters").required("this field is required"),
   desiredCurrencies: Yup.array().of(Yup.string()).optional(),
@@ -136,12 +117,6 @@ export const updateClientUserSchema: Yup.Schema<AddClientDtoType> = Yup.object({
       number: Yup.string(), // validations is done via Phon
     })
   ),
-  imAddresses: Yup.array().of(
-    Yup.object({
-      username: Yup.string(),
-      service: Yup.string().email("email is not valid"),
-    })
-  ),
   addresses: Yup.array().of(
     Yup.object({
       label: Yup.string(),
@@ -154,13 +129,11 @@ export const updateClientUserSchema: Yup.Schema<AddClientDtoType> = Yup.object({
       country: Yup.string(),
     })
   ),
-  socialAccounts: Yup.array().of(
-    Yup.object({
-      kind: Yup.string(),
-      uid: Yup.string(),
-      username: Yup.string(),
-    })
-  ),
+  socialAccounts: Yup.object({
+    kind: Yup.string(),
+    uid: Yup.string(),
+    username: Yup.string(),
+  }),
   birthday: Yup.string(),
   desiredCurrencies: Yup.array().of(Yup.string()),
 });
@@ -178,12 +151,7 @@ export const updateBusinessUserSchema: Yup.Schema<CreateBusinessUserDtoType> = Y
       number: Yup.string(), // validations is done via Phon
     })
   ),
-  imAddresses: Yup.array().of(
-    Yup.object({
-      username: Yup.string(),
-      service: Yup.string(),
-    })
-  ),
+
   addresses: Yup.array().of(
     Yup.object({
       label: Yup.string(),
@@ -196,13 +164,11 @@ export const updateBusinessUserSchema: Yup.Schema<CreateBusinessUserDtoType> = Y
       country: Yup.string(),
     })
   ),
-  socialAccounts: Yup.array().of(
-    Yup.object({
-      kind: Yup.string(),
-      uid: Yup.string(),
-      username: Yup.string(),
-    })
-  ),
+  socialAccounts: Yup.object({
+    kind: Yup.string(),
+    uid: Yup.string(),
+    username: Yup.string(),
+  }),
   birthday: Yup.string(),
   email: Yup.string().email("Please enter a valid email").min(2, "Must be more than 10 characters").required("this field is required"),
   password: Yup.string().min(6, "Must be more than 6 characters").required("this field is required"),

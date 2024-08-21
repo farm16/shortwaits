@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { AddLocalClientDtoType } from "@shortwaits/shared-lib";
+import { AddLocalClientDtoType, SocialAccountType } from "@shortwaits/shared-lib";
 import { IsNotEmpty, IsOptional } from "class-validator";
 
 export class CreateLocalClientUserDto implements AddLocalClientDtoType {
@@ -13,7 +13,7 @@ export class CreateLocalClientUserDto implements AddLocalClientDtoType {
 
   @ApiProperty()
   @IsNotEmpty()
-  socialAccount: { kind: string; uid?: string; username?: string };
+  socialAccount: SocialAccountType;
 
   @ApiProperty()
   @IsNotEmpty()
@@ -98,13 +98,6 @@ export class CreateLocalClientUserDto implements AddLocalClientDtoType {
 
   @ApiProperty()
   @IsOptional()
-  imAddresses: {
-    username: string;
-    service: string;
-  }[];
-
-  @ApiProperty()
-  @IsOptional()
   addresses: {
     label: string;
     address1: string;
@@ -121,7 +114,7 @@ export class CreateLocalClientUserDto implements AddLocalClientDtoType {
     kind: string;
     uid?: string;
     username?: string;
-  }[];
+  };
 
   @ApiProperty()
   @IsOptional()

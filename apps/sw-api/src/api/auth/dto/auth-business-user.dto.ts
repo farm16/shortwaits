@@ -59,7 +59,15 @@ export class WithSocialAuthDto {
   @MinLength(3)
   @MaxLength(320)
   @ApiProperty({ example: "google" })
-  readonly provider: string;
+  readonly kind: string;
+
+  @Trim()
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(3)
+  @MaxLength(400)
+  @ApiProperty({ example: "1234567890" })
+  readonly uid: string;
 
   // make email optional for now
   @Trim()

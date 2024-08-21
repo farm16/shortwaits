@@ -95,10 +95,6 @@ export class BusinessUser extends Document<ObjectId> implements BusinessUserType
 
   @ApiProperty()
   @Prop()
-  preferredAlias: "username" | "displayName";
-
-  @ApiProperty()
-  @Prop()
   username: string;
 
   @ApiProperty()
@@ -156,13 +152,6 @@ export class BusinessUser extends Document<ObjectId> implements BusinessUserType
 
   @ApiProperty()
   @Prop()
-  imAddresses: {
-    username: string;
-    service: string;
-  }[];
-
-  @ApiProperty()
-  @Prop()
   addresses: {
     label: string;
     address1: string;
@@ -177,7 +166,7 @@ export class BusinessUser extends Document<ObjectId> implements BusinessUserType
     kind: string;
     uid?: string;
     username?: string;
-  }[];
+  };
 
   @ApiProperty()
   @Prop()

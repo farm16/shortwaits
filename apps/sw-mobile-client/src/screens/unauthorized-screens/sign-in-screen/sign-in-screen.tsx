@@ -33,7 +33,7 @@ export function SignInScreen({ navigation }: UnauthorizedScreenProps<"sign-in-sc
     try {
       const authCode = await onGoogleButtonPress();
       await socialSignUp({
-        provider: "google",
+        kind: "google",
         authCode,
       });
     } catch (error) {
@@ -59,7 +59,7 @@ export function SignInScreen({ navigation }: UnauthorizedScreenProps<"sign-in-sc
     try {
       const authCode = await onGoogleButtonPress();
       await socialSignUp({
-        provider: "facebook",
+        kind: "facebook",
         authCode,
       });
     } catch (error) {

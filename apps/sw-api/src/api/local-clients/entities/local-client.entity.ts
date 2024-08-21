@@ -131,17 +131,6 @@ export class LocalClient extends Document<ObjectId> implements LocalClientType {
       type: Array,
     })
   )
-  imAddresses: {
-    username: string;
-    service: string;
-  }[];
-
-  @ApiProperty()
-  @Prop(
-    raw({
-      type: Array,
-    })
-  )
   addresses: {
     label: string;
     address1: string;

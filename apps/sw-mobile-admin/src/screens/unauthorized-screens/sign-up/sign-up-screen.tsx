@@ -1,13 +1,11 @@
 import { CompositeNavigationProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { Button, Container, Facebook, Google, Screen, Space, TermsAndConditions, Text, TextFieldCard, useForm, useTheme } from "@shortwaits/shared-ui";
-import { isString } from "lodash";
+import { Button, Container, Facebook, ActivityIndicator, Google, Screen, Space, TermsAndConditions, Text, TextFieldCard, useForm, useTheme } from "@shortwaits/shared-ui";
 import React, { FC, useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { Alert, StyleSheet, View } from "react-native";
-import { ActivityIndicator } from "react-native-paper";
 import { shortwaitsApi } from "../../../configs";
-import { useGoogleAuth } from "../../../hooks";
+import { useFacebookAuth, useGoogleAuth } from "../../../hooks";
 import { RootStackParamList, UnauthorizedStackParamList } from "../../../navigation";
 import { useLocalSignUpMutation } from "../../../services";
 
@@ -20,7 +18,8 @@ export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
   const [isVisible, setIsVisible] = useState(false);
   const intl = useIntl(); // Access the intl object
   const termsOfServiceUrl = `${shortwaitsApi.baseUrl}/shortwaits/terms-of-use`;
-  const { isLoading, error: googleAuthError, handleGoogleAuth } = useGoogleAuth();
+  const { isLoading: isGoogleAuthLoading, error: googleAuthError, handleGoogleAuth } = useGoogleAuth();
+  const { isLoading: isFacebookAuthLoading, error: facebookAuthError, handleFacebookAuth } = useFacebookAuth();
   const [localSignUp, localSignUpStatus] = useLocalSignUpMutation();
 
   useLayoutEffect(() => {
@@ -37,27 +36,21 @@ export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
   };
 
   useEffect(() => {
-    if (googleAuthError || localSignUpStatus.error) {
-      console.log("localSignUpStatus >>> ", localSignUpStatus.error);
-      console.log("error >>> ", googleAuthError);
-      const localSignUpStatusErrorDataMessage = isString(localSignUpStatus.error?.data?.message) ? localSignUpStatus.error?.data?.message : null;
-      const localSignUpStatusErrorMessage = isString(localSignUpStatus.error?.message) ? localSignUpStatus.error?.message : null;
-      const localSignUpStatusError = isString(localSignUpStatus.error) ? localSignUpStatus.error : null;
-      const googleAuthErrorMessage = isString(googleAuthError) ? googleAuthError : null;
+    const error = googleAuthError || localSignUpStatus.error || facebookAuthError;
+    if (error) {
+      console.log("error >>> ", error);
+
       Alert.alert(
         intl.formatMessage({
           id: "Common.error.title",
         }),
-        localSignUpStatusErrorDataMessage ||
-          localSignUpStatusErrorMessage ||
-          localSignUpStatusError ||
-          googleAuthErrorMessage ||
+        error ||
           intl.formatMessage({
             id: "Common.error.message",
           })
       );
     }
-  }, [googleAuthError, localSignUpStatus.error, intl]);
+  }, [googleAuthError, localSignUpStatus.error, intl, facebookAuthError]);
 
   const handlePasswordVisibility = useCallback(() => {
     setIsVisible(visibility => !visibility);
@@ -78,7 +71,7 @@ export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
     "adminAppLocalSignUp"
   );
 
-  if (isLoading || localSignUpStatus.isLoading) {
+  if (localSignUpStatus.isLoading || isGoogleAuthLoading || isFacebookAuthLoading) {
     return <ActivityIndicator />;
   }
 
@@ -180,7 +173,7 @@ export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
           justifyContent: "center",
         }}
         preset="social"
-        onPress={handleGoogleAuth}
+        onPress={handleFacebookAuth}
       >
         <Facebook width={30} height={30} style={{ position: "absolute", left: 0, margin: 16 }} />
         <Container style={styles.buttonContainer}>

@@ -102,13 +102,6 @@ export class Client extends Document<ObjectId> implements ClientType {
   }[];
 
   @ApiProperty()
-  @Prop()
-  imAddresses: {
-    username: string;
-    service: string;
-  }[];
-
-  @ApiProperty()
   @Prop(
     raw({
       type: Array,

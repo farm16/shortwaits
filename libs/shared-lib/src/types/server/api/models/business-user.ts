@@ -62,17 +62,13 @@ export type BusinessUserType = {
   isPasswordProtected: boolean;
   locale: LocaleType;
   phoneNumbers: PhoneNumberType[];
-  imAddresses: {
-    username: string;
-    service: string;
-  }[];
   addresses: AddressType[];
   isSocialAccount: boolean;
-  socialAccounts: SocialAccountType[];
+  socialAccounts: SocialAccountType;
   deviceSettings: UserDeviceSettings[];
   accountSettings: UserAccountSettings;
   desiredCurrencies: string[];
-
+  // ================
   hours: WeekHoursType;
   birthday: string;
 };

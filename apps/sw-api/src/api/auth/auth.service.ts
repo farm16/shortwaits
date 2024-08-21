@@ -3,7 +3,7 @@ import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundE
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import { InjectModel } from "@nestjs/mongoose";
-import { BusinessType, BusinessUserType, ClientType, ObjectId, ShortwaitsStore } from "@shortwaits/shared-lib";
+import { BusinessType, BusinessUserType, ClientType, FacebookUserInfoResponse, GoogleUserInfoResponse, ObjectId, ShortwaitsStore, SocialAccountType } from "@shortwaits/shared-lib";
 import bcrypt from "bcryptjs";
 import { OAuth2Client } from "google-auth-library";
 import { Model } from "mongoose";
@@ -12,7 +12,8 @@ import { shortwaitsStores } from "../../db/seeders/mongo-sw-api/default-data/sho
 import {
   convertToLowercase,
   filterBusinessOwnerPayload_localAuth,
-  filterBusinessOwnerPayload_socialAuth,
+  filterBusinessOwnerPayload_socialAuth_facebook,
+  filterBusinessOwnerPayload_socialAuth_google,
   generateBusinessUser,
   generateBusinessUser_socialAuth,
   generateUniqueId,
@@ -26,7 +27,9 @@ import { Client } from "../clients/entities/client.entity";
 import { ClientSignInWithEmailDto, ClientSignUpWithEmailDto, SignInWithEmailDto, SignUpWithEmailDto } from "./dto";
 
 const providers = ["google", "facebook"];
-const googleApiOauthUrl = "https://www.googleapis.com/oauth2/v3";
+const GOOGLE_API_OAUTH_URL = "https://www.googleapis.com/oauth2/v3";
+const FACEBOOK_ME_URL = "https://graph.facebook.com/me";
+
 @Injectable()
 export class AuthService {
   private readonly maxAttempts = 10;
@@ -47,42 +50,54 @@ export class AuthService {
     this.oAuth2Client = new OAuth2Client(googleAuthClientId, googleAuthClientSecret);
   }
 
-  async businessSocialSignIn(dto: { authCode: string; provider: string }, storeIndicator = "en") {
-    if (!providers.includes(dto.provider)) {
-      throw new UnprocessableEntityException("Invalid provider");
+  async businessSocialSignIn(
+    dto: SocialAccountType & {
+      authCode: string;
+    },
+    storeIndicator = "en"
+  ) {
+    if (!providers.includes(dto.kind)) {
+      throw new UnprocessableEntityException("Invalid kind");
     }
 
     try {
-      let socialAuthUser;
-
-      if (dto.provider === "google") {
-        socialAuthUser = await this.googleAuth(dto.authCode);
-        console.log("businessSocialSignIn : socialAuthUser >>>", socialAuthUser);
-      } else if (dto.provider === "facebook") {
-        noop();
-        // check if email is verified for facebook
+      if (dto.kind === "google") {
+        const socialAuthUser = await this.googleAuth(dto.authCode, dto.uid);
+        const existingUser = await this.businessUserModel.findOne({
+          email: socialAuthUser.email,
+          isEmailVerified: true,
+        });
+        if (!existingUser) {
+          const newUser = filterBusinessOwnerPayload_socialAuth_google(socialAuthUser);
+          console.log("businessSocialSignIn newUser >>>", newUser);
+          return await this.createNewBusinessAndBusinessOwner_socialAuth(newUser, storeIndicator);
+        }
+        return await this.successfulExistingBusinessUser(existingUser);
+      } else if (dto.kind === "facebook") {
+        const socialAuthUser = await this.facebookAuth(dto.authCode, dto.uid);
+        const existingUser = await this.businessUserModel.findOne({
+          email: socialAuthUser.email,
+          isEmailVerified: true,
+        });
+        if (!existingUser) {
+          const newUser = filterBusinessOwnerPayload_socialAuth_facebook(socialAuthUser);
+          console.log("businessSocialSignIn newUser >>>", newUser);
+          return await this.createNewBusinessAndBusinessOwner_socialAuth(newUser, storeIndicator);
+        }
+        return await this.successfulExistingBusinessUser(existingUser);
       }
-
-      const existingUser = await this.businessUserModel.findOne({
-        email: socialAuthUser.email,
-        isEmailVerified: true,
-      });
-
-      console.log("businessSocialSignIn : user >>>", existingUser);
-
-      if (!existingUser) {
-        const newUser = filterBusinessOwnerPayload_socialAuth(socialAuthUser);
-        return await this.createNewBusinessAndBusinessOwner_socialAuth(newUser, storeIndicator);
-      }
-
-      return await this.successfulExistingBusinessUser(existingUser);
     } catch (error) {
       console.error("Error in businessSocialSignIn:", error);
       throw new InternalServerErrorException("An error occurred while processing your request.");
     }
   }
 
-  async businessSocialSignUp(dto: { authCode: string; provider: string }, storeIndicator = "en") {
+  async businessSocialSignUp(
+    dto: SocialAccountType & {
+      authCode: string;
+    },
+    storeIndicator = "en"
+  ) {
     return await this.businessSocialSignIn(dto, storeIndicator);
   }
 
@@ -312,27 +327,41 @@ export class AuthService {
     return null; // Return null when the maximum attempts are reached
   }
 
-  async googleAuth(authCode: string) {
-    // userInfo >>> {
-    //   sub: '103181813044606974798',
-    //   name: 'Christopher Fajardo',
-    //   given_name: 'Christopher',
-    //   family_name: 'Fajardo',
-    //   picture: 'https://lh3.googleusercontent.com/a/ACg8ocKBYpErv8Z6fsGRxuYsztyn2bxv80vcz1GkFG1ki7rMRs0=s96-c',
-    //   email: 'christopher.fajardo73@gmail.com',
-    //   email_verified: true,
-    //   locale: 'en'
-    // }
+  async googleAuth(authCode: string, userSub: string) {
     const { tokens } = await this.oAuth2Client.getToken(authCode);
-    const userInfoResponse = await fetch(`${googleApiOauthUrl}/userinfo`, {
+    const userInfoResponse = await fetch(`${GOOGLE_API_OAUTH_URL}/userinfo`, {
       headers: {
         Authorization: `Bearer ${tokens.access_token}`,
       },
     });
+    console.log("googleAuth : userInfoResponse >>>", userInfoResponse);
     if (!userInfoResponse.ok) {
       throw new InternalServerErrorException("Failed to fetch user information from Google.");
     }
-    return await userInfoResponse.json();
+    const userInfo: GoogleUserInfoResponse = await userInfoResponse.json();
+    console.log("googleAuth : userInfo >>>", userInfo);
+    if (userSub !== userInfo.sub) {
+      throw new InternalServerErrorException("Invalid user ID (Google).");
+    }
+    return userInfo;
+  }
+
+  async facebookAuth(authCode: string, userId: string) {
+    const userInfoResponse = await fetch(`${FACEBOOK_ME_URL}?access_token=${authCode}&fields=id,email,name,first_name,last_name,picture`, {
+      headers: {
+        Authorization: `Bearer ${authCode}`,
+      },
+    });
+    console.log("facebookAuth : userInfoResponse >>>", userInfoResponse);
+    if (!userInfoResponse.ok) {
+      throw new InternalServerErrorException("Failed to fetch user information from Facebook.");
+    }
+    const userInfo: FacebookUserInfoResponse = await userInfoResponse.json();
+    console.log("facebookAuth : userInfo >>>", userInfo);
+    if (userId !== userInfo.id) {
+      throw new InternalServerErrorException("Invalid user ID (Facebook).");
+    }
+    return userInfo;
   }
 
   async successfulExistingBusinessUser(existingUser: BusinessUserType) {

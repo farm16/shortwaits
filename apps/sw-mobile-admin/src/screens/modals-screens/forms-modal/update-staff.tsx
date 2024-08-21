@@ -36,9 +36,30 @@ export const UpdateStaffModal: FC<ModalsScreenProps<"update-staff-modal-screen">
   const business = useBusiness();
   const [updateBusinessUser, updateBusinessUserStatus] = useUpdateBusinessUserMutation();
 
+  const initialValuesWithDefaultValues: PartialBusinessUserDtoType = {
+    ...initialValues,
+    phoneNumbers: [
+      { label: "mobile", number: initialValues.phoneNumbers?.[0]?.number ?? "" },
+      { label: "home", number: initialValues.phoneNumbers?.[1]?.number ?? "" },
+      { label: "work", number: initialValues.phoneNumbers?.[2]?.number ?? "" },
+    ],
+    addresses: [
+      {
+        label: initialValues.addresses?.[0]?.label ?? "home",
+        address1: initialValues.addresses?.[0]?.address1 ?? "",
+        address2: initialValues.addresses?.[0]?.address2 ?? "",
+        city: initialValues.addresses?.[0]?.city ?? "",
+        state: initialValues.addresses?.[0]?.state ?? "",
+        region: initialValues.addresses?.[0]?.region ?? "",
+        postCode: initialValues.addresses?.[0]?.postCode ?? "",
+        country: initialValues.addresses?.[0]?.country ?? "",
+      },
+    ],
+  };
+
   const { touched, errors, values, setFieldValue, validateField, setFieldTouched, handleChange, handleSubmit, setFieldError } = useForm<PartialBusinessUserDtoType>(
     {
-      initialValues,
+      initialValues: initialValuesWithDefaultValues,
       onSubmit: formData => {
         updateBusinessUser({
           businessId: business._id,

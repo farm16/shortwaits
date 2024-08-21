@@ -39,10 +39,9 @@ export const AddStaffModal: FC<ModalsScreenProps<"add-staff-modal-screen">> = ({
   const initialValues = useMemo(() => {
     const _initialValues: CreateBusinessUserDtoType = {
       // constant values for now
-      imAddresses: [],
-      socialAccounts: [],
+      socialAccounts: null,
       desiredCurrencies: ["USD"],
-      preferredAlias: "displayName",
+      alias: "displayName",
       //
       // set to US for now
       locale: {

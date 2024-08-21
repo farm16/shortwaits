@@ -12,8 +12,9 @@ import { useBusiness } from "../../../store";
 GoogleSignin.configure({
   webClientId: "805426205047-fcegaam9bmap1dagccindjh0ko7oro68.apps.googleusercontent.com",
   offlineAccess: true,
+  iosClientId: "805426205047-mlghv968heekr2u7egondvv621g17h81.apps.googleusercontent.com",
 });
-FacebookSettings.setAppID("693197073014015");
+FacebookSettings.initializeSDK();
 
 export interface WelcomeScreenProps {
   navigation: CompositeNavigationProp<StackNavigationProp<UnauthorizedStackParamList, "welcome-screen">, StackNavigationProp<RootStackParamList>>;

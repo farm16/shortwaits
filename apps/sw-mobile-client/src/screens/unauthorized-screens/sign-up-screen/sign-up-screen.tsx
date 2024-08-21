@@ -18,7 +18,7 @@ export function SignUpScreen({ navigation }: UnauthorizedScreenProps<"sign-up-sc
     try {
       // const authCode = await onGoogleButtonPress();
       // await socialSignUp({
-      //   provider: 'google',
+      //   kind: 'google',
       //   authCode,
       // });
     } catch (error) {
@@ -37,7 +37,7 @@ export function SignUpScreen({ navigation }: UnauthorizedScreenProps<"sign-up-sc
     try {
       // const authCode = await onGoogleButtonPress();
       // await socialSignUp({
-      //   provider: 'google',
+      //   kind: 'google',
       //   authCode,
       // });
     } catch (error) {

@@ -40,13 +40,6 @@ const phoneNumbersSchema = Yup.array().of(
   })
 );
 
-const imAddressesSchema = Yup.array().of(
-  Yup.object({
-    username: Yup.string(),
-    service: Yup.string(),
-  })
-);
-
 const addressesSchema = Yup.array().of(
   Yup.object({
     label: Yup.string(),
@@ -88,7 +81,6 @@ export const addLocalClientSchema = Yup.object({
   middleName: Yup.string().min(3, "need to add more characters").optional(),
   accountImageUrl: Yup.string().optional(),
   email: Yup.string().email("email is not valid").optional(),
-  imAddresses: imAddressesSchema.optional(),
   desiredCurrencies: Yup.array().of(Yup.string()).optional(),
   locale: localeSchema.optional(),
   phoneNumbers: phoneNumbersSchema.optional(),
@@ -116,7 +108,6 @@ export const updateLocalClientSchema = Yup.object({
   email: Yup.string().email("email is not valid").optional(),
   locale: localeSchema.optional(),
   phoneNumbers: phoneNumbersSchema.optional(),
-  imAddresses: imAddressesSchema.optional(),
   addresses: addressesSchema.optional(),
   socialAccounts: socialAccountsSchema.optional().nullable().optional(),
   desiredCurrencies: Yup.array().of(Yup.string()).optional(),

@@ -7,7 +7,7 @@ export function getUsersFromOsContacts(contacts: Contact[]) {
 }
 
 function getUserFromOsContact(contact: Contact): AddLocalClientDtoType {
-  const { givenName, familyName, middleName, displayName, phoneNumbers, emailAddresses, postalAddresses, imAddresses } = contact;
+  const { givenName, familyName, middleName, displayName, phoneNumbers, emailAddresses, postalAddresses } = contact;
   const addresses = postalAddresses.map(postalAddress => {
     return {
       label: postalAddress.label ?? "home",
@@ -33,7 +33,6 @@ function getUserFromOsContact(contact: Contact): AddLocalClientDtoType {
       middleName,
       displayName,
       phoneNumbers,
-      imAddresses,
       email: email,
       username: username,
       alias: "displayName",
@@ -53,7 +52,6 @@ function getUserFromOsContact(contact: Contact): AddLocalClientDtoType {
     middleName,
     displayName,
     phoneNumbers,
-    imAddresses,
     email: email,
     username: email,
     alias: "givenName",

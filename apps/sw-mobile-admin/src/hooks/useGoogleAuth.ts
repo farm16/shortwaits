@@ -13,12 +13,10 @@ export function useGoogleAuth() {
 
     try {
       await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-      const { serverAuthCode } = await GoogleSignin.signIn();
-
-      // Separate the social sign-up logic
-      await signInWithGoogle(serverAuthCode);
-
-      return serverAuthCode;
+      const result = await GoogleSignin.signIn();
+      console.log("Google sign-in serverAuthCode >>>", result);
+      await swLocalSocialSignUp(result.serverAuthCode, result.user.id);
+      return result.serverAuthCode;
     } catch (error) {
       console.log("useGoogleAuth error >>>", error);
       setError("An error occurred during Google sign-in.");
@@ -27,11 +25,12 @@ export function useGoogleAuth() {
     }
   };
 
-  const signInWithGoogle = async serverAuthCode => {
+  const swLocalSocialSignUp = async (serverAuthCode, uid) => {
     try {
       await socialSignUp({
-        provider: "google",
+        kind: "google",
         authCode: serverAuthCode,
+        uid: uid,
       });
     } catch (error) {
       // Handle social sign-up errors if needed

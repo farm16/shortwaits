@@ -334,7 +334,6 @@ const localClientFormInitialValues: AddLocalClientDtoType = {
   middleName: "",
   accountImageUrl: "",
   email: "",
-  imAddresses: [],
   desiredCurrencies: ["USD"],
   // set to US for now
   locale: {

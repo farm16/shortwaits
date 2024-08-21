@@ -1,10 +1,9 @@
 import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
-import { endpoints, type AuthResponseType } from "@shortwaits/shared-lib";
+import { endpoints, type AuthResponseType, SocialAccountType } from "@shortwaits/shared-lib";
 
 type RequestType = {
-  provider: string;
   authCode: string;
-};
+} & SocialAccountType;
 
 export default (builder: EndpointBuilder<any, any, any>) =>
   builder.mutation<AuthResponseType, RequestType>({

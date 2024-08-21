@@ -306,3 +306,28 @@ export const ERROR_CODES = {
   27: { code: 27, description: "authorization error sign out" },
   28: { code: 28, description: "authorization error signup" },
 } as const;
+
+export type GoogleUserInfoResponse = {
+  sub: string;
+  name: string;
+  given_name: string;
+  family_name: string;
+  picture: string;
+  email: string;
+  email_verified: boolean;
+};
+export type FacebookUserInfoResponse = {
+  id: string;
+  email: string;
+  name: string;
+  first_name: string;
+  last_name: string;
+  picture: {
+    data: {
+      height: number;
+      is_silhouette: boolean;
+      url: string;
+      width: number;
+    };
+  };
+};

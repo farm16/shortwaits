@@ -7,6 +7,8 @@ import {
   BusinessUserType,
   EventDtoType,
   EventType,
+  FacebookUserInfoResponse,
+  GoogleUserInfoResponse,
   ObjectId,
   ObjectId as ObjectIdType,
   ServiceDtoType,
@@ -68,7 +70,7 @@ export const getFilteredClientUser = (createCustomerDto: Partial<AddClientDtoTyp
     password: createCustomerDto?.password,
     locale: createCustomerDto?.locale,
     phoneNumbers: createCustomerDto?.phoneNumbers,
-    imAddresses: createCustomerDto?.imAddresses,
+
     addresses: createCustomerDto?.addresses,
     desiredCurrencies: createCustomerDto?.desiredCurrencies,
     isSocialAccount: false,
@@ -82,7 +84,7 @@ export const getFilteredClientUser = (createCustomerDto: Partial<AddClientDtoTyp
 export const getFilteredBusinessUser = (createCustomerDto: CreateBusinessUserDto) => {
   const filteredBusinessUser = {
     username: createCustomerDto?.username,
-    preferredAlias: createCustomerDto?.preferredAlias,
+    alias: createCustomerDto?.alias,
     displayName: createCustomerDto?.displayName,
     familyName: createCustomerDto?.familyName,
     givenName: createCustomerDto?.givenName,
@@ -92,7 +94,7 @@ export const getFilteredBusinessUser = (createCustomerDto: CreateBusinessUserDto
     password: createCustomerDto?.password,
     locale: createCustomerDto?.locale,
     phoneNumbers: createCustomerDto?.phoneNumbers,
-    imAddresses: createCustomerDto?.imAddresses,
+
     addresses: createCustomerDto?.addresses,
     socialAccounts: createCustomerDto?.socialAccounts,
     desiredCurrencies: createCustomerDto?.desiredCurrencies,
@@ -301,7 +303,7 @@ export const getNewBusinessLocalClientFromDto = (localClientsDto: AddLocalClient
     password: "password",
     locale: localClientsDto.locale,
     phoneNumbers: localClientsDto.phoneNumbers,
-    imAddresses: localClientsDto.imAddresses,
+
     addresses: localClientsDto.addresses,
     isSocialAccount: false,
     socialAccount: null,
@@ -378,7 +380,7 @@ export const filterBusinessOwnerPayload_localAuth = (ownerSignupDto: SignUpWithE
     accountImageUrl: null,
     locale: null,
     phoneNumbers: null,
-    imAddresses: null,
+
     addresses: null,
     socialAccounts: null,
     desiredCurrencies: null,
@@ -439,29 +441,33 @@ export const filterBusinessOwnerPayload_localAuth = (ownerSignupDto: SignUpWithE
   return filteredBusinessUser;
 };
 
-export const filterBusinessOwnerPayload_socialAuth = (ownerSignupDto: SignUpWithEmailDto) => {
+export const filterBusinessOwnerPayload_socialAuth_google = (googleUser: GoogleUserInfoResponse) => {
   const filteredBusinessUser: BusinessUserType = {
     alias: "username",
-    displayName: null,
-    familyName: null,
-    givenName: null,
+    displayName: googleUser.name ?? "",
+    familyName: googleUser.family_name ?? "",
+    givenName: googleUser.given_name ?? "",
     middleName: null,
-    accountImageUrl: null,
+    accountImageUrl: googleUser.picture ?? generateAvatarUrl(googleUser.email ?? "user"),
     locale: null,
     phoneNumbers: null,
-    imAddresses: null,
+
     addresses: null,
-    socialAccounts: null,
+    socialAccounts: {
+      kind: "google",
+      uid: googleUser.sub,
+    },
     desiredCurrencies: null,
     birthday: null,
     hours: null,
 
     // require
-    username: ownerSignupDto?.email,
-    email: ownerSignupDto?.email,
-    isEmailVerified: true,
-    password: ownerSignupDto?.password,
-    isPasswordProtected: true,
+    shortId: generateShortId(6), // generate shortId with 8 characters
+    username: googleUser?.email,
+    email: googleUser?.email,
+    isEmailVerified: googleUser.email_verified ?? false,
+    password: "",
+    isPasswordProtected: false,
     isDisabled: false,
     createdByBusinessId: null,
     deleted: false,
@@ -470,7 +476,7 @@ export const filterBusinessOwnerPayload_socialAuth = (ownerSignupDto: SignUpWith
     registrationState: {
       screenName: null,
       state: 0,
-      isCompleted: false,
+      isCompleted: true,
     },
 
     // below will get overridden by the Auth service
@@ -481,7 +487,6 @@ export const filterBusinessOwnerPayload_socialAuth = (ownerSignupDto: SignUpWith
     createdAt: null,
     updatedAt: null,
     userRoles: newBusinessOwnerRoles,
-    shortId: generateShortId(6), // generate shortId with 8 characters
     isSocialAccount: false,
     deviceSettings: [
       {
@@ -495,7 +500,78 @@ export const filterBusinessOwnerPayload_socialAuth = (ownerSignupDto: SignUpWith
         isTouchIdVerified: false,
         isFaceIdEnabled: false,
         isFaceIdVerified: false,
-        isPasswordlessEnabled: false,
+        isPasswordlessEnabled: true,
+      },
+    ],
+    accountSettings: {
+      isDarkModeEnabled: false,
+      isNotificationsEnabled: false,
+      isLocationEnabled: false,
+      isLocationShared: false,
+      isLocationSharedWithBusinesses: false,
+    },
+  };
+  return filteredBusinessUser;
+};
+
+export const filterBusinessOwnerPayload_socialAuth_facebook = (facebookUser: FacebookUserInfoResponse) => {
+  const filteredBusinessUser: BusinessUserType = {
+    alias: "username",
+    displayName: facebookUser.name ?? "",
+    familyName: facebookUser.last_name ?? "",
+    givenName: facebookUser.first_name ?? "",
+    middleName: null,
+    accountImageUrl: facebookUser.picture?.data?.url ?? generateAvatarUrl(facebookUser.email ?? "user"),
+    locale: null,
+    phoneNumbers: null,
+    addresses: null,
+    socialAccounts: {
+      kind: "facebook",
+      uid: facebookUser.id,
+    },
+    desiredCurrencies: ["USD"],
+    birthday: null,
+    hours: null,
+
+    // require
+    shortId: generateShortId(6), // generate shortId with 8 characters
+    username: facebookUser?.email,
+    email: facebookUser?.email,
+    isEmailVerified: true,
+    password: "",
+    isPasswordProtected: false,
+    isDisabled: false,
+    createdByBusinessId: null,
+    deleted: false,
+
+    roleId: null,
+    registrationState: {
+      screenName: null,
+      state: 0,
+      isCompleted: true,
+    },
+    // below will get overridden by the Auth service
+    businesses: null,
+    hashedRt: null,
+    lastSignInAt: null,
+    // `createdAt` and `updatedAt` will get overridden by the Mongoose schema
+    createdAt: null,
+    updatedAt: null,
+    userRoles: newBusinessOwnerRoles,
+    isSocialAccount: false,
+    deviceSettings: [
+      {
+        deviceUuid: "",
+        hasExportedContacts: false,
+        isEmailVerified: false,
+        isPhoneVerified: false,
+        isTwoFactorEnabled: false,
+        isTwoFactorVerified: false,
+        isTouchIdEnabled: false,
+        isTouchIdVerified: false,
+        isFaceIdEnabled: false,
+        isFaceIdVerified: false,
+        isPasswordlessEnabled: true,
       },
     ],
     accountSettings: {

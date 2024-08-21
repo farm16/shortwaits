@@ -44,7 +44,6 @@ export const AddLocalClientModal: FC<ModalsScreenProps<"add-local-client-modal-s
       middleName: "",
       accountImageUrl: "",
       email: "",
-      imAddresses: [],
       desiredCurrencies: ["USD"],
       // set to US for now
       locale: {

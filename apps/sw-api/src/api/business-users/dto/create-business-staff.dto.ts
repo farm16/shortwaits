@@ -37,10 +37,6 @@ export class CreateBusinessUserDto implements CreateBusinessUserDtoType {
 
   @ApiProperty()
   @IsNotEmpty()
-  preferredAlias: "username" | "displayName";
-
-  @ApiProperty()
-  @IsNotEmpty()
   username: string;
 
   @ApiProperty()
@@ -77,10 +73,6 @@ export class CreateBusinessUserDto implements CreateBusinessUserDtoType {
 
   @ApiProperty()
   @IsOptional()
-  imAddresses: { username: string; service: string }[];
-
-  @ApiProperty()
-  @IsOptional()
   addresses: {
     label: string;
     address1: string;
@@ -94,7 +86,11 @@ export class CreateBusinessUserDto implements CreateBusinessUserDtoType {
 
   @ApiProperty()
   @IsOptional()
-  socialAccounts: { kind: string; uid?: string; username?: string }[];
+  socialAccounts: {
+    kind: string;
+    uid?: string;
+    username?: string;
+  };
 
   @ApiProperty()
   @IsOptional()

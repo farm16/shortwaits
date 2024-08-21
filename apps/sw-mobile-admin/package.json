@@ -96,6 +96,7 @@
     "react-native-toast-message": "*",
     "react-native-walkthrough-tooltip": "*",
     "@react-native-community/netinfo": "*",
-    "react-native-rate": "*"
+    "react-native-rate": "*",
+    "fast-text-encoding": "*"
   }
 }

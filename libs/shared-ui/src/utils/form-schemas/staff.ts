@@ -17,14 +17,6 @@ export const addStaffSchema = Yup.object({
       })
     )
     .optional(),
-  imAddresses: Yup.array()
-    .of(
-      Yup.object({
-        username: Yup.string(),
-        service: Yup.string(),
-      })
-    )
-    .optional(),
   addresses: Yup.array()
     .of(
       Yup.object({
@@ -39,15 +31,11 @@ export const addStaffSchema = Yup.object({
       })
     )
     .optional(),
-  socialAccounts: Yup.array()
-    .of(
-      Yup.object({
-        kind: Yup.string(),
-        uid: Yup.string(),
-        username: Yup.string(),
-      })
-    )
-    .optional(),
+  socialAccounts: Yup.object({
+    kind: Yup.string(),
+    uid: Yup.string(),
+    username: Yup.string(),
+  }).optional(),
   birthday: Yup.string().optional(),
   desiredCurrencies: Yup.array().of(Yup.string()).optional(),
   locale: Yup.object()
@@ -61,7 +49,7 @@ export const addStaffSchema = Yup.object({
 });
 
 export const updateStaffSchema = Yup.object({
-  preferredAlias: Yup.string().oneOf(["username", "displayName"]).nullable(),
+  alias: Yup.string().oneOf(["username", "displayName"]).nullable(),
   username: Yup.string().min(3, "a longer name is required").nullable(),
   displayName: Yup.string().min(3, "a longer name is required").nullable(),
   familyName: Yup.string().min(3, "a longer name is required").nullable(),
@@ -79,14 +67,6 @@ export const updateStaffSchema = Yup.object({
       })
     )
     .nullable(),
-  imAddresses: Yup.array()
-    .of(
-      Yup.object({
-        username: Yup.string(),
-        service: Yup.string(),
-      })
-    )
-    .nullable(),
   addresses: Yup.array()
     .of(
       Yup.object({
@@ -101,15 +81,11 @@ export const updateStaffSchema = Yup.object({
       })
     )
     .nullable(),
-  socialAccounts: Yup.array()
-    .of(
-      Yup.object({
-        kind: Yup.string(),
-        uid: Yup.string(),
-        username: Yup.string(),
-      })
-    )
-    .nullable(),
+  socialAccounts: Yup.object({
+    kind: Yup.string(),
+    uid: Yup.string(),
+    username: Yup.string(),
+  }).nullable(),
   birthday: Yup.string().nullable(),
   desiredCurrencies: Yup.array().of(Yup.string()).nullable(),
   locale: Yup.object()

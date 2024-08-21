@@ -1,8 +1,10 @@
-import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { useState } from "react";
 import { useSocialSignUpMutation } from "../services";
+import { AccessToken, LoginManager } from "react-native-fbsdk-next";
 
-export function useFacebookAuth() {
+const fbPermissions = ["public_profile", "email"];
+
+export function useFacebookAuth(permissionList = fbPermissions) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [socialSignUp] = useSocialSignUpMutation();
@@ -12,25 +14,33 @@ export function useFacebookAuth() {
     setIsLoading(true);
 
     try {
-      await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-      const { serverAuthCode } = await GoogleSignin.signIn();
-
-      // Separate the social sign-up logic
-      await signInWithGoogle(serverAuthCode);
-
-      return serverAuthCode;
+      const result = await LoginManager.logInWithPermissions(permissionList);
+      if (result.isCancelled) {
+        setError("Login cancelled");
+      } else {
+        const accessToken = await AccessToken.getCurrentAccessToken();
+        if (!accessToken) {
+          setError("An error occurred during Facebook sign-in.");
+          return;
+        }
+        console.log("Facebook sign-in accessToken >>>", accessToken);
+        await swLocalSocialSignUp(accessToken.accessToken, accessToken.userID);
+        return accessToken.accessToken;
+      }
     } catch (error) {
-      setError("An error occurred during Google sign-in.");
+      console.error("Facebook sign-in error >>>", error);
+      setError("An error occurred during Facebook sign-in.");
     } finally {
       setIsLoading(false);
     }
   };
 
-  const signInWithGoogle = async serverAuthCode => {
+  const swLocalSocialSignUp = async (serverAuthCode, uid) => {
     try {
       await socialSignUp({
-        provider: "google",
+        kind: "facebook",
         authCode: serverAuthCode,
+        uid: uid,
       });
     } catch (error) {
       // Handle social sign-up errors if needed

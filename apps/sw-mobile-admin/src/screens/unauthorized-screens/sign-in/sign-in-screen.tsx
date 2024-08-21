@@ -1,10 +1,10 @@
 import { CompositeNavigationProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { Button, Container, Facebook, Google, Screen, Space, Text, TextFieldCard, useTheme } from "@shortwaits/shared-ui";
-import React, { FC, useCallback, useLayoutEffect, useState } from "react";
+import { Button, Container, Facebook, Google, Screen, Space, Text, TextFieldCard, useTheme, ActivityIndicator } from "@shortwaits/shared-ui";
+import React, { FC, useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { useIntl } from "react-intl";
-import { ActivityIndicator, Alert, AlertButton, StyleSheet, View } from "react-native";
-import { useForm, useGoogleAuth } from "../../../hooks";
+import { Alert, AlertButton, StyleSheet, View } from "react-native";
+import { useForm, useGoogleAuth, useFacebookAuth } from "../../../hooks";
 import { RootStackParamList, UnauthorizedStackParamList } from "../../../navigation";
 import { useLocalSignInMutation } from "../../../services";
 
@@ -18,6 +18,7 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
   const intl = useIntl();
   const [localSignIn, localSignInResponse] = useLocalSignInMutation();
   const { isLoading: isGoogleAuthLoading, error: googleAuthError, handleGoogleAuth } = useGoogleAuth();
+  const { isLoading: isFacebookAuthLoading, error: facebookAuthError, handleFacebookAuth } = useFacebookAuth();
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -25,18 +26,19 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
     });
   }, [intl, navigation]);
 
-  const isLoading = localSignInResponse.isLoading || isGoogleAuthLoading;
+  const isLoading = localSignInResponse.isLoading || isGoogleAuthLoading || isFacebookAuthLoading;
 
-  if (googleAuthError) {
-    Alert.alert(
-      intl.formatMessage({
-        id: "Common.error.title",
-      }),
-      intl.formatMessage({
-        id: "Common.error.message",
-      })
-    );
-  }
+  useEffect(() => {
+    if (googleAuthError || facebookAuthError) {
+      const errorMessage = googleAuthError || facebookAuthError || intl.formatMessage({ id: "Common.error.message" });
+      Alert.alert(
+        intl.formatMessage({
+          id: "Common.error.title",
+        }),
+        errorMessage
+      );
+    }
+  }, [facebookAuthError, googleAuthError, intl]);
 
   const initialValues = {
     email: "",
@@ -93,7 +95,9 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
     );
   }
 
-  if (isLoading) return <ActivityIndicator />;
+  if (isLoading) {
+    return <ActivityIndicator />;
+  }
 
   return (
     <Screen preset="scroll" unsafe withHorizontalPadding>
@@ -154,7 +158,7 @@ export const SignInScreen: FC<RegisterWithEmailScreenProps> = ({ navigation }) =
       />
       <Space size="small" />
 
-      <Button preset="social" onPress={handleGoogleAuth} style={styles.socialButton}>
+      <Button preset="social" onPress={handleFacebookAuth} style={styles.socialButton}>
         <Container style={styles.socialButtonText}>
           <Facebook width={30} height={30} style={styles.socialIcon} />
           <Text

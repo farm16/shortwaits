@@ -42,15 +42,12 @@ export type LocalClientType = {
   familyName: string;
   givenName: string;
   middleName: string;
+  // ================
   accountImageUrl: string;
   email: string;
   password: string;
   locale: LocaleType;
   phoneNumbers: PhoneNumberType[];
-  imAddresses: {
-    username: string;
-    service: string;
-  }[];
   addresses: AddressType[];
   isSocialAccount: boolean;
   socialAccount: SocialAccountType;

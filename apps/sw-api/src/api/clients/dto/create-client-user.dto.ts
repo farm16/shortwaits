@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { AddClientDtoType, DtoFriendlyType, UserDeviceSettings } from "@shortwaits/shared-lib";
+import { AddClientDtoType, DtoFriendlyType, SocialAccountType, UserDeviceSettings } from "@shortwaits/shared-lib";
 import { IsNotEmpty, IsOptional } from "class-validator";
 
 export class CreateClientUserDto implements AddClientDtoType {
@@ -9,7 +9,7 @@ export class CreateClientUserDto implements AddClientDtoType {
 
   @ApiProperty()
   @IsNotEmpty()
-  socialAccount: DtoFriendlyType<{ kind: string; uid?: string; username?: string }>;
+  socialAccount: DtoFriendlyType<SocialAccountType>;
 
   @ApiProperty()
   @IsNotEmpty()
@@ -82,13 +82,6 @@ export class CreateClientUserDto implements AddClientDtoType {
 
   @ApiProperty()
   @IsOptional()
-  imAddresses: {
-    username: string;
-    service: string;
-  }[];
-
-  @ApiProperty()
-  @IsOptional()
   addresses: {
     label: string;
     address1: string;
@@ -105,7 +98,7 @@ export class CreateClientUserDto implements AddClientDtoType {
     kind: string;
     uid?: string;
     username?: string;
-  }[];
+  };
 
   @ApiProperty()
   @IsOptional()

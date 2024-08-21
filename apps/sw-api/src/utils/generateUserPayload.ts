@@ -261,15 +261,11 @@ export const getNewClientPayload = (userPayloadOverride: RequiredKeys) => {
     roleId: null,
     billing: null,
     phoneNumbers: [],
-    imAddresses: [],
+
     addresses: [],
     desiredCurrencies: [],
     isSocialAccount: false,
-    socialAccount: {
-      kind: "",
-      uid: "",
-      username: "",
-    },
+    socialAccount: null,
     ...userPayloadOverride,
   };
   return userPayload;

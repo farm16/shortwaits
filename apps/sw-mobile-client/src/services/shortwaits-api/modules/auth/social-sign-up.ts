@@ -2,7 +2,7 @@ import { EndpointBuilder } from "@reduxjs/toolkit/dist/query/endpointDefinitions
 import { endpoints, type ClientAuthResponseType } from "@shortwaits/shared-lib";
 
 type RequestType = {
-  provider: string;
+  kind: string;
   authCode: string;
 };
 
