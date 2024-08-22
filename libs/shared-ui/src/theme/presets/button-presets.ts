@@ -21,7 +21,7 @@ export const buttonPresets = ({
   const VIEW_BASE = StyleSheet.flatten([
     {
       // ...Layout.center,
-      height: getResponsiveHeight(50),
+      height: getResponsiveHeight(47),
       backgroundColor: Colors.brandPrimary,
       flexDirection: "row",
       borderRadius: getResponsiveHeight(25),

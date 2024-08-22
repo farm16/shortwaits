@@ -60,3 +60,7 @@ export const clientAppLocalSignUpSchema = Yup.object({
     .oneOf([Yup.ref("password"), null], "passwords must match")
     .required("required"),
 });
+
+export const forgotPasswordSchema = Yup.object({
+  email: Yup.string().email("invalid email").required(),
+});

@@ -139,8 +139,8 @@ export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
       </View>
       <Container
         style={{
-          marginTop: "auto",
           marginBottom: 35,
+          marginTop: 35,
         }}
         direction="row"
         alignItems="center"
@@ -197,6 +197,7 @@ export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
       <Space size="small" />
       <Space />
       <TermsAndConditions
+        style={{ marginTop: "auto" }}
         onPress={() => {
           navigation.navigate("modals", {
             screen: "webview-modal-screen",

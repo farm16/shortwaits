@@ -24,7 +24,7 @@ export const createServiceSchema = Yup.object({
     colorId: Yup.string(),
     colorName: Yup.string(),
     hexCode: Yup.string(),
-    isSelected: Yup.mixed().optional(),
+    isSelected: Yup.mixed().optional().nullable(),
     isDefault: Yup.mixed().optional(),
   }),
   imageUrl: Yup.string().optional(),

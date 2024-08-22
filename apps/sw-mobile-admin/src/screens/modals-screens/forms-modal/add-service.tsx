@@ -32,8 +32,6 @@ export const AddServicesModal: FC<ModalsScreenProps<"add-service-modal-screen">>
   const business = useBusiness();
   const [createService, createServiceStatus] = useCreateServiceMutation();
 
-  console.log(mobileAdminData.shortwaits.serviceColors);
-
   const defaultService = useMemo(() => {
     const defaultServiceColor = Object.keys(mobileAdminData.shortwaits.serviceColors)[0];
     return {
@@ -70,6 +68,9 @@ export const AddServicesModal: FC<ModalsScreenProps<"add-service-modal-screen">>
     "addService"
   );
 
+  // console.log("mobileAdminData.shortwaits >>>", JSON.stringify(mobileAdminData.shortwaits, null, 2));
+  console.log("errors >>>", errors);
+
   useEffect(() => {
     if (createServiceStatus.isSuccess) {
       navigation.goBack();
@@ -100,6 +101,7 @@ export const AddServicesModal: FC<ModalsScreenProps<"add-service-modal-screen">>
 
   const handleServiceColorChange = useCallback(
     serviceColor => {
+      console.log("serviceColor >>>", serviceColor);
       setFieldValue("serviceColor", serviceColor);
     },
     [setFieldValue]

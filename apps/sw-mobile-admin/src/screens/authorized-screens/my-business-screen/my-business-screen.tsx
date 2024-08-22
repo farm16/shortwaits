@@ -122,7 +122,7 @@ export const MyBusinessScreen: FC<AuthorizedScreenProps<"my-business-screen">> =
               style={{
                 fontWeight: "700",
               }}
-              text={truncate(business?.shortName, { length: 16 })}
+              text={truncate(business?.shortName, { length: 10 })}
             />
             <View
               style={[
