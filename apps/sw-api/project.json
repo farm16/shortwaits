@@ -14,7 +14,7 @@
         "outputPath": "dist/apps/sw-api",
         "main": "apps/sw-api/src/main.ts",
         "tsConfig": "apps/sw-api/tsconfig.app.json",
-        "assets": ["apps/sw-api/src/assets", "apps/sw-api/src/views"],
+        "assets": ["apps/sw-api/src/assets", "apps/sw-api/src/views", "apps/sw-api/src/public"],
         "isolatedConfig": true,
         "webpackConfig": "apps/sw-api/webpack.config.js"
       },

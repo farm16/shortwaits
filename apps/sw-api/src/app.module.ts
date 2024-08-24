@@ -8,6 +8,8 @@ import { getEnvPath } from "./common/env.helper";
 import { TransformInterceptor } from "./common/interceptors/transform.interceptor";
 import { MongoConfigService } from "./db/mongo/mongo.service";
 import { SqliteConfigService } from "./db/sqlite/sqlite.service";
+import { MailerModule } from "@nestjs-modules/mailer";
+import { EmailService } from "./utils/email/email.service";
 
 const envFilePath = getEnvPath();
 
@@ -20,6 +22,7 @@ const envFilePath = getEnvPath();
     MongooseModule.forRootAsync({
       useClass: MongoConfigService,
     }),
+    MailerModule.forRootAsync(EmailService),
     SequelizeModule.forRootAsync(SqliteConfigService),
     ApiModule,
   ],

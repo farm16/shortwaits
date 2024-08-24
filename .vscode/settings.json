@@ -1,5 +1,5 @@
 {
-  "cSpell.words": ["datasource", "dismissable", "Fastify", "mmkv", "persistor", "Pressable", "reduxjs", "Signin", "Swipeable", "typeorm", "ZELLE"],
+  "cSpell.words": ["datasource", "dismissable", "Fastify", "FORWARDEMAIL", "mmkv", "persistor", "Pressable", "reduxjs", "Signin", "Swipeable", "typeorm", "ZELLE"],
   "typescript.tsdk": "node_modules/typescript/lib",
   "svg.preview.background": "dark-transparent"
 }

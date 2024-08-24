@@ -18,6 +18,10 @@ async function bootstrap() {
 
   app.setGlobalPrefix(API_PREFIX);
   app.use(helmet());
+  app.useStaticAssets({
+    root: join(__dirname, ".", "public"),
+    prefix: "/public/",
+  });
   app.setViewEngine({
     engine: {
       handlebars: require("handlebars"),

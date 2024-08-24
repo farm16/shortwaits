@@ -1,10 +1,11 @@
-import { Body, Controller, Headers, HttpCode, HttpStatus, Post, Req, UseGuards, ValidationPipe } from "@nestjs/common";
-import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
+import { Body, Controller, Get, Headers, HttpCode, HttpStatus, Post, Render, Req, UseGuards, ValidationPipe } from "@nestjs/common";
+import { ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
 import { GetCurrentUser, GetCurrentUserId, Public } from "../../common/decorators/auth.decorator";
 import { AtGuard, RtGuard } from "../../common/guards";
 import { AuthRefreshSuccessResponse, AuthSuccessResponse } from "./auth.interface";
 import { AuthService } from "./auth.service";
 import { ClientSignInWithEmailDto, ClientSignUpWithEmailDto, SignInWithEmailDto, SignUpWithEmailDto, WithSocialAuthDto } from "./dto";
+import { RequestResetPasswordDto, ResetPasswordDto } from "./dto/common.dto";
 
 @ApiTags("auth")
 @Controller("auth")
@@ -160,5 +161,49 @@ export class AuthController {
   })
   async clientRefreshToken(@GetCurrentUserId() userId: string, @GetCurrentUser("refreshToken") refreshToken: string): Promise<AuthRefreshSuccessResponse> {
     return this.authService.clientRefreshToken(userId, refreshToken);
+  }
+
+  @Public()
+  @Post("admin/request-reset-password")
+  @ApiBody({
+    type: RequestResetPasswordDto,
+  })
+  @HttpCode(HttpStatus.OK)
+  @ApiCreatedResponse({
+    status: HttpStatus.OK,
+    description: "sends reset password request",
+  })
+  async requestBusinessUserResetPassword(@Body(new ValidationPipe()) body: RequestResetPasswordDto) {
+    await this.authService.requestBusinessUserResetPassword(body);
+  }
+
+  @Public()
+  @Get("admin/request-reset-password")
+  @Render("request-reset-password.hbs") // will be replaced with react site
+  getPrivacyPolicyEs(@Headers("device-suggested-language") locale = "en") {
+    const data = {
+      token: "exampleToken123", // Replace with actual token logic
+      email: "user@example.com", // Replace with actual email logic
+    };
+    return data;
+  }
+
+  @Public()
+  @Post("admin/reset-password")
+  @ApiBody({
+    type: ResetPasswordDto,
+  })
+  @HttpCode(HttpStatus.OK)
+  @ApiCreatedResponse({
+    status: HttpStatus.OK,
+    description: "resets password",
+  })
+  async resetBusinessUserPassword(@Body(new ValidationPipe()) body: ResetPasswordDto) {
+    console.log("reset password controller", body);
+    return {
+      message: "Password reset successfully",
+      isPasswordReset: true,
+    };
+    // return await this.authService.resetBusinessUserPassword(body);
   }
 }

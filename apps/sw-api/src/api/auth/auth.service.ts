@@ -1,4 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundException, UnprocessableEntityException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
@@ -7,7 +6,6 @@ import { BusinessType, BusinessUserType, ClientType, FacebookUserInfoResponse, G
 import bcrypt from "bcryptjs";
 import { OAuth2Client } from "google-auth-library";
 import { Model } from "mongoose";
-import { noop } from "rxjs";
 import { shortwaitsStores } from "../../db/seeders/mongo-sw-api/default-data/shortwaits/shortwaits";
 import {
   convertToLowercase,
@@ -25,6 +23,7 @@ import { BusinessUser } from "../business-users/entities/business-user.entity";
 import { Business } from "../business/entities/business.entity";
 import { Client } from "../clients/entities/client.entity";
 import { ClientSignInWithEmailDto, ClientSignUpWithEmailDto, SignInWithEmailDto, SignUpWithEmailDto } from "./dto";
+import { MailerService } from "@nestjs-modules/mailer";
 
 const providers = ["google", "facebook"];
 const GOOGLE_API_OAUTH_URL = "https://www.googleapis.com/oauth2/v3";
@@ -43,7 +42,8 @@ export class AuthService {
     @InjectModel(Business.name) private businessModel: Model<Business>,
     @InjectModel(Service.name) private serviceModel: Model<Service>,
     private jwtService: JwtService,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private readonly mailService: MailerService
   ) {
     const googleAuthClientId = this.configService.get<string>("GOOGLE_AUTH_CLIENT_ID");
     const googleAuthClientSecret = this.configService.get<string>("GOOGLE_AUTH_CLIENT_SECRET");
@@ -676,6 +676,79 @@ export class AuthService {
       attributes: {
         currentUser: clientUserCreated,
       },
+    };
+  }
+
+  async requestBusinessUserResetPassword(dto: { email: string }) {
+    const email = dto?.email?.toLowerCase();
+    console.log("requestBusinessUserResetPassword email >>>", email);
+    if (!email) {
+      console.log("Email is required");
+      throw new UnprocessableEntityException("Email is required");
+    }
+    try {
+      const businessUser = await this.businessUserModel.findOne({ email: email });
+
+      if (!businessUser) {
+        console.log("Business user not found");
+        return {
+          isPasswordResetRequested: false,
+          message: "Business user not found",
+        };
+      }
+
+      const signedTokens = await this.signBusinessUserTokens(businessUser);
+      await this.updateBusinessUserRt(businessUser, signedTokens.refreshToken);
+      // send refresh token to user email
+      console.log("send refresh token to user email >>>", signedTokens.refreshToken);
+      this.mailService
+        .sendMail({
+          to: "christopher.fajardo73@gmail.com", // user.email,
+          from: '"No Reply" <noreply@shortwaits.com>',
+          subject: "Password reset",
+          text: "Password reset",
+          // template: "reset-password",
+          // context: {
+          //   token: signedTokens.refreshToken,
+          // },
+        })
+        .then(mailResponse => {
+          console.log("mailResponse >>>", mailResponse);
+          return {
+            isPasswordResetRequested: true,
+            message: "Password reset request sent",
+          };
+        })
+        .catch(error => {
+          console.error("Error sending email >>>", error);
+          throw new InternalServerErrorException("An error occurred while sending email");
+        });
+    } catch (error) {
+      console.error("Error in requestBusinessUserResetPassword:", error);
+      throw new InternalServerErrorException("An error occurred while processing your request.");
+    }
+  }
+
+  async resetBusinessUserPassword({ email, password, token }: { email: string; password: string; token: string }) {
+    const user = await this.businessUserModel.findOne({ email: email.toLowerCase() });
+    const rtMatches = await bcrypt.compare(token, user.hashedRt);
+    if (!rtMatches) {
+      throw new ForbiddenException("Invalid token");
+    }
+    if (!user) {
+      throw new NotFoundException("User not found");
+    }
+    const saltRounds = Number(this.configService.get("SALT_ROUNDS"));
+    const salt = await bcrypt.genSalt(saltRounds);
+    const updatedPassword = await bcrypt.hash(password, salt);
+    const updatedUser = await this.businessUserModel.findByIdAndUpdate(user._id, { password: updatedPassword });
+    if (!updatedUser) {
+      throw new InternalServerErrorException("An error occurred while updating your password");
+    }
+    // return handlebars template
+    return {
+      isPasswordUpdated: true,
+      message: "Password updated successfully",
     };
   }
 }
